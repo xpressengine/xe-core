@@ -193,6 +193,16 @@ class communicationController extends communication
 		$receiver_args->readed = 'N';
 		$receiver_args->regdate = date("YmdHis");
 
+		// Call a trigger (before)
+		$trigger_args = new stdClass();
+		$trigger_args->sender_srl = $sender_srl;
+		$trigger_args->receiver_srl = $receiver_srl;
+		$trigger_args->title = $title;
+		$trigger_args->content = $content;
+		$trigger_args->sender_log = $sender_log;
+		$output = ModuleHandler::triggerCall('communication.sendMessage', 'before', $trigger_args);
+		if(!$output->toBool()) return $output;
+
 		$oDB = DB::getInstance();
 		$oDB->begin();
 
@@ -209,6 +219,14 @@ class communicationController extends communication
 
 		// messages to save in the receiver's message box
 		$output = executeQuery('communication.sendMessage', $receiver_args);
+		if(!$output->toBool())
+		{
+			$oDB->rollback();
+			return $output;
+		}
+
+		// Call a trigger (after)
+		$output = ModuleHandler::triggerCall('communication.sendMessage', 'after', $trigger_args);
 		if(!$output->toBool())
 		{
 			$oDB->rollback();
