@@ -60,7 +60,7 @@ class messageView extends message
 		}
 		Context::set('ssl_mode',$ssl_mode);
 
-		Context::set('system_message', nl2br($this->getMessage()));
+		Context::set('system_message', nl2br(htmlspecialchars($this->getMessage())));
 
 		$this->setTemplateFile('system_message');
 	}
