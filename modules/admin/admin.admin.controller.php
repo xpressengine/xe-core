@@ -57,7 +57,7 @@ class adminAdminController extends admin
 	function procAdminRecompileCacheFile()
 	{
 		// rename cache dir
-		$temp_cache_dir = './files/cache_' . time();
+		$temp_cache_dir = './files/cache_' . $_SERVER['REQUEST_TIME'];
 		FileHandler::rename('./files/cache', $temp_cache_dir);
 		FileHandler::makeDir('./files/cache');
 
@@ -173,7 +173,7 @@ class adminAdminController extends admin
 		$buff = '';
 		if(is_readable($siteDesignFile))
 		{
-			@include($siteDesignFile);
+			include($siteDesignFile);
 		}
 		else
 		{
@@ -294,8 +294,7 @@ class adminAdminController extends admin
 		{
 			if($favorite->type == 'module')
 			{
-				$modulePath = './modules/' . $favorite->module;
-				$modulePath = FileHandler::getRealPath($modulePath);
+				$modulePath = _XE_PATH_ . 'modules/' . $favorite->module;
 				if(!is_dir($modulePath))
 				{
 					$deleteTargets[] = $favorite->admin_favorite_srl;
@@ -478,6 +477,29 @@ class adminAdminController extends admin
 			return new Object(-1, 'fail_to_delete');
 		}
 		$this->setMessage('success_deleted');
+	}
+
+	function procAdminUpdateSitelock()
+	{
+		$vars = Context::getRequestVars();
+		$oInstallController = &getController('install');
+
+		$db_info = Context::getDbInfo();
+
+		$db_info->use_sitelock = ($vars->use_sitelock) ? $vars->use_sitelock : 'N';
+		$db_info->sitelock_title = $vars->sitelock_title;
+		$db_info->sitelock_message = $vars->sitelock_message;
+		$db_info->sitelock_whitelist = $vars->sitelock_whitelist;
+
+		FileHandler::writeFile(Context::getConfigFile(), $oInstallController->_getDBConfigFileContents($db_info));
+
+		if(!in_array(Context::getRequestMethod(), array('XMLRPC','JSON')))
+		{
+			$returnUrl = Context::get('success_return_url');
+			if(!$returnUrl) $returnUrl = getNotEncodedUrl('', 'act', 'dispAdminConfigGeneral');
+			header('location:' . $returnUrl);
+			return;
+		}
 	}
 
 }

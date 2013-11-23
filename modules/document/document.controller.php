@@ -260,7 +260,7 @@ class documentController extends document
 		{
 			if($obj->use_html != 'Y')
 			{
-				$obj->content = htmlspecialchars($obj->content);
+				$obj->content = htmlspecialchars($obj->content, ENT_COMPAT | ENT_HTML401, 'UTF-8', false);
 			}
 			$obj->content = nl2br($obj->content);
 		}
@@ -443,7 +443,7 @@ class documentController extends document
 		{
 			if($obj->use_html != 'Y')
 			{
-				$obj->content = htmlspecialchars($obj->content);
+				$obj->content = htmlspecialchars($obj->content, ENT_COMPAT | ENT_HTML401, 'UTF-8', false);
 			}
 			$obj->content = nl2br($obj->content);
 		}
@@ -1091,8 +1091,17 @@ class documentController extends document
 		// Fail if session information already has a reported document
 		if($_SESSION['declared_document'][$document_srl]) return new Object(-1, 'failed_declared');
 
+		// Check if previously reported
+		$args = new stdClass();
+		$args->document_srl = $document_srl;
+		$output = executeQuery('document.getDeclaredDocument', $args);
+		if(!$output->toBool()) return $output;
+
+		$declared_count = ($output->data->declared_count) ? $output->data->declared_count : 0;
+
 		$trigger_obj = new stdClass();
 		$trigger_obj->document_srl = $document_srl;
+		$trigger_obj->declared_count = $declared_count;
 
 		// Call a trigger (before)
 		$trigger_output = ModuleHandler::triggerCall('document.declaredDocument', 'before', $trigger_obj);
@@ -1101,23 +1110,15 @@ class documentController extends document
 			return $trigger_output;
 		}
 
-		// Check if previously reported
-		$args = new stdClass();
-		$args->document_srl = $document_srl;
-		$output = executeQuery('document.getDeclaredDocument', $args);
-		if(!$output->toBool()) return $output;
-
-		$declared_count = $output->data->declared_count;
-
 		// Get the original document
 		$oDocumentModel = &getModel('document');
 		$oDocument = $oDocumentModel->getDocument($document_srl, false, false);
 
 		// Pass if the author's IP address is as same as visitor's.
-		/*if($oDocument->get('ipaddress') == $_SERVER['REMOTE_ADDR']) {
-		  $_SESSION['declared_document'][$document_srl] = true;
-		  return new Object(-1, 'failed_declared');
-		  }*/
+		if($oDocument->get('ipaddress') == $_SERVER['REMOTE_ADDR']) {
+			$_SESSION['declared_document'][$document_srl] = true;
+			return new Object(-1, 'failed_declared');
+		}
 
 		// Check if document's author is a member.
 		if($oDocument->get('member_srl'))
@@ -1142,6 +1143,7 @@ class documentController extends document
 		{
 			$args->ipaddress = $_SERVER['REMOTE_ADDR'];
 		}
+		
 		$args->document_srl = $document_srl;
 		$output = executeQuery('document.getDocumentDeclaredLogInfo', $args);
 
@@ -1830,10 +1832,10 @@ class documentController extends document
 			$title = $node->title;
 			$oModuleAdminModel = &getAdminModel('module');
 			$langs = $oModuleAdminModel->getLangCode($site_srl, $title);
-			if(count($langs)) foreach($langs as $key => $val) $xml_header_buff .= sprintf('$_titles[%d]["%s"] = "%s"; ', $category_srl, $key, str_replace('"','\\"',htmlspecialchars($val)));
+			if(count($langs)) foreach($langs as $key => $val) $xml_header_buff .= sprintf('$_titles[%d]["%s"] = "%s"; ', $category_srl, $key, str_replace('"','\\"',htmlspecialchars($val, ENT_COMPAT | ENT_HTML401, 'UTF-8', false)));
 
 			$langx = $oModuleAdminModel->getLangCode($site_srl, $description);
-			if(count($langx)) foreach($langx as $key => $val) $xml_header_buff .= sprintf('$_descriptions[%d]["%s"] = "%s"; ', $category_srl, $key, str_replace('"','\\"',htmlspecialchars($val)));
+			if(count($langx)) foreach($langx as $key => $val) $xml_header_buff .= sprintf('$_descriptions[%d]["%s"] = "%s"; ', $category_srl, $key, str_replace('"','\\"',htmlspecialchars($val, ENT_COMPAT | ENT_HTML401, 'UTF-8', false)));
 
 			$attribute = sprintf(
 				'mid="%s" module_srl="%d" node_srl="%d" parent_srl="%d" category_srl="%d" text="<?php echo (%s?($_titles[%d][$lang_type]):"")?>" url="%s" expand="%s" color="%s" description="<?php echo (%s?($_descriptions[%d][$lang_type]):"")?>" document_count="%d" ',
@@ -1846,7 +1848,7 @@ class documentController extends document
 				$category_srl,
 				getUrl('','mid',$node->mid,'category',$category_srl),
 				$expand,
-				htmlspecialchars($color),
+				htmlspecialchars($color, ENT_COMPAT | ENT_HTML401, 'UTF-8', false),
 				$group_check_code,
 				$category_srl,
 				$node->document_count
@@ -1894,9 +1896,9 @@ class documentController extends document
 			$description= $node->description;
 			$oModuleAdminModel = &getAdminModel('module');
 			$langs = $oModuleAdminModel->getLangCode($site_srl, $title);
-			if(count($langs)) foreach($langs as $key => $val) $php_header_buff .= sprintf('$_titles[%d]["%s"] = "%s"; ', $category_srl, $key, str_replace('"','\\"',htmlspecialchars($val)));
+			if(count($langs)) foreach($langs as $key => $val) $php_header_buff .= sprintf('$_titles[%d]["%s"] = "%s"; ', $category_srl, $key, str_replace('"','\\"',htmlspecialchars($val, ENT_COMPAT | ENT_HTML401, 'UTF-8', false)));
 			$langx = $oModuleAdminModel->getLangCode($site_srl, $description);
-			if(count($langx)) foreach($langx as $key => $val) $php_header_buff .= sprintf('$_descriptions[%d]["%s"] = "%s"; ', $category_srl, $key, str_replace('"','\\"',htmlspecialchars($val)));
+			if(count($langx)) foreach($langx as $key => $val) $php_header_buff .= sprintf('$_descriptions[%d]["%s"] = "%s"; ', $category_srl, $key, str_replace('"','\\"',htmlspecialchars($val, ENT_COMPAT | ENT_HTML401, 'UTF-8', false)));
 			// Create attributes(Use the category_srl_list to check whether to belong to the menu's node. It seems to be tricky but fast fast and powerful;)
 			$attribute = sprintf(
 				'"mid" => "%s", "module_srl" => "%d","node_srl"=>"%s","category_srl"=>"%s","parent_srl"=>"%s","text"=>$_titles[%d][$lang_type],"selected"=>(in_array(Context::get("category"),array(%s))?1:0),"expand"=>"%s","color"=>"%s","description"=>$_descriptions[%d][$lang_type],"list"=>array(%s),"document_count"=>"%d","grant"=>%s?true:false',

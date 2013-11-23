@@ -44,7 +44,7 @@ class menuAdminController extends menu
 	 * home menu cache file
 	 * @var string
 	 */
-	private $homeMenuCacheFile = './files/cache/menu/homeSitemap.php';
+	private $homeMenuCacheFile = 'files/cache/menu/homeSitemap.php';
 
 	/**
 	 * Initialization
@@ -53,7 +53,10 @@ class menuAdminController extends menu
 	function init()
 	{
 		$this->setTemplatePath($this->module_path.'tpl');
-		//$this->homeMenuCacheFile = sprintf('./files/cache/menu/homeSitemap.php');
+	}
+
+	function __construct() {
+		$this->homeMenuCacheFile = _XE_PATH_ . $this->homeMenuCacheFile;
 	}
 
 	/**
@@ -142,7 +145,7 @@ class menuAdminController extends menu
 
 		if(is_readable(FileHandler::getRealPath($phpFile)))
 		{
-			@include(FileHandler::getRealPath($phpFile));
+			include(FileHandler::getRealPath($phpFile));
 		}
 
 		// check home menu in originMenu
@@ -742,7 +745,7 @@ class menuAdminController extends menu
 
 		if(is_readable(FileHandler::getRealPath($phpFile)))
 		{
-			@include(FileHandler::getRealPath($phpFile));
+			include(FileHandler::getRealPath($phpFile));
 
 			if(is_array($menu->list))
 			{
@@ -889,12 +892,12 @@ class menuAdminController extends menu
 		}
 
 		// get menu properies with child menu
-		$phpFile = sprintf("./files/cache/menu/%s.php", $originalItemInfo->menu_srl);
+		$phpFile = sprintf(_XE_PATH_ . "files/cache/menu/%s.php", $originalItemInfo->menu_srl);
 		$originMenu = NULL;
 
 		if(is_readable(FileHandler::getRealPath($phpFile)))
 		{
-			@include(FileHandler::getRealPath($phpFile));
+			include(FileHandler::getRealPath($phpFile));
 
 			if(is_array($menu->list))
 			{
@@ -988,12 +991,12 @@ class menuAdminController extends menu
 		$menuSrl = $itemInfo->menu_srl;
 
 		// get menu properies with child menu
-		$phpFile = sprintf("./files/cache/menu/%s.php", $menuSrl);
+		$phpFile = sprintf(_XE_PATH_ . "files/cache/menu/%s.php", $menuSrl);
 		$originMenu = NULL;
 
 		if(is_readable(FileHandler::getRealPath($phpFile)))
 		{
-			@include(FileHandler::getRealPath($phpFile));
+			include(FileHandler::getRealPath($phpFile));
 
 			if(is_array($menu->list))
 			{
@@ -1120,7 +1123,7 @@ class menuAdminController extends menu
 
 	private function _makeRandomMid()
 	{
-		$time = time();
+		$time = $_SERVER['REQUEST_TIME'];
 		$randomString = "";
 		for($i=0;$i<4;$i++)
 		{
@@ -1306,7 +1309,7 @@ class menuAdminController extends menu
 				{
 					if(file_exists($this->homeMenuCacheFile))
 					{
-						@include($this->homeMenuCacheFile);
+						include($this->homeMenuCacheFile);
 					}
 					if(!$homeMenuSrl || $homeMenuSrl != $menu_srl)
 					{
@@ -1365,13 +1368,13 @@ class menuAdminController extends menu
 		if(!$menu_srl || !$menu_item_srl)
 		{
 			Context::set('error_messge', Context::getLang('msg_invalid_request'));
-			
+
 		}
 		else if(!$target_file || !is_uploaded_file($target_file['tmp_name']) || !preg_match('/\.(gif|jpeg|jpg|png)$/i',$target_file['name'])  || !checkUploadedFile($target_file['tmp_name']))
 		{
 			Context::set('error_messge', Context::getLang('msg_invalid_request'));
 		}
-		
+
 		// Move the file to a specific director if the uploaded file meets requirement
 		else
 		{
@@ -1565,6 +1568,8 @@ class menuAdminController extends menu
 				continue;
 			}
 
+			$htPerm[$grantName] = explode(',', $htPerm[$grantName]);
+
 			// users in a particular group
 			if(is_array($htPerm[$grantName]))
 			{
@@ -1618,8 +1623,8 @@ class menuAdminController extends menu
 		$output = executeQuery('menu.getMenuItems', $args);
 		if(!$output->toBool()) return;
 		// Specify the name of the cache file
-		$xml_file = sprintf("./files/cache/menu/%s.xml.php", $menu_srl);
-		$php_file = sprintf("./files/cache/menu/%s.php", $menu_srl);
+		$xml_file = sprintf(_XE_PATH_ . "files/cache/menu/%s.xml.php", $menu_srl);
+		$php_file = sprintf(_XE_PATH_ . "files/cache/menu/%s.php", $menu_srl);
 		// If no data found, generate an XML file without node data
 		$list = $output->data;
 		if(!$list)
@@ -1731,7 +1736,7 @@ class menuAdminController extends menu
 			$names = $oMenuAdminModel->getMenuItemNames($node->name, $site_srl);
 			foreach($names as $key => $val)
 			{
-				$name_arr_str .= sprintf('"%s"=>"%s",',$key, str_replace('\\','\\\\',htmlspecialchars($val)));
+				$name_arr_str .= sprintf('"%s"=>"%s",',$key, str_replace('\\','\\\\',htmlspecialchars($val, ENT_COMPAT | ENT_HTML401, 'UTF-8', false)));
 			}
 			$name_str = sprintf('$_names = array(%s); print $_names[$lang_type];', $name_arr_str);
 
@@ -1761,11 +1766,9 @@ class menuAdminController extends menu
 
 			if($normal_btn)
 			{
-				if(preg_match('/\.png$/',$normal_btn)) $classname = 'class=&quot;iePngFix&quot;';
-				else $classname = '';
 				if($hover_btn) $hover_str = sprintf('onmouseover=&quot;this.src=\'%s\'&quot;', $hover_btn); else $hover_str = '';
 				if($active_btn) $active_str = sprintf('onmousedown=&quot;this.src=\'%s\'&quot;', $active_btn); else $active_str = '';
-				$link = sprintf('&lt;img src=&quot;%s&quot; onmouseout=&quot;this.src=\'%s\'&quot; alt=&quot;<?php print htmlspecialchars($_names[$lang_type]) ?>&quot; %s %s %s /&gt;', $normal_btn, $normal_btn, $hover_str, $active_str, $classname);
+				$link = sprintf('&lt;img src=&quot;%s&quot; onmouseout=&quot;this.src=\'%s\'&quot; alt=&quot;<?php print htmlspecialchars($_names[$lang_type], ENT_COMPAT | ENT_HTML401, \'UTF-8\', false) ?>&quot; %s %s /&gt;', $normal_btn, $normal_btn, $hover_str, $active_str);
 			}
 			else
 			{
@@ -1880,12 +1883,10 @@ class menuAdminController extends menu
 
 			if($normal_btn)
 			{
-				if(preg_match('/\.png$/',$normal_btn)) $classname = 'class=\"iePngFix\"';
-				else $classname = '';
 				if($hover_btn) $hover_str = sprintf('onmouseover=\"this.src=\'%s\'\"', $hover_btn); else $hover_str = '';
 				if($active_btn) $active_str = sprintf('onmousedown=\"this.src=\'%s\'\"', $active_btn); else $active_str = '';
-				$link = sprintf('"<img src=\"%s\" onmouseout=\"this.src=\'%s\'\" alt=\"".$_menu_names[%d][$lang_type]."\" %s %s %s />"', $normal_btn, $normal_btn, $node->menu_item_srl, $hover_str, $active_str, $classname);
-				if($active_btn) $link_active = sprintf('"<img src=\"%s\" onmouseout=\"this.src=\'%s\'\" alt=\"".$_menu_names[%d][$lang_type]."\" %s %s />"', $active_btn, $active_btn, $node->menu_item_srl, $hover_str, $classname);
+				$link = sprintf('"<img src=\"%s\" onmouseout=\"this.src=\'%s\'\" alt=\"".$_menu_names[%d][$lang_type]."\" %s %s />"', $normal_btn, $normal_btn, $node->menu_item_srl, $hover_str, $active_str);
+				if($active_btn) $link_active = sprintf('"<img src=\"%s\" onmouseout=\"this.src=\'%s\'\" alt=\"".$_menu_names[%d][$lang_type]."\" %s />"', $active_btn, $active_btn, $node->menu_item_srl, $hover_str);
 				else $link_active = $link;
 			}
 			else
@@ -2000,7 +2001,7 @@ class menuAdminController extends menu
 			$ext = $tmp_arr[count($tmp_arr)-1];
 
 			$filename = sprintf('%s%d.%s.%s.%s', $path, $args->menu_item_srl, $date, 'menu_hover_btn', $ext);
-			
+
 			if(checkUploadedFile($args->menu_hover_btn['tmp_name']))
 			{
 				move_uploaded_file($args->menu_hover_btn['tmp_name'], $filename);
@@ -2015,13 +2016,13 @@ class menuAdminController extends menu
 			$ext = $tmp_arr[count($tmp_arr)-1];
 
 			$filename = sprintf('%s%d.%s.%s.%s', $path, $args->menu_item_srl, $date, 'menu_active_btn', $ext);
-			
+
 			if(checkUploadedFile($args->menu_active_btn['tmp_name']))
 			{
 				move_uploaded_file($args->menu_active_btn['tmp_name'], $filename);
 				$returnArray['active_btn'] = $filename;
 			}
-			
+
 		}
 		return $returnArray;
 	}

@@ -120,11 +120,11 @@ class spamfilterModel extends spamfilter
 		{
 			if($isMessage)
 			{
-				$message = sprintf(Context::getLang('msg_alert_limited_by_config'), $interval);
+				$message = sprintf(Context::getLang('msg_alert_limited_message_by_config'), $interval);
 			}
 			else
 			{
-				$message = sprintf(Context::getLang('msg_alert_limited_message_by_config'), $interval);
+				$message = sprintf(Context::getLang('msg_alert_limited_by_config'), $interval);
 			}
 
 			$oSpamFilterController = &getController('spamfilter');
@@ -155,7 +155,7 @@ class spamfilterModel extends spamfilter
 		if(!$ipaddress) $ipaddress = $_SERVER['REMOTE_ADDR'];
 
 		$args->ipaddress = $ipaddress;
-		$args->regdate = date("YmdHis", time()-$time);
+		$args->regdate = date("YmdHis", $_SERVER['REQUEST_TIME']-$time);
 		$output = executeQuery('spamfilter.getLogCount', $args);
 		$count = $output->data->count;
 		return $count;

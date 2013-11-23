@@ -80,7 +80,7 @@ class ModuleHandler extends Handler
 			exit;
 		}
 
-		if(isset($this->act) && substr_compare($this->act, 'disp', 0, 4) === 0)
+		if(isset($this->act) && (strlen($this->act) >= 4 && substr_compare($this->act, 'disp', 0, 4) === 0))
 		{
 			if(Context::get('_use_ssl') == 'optional' && Context::isExistsSSLAction($this->act) && $_SERVER['HTTPS'] != 'on')
 			{
@@ -93,7 +93,7 @@ class ModuleHandler extends Handler
 		$called_position = 'before_module_init';
 		$oAddonController = getController('addon');
 		$addon_file = $oAddonController->getCacheFilePath(Mobile::isFromMobilePhone() ? 'mobile' : 'pc');
-		@include($addon_file);
+		if(file_exists($addon_file)) include($addon_file);
 	}
 
 	/**
@@ -859,7 +859,7 @@ class ModuleHandler extends Handler
 						{
 							if($val->type == 'image')
 							{
-								if(preg_match('/^\.\/files\/attach\/images\/(.+)/i', $val->value))
+								if(strncmp('./files/attach/images/', $val->value, 22) === 0)
 								{
 									$val->value = Context::getRequestUri() . substr($val->value, 2);
 								}
@@ -878,9 +878,9 @@ class ModuleHandler extends Handler
 								$oMenuAdminController = getAdminController('menu');
 								$homeMenuCacheFile = $oMenuAdminController->getHomeMenuCacheFile();
 
-								if(file_exists($homeMenuCacheFile))
+								if(FileHandler::exists($homeMenuCacheFile))
 								{
-									@include($homeMenuCacheFile);
+									include($homeMenuCacheFile);
 								}
 
 								if(!$menu->menu_srl)
@@ -895,9 +895,11 @@ class ModuleHandler extends Handler
 									$menu->php_file = str_replace($menu->menu_srl, $homeMenuSrl, $menu->php_file);
 								}
 							}
-							if(file_exists($menu->php_file))
+
+							$php_file = FileHandler::exists($menu->php_file);
+							if($php_file)
 							{
-								@include($menu->php_file);
+								include($php_file);
 							}
 							Context::set($menu_id, $menu);
 						}

@@ -28,7 +28,7 @@ if($_REQUEST['act'] != 'api')
 }
 
 // Read func file
-require_once('./addons/blogapi/blogapi.func.php');
+require_once(_XE_PATH_ . 'addons/blogapi/blogapi.func.php');
 
 // xmlprc parsing
 // Parse the requested xmlrpc
@@ -83,8 +83,8 @@ if($called_position == 'before_module_proc')
 	$category_list = $oDocumentModel->getCategoryList($this->module_srl);
 
 	// Specifies a temporary file storage
-	$tmp_uploaded_path = sprintf('./files/cache/blogapi/%s/%s/', $this->mid, $user_id);
-	$uploaded_target_path = sprintf('/files/cache/blogapi/%s/%s/', $this->mid, $user_id);
+	$tmp_uploaded_path = sprintf(_XE_PATH_ . 'files/cache/blogapi/%s/%s/', $this->mid, $user_id);
+	$uploaded_target_path = sprintf(_XE_PATH_ . 'files/cache/blogapi/%s/%s/', $this->mid, $user_id);
 
 	switch($method_name)
 	{
@@ -490,10 +490,10 @@ if($called_position == 'before_module_proc')
 					$post = new stdClass();
 					$post->categories = array();
 					$post->dateCreated = date("Ymd", $oDocument->getRegdateTime()) . 'T' . date("H:i:s", $oDocument->getRegdateTime());
-					$post->description = htmlspecialchars($oEditorController->transComponent($oDocument->getContent(false, false, true, false)));
+					$post->description = htmlspecialchars($oEditorController->transComponent($oDocument->getContent(false, false, true, false)), ENT_COMPAT | ENT_HTML401, 'UTF-8', false);
 					$post->link = $post->permaLink = getFullUrl('', 'document_srl', $oDocument->document_srl);
 					$post->postid = $oDocument->document_srl;
-					$post->title = htmlspecialchars($oDocument->get('title'));
+					$post->title = htmlspecialchars($oDocument->get('title'), ENT_COMPAT | ENT_HTML401, 'UTF-8', false);
 					$post->publish = 1;
 					$post->userid = $oDocument->get('user_id');
 					$post->mt_allow_pings = 0;

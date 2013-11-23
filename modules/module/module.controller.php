@@ -232,7 +232,7 @@ class moduleController extends module
 		}
 
 		$args->site_srl = getNextSequence();
-		$args->domain = preg_replace('/\/$/','',$domain);
+		$args->domain = (substr_compare($domain, '/', -1) === 0) ? substr($domain, 0, -1) : $domain;
 		$args->index_module_srl = $index_module_srl;
 		$args->default_language = Context::getLangType();
 
@@ -264,7 +264,7 @@ class moduleController extends module
 
 			if($args->domain && !isSiteID($args->domain))
 			{
-				$args->domain = preg_replace('/\/$/','',$args->domain);
+				$args->domain = (substr_compare($domain, '/', -1) === 0) ? substr($domain, 0, -1) : $domain;
 			}
 		}
 		$output = executeQuery('module.updateSite', $args);
@@ -545,6 +545,12 @@ class moduleController extends module
 				$oDB->rollback();
 				return $updateMenuItemOutput;
 			}
+		}
+		
+		// if mid changed, change mid of success_return_url to new mid
+		if($module_info->mid != $args->mid && Context::get('success_return_url'))
+		{
+			changeValueInUrl('mid', $args->mid, $module_info->mid);
 		}
 
 		// Insert module extra vars
@@ -1252,7 +1258,7 @@ class moduleController extends module
 		$this->unlockTimeoutPassed();
 		$args->lock_name = $lock_name;
 		if(!$timeout) $timeout = 60;
-		$args->deadline = date("YmdHis", time() + $timeout);
+		$args->deadline = date("YmdHis", $_SERVER['REQUEST_TIME'] + $timeout);
 		if($member_srl) $args->member_srl = $member_srl;
 		$output = executeQuery('module.insertLock', $args);
 		if($output->toBool())

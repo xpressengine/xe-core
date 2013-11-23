@@ -59,7 +59,7 @@ class installAdminController extends install
 		}
 
 		$default_url = Context::get('default_url');
-		if($default_url && !preg_match('/^(http|https):\/\//i', $default_url)) $default_url = 'http://'.$default_url;
+		if($default_url && strncasecmp('http://', $default_url, 7) !== 0 && strncasecmp('https://', $default_url, 8) !== 0) $default_url = 'http://'.$default_url;
 
 		$use_ssl = Context::get('use_ssl');
 		if(!$use_ssl) $use_ssl = 'none';
@@ -142,7 +142,7 @@ class installAdminController extends install
 		$homeMenuCacheFile = $oMenuAdminController->getHomeMenuCacheFile();
 		if(file_exists($homeMenuCacheFile))
 		{
-			@include($homeMenuCacheFile);
+			include($homeMenuCacheFile);
 		}
 
 		if(!$homeMenuSrl || $homeMenuSrl != $output->menu_srl)
@@ -272,7 +272,7 @@ class installAdminController extends install
 		}
 
 		Context::set('name', $name);
-		Context::set('tmpFileName', $tmpFileName.'?'.time());
+		Context::set('tmpFileName', $tmpFileName.'?'.$_SERVER['REQUEST_TIME']);
 	}
 
 	/**

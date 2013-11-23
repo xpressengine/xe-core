@@ -20,7 +20,7 @@ class pollController extends poll
 	function procInsert()
 	{
 		$stop_date = Context::get('stop_date');
-		if($stop_date < date("Ymd")) $stop_date = date("YmdHis", time()+60*60*24*365);
+		if($stop_date < date("Ymd")) $stop_date = date("YmdHis", $_SERVER['REQUEST_TIME']+60*60*24*365);
 
 		$logged_info = Context::get('logged_info');
 		$vars = Context::getRequestVars();
@@ -34,7 +34,7 @@ class pollController extends poll
 
 			$poll_index = $tmp_arr[1];
 
-			if($logged_info->is_admin != 'Y') $val = htmlspecialchars($val);
+			if($logged_info->is_admin != 'Y') $val = htmlspecialchars($val, ENT_COMPAT | ENT_HTML401, 'UTF-8', false);
 
 			if($tmp_arr[0]=='title') $tmp_args[$poll_index]->title = $val;
 			else if($tmp_arr[0]=='checkcount') $tmp_args[$poll_index]->checkcount = $val;
@@ -171,7 +171,7 @@ class pollController extends poll
 		$oDB->commit();
 
 		$skin = Context::get('skin'); 
-		if(!$skin || !is_dir('./modules/poll/skins/'.$skin)) $skin = 'default';
+		if(!$skin || !is_dir(_XE_PATH_ . 'modules/poll/skins/'.$skin)) $skin = 'default';
 		// Get tpl
 		$tpl = $oPollModel->getPollHtml($poll_srl, '', $skin);
 
@@ -191,7 +191,7 @@ class pollController extends poll
 		$poll_srl = Context::get('poll_srl'); 
 
 		$skin = Context::get('skin'); 
-		if(!$skin || !is_dir('./modules/poll/skins/'.$skin)) $skin = 'default';
+		if(!$skin || !is_dir(_XE_PATH_ . 'modules/poll/skins/'.$skin)) $skin = 'default';
 
 		$oPollModel = &getModel('poll');
 		$tpl = $oPollModel->getPollResultHtml($poll_srl, $skin);

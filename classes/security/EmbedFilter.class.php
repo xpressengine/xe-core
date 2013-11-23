@@ -17,8 +17,8 @@ class EmbedFilter
 	 * @var int
 	 */
 	var $allowscriptaccessKey = 0;
-	var $whiteUrlXmlFile = './classes/security/conf/embedWhiteUrl.xml';
-	var $whiteUrlCacheFile = './files/cache/embedfilter/embedWhiteUrl.php';
+	var $whiteUrlXmlFile = _XE_PATH_ . 'classes/security/conf/embedWhiteUrl.xml';
+	var $whiteUrlCacheFile = _XE_PATH_ . 'files/cache/embedfilter/embedWhiteUrl.php';
 	var $whiteUrlList = array();
 	var $whiteIframeUrlList = array();
 	var $parser = NULL;
@@ -355,7 +355,7 @@ class EmbedFilter
 
 				if(!$isWhiteDomain && !$isWhiteMimetype && !$isWhiteExt)
 				{
-					$content = str_replace($objectTag, htmlspecialchars($objectTag), $content);
+					$content = str_replace($objectTag, htmlspecialchars($objectTag, ENT_COMPAT | ENT_HTML401, 'UTF-8', false), $content);
 				}
 			}
 		}
@@ -408,7 +408,7 @@ class EmbedFilter
 
 				if(!$isWhiteDomain && !$isWhiteMimetype && !$isWhiteExt)
 				{
-					$content = str_replace($embedTag, htmlspecialchars($embedTag), $content);
+					$content = str_replace($embedTag, htmlspecialchars($embedTag, ENT_COMPAT | ENT_HTML401, 'UTF-8', false), $content);
 				}
 			}
 		}
@@ -451,7 +451,7 @@ class EmbedFilter
 
 				if(!$isWhiteDomain)
 				{
-					$content = str_replace($iframeTag, htmlspecialchars($iframeTag), $content);
+					$content = str_replace($iframeTag, htmlspecialchars($iframeTag, ENT_COMPAT | ENT_HTML401, 'UTF-8', false), $content);
 				}
 			}
 		}
@@ -491,7 +491,7 @@ class EmbedFilter
 
 							if(!$isWhiteDomain && !$isWhiteExt)
 							{
-								$content = str_replace($paramTag, htmlspecialchars($paramTag), $content);
+								$content = str_replace($paramTag, htmlspecialchars($paramTag, ENT_COMPAT | ENT_HTML401, 'UTF-8', false), $content);
 							}
 						}
 					}
