@@ -804,9 +804,14 @@ class TemplateHandler
 
 	private function _replaceVarCallback($matches)
 	{
-		if($matches[0] == '$lang' || $matches[0] == '$_COOKIE')
+		if($matches[0] == '$lang')
 		{
-			return '$GLOBALS[\'' . substr($matches[0], 1) . '\']';
+			return '$GLOBALS[\'lang\']';
+		}
+
+		if($matches[0] == '$_COOKIE')
+		{
+			return $matches[0];
 		}
 
 		return '$__Context->' . substr($matches[0], 1);
