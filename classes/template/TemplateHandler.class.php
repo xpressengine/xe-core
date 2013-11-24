@@ -806,7 +806,6 @@ class TemplateHandler
 	{
 		if($matches[0] == '$lang' || $matches[0] == '$_COOKIE')
 		{
-			if($matches[0] == '$_COOKIE') echo print_r($matches);
 			return '$GLOBALS[\'' . substr($matches[0], 1) . '\']';
 		}
 
