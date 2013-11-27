@@ -57,6 +57,7 @@ class DB
 	 * @var array
 	 */
 	var $priority_dbms = array(
+		'mysqli_innodb' => 6,
 		'mysqli' => 5,
 		'mysql' => 4,
 		'mysql_innodb' => 3,
