@@ -1268,7 +1268,7 @@ class DB
 	 */
 	function _afterConnect($connection)
 	{
-
+		register_shutdown_function( array($this, "close" ) );
 	}
 
 	/**

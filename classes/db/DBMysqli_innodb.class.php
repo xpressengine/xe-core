@@ -77,7 +77,7 @@ class DBMysqli_innodb extends DBMysql
 	 */
 	function _close($connection)
 	{
-		$this->_query("commit", $connection);
+		mysqli_commit($connection);
 		mysqli_close($connection);
 	}
 
@@ -92,7 +92,7 @@ class DBMysqli_innodb extends DBMysql
 
 		if(!$transactionLevel)
 		{
-			$this->_query("START TRANSACTION", $connection);
+			mysqli_autocommit($connection, FALSE);
 		}
 		else
 		{
@@ -118,7 +118,7 @@ class DBMysqli_innodb extends DBMysql
 		}
 		else
 		{
-			$this->_query("ROLLBACK", $connection);
+			mysqli_rollback($connection);
 		}
 		return true;
 	}
@@ -131,7 +131,7 @@ class DBMysqli_innodb extends DBMysql
 	function _commit()
 	{
 		$connection = $this->_getConnection('master');
-		$this->_query("commit", $connection);
+		mysqli_commit($connection);
 		return true;
 	}
 
