@@ -57,8 +57,8 @@ class DB
 	 * @var array
 	 */
 	var $priority_dbms = array(
-		'mysqli_innodb' => 6,
-		'mysqli' => 5,
+		'mysqli' => 6,
+		'mysqli_innodb' => 5,
 		'mysql' => 4,
 		'mysql_innodb' => 3,
 		'cubrid' => 2,
@@ -1268,7 +1268,7 @@ class DB
 	 */
 	function _afterConnect($connection)
 	{
-		register_shutdown_function( array($this, "close" ) );
+		register_shutdown_function(array($this, "close"));
 	}
 
 	/**
