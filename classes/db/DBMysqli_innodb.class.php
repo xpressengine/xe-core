@@ -77,7 +77,6 @@ class DBMysqli_innodb extends DBMysql
 	 */
 	function _close($connection)
 	{
-		mysqli_commit($connection);
 		mysqli_close($connection);
 	}
 
@@ -92,7 +91,7 @@ class DBMysqli_innodb extends DBMysql
 
 		if(!$transactionLevel)
 		{
-			mysqli_autocommit($connection, FALSE);
+			$this->_query("begin");
 		}
 		else
 		{

@@ -1090,6 +1090,7 @@ class DB
 			$connection = &$this->slave_db[$indx];
 		}
 
+		$this->commit();
 		$this->_close($connection["resource"]);
 
 		$connection["is_connected"] = FALSE;
@@ -1268,7 +1269,7 @@ class DB
 	 */
 	function _afterConnect($connection)
 	{
-		register_shutdown_function(array($this, "close"));
+
 	}
 
 	/**
@@ -1313,6 +1314,9 @@ class DB
 
 		// Save connection info for db logs
 		$this->connection = ucfirst($type) . ' ' . $connection["db_hostname"];
+
+		// regist $this->close callback
+		register_shutdown_function(array($this, "close"));
 
 		$this->_afterConnect($result);
 	}
