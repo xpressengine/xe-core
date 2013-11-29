@@ -118,6 +118,10 @@ class DBMysqli_innodb extends DBMysql
 		else
 		{
 			mysqli_rollback($connection);
+			// leave query log
+			$this->query = "rollback";
+			$this->errno = 0;
+			$this->actFinish();
 		}
 		return true;
 	}
@@ -131,6 +135,10 @@ class DBMysqli_innodb extends DBMysql
 	{
 		$connection = $this->_getConnection('master');
 		mysqli_commit($connection);
+		// leave query log
+		$this->query = "commit";
+		$this->errno = 0;
+		$this->actFinish();
 		return true;
 	}
 
