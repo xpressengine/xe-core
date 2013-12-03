@@ -469,7 +469,8 @@ class DB
 		{
 			$log['result'] = 'Success';
 		}
-		$GLOBALS['__db_queries__'][] = $log;
+
+		$this->setQueryLog($log);
 
 		// if __LOG_SLOW_QUERY__ if defined, check elapsed time and leave query log
 		if(__LOG_SLOW_QUERY__ > 0 && $elapsed_time > __LOG_SLOW_QUERY__)
@@ -485,6 +486,16 @@ class DB
 
 			@file_put_contents($log_file, $buff, FILE_APPEND|LOCK_EX);
 		}
+	}
+
+	/**
+	 * set query debug log
+	 * @param array $log values set query debug
+	 * @return void
+	*/
+	function setQueryLog($log)
+	{
+		$GLOBALS['__db_queries__'][] = $log;
 	}
 
 	/**
