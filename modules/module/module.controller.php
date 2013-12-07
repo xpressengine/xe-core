@@ -67,6 +67,8 @@ class moduleController extends module
 			$oCacheHandler->invalidateGroupKey('triggers');
 			$cache_key = 'object:'.$trigger_name.'_'.$called_position;
 			$oCacheHandler->delete($cache_key);
+			$cache_key = 'object:'.$trigger_name.'_'.$module.'_'.$type.'_'.$called_method.'_'.$called_position;
+			$oCacheHandler->delete($cache_key);
 		}
 
 		// Delete all the files which contain trigger information
@@ -96,6 +98,8 @@ class moduleController extends module
 		{
 			$oCacheHandler->invalidateGroupKey('triggers');
 			$cache_key = 'object:'.$trigger_name.'_'.$called_position;
+			$oCacheHandler->delete($cache_key);
+			$cache_key = 'object:'.$trigger_name.'_'.$module.'_'.$type.'_'.$called_method.'_'.$called_position;
 			$oCacheHandler->delete($cache_key);
 		}
 
