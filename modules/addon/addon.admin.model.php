@@ -182,19 +182,6 @@ class addonAdminModel extends addon
 		$extra_vals = unserialize($output->data->extra_vars);
 
 		$addon_info = new stdClass();
-		if($extra_vals->mid_list)
-		{
-			$addon_info->mid_list = $extra_vals->mid_list;
-		}
-		else
-		{
-			$addon_info->mid_list = array();
-		}
-
-		if($extra_vals->xe_run_method)
-		{
-			$addon_info->xe_run_method = $extra_vals->xe_run_method;
-		}
 
 		// Add information
 		if($xml_obj->version && $xml_obj->attrs->version == '0.2')
@@ -377,6 +364,21 @@ class addonAdminModel extends addon
 				}
 			}
 		}
+
+		if($extra_vals->mid_list)
+		{
+			$addon_info->mid_list = $extra_vals->mid_list;
+		}
+		else
+		{
+			$addon_info->mid_list = array();
+		}
+
+		if($extra_vals->xe_run_method)
+		{
+			$addon_info->xe_run_method = $extra_vals->xe_run_method;
+		}
+
 		return $addon_info;
 	}
 
