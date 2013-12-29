@@ -924,10 +924,33 @@ class Context
 	 *
 	 * @return string Language type
 	 */
-	function getLangType()
+	function getLangType($iso639 = FALSE)
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
-		return $self->lang_type;
+		is_a($this, 'Context') ? $self = $this : $self = Context::getInstance();
+		if(!$iso639) return $self->lang_type;
+		else
+		{
+			$lang_code = array(
+				/*
+				XE Lang Tyoe to ISO639 Lang Code by misol.kr@gmail.com
+				XE Lang Type => ISO639 Lang Code
+				*/
+				'en' => 'en',
+				'ko' => 'ko',
+				'jp' => 'ja',
+				'zh-CN' => 'zh-CN', //Macrolanguage
+				'zh-TW' => 'zh-TW', //Macrolanguage
+				'fr' => 'fr',
+				'de' => 'de',
+				'ru' => 'ru',
+				'es' => 'es',
+				'tr' => 'tr',
+				'vi' => 'vi',
+				'mn' => 'mn'
+				);
+			if($lang_code[$self->lang_type]) return $lang_code[$self->lang_type];
+			else return $self->lang_type;
+		}
 	}
 
 	/**
