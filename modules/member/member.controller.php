@@ -1701,7 +1701,10 @@ class memberController extends member
 			return new Object(-1,'msg_user_denied');
 		}
 		// Notify if denied_date is less than the current time
-		if($this->memberInfo->limit_date && substr($this->memberInfo->limit_date,0,8) >= date("Ymd")) return new Object(-1,sprintf(Context::getLang('msg_user_limited'),zdate($this->memberInfo->limit_date,"Y-m-d")));
+		if($this->memberInfo->limit_date && substr($this->memberInfo->limit_date,0,8) >= date("Ymd")) {
+			if($this->memberInfo->stop_reason!='') return new Object(-1,sprintf(Context::getLang('msg_user_limited_with_reason'),zdate($this->memberInfo->limit_date,"Y-m-d"),$this->memberInfo->stop_reason));
+			else return new Object(-1,sprintf(Context::getLang('msg_user_limited'),zdate($this->memberInfo->limit_date,"Y-m-d")));
+		}
 		// Update the latest login time
 		$args->member_srl = $this->memberInfo->member_srl;
 		$output = executeQuery('member.updateLastLogin', $args);

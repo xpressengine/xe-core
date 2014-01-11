@@ -23,4 +23,5 @@
     <column name="description" type="text" />
     <column name="extra_vars" type="text" />
     <column name="list_order" type="number" size="11" notnull="notnull" index="idx_list_order" />
+    <column name="stop_reason" type="varchar" size="250" />
 </table>

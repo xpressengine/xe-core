@@ -22,7 +22,6 @@
         <param name="group_srl_list" target="group_srl_list" />
         <param name="signature" target="signature" />
         <param name="limit_date" target="limit_date" />
-		<param name="stop_reason" target="stop_reason" />
     </parameter>
     <response callback_func="completeInsert">
         <tag name="error" />
