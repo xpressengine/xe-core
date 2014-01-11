@@ -27,6 +27,7 @@ class integration_searchAdminController extends integration_search
 		$oModuleModel = getModel('module');
 		$config = $oModuleModel->getModuleConfig('integration_search');
 
+		$args->enabled = Context::get('enabled');
 		$args->skin = Context::get('skin');
 		$args->target = Context::get('target');
 		$args->target_module_srl = Context::get('target_module_srl');
