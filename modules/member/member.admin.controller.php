@@ -29,7 +29,7 @@ class memberAdminController extends member
 			return new Object(-1, 'msg_invalid_request');
 		}
 
-		$args = Context::gets('member_srl','email_address','find_account_answer', 'allow_mailing','allow_message','denied','is_admin','description','group_srl_list','limit_date');
+		$args = Context::gets('member_srl','email_address','find_account_answer', 'allow_mailing','allow_message','denied','is_admin','description','group_srl_list','limit_date','stop_reason');
 		$oMemberModel = &getModel ('member');
 		$config = $oMemberModel->getMemberConfig ();
 		$getVars = array();
@@ -61,6 +61,7 @@ class memberAdminController extends member
 		unset($all_args->success_return_url);
 		unset($all_args->ruleset);
 		if(!isset($args->limit_date)) $args->limit_date = "";
+		if(!isset($args->stop_reason)) $args->stop_reason = "";
 		// Add extra vars after excluding necessary information from all the requested arguments
 		$extra_vars = delObjectVars($all_args, $args);
 		$args->extra_vars = serialize($extra_vars);

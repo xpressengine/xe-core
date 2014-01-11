@@ -27,5 +27,6 @@
         <column name="description" var="description" />
         <column name="extra_vars" var="extra_vars" />
         <column name="list_order" var="list_order" />
+	<column name="stop_reason" var="stop_reason" />
     </columns>
 </query>
