@@ -1,7 +1,8 @@
 <?php
+/* Copyright (C) NAVER <http://www.navercorp.com> */
 /**
  * @class  sessionModel
- * @author NHN (developers@xpressengine.com)
+ * @author NAVER (developers@xpressengine.com)
  * @brief The Model class of the session module
  */
 class sessionModel extends session
@@ -22,12 +23,15 @@ class sessionModel extends session
 	{
 		if(!$session_key || !$this->session_started) return;
 
-		$oCacheHandler = &CacheHandler::getInstance('object');
+		$output = new Object();
+
+		$oCacheHandler = CacheHandler::getInstance('object');
 		if($oCacheHandler->isSupport())
 		{
-			$cache_key = 'object:'.$session_key;
+			$cache_key = 'session:'.$session_key;
 			$output->data = $oCacheHandler->get($cache_key);
 		}
+
 		if(!$output->data)
 		{
 			$args = new stdClass();
@@ -70,12 +74,13 @@ class sessionModel extends session
 		if(!$args->list_count) $args->list_count = 20;
 		if(!$args->page) $args->page = 1;
 		if(!$args->period_time) $args->period_time = 3;
-		$args->last_update = date("YmdHis", time() - $args->period_time*60);
+		$args->last_update = date("YmdHis", $_SERVER['REQUEST_TIME'] - $args->period_time*60);
 
 		$output = executeQueryArray('session.getLoggedMembers', $args);
 		if(!$output->toBool()) return $output;
 
 		$member_srls = array();
+		$member_keys = array();
 		if(count($output->data))
 		{
 			foreach($output->data as $key => $val)

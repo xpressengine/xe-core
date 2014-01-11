@@ -1,8 +1,9 @@
 <?php
+/* Copyright (C) NAVER <http://www.navercorp.com> */
 
 /**
  * @class ModuleHandler
- * @author NHN (developers@xpressengine.com)
+ * @author NAVER (developers@xpressengine.com)
  * Handling modules
  *
  * @remarks This class is to excute actions of modules.
@@ -79,7 +80,7 @@ class ModuleHandler extends Handler
 			exit;
 		}
 
-		if(isset($this->act) && substr($this->act, 0, 4) == 'disp')
+		if(isset($this->act) && (strlen($this->act) >= 4 && substr_compare($this->act, 'disp', 0, 4) === 0))
 		{
 			if(Context::get('_use_ssl') == 'optional' && Context::isExistsSSLAction($this->act) && $_SERVER['HTTPS'] != 'on')
 			{
@@ -88,11 +89,14 @@ class ModuleHandler extends Handler
 			}
 		}
 
+		// call a trigger before moduleHandler init
+		ModuleHandler::triggerCall('moduleHandler.init', 'before', $this);
+
 		// execute addon (before module initialization)
 		$called_position = 'before_module_init';
 		$oAddonController = getController('addon');
 		$addon_file = $oAddonController->getCacheFilePath(Mobile::isFromMobilePhone() ? 'mobile' : 'pc');
-		@include($addon_file);
+		if(file_exists($addon_file)) include($addon_file);
 	}
 
 	/**
@@ -128,7 +132,7 @@ class ModuleHandler extends Handler
 
 		if(!$this->document_srl && $this->mid && $this->entry)
 		{
-			$oDocumentModel = &getModel('document');
+			$oDocumentModel = getModel('document');
 			$this->document_srl = $oDocumentModel->getDocumentSrlByAlias($this->mid, $this->entry);
 			if($this->document_srl)
 			{
@@ -137,10 +141,10 @@ class ModuleHandler extends Handler
 		}
 
 		// Get module's information based on document_srl, if it's specified
-		if($this->document_srl && !$this->module)
+		if($this->document_srl)
 		{
+			
 			$module_info = $oModuleModel->getModuleInfoByDocumentSrl($this->document_srl);
-
 			// If the document does not exist, remove document_srl
 			if(!$module_info)
 			{
@@ -150,19 +154,22 @@ class ModuleHandler extends Handler
 			{
 				// If it exists, compare mid based on the module information
 				// if mids are not matching, set it as the document's mid
-				if($this->mid != $module_info->mid)
+				if(($this->mid && $this->mid != $module_info->mid) || ($this->module_srl && $this->module_srl != $module_info->module_srl))
 				{
 					$this->mid = $module_info->mid;
+					$this->module_srl = $module_info->module_srl;
 					Context::set('mid', $module_info->mid, TRUE);
-					header('location:' . getNotEncodedSiteUrl($site_info->domain, 'mid', $this->mid, 'document_srl', $this->document_srl));
+					header('location:' . getNotEncodedSiteUrl($site_info->domain, 'mid', $this->mid, 'document_srl', $this->document_srl, 'module_srl',''));
 					return FALSE;
 				}
+				
+				// if requested module is different from one of the document, remove the module information retrieved based on the document number
+				if($this->module && $module_info->module != $this->module)
+				{
+					unset($module_info);
+				}
 			}
-			// if requested module is different from one of the document, remove the module information retrieved based on the document number
-			if($this->module && $module_info->module != $this->module)
-			{
-				unset($module_info);
-			}
+
 		}
 
 		// If module_info is not set yet, and there exists mid information, get module information based on the mid
@@ -231,7 +238,7 @@ class ModuleHandler extends Handler
 			// use the site default layout.
 			if($module_info->{$targetSrl} == -1)
 			{
-				$oLayoutAdminModel = &getAdminModel('layout');
+				$oLayoutAdminModel = getAdminModel('layout');
 				$layoutSrl = $oLayoutAdminModel->getSiteDefaultLayout($viewType, $module_info->site_srl);
 			}
 			else
@@ -275,7 +282,7 @@ class ModuleHandler extends Handler
 		if(!$output->toBool())
 		{
 			$this->error = $output->getMessage();
-			return FALSE;
+			return TRUE;
 		}
 
 		// Set current module info into context
@@ -348,7 +355,7 @@ class ModuleHandler extends Handler
 		// get type, kind
 		$type = $xml_info->action->{$this->act}->type;
 		$ruleset = $xml_info->action->{$this->act}->ruleset;
-		$kind = strpos(strtolower($this->act), 'admin') !== FALSE ? 'admin' : '';
+		$kind = stripos($this->act, 'admin') !== FALSE ? 'admin' : '';
 		if(!$kind && $this->module == 'admin')
 		{
 			$kind = 'admin';
@@ -457,13 +464,24 @@ class ModuleHandler extends Handler
 			{
 				$module = strtolower($matches[2] . $matches[3]);
 				$xml_info = $oModuleModel->getModuleActionXml($module);
-				if($xml_info->action->{$this->act})
+
+				if($xml_info->action->{$this->act} && ((stripos($this->act, 'admin') !== FALSE) || $xml_info->action->{$this->act}->standalone != 'false'))
 				{
 					$forward = new stdClass();
 					$forward->module = $module;
 					$forward->type = $xml_info->action->{$this->act}->type;
 					$forward->ruleset = $xml_info->action->{$this->act}->ruleset;
 					$forward->act = $this->act;
+				}
+				else
+				{
+					$this->error = 'msg_invalid_request';
+					$oMessageObject = ModuleHandler::getModuleInstance('message', 'view');
+					$oMessageObject->setError(-1);
+					$oMessageObject->setMessage($this->error);
+					$oMessageObject->dispMessage();
+
+					return $oMessageObject;
 				}
 			}
 
@@ -474,7 +492,7 @@ class ModuleHandler extends Handler
 
 			if($forward->module && $forward->type && $forward->act && $forward->act == $this->act)
 			{
-				$kind = strpos(strtolower($forward->act), 'admin') !== FALSE ? 'admin' : '';
+				$kind = stripos($forward->act, 'admin') !== FALSE ? 'admin' : '';
 				$type = $forward->type;
 				$ruleset = $forward->ruleset;
 				$tpl_path = $oModule->getTemplatePath();
@@ -656,6 +674,7 @@ class ModuleHandler extends Handler
 			$message = $oModule->getMessage();
 			$messageType = $oModule->getMessageType();
 			$redirectUrl = $oModule->getRedirectUrl();
+			if($messageType == 'error') debugPrint($message, 'ERROR');
 
 			if(!$procResult)
 			{
@@ -858,7 +877,7 @@ class ModuleHandler extends Handler
 						{
 							if($val->type == 'image')
 							{
-								if(preg_match('/^\.\/files\/attach\/images\/(.+)/i', $val->value))
+								if(strncmp('./files/attach/images/', $val->value, 22) === 0)
 								{
 									$val->value = Context::getRequestUri() . substr($val->value, 2);
 								}
@@ -877,9 +896,9 @@ class ModuleHandler extends Handler
 								$oMenuAdminController = getAdminController('menu');
 								$homeMenuCacheFile = $oMenuAdminController->getHomeMenuCacheFile();
 
-								if(file_exists($homeMenuCacheFile))
+								if(FileHandler::exists($homeMenuCacheFile))
 								{
-									@include($homeMenuCacheFile);
+									include($homeMenuCacheFile);
 								}
 
 								if(!$menu->menu_srl)
@@ -894,9 +913,11 @@ class ModuleHandler extends Handler
 									$menu->php_file = str_replace($menu->menu_srl, $homeMenuSrl, $menu->php_file);
 								}
 							}
-							if(file_exists($menu->php_file))
+
+							$php_file = FileHandler::exists($menu->php_file);
+							if($php_file)
 							{
-								@include($menu->php_file);
+								include($php_file);
 							}
 							Context::set($menu_id, $menu);
 						}
@@ -919,7 +940,7 @@ class ModuleHandler extends Handler
 			$isLayoutDrop = Context::get('isLayoutDrop');
 			if($isLayoutDrop)
 			{
-				$kind = strpos(strtolower($this->act), 'admin') !== FALSE ? 'admin' : '';
+				$kind = stripos($this->act, 'admin') !== FALSE ? 'admin' : '';
 				if($kind == 'admin')
 				{
 					$oModule->setLayoutFile('popup_layout');
@@ -1062,7 +1083,7 @@ class ModuleHandler extends Handler
 		$highClassFile = sprintf('%s%s%s.class.php', _XE_PATH_, $classPath, $module);
 		$highClassFile = FileHandler::getRealPath($highClassFile);
 
-		$types = explode(' ', 'view controller model api wap mobile class');
+		$types = array('view','controller','model','api','wap','mobile','class');
 		if(!in_array($type, $types))
 		{
 			$type = $types[0];
@@ -1084,8 +1105,7 @@ class ModuleHandler extends Handler
 		}
 
 		$instanceName = sprintf($instanceName, $module, ucfirst($type));
-		$classFile = sprintf($classFile, $classPath, $module, $type);
-		$classFile = FileHandler::getRealPath($classFile);
+		$classFile = FileHandler::getRealPath(sprintf($classFile, $classPath, $module, $type));
 	}
 
 	/**
@@ -1105,7 +1125,7 @@ class ModuleHandler extends Handler
 
 		$oModuleModel = getModel('module');
 		$triggers = $oModuleModel->getTriggers($trigger_name, $called_position);
-		if(!$triggers || !count($triggers))
+		if(!$triggers || count($triggers) < 1)
 		{
 			return new Object();
 		}
@@ -1116,7 +1136,7 @@ class ModuleHandler extends Handler
 			$type = $item->type;
 			$called_method = $item->called_method;
 
-			$oModule = NULL;
+			// todo why don't we call a normal class object ?
 			$oModule = getModule($module, $type);
 			if(!$oModule || !method_exists($oModule, $called_method))
 			{
@@ -1144,7 +1164,7 @@ class ModuleHandler extends Handler
 		$statusMessageList = array(
 			'100' => 'Continue',
 			'101' => 'Switching Protocols',
-			'201' => 'OK',
+			'201' => 'OK', // todo check array key '201'
 			'201' => 'Created',
 			'202' => 'Accepted',
 			'203' => 'Non-Authoritative Information',
@@ -1194,4 +1214,5 @@ class ModuleHandler extends Handler
 	}
 
 }
-?>
+/* End of file ModuleHandler.class.php */
+/* Location: ./classes/module/ModuleHandler.class.php */

@@ -1,10 +1,11 @@
 <?php
+/* Copyright (C) NAVER <http://www.navercorp.com> */
 
 /**
  * admin class
  * Base class of admin module
  *
- * @author NHN (developers@xpressengine.com)
+ * @author NAVER (developers@xpressengine.com)
  * @package /modules/admin
  * @version 0.1
  */

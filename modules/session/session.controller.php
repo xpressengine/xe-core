@@ -1,7 +1,8 @@
 <?php
+/* Copyright (C) NAVER <http://www.navercorp.com> */
 /**
  * @class  sessionController
- * @author NHN (developers@xpressengine.com)
+ * @author NAVER (developers@xpressengine.com)
  * @brief The controller class of the session module
  */
 class sessionController extends session
@@ -26,10 +27,10 @@ class sessionController extends session
 	function write($session_key, $val)
 	{
 		if(!$session_key || !$this->session_started) return;
-		$oCacheHandler = &CacheHandler::getInstance('object');
+		$oCacheHandler = CacheHandler::getInstance('object');
 		if($oCacheHandler->isSupport())
 		{
-			$cache_key = 'object:'.$session_key;
+			$cache_key = 'session:'.$session_key;
 			$cache_vars = $oCacheHandler->get($cache_key);
 		}
 
@@ -49,7 +50,7 @@ class sessionController extends session
 			return true;
 		}
 
-		$args->expired = date("YmdHis", time()+$this->lifetime);
+		$args->expired = date("YmdHis", $_SERVER['REQUEST_TIME']+$this->lifetime);
 		$args->val = $val;
 		$args->cur_mid = Context::get('mid');
 		if(!$args->cur_mid)
@@ -68,7 +69,7 @@ class sessionController extends session
 			$args->member_srl = 0;
 		}
 		$args->ipaddress = $_SERVER['REMOTE_ADDR'];
-		$args->last_update = date("YmdHis", time());
+		$args->last_update = date("YmdHis", $_SERVER['REQUEST_TIME']);
 		$diff = $args->last_update - $cache_vars->last_update;
 		//verify if session values have changed
 		if($val == $cache_vars->val)
@@ -79,7 +80,7 @@ class sessionController extends session
 				//put session into cache
 				if($oCacheHandler->isSupport())
 				{
-					$cache_key = 'object:'.$session_key;
+					$cache_key = 'session:'.$session_key;
 					$oCacheHandler->put($cache_key,$args,$this->lifetime);
 				}
 				//put session into db
@@ -90,7 +91,7 @@ class sessionController extends session
 				//put session into cache
 				if($oCacheHandler->isSupport())
 				{
-					$cache_key = 'object:'.$session_key;
+					$cache_key = 'session:'.$session_key;
 					$oCacheHandler->put($cache_key,$args,$this->lifetime);
 				}
 			}
@@ -100,7 +101,7 @@ class sessionController extends session
 			//put session into cache
 			if($oCacheHandler->isSupport())
 			{
-				$cache_key = 'object:'.$session_key;
+				$cache_key = 'session:'.$session_key;
 				$oCacheHandler->put($cache_key,$args,$this->lifetime);
 			}
 			//put session into db
@@ -115,10 +116,10 @@ class sessionController extends session
 	{
 		if(!$session_key || !$this->session_started) return;
 		//remove session from cache
-		$oCacheHandler = &CacheHandler::getInstance('object');
+		$oCacheHandler = CacheHandler::getInstance('object');
 		if($oCacheHandler->isSupport())
 		{
-			$cache_key = 'object:'.$session_key;
+			$cache_key = 'session:'.$session_key;
 			$oCacheHandler->delete($cache_key);
 		}
 		//remove session from db
