@@ -1629,8 +1629,8 @@
 		<value xml:lang="vi"><![CDATA[Bạn chưa xác nhận việc đăng kí. Xin vui lòng kiểm tra Email!]]></value>
 	</item>
 	<item name="msg_user_limited">
-		<value xml:lang="ko"><![CDATA[입력한 아이디는 %s 이후부터 사용할 수 있습니다.]]></value>
-		<value xml:lang="en"><![CDATA[You have entered an ID that can be used after %s]]></value>
+		<value xml:lang="ko"><![CDATA[입력한 아이디는 %s 까지 사용하실 수 없습니다.]]></value>
+		<value xml:lang="en"><![CDATA[You have entered an ID that cannot be used before %s]]></value>
 		<value xml:lang="jp"><![CDATA[入力したユーザーIDは%s以降から使用できます。]]></value>
 		<value xml:lang="zh-CN"><![CDATA[您输入的用户名%s以后才可以开始使用。]]></value>
 		<value xml:lang="zh-TW"><![CDATA[您輸入的帳號 %s 以後才可以開始使用。]]></value>
@@ -1639,6 +1639,18 @@
 		<value xml:lang="es"><![CDATA[ID ingresado puede ser usado luego de %s]]></value>
 		<value xml:lang="tr"><![CDATA[Bu kimlik, %s Tarihinden sonra kullanılabilir]]></value>
 		<value xml:lang="vi"><![CDATA[Bạn được phép sử dụng đến ngày %s]]></value>
+	</item>
+	<item name="msg_user_limited_with_reason">
+		<value xml:lang="ko"><![CDATA[입력한 아이디는 %s 까지 사용하실 수 없습니다. 사유:%s]]></value>
+		<value xml:lang="en"><![CDATA[You have entered an ID that cannot be used before %s. Reason:%s]]></value>
+	</item>
+	<item name="stop_reason">
+		<value xml:lang="ko"><![CDATA[정지 사유]]></value>
+		<value xml:lang="en"><![CDATA[Stop reason]]></value>
+	</item>
+	<item name="about_stop_reason">
+		<value xml:lang="ko"><![CDATA[정지된 회원에게 정지 사유를 보여 줍니다.]]></value>
+		<value xml:lang="en"><![CDATA[Show stop reason to stopped user.]]></value>
 	</item>
 	<item name="about_rechecked_password">
 		<value xml:lang="ko"><![CDATA[회원의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 확인 합니다.]]></value>

@@ -88,6 +88,13 @@
 		</div>
 	</div>
 	<div class="x_control-group">
+		<label class="x_control-label" for="stop_resaon">{$lang->stop_reason}</label>
+		<div class="x_controls">
+			<textarea name="stop_reason" id="stop_reason" rows="1" cols="42" style="vertical-align:top">{$member_info->stop_reason}</textarea>
+			<span class="x_help-inline">{$lang->about_stop_reason}</span>
+		</div>
+	</div>
+	<div class="x_control-group">
 		<label class="x_control-label">{$lang->is_admin}</label>
 		<div class="x_controls">
 			<label class="x_inline" for="is_admin"><input type="radio" name="is_admin" id="is_admin" value="Y" checked="checked"|cond="$member_info->is_admin == 'Y'" > {$lang->cmd_yes}</label>
