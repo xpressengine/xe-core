@@ -189,6 +189,9 @@ class member extends ModuleObject {
 
 		if(!$oDB->isColumnExists("member", "list_order")) return true;
 		if(!$oDB->isIndexExists("member","idx_list_order")) return true;
+		
+		// Add columns of stop reason(일단 주석처리)
+		if(!$oDB->isColumnExists("member", "stop_reason")) return true;
 
 		$oModuleModel = getModel('module');
 		$config = $oModuleModel->getModuleConfig('member');
@@ -297,6 +300,11 @@ class member extends ModuleObject {
 		if(!$oDB->isIndexExists("member","idx_list_order"))
 		{
 			$oDB->addIndex("member","idx_list_order", array("list_order"));
+		}
+		
+		if(!$oDB->isColumnExists("member", "stop_reason"))
+		{
+			$oDB->addColumn("member", "stop_reason", "varchar", 250);
 		}
 
 		$oModuleModel = getModel('module');
