@@ -41,6 +41,10 @@ class integration_searchView extends integration_search
 
 		$config = $oModuleModel->getModuleConfig('integration_search');
 		if(!$config) $config = new stdClass;
+		if($config->enabled == 'N')
+		{
+			return new Object(-1, 'msg_not_permitted');
+		}
 		if(!$config->skin)
 		{
 			$config->skin = 'default';
