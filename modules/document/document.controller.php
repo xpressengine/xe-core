@@ -213,8 +213,8 @@ class documentController extends document
 		
 		if($obj->notify_message != 'Y') $obj->notify_message = 'N';
 		if(!$obj->email_address) $obj->email_address = '';
-		if(!$isRestore) $obj->ipaddress = $_SERVER['REMOTE_ADDR'];	//board?�서 form key값으�?ipaddress�??�용?�면 ?�한 ip가 ?�록?? ?�터?�???��??�슴
-
+		if(!$isRestore) $obj->ipaddress = $_SERVER['REMOTE_ADDR'];	
+		
 		// Serialize the $extra_vars, check the extra_vars type, because duplicate serialized avoid
 		if(!is_string($obj->extra_vars)) $obj->extra_vars = serialize($obj->extra_vars);
 		// Remove the columns for automatic saving
