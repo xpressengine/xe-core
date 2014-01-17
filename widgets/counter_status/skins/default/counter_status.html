@@ -7,5 +7,13 @@
         <dd>{number_format($yesterday_counter->unique_visitor)}</dd>
         <dt>{$lang->total}:</dt>
         <dd>{number_format($total_counter->unique_visitor)}</dd>
+		<dt>{$lang->member}:</dt>
+		<dd>{number_format($status->member->total)}</dd>
+		<dt>{$lang->document}:</dt>
+		<dd>{number_format($status->document->total)}</dd>
+		<dt>{$lang->comment}:</dt>
+		<dd>{number_format($status->comment->total)}</dd>
+		<dt>{$lang->trackback}:</dt>
+		<dd>{number_format($status->trackback->total)}</dd>
     </dl>
 </div>
