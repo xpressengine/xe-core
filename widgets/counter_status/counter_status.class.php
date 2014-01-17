@@ -36,7 +36,7 @@
             $args->date = date("Ymd000000", $_SERVER['REQUEST_TIME']-60*60*24);
             $today = date("Ymd");
             $output = executeQueryArray("admin.getMemberStatus", $args);
-            if($output->data) {
+            if(count($output) > 0) {
                 foreach($output->data as $var) {
                     if($var->date == $today) {
                         $status->member->today = $var->count;
@@ -44,16 +44,19 @@
                         $status->member->yesterday = $var->count;
                     }
                 }
-            }            
-            $output = executeQuery("admin.getMemberCount", $args);
-            $status->member->total = $output->data->count;
+            }
+			if($args->member_count == 'Y')
+			{
+				$output = executeQuery("admin.getMemberCount", $args);
+				$status->member->total = $output->data->count;
+			}
             Context::set('start_module', $output->data);
             Context::set('status', $status);
 
 
             // 전체글수
             $output = executeQueryArray("admin.getDocumentStatus", $args);
-            if($output->data) {
+            if(count($output) > 0) {
                 foreach($output->data as $var) {
                     if($var->date == $today) {
                         $status->document->today = $var->count;
@@ -62,15 +65,18 @@
                     }
                 }
             }
-            $output = executeQuery("admin.getDocumentCount", $args);
-            $status->document->total = $output->data->count;
+			if($args->document_count == 'Y')
+			{
+				$output = executeQuery("admin.getDocumentCount", $args);
+				$status->document->total = $output->data->count;
+			}
             Context::set('start_module', $output->data);
             Context::set('status', $status);
 
 
             // 전체 댓글수
             $output = executeQueryArray("admin.getCommentStatus", $args);
-            if($output->data) {
+            if(count($output) > 0) {
                 foreach($output->data as $var) {
                     if($var->date == $today) {
                         $status->comment->today = $var->count;
@@ -79,32 +85,45 @@
                     }
                 }
             }
-            $output = executeQuery("admin.getCommentCount", $args);
-            $status->comment->total = $output->data->count;
+            
+			if($args->comment_count == 'Y')
+			{
+				$output = executeQuery("admin.getCommentCount", $args);
+				$status->comment->total = $output->data->count;
+			}
             Context::set('start_module', $output->data);
             Context::set('status', $status);
 
 
             // 엮인글수
-            $output = executeQueryArray("admin.getTrackbackStatus", $args);
-            if($output->data) {
-                foreach($output->data as $var) {
-                    if($var->date == $today) {
-                        $status->trackback->today = $var->count;
-                    } else {
-                        $status->trackback->yesterday = $var->count;
-                    }
-                }
-            }
-            $output = executeQuery("admin.getTrackbackCount", $args);
-            $status->trackback->total = $output->data->count;
-            Context::set('start_module', $output->data);
-            Context::set('status', $status);
-
+			$oTrackbackModel = getModel('trackback');
+			if ($oTrackbackModel)
+			{
+				$output = executeQueryArray("admin.getTrackbackStatus", $args);
+				if(count($output) > 0) {
+				    foreach($output->data as $var) {
+				        if($var->date == $today) {
+				            $status->trackback->today = $var->count;
+				        } else {
+				            $status->trackback->yesterday = $var->count;
+				        }
+				    }
+				}
+				
+				if($args->trackback_count == 'Y')
+				{
+					$output = executeQuery("admin.getTrackbackCount", $args);
+					$status->trackback->total = $output->data->count;
+				}
+				Context::set('start_module', $output->data);
+				Context::set('status', $status);
+			} else {
+				return;
+			}
 
             // 첨부파일수
             $output = executeQueryArray("admin.getFileStatus", $args);
-            if($output->data) {
+            if(count($output) > 0) {
                 foreach($output->data as $var) {
                     if($var->date == $today) {
                         $status->file->today = $var->count;
@@ -113,9 +132,13 @@
                     }
                 }
             }
-            $output = executeQuery("admin.getFileCount", $args);
-            $status->file->total = $output->data->count;
-            Context::set('start_module', $output->data);
+            
+			if($args->file_count == 'Y')
+			{
+				$output = executeQuery("admin.getFileCount", $args);
+				$status->file->total = $output->data->count;
+            }
+			Context::set('start_module', $output->data);
             Context::set('status', $status);
 
 
