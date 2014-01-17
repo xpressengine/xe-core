@@ -7,9 +7,8 @@
      **/
 
 
-    class counter_status extends WidgetHandler {
-
-
+    class counter_status extends WidgetHandler 
+    {
         /**
          * @brief Widget execution
          * Get extra_vars declared in ./widgets/widget/conf/info.xml as arguments
@@ -18,7 +17,6 @@
         function proc($args) {
             // 전체, 어제, 오늘 접속 현황을 가져옴
             $oCounterModel = &getModel('counter');
-
 
             $site_module_info = Context::get('site_module_info');
             $output = $oCounterModel->getStatus(array('00000000', date('Ymd', $_SERVER['REQUEST_TIME']-60*60*24), date('Ymd')), $site_module_info->site_srl);
@@ -53,7 +51,6 @@
             Context::set('start_module', $output->data);
             Context::set('status', $status);
 
-
             // 전체글수
             $output = executeQueryArray("admin.getDocumentStatus", $args);
             if(count($output) > 0) {
@@ -65,11 +62,11 @@
                     }
                 }
             }
-			if($args->document_count == 'Y')
-			{
+            if($args->document_count == 'Y')
+            {
                 $output = executeQuery("admin.getDocumentCount", $args);
                 $status->document->total = $output->data->count;
-			}
+            }
             Context::set('start_module', $output->data);
             Context::set('status', $status);
 
@@ -85,19 +82,19 @@
                 }
             }
 
-			if($args->comment_count == 'Y')
-			{
+            if($args->comment_count == 'Y')
+            {
                 $output = executeQuery("admin.getCommentCount", $args);
                 $status->comment->total = $output->data->count;
-			}
+            }
             Context::set('start_module', $output->data);
             Context::set('status', $status);
 
             // 엮인글수
-			$oTrackbackModel = getModel('trackback');
-			if ($oTrackbackModel)
-			{
-			$output = executeQueryArray("admin.getTrackbackStatus", $args);
+            $oTrackbackModel = getModel('trackback');
+            if ($oTrackbackModel)
+            {
+            $output = executeQueryArray("admin.getTrackbackStatus", $args);
                 if(count($output) > 0) {
                     foreach($output->data as $var) {
                         if($var->date == $today) {
@@ -107,7 +104,7 @@
                         }
                     }
                 }
-				
+
                 if($args->trackback_count == 'Y')
                 {
                     $output = executeQuery("admin.getTrackbackCount", $args);
