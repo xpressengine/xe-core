@@ -1,9 +1,10 @@
 <?php
+/* Copyright (C) NAVER <http://www.navercorp.com> */
 /**
  * menu class
  * high class of the menu module
  *
- * @author NHN (developers@xpressengine.com)
+ * @author NAVER (developers@xpressengine.com)
  * @package /modules/menu
  * @version 0.1
  */
@@ -65,7 +66,7 @@ class menu extends ModuleObject
 			$oDB->addColumn('menu_item', 'is_shortcut', 'char', 1, 'N');
 
 			// check empty url and change shortcut type
-			$oMenuAdminModel = &getAdminModel('menu');
+			$oMenuAdminModel = getAdminModel('menu');
 			$output = $oMenuAdminModel->getMenus();
 
 			if(is_array($output))
@@ -88,7 +89,7 @@ class menu extends ModuleObject
 							}
 
 							// if url is empty, change type to shortcurt
-							if($value2->is_shortcut == 'N' && (!$value2->url || preg_match('/^http/i',$value2->url)))
+							if($value2->is_shortcut == 'N' && (!$value2->url || strncasecmp('http', $value2->url, 4) === 0))
 							{
 								$value2->is_shortcut = 'Y';
 								$output3 = executeQuery('menu.updateMenuItem', $value2);
@@ -97,7 +98,7 @@ class menu extends ModuleObject
 					}
 				}
 
-				$oModuleModel = &getModel('module');
+				$oModuleModel = getModel('module');
 				// if duplicate reference, change type to shortcut
 				$shortcutItemList = array_diff_assoc($menuItemAllList, $menuItemUniqueList);
 				foreach($output AS $key=>$value)
@@ -109,7 +110,7 @@ class menu extends ModuleObject
 					{
 						foreach($output2->data AS $key2=>$value2)
 						{
-							if(!empty($value2->url) && !preg_match('/^http/i',$value2->url))
+							if(!empty($value2->url) && strncasecmp('http', $value2->url, 4) !== 0)
 							{
 								$moduleInfo = $oModuleModel->getModuleInfoByMid($value2->url);
 								if(!$moduleInfo->module_srl)
@@ -144,11 +145,11 @@ class menu extends ModuleObject
 	 */
 	function recompileCache()
 	{
-		$oMenuAdminController = &getAdminController('menu');
-		$oMenuAdminModel = &getAdminModel('menu');
+		$oMenuAdminController = getAdminController('menu');
+		$oMenuAdminModel = getAdminModel('menu');
 
 		// get home module id
-		$oModuleModel = &getModel('module');
+		$oModuleModel = getModel('module');
 		$columnList = array('modules.mid',);
 		$output = $oModuleModel->getSiteInfo(0, $columnList);
 		$homeModuleMid = $output->mid;

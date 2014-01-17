@@ -1,4 +1,5 @@
 <?php
+/* Copyright (C) NAVER <http://www.navercorp.com> */
 
 /**
  * Cache class for Wincache
@@ -9,13 +10,6 @@
  */
 class CacheWincache extends CacheBase
 {
-
-	/**
-	 * Default valid time
-	 * @var int
-	 */
-	var $valid_time = 36000;
-
 	/**
 	 * Get instance of CacheWincache
 	 *
@@ -68,7 +62,7 @@ class CacheWincache extends CacheBase
 		{
 			$valid_time = $this->valid_time;
 		}
-		return wincache_ucache_set(md5(_XE_PATH_ . $key), array(time(), $buff), $valid_time);
+		return wincache_ucache_set(md5(_XE_PATH_ . $key), array($_SERVER['REQUEST_TIME'], $buff), $valid_time);
 	}
 
 	/**

@@ -1,10 +1,11 @@
 <?php
+/* Copyright (C) NAVER <http://www.navercorp.com> */
 
 /**
  * commentModel class
  * model class of the comment module
  *
- * @author NHN (developers@xpressengine.com)
+ * @author NAVER (developers@xpressengine.com)
  * @package /modules/comment
  * @version 0.1
  */
@@ -375,37 +376,22 @@ class commentModel extends comment
 
 		$args->list_count = $obj->list_count;
 
-		// cache controll
-		$oCacheHandler = CacheHandler::getInstance('object');
-		if($oCacheHandler->isSupport())
+		if(strpos($args->module_srl, ",") === false)
 		{
-			$object_key = 'object_newest_comment_list:' . $obj->module_srl;
-			$cache_key = $oCacheHandler->getGroupKey('newestCommentsList', $object_key);
-			$output = $oCacheHandler->get($cache_key);
-		}
-		if(!$output)
-		{
-			if(strpos($args->module_srl, ",") === false)
+			if($args->module_srl)
 			{
-				if($args->module_srl)
+				// check if module is using comment validation system
+				$oCommentController = getController("comment");
+				$is_using_validation = $oCommentController->isModuleUsingPublishValidation($obj->module_srl);
+				if($is_using_validation)
 				{
-					// check if module is using comment validation system
-					$oCommentController = getController("comment");
-					$is_using_validation = $oCommentController->isModuleUsingPublishValidation($obj->module_srl);
-					if($is_using_validation)
-					{
-						$args->status = 1;
-					}
+					$args->status = 1;
 				}
 			}
-
-			$output = executeQuery('comment.getNewestCommentList', $args, $columnList);
-
-			if($oCacheHandler->isSupport())
-			{
-				$oCacheHandler->put($cache_key, $output);
-			}
 		}
+
+		$output = executeQuery('comment.getNewestCommentList', $args, $columnList);
+
 		if(!$output->toBool())
 		{
 			return $output;
@@ -562,7 +548,7 @@ class commentModel extends comment
 		// create a lock file to prevent repeated work when performing a batch job
 		$lock_file = "./files/cache/tmp/lock." . $document_srl;
 
-		if(file_exists($lock_file) && filemtime($lock_file) + 60 * 60 * 10 < time())
+		if(file_exists($lock_file) && filemtime($lock_file) + 60 * 60 * 10 < $_SERVER['REQUEST_TIME'])
 		{
 			return;
 		}
@@ -588,8 +574,8 @@ class commentModel extends comment
 		// Sort comments by the hierarchical structure
 		$comment_count = count($source_list);
 
-		$root = NULL;
-		$list = NULL;
+		$root = new stdClass;
+		$list = array();
 		$comment_list = array();
 
 		// get the log-in information for logged-in users
@@ -1051,6 +1037,44 @@ class commentModel extends comment
 		{
 			return $lang->secret_name_list;
 		}
+	}
+
+	/**
+	 * Get the total number of comments in corresponding with member_srl.
+	 * @param int $member_srl
+	 * @return int
+	 */
+	function getCommentCountByMemberSrl($member_srl)
+	{
+		$args = new stdClass();
+		$args->member_srl = $member_srl;
+		$output = executeQuery('comment.getCommentCountByMemberSrl', $args);
+		return (int) $output->data->count;
+	}
+
+
+	/**
+	 * Get comment list of the doc in corresponding woth member_srl.
+	 * @param int $member_srl
+	 * @param array $columnList
+	 * @param int $page
+	 * @param bool $is_admin
+	 * @param int $count
+	 * @return object
+	 */
+	function getCommentListByMemberSrl($member_srl, $columnList = array(), $page = 0, $is_admin = FALSE, $count = 0)
+	{
+		$args = new stdClass();
+		$args->member_srl = $member_srl;
+		$args->list_count = $count;
+		$output = executeQuery('comment.getCommentListByMemberSrl', $args, $columnList);
+		$comment_list = $output->data;
+
+		if(!$comment_list) return array();
+		if(!is_array($comment_list)) $comment_list = array($comment_list);
+
+		return $comment_list;
+
 	}
 
 }

@@ -1,7 +1,8 @@
 <?php
+/* Copyright (C) NAVER <http://www.navercorp.com> */
 /**
  * @class  installAdminController
- * @author NHN (developers@xpressengine.com)
+ * @author NAVER (developers@xpressengine.com)
  * @brief admin controller class of the install module
  */
 class installAdminController extends install
@@ -21,7 +22,7 @@ class installAdminController extends install
 		$module_name = Context::get('module_name');
 		if(!$module_name) return new object(-1, 'invalid_request');
 
-		$oInstallController = &getController('install');
+		$oInstallController = getController('install');
 		$oInstallController->installModule($module_name, './modules/'.$module_name);
 
 		$this->setMessage('success_installed');
@@ -36,7 +37,7 @@ class installAdminController extends install
 		$module_name = Context::get('module_name');
 		if(!$module_name) return new object(-1, 'invalid_request');
 
-		$oModule = &getModule($module_name, 'class');
+		$oModule = getModule($module_name, 'class');
 		if($oModule) $output = $oModule->moduleUpdate();
 		else $output = new Object(-1, 'invalid_request');
 
@@ -48,26 +49,33 @@ class installAdminController extends install
 	 */
 	function procInstallAdminSaveTimeZone()
 	{
+		$db_info = Context::getDBInfo();
+
 		$admin_ip_list = Context::get('admin_ip_list');
 
-		$admin_ip_list = preg_replace("/[\r|\n|\r\n]+/",",",$admin_ip_list);
-		$admin_ip_list = preg_replace("/\s+/","",$admin_ip_list);
-		if(preg_match('/(<\?|<\?php|\?>)/xsm', $admin_ip_list))
+		if($admin_ip_list)
 		{
-			$admin_ip_list = '';
+			$admin_ip_list = preg_replace("/[\r|\n|\r\n]+/",",",$admin_ip_list);
+			$admin_ip_list = preg_replace("/\s+/","",$admin_ip_list);
+			if(preg_match('/(<\?|<\?php|\?>)/xsm', $admin_ip_list))
+			{
+				$admin_ip_list = '';
+			}
+			$admin_ip_list = explode(',',trim($admin_ip_list, ','));
+			$admin_ip_list = array_unique($admin_ip_list);
+			if(!IpFilter::validate($admin_ip_list)) {
+				return new Object(-1, 'msg_invalid_ip');
+			}
 		}
-
+		
 		$default_url = Context::get('default_url');
-		if($default_url && !preg_match('/^(http|https):\/\//i', $default_url)) $default_url = 'http://'.$default_url;
+		if($default_url && strncasecmp('http://', $default_url, 7) !== 0 && strncasecmp('https://', $default_url, 8) !== 0) $default_url = 'http://'.$default_url;
 
 		$use_ssl = Context::get('use_ssl');
 		if(!$use_ssl) $use_ssl = 'none';
 
 		$http_port = Context::get('http_port');
 		$https_port = Context::get('https_port');
-
-		$use_cdn = Context::get('use_cdn');
-		if($use_cdn != 'Y') $use_cdn = 'N';
 
 		$use_rewrite = Context::get('use_rewrite');
 		if($use_rewrite!='Y') $use_rewrite = 'N';
@@ -84,14 +92,12 @@ class installAdminController extends install
 		$use_html5 = Context::get('use_html5');
 		if(!$use_html5) $use_html5 = 'N';
 
-		$db_info = Context::getDBInfo();
 		$db_info->default_url = $default_url;
 		$db_info->qmail_compatibility = $qmail_compatibility;
 		$db_info->use_db_session = $use_db_session;
 		$db_info->use_rewrite = $use_rewrite;
 		$db_info->use_sso = $use_sso;
 		$db_info->use_ssl = $use_ssl;
-		$db_info->use_cdn = $use_cdn;
 		$db_info->use_html5 = $use_html5;
 		$db_info->admin_ip_list = $admin_ip_list;
 
@@ -103,7 +109,7 @@ class installAdminController extends install
 
 		unset($db_info->lang_type);
 
-		$oInstallController = &getController('install');
+		$oInstallController = getController('install');
 		if(!$oInstallController->makeConfigFile())
 		{
 			return new Object(-1, 'msg_invalid_request');
@@ -113,9 +119,10 @@ class installAdminController extends install
 			Context::setDBInfo($db_info);
 			if($default_url)
 			{
+				$site_args = new stdClass;
 				$site_args->site_srl = 0;
 				$site_args->domain = $default_url;
-				$oModuleController = &getController('module');
+				$oModuleController = getController('module');
 				$oModuleController->updateSite($site_args);
 			}
 			$this->setRedirectUrl(Context::get('error_return_url'));
@@ -132,20 +139,20 @@ class installAdminController extends install
 		$site_args = new stdClass();
 		$site_args->site_srl = 0;
 		$site_args->index_module_srl = Context::get('index_module_srl');
-		$oModuleController = &getController('module');
+		$oModuleController = getController('module');
 		$oModuleController->updateSite($site_args);
 
 		// get menu item info
 		$menuItemSrl = Context::get('menu_item_srl');
-		$oMenuAdminModel = &getAdminModel('menu');
+		$oMenuAdminModel = getAdminModel('menu');
 		$output = $oMenuAdminModel->getMenuItemInfo($menuItemSrl);
 
 		// update homeSitemap.php cache file
-		$oMenuAdminController = &getAdminController('menu');
+		$oMenuAdminController = getAdminController('menu');
 		$homeMenuCacheFile = $oMenuAdminController->getHomeMenuCacheFile();
 		if(file_exists($homeMenuCacheFile))
 		{
-			@include($homeMenuCacheFile);
+			include($homeMenuCacheFile);
 		}
 
 		if(!$homeMenuSrl || $homeMenuSrl != $output->menu_srl)
@@ -193,7 +200,7 @@ class installAdminController extends install
 		foreach($ftp_info as $key => $val)
 		{
 			if(!$val) continue;
-			if(preg_match('/(<\?|<\?php|\?>|fputs|fopen|fwrite|fgets|fread|\/\*|\*\/|chr\()/xsm', preg_replace('/\s/', '', $val)))
+			if(preg_match('/(<\?|<\?php|\?>|fputs|fopen|fwrite|fgets|fread|file_get_contents|file_put_contents|exec|proc_open|popen|passthru|show_source|phpinfo|system|\/\*|\*\/|chr\()/xsm', preg_replace('/\s/', '', $val)))
 			{
 				continue;
 			}
@@ -222,7 +229,7 @@ class installAdminController extends install
 
 		unset($db_info->lang_type);
 		Context::setDBInfo($db_info);
-		$oInstallController = &getController('install');
+		$oInstallController = getController('install');
 		if(!$oInstallController->makeConfigFile())
 		{
 			return new Object(-1, 'msg_invalid_request');
@@ -232,7 +239,7 @@ class installAdminController extends install
 		$site_args->site_srl = 0;
 		$site_args->index_module_srl = Context::get('index_module_srl');//
 		$site_args->default_language = Context::get('change_lang_type');//
-		$oModuleController = &getController('module');
+		$oModuleController = getController('module');
 		$oModuleController->updateSite($site_args);
 
 		//언어 선택
@@ -275,7 +282,7 @@ class installAdminController extends install
 		}
 
 		Context::set('name', $name);
-		Context::set('tmpFileName', $tmpFileName.'?'.time());
+		Context::set('tmpFileName', $tmpFileName.'?'.$_SERVER['REQUEST_TIME']);
 	}
 
 	/**
@@ -304,11 +311,12 @@ class installAdminController extends install
 		if(!$config->thumbnail_type || $config->thumbnail_type != 'ratio' ) $args->thumbnail_type = 'crop';
 		else $args->thumbnail_type = 'ratio';
 
-		$oModuleController = &getController('module');
+		$oModuleController = getController('module');
 		$oModuleController->insertModuleConfig('document',$args);
 
 		unset($args);
 
+		$args = new stdClass;
 		$args->htmlFooter = $config->htmlFooter;
 		$args->siteTitle = $config->siteTitle;
 		$oModuleController->updateModuleConfig('module',$args);

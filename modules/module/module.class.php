@@ -1,7 +1,8 @@
 <?php
+/* Copyright (C) NAVER <http://www.navercorp.com> */
 /**
  * @class  module
- * @author NHN (developers@xpressengine.com)
+ * @author NAVER (developers@xpressengine.com)
  * @brief high class of the module module
  */
 class module extends ModuleObject
@@ -12,7 +13,7 @@ class module extends ModuleObject
 	function moduleInstall()
 	{
 		// Register action forward (to use in administrator mode)
-		$oModuleController = &getController('module');
+		$oModuleController = getController('module');
 
 		$oDB = &DB::getInstance();
 		$oDB->addIndex("modules","idx_site_mid", array("site_srl","mid"), true);
@@ -21,7 +22,9 @@ class module extends ModuleObject
 		FileHandler::makeDir('./files/cache/module_info');
 		FileHandler::makeDir('./files/cache/triggers');
 		FileHandler::makeDir('./files/ruleset');
+
 		// Insert site information into the sites table
+		$args = new stdClass;
 		$args->site_srl = 0;
 		$output = $oDB->executeQuery('module.getSite', $args);
 		if(!$output->data || !$output->data->index_module_srl)
@@ -30,6 +33,8 @@ class module extends ModuleObject
 			$domain = Context::getDefaultUrl();
 			$url_info = parse_url($domain);
 			$domain = $url_info['host'].( (!empty($url_info['port'])&&$url_info['port']!=80)?':'.$url_info['port']:'').$url_info['path'];
+
+			$site_args = new stdClass;
 			$site_args->site_srl = 0;
 			$site_args->index_module_srl  = 0;
 			$site_args->domain = $domain;
@@ -125,8 +130,8 @@ class module extends ModuleObject
 		// 2008. 10. 27 module_part_config Add a multi-index to the table and check all information of module_configg
 		if(!$oDB->isIndexExists("module_part_config","idx_module_part_config"))
 		{
-			$oModuleModel = &getModel('module');
-			$oModuleController = &getController('module');
+			$oModuleModel = getModel('module');
+			$oModuleController = getController('module');
 			$modules = $oModuleModel->getModuleList();
 			foreach($modules as $key => $module_info)
 			{
@@ -196,8 +201,8 @@ class module extends ModuleObject
 		// Move permission, skin info, extection info, admin ID of all modules to the table, grants
 		if($oDB->isColumnExists('modules', 'grants'))
 		{
-			$oModuleController = &getController('module');
-			$oDocumentController = &getController('document');
+			$oModuleController = getController('module');
+			$oDocumentController = getController('document');
 			// Get a value of the current system language code
 			$lang_code = Context::getLangType();
 			// Get module_info of all modules
@@ -260,7 +265,7 @@ class module extends ModuleObject
 							$oDocumentController->insertDocumentExtraKey($module_srl, $var_idx, $val->name, $val->type, $val->is_required, $val->search, $val->default, $val->desc, 'extra_vars'.$var_idx);
 						}
 						// 2009-04-14 Fixed a bug that only 100 extra vars are moved
-						$oDocumentModel = &getModel('document');
+						$oDocumentModel = getModel('document');
 						$total_count = $oDocumentModel->getDocumentCount($module_srl);
 
 						if($total_count > 0)
@@ -300,6 +305,12 @@ class module extends ModuleObject
 					$module_info->skin_vars = null;
 					$module_info->admin_id = null;
 					executeQuery('module.updateModule', $module_info);
+
+					$oCacheHandler = CacheHandler::getInstance('object', null, true);
+					if($oCacheHandler->isSupport())
+					{
+						$oCacheHandler->invalidateGroupKey('site_and_module');
+					}
 				}
 			}
 			// Various column drop
@@ -319,7 +330,9 @@ class module extends ModuleObject
 			if(!$oDB->isColumnExists("documents","extra_vars".$i)) continue;
 			$oDB->dropColumn('documents','extra_vars'.$i);
 		}
+
 		// Enter the main site information sites on the table
+		$args = new stdClass;
 		$args->site_srl = 0;
 		$output = $oDB->executeQuery('module.getSite', $args);
 		if(!$output->data)
@@ -401,7 +414,7 @@ class module extends ModuleObject
 			$output = executeQuery('module.updateMobileSkinFixModules');
 		}
 
-		unset($args);
+		$args = new stdClass;
 		$args->site_srl = 0;
 		$output = executeQueryArray('module.getNotLinkedModuleBySiteSrl',$args);
 
@@ -412,11 +425,11 @@ class module extends ModuleObject
 			$menuSrl = $args->menu_srl = getNextSequence();
 			$args->listorder = $args->menu_srl * -1;
 
-			$ioutput = executeQuery('menu.insertMenu', $args);
+			$output = executeQuery('menu.insertMenu', $args);
 
-			if(!$ioutput->toBool())
+			if(!$output->toBool())
 			{
-				return $ioutput;
+				return $output;
 			}
 
 			//getNotLinkedModuleBySiteSrl
@@ -432,6 +445,7 @@ class module extends ModuleObject
 			$output = executeQuery('module.updateMobileSkinFixModules');
 
 			$oModuleController = getController('module');
+			if(!$moduleConfig) $moduleConfig = new stdClass;
 			$moduleConfig->isUpdateFixedValue = TRUE;
 			$output = $oModuleController->updateModuleConfig('module', $moduleConfig);
 		}
@@ -516,6 +530,7 @@ class module extends ModuleObject
 		foreach($moduleInfos as $moduleInfo)
 		{
 			// search menu.
+			$args = new stdClass;
 			$args->url = $moduleInfo->mid;
 			$args->site_srl = $moduleInfo->site_srl;
 			$args->is_shortcut = 'N';
@@ -546,6 +561,11 @@ class module extends ModuleObject
 			$output = executeQuery('module.updateModule', $moduleInfo);
 			if(!$output->toBool())
 			{
+				$oCacheHandler = CacheHandler::getInstance('object', null, true);
+				if($oCacheHandler->isSupport())
+				{
+					$oCacheHandler->invalidateGroupKey('site_and_module');
+				}
 				return $output;
 			}
 		}
@@ -564,7 +584,7 @@ class module extends ModuleObject
 		{
 			if($data->count == 1) continue;
 			$domain = $data->domain;
-			$args = null;
+			$args = new stdClass;
 			$args->domain = $domain;
 			$output2 = executeQueryArray("module.getSiteByDomain", $args);
 			$bFirst = true;
@@ -576,7 +596,7 @@ class module extends ModuleObject
 					continue;
 				}
 				$domain .= "_";
-				$args = null;
+				$args = new stdClass;
 				$args->domain = $domain;
 				$args->site_srl = $site->site_srl;
 				$output3 = executeQuery("module.updateSite", $args);
@@ -589,7 +609,7 @@ class module extends ModuleObject
 	 */
 	function recompileCache()
 	{
-		$oModuleModel = &getModel('module');
+		$oModuleModel = getModel('module');
 		$oModuleModel->getModuleList();
 	}
 }

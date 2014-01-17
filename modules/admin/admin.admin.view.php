@@ -1,10 +1,11 @@
 <?php
+/* Copyright (C) NAVER <http://www.navercorp.com> */
 
 /**
  * adminAdminView class
  * Admin view class of admin module
  *
- * @author NHN (developers@xpressengine.com)
+ * @author NAVER (developers@xpressengine.com)
  * @package /modules/admin
  * @version 0.1
  */
@@ -58,7 +59,6 @@ class adminAdminView extends admin
 		Context::set('use_db_session', $db_info->use_db_session == 'N' ? 'N' : 'Y');
 		Context::set('use_mobile_view', $db_info->use_mobile_view == 'Y' ? 'Y' : 'N');
 		Context::set('use_ssl', $db_info->use_ssl ? $db_info->use_ssl : "none");
-		Context::set('use_cdn', $db_info->use_cdn ? $db_info->use_cdn : "none");
 		if($db_info->http_port)
 		{
 			Context::set('http_port', $db_info->http_port);
@@ -79,7 +79,7 @@ class adminAdminView extends admin
 	function checkEasyinstall()
 	{
 		$lastTime = (int) FileHandler::readFile($this->easyinstallCheckFile);
-		if($lastTime > time() - 60 * 60 * 24 * 30)
+		if($lastTime > $_SERVER['REQUEST_TIME'] - 60 * 60 * 24 * 30)
 		{
 			return;
 		}
@@ -114,7 +114,7 @@ class adminAdminView extends admin
 	 */
 	function _markingCheckEasyinstall()
 	{
-		$currentTime = time();
+		$currentTime = $_SERVER['REQUEST_TIME'];
 		FileHandler::writeFile($this->easyinstallCheckFile, $currentTime);
 	}
 
@@ -222,7 +222,7 @@ class adminAdminView extends admin
 		// move from index method, because use in admin footer
 		$newest_news_url = sprintf("http://news.xpressengine.com/%s/news.php?version=%s&package=%s", _XE_LOCATION_, __XE_VERSION__, _XE_PACKAGE_);
 		$cache_file = sprintf("%sfiles/cache/newest_news.%s.cache.php", _XE_PATH_, _XE_LOCATION_);
-		if(!file_exists($cache_file) || filemtime($cache_file) + 60 * 60 < time())
+		if(!file_exists($cache_file) || filemtime($cache_file) + 60 * 60 < $_SERVER['REQUEST_TIME'])
 		{
 			// Considering if data cannot be retrieved due to network problem, modify filemtime to prevent trying to reload again when refreshing administration page
 			// Ensure to access the administration page even though news cannot be displayed
@@ -276,7 +276,7 @@ class adminAdminView extends admin
 	{
 		// Get statistics
 		$args = new stdClass();
-		$args->date = date("Ymd000000", time() - 60 * 60 * 24);
+		$args->date = date("Ymd000000", $_SERVER['REQUEST_TIME'] - 60 * 60 * 24);
 		$today = date("Ymd");
 
 		// Member Status
@@ -412,16 +412,28 @@ class adminAdminView extends admin
 		Context::set('default_url', $db_info->default_url);
 		Context::set('langs', Context::loadLangSupported());
 
-		Context::set('lang_selected', Context::loadLangSelected());
+		// site lock
+		if(!$db_info->sitelock_title) $db_info->sitelock_title = 'Maintenance in progress...';
+		if(!in_array('127.0.0.1', $db_info->sitelock_whitelist)) $db_info->sitelock_whitelist[] = '127.0.0.1';
+		Context::set('remote_addr', $_SERVER['REMOTE_ADDR']);
+		Context::set('use_sitelock', $db_info->use_sitelock);
+		Context::set('sitelock_title', $db_info->sitelock_title);
+		Context::set('sitelock_message', htmlspecialchars($db_info->sitelock_message, ENT_COMPAT | ENT_HTML401, 'UTF-8', false));
+		
+		$whitelist = implode("\r\n", $db_info->sitelock_whitelist);
+		Context::set('sitelock_whitelist', $whitelist);
 
-		$admin_ip_list = preg_replace("/[,]+/", "\r\n", $db_info->admin_ip_list);
+		if($db_info->admin_ip_list) $admin_ip_list = implode("\r\n", $db_info->admin_ip_list);
+		else $admin_ip_list = '';
 		Context::set('admin_ip_list', $admin_ip_list);
+
+		Context::set('lang_selected', Context::loadLangSelected());
 
 		$oAdminModel = getAdminModel('admin');
 		$favicon_url = $oAdminModel->getFaviconUrl();
 		$mobicon_url = $oAdminModel->getMobileIconUrl();
-		Context::set('favicon_url', $favicon_url.'?'.time());
-		Context::set('mobicon_url', $mobicon_url.'?'.time());
+		Context::set('favicon_url', $favicon_url.'?'.$_SERVER['REQUEST_TIME']);
+		Context::set('mobicon_url', $mobicon_url.'?'.$_SERVER['REQUEST_TIME']);
 
 		$oDocumentModel = getModel('document');
 		$config = $oDocumentModel->getDocumentConfig();
@@ -523,6 +535,106 @@ class adminAdminView extends admin
 			FileHandler::writeFile($path . $mainVersion, '1');
 			unset($_SESSION['enviroment_gather']);
 		}
+	}
+
+	/**
+	 * Retrun server environment to XML string
+	 * @return object
+	*/
+	function dispAdminViewServerEnv()
+	{
+		$info = array();
+
+		$oAdminModel = getAdminModel('admin');
+		$envInfo = $oAdminModel->getEnv();
+		$tmp = explode("&", $envInfo);
+		$arrInfo = array();
+		$xe_check_env = array();
+		foreach($tmp as $value) {
+			$arr = explode("=", $value);
+			if($arr[0]=="type") {
+				continue;
+			}elseif($arr[0]=="phpext" ) {
+				$str = urldecode($arr[1]);
+				$xe_check_env[$arr[0]]= str_replace("|", ", ", $str);
+			} elseif($arr[0]=="module" ) {
+				$str = urldecode($arr[1]);
+				$arrModuleName = explode("|", $str);
+				$oModuleModel = getModel("module");
+				$mInfo = array();	
+				foreach($arrModuleName as $moduleName) {
+					$moduleInfo = $oModuleModel->getModuleInfoXml($moduleName);
+					$mInfo[] = "{$moduleName}({$moduleInfo->version})";
+				}
+				$xe_check_env[$arr[0]]= join(", ", $mInfo);
+			} elseif($arr[0]=="addon") {
+				$str = urldecode($arr[1]);
+				$arrAddonName = explode("|", $str);
+				$oAddonModel = getAdminModel("addon");
+				$mInfo = array();	
+				foreach($arrAddonName as $addonName) {
+					$addonInfo = $oAddonModel->getAddonInfoXml($addonName);
+					$mInfo[] = "{$addonName}({$addonInfo->version})";
+				}
+				$xe_check_env[$arr[0]]= join(", ", $mInfo);
+			} elseif($arr[0]=="widget") {
+				$str = urldecode($arr[1]);
+				$arrWidgetName = explode("|", $str);
+				$oWidgetModel = getModel("widget");
+				$mInfo = array();	
+				foreach($arrWidgetName as $widgetName) {
+					$widgetInfo = $oWidgetModel->getWidgetInfo($widgetName);
+					$mInfo[] = "{$widgetName}({$widgetInfo->version})";
+				}
+				$xe_check_env[$arr[0]]= join(", ", $mInfo);
+			} elseif($arr[0]=="widgetstyle") {
+				$str = urldecode($arr[1]);
+				$arrWidgetstyleName = explode("|", $str);
+				$oWidgetModel = getModel("widget");
+				$mInfo = array();	
+				foreach($arrWidgetstyleName as $widgetstyleName) {
+					$widgetstyleInfo = $oWidgetModel->getWidgetStyleInfo($widgetstyleName);
+					$mInfo[] = "{$widgetstyleName}({$widgetstyleInfo->version})";
+				}
+				$xe_check_env[$arr[0]]= join(", ", $mInfo);
+
+			} elseif($arr[0]=="layout") {
+				$str = urldecode($arr[1]);
+				$arrLayoutName = explode("|", $str);
+				$oLayoutModel = getModel("layout");
+				$mInfo = array();	
+				foreach($arrLayoutName as $layoutName) {
+					$layoutInfo = $oLayoutModel->getLayoutInfo($layoutName);
+					$mInfo[] = "{$layoutName}({$layoutInfo->version})";
+				}
+				$xe_check_env[$arr[0]]= join(", ", $mInfo);
+			} else {
+				$xe_check_env[$arr[0]] = urldecode($arr[1]);
+			}
+		}
+		$info['XE_Check_Evn'] = $xe_check_env;
+
+		$ini_info = ini_get_all();
+		$php_core = array();
+		$php_core['max_file_uploads'] = "{$ini_info['max_file_uploads']['local_value']}";
+		$php_core['post_max_size'] = "{$ini_info['post_max_size']['local_value']}";
+		$php_core['memory_limit'] = "{$ini_info['memory_limit']['local_value']}";
+		$info['PHP_Core'] = $php_core;
+
+		$str_info = "[XE Server Environment " . date("Y-m-d") . "]\n\n";
+		foreach( $info as $key=>$value )
+		{
+			if( is_array( $value ) == false ) {
+				$str_info .= "{$key} : {$value}\n";
+			} else {
+				//$str_info .= "\n{$key} \n";
+				foreach( $value as $key2=>$value2 )
+					$str_info .= "{$key2} : {$value2}\n";
+			}
+		}
+
+		Context::set('str_info', $str_info);
+		$this->setTemplateFile('server_env.html');
 	}
 
 }
