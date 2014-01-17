@@ -18,7 +18,7 @@
             $oCounterModel = &getModel('counter');
 
             $site_module_info = Context::get('site_module_info');
-            $output = $oCounterModel->getStatus(array('00000000', date('Ymd', time()-60*60*24), date('Ymd')), $site_module_info->site_srl);
+            $output = $oCounterModel->getStatus(array('00000000', date('Ymd', $_SERVER['REQUEST_TIME']-60*60*24), date('Ymd')), $site_module_info->site_srl);
 			if(count($output))
 			{
 				foreach($output as $key => $val)
@@ -31,7 +31,7 @@
 
 			// 가입한 회원수 출력
 			$oMemberModel = &getModel('member');
-            $args->date = date("Ymd000000", time()-60*60*24);
+            $args->date = date("Ymd000000", $_SERVER['REQUEST_TIME']-60*60*24);
             $today = date("Ymd");
             $output = executeQueryArray("admin.getMemberStatus", $args);
             if($output->data) {
@@ -112,14 +112,14 @@
             Context::set('start_module', $output->data);
             Context::set('status', $status);
 
-            // 템플릿의 스킨 경로를 지정 (skin, colorset에 따른 값을 설정)
+            // Set a path of the template skin (values of skin, colorset settings)
             $tpl_path = sprintf('%sskins/%s', $this->widget_path, $args->skin);
             Context::set('colorset', $args->colorset);
 
-            // 템플릿 파일을 지정
+            // Specify a template file
             $tpl_file = 'counter_status';
 
-            // 템플릿 컴파일
+            // Compile a template
             $oTemplate = &TemplateHandler::getInstance();
             return $oTemplate->compile($tpl_path, $tpl_file);
         }
