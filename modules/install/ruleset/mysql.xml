@@ -8,6 +8,7 @@
 		<field name="db_hostname" required="true" length="1:250" default="localhost" />
 		<field name="db_port" required="true" length="1:250" rule="number" default="3306" />
 		<field name="db_userid" required="true" length="1:250" />
+		<field name="db_userid" required="true" length="1:250" />
 		<field name="db_password" required="true" length="1:250"/>
 		<field name="db_database" required="true" length="1:250" />
 		<field name="db_table_prefix" length="2:20" rule="alpha_number" />
