@@ -4,22 +4,40 @@ class Router
 	private $routes = array();
 	private $rewrite_map = array();
 	private $segments = array();
+	private $stop_proc = FALSE;
 
 	/**
-	 * Cunstructor
+	 * returns static context object (Singleton). It's to use Router without declaration of an object
 	 *
+	 * @return object Instance
+	 */
+	public function &getInstance()
+	{
+		static $theInstance = null;
+		if(!$theInstance) $theInstance = new Router();
+
+		return $theInstance;
+	}
+
+	/**
+	 * Initialization, it sets routes and so on.
+	 *
+	 * @see This function should be called only once
 	 * @return void
 	 */
-	public function __construct()
+	public function init()
 	{
+		// Get path info
 		$path_info = parse_url(substr($_SERVER['REQUEST_URI'], 1));
-		array_shift($path_info);
 		$path = $path_info['path'];
-		if(strlen($path) > 0)
+		if(strlen($path) < 1)
 		{
-			$this->segments = explode('/', $path);
-			array_shift($this->segments);
+			$this->stop_proc = TRUE;
+			return TRUE;
 		}
+
+		$this->segments = explode('/', $path);
+		array_shift($this->segments);
 
 		$this->routes = array(
 			// rss , blogAPI
@@ -49,31 +67,9 @@ class Router
 		);
 	}
 
-	/**
-	 * returns static context object (Singleton). It's to use Router without declaration of an object
-	 *
-	 * @return object Instance
-	 */
-	public function &getInstance()
+	public function proc()
 	{
-		static $theInstance = null;
-		if(!$theInstance) $theInstance = new Router();
-
-		return $theInstance;
-	}
-
-	/**
-	 * Initialization, it sets routes and so on.
-	 *
-	 * @see This function should be called only once
-	 * @return void
-	 */
-	public function init()
-	{
-		// Get path info
-		$path_info = parse_url(substr($_SERVER['REQUEST_URI'], 1));
-		$path = $path_info['path'];
-		if(strlen($path) < 1)
+		if($this->stop_proc)
 		{
 			return TRUE;
 		}

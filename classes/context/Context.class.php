@@ -362,23 +362,24 @@ class Context
 		if($this->allow_rewrite)
 		{
 			$oRouter = Router::getInstance();
+			$oRouter->init();
 
-			// call a trigger before router init
-			ModuleHandler::triggerCall('router.init', 'before', $oRouter);
+			// call a trigger before router proc
+			ModuleHandler::triggerCall('router.proc', 'before', $oRouter);
 
-			// execute addon (before router initialization)
-			$called_position = 'before_router_init';
+			// execute addon (before router process)
+			$called_position = 'before_router_proc';
 			$oAddonController = getController('addon');
 			$addon_file = $oAddonController->getCacheFilePath(Mobile::isFromMobilePhone() ? 'mobile' : 'pc');
 			if(file_exists($addon_file)) include($addon_file);
 
-			$oRouter->init();
+			$oRouter->proc();
 
 			// call a trigger after router init
-			ModuleHandler::triggerCall('router.init', 'after', $oRouter);
+			ModuleHandler::triggerCall('router.proc', 'after', $oRouter);
 
-			// execute addon (after router initialization)
-			$called_position = 'after_router_init';
+			// execute addon (after router process)
+			$called_position = 'after_router_proc';
 			$oAddonController = getController('addon');
 			$addon_file = $oAddonController->getCacheFilePath(Mobile::isFromMobilePhone() ? 'mobile' : 'pc');
 			if(file_exists($addon_file)) include($addon_file);
