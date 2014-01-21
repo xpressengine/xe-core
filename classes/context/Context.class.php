@@ -358,31 +358,12 @@ class Context
 		// check if using rewrite module
 		$this->allow_rewrite = ($this->db_info->use_rewrite == 'Y' ? TRUE : FALSE);
 
-		// If using rewrite module
+		// If using rewrite module, initializes router
 		if($this->allow_rewrite)
 		{
 			$oRouter = Router::getInstance();
 			$oRouter->init();
-
-			// call a trigger before router proc
-			ModuleHandler::triggerCall('router.proc', 'before', $oRouter);
-
-			// execute addon (before router process)
-			$called_position = 'before_router_proc';
-			$oAddonController = getController('addon');
-			$addon_file = $oAddonController->getCacheFilePath(Mobile::isFromMobilePhone() ? 'mobile' : 'pc');
-			if(file_exists($addon_file)) include($addon_file);
-
 			$oRouter->proc();
-
-			// call a trigger after router init
-			ModuleHandler::triggerCall('router.proc', 'after', $oRouter);
-
-			// execute addon (after router process)
-			$called_position = 'after_router_proc';
-			$oAddonController = getController('addon');
-			$addon_file = $oAddonController->getCacheFilePath(Mobile::isFromMobilePhone() ? 'mobile' : 'pc');
-			if(file_exists($addon_file)) include($addon_file);
 		}
 
 		// set locations for javascript use
