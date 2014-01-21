@@ -358,6 +358,32 @@ class Context
 		// check if using rewrite module
 		$this->allow_rewrite = ($this->db_info->use_rewrite == 'Y' ? TRUE : FALSE);
 
+		// If using rewrite module
+		if($this->allow_rewrite)
+		{
+			$oRouter = Router::getInstance();
+
+			// call a trigger before router init
+			ModuleHandler::triggerCall('router.init', 'before', $oRouter);
+
+			// execute addon (before router initialization)
+			$called_position = 'before_router_init';
+			$oAddonController = getController('addon');
+			$addon_file = $oAddonController->getCacheFilePath(Mobile::isFromMobilePhone() ? 'mobile' : 'pc');
+			if(file_exists($addon_file)) include($addon_file);
+
+			$oRouter->init();
+
+			// call a trigger after router init
+			ModuleHandler::triggerCall('router.init', 'after', $oRouter);
+
+			// execute addon (after router initialization)
+			$called_position = 'after_router_init';
+			$oAddonController = getController('addon');
+			$addon_file = $oAddonController->getCacheFilePath(Mobile::isFromMobilePhone() ? 'mobile' : 'pc');
+			if(file_exists($addon_file)) include($addon_file);
+		}
+
 		// set locations for javascript use
 		if($_SERVER['REQUEST_METHOD'] == 'GET')
 		{
@@ -1535,7 +1561,10 @@ class Context
 					'act.document_srl.key.mid.vid' => ($act == 'trackback') ? "$vid/$mid/$srl/$key/$act" : ''
 				);
 
-				$query = $target_map[$target];
+				$oRouter = Router::getInstance();
+				$oRouter->setMap($target_map);
+
+				$query = $oRouter->makePrettyUrl($target);
 			}
 
 			if(!$query)
