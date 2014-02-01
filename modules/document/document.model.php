@@ -133,13 +133,28 @@ class documentModel extends document
 	function getDocument($document_srl=0, $is_admin = false, $load_extra_vars=true, $columnList = array())
 	{
 		if(!$document_srl) return new documentItem();
+		sort($columnList);
 
 		if(!isset($GLOBALS['XE_DOCUMENT_LIST'][$document_srl]) || $GLOBALS['XE_DOCUMENT_LIST'][$document_srl]->columnListKey != serialize($columnList))
 		{
-			$oDocument = new documentItem($document_srl, $load_extra_vars, $columnList);
-			$GLOBALS['XE_DOCUMENT_LIST'][$document_srl] = $oDocument;
-			if($load_extra_vars) $this->setToAllDocumentExtraVars();
-			$GLOBALS['XE_DOCUMENT_LIST'][$document_srl]->columnListKey = serialize($columnList);
+			if(isset($GLOBALS['XE_DOCUMENT_LIST'][$document_srl]->columnListKey) && $GLOBALS['XE_DOCUMENT_LIST'][$document_srl]->columnListKey != serialize($columnList))
+			{
+				$ori_columnList = unserialize($GLOBALS['XE_DOCUMENT_LIST'][$document_srl]->columnListKey);
+				$des_columnList = array_merge($ori_columnList, $columnList);
+				$des_columnList = sort(array_unique($des_columnList));
+			}
+			else
+			{
+				$des_columnList = $columnList;
+			}
+
+			if(!isset($ori_columnList) || serialize($ori_columnList) != serialize($des_columnList))
+			{
+				$oDocument = new documentItem($document_srl, $load_extra_vars, $des_columnList);
+				$GLOBALS['XE_DOCUMENT_LIST'][$document_srl] = $oDocument;
+				if($load_extra_vars) $this->setToAllDocumentExtraVars();
+				$GLOBALS['XE_DOCUMENT_LIST'][$document_srl]->columnListKey = serialize($des_columnList);
+			}
 		}
 		if($is_admin) $GLOBALS['XE_DOCUMENT_LIST'][$document_srl]->setGrant();
 
