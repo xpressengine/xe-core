@@ -59,7 +59,7 @@
 				for(var j = 0, l = shortURLList.length; j < l; j++) {
 					var regExp = new RegExp('://' + shortURLList[j] + '/', "i");
 					if(resourceURL.match(regExp) !== null) {
-						//AJAX to http://api.longurl.org/v2/expand?url=http://bit.ly/JATvIs&format=json&callback=hhh
+						//AJAX to http://api.longurl.org/v2/expand?url=https://bit.ly/JATvIs&format=json&callback=hhh
 						var ajaxopts = $.extend({
 							url: "http://api.longurl.org/v2/expand",
 							dataType: 'jsonp',
@@ -125,7 +125,7 @@
 	};
 
 	/* Private functions */
-	function rand(length, current) { //Found on http://stackoverflow.com/questions/1349404/generate-a-string-of-5-random-characters-in-javascript
+	function rand(length, current) { //Found on https://stackoverflow.com/questions/1349404/generate-a-string-of-5-random-characters-in-javascript
 		current = current ? current : '';
 		return length ? rand(--length, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz".charAt(Math.floor(Math.random() * 60)) + current) : current;
 	}
@@ -178,7 +178,7 @@
 			var query = 'SELECT * FROM ' + from + ' WHERE url="' + (url) + '"' + " and " + (/html/.test(from) ? 'xpath' : 'itemPath') + "='" + (embedProvider.yql.xpath || '/') + "'";
 			if(from == 'html') query += " and compat='html5'";
 			var ajaxopts = $.extend({
-				url: "http://query.yahooapis.com/v1/public/yql",
+				url: "https://query.yahooapis.com/v1/public/yql",
 				dataType: 'jsonp',
 				data: {
 					q: query,
@@ -491,7 +491,7 @@
 	/* Native & common providers */
 	$.fn.oembed.providers = [
 		//Video
-		new $.fn.oembed.OEmbedProvider("youtube", "video", ["youtube\\.com/watch.+v=[\\w-]+&?", "youtu\\.be/[\\w-]+", "youtube.com/embed"], 'http://www.youtube.com/embed/$1?wmode=transparent', {
+		new $.fn.oembed.OEmbedProvider("youtube", "video", ["youtube\\.com/watch.+v=[\\w-]+&?", "youtu\\.be/[\\w-]+", "youtube.com/embed"], 'https://www.youtube.com/embed/$1?wmode=transparent', {
 			templateRegex: /.*(?:v\=|be\/|embed\/)([\w\-]+)&?.*/,
 			embedtag: {
 				tag: 'iframe',
@@ -500,7 +500,7 @@
 			}
 		}),
 
-		// new $.fn.oembed.OEmbedProvider("youtube", "video", ["youtube\\.com/watch.+v=[\\w-]+&?", "youtu\\.be/[\\w-]+"], 'http://www.youtube.com/oembed', {
+		// new $.fn.oembed.OEmbedProvider("youtube", "video", ["youtube\\.com/watch.+v=[\\w-]+&?", "youtu\\.be/[\\w-]+"], 'https://www.youtube.com/oembed', {
 		// 	useYQL: 'json'
 		// }),
 		// new $.fn.oembed.OEmbedProvider("youtubeiframe", "video", ["youtube.com/embed"], "$1?wmode=transparent", {
@@ -511,10 +511,10 @@
 		// 		height: '349'
 		// 	}
 		// }),
-		new $.fn.oembed.OEmbedProvider("wistia", "video", ["wistia.com/m/.+", "wistia.com/embed/.+", "wi.st/m/.+", "wi.st/embed/.+"], 'http://fast.wistia.com/oembed', {
+		new $.fn.oembed.OEmbedProvider("wistia", "video", ["wistia.com/m/.+", "wistia.com/embed/.+", "wi.st/m/.+", "wi.st/embed/.+"], 'https://fast.wistia.com/oembed', {
 			useYQL: 'json'
 		}),
-		new $.fn.oembed.OEmbedProvider("xtranormal", "video", ["xtranormal\\.com/watch/.+"], "http://www.xtranormal.com/xtraplayr/$1/$2", {
+		new $.fn.oembed.OEmbedProvider("xtranormal", "video", ["xtranormal\\.com/watch/.+"], "https://www.xtranormal.com/xtraplayr/$1/$2", {
 			templateRegex: /.*com\/watch\/([\w\-]+)\/([\w\-]+).*/,
 			embedtag: {
 				tag: 'iframe',
@@ -522,7 +522,7 @@
 				height: '269'
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("scivee", "video", ["scivee.tv/node/.+"], "http://www.scivee.tv/flash/embedCast.swf?", {
+		new $.fn.oembed.OEmbedProvider("scivee", "video", ["scivee.tv/node/.+"], "https://www.scivee.tv/flash/embedCast.swf?", {
 			templateRegex: /.*tv\/node\/(.+)/,
 			embedtag: {
 				width: '480',
@@ -530,21 +530,21 @@
 				flashvars: "id=$1&type=3"
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("veoh", "video", ["veoh.com/watch/.+"], "http://www.veoh.com/swf/webplayer/WebPlayer.swf?version=AFrontend.5.7.0.1337&permalinkId=$1&player=videodetailsembedded&videoAutoPlay=0&id=anonymous", {
+		new $.fn.oembed.OEmbedProvider("veoh", "video", ["veoh.com/watch/.+"], "https://www.veoh.com/swf/webplayer/WebPlayer.swf?version=AFrontend.5.7.0.1337&permalinkId=$1&player=videodetailsembedded&videoAutoPlay=0&id=anonymous", {
 			templateRegex: /.*watch\/([^\?]+).*/,
 			embedtag: {
 				width: '410',
 				height: '341'
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("gametrailers", "video", ["gametrailers\\.com/video/.+"], "http://media.mtvnservices.com/mgid:moses:video:gametrailers.com:$2", {
+		new $.fn.oembed.OEmbedProvider("gametrailers", "video", ["gametrailers\\.com/video/.+"], "https://media.mtvnservices.com/mgid:moses:video:gametrailers.com:$2", {
 			templateRegex: /.*com\/video\/([\w\-]+)\/([\w\-]+).*/,
 			embedtag: {
 				width: '512',
 				height: '288'
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("funnyordie", "video", ["funnyordie\\.com/videos/.+"], "http://player.ordienetworks.com/flash/fodplayer.swf?", {
+		new $.fn.oembed.OEmbedProvider("funnyordie", "video", ["funnyordie\\.com/videos/.+"], "https://player.ordienetworks.com/flash/fodplayer.swf?", {
 			templateRegex: /.*videos\/([^\/]+)\/([^\/]+)?/,
 			embedtag: {
 				width: 512,
@@ -552,28 +552,28 @@
 				flashvars: "key=$1"
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("colledgehumour", "video", ["collegehumor\\.com/video/.+"], "http://www.collegehumor.com/moogaloop/moogaloop.swf?clip_id=$1&use_node_id=true&fullscreen=1", {
+		new $.fn.oembed.OEmbedProvider("colledgehumour", "video", ["collegehumor\\.com/video/.+"], "https://www.collegehumor.com/moogaloop/moogaloop.swf?clip_id=$1&use_node_id=true&fullscreen=1", {
 			templateRegex: /.*video\/([^\/]+).*/,
 			embedtag: {
 				width: 600,
 				height: 338
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("metacafe", "video", ["metacafe\\.com/watch/.+"], "http://www.metacafe.com/fplayer/$1/$2.swf", {
+		new $.fn.oembed.OEmbedProvider("metacafe", "video", ["metacafe\\.com/watch/.+"], "https://www.metacafe.com/fplayer/$1/$2.swf", {
 			templateRegex: /.*watch\/(\d+)\/(\w+)\/.*/,
 			embedtag: {
 				width: 400,
 				height: 345
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("bambuser", "video", ["bambuser\\.com\/channel\/.*\/broadcast\/.*"], "http://static.bambuser.com/r/player.swf?vid=$1", {
+		new $.fn.oembed.OEmbedProvider("bambuser", "video", ["bambuser\\.com\/channel\/.*\/broadcast\/.*"], "https://static.bambuser.com/r/player.swf?vid=$1", {
 			templateRegex: /.*bambuser\.com\/channel\/.*\/broadcast\/(\w+).*/,
 			embedtag: {
 				width: 512,
 				height: 339
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("twitvid", "video", ["twitvid\\.com/.+"], "http://www.twitvid.com/embed.php?guid=$1&autoplay=0", {
+		new $.fn.oembed.OEmbedProvider("twitvid", "video", ["twitvid\\.com/.+"], "https://www.twitvid.com/embed.php?guid=$1&autoplay=0", {
 			templateRegex: /.*twitvid\.com\/(\w+).*/,
 			embedtag: {
 				tag: 'iframe',
@@ -581,14 +581,14 @@
 				height: 360
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("aniboom", "video", ["aniboom\\.com/animation-video/.+"], "http://api.aniboom.com/e/$1", {
+		new $.fn.oembed.OEmbedProvider("aniboom", "video", ["aniboom\\.com/animation-video/.+"], "https://api.aniboom.com/e/$1", {
 			templateRegex: /.*animation-video\/(\d+).*/,
 			embedtag: {
 				width: 594,
 				height: 334
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("vzaar", "video", ["vzaar\\.com/videos/.+", "vzaar.tv/.+"], "http://view.vzaar.com/$1/player?", {
+		new $.fn.oembed.OEmbedProvider("vzaar", "video", ["vzaar\\.com/videos/.+", "vzaar.tv/.+"], "https://view.vzaar.com/$1/player?", {
 			templateRegex: /.*\/(\d+).*/,
 			embedtag: {
 				tag: 'iframe',
@@ -596,7 +596,7 @@
 				height: 324
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("snotr", "video", ["snotr\\.com/video/.+"], "http://www.snotr.com/embed/$1", {
+		new $.fn.oembed.OEmbedProvider("snotr", "video", ["snotr\\.com/video/.+"], "https://www.snotr.com/embed/$1", {
 			templateRegex: /.*\/(\d+).*/,
 			embedtag: {
 				tag: 'iframe',
@@ -605,7 +605,7 @@
 				nocache: 1
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("youku", "video", ["v.youku.com/v_show/id_.+"], "http://player.youku.com/player.php/sid/$1/v.swf", {
+		new $.fn.oembed.OEmbedProvider("youku", "video", ["v.youku.com/v_show/id_.+"], "https://player.youku.com/player.php/sid/$1/v.swf", {
 			templateRegex: /.*id_(.+)\.html.*/,
 			embedtag: {
 				width: 480,
@@ -613,7 +613,7 @@
 				nocache: 1
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("tudou", "video", ["tudou.com/programs/view/.+\/"], "http://www.tudou.com/v/$1/v.swf", {
+		new $.fn.oembed.OEmbedProvider("tudou", "video", ["tudou.com/programs/view/.+\/"], "https://www.tudou.com/v/$1/v.swf", {
 			templateRegex: /.*view\/(.+)\//,
 			embedtag: {
 				width: 480,
@@ -621,69 +621,69 @@
 				nocache: 1
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("embedr", "video", ["embedr\\.com/playlist/.+"], "http://embedr.com/swf/slider/$1/425/520/default/false/std?", {
+		new $.fn.oembed.OEmbedProvider("embedr", "video", ["embedr\\.com/playlist/.+"], "https://embedr.com/swf/slider/$1/425/520/default/false/std?", {
 			templateRegex: /.*playlist\/([^\/]+).*/,
 			embedtag: {
 				width: 425,
 				height: 520
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("blip", "video", ["blip\\.tv/.+"], "http://blip.tv/oembed/"),
-		new $.fn.oembed.OEmbedProvider("minoto-video", "video", ["http://api.minoto-video.com/publishers/.+/videos/.+", "http://dashboard.minoto-video.com/main/video/details/.+", "http://embed.minoto-video.com/.+"], "http://api.minoto-video.com/services/oembed.json", {
+		new $.fn.oembed.OEmbedProvider("blip", "video", ["blip\\.tv/.+"], "https://blip.tv/oembed/"),
+		new $.fn.oembed.OEmbedProvider("minoto-video", "video", ["https://api.minoto-video.com/publishers/.+/videos/.+", "https://dashboard.minoto-video.com/main/video/details/.+", "https://embed.minoto-video.com/.+"], "https://api.minoto-video.com/services/oembed.json", {
 			useYQL: 'json'
 		}),
-		new $.fn.oembed.OEmbedProvider("animoto", "video", ["animoto.com/play/.+"], "http://animoto.com/services/oembed"),
-		new $.fn.oembed.OEmbedProvider("hulu", "video", ["hulu\\.com/watch/.*"], "http://www.hulu.com/api/oembed.json"),
-		new $.fn.oembed.OEmbedProvider("ustream", "video", ["ustream\\.tv/recorded/.*"], "http://www.ustream.tv/oembed", {
+		new $.fn.oembed.OEmbedProvider("animoto", "video", ["animoto.com/play/.+"], "https://animoto.com/services/oembed"),
+		new $.fn.oembed.OEmbedProvider("hulu", "video", ["hulu\\.com/watch/.*"], "https://www.hulu.com/api/oembed.json"),
+		new $.fn.oembed.OEmbedProvider("ustream", "video", ["ustream\\.tv/recorded/.*"], "https://www.ustream.tv/oembed", {
 			useYQL: 'json'
 		}),
-		new $.fn.oembed.OEmbedProvider("videojug", "video", ["videojug\\.com/(film|payer|interview).*"], "http://www.videojug.com/oembed.json", {
+		new $.fn.oembed.OEmbedProvider("videojug", "video", ["videojug\\.com/(film|payer|interview).*"], "https://www.videojug.com/oembed.json", {
 			useYQL: 'json'
 		}),
-		new $.fn.oembed.OEmbedProvider("sapo", "video", ["videos\\.sapo\\.pt/.*"], "http://videos.sapo.pt/oembed", {
+		new $.fn.oembed.OEmbedProvider("sapo", "video", ["videos\\.sapo\\.pt/.*"], "https://videos.sapo.pt/oembed", {
 			useYQL: 'json'
 		}),
-		new $.fn.oembed.OEmbedProvider("vodpod", "video", ["vodpod.com/watch/.*"], "http://vodpod.com/oembed.js", {
+		new $.fn.oembed.OEmbedProvider("vodpod", "video", ["vodpod.com/watch/.*"], "https://vodpod.com/oembed.js", {
 			useYQL: 'json'
 		}),
 		new $.fn.oembed.OEmbedProvider("vimeo", "video", ["www\.vimeo\.com\/groups\/.*\/videos\/.*", "www\.vimeo\.com\/.*", "vimeo\.com\/groups\/.*\/videos\/.*", "vimeo\.com\/.*"], "//vimeo.com/api/oembed.json"),
-		new $.fn.oembed.OEmbedProvider("dailymotion", "video", ["dailymotion\\.com/.+"], 'http://www.dailymotion.com/services/oembed'),
-		new $.fn.oembed.OEmbedProvider("5min", "video", ["www\\.5min\\.com/.+"], 'http://api.5min.com/oembed.xml', {
+		new $.fn.oembed.OEmbedProvider("dailymotion", "video", ["dailymotion\\.com/.+"], 'https://www.dailymotion.com/services/oembed'),
+		new $.fn.oembed.OEmbedProvider("5min", "video", ["www\\.5min\\.com/.+"], 'https://api.5min.com/oembed.xml', {
 			useYQL: 'xml'
 		}),
-		new $.fn.oembed.OEmbedProvider("National Film Board of Canada", "video", ["nfb\\.ca/film/.+"], 'http://www.nfb.ca/remote/services/oembed/', {
+		new $.fn.oembed.OEmbedProvider("National Film Board of Canada", "video", ["nfb\\.ca/film/.+"], 'https://www.nfb.ca/remote/services/oembed/', {
 			useYQL: 'json'
 		}),
-		new $.fn.oembed.OEmbedProvider("qik", "video", ["qik\\.com/\\w+"], 'http://qik.com/api/oembed.json', {
+		new $.fn.oembed.OEmbedProvider("qik", "video", ["qik\\.com/\\w+"], 'https://qik.com/api/oembed.json', {
 			useYQL: 'json'
 		}),
-		new $.fn.oembed.OEmbedProvider("revision3", "video", ["revision3\\.com"], "http://revision3.com/api/oembed/"),
-		new $.fn.oembed.OEmbedProvider("dotsub", "video", ["dotsub\\.com/view/.+"], "http://dotsub.com/services/oembed", {
+		new $.fn.oembed.OEmbedProvider("revision3", "video", ["revision3\\.com"], "https://revision3.com/api/oembed/"),
+		new $.fn.oembed.OEmbedProvider("dotsub", "video", ["dotsub\\.com/view/.+"], "https://dotsub.com/services/oembed", {
 			useYQL: 'json'
 		}),
-		new $.fn.oembed.OEmbedProvider("clikthrough", "video", ["clikthrough\\.com/theater/video/\\d+"], "http://clikthrough.com/services/oembed"),
-		new $.fn.oembed.OEmbedProvider("Kinomap", "video", ["kinomap\\.com/.+"], "http://www.kinomap.com/oembed"),
-		new $.fn.oembed.OEmbedProvider("VHX", "video", ["vhx.tv/.+"], "http://vhx.tv/services/oembed.json"),
-		new $.fn.oembed.OEmbedProvider("bambuser", "video", ["bambuser.com/.+"], "http://api.bambuser.com/oembed/iframe.json"),
-		new $.fn.oembed.OEmbedProvider("justin.tv", "video", ["justin.tv/.+"], 'http://api.justin.tv/api/embed/from_url.json', {
+		new $.fn.oembed.OEmbedProvider("clikthrough", "video", ["clikthrough\\.com/theater/video/\\d+"], "https://clikthrough.com/services/oembed"),
+		new $.fn.oembed.OEmbedProvider("Kinomap", "video", ["kinomap\\.com/.+"], "https://www.kinomap.com/oembed"),
+		new $.fn.oembed.OEmbedProvider("VHX", "video", ["vhx.tv/.+"], "https://vhx.tv/services/oembed.json"),
+		new $.fn.oembed.OEmbedProvider("bambuser", "video", ["bambuser.com/.+"], "https://api.bambuser.com/oembed/iframe.json"),
+		new $.fn.oembed.OEmbedProvider("justin.tv", "video", ["justin.tv/.+"], 'https://api.justin.tv/api/embed/from_url.json', {
 			useYQL: 'json'
 		}),
 
 		//Audio
-		new $.fn.oembed.OEmbedProvider("official.fm", "rich", ["official.fm/.+"], 'http://official.fm/services/oembed', {
+		new $.fn.oembed.OEmbedProvider("official.fm", "rich", ["official.fm/.+"], 'https://official.fm/services/oembed', {
 			useYQL: 'json'
 		}),
-		new $.fn.oembed.OEmbedProvider("chirbit", "rich", ["chirb.it/.+"], 'http://chirb.it/oembed.json', {
+		new $.fn.oembed.OEmbedProvider("chirbit", "rich", ["chirb.it/.+"], 'https://chirb.it/oembed.json', {
 			useYQL: 'json'
 		}),
-		new $.fn.oembed.OEmbedProvider("Huffduffer", "rich", ["huffduffer.com/[-.\\w@]+/\\d+"], "http://huffduffer.com/oembed"),
+		new $.fn.oembed.OEmbedProvider("Huffduffer", "rich", ["huffduffer.com/[-.\\w@]+/\\d+"], "https://huffduffer.com/oembed"),
 		new $.fn.oembed.OEmbedProvider("Spotify", "rich", ["open.spotify.com/(track|album|user)/"], "https://embed.spotify.com/oembed/"),
-		new $.fn.oembed.OEmbedProvider("shoudio", "rich", ["shoudio.com/.+", "shoud.io/.+"], "http://shoudio.com/api/oembed"),
-		new $.fn.oembed.OEmbedProvider("mixcloud", "rich", ["mixcloud.com/.+"], 'http://www.mixcloud.com/oembed/', {
+		new $.fn.oembed.OEmbedProvider("shoudio", "rich", ["shoudio.com/.+", "shoud.io/.+"], "https://shoudio.com/api/oembed"),
+		new $.fn.oembed.OEmbedProvider("mixcloud", "rich", ["mixcloud.com/.+"], 'https://www.mixcloud.com/oembed/', {
 			useYQL: 'json'
 		}),
-		new $.fn.oembed.OEmbedProvider("rdio.com", "rich", ["rd.io/.+", "rdio.com"], "http://www.rdio.com/api/oembed/"),
-		new $.fn.oembed.OEmbedProvider("Soundcloud", "rich", ["soundcloud.com/.+", "snd.sc/.+"], "http://soundcloud.com/oembed", {
+		new $.fn.oembed.OEmbedProvider("rdio.com", "rich", ["rd.io/.+", "rdio.com"], "https://www.rdio.com/api/oembed/"),
+		new $.fn.oembed.OEmbedProvider("Soundcloud", "rich", ["soundcloud.com/.+", "snd.sc/.+"], "https://soundcloud.com/oembed", {
 			format: 'js'
 		}),
 		new $.fn.oembed.OEmbedProvider("bandcamp", "rich", ["bandcamp\\.com/album/.+"], null, {
@@ -697,7 +697,7 @@
 		}),
 
 		//Photo
-		new $.fn.oembed.OEmbedProvider("deviantart", "photo", ["deviantart.com/.+", "fav.me/.+", "deviantart.com/.+"], "http://backend.deviantart.com/oembed", {
+		new $.fn.oembed.OEmbedProvider("deviantart", "photo", ["deviantart.com/.+", "fav.me/.+", "deviantart.com/.+"], "https://backend.deviantart.com/oembed", {
 			format: 'jsonp'
 		}),
 		new $.fn.oembed.OEmbedProvider("skitch", "photo", ["skitch.com/.+"], null, {
@@ -705,39 +705,39 @@
 				xpath: "json",
 				from: 'json',
 				url: function (externalurl) {
-					return 'http://skitch.com/oembed/?format=json&url=' + externalurl
+					return 'https://skitch.com/oembed/?format=json&url=' + externalurl
 				},
 				datareturn: function (data) {
 					return $.fn.oembed.getPhotoCode(data.json.url, data.json);
 				}
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("mobypicture", "photo", ["mobypicture.com/user/.+/view/.+", "moby.to/.+"], "http://api.mobypicture.com/oEmbed"),
-		new $.fn.oembed.OEmbedProvider("flickr", "photo", ["flickr\\.com/photos/.+"], "http://flickr.com/services/oembed", {
+		new $.fn.oembed.OEmbedProvider("mobypicture", "photo", ["mobypicture.com/user/.+/view/.+", "moby.to/.+"], "https://api.mobypicture.com/oEmbed"),
+		new $.fn.oembed.OEmbedProvider("flickr", "photo", ["flickr\\.com/photos/.+"], "https://flickr.com/services/oembed", {
 			callbackparameter: 'jsoncallback'
 		}),
-		new $.fn.oembed.OEmbedProvider("photobucket", "photo", ["photobucket\\.com/(albums|groups)/.+"], "http://photobucket.com/oembed/"),
-		new $.fn.oembed.OEmbedProvider("instagram", "photo", ["instagr\\.?am(\\.com)?/.+"], "http://api.instagram.com/oembed"),
-		// new $.fn.oembed.OEmbedProvider("yfrog", "photo", ["yfrog\\.(com|ru|com\\.tr|it|fr|co\\.il|co\\.uk|com\\.pl|pl|eu|us)/.+"], "http://www.yfrog.com/api/oembed", {
+		new $.fn.oembed.OEmbedProvider("photobucket", "photo", ["photobucket\\.com/(albums|groups)/.+"], "https://photobucket.com/oembed/"),
+		new $.fn.oembed.OEmbedProvider("instagram", "photo", ["instagr\\.?am(\\.com)?/.+"], "https://api.instagram.com/oembed"),
+		// new $.fn.oembed.OEmbedProvider("yfrog", "photo", ["yfrog\\.(com|ru|com\\.tr|it|fr|co\\.il|co\\.uk|com\\.pl|pl|eu|us)/.+"], "https://www.yfrog.com/api/oembed", {
 		// 	useYQL: "json"
 		// }),
-		new $.fn.oembed.OEmbedProvider("SmugMug", "photo", ["smugmug.com/[-.\\w@]+/.+"], "http://api.smugmug.com/services/oembed/"),
+		new $.fn.oembed.OEmbedProvider("SmugMug", "photo", ["smugmug.com/[-.\\w@]+/.+"], "https://api.smugmug.com/services/oembed/"),
 
-		new $.fn.oembed.OEmbedProvider("dribbble", "photo", ["dribbble.com/shots/.+"], "http://api.dribbble.com/shots/$1?callback=?", {
+		new $.fn.oembed.OEmbedProvider("dribbble", "photo", ["dribbble.com/shots/.+"], "https://api.dribbble.com/shots/$1?callback=?", {
 			templateRegex: /.*shots\/([\d]+).*/,
 			templateData: function (data) {
 				if(!data.image_teaser_url) return false;
 				return '<img src="' + data.image_teaser_url + '"/>';
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("chart.ly", "photo", ["chart\\.ly/[a-z0-9]{6,8}"], "http://chart.ly/uploads/large_$1.png", {
+		new $.fn.oembed.OEmbedProvider("chart.ly", "photo", ["chart\\.ly/[a-z0-9]{6,8}"], "https://chart.ly/uploads/large_$1.png", {
 			templateRegex: /.*ly\/([^\/]+).*/,
 			embedtag: {
 				tag: 'img'
 			},
 			nocache: 1
 		}),
-		// new $.fn.oembed.OEmbedProvider("stocktwits.com", "photo", ["stocktwits\\.com/message/.+"], "http://charts.stocktwits.com/production/original_$1.png?", {
+		// new $.fn.oembed.OEmbedProvider("stocktwits.com", "photo", ["stocktwits\\.com/message/.+"], "https://charts.stocktwits.com/production/original_$1.png?", {
 		// 	templateRegex: /.*message\/([^\/]+).*/,
 		// 	embedtag: {
 		// 		tag: 'img'
@@ -751,24 +751,24 @@
 			},
 			nocache: 1
 		}),
-		new $.fn.oembed.OEmbedProvider("23hq", "photo", ["23hq.com/[-.\\w@]+/photo/.+"], "http://www.23hq.com/23/oembed", {
+		new $.fn.oembed.OEmbedProvider("23hq", "photo", ["23hq.com/[-.\\w@]+/photo/.+"], "https://www.23hq.com/23/oembed", {
 			useYQL: "json"
 		}),
-		new $.fn.oembed.OEmbedProvider("img.ly", "photo", ["img\\.ly/.+"], "http://img.ly/show/thumb/$1", {
+		new $.fn.oembed.OEmbedProvider("img.ly", "photo", ["img\\.ly/.+"], "https://img.ly/show/thumb/$1", {
 			templateRegex: /.*ly\/([^\/]+).*/,
 			embedtag: {
 				tag: 'img'
 			},
 			nocache: 1
 		}),
-		new $.fn.oembed.OEmbedProvider("twitgoo.com", "photo", ["twitgoo\\.com/.+"], "http://twitgoo.com/show/thumb/$1", {
+		new $.fn.oembed.OEmbedProvider("twitgoo.com", "photo", ["twitgoo\\.com/.+"], "https://twitgoo.com/show/thumb/$1", {
 			templateRegex: /.*com\/([^\/]+).*/,
 			embedtag: {
 				tag: 'img'
 			},
 			nocache: 1
 		}),
-		new $.fn.oembed.OEmbedProvider("imgur.com", "photo", ["imgur\\.com/gallery/.+"], "http://imgur.com/$1l.jpg", {
+		new $.fn.oembed.OEmbedProvider("imgur.com", "photo", ["imgur\\.com/gallery/.+"], "https://imgur.com/$1l.jpg", {
 			templateRegex: /.*gallery\/([^\/]+).*/,
 			embedtag: {
 				tag: 'img'
@@ -784,33 +784,33 @@
 		new $.fn.oembed.OEmbedProvider("gravtar", "photo", ["mailto:.+"], null, {
 			templateRegex: /mailto:([^\/]+).*/,
 			template: function (wm, email) {
-				return '<img src="http://gravatar.com/avatar/' + email.md5() + '.jpg" alt="on Gravtar" class="jqoaImg">';
+				return '<img src="https://gravatar.com/avatar/' + email.md5() + '.jpg" alt="on Gravtar" class="jqoaImg">';
 			}
 		}),
 
 		//Rich
 		new $.fn.oembed.OEmbedProvider("twitter", "rich", ["twitter.com/.+"], "https://api.twitter.com/1/statuses/oembed.json"),
-		new $.fn.oembed.OEmbedProvider("gmep", "rich", ["gmep.imeducate.com/.*", "gmep.org/.*"], "http://gmep.org/oembed.json"),
-		new $.fn.oembed.OEmbedProvider("urtak", "rich", ["urtak.com/(u|clr)/.+"], "http://oembed.urtak.com/1/oembed"),
-		new $.fn.oembed.OEmbedProvider("cacoo", "rich", ["cacoo.com/.+"], "http://cacoo.com/oembed.json"),
-		new $.fn.oembed.OEmbedProvider("dailymile", "rich", ["dailymile.com/people/.*/entries/.*"], "http://api.dailymile.com/oembed"),
-		new $.fn.oembed.OEmbedProvider("dipity", "rich", ["dipity.com/timeline/.+"], 'http://www.dipity.com/oembed/timeline/', {
+		new $.fn.oembed.OEmbedProvider("gmep", "rich", ["gmep.imeducate.com/.*", "gmep.org/.*"], "https://gmep.org/oembed.json"),
+		new $.fn.oembed.OEmbedProvider("urtak", "rich", ["urtak.com/(u|clr)/.+"], "https://oembed.urtak.com/1/oembed"),
+		new $.fn.oembed.OEmbedProvider("cacoo", "rich", ["cacoo.com/.+"], "https://cacoo.com/oembed.json"),
+		new $.fn.oembed.OEmbedProvider("dailymile", "rich", ["dailymile.com/people/.*/entries/.*"], "https://api.dailymile.com/oembed"),
+		new $.fn.oembed.OEmbedProvider("dipity", "rich", ["dipity.com/timeline/.+"], 'https://www.dipity.com/oembed/timeline/', {
 			useYQL: 'json'
 		}),
-		new $.fn.oembed.OEmbedProvider("sketchfab", "rich", ["sketchfab.com/show/.+"], 'http://sketchfab.com/oembed', {
+		new $.fn.oembed.OEmbedProvider("sketchfab", "rich", ["sketchfab.com/show/.+"], 'https://sketchfab.com/oembed', {
 			useYQL: 'json'
 		}),
-		new $.fn.oembed.OEmbedProvider("speakerdeck", "rich", ["speakerdeck.com/.+"], 'http://speakerdeck.com/oembed.json', {
+		new $.fn.oembed.OEmbedProvider("speakerdeck", "rich", ["speakerdeck.com/.+"], 'https://speakerdeck.com/oembed.json', {
 			useYQL: 'json'
 		}),
-		new $.fn.oembed.OEmbedProvider("popplet", "rich", ["popplet.com/app/.*"], "http://popplet.com/app/Popplet_Alpha.swf?page_id=$1&em=1", {
+		new $.fn.oembed.OEmbedProvider("popplet", "rich", ["popplet.com/app/.*"], "https://popplet.com/app/Popplet_Alpha.swf?page_id=$1&em=1", {
 			templateRegex: /.*#\/([^\/]+).*/,
 			embedtag: {
 				width: 460,
 				height: 460
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("pearltrees", "rich", ["pearltrees.com/.*"], "http://cdn.pearltrees.com/s/embed/getApp?", {
+		new $.fn.oembed.OEmbedProvider("pearltrees", "rich", ["pearltrees.com/.*"], "https://cdn.pearltrees.com/s/embed/getApp?", {
 			templateRegex: /.*N-f=1_(\d+).*N-p=(\d+).*/,
 			embedtag: {
 				width: 460,
@@ -818,7 +818,7 @@
 				flashvars: "lang=en_US&amp;embedId=pt-embed-$1-693&amp;treeId=$1&amp;pearlId=$2&amp;treeTitle=Diagrams%2FVisualization&amp;site=www.pearltrees.com%2FF"
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("prezi", "rich", ["prezi.com/.*"], "http://prezi.com/bin/preziloader.swf?", {
+		new $.fn.oembed.OEmbedProvider("prezi", "rich", ["prezi.com/.*"], "https://prezi.com/bin/preziloader.swf?", {
 			templateRegex: /.*com\/([^\/]+)\/.*/,
 			embedtag: {
 				width: 550,
@@ -832,41 +832,41 @@
 				setTimeout(function () {
 					if(loadEmbeds) loadEmbeds();
 				}, 2000);
-				return "<div id='" + tourid + "' class='tourwrist-tour-embed direct'></div> <script type='text/javascript' src='http://tourwrist.com/tour_embed.js'></script>";
+				return "<div id='" + tourid + "' class='tourwrist-tour-embed direct'></div> <script type='text/javascript' src='https://tourwrist.com/tour_embed.js'></script>";
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("meetup", "rich", ["meetup\\.(com|ps)/.+"], "http://api.meetup.com/oembed"),
-		new $.fn.oembed.OEmbedProvider("ebay", "rich", ["ebay\\.*"], "http://togo.ebay.com/togo/togo.swf?2008013100", {
+		new $.fn.oembed.OEmbedProvider("meetup", "rich", ["meetup\\.(com|ps)/.+"], "https://api.meetup.com/oembed"),
+		new $.fn.oembed.OEmbedProvider("ebay", "rich", ["ebay\\.*"], "https://togo.ebay.com/togo/togo.swf?2008013100", {
 			templateRegex: /.*\/([^\/]+)\/(\d{10,13}).*/,
 			embedtag: {
 				width: 355,
 				height: 300,
-				flashvars: "base=http://togo.ebay.com/togo/&lang=en-us&mode=normal&itemid=$2&query=$1"
+				flashvars: "base=https://togo.ebay.com/togo/&lang=en-us&mode=normal&itemid=$2&query=$1"
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("wikipedia", "rich", ["wikipedia.org/wiki/.+"], "http://$1.wikipedia.org/w/api.php?action=parse&page=$2&format=json&section=0&callback=?", {
+		new $.fn.oembed.OEmbedProvider("wikipedia", "rich", ["wikipedia.org/wiki/.+"], "https://$1.wikipedia.org/w/api.php?action=parse&page=$2&format=json&section=0&callback=?", {
 			templateRegex: /.*\/\/([\w]+).*\/wiki\/([^\/]+).*/,
 			templateData: function (data) {
 				if(!data.parse) return false;
-				var text = data.parse['text']['*'].replace(/href="\/wiki/g, 'href="http://en.wikipedia.org/wiki');
-				return '<div id="content"><h3><a class="nav-link" href="http://en.wikipedia.org/wiki/' + data.parse['displaytitle'] + '">' + data.parse['displaytitle'] + '</a></h3>' + text + '</div>';
+				var text = data.parse['text']['*'].replace(/href="\/wiki/g, 'href="https://en.wikipedia.org/wiki');
+				return '<div id="content"><h3><a class="nav-link" href="https://en.wikipedia.org/wiki/' + data.parse['displaytitle'] + '">' + data.parse['displaytitle'] + '</a></h3>' + text + '</div>';
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("imdb", "rich", ["imdb.com/title/.+"], "http://www.imdbapi.com/?i=$1&callback=?", {
+		new $.fn.oembed.OEmbedProvider("imdb", "rich", ["imdb.com/title/.+"], "https://www.imdbapi.com/?i=$1&callback=?", {
 			templateRegex: /.*\/title\/([^\/]+).*/,
 			templateData: function (data) {
 				if(!data.Title) return false;
-				return '<div id="content"><h3><a class="nav-link" href="http://imdb.com/title/' + data.imdbID + '/">' + data.Title + '</a> (' + data.Year + ')</h3><p>Rating: ' + data.imdbRating + '<br/>Genre: ' + data.Genre + '<br/>Starring: ' + data.Actors + '</p></div>  <div id="view-photo-caption">' + data.Plot + '</div></div>';
+				return '<div id="content"><h3><a class="nav-link" href="https://imdb.com/title/' + data.imdbID + '/">' + data.Title + '</a> (' + data.Year + ')</h3><p>Rating: ' + data.imdbRating + '<br/>Genre: ' + data.Genre + '<br/>Starring: ' + data.Actors + '</p></div>  <div id="view-photo-caption">' + data.Plot + '</div></div>';
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("livejournal", "rich", ["livejournal.com/"], "http://ljpic.seacrow.com/json/$2$4?jsonp=?", {
+		new $.fn.oembed.OEmbedProvider("livejournal", "rich", ["livejournal.com/"], "https://ljpic.seacrow.com/json/$2$4?jsonp=?", {
 			templateRegex: /(http:\/\/(((?!users).)+)\.livejournal\.com|.*users\.livejournal\.com\/([^\/]+)).*/,
 			templateData: function (data) {
 				if(!data.username) return false;
-				return '<div><img src="' + data.image + '" align="left" style="margin-right: 1em;" /><span class="oembedall-ljuser"><a href="http://' + data.username + '.livejournal.com/profile"><img src="http://www.livejournal.com/img/userinfo.gif" alt="[info]" width="17" height="17" /></a><a href="http://' + data.username + '.livejournal.com/">' + data.username + '</a></span><br />' + data.name + '</div>';
+				return '<div><img src="' + data.image + '" align="left" style="margin-right: 1em;" /><span class="oembedall-ljuser"><a href="https://' + data.username + '.livejournal.com/profile"><img src="https://www.livejournal.com/img/userinfo.gif" alt="[info]" width="17" height="17" /></a><a href="https://' + data.username + '.livejournal.com/">' + data.username + '</a></span><br />' + data.name + '</div>';
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("circuitbee", "rich", ["circuitbee\\.com/circuit/view/.+"], "http://c.circuitbee.com/build/r/schematic-embed.html?id=$1", {
+		new $.fn.oembed.OEmbedProvider("circuitbee", "rich", ["circuitbee\\.com/circuit/view/.+"], "https://c.circuitbee.com/build/r/schematic-embed.html?id=$1", {
 			templateRegex: /.*circuit\/view\/(\d+).*/,
 			embedtag: {
 				tag: 'iframe',
@@ -882,7 +882,7 @@
 				height: '600'
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("jsfiddle", "rich", ["jsfiddle.net/[^/]+/?"], "http://jsfiddle.net/$1/embedded/result,js,resources,html,css/?", {
+		new $.fn.oembed.OEmbedProvider("jsfiddle", "rich", ["jsfiddle.net/[^/]+/?"], "https://jsfiddle.net/$1/embedded/result,js,resources,html,css/?", {
 			templateRegex: /.*net\/([^\/]+).*/,
 			embedtag: {
 				tag: 'iframe',
@@ -890,7 +890,7 @@
 				height: '300'
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("jsbin", "rich", ["jsbin.com/.+"], "http://jsbin.com/$1/?", {
+		new $.fn.oembed.OEmbedProvider("jsbin", "rich", ["jsbin.com/.+"], "https://jsbin.com/$1/?", {
 			templateRegex: /.*com\/([^\/]+).*/,
 			embedtag: {
 				tag: 'iframe',
@@ -906,7 +906,7 @@
 				height: '507'
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("reelapp", "rich", ["reelapp\\.com/.+"], "http://www.reelapp.com/$1/embed", {
+		new $.fn.oembed.OEmbedProvider("reelapp", "rich", ["reelapp\\.com/.+"], "https://www.reelapp.com/$1/embed", {
 			templateRegex: /.*com\/(\S{6}).*/,
 			embedtag: {
 				tag: 'iframe',
@@ -922,7 +922,7 @@
 				height: 'auto'
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("timetoast", "rich", ["timetoast.com/timelines/[0-9]+"], "http://www.timetoast.com/flash/TimelineViewer.swf?passedTimelines=$1", {
+		new $.fn.oembed.OEmbedProvider("timetoast", "rich", ["timetoast.com/timelines/[0-9]+"], "https://www.timetoast.com/flash/TimelineViewer.swf?passedTimelines=$1", {
 			templateRegex: /.*timelines\/([0-9]*)/,
 			embedtag: {
 				width: 550,
@@ -930,7 +930,7 @@
 				nocache: 1
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("pastebin", "rich", ["pastebin\\.com/[\\S]{8}"], "http://pastebin.com/embed_iframe.php?i=$1", {
+		new $.fn.oembed.OEmbedProvider("pastebin", "rich", ["pastebin\\.com/[\\S]{8}"], "https://pastebin.com/embed_iframe.php?i=$1", {
 			templateRegex: /.*\/(\S{8}).*/,
 			embedtag: {
 				tag: 'iframe',
@@ -938,7 +938,7 @@
 				height: 'auto'
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("mixlr", "rich", ["mixlr.com/.+"], "http://mixlr.com/embed/$1?autoplay=ae", {
+		new $.fn.oembed.OEmbedProvider("mixlr", "rich", ["mixlr.com/.+"], "https://mixlr.com/embed/$1?autoplay=ae", {
 			templateRegex: /.*com\/([^\/]+).*/,
 			embedtag: {
 				tag: 'iframe',
@@ -963,11 +963,11 @@
 			templateRegex: /.*facebook.com\/(people\/[^\/]+\/(\d+).*|([^\/]+$))/,
 			templateData: function (data) {
 				if(!data.id) return false;
-				var out = '<div class="oembedall-facebook1"><div class="oembedall-facebook2"><a href="http://www.facebook.com/">facebook</a> ';
-				if(data.from) out += '<a href="http://www.facebook.com/' + data.from.id + '">' + data.from.name + '</a>';
+				var out = '<div class="oembedall-facebook1"><div class="oembedall-facebook2"><a href="https://www.facebook.com/">facebook</a> ';
+				if(data.from) out += '<a href="https://www.facebook.com/' + data.from.id + '">' + data.from.name + '</a>';
 				else if(data.link) out += '<a href="' + data.link + '">' + data.name + '</a>';
-				else if(data.username) out += '<a href="http://www.facebook.com/' + data.username + '">' + data.name + '</a>';
-				else out += '<a href="http://www.facebook.com/' + data.id + '">' + data.name + '</a>';
+				else if(data.username) out += '<a href="https://www.facebook.com/' + data.username + '">' + data.name + '</a>';
+				else out += '<a href="https://www.facebook.com/' + data.id + '">' + data.name + '</a>';
 				out += '</div><div class="oembedall-facebookBody"><div class="contents">';
 				if(data.picture) out += '<a href="' + data.link + '"><img src="' + data.picture + '"></a>';
 				else out += '<img src="https://graph.facebook.com/' + data.id + '/picture">';
@@ -981,21 +981,21 @@
 				return out;
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("stackoverflow", "rich", ["stackoverflow.com/questions/[\\d]+"], "http://api.stackoverflow.com/1.1/questions/$1?body=true&jsonp=?", {
+		new $.fn.oembed.OEmbedProvider("stackoverflow", "rich", ["stackoverflow.com/questions/[\\d]+"], "https://api.stackoverflow.com/1.1/questions/$1?body=true&jsonp=?", {
 			templateRegex: /.*questions\/([\d]+).*/,
 			templateData: function (data) {
 				if(!data.questions) return false;
 				var q = data.questions[0];
 				var body = $(q.body).text();
-				var out = '<div class="oembedall-stoqembed"><div class="oembedall-statscontainer"><div class="oembedall-statsarrow"></div><div class="oembedall-stats"><div class="oembedall-vote"><div class="oembedall-votes">' + '<span class="oembedall-vote-count-post"><strong>' + (q.up_vote_count - q.down_vote_count) + '</strong></span><div class="oembedall-viewcount">vote(s)</div></div>' + '</div><div class="oembedall-status"><strong>' + q.answer_count + '</strong>answer</div></div><div class="oembedall-views">' + q.view_count + ' view(s)</div></div>' + '<div class="oembedall-summary"><h3><a class="oembedall-question-hyperlink" href="http://stackoverflow.com/questions/' + q.question_id + '/">' + q.title + '</a></h3>' + '<div class="oembedall-excerpt">' + body.substring(0, 100) + '...</div><div class="oembedall-tags">';
+				var out = '<div class="oembedall-stoqembed"><div class="oembedall-statscontainer"><div class="oembedall-statsarrow"></div><div class="oembedall-stats"><div class="oembedall-vote"><div class="oembedall-votes">' + '<span class="oembedall-vote-count-post"><strong>' + (q.up_vote_count - q.down_vote_count) + '</strong></span><div class="oembedall-viewcount">vote(s)</div></div>' + '</div><div class="oembedall-status"><strong>' + q.answer_count + '</strong>answer</div></div><div class="oembedall-views">' + q.view_count + ' view(s)</div></div>' + '<div class="oembedall-summary"><h3><a class="oembedall-question-hyperlink" href="https://stackoverflow.com/questions/' + q.question_id + '/">' + q.title + '</a></h3>' + '<div class="oembedall-excerpt">' + body.substring(0, 100) + '...</div><div class="oembedall-tags">';
 				for(i in q.tags)
-					out += '<a title="" class="oembedall-post-tag" href="http://stackoverflow.com/questions/tagged/' + q.tags[i] + '">' + q.tags[i] + '</a>';
-				out += '</div><div class="oembedall-fr"><div class="oembedall-user-info"><div class="oembedall-user-gravatar32"><a href="http://stackoverflow.com/users/' + q.owner.user_id + '/' + q.owner.display_name + '">' + '<img width="32" height="32" alt="" src="http://www.gravatar.com/avatar/' + q.owner.email_hash + '?s=32&amp;d=identicon&amp;r=PG"></a></div><div class="oembedall-user-details">' + '<a href="http://stackoverflow.com/users/' + q.owner.user_id + '/' + q.owner.display_name + '">' + q.owner.display_name + '</a><br><span title="reputation score" class="oembedall-reputation-score">' + q.owner.reputation + '</span></div></div></div></div></div>';
+					out += '<a title="" class="oembedall-post-tag" href="https://stackoverflow.com/questions/tagged/' + q.tags[i] + '">' + q.tags[i] + '</a>';
+				out += '</div><div class="oembedall-fr"><div class="oembedall-user-info"><div class="oembedall-user-gravatar32"><a href="https://stackoverflow.com/users/' + q.owner.user_id + '/' + q.owner.display_name + '">' + '<img width="32" height="32" alt="" src="https://www.gravatar.com/avatar/' + q.owner.email_hash + '?s=32&amp;d=identicon&amp;r=PG"></a></div><div class="oembedall-user-details">' + '<a href="https://stackoverflow.com/users/' + q.owner.user_id + '/' + q.owner.display_name + '">' + q.owner.display_name + '</a><br><span title="reputation score" class="oembedall-reputation-score">' + q.owner.reputation + '</span></div></div></div></div></div>';
 				return out;
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("wordpress", "rich", ["wordpress\\.com/.+", "blogs\\.cnn\\.com/.+", "techcrunch\\.com/.+", "wp\\.me/.+"], "http://public-api.wordpress.com/oembed/1.0/?for=jquery-oembed-all"),
-		new $.fn.oembed.OEmbedProvider("screenr", "rich", ["screenr\.com"], "http://www.screenr.com/embed/$1", {
+		new $.fn.oembed.OEmbedProvider("wordpress", "rich", ["wordpress\\.com/.+", "blogs\\.cnn\\.com/.+", "techcrunch\\.com/.+", "wp\\.me/.+"], "https://public-api.wordpress.com/oembed/1.0/?for=jquery-oembed-all"),
+		new $.fn.oembed.OEmbedProvider("screenr", "rich", ["screenr\.com"], "https://www.screenr.com/embed/$1", {
 			templateRegex: /.*\/([^\/]+).*/,
 			embedtag: {
 				tag: 'iframe',
@@ -1003,7 +1003,7 @@
 				height: 396
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("gigpans", "rich", ["gigapan\\.org/[-.\\w@]+/\\d+"], "http://gigapan.org/gigapans/$1/options/nosnapshots/iframe/flash.html", {
+		new $.fn.oembed.OEmbedProvider("gigpans", "rich", ["gigapan\\.org/[-.\\w@]+/\\d+"], "https://gigapan.org/gigapans/$1/options/nosnapshots/iframe/flash.html", {
 			templateRegex: /.*\/(\d+)\/?.*/,
 			embedtag: {
 				tag: 'iframe',
@@ -1011,7 +1011,7 @@
 				height: 400
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("scribd", "rich", ["scribd\\.com/.+"], "http://www.scribd.com/embeds/$1/content?start_page=1&view_mode=list", {
+		new $.fn.oembed.OEmbedProvider("scribd", "rich", ["scribd\\.com/.+"], "https://www.scribd.com/embeds/$1/content?start_page=1&view_mode=list", {
 			templateRegex: /.*doc\/([^\/]+).*/,
 			embedtag: {
 				tag: 'iframe',
@@ -1027,7 +1027,7 @@
 				height: 380
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("amazon", "rich", ["amzn.com/B+", "amazon.com.*/(B\\S+)($|\\/.*)"], "http://rcm.amazon.com/e/cm?t=_APIKEY_&o=1&p=8&l=as1&asins=$1&ref=qf_br_asin_til&fc1=000000&IS2=1&lt1=_blank&m=amazon&lc1=0000FF&bc1=000000&bg1=FFFFFF&f=ifr", {
+		new $.fn.oembed.OEmbedProvider("amazon", "rich", ["amzn.com/B+", "amazon.com.*/(B\\S+)($|\\/.*)"], "https://rcm.amazon.com/e/cm?t=_APIKEY_&o=1&p=8&l=as1&asins=$1&ref=qf_br_asin_til&fc1=000000&IS2=1&lt1=_blank&m=amazon&lc1=0000FF&bc1=000000&bg1=FFFFFF&f=ifr", {
 			apikey: true,
 			templateRegex: /.*\/(B[0-9A-Z]+)($|\/.*)/,
 			embedtag: {
@@ -1036,10 +1036,10 @@
 				height: '240px'
 			}
 		}),
-		new $.fn.oembed.OEmbedProvider("slideshare", "rich", ["slideshare\.net"], "http://www.slideshare.net/api/oembed/2", {
+		new $.fn.oembed.OEmbedProvider("slideshare", "rich", ["slideshare\.net"], "https://www.slideshare.net/api/oembed/2", {
 			format: 'jsonp'
 		}),
-		new $.fn.oembed.OEmbedProvider("roomsharejp", "rich", ["roomshare\\.jp/(en/)?post/.*"], "http://roomshare.jp/oembed.json"),
+		new $.fn.oembed.OEmbedProvider("roomsharejp", "rich", ["roomshare\\.jp/(en/)?post/.*"], "https://roomshare.jp/oembed.json"),
 		new $.fn.oembed.OEmbedProvider("lanyard", "rich", ["lanyrd.com/\\d+/.+"], null, {
 			yql: {
 				xpath: '(//div[@class="primary"])[1]',
