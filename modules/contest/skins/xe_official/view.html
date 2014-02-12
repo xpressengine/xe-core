@@ -1,0 +1,123 @@
+<!--#include("header.include.html")-->
+
+<div class="roundBox">
+    <div class="roundBoxGuide"><span class="roundBoxTl"></span><span class="roundBoxTr"></span></div>
+    <div class="roundContents content">
+        <div class="titleArea">
+            <h3>{$oDocument->getTitle()}</h3>
+            <!--@if($module_info->use_category == "Y" && $oDocument->get('category_srl'))-->
+            <a href="{getUrl('document_srl','','category_srl',$oDocument->get('category_srl'))}" class="category">{$categories[$oDocument->get('category_srl')]->title}</a>
+            <!--@end-->
+            <a href="#" onclick="return false;" class="author member_{$oDocument->get('member_srl')}">{$oDocument->getNickName()}</a>
+            <span class="date"><strong>{$oDocument->getRegdate('Y.m.d')}</strong> {$oDocument->getRegdate('H:i')}</span>
+        </div>
+        <div class="docContent">
+            {$oDocument->getContent()}
+        </div>
+        {@ $tag_list = $oDocument->get('tag_list') }
+		<!--@if(count($tag_list))-->
+		<dl class="tag">
+            <dt><img src="./img/iconTag.gif" width="27" height="11" alt="tag" /></dt>
+            <dd>
+                <ul>
+					<!--@for($i=0;$i<count($tag_list);$i++)-->
+                    {@ $tag = $tag_list[$i]; }
+                    <li><a href="{getUrl('act','','search_target','tag','search_keyword',$tag,'document_srl','')}" rel="tag">{htmlspecialchars($tag)}</a></li>
+                    <!--@end-->
+                </ul>
+            </dd>
+		</dl>
+		<!--@end-->
+		<!--@if($oDocument->hasUploadedFiles())-->
+        <dl class="attachedFile">
+            <dt><img src="./img/iconFiles.gif" width="27" height="11" alt="{$lang->uploaded_file}" /> <button type="button" class="fileToggle" onclick="jQuery(this).parents('dl.attachedFile').toggleClass('open');return false;">{$lang->uploaded_file} ({$oDocument->get('uploaded_count')})</button></dt>
+            <dd>
+                <ul class="files">
+                    {@ $uploaded_list = $oDocument->getUploadedFiles() }
+                    <!--@foreach($uploaded_list as $key => $file)-->
+                    <li><a href="{getUrl('')}{$file->download_url}">{$file->source_filename} <span class="bubble">[File Size:{FileHandler::filesize($file->file_size)}/Download:{number_format($file->download_count)}]</span></a></li>
+                    <!--@end-->
+                </ul>
+            </dd>
+        </dl>
+		<!--@end-->
+        <div class="replies">
+            <a href="#replies_{$oDocument->document_srl}" onclick="doGetComments({$oDocument->document_srl}); return false;" id="replies_{$oDocument->document_srl}">{$lang->short_replies}</a> ({number_format($replies_count[$oDocument->document_srl])})
+            <div id="replies_content_{$oDocument->document_srl}" style="display:none;"></div>
+        </div>
+        <p class="buttonArea">
+            <!--@if($selected_reply)-->
+            <a href="#comment_{$selected_reply}" class="button"><span>{$lang->cmd_move_selected_reply}</span></a>
+            <!--@end-->
+            <!--@if(!$selected_reply && $oDocument->isGranted())--><a href="{getUrl('act','dispKinWrite')}" class="button"><span>{$lang->cmd_modify}</span></a><!--@end-->
+            <!--@if($oDocument->getCommentCount()<1 && $oDocument->isGranted())--><a href="#" onclick="if(confirm('{$lang->confirm_delete}')) doDeleteDocument('{$oDocument->document_srl}'); return false;" class="button red"><span>{$lang->cmd_delete}</span></a><!--@end-->
+            <a href="{getUrl('act','dispKinReply')}" class="button black strong"><span>{$lang->cmd_reply}</span></a>
+        </p>
+    </div>
+    <div class="roundBoxGuide"><span class="roundBoxBl"></span><span class="roundBoxBr"></span></div>
+</div>
+
+<div class="currentReplies">{$lang->current_replies} <strong>{$oDocument->getCommentCount()}</strong></div>
+<!--@if(!$selected_reply && $grant->write_reply)-->
+<div class="replyMessage">
+    {$lang->msg_reply_message} : <strong>{number_format($oDocument->get('point'))} {$point_name}</strong>
+</div>
+<!--@end-->
+
+<!--@foreach($oDocument->getComments() as $reply)-->
+<div class="roundBox" id="comment_{$reply->comment_srl}">
+    <div class="roundBoxGuide"><span class="roundBoxTl"></span><span class="roundBoxTr"></span></div>
+    <div class="roundContents content">
+        <div class="titleArea">
+            <a href="#" onclick="return false;" class="author member_{$reply->get('member_srl')}">{$reply->getNickName()}</a>
+            <span class="date"><strong>{$reply->getRegdate('Y.m.d')}</strong> {$reply->getRegdate('H:i')}</span>
+        </div>
+        <div class="infoArea">
+            <!--@if($oDocument->isGranted() && !$selected_reply)-->
+            <a href="#" onclick="if(confirm('{$lang->msg_select_reply}')) doSelectReply('{$reply->comment_srl}'); return false;" class="button blue"><span>{$lang->cmd_select_reply}</span></a>
+            <!--@end-->
+        </div>
+        <div class="docContent">
+            <!--@if($selected_reply == $reply->comment_srl)-->
+            <div class="selectedReply">
+                {$lang->msg_selected_reply}
+            </div>
+            <!--@end-->
+            {$reply->getContent(false)}
+        </div>
+		<!--@if($reply->hasUploadedFiles())-->
+        <dl class="attachedFile">
+            <dt><img src="./img/iconFiles.gif" width="27" height="11" alt="{$lang->uploaded_file}" /> <button type="button" class="fileToggle" onclick="jQuery(this).parents('dl.attachedFile').toggleClass('open');return false;">{$lang->uploaded_file} ({$reply->get('uploaded_count')})</button></dt>
+            <dd>
+                <ul class="files">
+                    {@ $uploaded_list = $reply->getUploadedFiles() }
+                    <!--@foreach($uploaded_list as $key => $file)-->
+                    <li><a href="{getUrl('')}{$file->download_url}">{$file->source_filename} <span class="bubble">[File Size:{FileHandler::filesize($file->file_size)}/Download:{number_format($file->download_count)}]</span></a></li>
+                    <!--@end-->
+                </ul>
+            </dd>
+        </dl>
+		<!--@end-->
+        <div class="replies">
+            <a href="#replies_{$reply->comment_srl}"  onclick="doGetComments({$reply->comment_srl}); return false;"  id="replies_{$reply->comment_srl}">{$lang->short_replies}</a> ({number_format($replies_count[$reply->comment_srl])})
+            <div id="replies_content_{$reply->comment_srl}" style="display:none;"></div>
+        </div>
+        <!--@if(!$selected_reply && $reply->isGranted())-->
+        <div class="buttonArea">
+            <a href="{getUrl('act','dispKinModifyReply','comment_srl', $reply->comment_srl)}" class="button"><span>{$lang->cmd_modify}</span></a>
+            <a href="#" onclick="if(confirm('{$lang->confirm_delete}')) doDeleteReply('{$reply->comment_srl}'); return false;" class="button"><span>{$lang->cmd_delete}</span></a>
+        </div>
+        <!--@end-->
+    </div>
+    <div class="roundBoxGuide"><span class="roundBoxBl"></span><span class="roundBoxBr"></span></div>
+</div>
+<!--@end-->
+
+<div class="buttonArea clear">
+	<!--@if($search_keyword)-->
+    <a href="{getUrl('document_srl','','act','','search_keyword',$search_keyword)}" class="button"><span>{$lang->cmd_back}</span></a>
+	<!--@end-->
+    <a href="{getUrl('document_srl','','act','')}" class="button"><span>{$lang->cmd_go_kin_index}</span></a>
+</div>
+
+<!--#include("footer.include.html")-->

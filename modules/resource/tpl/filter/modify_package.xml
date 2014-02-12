@@ -1,0 +1,23 @@
+<filter name="modify_package" module="resource" act="procResourceModifyPackage">
+    <form>
+        <node target="mid" required="true" />
+        <node target="package_srl" required="true" />
+        <node target="package_title" required="true" />
+        <node target="package_path" required="true" />
+        <node target="package_license" required="true" />
+        <node target="package_homepage" required="true" />
+        <node target="package_description" required="true" />
+    </form>
+    <parameter>
+        <param name="vid" target="vid" />
+        <param name="mid" target="mid" />
+        <param name="have_instance" target="have_instance" />
+        <param name="package_srl" target="package_srl" />
+        <param name="title" target="package_title" />
+        <param name="path" target="package_path" />
+        <param name="license" target="package_license" />
+        <param name="homepage" target="package_homepage" />
+        <param name="description" target="package_description" />
+    </parameter>
+    <response />
+</filter>

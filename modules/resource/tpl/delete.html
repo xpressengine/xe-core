@@ -1,0 +1,24 @@
+<load target="filter/delete_resource.xml" />
+<include target="_header.html" />
+<div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/resource/tpl/delete/1'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+<form action="./" method="post" class="section" ruleset="deleteResource">
+	<input type="hidden" name="module" value="resource" />
+	<input type="hidden" name="act" value="procResourceAdminDelete" />
+	<input type="hidden" name="page" value="{$page}" />
+	<input type="hidden" name="module_srl" value="{$module_info->module_srl}" />
+	<input type="hidden" name="success_return_url" value="{getUrl('act', 'dispResourceAdminList', 'module_srl', '')}" />
+	<input type="hidden" name="xe_validator_id" value="modules/resource/tpl/delete/1" />
+    <h1>{$lang->confirm_delete}</h1>
+	<dl class="x_dl-horizontal">
+		<dt>{$lang->module_name}</dt>
+		<dd>{$module_info->mid}</dd>
+		<dt>{$lang->module}</dt>
+		<dd>{$module_info->module}</dd>
+	</dl>
+	<div class="btnArea">
+		<button type="button" class="x_btn x_pull-left" onclick="history.back()">{$lang->cmd_back}</button>
+		<span><input type="submit" value="{$lang->cmd_delete}" class="x_btn x_btn-danger" /></span>
+	</div>
+</form>

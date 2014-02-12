@@ -1,0 +1,14 @@
+<query id="getHistoriesWithChanges" action="select">
+	<tables>
+		<table name="comments" />
+		<table name="issue_history_change" />
+	</tables>
+	<columns>
+		<column name="issue_history_change.*" />
+	</columns>
+	<conditions>
+		<condition operation="equal" column="comments.comment_srl" default="issue_history_change.comment_srl" />
+        <condition operation="equal" column="comments.module_srl" var="module_srl" pipe="and" />
+        <condition operation="less" column="regdate" var="enddate" pipe="and" />
+	</conditions>
+</query>

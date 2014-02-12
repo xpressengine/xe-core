@@ -1,0 +1,30 @@
+<!--#include("header.html)-->
+<h4 class="xeAdmin">색인 현황</h4>
+<table cellspacing="0" class="rowTable">
+	<tr>
+		<th>문서 색인 현황
+		</th>
+		<td class="fullWidth">
+			<!--@if(!$doc_status->exists == 'Y')-->문서에 대한 색인이 생성되지 않았거나 존재하지 않습니다.
+			<!--@else-->
+			색인명 : {$doc_status->serviceName} <br />
+			색인된 문서 수 : {$doc_status->numDocs} <br />
+			마지막 갱신된 시각 : {$doc_status->lastUpdateDate} <br />
+			색인시 소요 시간 : {$doc_status->lastUpdateDuration} ms <br />
+			<!--@end-->
+		</td>
+	</tr>
+	<tr>
+		<th>댓글 색인 현황
+		</th>
+		<td>
+			<!--@if(!$com_status->exists == 'Y')-->댓글에 대한 색인이 생성되지 않았거나 존재하지 않습니다.
+			<!--@else-->
+			색인명 : {$com_status->serviceName} <br />
+			색인된 문서 수 : {$com_status->numDocs} <br />
+			마지막 갱신된 시각 : {$com_status->lastUpdateDate} <br />
+			색인시 소요 시간 : {$com_status->lastUpdateDuration} ms <br />
+			<!--@end-->
+		</td>
+	</tr>
+</table>

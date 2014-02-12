@@ -1,0 +1,12 @@
+<query id="getCategorySrl" action="select">
+    <tables>
+        <table name="document_categories" />
+    </tables>
+    <columns>
+        <column name="category_srl"/>
+    </columns>
+    <conditions>
+        <condition operation="equal" column="title" var="category_title"/>
+        <condition operation="equal" column="module_srl" var="module_srl"  pipe="and" />
+    </conditions>
+</query>

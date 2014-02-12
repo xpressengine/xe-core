@@ -1,0 +1,28 @@
+<h3 class="xeAdmin">{$lang->enroll} <span class="gray">{$lang->cmd_management}</span></h3>
+
+<div class="infoText">{nl2br($lang->about_enroll)}</div>
+
+<!--@if($module_info)-->
+<div class="header4">
+    <h4 class="xeAdmin">
+        {$module_info->mid}
+        <span class="vr">|</span> 
+        <a href="{getSiteUrl($module_info->domain,'','mid',$module_info->mid)}" onclick="window.open(this.href); return false;" class="view">View</a>
+        <a href="{getSiteUrl($module_info->domain,'','mid',$module_info->mid,'act','dispEnrollModify')}" onclick="window.open(this.href); return false;" class="view">Modify Page</a>
+    </h4>
+
+    <ul class="localNavigation">
+        <!--@if($module=='admin')-->
+        <li <!--@if($act=='dispEnrollAdminList')-->class="on"<!--@end-->><a href="{getUrl('act','dispEnrollAdminList','module_srl','')}">{$lang->cmd_list}</a></li>
+        <!--@else-->
+        <li><a href="{getUrl('act','')}">{$lang->cmd_back}</a></li>
+        <!--@end-->
+
+        <li <!--@if($act=='dispEnrollAdminItemList')-->class="on"<!--@end-->><a href="{getUrl('status','','act','dispEnrollAdminItemList')}">등록 {$lang->cmd_list}</a></li>
+        <li <!--@if($act=='dispEnrollAdminInsert')-->class="on"<!--@end-->><a href="{getUrl('act','dispEnrollAdminInsert')}">{$lang->cmd_setup}</a></li>
+        <li <!--@if($act=='dispEnrollAdminGrant')-->class="on"<!--@end-->><a href="{getUrl('act','dispEnrollAdminGrant')}">{$lang->cmd_manage_grant}</a></li>
+        <li <!--@if($act=='dispEnrollAdminSkin')-->class="on"<!--@end-->><a href="{getUrl('act','dispEnrollAdminSkin')}">{$lang->cmd_manage_skin}</a></li>
+    </ul>
+</div>
+<!--@end-->
+

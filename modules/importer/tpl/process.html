@@ -1,0 +1,21 @@
+<script>
+    var preProcessingMsg = "{$lang->preprocessing}";
+</script>
+<div id="process" style="display:none;">
+    <form action="./" method="get" onsubmit="return doImport()" id="fo_process">
+        <input type="hidden" name="type" value="" />
+        <input type="hidden" name="total" value="" />
+        <input type="hidden" name="cur" value="" />
+        <input type="hidden" name="key" value="" />
+        <input type="hidden" name="target_module" value="" />
+        <input type="hidden" name="guestbook_target_module" value="" />
+        <input type="hidden" name="unit_count" value="" />
+        <input type="hidden" name="user_id" value="" />
+        <h3 class="h3">{$lang->import_step_title[99]} - {$lang->import_step_desc[99]}</h3>
+        <div id="status"></div>
+        <div class="btnArea"> 
+			<input class="btn" id="btn_continue" style="display:none;" type="submit" value="{$lang->cmd_continue}" />
+			<input class="btn" id="btn_reload" style="display:block;" type="button" value="{$lang->cmd_reload}" onclick="location.reload()"/>
+		</div>
+	</form>
+</div>

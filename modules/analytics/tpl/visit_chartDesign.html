@@ -1,0 +1,41 @@
+{'<?xml version="1.0" encoding="UTF-8"?>'}
+<design>
+	{@$i=0}
+	<!--@foreach($names as $val)-->
+	<series>
+		<name>{$val}</name>
+		<type>Line</type>
+		<color>{$color_set[$i]}</color>
+		<alpha>100</alpha>
+		<lineWeight>2</lineWeight>
+	</series>
+	{@$i = (++$i % count($color_set))}
+	<!--@end-->
+	<axis>
+		<name>xAxis</name>
+		<color>0x666666</color>
+		<lineWeight>1</lineWeight>
+		<font>tahoma</font>
+		<fontColor>0x666666</fontColor>
+		<fontSize>11</fontSize>
+		<fontStyle>normal</fontStyle>
+		<labelGap>4</labelGap>
+	</axis>
+	<axis>
+		<name>yAxis</name>
+		<color>0x666666</color>
+		<lineWeight>1</lineWeight>
+		<font>Dotum</font>
+		<fontColor>0x666666</fontColor>
+		<fontSize>11</fontSize>
+		<fontStyle>normal</fontStyle>
+		<labelGap>4</labelGap>
+	</axis>
+	<index>
+		<name>index</name>
+		<font>Dotum</font>
+		<fontColor>0x666666</fontColor>
+		<fontSize>11</fontSize>
+		<fontStyle>normal</fontStyle>
+	</index>
+</design>

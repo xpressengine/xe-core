@@ -1,0 +1,4 @@
+<table name="wiki_links">
+    <column name="cur_doc_srl" type="number" size="11" notnull="notnull" primary_key="primary_key" />
+    <column name="link_doc_srl" type="number" size="11" notnull="notnull" primary_key="primary_key"  />
+</table>

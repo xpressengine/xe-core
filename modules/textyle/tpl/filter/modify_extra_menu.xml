@@ -1,0 +1,10 @@
+<filter name="modify_extra_menu" module="textyle" act="procTextyleToolExtraMenuUpdate">
+  <form>
+    <node target="menu_name" required="true" />
+  </form>
+  <parameter />
+  <response callback_func="completeModifyExtraMenu">
+     <tag name="error" />
+     <tag name="message" />
+  </response>
+</filter>

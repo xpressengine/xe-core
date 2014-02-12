@@ -1,0 +1,12 @@
+<query id="updateSkinFixModules" action="update">
+    <tables>
+        <table name="modules" />
+    </tables>
+    <columns>
+        <column name="is_skin_fix" default="Y" />
+    </columns>
+    <conditions>
+        <condition operation="notnull" column="skin" />
+        <condition operation="notequal" column="skin" default=" " pipe="or" />
+    </conditions>
+</query>

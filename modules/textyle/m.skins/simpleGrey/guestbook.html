@@ -1,0 +1,64 @@
+{@ Context::addJsFile("./common/js/jquery.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/js_app.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/common.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/xml_handler.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/xml_js_filter.js", true, '', -100000) }
+<!--%import("js/mtextyle.js")-->
+
+<!--#include("_header.html")-->
+<div class="bd">
+	<div class="hx">
+		<h2>&rsaquo; Guestbook <em>{number_format($page_navigation->total_count)}</em>
+			<a href="{getUrl('act','dispTextyleGuestbookWrite')}" class="bn">글쓰기</a>
+		</h2>
+	</div>
+
+<!--@if($guestbook_list)-->
+	<ul id="cl" class="rp tgo open">
+	<!--@foreach($guestbook_list as $key => $val)-->
+		<li <!--@if($val->parent_srl)-->style="padding-left:20px"<!--@end-->>
+
+			<!--@if($val->is_secret==-1)-->
+				<div>{$val->content}</div>
+			<!--@else-->
+				<!--@if($logged_info)-->
+					<!--@if($val->member_srl == $logged_info->member_srl||$logged_info->is_site_admin)-->
+						<div>{$val->content}</div>
+					<!--@else-->
+						<div>{$lang->msg_is_secret}</div>
+					<!--@end-->
+				<!--@else-->
+					<div>{$lang->msg_is_secret}</div>
+				<!--@end-->
+			<!--@end-->
+			<span class="auth"><em>{$val->nick_name}</em> <span>{zdate($val->regdate,'Y.m.d')}</span>
+
+				<!--@if(!$val->parent_srl)-->
+				<a href="{getUrl('','act','dispTextyleGuestbookWrite','mid',$this->mid,'textyle_guestbook_srl',$val->textyle_guestbook_srl)}" class="md">{$lang->cmd_reply}</a>
+				<!--@end-->
+
+				<!--@if($logged_info)-->
+					<!--@if($logged_info->is_site_admin || $val->member_srl==$logged_info->member_srl)-->
+						<a href="#" onclick="if(confirm('{$lang->confirm_delete}')) deleteGuestbookItem({$val->textyle_guestbook_srl})">{$lang->cmd_delete}</a>
+					<!--@end-->
+				<!--@else-->
+					<!--@if(!$val->member_srl)-->
+						<a href="{getUrl('type','delete_guestbook','act','dispTextylePasswordForm','textyle_guestbook_srl',$val->textyle_guestbook_srl)}" class="md">{$lang->cmd_delete}</a>
+					<!--@end-->
+				<!--@end-->
+			</span>
+		</li>
+	<!--@end-->
+	</ul>
+	<div class="pn">
+        <!--@if($page != 1)-->
+		<a href="{getUrl('page',$page-1,'document_srl','','division',$division,'last_division',$last_division,'entry','')}">&lsaquo; {$lang->cmd_prev}</a> 
+        <!--@endif-->
+        <strong>{$page} / {$page_navigation->last_page}</strong>
+        <!--@if($page != $page_navigation->last_page)-->
+		<a href="{getUrl('page',$page+1,'document_srl','','division',$division,'last_division',$last_division,'entry','')}">{$lang->cmd_next} &rsaquo;</a>
+        <!--@endif-->
+	</div>
+<!--@end-->
+</div>
+<!--#include("_footer.html")-->

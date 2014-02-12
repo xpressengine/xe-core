@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+	<title xml:lang="ko">알림센터 기본스킨</title>
+	<version>1.5.6.2</version>
+	<date>2013-03-21</date>
+	<license>정식 구매 및 등록한 사이트에서만 사용할 수 있습니다.</license>
+
+	<author email_address="info@xemagazine.com" link="http://xemagazine.com/">
+		<name xml:lang="ko">XE Magazine</name>
+	</author>
+
+	<colorset>
+		<color name="black">
+			<title xml:lang="ko">검은색</title>
+		</color>
+		<color name="gray">
+			<title xml:lang="ko">회색</title>
+		</color>
+		<color name="white">
+			<title xml:lang="ko">흰색</title>
+		</color>
+
+		<color name="blacknoprofile">
+			<title xml:lang="ko">검은색(no profile)</title>
+		</color>
+		<color name="graynoprofile">
+			<title xml:lang="ko">회색(no profile)</title>
+		</color>
+		<color name="whitenoprofile">
+			<title xml:lang="ko">흰색(no profile)</title>
+		</color>
+	</colorset>
+</skin>

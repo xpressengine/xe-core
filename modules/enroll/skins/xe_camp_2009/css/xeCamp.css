@@ -1,0 +1,58 @@
+@charset "utf-8";
+/* NHN > UIT Center > Open UI Technology Team > Jeong Chan Myeong(dece24@nhncorp.com) */
+
+body{ margin:0; font-family:Dotum, 돋움; font-size:12px; }
+input,
+textarea{ font-family:Dotum, 돋움; }
+label{ cursor:pointer;}
+#container{ width:480px; margin:0; padding:0;}
+#header{ background:#2a2a2a; line-height:1; margin:0 0 25px 0; }
+#header h1{ font-size:14px; color:#fff; margin:0; padding:13px 0 12px 20px; }
+#body{ margin:0 30px; }
+#body .oList{ list-style:none; margin:0 0 22px 0; padding:0; letter-spacing:-1px; }
+#body .oList li{ padding:1px 0 0 21px; margin:0 0 6px 0; background-repeat:no-repeat; background-position:left top; font-weight:bold; color:#646464; line-height:1.4; }
+#body .oList li.n1{ background-image:url(../img/iconNum1.gif); }
+#body .oList li.n2{ background-image:url(../img/iconNum2.gif); }
+#body .oList li.n3{ background-image:url(../img/iconNum3.gif); }
+#body .oList li.n4{ background-image:url(../img/iconNum4.gif); }
+
+#body .t1{ border:0; width:100%; letter-spacing:-1px; border-top:1px solid #ccc; margin:0 0 15px 0;}
+#body .t1 caption{ font-size:0; line-height:0; position:absolute; left:-1000%; visibility:hidden; }
+#body .t1 th,
+#body .t1 td{ border:0; padding:7px 12px 6px 12px;}
+#body .t1 th{ color:#333;}
+#body .t1 thead th{ background:#f7f7f7; border:1px solid #ccc; border-top:0; border-right:0; white-space:nowrap;}
+#body .t1 thead th.first{ border-left:0;}
+#body .t1 thead tr.subTitle th{ font-size:11px; color:#838383;}
+#body .t1 thead tr.subTitle th.first{}
+#body .t1 tbody th{ border-bottom:1px solid #ebebeb;}
+#body .t1 td{ font-size:11px; color:#898989; border:1px solid #ebebeb; border-top:0; border-right:0; }
+
+#body fieldset{ margin:0 0 42px 0; padding:12px 0 6px 0; border:1px solid #e9e9e9; background:#f7f7f7;}
+#body .t2{ border:0; width:375px; margin:0 auto; letter-spacing:-1px; font-size:11px;}
+#body .t2 caption{ font-size:0; line-height:0; position:absolute; left:-1000%; visibility:hidden; }
+#body .t2 th,
+#body .t2 td{ border:0; padding:5px 0; vertical-align:top;}
+#body .t2 th{ padding-right:5px; white-space:nowrap; text-align:left; color:#838383;}
+#body .t2 td{ font-size:11px; color:#797979; }
+#body .t2 td label{ margin:0 5px 0 0;}
+#body .t2 td .inputText{ border:1px solid #ebebeb; font-size:11px; letter-spacing:-1px; padding:2px 4px; height:14px; width:197px; margin:-4px 0; color:#767676;}
+#body .t2 td .inputRadio{ width:13px; height:13px; margin:0; padding:0; vertical-align:middle;}
+#body .t2 td textarea{ border:1px solid #ebebeb; font-size:11px; letter-spacing:-1px; padding:4px; width:197px; height:24px; color:#c1c1c1; overflow:auto;}
+#body .t2 td textarea:focus{ color:#767676;}
+#body .t2 td select{font-size:11px}
+
+#footer{ padding:7px 30px 0 30px; height:28px; background:url(../img/bgFooter.gif) repeat-x;}
+.aCenter{ text-align:center;}
+.aRight{ text-align:right;}
+
+.thanks{ position:relative; padding:15px 0 19px 0; border:1px solid #e9e9e9; background:#f7f7f7; margin:0 0 27px 0; text-align:center;}
+.thanks h2{ font-family:NanumGothic, 나눔고딕, "Malgun Gothic", "맑은 고딕", AppleGothic; font-size:30px; margin:0 0 3px 0; letter-spacing:-2px;}
+.thanks p{ font-size:11px; letter-spacing:-1px; color:#838383; margin:0;}
+
+.button,
+.button input,
+.button button{ position:relative; display:inline-block; padding:0; background-repeat:no-repeat; background-image:url(img/button.gif); font-size:11px; font-family:Dotum, 돋움; letter-spacing:-1px; color:#484848; height:22px; line-height:22px; vertical-align:middle; overflow:visible; border:0; background-color:transparent; cursor:pointer; white-space:nowrap;}
+.button{ background-position:left top; margin:0 3px 0 0;}
+.button input,
+.button button{ left:3px; *vertical-align:top; background-position:right top; padding:0 9px 0 5px;}

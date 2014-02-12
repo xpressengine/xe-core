@@ -1,0 +1,5 @@
+<filter name="insert_index_config" module="lucene" act="procLuceneAdminInsertServiceConfig" confirm_msg_code="confirm_submit">
+    <form />
+    <parameter />
+    <response />
+</filter>

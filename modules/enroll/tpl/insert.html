@@ -1,0 +1,201 @@
+<!--#include("_header.html")-->
+<!--%load_js_plugin("ui.datepicker")-->
+
+<script type="text/javascript">
+jQuery(function($){
+	//입력 제한
+        $('input[name=to_regdate_time], input[name=until_regdate_time]').keypress(function(event){
+		//숫자
+                if(event.which && (event.which  > 47 && event.which  < 58 || event.which == 8)) {
+                        if($(this).val().length >= 6)
+                                event.preventDefault();
+                } else {
+                //숫자아님
+                        event.preventDefault();
+                }
+        });
+
+
+});
+function timeCheck(obj) {
+	var n = obj.value.replace(/\:/g, "");
+	var len = n.length;
+	var number= n;
+	if(len >2) {
+		number = n.substring(0, 2)+":";
+		if(len > 2 && len < 5){
+			number+=n.substring(2);
+		}
+	if(len < 6)
+		obj.value=number;
+	}
+}
+</script>
+<form action="./" method="post" onsubmit="return procFilter(this, insert_enroll)" enctype="multipart/form-data">
+<input type="hidden" name="page" value="{$page}" />
+<input type="hidden" name="module_srl" value="{$module_info->module_srl}" />
+
+    <table cellspacing="0" class="rowTable">
+
+    <!--@if($logged_info->is_admin!='Y')-->
+    <input type="hidden" name="mid" value="{$module_info->mid}" />
+    <!--@else-->
+    <tr>
+        <th scope="row"><div>{$lang->mid}</div></th>
+        <td>
+            <input type="text" name="mid" value="{$module_info->mid}" class="inputTypeText w200" />
+            <p>{$lang->about_mid}</p>
+        </td>
+    </tr>
+    <!--@end-->
+    <tr>
+        <th scope="row"><div>{$lang->module_category}</div></th>
+        <td>
+            <select name="module_category_srl">
+                <option value="0">{$lang->notuse}</option>
+                <!--@foreach($module_category as $key => $val)-->
+                <option value="{$key}" <!--@if($module_info->module_category_srl==$key)-->selected="selected"<!--@end-->>{$val->title}</option>
+                <!--@end-->
+            </select>
+            <p>{$lang->about_module_category}</p>
+        </td>
+    </tr>
+
+    <tr>
+        <th scope="row"><div>{$lang->browser_title}</div></th>
+        <td>
+            <input type="text" name="browser_title" value="{htmlspecialchars($module_info->browser_title)}"  class="inputTypeText w400" id="browser_title"/>
+            <a href="{getUrl('','module','module','act','dispModuleAdminLangcode','target','browser_title')}" onclick="popopen(this.href);return false;" class="buttonSet buttonSetting"><span>{$lang->cmd_find_langcode}</span></a>
+            <p>{$lang->about_browser_title}</p>
+        </td>
+    </tr>
+
+    <tr>
+        <th scope="row"><div>{$lang->layout}</div></th>
+        <td>
+            <select name="layout_srl">
+            <option value="0">{$lang->notuse}</option>
+            <!--@foreach($layout_list as $key => $val)-->
+            <option value="{$val->layout_srl}" <!--@if($module_info->layout_srl==$val->layout_srl)-->selected="selected"<!--@end-->>{$val->title} ({$val->layout})</option>
+            <!--@end-->
+            </select>
+            <p>{$lang->about_layout}</p>
+        </td>
+    </tr>
+    <tr>
+        <th scope="row"><div>{$lang->skin}</div></th>
+        <td>
+            <select name="skin">
+                <!--@foreach($skin_list as $key=>$val)-->
+                <option value="{$key}" <!--@if($module_info->skin==$key)-->selected="selected"<!--@end-->>{$val->title}</option>
+                <!--@end-->
+            </select>
+            <p>{$lang->about_skin}</p>
+        </td>
+    </tr>
+    <tr>
+        <th scope="row"><div>신청방식</div></th>
+        <td>
+		<select name="grant_enroll" class="grant_default" cond="!$module_srl">
+			<option value="{$grant_name}" loop="$lang->grant_enroll => $grant_name, $grant_title" selected="selected"|cond="$grant_name == $module_info->grant_enroll">{$grant_title}</option>
+		</select>
+		<block cond="$module_srl">
+			<input type="hidden" name="grant_enroll" value="{$module_info->grant_enroll}" />
+			<b>{$lang->grant_enroll[$module_info->grant_enroll]}</b>
+		</block>
+            <p>참가신청방식을 지정합니다.</p>
+        </td>
+    </tr>
+    <tr>
+        <th scope="row"><div>신청기간</div></th>
+        <td>
+		<input type="hidden" name="to_regdate" id="toDate" value="{zdate($module_info->to_regdate,'Ymd',false)}" />
+		<input type="text" class="inputDate" id="toDateText" value="{zdate($module_info->to_regdate,'Y-m-d',false)}" style="width:80px" /> 
+		<input type="text" name="to_regdate_time" value="{zdate($module_info->to_regdate,'H:i',false)}"|cond="$module_info->to_regdate" style="width:81px" onkeyup="timeCheck(this)" />
+
+~
+		<input type="hidden" name="until_regdate" id="untilDate" value="{zdate($module_info->until_regdate,'Ymd',false)}" />
+		<input type="text" class="inputDate" id="untilDateText" value="{zdate($module_info->until_regdate,'Y-m-d',false)}" style="width:80px" /> 
+		<input type="text" name="until_regdate_time" value="{zdate($module_info->until_regdate,'H:i',false)}"|cond="$module_info->until_regdate" style="width:81px" onkeyup="timeCheck(this)" />
+            <p>신청기간을 지정합니다.</p>
+        </td>
+    </tr>
+    <tr>
+        <th scope="row"><div>승인 인원 제한</div></th>
+        <td>
+		<input type="text" name="limit_count" value="{$module_info->limit_count}" /> 
+            <p>승인 인원수를 제한합니다. 제한 수를 초과하면 신청 등록을 할 수 없습니다.</p>
+        </td>
+    </tr>
+    <tr>
+        <th scope="row"><div>{$lang->description}</div></th>
+        <td>
+            <textarea name="description" class="inputTypeTextArea fullWidth">{htmlspecialchars($module_info->description)}</textarea>
+            <p>{$lang->about_description}</p>
+        </td>
+    </tr>
+    <tr>
+        <th scope="row"><div>{$lang->header_text}</div></th>
+        <td>
+            <textarea name="header_text" class="inputTypeTextArea fullWidth" id="header_text">{htmlspecialchars($module_info->header_text)}</textarea>
+            <a href="{getUrl('','module','module','act','dispModuleAdminLangcode','target','header_text')}" onclick="popopen(this.href);return false;" class="buttonSet buttonSetting"><span>{$lang->cmd_find_langcode}</span></a>
+            <p>{$lang->about_header_text}</p>
+        </td>
+    </tr>
+    <tr>
+        <th scope="row"><div>{$lang->footer_text}</div></th>
+        <td>
+            <textarea name="footer_text" class="inputTypeTextArea fullWidth" id="footer_text">{htmlspecialchars($module_info->footer_text)}</textarea>
+            <a href="{getUrl('','module','module','act','dispModuleAdminLangcode','target','footer_text')}" onclick="popopen(this.href);return false;" class="buttonSet buttonSetting"><span>{$lang->cmd_find_langcode}</span></a>
+            <p>{$lang->about_footer_text}</p>
+        </td>
+    </tr>
+    <tr>
+        <th colspan="2" class="button">
+            <span class="button black strong"><input type="submit" value="{$lang->cmd_registration}" accesskey="s" /></span>
+            <span class="button"><input type="button" value="{$lang->cmd_back}" onclick="history.back(); return false;" /></span>
+        </th>
+	</tr>
+    </table>
+
+</form>
+<script type="text/javascript">
+(function($){
+    $(function(){
+        var option = { changeMonth: true, changeYear: true, gotoCurrent: false,yearRange:'-100:+10', dateFormat:'yy-mm-dd', onSelect:function(){
+
+            $(this).prev('input[type="hidden"]').val(this.value.replace(/-/g,""))}
+        };
+        $.extend(option,$.datepicker.regional['{$lang_type}']);
+        $(".inputDate").datepicker(option);
+
+                $('.delDate button').click(function(){
+                        $(this).parent().siblings('input').val('');
+                });
+
+                $('.weekCheck').click(function(){
+                        var $this = $(this);
+
+                        var diffMilli = 1000 * 60 * 60 * 24 * 7 * $this.data('week');
+                        var today = new Date();
+                        var start = new Date(today.getTime() - diffMilli);
+
+                        var year = start.getFullYear();
+                        var month = start.getMonth()+1;
+                        var day = start.getDate();
+
+                        if(month < 10) month = '0' + month;
+                        if(day < 10) day = '0' + day;
+
+                        var displayStr = year + '-' + month + '-' + day;
+                        var hiddenStr = year +''+ month +''+ day;
+
+                        var $td = $this.parents('tr').children('td:eq(0)');
+                        $td.children('input:eq(0)').val(hiddenStr);
+                        $td.children('input:eq(1)').val(displayStr);
+
+                });
+    });
+})(jQuery);
+</script>
+

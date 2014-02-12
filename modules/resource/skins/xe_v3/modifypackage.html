@@ -1,0 +1,120 @@
+<include target="include.header.html" />
+<div class="rsHeader">
+	<h2><img src="img/h2.dataModify.gif" width="66" height="18" alt="{$lang->cmd_modify_package}" /></h2>
+</div>
+<div class="rsForm">
+    <p class="notice">{$lang->about_modify_package}</p>
+    <p class="required"><span>* {$lang->about_required_field}</span></p>
+    
+	<div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/resource/skins/xe_v3/modifypackage/1'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+		<p>{$XE_VALIDATOR_MESSAGE}</p>
+	</div>
+	
+    <form action="./" method="post" ruleset="modifyPackage">
+    <input type="hidden" name="act" value="procResourceModifyPackage" />
+    <input type="hidden" name="vid" value="{$vid}" />
+    <input type="hidden" name="mid" value="{$mid}" />
+    <input type="hidden" name="package_srl" value="{$selected_package->package_srl}" />
+	<input type="hidden" name="xe_validator_id" value="modules/resource/skins/xe_v3/modifypackage/1" />
+    <fieldset>
+        <legend>{$lang->cmd_modify_package}</legend>
+
+            <table border="1" cellspacing="0" class="rsTable">
+            <tr>
+                <th scope="row">{$lang->package_title} <em>*</em></th>
+                <td>
+					<input type="text" name="title" class="iText" value="{htmlspecialchars($selected_package->title)}" />
+                    <p>{$lang->about_package_title}</p>
+                </td>
+            </tr>
+            <!--@if($grant->manager)-->
+            <tr>
+                <th scope="row">{$lang->package_category} <em>*</em></th>
+                <td>
+					<select name="package_category" id="category">
+					{@ $_curDepth = 0; }
+					<!--@foreach($categories as $key => $val)-->
+						<!--@if($val->depth<$_curDepth)-->
+						</optgroup>
+						<!--@end-->
+						<!--@if($val->depth<1)-->
+						<!--@if($val->child_count>0)-->
+						<optgroup label="{$val->title}">
+						<!--@else-->
+						<option value="{$val->category_srl}" <!--@if($selected_package->category_srl == $val->category_srl)-->selected="selected"<!--@end-->>{$val->title}</option>
+						<!--@end-->
+						<!--@end-->
+						<!--@if($val->depth>0)-->
+							<option value="{$val->category_srl}" <!--@if($selected_package->category_srl == $val->category_srl)-->selected="selected"<!--@end-->>{$val->title}</option>
+						<!--@end-->
+						{@ $_curDepth = $val->depth}
+					<!--@end-->
+					<!--@for($i=0;$i<$_curDepth;$i++)--></optgroup><!--@end-->
+					</select>
+                    <p>{$lang->about_package_title}</p>
+                </td>
+            </tr>
+            <!--@end-->
+            <tr>
+                <th scope="row">{$lang->package_license} <em>*</em></th>
+                <td>
+					<select name="license">
+						<!--@foreach($licenses as $key => $val)-->
+						<option value="{$val}" <!--@if($val==$selected_package->licenses)-->selected="selected"<!--@end-->>{$val}</option>
+						<!--@end-->
+					</select>
+                    <p>{$lang->about_package_license}</p>
+                </td>
+            </tr>
+            <!--@if($module_info->resource_use_path=='Y')-->
+            <tr>
+                <th scope="row">{$lang->package_path} <em>*</em></th>
+                <td>
+                    <input type="text" name="path" class="iText" value="{htmlspecialchars($selected_package->path)}"/>
+                    <p>{$lang->about_package_path}</p>
+                </td>
+            </tr>
+            <!--@end-->
+            <tr cond="$module_info->module_category" id="module_page" style="display:none"|cond="$module_info->module_category != $selected_package->category_srl">
+				<th scope="row">{$lang->is_create_page}</th>
+				<td>
+					<input type="checkbox" name="have_instance" value="Y" id="have_instance" checked="checked"|cond="$selected_package->have_instance == 'Y'"/> <label for="have_instance">{$lang->about_is_create_page}</label>
+					<script>
+						jQuery('#category').change(function(){
+							var c = jQuery(this).val();
+
+							if(c == {$module_info->module_category})
+							{
+								jQuery('#module_page').show();
+							}
+							else
+							{
+								jQuery('#module_page').hide();
+							}
+						}).trigger('change');
+					</script>
+				</td>
+			</tr>
+            <tr>
+                <th scope="row">{$lang->package_homepage} <em>*</em></th>
+                <td>
+                    <input type="text" name="homepage" class="iText"  value="{htmlspecialchars($selected_package->homepage)}" />
+                    <p>{$lang->about_package_homepage}</p>
+                </td>
+            </tr>
+            <tr class="last_child">
+                <th scope="row">{$lang->package_description} <em>*</em></th>
+                <td>
+                    <textarea name="description">{htmlspecialchars($selected_package->description)}</textarea>
+                    <p>{$lang->about_package_description}</p>
+                </td>
+            </tr>
+            </table>
+        </fieldset>
+        <div class="btnArea">
+            <span class="btn25 blue"><input type="submit" value="{$lang->cmd_save}" /></span>
+            <span class="btn25"><a href="{getUrl('act','dispResourcePackage')}">{$lang->cmd_back}</a></span>
+        </div>
+    </form>
+</div>
+<include target="include.footer.html" />

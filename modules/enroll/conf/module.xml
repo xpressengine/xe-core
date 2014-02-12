@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+	<permissions>
+		<permission action="procEnrollItemUpdateStatus" target="member" />
+		<permission action="procEnrollItemInsert" target="member" />
+		<permission action="procEnrollItemUpdate" target="member" />
+		<permission action="procEnrollItemUpdateStatus" target="member" />
+	</permissions>
+    <actions>
+        <action name="validEnrollItem" type="model" index="true" />
+        <action name="dispEnrollLogin" type="view" index="true" />
+        <action name="dispEnrollModify" type="view" index="true" />
+        <action name="dispEnrollModifyComplete" type="view" index="true" />
+        <action name="dispEnrollInsert" type="view" index="true" />
+        <action name="dispEnrollInsertComplete" type="view" />
+        <action name="dispEnrollAdminList" type="view" standalone="true" admin_index="true" />
+        <action name="dispEnrollAdminItemList" type="view" standalone="true" />
+        <action name="dispEnrollAdminInsert" type="view" standalone="true" />
+        <action name="dispEnrollAdminGrant" type="view" standalone="true" />
+        <action name="dispEnrollAdminSkin" type="view" standalone="true" />
+        <action name="dispEnrollAdminDelete" type="view" standalone="true" />
+        <action name="procEnrollLoginErr" type="controller" />
+        <action name="procEnrollItemUpdate" type="controller" ruleset="update_enroll_item" />
+        <action name="procEnrollItemInsert" type="controller" ruleset="insert_enroll_item" />
+        <action name="procEnrollItemUpdateStatus" type="controller" />
+        <action name="procEnrollAdminInsert" type="controller" standalone="true" />
+        <action name="procEnrollAdminDelete" type="controller" standalone="true" />
+        <action name="procEnrollAdminItemDelete" type="controller" standalone="true" />
+    </actions>
+</module>

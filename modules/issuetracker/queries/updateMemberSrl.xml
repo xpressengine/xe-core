@@ -1,0 +1,11 @@
+<query id="updateMemberSrl" action="update">
+	<tables>
+		<table name="issue_changesets" />
+	</tables>
+	<columns>
+		<column name="member_srl" var="member_srl" notnull="notnull" />
+	</columns>
+	<conditions>
+		<condition operation="equal" column="author" var="author" notnull="notnull" />
+	</conditions>
+</query>

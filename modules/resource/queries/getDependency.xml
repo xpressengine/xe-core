@@ -1,0 +1,18 @@
+<query id="getDependency" action="select">
+    <tables>
+        <table name="resource_dependency" alias="dep" />
+        <table name="resource_items" alias="item" />
+        <table name="resource_packages" alias="package" />
+    </tables>
+    <columns>
+        <column name="item.*" />
+        <column name="package.title" alias="title" />
+        <column name="package.category_srl" alias="category_srl" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="dep.module_srl" var="module_srl" filter="number" notnull="notnull" />
+        <condition operation="equal" column="dep.item_srl" var="item_srl" filter="number" notnull="notnull" pipe="and" />
+        <condition operation="equal" column="item.item_srl" default="dep.dependency_item_srl" filter="number" notnull="notnull" pipe="and" />
+        <condition operation="equal" column="package.package_srl" default="item.package_srl" filter="number" notnull="notnull" pipe="and" />
+    </conditions>
+</query>

@@ -1,0 +1,14 @@
+<table name="resource_items">
+    <column name="module_srl" type="number" size="11" default="0" notnull="notnull" index="idx_items" />
+    <column name="package_srl" type="number" size="11" notnull="notnull" default="0" index="idx_items" />
+    <column name="item_srl" type="number" size="11" notnull="notnull" default="0" index="idx_items" />
+    <column name="document_srl" type="number" size="11" notnull="notnull" default="0" index="idx_document_srl" />
+    <column name="version" type="varchar" size="255" />
+    <column name="file_srl" type="number" size="11" default="0" />
+    <column name="screenshot_url" type="varchar" size="255" default="" />
+    <column name="voter" type="number" size="11" notnull="notnull" default="0" />
+    <column name="voted" type="number" size="11" notnull="notnull" default="0" index="idx_voted" />
+    <column name="downloaded" type="number" size="11" notnull="notnull" default="0" index="idx_downloaded" />
+    <column name="regdate" type="date" index="idx_regdate " />
+    <column name="list_order" type="number" size="11" notnull="notnull" index="idx_list_order" />
+</table>

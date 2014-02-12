@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget version="0.2">
+    <title xml:lang="ko">wiki tree</title>
+    <title xml:lang="en">wiki tree</title>
+    <version>0.1</version>
+    <date>2011-01-05</date>
+    <author email_address="developers@xpressengine.com" link="http://www.xpressengine.com">
+        <name xml:lang="ko">NHN</name>
+        <name xml:lang="en">NHN</name>
+    </author>
+
+    <extra_vars>
+        <var id="srl">
+            <type>mid</type>
+            <name xml:lang="ko">대상 모듈</name>
+            <name xml:lang="es">대상 모듈</name>
+            <name xml:lang="en">Target Module</name>
+            <name xml:lang="jp">対象モジュール</name>
+            <name xml:lang="ru">대상 모듈</name>
+            <name xml:lang="zh-CN">对象模块</name>
+            <name xml:lang="zh-TW">目標模組</name>
+            <description xml:lang="ko">선택하신 모듈을 대상으로 합니다. 꼭 한개의 모듈만 선택해 주세요.</description>
+            <description xml:lang="en">Selected module will be target. Please select only 1 (one) module.</description>
+            <description xml:lang="es">선택하신 모듈을 대상으로 합니다. 꼭 한개의 모듈만 선택해 주세요.</description>
+            <description xml:lang="ru">선택하신 모듈을 대상으로 합니다. 꼭 한개의 모듈만 선택해 주세요.</description>
+            <description xml:lang="jp">選択されたモジュールを対象とします。必ず一つのモジュールのみ選択して下さい。</description>
+            <description xml:lang="zh-CN">将把所选模块当中的主题作为对象。只能选一个模块。</description>
+            <description xml:lang="zh-TW">將所選擇的模組作為目標。只能選擇一個模組。</description>
+        </var>
+    </extra_vars>
+</widget>

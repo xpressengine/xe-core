@@ -1,0 +1,82 @@
+<include target="./_header.html" />
+{@
+	$avail_validator_id = array(
+		'modules/resource/tpl/delete/1' => 1,
+	);
+}
+<div cond="$XE_VALIDATOR_MESSAGE && isset($avail_validator_id[$XE_VALIDATOR_ID])" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+<form action="./" method="get" onsubmit="return doChangeCategory(this);" id="fo_list" no-error-return-url="true">
+	<input type="hidden" name="module" value="{$module}" />
+	<input type="hidden" name="act" value="{$act}" />
+	<table class="x_table x_table-striped x_table-hover">
+		<caption>
+			<strong>Total: {number_format($total_count)}, Page: {number_format($page)}/{number_format($total_page)}</strong>
+		</caption>
+		<thead>
+			<tr>
+				<th scope="col">{$lang->no}</th>
+				<th scope="col">
+					<select name="module_category_srl" style="width:auto;margin:0">
+						<option value="">{$lang->module_category}</option>
+						<option value="0" selected="selected"|cond="$module_category_srl==='0'">{$lang->not_exists}</option>
+						<option loop="$module_category => $key,$val" value="{$key}" selected="selected"|cond="$module_category_srl==$key">{$val->title}</option>
+						<option value="">&hellip;</option>
+						<option value="-1">{$lang->cmd_management}</option>
+					</select>
+					<input type="submit" id="go_button" value="GO" class="x_btn" />
+				</th>
+				<th scope="col">{$lang->mid}</th>
+				<th scope="col">{$lang->browser_title}</th>
+				<th scope="col">{$lang->regdate}</th>
+				<th scope="col">{$lang->cmd_edit}</th>
+				<th scope="col"><input type="checkbox" title="Check All" /></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr loop="$resource_list => $no,$val">
+				<td>{$no}</td>
+				<td>
+					<!--@if(!$val->module_category_srl)-->
+						<!--@if($val->site_srl)-->
+						{$lang->virtual_site}
+						<!--@else-->
+						{$lang->not_exists}
+						<!--@end-->
+					<!--@else-->
+						{$module_category[$val->module_category_srl]->title}
+					<!--@end-->
+				</td>
+				<td>{htmlspecialchars($val->mid)}</td>
+				<td><a href="{getSiteUrl($val->domain,'','mid',$val->mid)}" target="_blank">{$val->browser_title}</a></td>
+				<td>{zdate($val->regdate,"Y-m-d")}</td>
+				<td>
+					<a href="{getUrl('act','dispResourceAdminInsert','module_srl',$val->module_srl)}" class="x_icon-cog">{$lang->cmd_setup}</a>
+					<a href="{getUrl('','module','module','act','dispModuleAdminCopyModule','module_srl',$val->module_srl)}" class="x_icon-plus" onclick="popopen(this.href);return false;">{$lang->cmd_copy}</a>
+					<a href="{getUrl('act','dispResourceAdminDelete','module_srl', $val->module_srl)}" class="x_icon-remove">{$lang->cmd_delete}</a>
+				</td>
+				<td><input type="checkbox" name="cart" value="{$val->module_srl}" /></td>
+			</tr>
+		</tbody>
+	</table>
+</form>
+<div class="x_clearfix">
+	<div class="x_pagination x_pull-left">
+		<ul>
+			<li><a href="{getUrl('page','','module_srl','')}">&lsaquo; {$lang->first_page}</a> </li>
+			<!--@while($page_no = $page_navigation->getNextPage())-->
+			<li class="x_active"|cond="$page == $page_no"><a href="{getUrl('page',$page_no,'module_srl','')}">{$page_no}</a></li> 
+			<!--@end-->
+			<li><a href="{getUrl('page',$page_navigation->last_page,'module_srl','')}">{$lang->last_page} &rsaquo;</a></li>
+		</ul>
+	</div>
+    <span class="x_btn-group x_pull-right">
+		<a class="x_btn x_btn-inverse" href="{getUrl('act','dispResourceAdminInsert','module_srl','')}">{$lang->cmd_make}</a>
+        <a class="x_btn" href="{getUrl('','module','module','act','dispModuleAdminModuleSetup')}" onclick="doCartSetup(this.href); return false;">{$lang->cmd_setup}</a>
+        <a class="x_btn" href="{getUrl('','module','module','act','dispModuleAdminModuleAdditionSetup')}" onclick="doCartSetup(this.href); return false;">{$lang->cmd_addition_setup}</a>
+        <a class="x_btn" href="{getUrl('','module','module','act','dispModuleAdminModuleGrantSetup')}" onclick="doCartSetup(this.href); return false;">{$lang->cmd_manage_grant}</a>
+    </span>
+</div>
+
+

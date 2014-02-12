@@ -1,0 +1,12 @@
+<filter name="write_document" module="kin" act="procKinInsert">
+    <form>
+        <node target="category_srl" required="true" />
+        <node target="title" required="true" minlength="1" maxlength="250" />
+        <node target="content" required="true" />
+    </form>
+    <response callback_func="completeWriteDocument">
+        <tag name="error" />
+        <tag name="message" />
+        <tag name="document_srl" />
+    </response>
+</filter>

@@ -1,0 +1,15 @@
+<filter name="insert_enroll_item" module="enroll" act="procEnrollItemInsert" confirm_msg_code="confirm_submit">
+    <form>
+        <node target="user_name" required="true" maxlength="20"/>
+        <node target="email_address" required="true" filter="email_address"/>
+        <node target="password1" minlength="6" maxlength="20"/>
+        <node target="job" required="true" maxlength="100"/>
+        <node target="session" maxlength="100"/>
+        <node target="content" maxlength="1000"/>
+    </form>
+    <response callback_func="completeInsertEnrollItem">
+        <tag name="error" />
+        <tag name="message" />
+        <tag name="enroll_srl" />
+    </response>
+</filter>

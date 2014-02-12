@@ -1,0 +1,134 @@
+<include target="header.include.html" />
+<div class="section clearfix">
+	<h2 class="sec_title"><block cond="$selected_reply"><span class="red">{$lang->solved_question}</span></block><block cond="!$selected_reply"><span class="green">{$lang->open_question}</span></block></h2>
+    <div class="corner01">
+		<div class="question">
+			<div class="pf_img">
+				{@ 
+					$oMemberModel = &getModel('member');
+					$memberImage = $oMemberModel->getProfileImage($oDocument->get('member_srl'));
+				}
+				<img cond="$memberImage" border="0" src="{$memberImage->src}" width="90" height="90">
+				<img cond="!$memberImage" src="img/default_profile_pic90.png" width="90" height="90" alt="">
+			</div>
+            <div class="pg">    
+				<div class="kin_header">
+					<h3 class="pg_title">{$oDocument->getTitle()}</h3>
+					<div class="meta">
+						<span class="cate"  cond="$module_info->use_category == 'Y' && $oDocument->get('category_srl')">{$categories[$oDocument->get('category_srl')]->title}</span>
+						<span class="author">{$oDocument->getNickName()}</span>
+						<span class="date">{$oDocument->getRegdate('Y.m.d')} {$oDocument->getRegdate('H:i')}</span>
+						<span class="point status"><strong class="red">Given Points  {$oDocument->get('point')}</strong></span>
+					</div>
+                    <a href="#" class="kin_btn" data="{$oDocument->get('voted_count')}" onclick="voteQuestion({$oDocument->document_srl}); return false;"><span>{$lang->voted_count} ( <strong id="q_voteno_{$oDocument->document_srl}">{$oDocument->get('voted_count')}</strong> )</span></a>
+				</div><!-- //header -->
+				<div class="pg_txt">
+					 {$oDocument->getContent(false)}
+				</div><!-- //pg_txt -->
+				<div class="attach" cond="$oDocument->hasUploadedFiles()" >
+					<h4 class="attach_title">{$lang->uploaded_file} ({$oDocument->get('uploaded_count')})</h4>
+					<ul class="files">
+						 {@ $uploaded_list = $oDocument->getUploadedFiles() }
+						<li loop="$uploaded_list => $key, $file"><a href="{getUrl('')}{$file->download_url}">{$file->source_filename} <span class="bubble">[File Size:{FileHandler::filesize($file->file_size)}/Download:{number_format($file->download_count)}]</span></a></li>
+					</ul>
+				</div>
+			</div><!-- //pg -->
+			<div class="comments corner02">
+				<h5 class="cm_title"><a href="#replies_{$oDocument->document_srl}" onclick="doGetComments({$oDocument->document_srl},{$oDocument->document_srl}); return false;" id="replies_{$oDocument->document_srl}" class="replies_link"><span>{$lang->short_replies} ({number_format($replies_count[$oDocument->document_srl])})</span></a></h5>
+				<div id="replies_content_{$oDocument->document_srl}" style="display:none;"></div>
+				<!-- border-round elements -->
+				<span class="corn tl"></span><span class="corn tr"></span><span class="corn bl"></span><span class="corn br"></span>        
+			</div>
+            <a href="{getUrl('act','dispKinReply')}" class="btn_answer"><span>{$lang->cmd_reply}</span></a>
+			 <p class="buttonArea">
+				<a cond="$selected_reply" href="#comment_{$selected_reply}" class="btn_accepted btn_left"><span>{$lang->cmd_move_selected_reply}</span></a>
+				<a cond="!$selected_reply && $oDocument->isGranted()" href="{getUrl('act','dispKinWrite')}" class="btn"><span>{$lang->cmd_modify}</span></a>
+				<a href="#" cond="$oDocument->getCommentCount()<1 && $oDocument->isGranted()" onclick="if(confirm('{$lang->confirm_delete}')) doDeleteDocument('{$oDocument->document_srl}'); return false;" class="btn red"><span>{$lang->cmd_delete}</span></a>
+			</p>
+		</div><!-- //question -->
+            <!-- border-round elements -->
+            <span class="corn tl"></span><span class="corn tr"></span><span class="corn bl"></span><span class="corn br"></span>
+        </div><!-- //corner01 -->
+    </div><!-- //section -->
+    <div class="section clearfix">
+        <h2 class="sec_title answer_title">{$lang->answers} ({$oDocument->getCommentCount()})</h2>
+        <div class="pull-right options">
+            <label for="" class="answer_show">{$lang->show} : </label>
+			<select name="" id="a_select_target" class="right fe_sel">
+				<option value="all" <!--@if($a_target=='all')-->selected<!--@end-->>{$lang->all_answers}</option>
+				<option value="accepted" <!--@if($a_target=='accepted')-->selected<!--@end-->>{$lang->accepted_answer}</option>
+				<option value="vote" <!--@if($a_target=='vote')-->selected<!--@end-->>{$lang->rated_sort}</option>
+            </select>
+        </div>
+
+		<div class="corner03 clearfix">
+			<div loop="$answer_list => $reply" class="roundBox" id="comment_{$reply->comment_srl}">	
+				<div class="answer"|cond="$selected_reply != $reply->comment_srl" class="answer choose"|cond="$selected_reply == $reply->comment_srl">
+					<div class="pf_img">
+						{@ 
+							$oMemberModel = &getModel('member');
+							$memberImage = $oMemberModel->getProfileImage($reply->get('member_srl'));
+						}
+						<img cond="$memberImage" border="0" src="{$memberImage->src}" width="70" height="70">
+						<img cond="!$memberImage" src="img/default_profile_pic90.png" width="70" height="70" alt="">
+					</div>
+					<div class="pg">    
+						<div class="kin_header">
+							<div class="meta">
+								<span class="author">{$reply->getNickName()}</span>
+								<span class="date">{$reply->getRegdate('Y.m.d')} {$reply->getRegdate('H:i')}</span>
+								<a cond="($oDocument->isGranted() && !$selected_reply) && $logged_info->user_id == $oDocument->get('user_id') && $oDocument->get('user_id') != $reply->user_id" href="#" onclick="if(confirm('{$lang->msg_select_reply}')) doSelectReply('{$reply->comment_srl}'); return false;" class="btn_accepted">{$lang->cmd_select_reply}</a>
+							</div>
+
+							<div cond="$selected_reply == $reply->comment_srl" class="accepted"><span>{$lang->msg_selected_reply}</span></div>
+						</div><!-- //header -->
+						<div class="pg_txt">
+								{$reply->getContent(false)}
+						</div>
+						<div class="attach" cond="$reply->hasUploadedFiles()" >
+							<h4 class="attach_title">{$lang->uploaded_file} ({$reply->get('uploaded_count')})</h4>
+							<ul class="files">
+								 {@ $uploaded_list = $reply->getUploadedFiles() }
+								<li loop="$uploaded_list => $key, $file"><a href="{getUrl('')}{$file->download_url}">{$file->source_filename} <span class="bubble">[File Size:{FileHandler::filesize($file->file_size)}/Download:{number_format($file->download_count)}]</span></a></li>
+							</ul>
+						</div>
+					</div><!-- //pg -->
+					<div class="comments corner04"|cond="$selected_reply != $reply->comment_srl" class="comments corner02"|cond="$selected_reply == $reply->comment_srl">
+						<h5 class="cm_title"><a href="#replies_{$reply->comment_srl}" onclick="doGetComments({$oDocument->document_srl},{$reply->comment_srl}); return false;" id="replies_{$reply->comment_srl}" class="replies_link"><span>{$lang->short_replies} ({number_format($replies_count[$reply->comment_srl])})</span></a></h5>
+						<div id="replies_content_{$reply->comment_srl}" style="display:none;"></div>
+						<!-- border-round elements -->
+						<span class="corn tl"></span><span class="corn tr"></span><span class="corn bl"></span><span class="corn br"></span>        
+					</div>
+					<!--@if(!$selected_reply && $reply->isGranted())-->
+					<div class="kin_buttonArea">
+						<a href="{getUrl('act','dispKinModifyReply','comment_srl', $reply->comment_srl)}" class="btn"><span>{$lang->cmd_modify}</span></a>
+						<a href="#" onclick="if(confirm('{$lang->confirm_delete}')) doDeleteReply('{$reply->comment_srl}'); return false;" class="btn"><span>{$lang->cmd_delete}</span></a>
+					</div>
+					<!--@elseif($logged_info->is_admin == 'Y' && $selected_reply != $reply->comment_srl)-->
+					<div class="kin_buttonArea">
+						<a href="#" onclick="if(confirm('{$lang->confirm_delete}')) doDeleteReply('{$reply->comment_srl}'); return false;" class="btn"><span>{$lang->cmd_delete}</span></a>
+					</div>
+					<!--@end-->
+					<a class="btn_rate" href="#" data="{$oDocument->get('voted_count')}" onclick="voteAnswer({$reply->comment_srl}); return false;"><span><i class="ico_rate_up"></i><strong id="c_voteno_{$reply->comment_srl}">{$reply->get('voted_count')}</strong> person rated this as good</span></a>
+				</div>
+			</div>
+			<!-- border-round elements -->
+            <span class="corn tl"></span><span class="corn tr"></span><span class="corn bl"></span><span class="corn br"></span>
+		</div>
+		<div cond="!$answer_list" class="no_answer">
+			There is not a answer for this question
+		</div>
+
+    </div>
+
+<script type="text/javascript">
+	jQuery(function($){
+		$('#a_select_target').change(function(){
+			var url = "{getUrl('','document_srl', $oDocument->document_srl)}"+"?a_target="+$(this).val();
+			url = url.replace(/&amp;/g,"&");
+			window.location = url;
+		});
+	});
+</script>
+
+<include target="footer.include.html" />

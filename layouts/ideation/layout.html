@@ -1,0 +1,135 @@
+<!--%import("css/layout.css")-->
+<!--%import("css/layout@style.css")-->
+<!--%import("lang")-->
+<div id="xe" class="fixed">
+	<div id="container" class="ec">
+		<div id="header"> <a href="#content" class="skipToContent">Skip to content</a>
+			<!--@if($layout_info->logo_image)-->
+            <h1><a href="<!--@if($layout_info->index_url)-->{$layout_info->index_url}<!--@else-->{getUrl()}<!--@end-->"><img src="{$layout_info->logo_image}" alt="" /></a></h1>
+            <!--@end-->
+			<hr />
+            <form action="./" method="post" onsubmit="if(this.user_id.name == this.user_id.title) this.user_id.value = ''; return procFilter(this, login)">
+			<p class="account">
+                <!--@if($is_logged)-->
+				{sprintf($lang->ideation_login_message,$logged_info->nick_name)}
+				<span class="buttonAccount"><a href="#" class="member_{$logged_info->member_srl}" onclick="return false;">{$lang->private_info}</a></span> 
+				<span class="buttonAccount"><a href="{getUrl('act','dispMemberLogout')}">{$lang->cmd_logout}</a></span>
+                <!--@else-->
+                <!--%import("./filter/login.xml")-->
+                {@ $member_config = MemberModel::getMemberConfig(); }
+                <input type="text" name="user_id" value="{$lang->user_id}" title="{$lang->user_id}" class="inputType" onfocus="if(this.value==this.title) this.value = '';return false;"/>
+                <input type="password" name="password" class="inputType" value="{$lang->password}" title="{$lang->password}" onfocus="if(this.value==this.title)this.value='';return false;"/>
+                <input name="keep_signed" type="checkbox" id="keepA" value="Y" class="inputCheck" onmouseover="jQuery(this).next().addClass('show');" onmouseout="jQuery(this).next().removeClass('show');"/>
+                <label>{str_replace('\\n','<br/>',$lang->about_keep_signed)}</label>
+				<span class="buttonAccount"><input type="submit" value="{$lang->cmd_login}" /></span>
+                <!--@if($member_config->enable_join != 'N')-->
+				<span class="buttonAccount"><a href="{getUrl('act','dispMemberSignUpForm')}">{$lang->cmd_signup}</a></span>
+                <!--@end-->
+                <!--@end-->
+			</p>
+            </form>
+			<div class="extension">
+				<ul class="gnb">
+                <!--@foreach($main_menu->list as $key => $val)--><!--@if($val['link'])-->
+					<li  <!--@if($val['selected'])-->class="on"{@$selected_menu=$val}<!--@end-->><a href="{$val['href']}" <!--@if($val['open_window']=='Y')-->onclick="window.open(this.href);return false;"<!--@end-->>{$val['link']}</a></li>
+                <!--@end--><!--@end-->
+				</ul>
+                <form action="{getUrl()}" method="post" class="search">
+                <input type="hidden" name="vid" value="{$vid}" />
+                <input type="hidden" name="mid" value="{$mid}" />
+                <input type="hidden" name="act" value="IS" />
+                <input type="hidden" name="search_target" value="title_content" />
+					<fieldset>
+                        <legend>{$lang->cmd_search}</legend>
+                        <input name="is_keyword" type="text" title="Search" class="inputText" accesskey="S" />
+                        <input type="image" src="img/buttonSearch.gif" alt="Search" class="inputSearch" />
+					</fieldset>
+				</form>
+			</div>
+		</div>
+		<hr />
+		<div id="body">
+			<div id="content">
+                {$content}
+			</div>
+			<hr />
+			<div class="extension e1">
+                <!--@if($layout_info->use_subject=='Y')-->
+				<div class="section">
+					<h2>{$layout_info->subject_title}</h2>
+					<ul class="topic">
+                        {@$_is_first = true}
+                        <!--@if($layout_info->subject_1)-->
+						<li<!--@if(!$_is_first)-->{@$_is_first=true;} class="first"<!--@end-->><strong>{$layout_info->subject_unit}1</strong> <a href="{$layout_info->subject_1_url}" onmouseover="if(jQuery('#ideationNavigation')) {jQuery('#ideationNavigation').attr('class','ideationNavigation topic1');jQuery('dl.show').removeClass('show');jQuery('#topic1').addClass('show');jQuery('ul.topic>li.first').removeClass('first');jQuery(this).parent().addClass('first');return false;}">{$layout_info->subject_1}</a></li>
+                        <!--@end-->
+                        <!--@if($layout_info->subject_2)-->
+						<li<!--@if(!$_is_first)-->{@$_is_first=true;} class="first"<!--@end-->><strong>{$layout_info->subject_unit}2</strong> <a href="{$layout_info->subject_2_url}" onmouseover="if(jQuery('#ideationNavigation')) {jQuery('#ideationNavigation').attr('class','ideationNavigation topic2');jQuery('dl.show').removeClass('show');jQuery('#topic2').addClass('show');jQuery('ul.topic>li.first').removeClass('first');jQuery(this).parent().addClass('first');return false;}">{$layout_info->subject_2}</a></li>
+                        <!--@end-->
+                        <!--@if($layout_info->subject_3)-->
+						<li<!--@if(!$_is_first)-->{@$_is_first=true;} class="first"<!--@end-->><strong>{$layout_info->subject_unit}3</strong> <a href="{$layout_info->subject_3_url}" onmouseover="if(jQuery('#ideationNavigation')) {jQuery('#ideationNavigation').attr('class','ideationNavigation topic3');jQuery('dl.show').removeClass('show');jQuery('#topic3').addClass('show');jQuery('ul.topic>li.first').removeClass('first');jQuery(this).parent().addClass('first');return false;}">{$layout_info->subject_3}</a></li>
+                        <!--@end-->
+					</ul>
+				</div>
+                <!--@end-->
+				<!--@if($selected_menu['list'])-->
+				<div class="section">
+                                        <h2>{$selected_menu['text']}</h2>
+                                        <ul class="topic">
+                                        {@$__c = false;}
+					<!--@foreach($selected_menu['list'] as $k => $v)--><!--@if($v['link'])-->
+					<li <!--@if($v['url']=='introduce'||$v['url']=='best')-->class="bold<!--@if(!$__c)--> top{@$__c=true;}<!--@end-->"<!--@elseif($v['selected'])-->class="first"<!--@end-->><a href="{$v['href']}" <!--@if($v['open_window']=='Y')-->onclick="window.open(this.href);return false;"<!--@end-->>{$v['link']}</a></li>
+					<!--@end--><!--@end-->
+                                        </ul>
+                                </div>
+                                <!--@end-->
+
+				<div class="section">
+					<!--@if($layout_info->service_title)--><h2>{$layout_info->service_title}</h2><!--@end-->
+                    <!--@if($left_menu)-->
+					<div class="widgetContainer">
+						<div class="widgetTree">
+							<ul>
+                                <!--@foreach($left_menu->list as $key => $val)--><!--@if($val['link'])-->
+								<li class="nav_tree_<!--@if($val['selected']||$val['expand']=='Y')-->on<!--@else-->off<!--@end-->">
+									<button type="button" onclick="var o = jQuery(jQuery(this).parent());if(o.hasClass('nav_tree_on')){o.removeClass('nav_tree_on');o.addClass('nav_tree_off');jQuery(this).html('-');}else{o.removeClass('nav_tree_off');o.addClass('nav_tree_on');jQuery(this).html('+');}; return false;">+</button> <a href="{$val['href']}" class="nav_tree_label" <!--@if($val['open_window']=='Y')-->onclick="window.open(this.href);return false;"<!--@end-->>{$val['link']}</a>
+                                    <!--@if($val['list'])-->
+									<ul>
+                                        {@$__i = count($val['list'])}
+                                        <!--@foreach($val['list'] as $k => $v)--><!--@if($v['link'])-->
+                                        <!--@if($v['selected'])-->{@$_active = 'active'}<!--@foreach($v['list'] as $ck => $cv)--><!--@if($cv['selected'])-->{@$_active=''}<!--@end--><!--@end--><!--@else-->{@$_active=''}<!--@end-->
+										<li class="nav_tree_<!--@if($v['selected'])-->on {$_active}<!--@else-->off<!--@end--> <!--@if($__i==1)-->nav_tree_last<!--@end-->">
+                                            <a href="{$v['href']}" class="nav_tree_label" <!--@if($v['open_window']=='Y')-->onclick="window.open(this.href);return false;"<!--@end-->>{$v['link']}</a>
+                                            <!--@if($val['expand']=='Y')--> <img class="icon" src="img/iconTopicOn.gif" width="22" height="11" alt="ON" /><!--@end-->
+                                            <!--@if($v['list'])-->
+											<ul>
+                                                {@$___i = count($v['list'])}
+                                                <!--@foreach($v['list'] as $ck => $cv)--><!--@if($cv['link'])-->
+                                                <li class="nav_tree_<!--@if($cv['selected'])-->on active<!--@else-->off<!--@end--> <!--@if($___i==1)-->nav_tree_last<!--@end-->"><a href="{$cv['href']}" class="nav_tree_label" <!--@if($cv['open_window']=='Y')-->onclick="window.open(this.href);return false;"<!--@end-->>{$cv['link']}</a></li>
+                                                <!--@end-->
+                                                {@$___i--}
+                                                <!--@end-->
+											</ul>
+                                            <!--@end-->
+                                        </li>
+                                        <!--@end-->
+                                        {@$__i--}
+                                        <!--@end-->
+									</ul>
+                                    <!--@end-->
+								</li>
+                                <!--@end--><!--@end-->
+							</ul>
+						</div>
+					</div>
+                    <!--@end-->
+				</div>
+			</div>
+		</div>
+		<hr />
+		<div id="footer">
+			<address>
+			Copyright &copy; <strong>NHN Corp.</strong> All Rights Reserved.
+			</address>
+		</div>
+	</div>
+</div>

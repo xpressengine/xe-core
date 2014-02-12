@@ -1,0 +1,33 @@
+<query id="getPosts" action="select">
+    <tables>
+        <table name="documents" alias="d" />
+        <table name="document_aliases" alias="a" type="left join">
+            <conditions>
+                <condition operation="equal" column="a.document_srl" default="d.document_srl" pipe="and" />
+            </conditions>
+        </table>
+        <table name="tags" alias="t" type="left outer join">
+            <conditions>
+                <condition operation="equal" column="t.document_srl" default="d.document_srl" pipe="and" />
+            </conditions>
+        </table>
+    </tables>
+    <columns>
+        <column name="d.*" />
+        <column name="a.alias_title" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="d.module_srl" var="module_srl" notnull="notnull" pipe="and" />
+        <condition operation="in" column="d.category_srl" var="categories" pipe="and" />
+        <condition operation="equal" column="t.tag" var="tag" pipe="and" />
+    </conditions>
+    <navigation>
+        <index var="sort_index" default="list_order" order="asc" />
+        <list_count var="list_count" default="10" />
+        <page_count var="page_count" />
+        <page var="page" />
+    </navigation>
+    <groups>
+        <group column="d.document_srl" />
+    </groups>
+</query>

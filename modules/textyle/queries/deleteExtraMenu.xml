@@ -1,0 +1,8 @@
+<query id="deleteExtraMenu" action="delete">
+    <tables>
+        <table name="textyle_extra_menu" />
+    </tables>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" notnull="notnull" />
+    </conditions>
+</query>

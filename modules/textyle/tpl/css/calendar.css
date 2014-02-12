@@ -1,0 +1,52 @@
+@charset "utf-8";
+/* NHN (developers@xpressengine.com) */
+
+/* Calendar */
+.calendar{position:relative;display:inline-block;*display:inline;font-size:12px}
+.calendar .btnCalendar{position:relative;width:19px;height:19px;border:0;padding:0;background:url(../img/buttonCalendar.gif) no-repeat center center;cursor:pointer;vertical-align:middle}
+.calendar .btnCalendar span{position:absolute;width:0;height:0;overflow:hidden;font-size:0;line-height:0;z-index:-1;visibility:hidden}
+.calendar .layerCalendar{display:none;padding:25px 15px 15px 15px;position:absolute;border:2px solid #737373;background:#fff;color:#333}
+.calendar .layerCalendar.open{display:block}
+.calendar .close{position:absolute;top:10px;right:15px;width:17px;height:17px;border:0;padding:0;background:url(../img/buttonCloseLayerX.gif) no-repeat center center;cursor:pointer}
+.calendar .close span{position:absolute;width:0;height:0;font-size:0;line-height:0;overflow:hidden;z-index:-1;visibility:hidden}
+.calendar .layerCalendar table{border:0;border-spacing:0;_width:200px}
+.calendar caption{font-weight:bold;text-align:center;position:relative}
+.calendar caption span{display:block;position:relative;padding:10px 0 15px 0;zoom:1}
+.calendar caption .today{font-size:11px;border:0;padding:0;border-bottom:1px solid;background:none;cursor:pointer}
+.calendar caption .today span{text-decoration:underline}
+.calendar caption .navi{position:absolute;top:10px;border:0;padding:0;width:17px;height:18px;background-color:transparent;background-image:url(../img/buttonPaginate.gif);background-repeat:no-repeat;cursor:pointer}
+.calendar caption .navi span{position:absolute;width:0;height:0;overflow:hidden;font-size:0;line-height:0;z-index:-1;visibility:hidden}
+.calendar caption .navi.prev{left:0;background-position:left top}
+.calendar caption .navi.next{right:0;background-position:right top}
+.calendar th,
+.calendar td{border:0;text-align:center}
+.calendar th{color:#666;background:#f2f2f2;padding:3px 8px}
+.calendar td{font-size:11px;padding:3px 8px}
+.calendar td button{padding:0;border:0;background:none;cursor:pointer;width:20px;font-size:11px;font-family:Tahoma, Sans-serif}
+.calendar td button.today{font-weight:bold}
+.calendar td button.book,
+.calendar td button.active,
+.calendar tr.active td{background:#ff4747}
+.calendar tr.active button{background:#ff4747;color:#fff}
+.calendar tr.active button.active{font-weight:bold}
+.calendar tr.active .overlap button{background:#fc6;color:#fff}
+.calendar .sun,
+.calendar .sun button{color:#ff1a1a}
+.calendar .overlap button{color:#ccc}
+
+.calendar table.month{border-top:1px solid #f2f2f2;border-left:1px solid #f2f2f2}
+.calendar table.month td{border-right:1px solid #f2f2f2;border-bottom:1px solid #f2f2f2}
+.calendar table.month td button{width:50px;color:#bababa}
+.calendar table.month td button.past{color:#333}
+.calendar table.month td button.active{color:#fff}
+
+.contentNavigation .calendar{padding:0 50px;zoom:1}
+.contentNavigation .calendar .h4{margin:0;display:inline;font-size:18px;vertical-align:middle}
+.contentNavigation .calendar .prevData,
+.contentNavigation .calendar .nextData{position:absolute;top:0;border:0;padding:0;width:18px;height:19px;background-color:transparent;background-image:url(../img/buttonPagination.gif);background-repeat:no-repeat;cursor:pointer}
+.contentNavigation .calendar .prevData{background-position:left top;left:0}
+.contentNavigation .calendar .nextData{background-position:right top;right:0}
+.contentNavigation .calendar .prevData span,
+.contentNavigation .calendar .nextData span{position:absolute;width:0;height:0;overflow:hidden;font-size:0;line-height:0;z-index:-1;visibility:hidden}
+.contentNavigation .calendar .layerCalendar{top:22px;left:52px}
+

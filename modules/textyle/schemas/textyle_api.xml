@@ -1,0 +1,15 @@
+<table name="textyle_api">
+  <column name="module_srl" type="number" size="11" notnull="notnull" index="idx_api" />
+  <column name="api_srl" type="number" size="11" notnull="notnull" index="idx_api" />
+  <column name="blogapi_service" type="varchar" size="250" notnull="notnull" />
+  <column name="blogapi_host_provider" type="varchar" size="250" notnull="notnull" />
+  <column name="blogapi_type" type="varchar" size="50" notnull="notnull" />
+  <column name="blogapi_site_url" type="varchar" size="250" notnull="notnull" />
+  <column name="blogapi_site_title" type="varchar" size="250" notnull="notnull" />
+  <column name="blogapi_url" type="varchar" size="250" notnull="notnull" />
+  <column name="blogapi_user_id" type="varchar" size="250" notnull="notnull" />
+  <column name="blogapi_password" type="varchar" size="250" notnull="notnull" />
+  <column name="publishded" type="number" size="11" default="0" />
+  <column name="enable" type="char" size="1" default="Y" />
+  <column name="regdate" type="date" notnull="notnull" />
+</table>

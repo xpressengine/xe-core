@@ -1,0 +1,55 @@
+<!-- Comment Reply, Modify -->
+<div class="feedback reply" cond="$oSourceComment->isExists()">
+	<h3 class="feedbackTitle">{$lang->comment}</h3>
+	<ol class="feedbackOrder">
+		<li class="item">
+			<div class="meta">
+				<h4 class="author">
+					<a href="{$oSourceComment->homepage}" cond="$oSourceComment->homepage">{$oSourceComment->getNickName()}</a>
+					<block cond="!$oSourceComment->homepage">{$oSourceComment->getNickName()}</block>
+				</h4>
+				<p class="date">{$oSourceComment->getRegdate('Y.m.d H:i')}</p>
+			</div>
+			<div class="data xe_content">
+				{$oSourceComment->getContent(false)}
+			</div>
+		</li>
+	</ol>
+</div>
+<div class="replyForm" cond="$textyle->isEnableComment()">
+	<h3>Leave Comments</h3>
+	<fieldset>
+		<form method="post" onsubmit="return insertCommentItem(this, insert_comment)" action="">
+			<input name="mid" type="hidden" value="textyle" />
+			<input type="hidden" name="document_srl" value="{$oComment->get('document_srl')}" />
+			<input type="hidden" name="comment_srl" value="{$oComment->get('comment_srl')}" />
+			<input type="hidden" name="parent_srl" value="{$oComment->get('parent_srl')}" />
+			<textarea class="iTextArea" name="content" rows="8" cols="42">{htmlspecialchars($oComment->get('content'))}</textarea>
+			<block cond="$is_logged">
+				<strong class="name">{$logged_info->nick_name}</strong> <span class="email">{$logged_info->email_address}</span> <span class="url">{$logged_info->homepage}</span>
+			</block>
+			<block cond="!$is_logged">
+				<input name="nick_name" type="text" class="iText name" value="Name" title="Name" />
+				<input name="password" type="password" class="iText pw" value="Password" title="Password" />
+				<block cond="$textyle->getInputEmail()!='N'">
+					<input type="hidden" name="msg_input_email_address" value="{$lang->msg_input_email_address}"/>
+					<input name="email_address" type="text" class="iText email"|cond="$textyle->getInputEmail()!='R'" class="iText email request"|cond="$textyle->getInputEmail()=='R'" value="Email address" title="Email address" />
+				</block>
+				<block cond="$textyle->getInputWebsite()!='N'">
+					<input type="hidden" name="msg_input_homepage" value="{$lang->msg_input_homepage}"/>
+					<input name="homepage" type="text" class="iText url"|cond="$textyle->getInputWebsite()!='R'" class="iText url request"|cond="$textyle->getInputWebsite()=='R'" value="URL" title="URL" />
+				</block>
+			</block>
+
+			<input name="is_secret" id="secret1" type="hidden" value="Y" cond="$oComment->isExists() && $oComment->isSecret()" />
+			<input name="is_secret" id="secret1" type="checkbox" value="Y" class="iCheck" cond="$oComment->isExists() && !$oComment->isSecret()" />
+
+			<label for="secret1">{$lang->secret}</label>
+			<input name="submit" type="submit" value="SUBMIT" class="inputSubmit" />
+		</form>
+	</fieldset>
+	<block cond="!$textyle->isEnableComment()">
+		{$lang->disable_comment}
+	</block>
+</div>
+<!-- /Comment Reply, Modify -->

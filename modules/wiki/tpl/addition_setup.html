@@ -1,0 +1,13 @@
+<include target="header.html" />
+<!--// no use validator id. -->
+<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+{$setup_content}
+<script cond="$markup_type != 'xe_wiki_markup'">
+	jQuery(function($){
+		$("select[name=editor_skin]").attr("disabled", true);
+		$("#sel_editor_colorset").attr("disabled", true);
+		$("#sel_editor_colorset").parent().prepend("<p>Document editor skin is not configurable when using Markdown, GoogleCode or MediaWiki syntax.</p>");
+	});
+</script>

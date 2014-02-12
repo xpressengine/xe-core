@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<lang>
+	<item name="code_type">
+		<value xml:lang="en"><![CDATA[Code Type]]></value>
+		<value xml:lang="es"><![CDATA[Código Tipo]]></value>
+		<value xml:lang="jp"><![CDATA[言語種類]]></value>
+		<value xml:lang="ko"><![CDATA[언어 종류]]></value>
+		<value xml:lang="ru"><![CDATA[Тип кода]]></value>
+		<value xml:lang="zh-CN"><![CDATA[语言类型]]></value>
+		<value xml:lang="zh-TW"><![CDATA[語法類型]]></value>
+	</item>
+	<item name="used_collapse">
+		<value xml:lang="en"><![CDATA[Use Folding]]></value>
+		<value xml:lang="es"><![CDATA[Utilice Folding]]></value>
+		<value xml:lang="jp"><![CDATA[折りたたみ機能を使う]]></value>
+		<value xml:lang="ko"><![CDATA[접기 기능 사용]]></value>
+		<value xml:lang="ru"><![CDATA[Использованное сокращение]]></value>
+		<value xml:lang="zh-CN"><![CDATA[使用代码折叠]]></value>
+		<value xml:lang="zh-TW"><![CDATA[使用收合]]></value>
+	</item>
+	<item name="hidden_linenumber">
+		<value xml:lang="en"><![CDATA[Hide Line Number]]></value>
+		<value xml:lang="es"><![CDATA[Ocultar número de línea]]></value>
+		<value xml:lang="jp"><![CDATA[行番号を隠す]]></value>
+		<value xml:lang="ko"><![CDATA[줄 번호 감추기]]></value>
+		<value xml:lang="ru"><![CDATA[Скрытый номер строки]]></value>
+		<value xml:lang="zh-CN"><![CDATA[隐藏行号]]></value>
+		<value xml:lang="zh-TW"><![CDATA[隱藏行號]]></value>
+	</item>
+	<item name="hidden_controls">
+		<value xml:lang="en"><![CDATA[Hide Toolbar]]></value>
+		<value xml:lang="es"><![CDATA[Ocultar barra de herramientas]]></value>
+		<value xml:lang="jp"><![CDATA[ツールバーを隠す]]></value>
+		<value xml:lang="ko"><![CDATA[툴바 감추기]]></value>
+		<value xml:lang="ru"><![CDATA[Скрытый контрол]]></value>
+		<value xml:lang="zh-CN"><![CDATA[隐藏工具栏]]></value>
+		<value xml:lang="zh-TW"><![CDATA[隱藏控制]]></value>
+	</item>
+	<item name="first_line">
+		<value xml:lang="en"><![CDATA[First Line]]></value>
+		<value xml:lang="es"><![CDATA[Primera Línea]]></value>
+		<value xml:lang="jp"><![CDATA[開始する行番号]]></value>
+		<value xml:lang="ko"><![CDATA[시작 줄 번호]]></value>
+		<value xml:lang="ru"><![CDATA[Первая строка]]></value>
+		<value xml:lang="zh-CN"><![CDATA[首行行号]]></value>
+		<value xml:lang="zh-TW"><![CDATA[第一行]]></value>
+	</item>
+</lang>

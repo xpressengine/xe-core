@@ -1,0 +1,79 @@
+<!--%import("css/gnb.css")-->
+<!--%import("js/gnb.js")-->
+<!--%import("js/mwLogin.js")-->
+
+<div class="displayGNB">
+    <!--@if($gnb_menu_list)-->
+    <ul class="fLeft">
+        <!--@foreach($gnb_menu_list as $val)-->
+        <li class="{$_colorset_list[$_idx]} <!--@if($val['selected'])-->selected<!--@end-->"><a href="{$val['href']}"<!--@if($val['open_window']=='Y')--> onclick="window.open(this.href);return false;"<!--@end-->><span>{$val['text']}</span></a></li>
+        <!--@end-->
+    </ul>
+    <!--@end-->
+
+    <ul class="fRight">
+        <!--@if($is_logged)-->
+        <li><a href="{getUrl('act','dispMemberLogout')}"><span>{$lang->cmd_logout}</span></a></li>
+        <li class="my myProfile"><a href="#" onclick="return false"><span>{$lang->profile}</span></a>
+            <ul>
+                <!--@foreach($logged_info->menu_list as $key => $val)-->
+                <li><a href="{getUrl('act',$key,'member_srl','')}">{Context::getLang($val)}</a></li>
+                <!--@endif-->
+            </ul>
+        </li>
+        <!--@else-->
+        <li><a href="#login" id="loginAnchor" class="loginTrigger" accesskey="L" title="Accesskey(L)"><span>{$lang->cmd_login}</span></a></li>
+        <!--@end-->
+        <li class="my myLanguage"><a href="#" onclick="return false" title="Select Language"><span>{$lang_supported[$lang_type]}</span></a>
+            <ul>
+                <!--@foreach($lang_supported as $key => $val)-->
+                <!--@if($key== $lang_type)-->
+                <li class="selected"><a href="#">{$lang_supported[$lang_type]}</a></li>
+                <!--@else-->
+                <li><a href="#" onclick="doChangeLangType('{$key}'); return false;">{$lang_supported[$key]}</a></li>
+                <!--@end-->
+                <!--@end-->
+            </ul>
+        </li>
+    </ul>
+</div>
+<!--@if(!$is_logged)-->
+<div class="mwLogin">
+    {@
+		$memberModel = getModel('member');
+		$member_config = $memberModel->getMemberConfig();
+	}
+    <!--%import("./filter/login.xml")-->
+    <!--@if($member_config->enable_openid=='Y')--><!--%import("./filter/openid_login.xml")--><!--@end-->
+	<div class="bg"></div>
+	<div id="login" class="gLogin">
+		<a href="#loginAnchor" class="close" title="Close Login Layer">X</a>
+		<form action="./" method="post" class="gLogin" ruleset="@login">
+		<input type="hidden" name="act" value="procMemberLogin" />
+		<input type="hidden" name="success_return_url" value="{getRequestUriByServerEnviroment()}" />
+            <input type="hidden" name="vid" value="{$vid}" />
+            <input type="hidden" name="mid" value="{$mid}" />
+			<fieldset>
+				<legend>Login</legend>
+				<div class="iClear">
+					<label for="uid" class="iLabel">EMAIL</label><input name="user_id" type="text" value="" id="uid" class="iText uid" />
+				</div>
+				<div class="iClear">
+					<label for="upw" class="iLabel">PASSWORD</label><input name="password" type="password" value="" id="upw" class="iText upw" />
+				</div>
+				<p class="keeping"><input name="" type="checkbox" value="" class="iCheck" id="keepid" /><label for="keepid">{$lang->keep_signed}</label></p>
+				<p class="warning">{$lang->about_keep_signed}</p>
+				<span class="btnLogin"><input name="" type="submit" value="{$lang->cmd_login}" /></span>
+				<div class="message">
+					<p> <strong>2011년 10월 31일</strong> 부터 '<strong>이메일</strong>+<strong>비밀번호</strong>' 형식으로 로그인 방식이 변경되었습니다. <a href="http://www.xpressengine.com/findemail" target="_blank">아이디로 이메일주소 검색하기</a> </p>
+				</div>
+				<ul class="help">
+					<li class="first"><a href="{getUrl('act','dispMemberFindAccount')}">아이디/비밀번호 찾기</a></li>
+					<li><a href="{getUrl('act','dispMemberSignUpForm')}">회원 가입</a></li>
+				</ul>
+			</fieldset>
+		</form>
+		<a href="#loginAnchor" class="close" title="Close Login Layer">X</a>
+	</div>
+</div>
+<!--@end-->

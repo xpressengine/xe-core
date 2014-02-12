@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+    <grants>
+    </grants>
+    <permissions />
+    <actions>
+        <action name="dispContestAdminList" type="view" standalone="true" admin_index="true" />
+        <action name="dispContestAdminView" type="view" standalone="true" />
+    </actions>
+</module>

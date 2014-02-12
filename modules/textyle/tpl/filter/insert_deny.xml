@@ -1,0 +1,12 @@
+<filter name="insert_deny" module="textyle" act="procTextyleDenyInsert" >
+    <form>
+        <node target="module_srl" required="true" />
+        <node target="deny_type" required="true" />
+        <node target="deny_content" required="true" />
+    </form>
+	<parameter />
+    <response callback_func="completeInsertDeny">
+        <tag name="error" />
+        <tag name="message" />
+    </response>
+</filter>

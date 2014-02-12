@@ -1,0 +1,100 @@
+<include target="header.html" />
+
+<script>
+    jQuery(document).ready(function($){
+        var old_radios = $("input[name=old_history_srl]");
+        var new_radios = $("input[name=history_srl]");
+
+        old_radios.first().attr('checked', 'checked');
+
+        old_radios.change(function(){
+            var current_index = old_radios.index($(this));
+            new_radios.slice(0, current_index + 1).show();
+            new_radios.slice(current_index + 1, new_radios.length).hide();
+        });
+
+        new_radios.change(function(){
+            var current_index = new_radios.index($(this));
+            old_radios.slice(0, current_index).hide();
+            old_radios.slice(current_index, old_radios.length).show();
+        });
+
+    });
+</script>
+<form method="get" action="./" no-error-return-url="true">
+    <input type="hidden" name="mid" value="{$module_info->mid}" />
+    <input type="hidden" name="act" value="dispWikiHistoryCompare" />
+    <input type="hidden" name="document_srl" value="{$document_srl}" />
+
+<table cellspacing="0" border="1" summary="List of document histories" class="wkList">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th scope="col" class="title">{$lang->title}</th>
+            <th scope="col">{$lang->author}</th>
+            <th scope="col">{$lang->date}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!--@if(!$page || $page == 1)-->
+        <tr>
+            <td>
+            </td>
+            <td>
+                <input type="radio" name="history_srl" value="{$val->history_srl}" checked="checked" />
+            </td>
+            <td class="title">
+                <a href="{getUrl('act','',page,'','history_srl','')}">{$oDocument->getTitle()} (current)</a>
+            </td>
+            <td class="author">{$oDocument->getNickName()}</td>
+            <td class="date">{$oDocument->getUpdate()}</td>
+        </tr>
+        <!--@end-->
+
+        <!--@foreach($histories as $val)-->
+        <tr>
+            <td>
+                <input type="radio" name="old_history_srl" value="{$val->history_srl}" />
+            </td>
+            <td>
+                <input type="radio" name="history_srl" value="{$val->history_srl}" class="hide" />
+            </td>
+            <td class="title">
+				<button type="button" class="btn" onclick="jQuery('#historyContent{$val->history_srl}').toggleClass('hide')">{$lang->cmd_view}</button>
+				<a href="{getUrl('act','dispWikiEditPage','history_srl',$val->history_srl)}" class="btn">{$lang->restore}</a>
+				<button type="button" class="btn" onclick="getDiff('diff{$val->history_srl}',{$oDocument->document_srl},{$val->history_srl})">{$lang->diff}</button>
+                <div id="historyContent{$val->history_srl}" class="hide history_content">
+					<!--@if($module_info->markup_type == 'xe_wiki_markup')-->
+					{$val->content}
+					<!--@else-->
+					{nl2br(htmlspecialchars($val->content))}
+					<!--@end-->
+				</div>
+				<div id="diff{$val->history_srl}" name="diff{$val->history_srl}" class="hide diff">
+				</div>				
+            </td>
+            <td class="author"><a href="#" onclick="return false;" class="member_{$val->member_srl}">{$val->nick_name}</a></td>
+            <td class="date">{zdate($val->regdate, 'Y.m.d H:i:s')}</td>
+        </tr>
+        <!--@end-->
+    </tbody>
+</table>
+
+    <input type="submit" class="btn" value="Compare selected revisions" />
+</form>
+<!--@if($page_navigation)-->
+    <div class="pagination">
+        <a href="{getUrl('page','')}" class="prevEnd">&lsaquo; {$lang->first_page}</a> 
+        <!--@while($page_no = $page_navigation->getNextPage())-->
+            <!--@if($page == $page_no)-->
+                <strong>{$page_no}</strong> 
+            <!--@else-->
+                <a href="{getUrl('page',$page_no)}">{$page_no}</a>
+            <!--@end-->
+        <!--@end-->
+        <a href="{getUrl('page',$page_navigation->last_page)}" class="nextEnd">{$lang->last_page} &rsaquo;</a>
+    </div>
+<!--@endif-->
+
+<include target="footer.html" />

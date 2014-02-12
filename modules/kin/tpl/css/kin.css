@@ -1,0 +1,8 @@
+#xeAdmin .crossTable th {
+    color: #666666;
+    text-align: left;
+}
+
+
+div.table table td p{margin-top:5px;white-space:normal !important}
+div.table table td{white-space:normal !important}

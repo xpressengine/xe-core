@@ -1,0 +1,32 @@
+<load target="member.js" />
+<load target="member.css" />
+<div class="visual">
+	<img src="mypage.jpg" alt="나의 활동 내역 - 나의 개인 정보에 대한 확인, 수정과 내가 올린 자료, 내가 올린 글, 나의 개발 참여 현황을 확인할 수 있습니다." />
+</div>
+<div class="path">
+	<a href="/" class="home"><span>Home</span></a> 
+	&gt; <a href="{getUrl('act','dispMemberInfo')}">마이페이지</a>
+	<block cond="$act=='dispMemberInfo'">&gt; <a href="{getUrl('act','dispMemberInfo')}">회원정보 보기</a></block>
+	<block cond="$act=='dispMemberModifyInfo'">&gt; <a href="{getUrl('act','dispMemberModifyInfo')}">회원정보 수정</a></block>
+	<block cond="$act=='dispMemberModifyPassword'">&gt; <a href="{getUrl('act','dispMemberModifyPassword')}">비밀번호 변경</a></block>
+	<block cond="$act=='dispMemberLeave'">&gt; <a href="{getUrl('act','dispMemberLeave')}">회원 탈퇴</a></block>
+	<block cond="$act=='dispMemberOwnDocument'">&gt; <a href="{getUrl('act','dispMemberOwnDocument')}">내가 올린 글</a></block>
+	<block cond="$act=='dispMemberScrappedDocument'">&gt; <a href="{getUrl('act','dispMemberScrappedDocument')}">내 스크랩 목록</a></block>
+	<block cond="$act=='dispMemberSavedDocument'">&gt; <a href="{getUrl('act','dispMemberSavedDocument')}">임시 저장함</a></block>
+	<block cond="$act=='dispProjectAccountManage'">&gt; <a href="{getUrl('act','dispProjectAccountManage')}">내 프로젝트 목록</a></block>
+	<block cond="$act=='dispCommunicationFriend'">&gt; <a href="{getUrl('act','dispCommunicationFriend')}">친구 목록</a></block>
+	<block cond="$act=='dispCommunicationMessages'">&gt; <a href="{getUrl('act','dispCommunicationMessages')}">쪽지함 보기</a></block>
+</div>
+<div class="lnb">
+	<h2><a href="{getUrl('act','dispMemberInfo')}">마이페이지</a></h2>
+	<ul>
+		<li class="x1"><a href="{getUrl('act','dispMemberInfo')}" class="active"|cond="$act=='dispMemberInfo'||$act=='dispMemberModifyInfo'||$act=='dispMemberModifyPassword'||$act=='dispMemberLeave'">회원정보 보기</a></li>
+		<li class="x2"><a href="{getUrl('act','dispMemberOwnDocument')}" class="active"|cond="$act=='dispMemberOwnDocument'">내가 올린 글</a></li>
+		<li class="x3"><a href="{getUrl('act','dispMemberScrappedDocument')}" class="active"|cond="$act=='dispMemberScrappedDocument'">내 스크랩 목록</a></li>
+		<li class="x4"><a href="{getUrl('act','dispMemberSavedDocument')}" class="active"|cond="$act=='dispMemberSavedDocument'">임시 저장함</a></li>
+		<li class="x5"><a href="{getUrl('act','dispProjectAccountManage')}" class="active"|cond="$act=='dispProjectAccountManage'">내 프로젝트 목록</a></li>
+		<li class="x6"><a href="{getUrl('act','dispCommunicationFriend')}" class="active"|cond="$act=='dispCommunicationFriend'">친구 목록</a></li>
+		<li class="x7"><a href="{getUrl('act','dispCommunicationMessages')}" class="active"|cond="$act=='dispCommunicationMessages'">쪽지함 보기</a></li>
+	</ul>
+</div>
+<div class="member">

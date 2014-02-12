@@ -1,0 +1,20 @@
+@charset "utf-8"; 
+.xeBanner { position:relative; z-index:100;}
+.xeBanner .section{ display:none; position:static; height:346px; padding-top:1px; margin:0 !important; }
+.xeBanner.v1 #v1,
+.xeBanner.v2 #v2,
+.xeBanner.v3 #v3,
+.xeBanner.v4 #v4{ display:block;}
+.xeBanner #v1{ background-position:0 0;}
+.xeBanner #v2{ background-position:0 -347px;}
+.xeBanner #v3{ background-position:0 -694px;}
+.xeBanner #v4{ background-position:0 -1041px;}
+.xeBanner .section h2,
+.xeBanner .section p{ position:relative; margin:0; z-index:-1; line-height:1.2;}
+.xeBanner .section a{ position:absolute; height:28px; top:206px; left:5px; font-size:11px; padding:0 8px; overflow:hidden; text-decoration:none;}
+.xeBanner .section a span{ position:relative; top:-22px;}
+.xeBanner .vNavigation{ position:absolute; top:267px; left:15px; margin:0; padding:0; list-style:none;}
+.xeBanner .vNavigation li{ float:left; margin-right:22px; font-size:0; line-height:0;}
+.xeBanner .vNavigation li button{ overflow:visible; padding:0; cursor:pointer; background-color:transparent; border:0; width:19px; height:19px; font-size:0; line-height:0;}
+.xeBanner .vNavigation li button span{ position:absolute; width:0; height:0; overflow:hidden; visibility:hidden; z-index:-1;}
+

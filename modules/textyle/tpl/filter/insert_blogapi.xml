@@ -1,0 +1,15 @@
+<filter name="insert_blogapi" module="textyle" act="procTextyleInsertBlogApi">
+  <form>
+    <node target="blogapi_site_url" required="true" />
+    <node target="blogapi_site_title" required="true" />
+    <node target="blogapi_type" required="true" />
+    <node target="blogapi_url" required="true" />
+    <node target="blogapi_user_id" required="true" />
+    <node target="blogapi_password" required="true" />
+  </form>
+  <parameter />
+  <response callback_func="completeInsertBlogApi">
+    <tag name="error" />
+    <tag name="message" />
+  </response>
+</filter>

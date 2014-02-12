@@ -1,0 +1,140 @@
+<!--#include("_tool_header.html")-->
+<!--%import("css/pagination.css",optimized=false)-->
+
+			<!-- Content -->
+			<div id="content">
+				
+				<!-- contentHeader -->
+				<div class="contentHeader guestbookHeader lineBottom">
+					<h3 class="h3">{$lang->textyle_second_menus[2]['dispTextyleToolCommunicationGuestbook']}</h3>
+				</div>
+				<!-- /contentHeader -->
+				
+				<!-- listHeader -->
+				<div class="listHeader">
+					<p class="info"> <!--@if($search_keyword)-->{sprintf($lang->search_result_count,$page_navigation->total_count)}<!--@else-->{sprintf($lang->total_result_count,$page_navigation->total_count)}<!--@end--></p>
+					<fieldset class="search">
+						<legend>{$lang->cmd_search}</legend>
+						<form action="{Context::getRequestUri()}">
+							<input type="hidden" name="act" value="{$act}" />
+							<input type="hidden" name="mid" value="{$mid}" />
+							<input type="hidden" name="vid" value="{$vid}" />
+							<input name="search_keyword" type="text" value="{$search_keyword}" title="{$lang->cmd_search}" class="iText" />
+							<span class="btnGray medium"><input type="submit" value="{$lang->cmd_search}" /></span>
+						</form>
+					</fieldset>
+				</div>
+				<!-- /listHeader -->
+				
+				<!-- Table Data -->
+				<fieldset>
+					<legend>{$lang->manage_guestbook}</legend>
+					<form action="" method="post">
+						<table border="1" cellspacing="0" summary="{$lang->content_list}" class="tableData">
+							<thead>
+								<tr>
+									<th scope="col">
+										<input type="checkbox" class="inputCheck" onclick="jQuery('input.boxlist').click()"/>
+									</th>
+									<th scope="col">{$lang->avatar}</th>
+									<th scope="col" class="replyArea">{$lang->comment}</th>
+									<th scope="col">{$lang->email_address}</th>
+									<th scope="col">{$lang->ipaddress}</th>
+									<th scope="col">{$lang->status}</th>
+								</tr>
+							</thead>
+							<tbody>
+								<!--@if(count($guestbook_list)==0)-->
+									<tr>
+                                        <td class="noData" colspan="6"><p>{$lang->no_guestbook}</p></td>
+									</tr>
+
+								<!--@else-->
+									<!--@foreach($guestbook_list as $k => $v)-->
+									<tr<!--@if($v->parent_srl>0)--> class="indent"<!--@end-->>
+										<td>
+											<input type="checkbox" name="textyle_guestbook_srl" value="{$v->textyle_guestbook_srl}" class="inputCheck boxlist" />
+										</td>
+										<td class="thumb">
+                                            <!--@if($v->profile_image)-->
+                                            <img src="{$v->profile_image}" alt="{$v->nick_name}" />
+                                            <!--@else-->
+                                            <img height="39" width="39" alt="" src="img/iconEmoticonDefault.gif" class="author"/>
+                                            <!--@end-->
+                                        </td>
+										<td class="replyArea">
+											<dl>
+												<dt><span class="member_{$v->member_srl}"><strong>{$v->nick_name}</strong></span> <span class="yymmdd">{zdate($v->regdate,"Y.m.d")}</span> <span class="hhmm">{zdate($v->regdate,"H:i")}</span></dt>
+												<dd>{$v->content}</dd>
+											</dl>
+										</td>
+										<td class="email">{$v->email_address}&nbsp;</td>
+										<td class="ipAddress">{$v->ipaddress}</td>
+										<td class="state"><!--@if($v->is_secret<0)-->{$lang->public}<!--@else--><em>{$lang->secret}</em><!--@end--></td>
+									</tr>
+									<tr class="trBtnArea">
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>
+										<td colspan="4">
+											<div class="reAction">
+												<!--@if($v->parent_srl==0)-->
+												<span class="btnGray small"><a href="{getUrl('','mid',$mid,'act','dispTextyleToolCommunicationGuestbookReply','textyle_guestbook_srl',$v->textyle_guestbook_srl)}">{$lang->cmd_reply_comment}</a></span>
+												<!--@end-->
+											</div>
+											<div class="control">
+												<span class="btnGray small"><button type="button" onclick="updateGuestbookItemChangeSecret({$v->textyle_guestbook_srl},{$page})"><!--@if($v->is_secret<0)-->{$lang->private}<!--@else-->{$lang->public}<!--@end--></button></span> 
+												<span class="btnGray small"><button type="button" onclick="openLayerAddDenyItem('{$v->textyle_guestbook_srl}','_addDenyGuestbookList')">{$lang->cmd_deny}</button></span> 
+												<span class="btnGray small"><button type="button" onclick="if(confirm('{$lang->confirm_delete}')) deleteGuestbookItem({$v->textyle_guestbook_srl},{$page});return false;">{$lang->cmd_delete}</button></span>
+											</div>
+										</td>
+									</tr>
+											
+								<!--@end-->
+								<!--@end-->
+						</tbody>
+						</table>
+						
+						<div class="listFooter">
+							
+							<!-- Change-->
+							<div class="change">
+								<p class="p1">{$lang->selected_articles}</p>
+								
+								<span class="btnGray large"><button type="button" onclick="openLayerAddDeny('_addDenyGuestbookList')">{$lang->cmd_deny}</button></span>
+								<span class="btnGray large"><button type="button" onclick="deleteGuestbookItems({$page})"><img src="img/buttonTableDataX.gif" width="7" height="7" alt="" class="icon" />{$lang->cmd_delete}</button></span>
+								
+							</div>
+							<!-- /Change -->
+							
+							<!--@if($page_navigation)-->
+							<!-- Pagination -->
+							<div class="pagination">
+								<a href="{getUrl('page','','mid',$mid)}" class="prev"><span>{$lang->first_page}</span></a>
+								<!--@while($page_no = $page_navigation->getNextPage())-->
+									<!--@if($page == $page_no)-->
+										<strong>{$page_no}</strong> 
+									<!--@else-->
+										<a href="{getUrl('page',$page_no,'mid',$mid)}">{$page_no}</a> 
+									<!--@end-->
+								<!--@end-->
+
+								<a href="{getUrl('page',$page_navigation->last_page,'module_srl','')}" class="next"><span>{$lang->last_page}</span></a>
+							</div>
+							<!-- /Pagination -->
+							<!--@end-->
+						</div>
+						
+					</form>
+				</fieldset>
+				<!-- /Table Data -->
+				
+			</div>
+			<hr />
+			<!-- /Content -->
+	
+			<!-- Extension -->
+				<!--#include("_tool_menu.html")-->
+			<!-- Extension -->
+
+<!--#include("_layerAddDeny.html")-->
+<!--#include("_tool_footer.html")-->

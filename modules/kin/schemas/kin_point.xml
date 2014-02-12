@@ -1,0 +1,4 @@
+<table name="kin_point">
+    <column name="document_srl" type="number" size="11" notnull="notnull" default="0" primary_key="primary_key" />
+    <column name="point" type="number" size="11" notnull="notnull" />
+</table>

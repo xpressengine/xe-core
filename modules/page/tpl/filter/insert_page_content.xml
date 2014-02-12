@@ -1,0 +1,17 @@
+<filter name="insert_page_content" module="page" act="procPageAdminInsertContent" confirm_msg_code="confirm_submit">
+    <form>
+        <node target="module_srl" required="true" />
+    </form>
+    <parameter>
+        <param name="module_srl" target="module_srl" />
+        <param name="mid" target="mid" />
+        <param name="content" target="content" />
+    </parameter>
+    <response callback_func="completeInsertPageContent">
+        <tag name="error" />
+        <tag name="message" />
+        <tag name="mid" />
+        <tag name="module_srl" />
+        <tag name="page" />
+    </response>
+</filter>

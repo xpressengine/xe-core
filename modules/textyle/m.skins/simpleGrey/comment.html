@@ -1,0 +1,55 @@
+		<ul id="cl" class="rp tgo open">
+			{@ $_comment_list = $oDocument->getComments() }
+			{@ $start = true }
+			{@ $depth = 0 }
+			<!--@foreach($_comment_list as $key => $comment)-->
+			<!--@if(!$start && $comment->get('depth') == $depth)-->
+			</li>
+			<!--@end-->
+			<!--@if($comment->get('depth') > $depth)-->
+			<ul>
+			<!--@else-->
+			<!--@while($comment->get('depth') < $depth)-->
+			</li>
+			</ul>
+			{@ $depth -= 1 }
+			<!--@end-->
+			<!--@endif-->
+			<li>
+				<p>{$comment->getContent(false)}</p>
+				<em>{$comment->getNickName()}</em>
+				<span>{$comment->getRegdate("Y.m.d")}</span>
+				<!--@if($logged_info)-->
+					<!--@if($logged_info->is_site_admin || $comment->get('member_srl')==$logged_info->member_srl)-->
+						<a href="#" class="md" onclick="if(confirm('{$lang->confirm_delete}')) deleteCommentItem({$comment->get('comment_srl')})">{$lang->cmd_delete}</a>
+					<!--@end-->
+				<!--@else-->
+					<!--@if(!$comment->get('member_srl'))-->
+						<a href="{getUrl('','act','dispTextylePasswordForm','mid',$this->mid,'type','delete_comment','comment_srl',$comment->comment_srl,'document_srl',$comment->document_srl)}" class="md">{$lang->cmd_delete}</a>
+					<!--@end-->
+				<!--@end-->
+
+				<!--@if($textyle->isEnableComment() )-->
+				<a href="{getUrl('','act','dispTextyleCommentReply','mid',$this->mid,'comment_srl',$comment->comment_srl,'document_srl',$comment->document_srl)}" class="md">{$lang->cmd_reply}</a>
+				<!--@end-->
+				{@ $start = false }
+				{@ $depth = $comment->get('depth') }
+			<!--@endforeach-->
+			<!--@while($depth > 0)-->
+			</li>
+			</ul>
+			{@ $depth -= 1}
+			<!--@end-->
+			</li>
+		</ul>
+			<!--@if($oDocument->comment_page_navigation)-->
+				<div id="clpn" class="pn">
+				<!--@if($oDocument->comment_page_navigation->cur_page != 1)-->
+				<a href="#" onclick="loadPage({$oDocument->document_srl}, {$oDocument->comment_page_navigation->cur_page-1}); return false;">&lsaquo; {$lang->cmd_prev}</a>
+				<!--@endif-->
+				<strong id="curpage">{$oDocument->comment_page_navigation->cur_page} / {$oDocument->comment_page_navigation->last_page}</strong>
+				<!--@if($oDocument->comment_page_navigation->cur_page != $oDocument->comment_page_navigation->last_page)-->
+				<a href="#" onclick="loadPage({$oDocument->document_srl}, {$oDocument->comment_page_navigation->cur_page+1}); return false;">{$lang->cmd_next} &rsaquo;</a>
+				<!--@endif-->
+				</div>
+			<!--@endif-->

@@ -1,0 +1,16 @@
+<query id="getTextyleSupporter" action="select">
+    <tables>
+        <table name="textyle_supporter" />
+    </tables>
+    <columns>
+        <column name="*" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" notnull="notnull" />
+        <condition operation="equal" column="textyle_supporter_srl" var="textyle_supporter_srl" pipe="and" />
+        <condition operation="equal" column="member_srl" var="member_srl" pipe="and" />
+        <condition operation="equal" column="nick_name" var="nick_name" pipe="and" />
+        <condition operation="equal" column="homepage" var="homepage" pipe="and" />
+        <condition operation="equal" column="regdate" var="regdate" pipe="and" />
+    </conditions>
+</query>

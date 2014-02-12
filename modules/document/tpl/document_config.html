@@ -1,0 +1,21 @@
+<!--#include("header.html")-->
+
+<form action="./" method="post">
+	<input type="hidden" name="module" value="document" />
+	<input type="hidden" name="act" value="procDocumentAdminInsertConfig" />
+	<table class="x_table x_table-striped x_table-hover">
+		<tr>
+			<th scope="col">{$lang->thumbnail_type}</th>
+		</tr>
+		<tr>
+			<td>
+				<input type="radio" name="thumbnail_type" value="crop" <!--@if($config->thumbnail_type != 'ratio')-->checked="checked"<!--@end-->/> {$lang->thumbnail_crop} <br />
+				<input type="radio" name="thumbnail_type" value="ratio" <!--@if($config->thumbnail_type == 'ratio')-->checked="checked"<!--@end-->/> {$lang->thumbnail_ratio}
+			</td>
+		</tr>
+	</table>
+    <div class="btnArea">
+		<input class="btn" type="submit" value="{$lang->cmd_registration}" />
+		<input class="btn" type="button" value="{$lang->cmd_delete_all_thumbnail}" onclick="doDeleteAllThumbnail()"/>
+	</div>
+</form>

@@ -1,0 +1,15 @@
+<filter name="delete_package" module="resource" act="procResourceDeletePackage">
+    <form>
+        <node target="mid" required="true" />
+        <node target="package_srl" required="true" />
+    </form>
+    <parameter>
+        <param name="vid" target="vid" />
+        <param name="mid" target="mid" />
+        <param name="package_srl" target="package_srl" />
+    </parameter>
+    <response callback_func="completeDeletePackage">
+        <tag name="error" />
+        <tag name="message" />
+    </response>
+</filter>

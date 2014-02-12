@@ -1,0 +1,90 @@
+<load target="filter/insert_textyle.xml" />
+<include target="./header.html" />
+<ul class="x_nav x_nav-tabs">
+	<li class="x_active"|cond="$act=='dispTextyleAdminList'"><a href="{getUrl('act','dispTextyleAdminList','module_srl','')}">{$lang->cmd_textyle_list}</a></li>
+	<li class="x_active"|cond="$act=='dispTextyleAdminInsert'"><a href="{getUrl('act','dispTextyleAdminInsert','module_srl')}">{$lang->cmd_textyle_creation}</a></li>
+	<li class="x_active"|cond="$act=='dispTextyleAdminCustomMenu'"><a href="{getUrl('act','dispTextyleAdminCustomMenu','module_srl')}">{$lang->cmd_textyle_custom_menu}</a></li>
+	<li class="x_active"|cond="$act=='dispTextyleAdminBlogApiConfig'"><a href="{getUrl('act','dispTextyleAdminBlogApiConfig','module_srl')}">{$lang->cmd_textyle_blogapi_service}</a></li>
+	<li class="x_active"|cond="$act=='dispTextyleAdminExportList'"><a href="{getUrl('act','dispTextyleAdminExportList','module_srl')}">{$lang->cmd_textyle_export_request}</a></li>
+	<li class="x_active"|cond="$act=='dispTextyleAdminExtraMenu'"><a href="{getUrl('act','dispTextyleAdminExtraMenu','module_srl')}">{$lang->cmd_textyle_extra_menu_config}</a></li>
+</ul>
+
+<table class="x_table x_table-striped x_table-hover">
+	<caption>
+		<strong>Total {number_format($page_navigation->total_count)}, Page {number_format($page_navigation->cur_page)}/{number_format($page_navigation->total_page)}</strong>
+	</caption>
+	<thead>
+		<tr>
+			<th scope="col">{$lang->browser_title}</th>
+			<th scope="col">{$lang->domain}</th>
+			<th scope="col">{$lang->user_id}({$lang->nick_name})</th>
+			<th scope="col">{$lang->regdate}</th>
+			<th scope="col">{$lang->cmd_setup}</th>
+			<th scope="col">{$lang->cmd_delete}</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr loop="$textyle_list => $no,$val">
+			<td><a href="{getSiteUrl($val->domain)}" title="{htmlspecialchars($lang->cmd_view)}">{$val->getBrowserTitle()}</a></td>
+			<td><a href="{getSiteUrl($val->domain)}">{$val->domain}</a></td>
+			<td>
+				<!--@if($val->getUserId())-->
+				<a href="#popup_menu_area" class="member_{$val->getMemberSrl()}">{$val->getUserId()}({$val->getNickName()})</a>
+				<!--@else-->
+				-
+				<!--@end-->
+			</td>
+			<td>{zdate($val->get('regdate'),"Y-m-d")}</td>
+			<td>
+				<a href="{getUrl('act','dispTextyleAdminInsert','module_srl',$val->getModuleSrl())}" class="xe-ui-button-gray">{$lang->cmd_setup}</a>
+			</td>
+			<td>
+				<a href="{getUrl('act','dispTextyleAdminDelete','module_srl',$val->getModuleSrl())}" title="{htmlspecialchars($lang->cmd_delete)}" class="xe-ui-button-gray">{$lang->cmd_delete}</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<div class="x_clearfix">
+<form action="" class="x_pull-left">
+	<input type="hidden" name="error_return_url" value="" />
+	<input type="hidden" name="module" value="{$module}" />
+	<input type="hidden" name="act" value="{$act}" />
+	<input cond="$search_keyword" type="hidden" name="search_keyword" value="{$search_keyword}" />
+	<input cond="$search_target" type="hidden" name="search_target" value="{$search_target}" />
+	{@ $page = $page_navigation->cur_page}
+	<a href="{getUrl('page', '')}" class="xe-ui-button-gray pagination first">&laquo;</a>
+	<block cond="$page_navigation->first_page + $page_navigation->page_count > $page_navigation->last_page && $page_navigation->page_count != $page_navigation->total_page">
+		{@$isGoTo = true}
+		<a href="{getUrl('page', '')}" class="xe-ui-button-gray pagination">1</a>
+		<a href="#goTo" class="tgAnchor" title="{$lang->cmd_go_to_page}">...</a>
+	</block>
+	<!--@while($page_no = $page_navigation->getNextPage())-->
+	{@$last_page = $page_no}
+	<a href="#" cond="$page_no == $page" class="xe-ui-button-gray pagination disabled">{$page_no}</a>
+	<a cond="$page_no != $page" href="{getUrl('page', $page_no)}" class="xe-ui-button-gray pagination">{$page_no}</a>
+	<!--@end-->
+	<block cond="$last_page != $page_navigation->last_page">
+		{@$isGoTo = true}
+		<a href="#goTo" class="tgAnchor" title="{$lang->cmd_go_to_page}">...</a>
+		<a href="{getUrl('page', $page_navigation->last_page)}" class="xe-ui-button-gray pagination">{$page_navigation->last_page}</a>
+	</block>
+	<a href="{getUrl('page', $page_navigation->last_page)}" class="xe-ui-button-gray pagination last">&raquo;</a>
+	<span cond="$isGoTo" id="goTo" class="tgContent">
+		<input name="page" title="{$lang->cmd_go_to_page}" />
+		<button type="submit">Go</button>
+	</span>
+</form>
+<form action="./" method="get" id="search_fo" class="search x_input-append x_pull-right" style="margin:0">
+	<input type="hidden" value="{$module}" name="module"/>
+	<input type="hidden" value="{$act}" name="act"/>
+	<select name="search_target" style="width:auto;margin-right:4px">
+		<option value="user_id" selected="selected"|cond="$search_target == 'user_id'">{$lang->user_id}</option>
+		<option value="nick_name" selected="selected"|cond="$search_target == 'nick_name'">{$lang->nick_name}</option>
+		<option value="user_name" selected="selected"|cond="$search_target == 'user_name'">{$lang->user_name}</option>
+		<option value="domain" selected="selected"|cond="$search_target == 'domain'">{$lang->domain}</option>
+		<option value="regdate" selected="selected"|cond="$search_target == 'regdate'">{$lang->regdate}</option>
+	</select>
+	<input type="search" name="search_keyword" value="{$search_keyword}" required />
+	<input type="submit" class="x_btn x_btn-inverse" value="{$lang->cmd_search}" />
+</form>
+</div>

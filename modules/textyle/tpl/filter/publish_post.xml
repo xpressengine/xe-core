@@ -1,0 +1,13 @@
+<filter name="publish_post" module="textyle" act="procTextylePostPublish">
+  <form>
+    <node target="document_srl" required="true" />
+    <node target="category_srl" required="true" />
+  </form>
+  <response callback_func="completePostwrite">
+    <tag name="error" />
+    <tag name="message" />
+    <tag name="mid" />
+    <tag name="document_srl" />
+    <tag name="category_srl" />
+  </response>
+</filter>

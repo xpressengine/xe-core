@@ -1,0 +1,50 @@
+
+			{@ $curDate = null}
+			<!--@foreach($changesets as $changeset)-->
+			<!--@if(!$curDate || $curDate != zdate($changeset->date, "Y.m.d"))--> <!--table Open-->
+			<!--@if($curDate)--></tbody></table><!--@endif-->
+			{@ $curDate = zdate($changeset->date, "Y.m.d")}
+			<table border="1" cellspacing="0" class="pxeT3">
+				<caption><!--@if($curDate==date("Y.m.d"))--><em>{$curDate}</em><!--@else-->{$curDate}<!--@end--> <sup>{zdate($changeset->date,"D")}</sup></caption>
+				<thead>
+					<tr>
+						<th scope="col">{$lang->time}</th>
+						<th scope="col">{$lang->type}</th>
+						<th scope="col">ID/{$lang->revision}</th>
+						<th scope="col">{$lang->description}</th>
+						<th scope="col">{$lang->contributor}</th>
+						<th scope="col"><button type="button" class="toggleTable" onclick="button_table_click(this);"><span class="alt">열기/닫기</span></button></th>
+					</tr>
+				</thead>
+				<tbody>
+			<!--@endif--> <!--/table Open-->
+
+					<tr>
+						<td>{zdate($changeset->date,"H:i")}</td>
+						<!--@if($changeset->type)-->
+						{@ $oIssue = $issues[$changeset->target_srl];}
+						<td>{$lang->timeline_msg[$changeset->type]}</td>
+						<td><a href="{getUrl('','document_srl',$changeset->target_srl)}">#{$changeset->target_srl}</a></td>
+						<!--@else-->
+						<td>{$lang->target_list["commit"]}</td>
+						<td><a href="{getUrl('act','dispIssuetrackerViewSource','erev',$changeset->revision,'type','log')}">r{$changeset->revision}</a></td>
+						<!--@endif-->
+						<td class="title">
+							<!--@if($changeset->type)-->
+							{$oIssue->getTitle(50)}
+							<p class="pData">
+								<!--@if($changeset->type=="changed")-->
+								{$changeset->message}
+								<!--@else-->
+								{$oIssue->getContentText(80)}
+								<!--@endif-->
+							</p>
+							<!--@else-->
+							{$changeset->message}
+							<!--@end-->
+						</td>
+						<td class="aLeft">{$changeset->author}</td>
+						<td><!--@if($changeset->type)--><button type="button" class="toggleTr" onclick="button_tr_click(this);"><span class="alt">{$lang->cmd_openclose}</span></button><!--@end--></td>
+					</tr>
+			<!--@endforeach-->
+			<!--@if($curDate)--></tbody></table><!--@endif-->

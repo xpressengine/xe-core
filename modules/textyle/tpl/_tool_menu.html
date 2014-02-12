@@ -1,0 +1,53 @@
+{@$_menu_class=array('dashboard','post','comment','statistics','design','setup')}
+			<div class="extension e1">
+
+				<div class="section" id="tool_navigation">
+					<h3>Navigation</h3>
+					<ul>
+					{@$i=0}
+                        <!--@foreach($lang->textyle_first_menus as $key => $val)-->
+                            <!--@if(!in_array($val, $custom_menu->hidden_menu))-->
+                            {@$_sub = $lang->textyle_second_menus[$key]}
+                            {@$_attached = $custom_menu->attached_menu[$key]}
+                            <!--@if($act==$val[0]||in_array($act,array_keys($_sub)))-->{@$_sel="active"}<!--@else-->{$_sel=""}<!--@end-->
+                            
+							<li class="{$_menu_class[$i++]} {$_sel}<!--@if(!count($_sub))--> noChild<!--@end-->">
+ 
+                            <!--@if($val[0])-->
+                                <a href="{getSiteUrl($textyle->domain,'','mid',$mid,'act',$val[0])}"><span>{$val[1]}</span></a>
+                            <!--@else-->
+                                <a href="#nav"><span>{$val[1]}</span></a>
+                            <!--@end-->
+
+                            <!--@if(count($_sub) || count($_attached))-->
+                            <ul>
+                                <!--@foreach($_sub as $k => $v)-->
+                                <!--@if(!in_array(strtolower($k), $custom_menu->hidden_menu) && $k != 'dispTextyleToolConfigEditorComponents')-->
+								<li<!--@if($k==$act)--> class="active"<!--@end-->><a href="{getSiteUrl($textyle->domain,'','mid',$mid,'act',$k)}">{$v}</a></li>
+                                <!--@end-->
+                                <!--@end-->
+                                <!--@foreach($_attached  as $k => $v)-->
+								<li<!--@if($k==$act)--> class="active"<!--@end-->><a href="{getSiteUrl($textyle->domain,'','mid',$mid,'act',$k)}">{$v}</a></li>
+                                <!--@end-->
+                            </ul>
+                            <!--@end-->
+                            <!--@end-->
+                        </li>
+                        <!--@end-->
+					</ul>
+				</div>
+				
+				<p class="goToHelp">
+					<a href="http://code.google.com/p/xe-textyle/issues/list" target="_blank" title="{$lang->cmd_new_window}">{$lang->textyle_bug_report}</a>
+				</p>
+
+				<div class="language">
+					<button type="button" onclick="jQuery('#selectLang').toggleClass('hide'); return false;" class="selected" title="{$lang_type}">{$lang_supported[$lang_type]}</button>
+					<ul class="hide" id="selectLang">
+						<!--@foreach($lang_supported as $key => $val)--><!--@if($key!= $lang_type)-->
+						<li><button type="button" onclick="doChangeLangType('{$key}');return false;">{$val}</button></li>
+						<!--@end--><!--@end-->
+					</ul>
+				</div>
+				
+			</div>

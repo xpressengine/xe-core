@@ -1,0 +1,26 @@
+<query id="getRefererHostList" action="select">
+    <tables>
+        <table name="documents" alias="documents" />
+        <table name="textyle_referer_hosts" alias="referer" />
+    </tables>
+    <columns>
+        <column name="documents.*" />
+        <column name="referer.textyle_host_srl" alias="host_srl" />
+        <column name="referer.host" alias="host" />
+        <column name="referer.visitor" alias="visitor" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="referer.module_srl" var="module_srl" filter="number" notnull="notnull" />
+        <condition operation="equal" column="documents.document_srl" default="referer.document_srl" filter="number" notnull="notnull" pipe="and" />
+        <condition operation="equal" column="referer.regdate" var="day" pipe="and" />
+        <condition operation="like_prefix" column="referer.regdate" var="month" pipe="and" />
+        <condition operation="more" column="referer.regdate" var="start_date" pipe="and" />
+        <condition operation="less" column="referer.regdate" var="end_date" pipe="and" />
+    </conditions>
+    <navigation>
+		<index var="list_order" default="referer.visitor" order="desc" />
+		<list_count var="list_count" default="20" />
+        <page_count var="page_count" default="10" />
+        <page var="page" default="1" />
+    </navigation>
+</query>

@@ -1,0 +1,5 @@
+<filter name="insert_extra_menu_config" module="textyle" act="procTextyleAdminInsertExtraMenuConfig" confirm_msg_code="confirm_submit">
+    <form />
+    <parameter />
+    <response />
+</filter>

@@ -1,0 +1,26 @@
+<query id="getExport" action="select">
+    <tables>
+        <table name="modules" alias="modules" />
+        <table name="textyle_export" alias="export" />
+        <table name="member" alias="member" />
+        <table name="sites" alias="sites" />
+    </tables>
+    <columns>
+        <column name="sites.domain" alias="domain" />
+        <column name="member.nick_name" alias="nick_name" />
+        <column name="member.user_name" alias="user_name" />
+        <column name="member.user_id" alias="user_id" />
+        <column name="member.email_address" alias="email_address" />
+        <column name="export.export_status" alias="export_status" />
+        <column name="export.export_type" alias="export_type" />
+        <column name="export.regdate" alias="regdate" />
+        <column name="export.export_file" alias="export_file" />
+        <column name="export.export_date" alias="export_date" />
+    </columns>
+    <conditions>
+		<condition operation="equal" column="export.site_srl" var="site_srl" filter="number" pipe="and" />
+        <condition operation="equal" column="sites.site_srl" default="modules.site_srl" pipe="and" />
+        <condition operation="equal" column="export.member_srl" default="member.member_srl" filter="number" pipe="and" />
+        <condition operation="equal" column="modules.module_srl" default="export.module_srl" filter="number" pipe="and" />
+    </conditions>
+</query>

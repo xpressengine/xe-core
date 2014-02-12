@@ -1,0 +1,32 @@
+<query id="getMyQuestionsUnsolved" action="select">
+    <tables>
+        <table name="documents" alias="doc"/>
+        <table name="kin_thread" alias="kin" type="left join">
+            <conditions>
+                <condition operation="equal" column="doc.document_srl" default="kin.document_srl" filter="number" notnull="notnull" />
+            </conditions>
+        </table>
+    </tables>
+    <columns>
+        <column name="doc.*" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="doc.module_srl" var="module_srl" filter="number" />
+		<group pipe="and">
+			<condition operation="in" column="doc.category_srl" var="category_srl" />
+			<condition operation="in" column="doc.category_srl" var="category_childs" pipe="or"/>
+		</group>
+        <condition operation="equal" column="doc.member_srl" var="member_srl" filter="number" pipe="and" />
+        <group pipe="and">
+            <condition operation="like" column="doc.title" var="search_keyword" />
+            <condition operation="like" column="doc.content" var="search_keyword" pipe="or" />
+        </group>
+		 <condition operation="null" column="kin.selected" default="1" pipe="and" />
+    </conditions>
+    <navigation>
+        <index var="sort_index" default="doc.list_order" order="order_type" />
+        <list_count var="list_count" default="20" />
+        <page_count var="page_count" default="10" />
+        <page var="page" default="1" />
+    </navigation>
+</query>

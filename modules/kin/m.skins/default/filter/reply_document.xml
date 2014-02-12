@@ -1,0 +1,10 @@
+<filter name="reply_document" module="kin" act="procKinInsertReply">
+    <form>
+        <node target="content" required="true" />
+    </form>
+    <response callback_func="completeWriteReply">
+        <tag name="error" />
+        <tag name="message" />
+        <tag name="document_srl" />
+    </response>
+</filter>

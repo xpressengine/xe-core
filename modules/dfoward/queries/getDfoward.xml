@@ -1,0 +1,11 @@
+<query id="getDfoward" action="select">
+    <tables>
+        <table name="dfoward" />
+    </tables>
+    <columns>
+        <column name="*" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="dfoward_srl" var="dfoward_srl" filter="number" notnull="notnull" />
+    </conditions>
+</query>

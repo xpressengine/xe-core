@@ -1,0 +1,14 @@
+<query id="insertExport" action="insert">
+    <tables>
+        <table name="textyle_export" />
+    </tables>
+    <columns>
+        <column name="site_srl" var="site_srl" filter="number" notnull="notnull" />
+        <column name="module_srl" var="module_srl" filter="number" notnull="notnull" />
+        <column name="member_srl" var="member_srl" filter="number" notnull="notnull" />
+        <column name="export_status" var="export_status" default="R" />
+        <column name="export_type" var="export_type" default="ttxml" />
+        <column name="regdate" var="regdate" default="curdate()" />
+        <column name="export_date" var="regdate" default="" />
+    </columns>
+</query>

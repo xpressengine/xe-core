@@ -1,0 +1,13 @@
+<query id="updateTextyleInfo" action="update">
+    <tables>
+        <table name="textyle" />
+    </tables>
+	<columns>
+		<column name="textyle_content" var="textyle_content" default="" />
+        <column name="textyle_title" var="textyle_title" default="" />
+		<column name="timezone" var="timezone" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" notnull="notnull" />
+    </conditions>
+</query>

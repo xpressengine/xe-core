@@ -1,0 +1,185 @@
+<div class="post">
+<!--@foreach($document_list as $document)-->
+    {@ $url = $root_url . $module_name . '/' . $document->alias_title}
+    <h1 class="postTitle"><a href="{$url}">{$document->getTitle()}</a></h1>
+    {@ $views = $document->get('readed_count')}
+    <p class="postMeta">{$lang->posted} <span class="yymmdd" title="{date('Y/m/d @ H:i', $date)}">{$document->variables['relative_date']}</span> in <span class="category">{$category_list[$document->get('category_srl')]->title}</span> category by <a href="#" class="author member_{$document->get('member_srl')}" onclick="return false;">{$document->get('user_id')}</a>
+    <!--@if($logged_info->is_site_admin)-->
+        <!--@$edit_url=getFullSiteUrl()."/".$vid."/?mid=textyle&vid=blog&document_srl=".$document->document_srl."&act=dispTextyleToolPostManageWrite";--><!--@end-->
+        <a href="{$edit_url}" class="editPost">Edit</a></p>
+    <!--@end-->
+    <div class="addthis_toolbox addthis_default_style" addthis:url="{$document->variables['url']}">
+        <a class="addthis_button_facebook_like" fb:like:layout="standard" fb:like:width="310"></a>
+        <a class="addthis_button_tweet"></a>
+        <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    </div>
+    <div class="textyleContent">
+        {$post_prefix}
+        <!--@if ($nr_documents == 1)-->
+        {$document->getContent(false)}
+        <!--@else-->
+        {$document->getPartialContent()}
+        <!--@end-->
+        {$post_suffix}
+    </div>
+    <div class="section">
+        <img id="related-posts" class="zbxe_widget_output" list_count="5" display_related="Y" widget="newest_tutorials" skin="default" thumbnail="Y" module="textyle" target_category="{$document->module_srl}" document_srl="{$document->document_srl}"/>
+    </div>
+    <br/>
+    <a name="comment"></a>
+    <a name="trackback"></a>
+    <div id="feedbacks">
+        <div class="feedbackTitle">
+            <span id="commentToggle">{$document->getCommentCount()} comments</span>
+            <span id="trackbackToggle">{$document->getTrackbackCount()} trackbacks</span>
+        </div>
+        <div id="comments">
+            <!--#include("./comment.html")-->
+            <!--@if($document->allowComment() && $textyle->isEnableComment())-->
+            <div id="editor-box">
+                <span class="button blue" id="loadEditorButton"><a onclick="loadCommentForm({$document->document_srl})">{$lang->insert_comment}</a></span>
+            </div>
+            <!--@else-->
+            <p>{$lang->disable_comment}</p>
+            <!--@end-->
+        </div>
+        <!--@if($document->allowTrackback() || $document->getTrackbackCount())-->
+        <div class="trackbacks" id="trackbacks">
+            <!--@foreach($document->getTrackbacks() as $key => $val)-->
+            <div class="trackback" id="trackback_{$val->trackback_srl}">
+                <div class="meta">
+                    <span class="sprite userIcon"></span>
+                <span class="author">
+                    <a href="{$val->url}">{htmlspecialchars($val->blog_name)}</a>
+                    <span class="date">{zdate($val->regdate, "Y.m.d")}</span>
+                </span>
+                </div>
+                <div class="message">
+                    {$val->excerpt}
+                </div>
+            </div>
+            <!--@end-->
+        </div>
+        <!--@end-->
+    </div>
+<!--@end-->
+</div><div class="e1">
+    <div id="subscribe-box">
+        <div class="block-title"><span>{$lang->subscribe}</span></div>
+		<g:plus href="https://plus.google.com/117678621522135486540" rel="publisher" width="223" height="131" theme="light"></g:plus>
+        <div id="fb-root"></div><div class="fb-like" data-href="http://www.facebook.com/XpressEngine" data-send="false" data-width="225" data-show-faces="true"></div>
+        <div class="twitter-box"><a href="https://twitter.com/xeglobal" class="twitter-follow-button">Follow @CUBRID</a></div>
+        <div class="rss-box"><a href="{getUrl('mid','','entry','').'/rss'}" title="Subscribe to CUBRID RSS"><span class="sprite rss"></span><span style="margin:5px 0 0 5px">{$lang->subscribe_blog}</span></a></div>
+    </div>
+    <!--@if($logged_info->is_site_admin)-->
+    <div class="section">
+        <div class="block-title"><span>{$lang->admin_blog}</span></div>
+        <span class="button blue"><a href="{getUrl('act','dispTextyleToolDashboard','mid',$module_info->mid,'vid', $module_info->site_id)}">{$lang->dashboard}</a></span>
+        <span class="button green"><a href="{getUrl('act','dispTextyleToolPostManageWrite','mid',$module_info->mid,'vid', $module_info->site_id)}">{$lang->new_post}</a></span>
+    </div>
+    <!--@end-->
+    <div class="section">
+        <div class="block-title"><span>{$lang->categories}</span></div>
+       <div class="widgetContainer">
+			<ul>
+			<!--@foreach($category_list as $key => $val)-->
+				<!--@if($val->document_count)--><li class="<!--@if($val->last)-->nav_tree_last<!--@end--> <!--@if($val->expand)-->nav_tree_on<!--@else-->nav_tree_off<!--@end--> <!--@if($category==$val->category_srl)-->active<!--@end-->" id="category_parent_{$val->category_srl}">
+					{str_repeat('&nbsp;&nbsp;&nbsp;',$val->depth)}	
+					<!--@$link = "/blog/categories/".strtolower(str_replace(".","-",str_replace("&amp;","",str_replace(" ","-",$val->text))))."/";-->
+					<a href="{getUrl('','category',$val->text)}" class="nav_tree_label <!--@if($val->selected)-->selected<!--@end-->">{$val->text}</a>
+					<span class="sum">({$val->document_count})</span>
+				<!--@end-->
+			<!--@end-->
+			<!--@for($i=0;$i<$_pDepth;$i++)-->
+				</ul>
+				</li>
+			<!--@end-->
+		<!--@end-->
+			</ul>
+		</div>
+    </div><div class="section" id="tagCloud">
+        <div class="block-title"><span>{$lang->tagged}</span></div>
+        <!--@foreach($recentTags as $tag => $tagCount)-->
+            <div><a class="tag" href="/{$module_name}/tags/{$tag}/" rel="tag">{$tag}</a></div>
+        <!--@end-->
+    </div><div class="section" style="font-size:15px">
+        <div>{$lang->posted} <strong title="{date('Y/m/d @ H:i', $date)}">{$document->variables['relative_date']}</strong></div>
+        <div>{$lang->viewed} <strong>{$views} {$views == 1 ? $lang->time : $lang->times}</strong></div>
+    </div>
+    <div class="section" id="sns-buttons">
+        <div class="block-title"><span>{$lang->share_this_article}</span></div>
+        <span class="sns-buttons addthis_toolbox addthis_default_style" addthis:url="{$document->variables['url']}">
+            <a class="addthis_button_tweet" tw:count="vertical"></a>
+            <a class="addthis_button_facebook_like" fb:like:layout="box_count"></a>
+            <a class="addthis_button_google_plusone" g:plusone:size="tall"></a>
+        </span>
+    </div>
+</div>
+<script type="text/javascript">
+$LAB.queueWait(function()
+{
+    (function($)
+    {
+        var comments = $('#comments'),
+            trackbacks = $('#trackbacks'),
+            relatedPosts = $('#related-posts'),
+            snsButtons = $('#sns-buttons'),
+            $window = $(window), snsTop;
+
+        if (relatedPosts.length)
+        {
+            $('#side-related-posts').append(relatedPosts.find('h3').clone());
+        }
+
+        addthis.init();
+
+        snsTop = snsButtons.offset().top - snsButtons.css('marginTop').replace('px', '');
+
+        $window.scroll(function()
+        {
+            if ($window.scrollTop() > snsTop)
+            {
+                if (snsButtons.css('position') != 'fixed')
+                {
+                    snsButtons.css('position', 'fixed');
+                }
+            }
+            else{
+                if (snsButtons.css('position') != 'relative')
+                {
+                    snsButtons.css('position', 'relative');
+                }
+            }
+        });
+
+//            $window.bind('scroll', function()
+//            {
+//                if (isScrolledIntoView(snsButtons))
+//                {
+
+//                }
+//            });
+
+        $('#commentToggle').click(function(){
+            comments.show();
+            trackbacks.hide();
+        });
+        $('#trackbackToggle').click(function(){
+            comments.hide();
+            trackbacks.show();
+        });
+
+        function isScrolledIntoView(elem)
+        {
+            var docViewTop = $(window).scrollTop();
+            var docViewBottom = docViewTop + $(window).height();
+
+            var elemTop = elem.offset().top;
+            var elemBottom = elemTop + elem.height();
+
+            return ((elemBottom >= docViewTop) && (elemTop <= docViewBottom));
+        }
+    })(jQuery);
+})
+.script('{$root_url . $module_path}skins/{$module_info->skin}/js/textyle.js');
+</script>

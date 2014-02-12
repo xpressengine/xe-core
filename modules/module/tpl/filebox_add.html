@@ -1,0 +1,30 @@
+<load target="./js/module_admin.js" />
+<h1 class="h1">{$lang->filebox}</h1>
+<form action="{getUrl('')}" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="module" value="module" />
+	<input type="hidden" name="act" value="procModuleFileBoxAdd" />
+	<input type="hidden" name="vid" value="{$vid}" />
+	<input type="hidden" name="filter" value="{$filter}" />
+	<input type="hidden" name="input" value="{$input}" />
+	<table class="x_table x_table-striped x_table-hover">
+		<tbody>
+			<tr>
+				<th>{$lang->description}</th>
+				<td><input type="text" name="comment" /></td>
+				</tr>
+			<tr>
+				<th>{$lang->file}</th>
+				<td><input type="file" name="addfile" />
+					<p>
+						<!--@if($arrfilter && is_array($arrfilter))-->
+						{@sprintf($lang->about_file_extension,join(", ",$arrfilter ))}
+						<!--@end-->
+						</p>
+					</td>
+				</tr>
+			</tbody>
+	</table>
+	<div class="btnArea">
+		<input class="btn" type="submit" value="{$lang->cmd_submit}" />
+	</div>
+</form>

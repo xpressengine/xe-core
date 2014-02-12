@@ -1,0 +1,84 @@
+<include target="./common_header.html" />
+<load target="filter/delete_checked_message.xml" />
+<load target="filter/update_allow_message.xml" />
+<h2><img src="h2.message.gif" width="83" height="17" alt="쪽지함 보기" /></h2>
+<ul class="isTab">
+	<li loop="$lang->message_box => $key,$val" class="on"|cond="$key==$message_type"><a href="{getUrl(message_type,$key,message_srl,0)}">{$val}</a></li>
+</ul>
+<div class="aRead" cond="$message">
+	<div class="aReadHeader">
+		<h1>{$message->title}</h1>
+		<span class="meta"><a href="#popup_menu_area" class="member_{$message->member_srl}">{$message->nick_name}</a>({$message->user_id}) <span class="time">{zdate($message->regdate, "Y.m.d H:i:s")}</span></span>
+	</div>
+	<div class="xe_content">
+		{$message->content}
+	</div>
+	<div class="btnArea ar">
+		<span class="btn25 blue" cond="$message->message_type!='S'&&$message->member_srl!=$logged_info->member_srl"><button type="button" onclick="doSendMessage('{$message->sender_srl}','{$message->message_srl}');">{$lang->cmd_reply_message}</button></span>
+		<span class="btn25" cond="$message->message_type=='R'"><button type="button" onclick="doStoreMessage('{$message->message_srl}');">{$lang->cmd_store}</button></span>
+		<span class="btn25"><button type="button" onclick="doDeleteMessage('{$message->message_srl}');">{$lang->cmd_delete}</button></span>
+	</div>
+</div>
+<form action="./" method="get" onsubmit="return procFilter(this, delete_checked_message)" id="fo_message_list">
+    <input type="hidden" name="message_type" value="{$message_type}" />
+	<table cellspacing="0" class="aList">
+		<col width="13" />
+        <thead>
+			<tr>
+				<th scope="col"><span><input name="check_all" type="checkbox" onclick="XE.checkboxToggleAll('message_srl_list', { wrap:'fo_message_list' });" /></span></th>
+				<th scope="col" class="title"><span>{$lang->title}</span></th>
+				<th scope="col">
+					<span>
+						<block cond="$message_type=='S'">{$lang->receiver}</block>
+						<block cond="$message_type!='S'">{$lang->sender}</block>
+					</span>
+				</th>
+				<th scope="col"><span>{$lang->regdate}</span></th>
+				<th scope="col"><span>읽은 시각</span></th>
+			</tr>
+        </thead>
+        <tbody>
+            <tr loop="$message_list => $no,$val">
+				<td><input name="message_srl_list" type="checkbox" value="{$val->message_srl}" /></td>
+                <td class="title">
+					<a cond="$val->readed=='Y'" href="{getUrl('message_srl',$val->message_srl)}">{$val->title}</a>
+					<a cond="$val->readed=='N'" href="{getUrl('message_srl',$val->message_srl)}"><strong>{$val->title}</strong></a>
+                </td>
+                <td>
+                    <a href="#popup_menu_area" class="member_{$val->member_srl}" onclick="return false">{$val->nick_name}</a></td>
+                </td>
+                <td class="num">{zdate($val->regdate,"Y-m-d")}</td>
+				<td class="num"><block cond="$val->readed=='Y'">{zdate($val->readed_date,"Y-m-d")}</block>&nbsp;</td>
+            </tr>
+        </tbody>
+	</table>
+	<div class="ctrArea">
+		<div class="ctrSelect">
+			<span class="btn25"><input type="submit" value="{$lang->cmd_delete}" /></span>
+		</div>
+	</div>
+</form>
+<form action="./" method="post" onsubmit="return procFilter(this, update_allow_message)" style="margin:-33px 0 0 200px">
+	<div class="ctrArea">
+		<div class="ctrGroup">
+			<span class="btn25 black"><button type="button" class="ctrToBtn"><span class="arrLeft"></span> 수신설정</button></span>
+			<span class="ctrTo">
+				<span class="vr">{@$i=0}{@$f=0}
+					<block loop="$lang->allow_message_type => $key,$val">
+						&nbsp;<input type="radio" name="allow_message" id="am{$i++}" value="{$key}" checked="checked"|cond="$logged_info->allow_message==$key" /><label for="am{$f++}">{$val}</label>
+					</block>
+					<span class="btn19"><input type="submit" value="{$lang->cmd_save}"></span>
+				</span>
+			</span>
+		</div>
+	</div>
+</form>
+<div class="pagination">
+	<a href="{getUrl('page','','document_srl','')}" class="direction prev"><span></span><span></span> {$lang->first_page}</a> 
+	<block loop="$page_no = $page_navigation->getNextPage()">
+		<strong cond="$page == $page_no">{$page_no}</strong> 
+		<a cond="$page != $page_no" href="{getUrl('page',$page_no,'document_srl','')}">{$page_no}</a>
+	</block>
+	<a href="{getUrl('page',$page_navigation->last_page,'document_srl','')}" class="direction next">{$lang->last_page} <span></span><span></span></a>
+</div>
+<include target="./common_footer.html" />

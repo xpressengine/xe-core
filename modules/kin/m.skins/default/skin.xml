@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+    <title xml:lang="ko">지식인 XE 모바일 기본 스킨</title>
+	<title xml:lang="en">XE Kin (Q&amp;A) module default mobile skin</title>
+	<title xml:lang="zh-CN">XE 问答模块默认移动皮肤</title>
+    <description xml:lang="ko">
+        지식인 XE 모바일 기본 스킨입니다.
+    </description>
+	<description xml:lang="en">
+        XE Kin (Q&amp;A) module default mobile skin
+    </description>
+	<description xml:lang="zh-CN">
+        XE 问答模块默认移动皮肤
+    </description>
+    <version>0.1</version>
+    <date>2010-07-21</date>
+
+    <author email_address="developers@xpressengine.com" link="http://xpressengine.com">
+        <name xml:lang="ko">XE</name>
+    </author>
+	<extra_vars />
+</skin>

@@ -1,0 +1,95 @@
+<!--#include("_tool_header.html")-->
+
+			<!-- Content -->
+			<div id="content">
+				
+				<!-- contentHeader -->
+				<div class="contentHeader spamHeader">
+					<h3 class="h3">{$lang->textyle_second_menus[2]['dispTextyleToolCommunicationSpam']}</h3>
+				</div>
+				<!-- /contentHeader -->
+
+				<div class="partitionContainer spam">
+					<fieldset class="quarter partitionLeft">
+						<legend>{$lang->name_nick}</legend>
+						<form action="{Context::getRequestUri()}" method="post" onsubmit="return insertDeny(this, insert_deny)">
+							<input type="hidden" name="mid" value="{$mid}" />
+							<input type="hidden" name="deny_type" value="N" />
+							<div class="header">
+								<input type="text" class="iText" placeholder="{$lang->name_nick}" name="deny_content" title="{$lang->name_nick}" />
+                                <span class="btnGray medium strong"><button type="submit">{$lang->cmd_insert}</button></span>
+							</div>
+							<!--@if($deny_list['N'] && count($deny_list['N'])>0)-->
+							<ul>
+								<!--@foreach($deny_list['N'] as $srl => $content)-->
+								<li>{$content}<button type="button" onclick="deleteDenyItem('{$mid}',{$srl})"><span>{$lang->cmd_delete}</span></button></li>
+								<!--@end-->
+							</ul>
+							<!--@end-->
+						</form>
+					</fieldset>
+					<fieldset class="quarter partitionLeft">
+						<legend>{$lang->email_address}</legend>
+						<form action="{Context::getRequestUri()}" method="post" onsubmit="return insertDeny(this, insert_deny)">
+							<input type="hidden" name="mid" value="{$mid}" />
+							<input type="hidden" name="deny_type" value="M" />
+							<div class="header">
+								<input type="text" class="iText" placeholder="xxx@xxx.xxx" name="deny_content" title="xxx@xxx.xxx" />
+                                <span class="btnGray medium strong"><button type="submit">{$lang->cmd_insert}</button></span>
+							</div>
+							<!--@if($deny_list['M'] && count($deny_list['M'])>0)-->
+							<ul>
+								<!--@foreach($deny_list['M'] as $srl => $content)-->
+									<li>{$content}<button type="button" onclick="deleteDenyItem('{$mid}',{$srl})"><span>{$lang->cmd_delete}</span></button></li>
+								<!--@end-->
+							</ul>
+							<!--@end-->		
+						</form>
+					</fieldset>
+					<fieldset class="quarter partitionLeft">
+						<legend>URL</legend>
+						<form action="{Context::getRequestUri()}" method="post" onsubmit="return insertDeny(this, insert_deny)">
+							<input type="hidden" name="mid" value="{$mid}" />
+							<input type="hidden" name="deny_type" value="S" />
+							<div class="header">
+								<input type="text" class="iText" placeholder="http://xxx.xxx" name="deny_content" title="http://xxx.xxx" />
+                                <span class="btnGray medium strong"><button type="submit">{$lang->cmd_insert}</button></span>
+							</div>
+							<!--@if($deny_list['S'] && count($deny_list['S'])>0)-->
+							<ul>
+								<!--@foreach($deny_list['S'] as $srl => $content)-->
+									<li>{$content}<button type="button" onclick="deleteDenyItem('{$mid}',{$srl})"><span>{$lang->cmd_delete}</span></button></li>
+								<!--@end-->
+							</ul>
+							<!--@end-->		
+						</form>
+					</fieldset>
+					<fieldset class="quarter partitionRight">
+						<legend>IP</legend>
+						<form action="{Context::getRequestUri()}" method="post" onsubmit="return insertDeny(this, insert_deny)">
+							<input type="hidden" name="mid" value="{$mid}" />
+							<input type="hidden" name="deny_type" value="I" />
+							<div class="header">
+								<input type="text" class="iText" placeholder="xxx.xxx.xxx.xxx" name="deny_content" title="xxx.xxx.xxx.xxx" />
+                                <span class="btnGray medium strong"><button type="submit">{$lang->cmd_insert}</button></span>
+							</div>
+							<!--@if($deny_list['I'] && count($deny_list['I'])>0)-->
+							<ul>
+								<!--@foreach($deny_list['I'] as $srl => $content)-->
+									<li>{$content}<button type="button" onclick="deleteDenyItem('{$mid}',{$srl})"><span>{$lang->cmd_delete}</span></button></li>
+								<!--@end-->
+							</ul>
+							<!--@end-->								</form>
+					</fieldset>
+				</div>
+				
+			</div>
+			<hr />
+			<!-- /Content -->
+
+			<!-- Extension -->
+				<!--#include("_tool_menu.html")-->
+			<!-- Extension -->
+
+
+<!--#include("_tool_footer.html")-->

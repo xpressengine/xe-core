@@ -1,0 +1,106 @@
+<!--#include("header.html")-->
+
+<!-- display the document written form -->
+<form action="./" method="post" onsubmit="return procFilter(this, insert)" id="fo_write">
+	<input type="hidden" name="mid" value="{$mid}" />
+	<input type="hidden" name="content" value="{$oDocument->getContentText()}" />
+	<input type="hidden" name="document_srl" value="{$document_srl}" />
+	
+	<div class="boardWrite">
+		<!--@if(!$is_logged)-->
+		<div class="userNameAndPw">
+			<label for="userName">{$lang->writer}</label>
+			<input type="text" name="nick_name" value="{$oDocument->getNickName()}" class="userName iText" id="userName"/>
+	
+			<label for="userPw">{$lang->password}</label>
+			<input type="password" name="password" value="" id="userPw" class="userPw iText" />
+	
+			<label for="emailAddress">{$lang->email_address}</label>
+			<input type="text" name="email_address" value="{htmlspecialchars($oDocument->get('email_address'))}" id="emailAddress" class="emailAddress iText"/>
+	
+			<label for="homePage">{$lang->homepage}</label>
+			<input type="text" name="homepage" value="{htmlspecialchars($oDocument->get('homepage'))}" id="homePage" class="homePage iText"/>
+		</div>
+		<!--@end-->
+	
+		<div class="title">
+			<!--@if($module_info->use_category=="Y")-->
+			<select name="category_srl" class="category">
+				<option value="">{$lang->category}</option>
+				<!--@foreach($category_list as $val)-->
+				<option <!--@if(!$val->grant)-->disabled="disabled"<!--@endif--> value="{$val->category_srl}" <!--@if($val->grant&&$val->selected||$val->category_srl==$oDocument->get('category_srl'))-->selected="selected"<!--@endif-->>
+					{str_repeat("&nbsp;&nbsp;",$val->depth)} {$val->title} ({$val->document_count})
+				</option>
+				<!--@endforeach-->
+			</select>
+			<!--@else-->
+			<label class="title">{$lang->title}</label>
+			<!--@endif-->
+			<input type="text" name="title" class="title iText" value="{htmlspecialchars($oDocument->getTitleText())}" />
+		</div>
+	
+		<div class="option">
+			<!--@if($grant->manager)-->
+			{@ $_color = array('555555','222288','226622','2266EE','8866CC','88AA66','EE2222','EE6622','EEAA22','EEEE22') }
+			<select name="title_color" id="title_color" <!--@if($oDocument->get('title_color'))-->style="background-color:#{$oDocument->get('title_color')};"<!--@end--> onchange="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;">
+					<option value="" style="background-color:#FFFFFF;">{$lang->title_color}</option>
+					<!--@foreach($_color as $_col)-->
+					<option value="{$_col}" style="background-color:#{$_col}" <!--@if($oDocument->get('title_color')==$_col)-->selected="selected"<!--@end-->>{$lang->title_color}</option>
+					<!--@endforeach-->
+			</select>
+			<input type="checkbox" name="title_bold" id="title_bold" value="Y" <!--@if($oDocument->get('title_bold')=='Y')-->checked="checked"<!--@end--> />
+			<label for="title_bold">{$lang->title_bold}</label>
+			<input type="checkbox" name="is_notice" value="Y" <!--@if($oDocument->isNotice())-->checked="checked"<!--@end--> id="is_notice" />
+			<label for="is_notice">{$lang->notice}</label>
+			<!--@endif-->
+			<input type="checkbox" name="comment_status" value="ALLOW" <!--@if($oDocument->allowComment())-->checked="checked"<!--@end--> id="comment_status" />
+			<label for="comment_status">{$lang->allow_comment}</label>
+			<input type="checkbox" name="allow_trackback" value="Y" <!--@if($oDocument->allowTrackback())-->checked="checked"<!--@end--> id="allow_trackback" />
+			<label for="allow_trackback">{$lang->allow_trackback}</label>
+			<!--@if($is_logged)-->
+			<input type="checkbox" name="notify_message" value="Y" <!--@if($oDocument->useNotify())-->checked="checked"<!--@end--> id="notify_message" />
+			<label for="notify_message">{$lang->notify}</label>
+			<!--@end-->
+			<!--@if(is_array($status_list))-->
+				<!--@foreach($status_list AS $key=>$value)-->
+				<input type="radio" name="status" value="{$key}" id="{$key}" <!--@if($oDocument->get('status') == $key || ($key == 'PUBLIC' && !$document_srl))-->checked="checked"<!--@end--> /> 
+				<label for="{$key}">{$value}</label>
+				<!--@end-->
+			<!--@end-->
+		</div>
+	
+		<!--@if(count($extra_keys))-->
+		<table cellspacing="0" summary="" class="extraVarsList">
+		<col width="150" />
+		<col />
+		<!--@foreach($extra_keys as $key => $val)-->
+		<tr>
+			<th scope="row">{$val->name} <!--@if($val->is_required=='Y')-->*<!--@end--></th>
+			<td class="{$val->type}">{$val->getFormHTML()}</td>
+		</tr>
+		<!--@endforeach-->
+		</table>
+		<!--@endif-->
+	
+		<div class="editor">{$oDocument->getEditor()}</div>
+	
+		<div class="tag">
+			<input type="text" name="tags" value="{htmlspecialchars($oDocument->get('tags'))}" class="iText" />
+			<p class="info">{$lang->about_tag}</p>
+		</div>
+	</div>
+	<div class="btnArea">
+		<input class="btn" type="button" value="{$lang->cmd_preview}" onclick="doDocumentPreview(this); return false;" />
+		<input class="btn" type="submit" value="{$lang->cmd_registration}" />
+		<span class="etc">
+			<!--@if($is_logged)-->
+			<!--@if(!$oDocument->isExists() || $oDocument->get('status') == 'TEMP')-->
+			<input class="btn" type="button" value="{$lang->cmd_temp_save}"  onclick="doDocumentSave(this); return false;" />
+			<input class="btn" type="button" value="{$lang->cmd_load}"  onclick="doDocumentLoad(this); return false;" />
+			<!--@end-->
+			<input class="btn" type="button" value="{$lang->cmd_back}" onclick="location.href='{getUrl('act','')}'" />
+			<!--@end-->
+		</span>
+	</div>
+</form>
+<!--#include("footer.html")-->

@@ -1,0 +1,61 @@
+<!--#include("_header.html")-->
+
+<!--@if($oSourceComment->isExists())-->
+<div class="feedbackList">
+    <div class="item itemOnly">
+	
+		<div class="itemAside">
+			<h4 class="author"><a href="#popup_menu_area" class="member_{$oSourceComment->getMemberSrl()}" onclick="return false">{$oSourceComment->getNickName()}</a></h4>
+			<p class="meta">
+				{$oSourceComment->getRegdate("Y.m.d H:i")}
+				<!--@if($grant->manager)-->
+				<br />{$oSourceComment->get('ipaddress')}
+				<!--@end-->
+			</p>
+		</div>
+		
+		<div class="itemContent">
+			{$oSourceComment->getContent(false)}
+		</div>
+
+    </div>
+</div>
+<!--@end-->
+
+<form action="./" method="post" onsubmit="jQuery(this).find('input').each(function(){if(this.title==this.value)this.value='';});return procFilter(this, insert_comment)" class="boardEditor" >
+<input type="hidden" name="mid" value="{$mid}" />
+<input type="hidden" name="document_srl" value="{$oComment->get('document_srl')}" />
+<input type="hidden" name="comment_srl" value="{$oComment->get('comment_srl')}" />
+<input type="hidden" name="content" value="{htmlspecialchars($oComment->get('content'))}" />
+<input type="hidden" name="parent_srl" value="{$oComment->get('parent_srl')}" />
+
+<div class="boardWrite commentEditor">
+	
+    <div class="editor">{$oComment->getEditor()}</div>
+	
+	<div class="editOption">
+	<!--@if(!$is_logged)-->
+	   <input type="text" name="nick_name" class="iText userName" value="{$oComment->getNickName()}"  title="{$lang->writer}" onfocus="if(this.value==this.title)this.value='';return false;" />
+	   <input type="password" name="password" class="iText userPw" value="" title="{$lang->password}" onfocus="if(this.value==this.title)this.value='';return false;" />
+	   <input type="text" name="email_address" class="iText emailAddress" value="{htmlspecialchars($oComment->get('email_address'))}" title="{$lang->email_address}" onfocus="if(this.value==this.title)this.value='';return false;" />
+	   <input type="text" name="homepage" class="iText homePage" value="{htmlspecialchars($oComment->get('homepage'))}" title="{$lang->homepage}" onfocus="if(this.value==this.title)this.value='';return false;" />
+	<!--@end-->
+
+	<!--@if($is_logged)-->
+		<input type="checkbox" name="notify_message" value="Y" <!--@if($oComment->get('notify_message')=='Y')-->checked="checked"<!--@end--> id="notify_message" class="inputCheck" />
+		<label for="notify_message">{$lang->notify}</label>
+	<!--@end-->
+		<input type="checkbox" name="is_secret" value="Y" id="is_secret" <!--@if($oComment->get('is_secret')=='Y')-->checked="checked"<!--@end--> class="inputCheck" />
+		<label for="is_secret">{$lang->secret}</label>
+	</div>
+
+	<div class="btnArea">
+		<input class="btn" type="submit" value="{$lang->cmd_comment_registration}" />
+	</div>
+	
+</div>
+
+
+</form>
+
+<!--#include("_footer.html")-->

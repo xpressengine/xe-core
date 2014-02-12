@@ -1,0 +1,46 @@
+<div class="shortReply">
+    <!--@if(count($comment_list))-->
+    <ul>
+    <!--@foreach($comment_list as $key => $val)-->
+    <li>
+        <div class="infoBox">
+            <span class="author"><a href="#" onclick="return false;" class="member_{$val->member_srl}">{$val->nick_name}</a></span>
+            <span class="date">
+                {zdate($val->regdate, "Y-m-d H:i")}
+                <!--@if($grant->manager || $val->member_srl == $logged_info->member_srl)-->
+                <a href="#" onclick="if(confirm('{$lang->confirm_delete}')) doDeleteComment({$parent_srl},{$val->reply_srl},{$page}); return false;">[{$lang->cmd_delete}]</a>
+                <!--@end-->
+            </span>
+        </div>
+        <div class="content">{htmlspecialchars($val->content)}</div>
+    </li>
+    <!--@end-->
+    </ul>
+
+    <!--@if($page_navigation->total_page>1)-->
+    <div class="pagi">
+        <a href="#replies_content_{$parent_srl}" onclick="doGetComments({$parent_srl},1);" class="prevEnd">{$lang->first_page}</a> 
+        <!--@while($page_no = $page_navigation->getNextPage())-->
+            <!--@if($page == $page_no)-->
+                <strong>{$page_no}</strong> 
+            <!--@else-->
+                <a href="#replies_content_{$parent_srl}" onclick="doGetComments({$parent_srl},{$page_no});">{$page_no}</a>
+            <!--@end-->
+        <!--@end-->
+        <a href="#replies_content_{$parent_srl}" onclick="doGetComments({$parent_srl},{$page_navigation->last_page});">{$lang->last_page}</a>
+    </div>
+    <!--@end-->
+    <!--@end-->
+
+    <!--@if($grant->write_reply)-->
+    <form action="./" method="post" onsubmit="return procFilter(this, insert_comment);">
+    <input type="hidden" name="mid" value="{$mid}" />
+    <input type="hidden" name="parent_srl" value="{$parent_srl}" />
+    <table>
+    <colgroup><col width="*"/><col width="100"/></colgroup>
+    <tr><td><input type="text" name="content" class="inputText"/></td><td><span class="button"><input type="submit" value="{$lang->cmd_registration}" /></span></td></tr>
+    </table>
+    </form>
+    <!--@end-->
+
+</div>

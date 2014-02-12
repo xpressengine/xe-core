@@ -1,0 +1,13 @@
+<!--#include("header.html")-->
+
+<div class="pxeMsg">
+	<p>{$message}</p>
+	<div class="btnArea">
+    <!--@if(!$is_logged)-->
+    	<a href="{getUrl('act','dispMemberLoginForm')}" class="button"><span>{$lang->cmd_login}</span></a>
+    <!--@end-->
+    	<span class="button"><button onclick="history.back(); return false;">{$lang->cmd_back}</button></span>
+	</div>
+</div>
+
+<!--#include("footer.html")-->

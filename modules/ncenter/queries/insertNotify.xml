@@ -1,0 +1,21 @@
+<query id="insertNotify" action="insert">
+	<tables>
+		<table name="ncenter_notify" />
+	</tables>
+	<columns>
+		<column name="notify" var="notify" notnull="notnull" />
+		<column name="srl" var="srl" filter="number" notnull="notnull" />
+		<column name="target_srl" var="target_srl" filter="number" notnull="notnull" />
+		<column name="member_srl" var="member_srl" filter="number" notnull="notnull" />
+		<column name="target_member_srl" var="target_member_srl" filter="number" notnull="notnull" />
+		<column name="target_nick_name" var="target_nick_name" />
+		<column name="target_user_id" var="target_user_id" />
+		<column name="target_email_address" var="target_email_address" />
+		<column name="type" var="type" notnull="notnull" />
+		<column name="target_type" var="target_type" notnull="notnull" />
+		<column name="summary" var="summary" />
+		<column name="target_summary" var="target_summary" />
+		<column name="target_url" var="target_url" notnull="notnull" />
+		<column name="regdate" var="regdate" />
+	</columns>
+</query>

@@ -1,0 +1,12 @@
+<filter name="insert_profile" module="textyle" act="procTextyleProfileUpdate">
+  <form>
+    <node target="mid" required="true" />
+    <node target="nick_name" required="true" />
+    <node target="email_address" required="true" filter="email" />
+  </form>
+  <parameter />
+  <response callback_func="completeInsertProfile">
+    <tag name="error" />
+    <tag name="message" />
+  </response>
+</filter>

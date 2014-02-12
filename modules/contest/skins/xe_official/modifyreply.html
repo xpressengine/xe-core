@@ -1,0 +1,23 @@
+<!--%import("filter/modify_reply.xml")-->
+
+<!--#include("header.include.html")-->
+
+<form action="./" method="post" onsubmit="return procFilter(this, modify_reply)" class="writeForm">
+<input type="hidden" name="mid" value="{$mid}" />
+<input type="hidden" name="comment_srl" value="{$oReply->comment_srl}" />
+<input type="hidden" name="content" value="{$oReply->getContentText()}" />
+
+    <h3>{$lang->cmd_modify_reply}</h3>
+
+    <div class="editor">
+        {$oReply->getEditor()}
+    </div>
+
+    <div class="buttonArea">
+        <span class="button strong black"><input type="submit" value="{$lang->cmd_modify}" /></span>
+        <span class="button"><button type="button" onclick="location.href=current_url.setQuery('act','dispKinView','comment_srl','');return false;">{$lang->cmd_back}</button></span>
+    </div>
+
+</form>
+
+<!--#include("footer.include.html")-->

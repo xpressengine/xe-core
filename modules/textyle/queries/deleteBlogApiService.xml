@@ -1,0 +1,8 @@
+<query id="deleteBlogApiService" action="delete">
+    <tables>
+        <table name="textyle_blogapi_services" />
+    </tables>
+    <conditions>
+        <condition operation="equal" column="textyle_blogapi_services_srl" var="textyle_blogapi_services_srl" notnull="notnull" />
+    </conditions>
+</query>

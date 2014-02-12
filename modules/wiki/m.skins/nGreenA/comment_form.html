@@ -1,0 +1,63 @@
+<include target="header.html" />
+<header class="mod_head">
+    <h2 class="mod_title"><span>{$oDocument->getTitle()}</span></h2>
+    <button class="btn_srch">search</button>
+   <nav class="nav_wk b00"|cond="$oDocumentPrev" class="nav_wk b10"|cond="!$oDocumentPrev"> <!-- [D] class opt => b00, b10, b01 -->
+        <a href="{getUrl('','mid',$mid)}" class="f">Front</a>
+        <a href="{getUrl('act','dispWikiTitleIndex','entry','','document_srl','')}" class="l">List</a>
+    </nav>
+    <form action="{getUrl()}" method="get" class="srch" no-error-return-url="true">
+        <fieldset>
+        <legend>{$lang->cmd_move}</legend>
+            <input type="hidden" name="mid" value="{$mid}" />
+            <input type="hidden" name="vid" value="{$vid}" />
+            <input type="hidden" name="act" value="dispWikiTitleIndex" />
+            <input type="hidden" name="category" value="{$category}" />
+            <input type="hidden" name="search_target" value="title_content" />
+            <span><input type="search" name="search_keyword" placeholder="Search..." /></span>
+        </fieldset>
+    </form>
+</header>
+<!--@if(!$is_logged)-->
+	{@ $ruleset = "insert_comment_not_logged"}
+	{@ $act_insert = "procWikiInsertCommentNotLogged"}
+<!--@else-->
+	{@ $ruleset = "insert_comment"}
+	{@ $act_insert = "procWikiInsertComment"}
+<!--@end-->
+<form id="cm_form" action="./" method="post" ruleset="{$ruleset}"  class="cm_form" >
+	<input type="hidden" name="act" value="{$act_insert}" />
+	<input type="hidden" name="success_return_url" value="{getUrl('act','displayWikiCommentList', 'module_srl', $module_info->module_srl,'document_srl',$oDocument->document_srl)}" />
+	<input type="hidden" name="module" value="wiki" />
+	<input type="hidden" name="mid" value="{$mid}" />
+	<input type="hidden" name="document_srl" value="{$oDocument->document_srl}" />
+	<!--@if(!$is_logged)-->
+    <fieldset>
+        <legend class="blind">add comment</legend>
+        <ul class="g">
+            <li class="sl"><label for="userName" class="lft">Name</label><span class="field"><input type="text" name="nick_name" id="userName" placeholder="Name"></span></li>
+            <li class="sl"><label for="userPw" class="lft">Password</label><span class="field"><input type="password" name="password" id="userPw" placeholder="Password"></span></li>
+            <li class="sl"><label for="emailAddress" class="lft">Email</label><span class="field"><input type="email" name="email_address" id="emailAddress" placeholder="Email"></span></li>
+            <li class="ml">
+                <label for="" class="lft">Comment</label>
+                <span class="field"><textarea name="content" id="" cols="30" rows="10" placeholder="Comment"></textarea></span>
+            </li>
+        </ul>
+    </fieldset>
+	<!--@else-->
+    <fieldset>
+        <legend class="blind">add comment</legend>
+        <ul class="m">
+            <li class="sl"><label for="">Comment:</label></li>
+            <li class="ml"><span class="field"><textarea name="content" id="" cols="30" rows="10" placeholder="Comment"></textarea></span></li>
+        </ul>
+    </fieldset>
+	<!--@end-->
+</form>
+<footer class="ctrl_btm"><a href="" class="blue_btn ui_txt_sty" onClick="jQuery('#cm_form').submit(); return false;">AddComments</a></footer>
+
+<!-- // html markup -->
+
+
+
+

@@ -1,0 +1,14 @@
+<query id="updateItem" action="update">
+    <tables>
+        <table name="resource_items" />
+    </tables>
+    <columns>
+        <column name="file_srl" var="file_srl" />
+        <column name="screenshot_url" var="screenshot_url" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" />
+        <condition operation="equal" column="package_srl" var="package_srl" filter="number" notnull="notnull" pipe="and" />
+        <condition operation="equal" column="item_srl" var="item_srl" filter="number" notnull="notnull" pipe="and" />
+    </conditions>
+</query>

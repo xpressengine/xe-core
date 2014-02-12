@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+    <title xml:lang="ko">지식인 XE 공식 스킨</title>
+    <title xml:lang="zh-CN">知识人官方默认皮肤</title>
+    <description xml:lang="ko">지식인 XE 의 공식 스킨입니다. </description>
+    <description xml:lang="zh-CN">知识人官方默认皮肤。</description>
+    <version>0.1</version>
+    <date>2009-09-08</date>
+    <author email_address="developers@xpressengine.com" link="http://xpressengine.com/">
+        <name xml:lang="ko">NHN</name>
+		<name xml:lang="zh-CN">NHN</name>
+    </author>
+    <license>GPL v2 or later</license>
+    <colorset>
+        <color name="default" >
+            <title xml:lang="ko">기본</title>
+	    <title xml:lang="zh-CN">默认</title>
+        </color>
+    </colorset>
+
+    <extra_vars>
+        <var name="title" type="text">
+            <title xml:lang="ko">제목</title>
+	    <title xml:lang="zh-CN">标题</title>
+            <description xml:lang="ko">제목을 적어주세요.</description>
+	    <description xml:lang="zh-CN">请输入标题。</description>
+        </var>
+        <var name="sub_title" type="text">
+            <title xml:lang="ko">부제목</title>
+	    <title xml:lang="zh-CN">副标题</title>
+            <description xml:lang="ko">제목 옆에 나타날 부제목을 적어주세요.</description>
+	    <description xml:lang="zh-CN">请输入副标题(显示在标题旁)。</description>
+        </var>
+        <var name="comment" type="textarea">
+            <title xml:lang="ko">상세 설명</title>
+	    <title xml:lang="zh-CN">简单描述</title>
+            <description xml:lang="ko">제목 아래 표시될 설명을 입력하실 수 있습니다.</description>
+	    <description xml:lang="zh-CN">此处可输入简单的描述(显示在标题下旁)。</description>
+        </var>
+    </extra_vars>
+</skin>

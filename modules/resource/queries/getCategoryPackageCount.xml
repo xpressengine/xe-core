@@ -1,0 +1,17 @@
+<query id="getCategoryPackageCount" action="select">
+    <tables>
+        <table name="resource_packages" alias="package" />
+    </tables>
+    <columns>
+        <column name="package.category_srl" alias="category_srl" />
+        <column name="count(*)" alias="count" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="package.module_srl" var="module_srl" filter="number" notnull="notnull" pipe="and" />
+        <condition operation="equal" column="package.status" default="accepted" notnull="notnull" pipe="and" />
+        <condition operation="more" column="package.latest_item_srl" default="1" filter="number" notnull="notnull" pipe="and" />
+    </conditions>
+    <groups>
+        <group column="package.category_srl" />
+    </groups>
+</query>

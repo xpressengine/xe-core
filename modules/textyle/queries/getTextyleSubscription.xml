@@ -1,0 +1,18 @@
+<query id="getTextyleSubscription" action="select">
+    <tables>
+        <table name="textyle_subscription" />
+    </tables>
+    <columns>
+        <column name="*" />
+    </columns>
+
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" notnull="notnull" />
+        <condition operation="less" column="publish_date" var="less_publish_date" pipe="and" />
+        <condition operation="more" column="publish_date" var="more_publish_date" pipe="and" />
+    </conditions>
+    <navigation>
+		<index var="list_order" default="publish_date" order="asc" />
+    </navigation>
+
+</query>

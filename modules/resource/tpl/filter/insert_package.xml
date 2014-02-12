@@ -1,0 +1,23 @@
+<filter name="insert_package" module="resource" act="procResourceInsertPackage">
+    <form>
+        <node target="mid" required="true" />
+        <node target="package_category" required="true" />
+        <node target="package_title" required="true" />
+        <node target="package_path" required="true" />
+        <node target="package_license" required="true" />
+        <node target="package_homepage" required="true" />
+        <node target="package_description" required="true" />
+    </form>
+    <parameter>
+        <param name="vid" target="vid" />
+        <param name="mid" target="mid" />
+        <param name="category_srl" target="package_category" />
+        <param name="title" target="package_title" />
+        <param name="path" target="package_path" />
+        <param name="have_instance" target="have_instance" />
+        <param name="license" target="package_license" />
+        <param name="homepage" target="package_homepage" />
+        <param name="description" target="package_description" />
+    </parameter>
+    <response />
+</filter>

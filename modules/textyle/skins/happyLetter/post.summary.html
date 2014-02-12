@@ -1,0 +1,18 @@
+                    <!--@foreach($document_list as $no => $document)-->
+					<div class="postSummary">
+						<h2 class="postTitle"><a href="{getUrl('','document_srl',$document->document_srl,'cpage','')}">{cut_str($document->getTitle(),40)}</a></h2>
+						<p class="postMeta">
+							{$document->getRegdate("Y.m.d")}
+							{$document->getRegdate("H:i")}
+							{$document->getNickName()}
+						</p>
+						<div class="textyleContent xe_content">
+							<!--@if($document->thumbnailExists())-->
+							<p class="summarySpot"><img src="{$document->getThumbnail(200,133)}" class="summaryThumb" alt="" /></p>
+							<!--@end-->
+							<p>{$document->getSummary(600)}</p>
+						</div>
+						<p class="summaryMore"><a href="{$document->getPermanentUrl()}">more</a></p>
+					</div>
+                    <!--@end-->
+					<div class="postSummaryFixer"></div>

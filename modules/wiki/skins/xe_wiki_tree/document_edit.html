@@ -1,0 +1,192 @@
+<include target="header.html" />
+
+<!--@if($module_info->markup_type == 'markdown')-->
+<script src="../../lib/pagedown/Markdown.Converter.js"></script>
+<script>
+    jQuery(function ($) {
+        var $textarea = $('#wikiContentContainer textarea');
+        var $preview = $('#wikiDocumentPreview');
+        converter = new Markdown.Converter().makeHtml;
+
+        $textarea.keyup(function () {
+            var val = $textarea.val()
+                    .replace(/<\s*script.*>(.*?)<\s*\/\s*script\s*>/g, function (a, s) {
+                        return s;
+                    })
+                    .replace(/javascript\s*:\s*(['"])(.*?)\1]/g, '');
+            $preview.html(converter(val));
+        }).trigger('keyup');
+    });
+</script>
+<!--@elseif ($module_info->markup_type == 'googlecode_markup')-->
+<script src="../../lib/js/GoogleCodeWikiParser.js"></script>
+<script>
+    jQuery(function ($) {
+        setInterval(function () {
+            var wikitext = editorGetContent(jQuery('form[editor_sequence]').attr('editor_sequence'));
+            var g = new GoogleCodeWikiParser();
+            var html = g.parse(wikitext);
+            jQuery('#wikiDocumentPreview').html(html);
+        }, 500);
+    });
+</script>
+<!--@elseif ($module_info->markup_type == 'mediawiki_markup')-->
+<script>
+    //ajax:
+    jQuery.fn.syncPreviewWithEditor = function (options) {
+        var form = (
+                typeof(options) != 'undefined' && options.sequence && !isNaN(options.sequence) ?
+                        jQuery('form[editor_sequence=' + options.sequence + ']') :
+                        jQuery('form[editor_sequence]:eq(0)')
+                );
+        if (!form.length) return false;
+        //defaults:
+        var settings = jQuery.extend({
+            sequence:form.attr('editor_sequence'),
+            interval:2000
+        }, options);
+        form = jQuery('form[editor_sequence=' + settings.sequence + ']');
+        if (!form.length) return false;
+        var editorContent = editorGetContent(settings.sequence);
+        return this.each(function () {
+            var $this = jQuery(this);
+            setInterval(function () {
+                var newContent = editorGetContent(settings.sequence);
+                if (editorContent != newContent || ( !$this.html() && newContent)) {
+                    editorContent = newContent;
+                    var ajaxData = {act:'procWikiTextParse', content:newContent, markup:form.data('markup')};
+                    jQuery.getJSON('index.php', ajaxData, function (data) {
+                        $this.html(data.content);
+                    });
+                }
+            }, settings.interval);
+        });
+
+    }
+    jQuery(function ($) {
+        setTimeout(function () {
+            jQuery('#wikiDocumentPreview').syncPreviewWithEditor();
+        }, 1000);
+    });
+</script>
+<!--@end-->
+
+<script>
+	jQuery(document).ready(function($){
+		$("#title").change(function(){
+			var alias = $("#title").val().replace(/[ ]/g, "_").toLowerCase();
+			$("#alias").val(alias);
+		});
+		
+		$("#wikiHelp").click(function(){ $(this).toggleClass("hide")});
+		
+		$("#toggleWikiHelp").click(function(){
+			$("#wikiHelp").toggleClass("hide");
+			return false;
+		});		
+		
+		$("#fo_write").submit(function(event){
+				event.preventDefault();
+
+				var url = "index.php";
+				var document_srl = {$document_srl ? $document_srl : 'null'};
+				var latest_doc_edit = {$latest_doc_edit ? $latest_doc_edit : 'null'};
+
+				$.getJSON(url
+						, { act: 'procWikiCheckIfDocumentWasUpdated'
+							, document_srl : document_srl
+							, latest_doc_edit: latest_doc_edit} 
+						, function(json){
+							if(json.updated)
+							{
+								var confirm_message = '{$lang->confirm_document_override}';
+								if(confirm(confirm_message))
+								{
+									$("#fo_write").unbind('submit').submit();
+								}
+							}
+							else 
+							{
+								$("#fo_write").unbind('submit').submit();
+							}
+						});
+
+			});		
+	});
+</script>
+
+<form action="./" method="post" ruleset="insert" id="fo_write">
+	<input type="hidden" name="mid" value="{$mid}" />
+	<input type="hidden" name="act" value="procWikiInsertDocument" />
+	<input type="hidden" name="module" value="wiki" />
+	<input type="hidden" name="section" value="{$section}" />
+	<input type="hidden" name="section_title" value="{$section_title}" />
+    <input type="hidden" name="success_return_url" value="{getUrl('act','dispWikiContent', 'module_srl', $module_info->module_srl)}" />
+    <input type="hidden" name="xe_validator_id" value="modules/wiki/skins/xe_wiki_tree" />
+	
+	<!--@if($history)-->
+	<input type="hidden" name="content" value="{htmlspecialchars($history->content)}" />
+	<!--@else-->
+	<input type="hidden" name="content" value="{$oDocument->getContentText()}" />
+	<!--@end-->
+	<input type="hidden" name="document_srl" value="{$document_srl}" />
+
+	<div id="wikiTitleArea">
+		<em>{$lang->write_form_title}</em>
+		<input id="title" type="text" name="title" value="{htmlspecialchars($oDocument->get('title'))}" class="inputTypeText" />
+			
+		<br />
+		<em>{$lang->write_form_alias}</em>
+		{getFullUrl()}entry/
+		<input type="text" id="alias" name="alias" value="{htmlspecialchars($oDocument->get('alias'))}" class="inputTypeText" />
+	</div>
+
+	<div id="wikiContentContainer">{$oDocument->getEditor()}</div>
+
+	<!--@if($module_info->markup_type != 'xe_wiki_markup')-->
+	<a href="#" id="toggleWikiHelp">{$lang->wiki_language_help}</a>
+	<div id="wikiHelp" class="hide" title="Click to hide">
+		<!--@if($module_info->markup_type == 'markdown')-->
+			{nl2br($lang->markdown_help)}
+		<!--@elseif($module_info->markup_type == 'googlecode_markup')-->
+			{nl2br($lang->googlecode_markup_help)}
+		<!--@elseif($module_info->markup_type == 'mediawiki_markup')-->
+			{nl2br($lang->mediawiki_markup_help)}
+		<!--@end-->
+	</div>
+	<!--@end-->
+
+	<div class="wikiNavigation">
+		<input class="btn" type="submit" value="{$lang->cmd_registration}" />
+	</div>
+
+	<!--@if($module_info->markup_type != 'xe_wiki_markup')-->
+	<div id="wikiDocumentPreview"></div>
+	<!--@end-->
+	
+	<div class="tag">
+		{$lang->tag} : <input type="text" name="tags" value="{htmlspecialchars($oDocument->get('tags'))}" class="inputText" title="Tag" /> ({$lang->about_tag})
+	</div>
+
+	<!--@if(!$is_logged)-->
+	<input type="text" name="nick_name" class="inputText userName" value="{$lang->writer}" onfocus="this.value=''" />
+	<input type="password" name="password" class="inputText userPw" value="{$lang->password}" onfocus="this.value=''" />
+	<input type="text" name="email_address" class="inputText emailAddress" value="{$lang->email_address}" onfocus="this.value=''" />
+	<input type="text" name="homepage" class="inputText homePage" value="{$lang->homepage}" onfocus="this.value=''" />
+	<!--@end-->
+
+	<div id="wikiDocumentStatus">
+	<!--@if(is_array($status_list))-->
+		<!--@foreach($status_list AS $key=>$value)-->
+			<input type="radio" name="status" value="{$key}" id="{$key}" <!--@if($oDocument->get('status') == $key || ($key == 'PUBLIC' && !$document_srl))-->checked="checked"<!--@end--> />
+			<label for="{$key}">{$value}</label>
+		<!--@end-->
+	<!--@end-->
+	</div>
+
+	<div class="wikiNavigation">
+		<input class="btn" type="submit" value="{$lang->cmd_registration}" />
+	</div>
+
+</form>
+<include target="footer.html" />

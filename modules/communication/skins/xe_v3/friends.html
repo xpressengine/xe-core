@@ -1,0 +1,73 @@
+<include target="./common_header.html" />
+<load target="filter/delete_checked_friend.xml" />
+<load target="filter/delete_friend_group.xml" />
+<load target="filter/move_friend.xml" />
+<h2><img src="h2.friend.gif" width="68" height="17" alt="{$member_title = $lang->cmd_view_friend }" /></h2>
+<ul class="isTab" cond="$friend_group_list">
+	<li class="on"|cond="!$friend_group_srl"><a href="{getUrl('friend_group_srl',0)}">모든 친구</a></li>
+	<li loop="$friend_group_list => $key,$val" class="on"|cond="$friend_group_srl==$val->friend_group_srl"><a href="{getUrl('friend_group_srl',$val->friend_group_srl)}">{$val->title}</a></li>
+</ul>
+<form id="fo_friend_list" action="./" method="get" onsubmit="return procFilter(this, delete_checked_friend)">
+	<table cellspacing="0" class="aList">
+		<col width="13" />
+		<thead>
+			<tr>
+				<th scope="col"><span><input name="check_all" type="checkbox" onclick="XE.checkboxToggleAll('friend_srl_list', { wrap:'fo_friend_list' });" /></span></th>
+				<th scope="col"><span>{$lang->nick_name}</span></th>
+				<th scope="col"><span>{$lang->friend_group}</span></th>
+				<th scope="col"><span>{$lang->user_id}</span></th>
+				<th scope="col"><span>{$lang->user_name}</span></th>
+				<th scope="col"><span>{$lang->regdate}</span></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr loop="$friend_list => $no,$val">
+				<td><input type="checkbox" name="friend_srl_list" value="{$val->friend_srl}" /></td>
+				<td><a href="popup_menu_area" class="member_{$val->target_srl}" onclick="return false">{$val->nick_name}</a></td>
+				<td>{$val->group_title?$val->group_title:"&nbsp;"}</td>
+				<td>{$val->user_id}</td>
+				<td>{$val->user_name}</td>
+				<td class="num">{zdate($val->regdate,"Y-m-d")}</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="ctrArea">
+		<div class="ctrSelect">
+			<span class="ctrTo">└ 선택한 친구를</span>
+			<span class="btn25"><input type="submit" value="{$lang->cmd_delete}" /></span>
+			<span class="btn25" cond="$friend_group_list">
+				<select name="target_friend_group_srl">
+					<option>그룹</option>
+					<option loop="$friend_group_list => $key,$val" value="{$val->friend_group_srl}">{$val->title}</option>
+				</select>
+			<button type="button" onclick="doMoveFriend();return false;"><span class="ctxt">으로</span> {$lang->cmd_move}</button>
+			</span>
+		</div>
+		<div class="ctrGroup">
+			<span class="btn25 black"><button type="button" class="ctrToBtn"><span class="arrLeft"></span> 그룹관리</button></span>
+			<span class="ctrTo">
+				<span class="vr">
+					<select name="friend_group_list" id="friend_group_list">
+						<option>그룹 선택</option>
+						<option loop="$friend_group_list => $key,$val" value="{$val->friend_group_srl}" selected="selected"|cond="$val->friend_group_srl == $friend_group_srl">{$val->title}</option>
+					</select>
+					<span class="btn19"><button type="button" onclick="doRenameFriendGroup();">{$lang->cmd_modify}</button></span>
+					<span class="btn19"><button type="button" onclick="doDeleteFriendGroup();">{$lang->cmd_delete}</button></span>
+					<span class="btn19"><a href="{getUrl('','module','communication','act','dispCommunicationAddFriendGroup')}" onclick="popopen(this.href);return false;">{$lang->cmd_insert}</a></span>
+				</span>
+			</span>
+		</div>
+	</div>
+	<div class="pagination">
+		<a href="{getUrl('page','','document_srl','')}" class="direction prev"><span></span><span></span> {$lang->first_page}</a> 
+		<block loop="$page_no = $page_navigation->getNextPage()">
+			<strong cond="$page==$page_no">{$page_no}</strong> 
+			<a cond="$page!=$page_no" href="{getUrl('page',$page_no,'document_srl','')}">{$page_no}</a>
+		</block>
+		<a href="{getUrl('page',$page_navigation->last_page,'document_srl','')}" class="direction next">{$lang->last_page} <span></span><span></span></a>
+	</div>
+</form>
+<form action="./" method="get" id="for_delete_group">
+	<input type="hidden" name="friend_group_srl" value="" />
+</form>
+<include target="./common_footer.html" />

@@ -1,0 +1,115 @@
+<div class="bd rd">
+	<div class="hx">
+		<h2>
+			<!--@if($package->get('category_srl'))--><a href="{getUrl('package_srl','','document_srl','','category',$package->get('category_srl'))}">{$categories[$package->get('category_srl')]->title}</a> &rsaquo; <!--@end-->
+			{$package->getTitle()} ver. {$package->get('item_version')}
+		</h2>
+		<em>{$package->get('nick_name')}</em>
+		<span>{zdate($package->get('item_regdate'), "Y-m-d H:i")}</span>
+	</div>
+    <p class="p">{nl2br(htmlspecialchars($package->get('package_description')))}</p>
+	<div class="co">
+		<dl class="xv">
+			<dt>{$lang->package_category}</dt>
+			<dd><a href="{getUrl('package_srl','','category_srl', $package->get('category_srl'))}">{$categories[$package->get('category_srl')]->title}</a></dd>
+			<dt>{$lang->package_license}</dt>
+			<dd>{htmlspecialchars($package->get('license'))}</dd>
+			<dt>{$lang->package_author}</dt>
+			<dd>{$package->get('nick_name')}</dd>
+			<!--@if($package->get('homepage'))-->
+			<dt>{$lang->homepage}</dt>
+			<dd><a href="{$package->get('homepage')}" onclick="window.open(this.href); return false;">{$package->get('homepage')}</a></dd>
+			<!--@end-->
+			<!--@if($package->get('path') && $module_info->resource_use_path=='Y')-->
+			<dt>{$lang->package_path}</dt>
+			<dd>{$package->get('path')}</dd>
+			<!--@end-->
+			<dt>{$lang->package_regdate}</dt>
+			<dd>{zdate($package->get('package_regdate'), "Y-m-d H:i")}</dd>
+			<dt>{$lang->package_downloaded_count}</dt>
+			<td>{$package->get('package_downloaded')}</td>
+			<th>{$lang->latest_version}</th>
+			<td>{$package->get('item_version')}</td>
+			<th>{$lang->latest_version}</th>
+			<td>{$package->get('item_version')}</td>
+			<th>{$lang->downloaded_count}</th>
+			<td>{$package->get('item_downloaded')}</td>
+			<dt>{$lang->resource_estimate}</dt>
+			<dd>
+				<!--@for($i=0;$i<5;$i++)--><!--@if($i<$package->get('item_star'))-->★<!--@else-->☆<!--@end--><!--@end-->
+				<!--@if($package->get('item_voter'))-->
+				{sprintf("%0.1f",$package->get('item_voted')/$package->get('item_voter')*2)} /{number_format($package->get('item_voter'))}
+				<!--@else-->
+				0 / 0
+				<!--@end-->
+			</dd>
+		</dl>
+		<p>{$package->getContent(false)}</p>
+		<p class="ac"><a href="{$package->get('download_url')}" class="bn">{$lang->download}</a>
+	</div>
+	<div class="hx">
+		<h3>{$lang->resource_estimate} <em>[{number_format($package->getCommentCount())}]</em> <button type="button" class="tg" title="open/close"></button></h3>
+	</div>
+    <!--@if($package->getCommentCount())-->
+	<ul class="rp tgo open">
+		{@ $_comment_list = $package->getComments() }
+		<!--@foreach($_comment_list as $key => $comment)-->
+		<li>
+			<p><!--@for($i=0;$i<5;$i++)--><!--@if($i<$comment->get('voted_count'))-->★<!--@else-->☆<!--@end--><!--@end--></p>
+			<p>{$comment->getContent(false)}</p>
+			<em>{$comment->getNickName()}</em>
+			<span>{$comment->getRegdate()}</span>
+			<!--@if($comment->isGranted())-->
+			<a href="#" onclick="if(confirm('{$lang->confirm_delete}')) doDeleteComment({$package->get('package_srl')}, {$package->get('item_srl')}, {$comment->get('comment_srl')});return false;" class="md">{$lang->cmd_delete}</a>
+			<!--@end-->
+		</li>
+		<!--@end-->
+	</ul>
+	<!--@end-->
+	<div class="hx">
+		<h3 id="rw">{$lang->cmd_estimate} <button type="button" class="tg" title="open/close"></button></h3>
+	</div>
+    <form action="./" method="post" onsubmit="return procFilter(this, insert_comment)" class="sn tgo open" >
+    <input type="hidden" name="vid" value="{$vid}" />
+    <input type="hidden" name="mid" value="{$mid}" />
+    <input type="hidden" name="package_srl" value="{$package->get('package_srl')}" />
+    <input type="hidden" name="item_srl" value="{$package->get('item_srl')}" />
+		<ul>
+			<li>
+				<strong class="db">{$lang->star_point}</strong>
+				<input name="star_point" type="radio" value="1" id="p2" />
+				<label for="p2">1</label>
+				<input name="star_point" type="radio" value="2" id="p4" />
+				<label for="p4">2</label>
+				<input name="star_point" type="radio" value="3" id="p6" />
+				<label for="p6">3</label>
+				<input name="star_point" type="radio" value="4" id="p8" />
+				<label for="p8">4</label>
+				<input name="star_point" type="radio" value="5" id="p10" checked="checked" />
+				<label for="p10">5</label>
+			</li>
+			<li>
+				<label for="rText" class="db fb">{$lang->resource_estimate}</label>
+				<textarea name="content" cols="20" rows="5" id="rText" class="itxx"></textarea>
+			</li>
+		</ul>
+		<div class="ar">
+			<button type="submit" class="bn">{$lang->cmd_estimate}</button>
+		</div>
+	</form>
+	<ul class="cm">
+		<li class="fl"><a href="{getUrl('package_srl','','document_srl','')}" class="bn">{$lang->cmd_list}</a></li>
+	</ul>
+</div>
+<script>
+//<![CDATA[
+jQuery(function($){
+	$('.tgo, .pn').removeClass('open');
+	$('.tg').click(function(){
+		var tgo = $(this).parents('.hx:first').next('.tgo');
+		tgo.toggleClass('open');
+		tgo.next('.pn').toggleClass('open');
+	});
+});
+//]]>
+</script>

@@ -1,0 +1,9 @@
+<load target="./css/resource.css" />
+<div class="resource">
+	{$module_info->header_text}
+	<div class="resourceHeader" cond="$module_info->title">
+		<div class="resourceTitle">
+			<h2 class="resourceTitleText"><a href="{getUrl('','mid',$mid,'listStyle',$listStyle)}">{$module_info->title}<!--@if($module_info->sub_title)--> : <em>{$module_info->sub_title}</em><!--@end--></a></h2>
+		</div>
+		<p class="resourceDescription" cond="$module_info->comment">{nl2br($module_info->comment)}</p>
+	</div>

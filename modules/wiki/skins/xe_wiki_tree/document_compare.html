@@ -1,0 +1,16 @@
+<include target="header.html" />
+
+<load target="css/diff-styles.css" />
+
+
+<div id="wikiTitleArea">
+	<h2 id="wikiTitle">{$oDocument->getTitle()} - History compare</h2>
+</div>
+
+<div id="wikiDiff">
+	<a href="{getUrl('act','dispWikiHistory','document_srl',$oDocument->document_srl,'history_srl','')}">{$lang->cmd_back}</a>
+
+	{$diff_html}
+</div>
+<div class="cleared"></div>
+<include target="footer.html" />

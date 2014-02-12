@@ -1,0 +1,87 @@
+<include target="header.include.html" />
+
+<div class="column_left"|cond="$module_info->default_style == 'horizontal' || !$module_info->default_style" class="column_single"|cond="$module_info->default_style == 'vertical'">
+	<form class="search_form corner05 clearfix" action="{getUrl()}" method="get" id="fo_kin_search">
+		<input cond="$vid" type="hidden" name="vid" value="{$vid}" />
+		<input type="hidden" name="mid" value="{$mid}" />
+		<input type="hidden" name="category" value="{$category}" />
+		<input type="hidden" name="rtarget" value="{$rtarget}" />
+		<fieldset>
+			<legend class="blind">search</legend>
+			<div class="ipt_box">
+				<span class="bullet"></span>
+				<span class="ipt_inner"><input type="text" class="ipt_txt" name="search_keyword" value="{htmlspecialchars($search_keyword)}"/></span>
+				<input type="image" src="img/btn_srch_sbmt.png" width="67" height="32" class="btn_sbmt_srch" onclick="xGetElementById('fo_kin_search').submit();return false;"/>
+			</div>
+		
+			<!-- border-round elements -->
+			<span class="corn l"></span><span class="corn r"></span>
+		</fieldset>
+	</form>
+
+        <div class="sec_list">
+            <div class="tab_header"|cond="$module_info->default_style == 'horizontal' || !$module_info->default_style" class="tab_header tab_horizontal"|cond="$module_info->default_style == 'vertical'">
+                <ul class="tabgroup">
+                    <li class="active"|cond="$rtarget=='total'"><a href="{getUrl('page',1,'rtarget','total')}"><span>{$lang->total_point}</span></a></li>
+					<li class="active"|cond="$rtarget=='week'"><a href="{getUrl('page',1,'rtarget','week')}"><span>{$lang->weekly_point}</span></a></li>
+					<li class="active"|cond="$rtarget=='month'"><a href="{getUrl('page',1,'rtarget','month')}"><span>{$lang->monthly_point}</span></a></li>
+					<li class="active"|cond="$rtarget=='annual'"><a href="{getUrl('page',1,'rtarget','annual')}"><span>{$lang->annually_point}</span></a></li>
+                </ul>
+				<div class="sum">
+					<em>	{number_format($page_navigation->total_count)}, {$page}/{number_format($page_navigation->total_page)} pages</em>
+				</div>
+            </div><!-- /header -->
+            <div class="board_lst">
+                <table cellspacing="0" class="mb_rank">
+                    <caption class="blind">Question List</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col" class="frst" width="80px">{$lang->position}</th>
+                            <th scope="col" class="col2">{$lang->user_name}</th>
+                            <th scope="col" class="col3">{$lang->all_questions}</th>
+                            <th scope="col" class="col4">{$lang->all_answers}</th>
+                            <th scope="col" class="col5">{$lang->accepted_answer}</th>
+                            <th scope="col" class="last">{$lang->total_point}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+						{@ $index = 1;}
+						<tr loop="$member_point_rank => $key, $member">
+							<td>{$index}</td>
+							 <td class="col2" >
+                                <a href="" class="member_{$member->member_srl}">
+									{@ 
+										$oMemberModel = &getModel('member');
+										$memberImage = $oMemberModel->getProfileImage($member->member_srl);
+									}
+									<img cond="$memberImage" border="0" src="{$memberImage->src}" width="46" height="46">
+									<img cond="!$memberImage" src="img/default_profile_pic46.png" width="46" height="46" alt="">{$member->nick_name}
+								</a>
+                            </td>
+							<td class="col3">{$member->question_count}</td>
+							<td class="col4">{$member->answer_count}</td>
+							<td class="col5">{$member->accepted_count}</td>
+							<td class="last">{$member->point}</td>
+							{@ $index++;}
+						</tr>
+                    </tbody>
+                </table>
+				<div class="pagination" cond="$page_navigation">
+					<a class="prevEnd" href="{getUrl('page','')}"><i class="ico_prev"></i>{$lang->first_page}</a>
+					<!--@while($page_no = $page_navigation->getNextPage())-->
+						<!--@if($page == $page_no)-->
+							<strong>{$page_no}</strong>
+						<!--@else-->
+							<a href="{getUrl('page',$page_no)}">{$page_no}</a>
+						<!--@end-->
+					<!--@end-->
+					<a class="nextEnd" href="">{$lang->last_page}<i class="ico_next"></i></a>
+				</div>
+                <a href="{getUrl('','mid',$mid)}" class="btn_back"><span>{$lang->back}</span></a>
+            </div>
+        </div><!-- //sec_list -->
+    </div><!-- //column_left -->
+
+<include target="widget.inlcude.html" />
+
+<include target="footer.include.html" />

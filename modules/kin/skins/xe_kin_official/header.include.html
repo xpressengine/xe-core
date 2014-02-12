@@ -1,0 +1,32 @@
+<load target="./css/style.css" />
+<load target="./js/kin.js" />
+
+<div id="tmp">
+<div class="kinHeader">
+    <div class="kinTitle">
+        <h1 class="mod_title">
+			<block cond="$type != 'my_questions' && $type != 'my_replies' && $type != 'popular' && $type != 'popular_answers'">
+				<a href="{getUrl('','mid',$mid,'listStyle',$listStyle)}"><!--@if($module_info->qa_title)-->{$module_info->qa_title}<!--@else-->Q & A System<!--@end--></a>
+			</block>
+			<block cond="$type == 'my_questions' || $type == 'my_replies'">
+				{$lang->my_question_answer}
+			</block>
+			<block cond="$type == 'popular' || $type == 'popular_answers'">
+				{$lang->popolar_question_answer}
+			</block>
+		</h1>
+		<block cond="$type == 'my_questions' || $type == 'my_replies' || $type == 'popular' || $type == 'popular_answers' || ($oDocument && $act != dispKinReply)">
+			<div class="breadcrumb">
+				<ul>
+				<li><a href="{getUrl('','mid',$mid,'listStyle',$listStyle)}"><!--@if($module_info->qa_title)-->{$module_info->qa_title}<!--@else-->Q & A System<!--@end--></a><em> &gt;&nbsp; </em></li>
+				<li class="current" cond="$type == 'my_questions' || $type == 'my_replies'"><a href="">{$lang->my_question_answer}</a></li>
+				<li class="current" cond="$type == 'popular' || $type == 'popular_answers'"><a href="">{$lang->popolar_question_answer}</a></li>
+				<li class="current" cond="$oDocument"><a href="">Question Information</a></li>
+				</ul>
+			</div>
+		</block>
+		<block cond="$type != 'my_questions' && $type != 'my_replies' && $type != 'popular' && $type != 'popular_answers' && !$oDocument">
+			<a cond="$is_logged && $logged_info->is_admin == 'Y'" class="setup" href="{getUrl('act','dispKinAdminInsert','mid',$module_info->mid,'module_srl', $module_info->module_srl)}">{$lang->cmd_setup}</a>
+		</block>
+    </div>
+</div>

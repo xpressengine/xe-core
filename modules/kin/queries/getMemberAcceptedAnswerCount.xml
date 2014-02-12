@@ -1,0 +1,14 @@
+<query id="getMemberAcceptedAnswerCount" action="select">
+    <tables>
+        <table name="comments" alias="com" />
+		<table name="kin_thread" alias="kin_thread" />
+    </tables>
+    <columns>
+        <column name="count(com.*)" alias="accepted_count" />
+    </columns>
+    <conditions>
+		<condition operation="equal" column="com.module_srl" var="module_srl"/>
+        <condition operation="equal" column="com.member_srl" var="member_srl" pipe="and"/>
+		<condition operation="equal" column="com.comment_srl" var="kin_thread.selected" pipe="and"/>
+    </conditions>
+</query>

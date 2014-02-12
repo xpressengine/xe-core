@@ -1,0 +1,89 @@
+<!--#include("_tool_header.html")-->
+
+			<!-- Content -->
+			<div id="content">
+				
+				<!-- contentHeader -->
+				<div class="contentHeader replyHeader">
+					<h3 class="h3">{$lang->textyle_second_menus[2]['dispTextyleToolCommunicationComment']}</h3>
+				</div>
+				<!-- /contentHeader -->
+				
+				<!-- Table Data -->
+				<fieldset>
+					<form method="post" onsubmit="return insertCommentItem(this, insert_comment)">
+						<input name="mid" type="hidden" value="{$mid}" />
+						<input type="hidden" name="document_srl" value="{$oComment->get('document_srl')}" />
+						<input type="hidden" name="comment_srl" value="{$oComment->get('comment_srl')}" />
+						<input type="hidden" name="content" value="{htmlspecialchars($oComment->get('content'))}" />
+						<input type="hidden" name="parent_srl" value="{$oComment->get('parent_srl')}" />
+
+					<legend>{$lang->manage_comment}</legend>
+						<table border="1" cellspacing="0" summary="{$lang->content_list}" class="tableData">
+							<thead>
+								<tr>
+									<th scope="col">{$lang->avatar}</th>
+									<th scope="col" class="replyArea">{$lang->comment}</th>
+									<th scope="col">{$lang->email_address}</th>
+									<th scope="col">{$lang->ipaddress}</th>
+								</tr>
+							</thead>
+							<tbody>
+                                    {@$_profile_image = $oSourceComment->getProfileImage()}
+                                <tr>
+									<td class="thumb">
+                                        <!--@if($_profile_image)-->
+										<img src="{$_profile_image}" alt="{htmlspecialchars($oSourceComment->getNickName())}" />
+                                        <!--@else-->
+										<img height="39" width="39" alt="" src="img/iconEmoticonDefault.gif" class="author"/>
+                                        <!--@end-->
+                                    </td>
+									<td class="replyArea">
+										<dl>
+											<dt>
+                                                <strong>{$oSourceComment->getNickName()}</strong>
+                                                <span class="yymmdd">{$oSourceComment->getRegdate("Y.m.d")}</span> <span class="hhmm">{$oSourceComment->getRegdate("H:i")}</span>
+                                            </dt>
+											<dd>{$oSourceComment->getContent(false,false)}</dd>
+										</dl>
+									</td>
+									<td class="email">{$oSourceComment->email_address}&nbsp;</td>
+									<td class="ipAddress">{$oSourceComment->ipaddress}</td>
+								</tr>
+								<tr class="replyAction" >
+									<td class="thumb">
+										<!--@if($logged_info->profile_image)-->
+										<img src="{$logged_info->profile_image->src}" alt="{$logged_info->nick_name}" />
+										<!--@else-->
+										<img height="39" width="39" alt="" src="img/iconEmoticonDefault.gif" class="author"/>
+										<!--@end-->
+									</td>
+									<td colspan="4">
+										<div class="textarea">
+											<span class="arrow"></span>
+                                {$oComment->getEditor()}
+										</div>
+										<div class="replyButtonArea">
+                                <!--@if($is_logged)-->
+                                <strong class="name">{$logged_info->nick_name}</strong> <span class="email">{$logged_info->email_address}</span> <span class="url">{$logged_info->homepage}</span>
+                                <!--@end-->
+                                <input name="is_secret" id="secret1" type="checkbox" value="Y" class="inputCheck" />
+                                <label for="secret1">{$lang->secret}</label>
+								<span class="btnGray medium strong"><button type="submit"><img height="8" width="12" class="icon" alt="" src="/blog/modules/textyle/tpl/img/iconCheckSmall.gif"/>{$lang->cmd_reply_comment}</button></span>								
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+				</fieldset>
+			</div>
+			<hr />
+			<!-- /Content -->
+
+			<!-- Extension -->
+			<!--#include("_tool_menu.html")-->
+			<!-- Extension -->
+
+<!--#include("_tool_footer.html")-->

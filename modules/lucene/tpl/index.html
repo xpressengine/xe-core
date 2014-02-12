@@ -1,0 +1,37 @@
+<!--#include("header.html")-->
+<!--%import("filter/insert_config.xml")-->
+<!--%import("../../widget/tpl/js/widget_admin.js")-->
+
+<h4 class="xeAdmin">{$lang->set_for_nlucene}</h4>
+ <div class"infoText">{nl2br($lang->about_config_share)}</div>
+<form action="./" method="get" onsubmit="return procFilter(this, insert_config)">
+    <table cellspacing="0" class="rowTable">
+    <!-- setting for Lucene API -->
+    <tr>
+        <th scope="row2"><div>{$lang->apiurl}</div></th>
+        <td>
+            <input type="textarea" class="fullWidth" name="search_url" value="{$searchUrl}" />
+            <p>{$lang->about_apiurl}</p>
+        </td>
+    </tr>
+    <tr>
+        <th scope="row2"><div>DB서버 위치</div></th>
+        <td>
+            <input type="textarea" class="fullWidth" name="db_server" value="{$db_server}" />
+            <p>nLucene 서버가 색인을 위해 XE에서 사용하는 DB에 접근할 수 있는 주소를 입력해 주십시오.<br />입력하지 않을 경우 자동으로 생성된 값이 사용되지만, 권한에 따라 DB에 접근하지 못할 수도 있습니다.</p>
+        </td>
+    </tr>
+    <tr>
+        <th scope="row"><div>{$lang->uselucene}</div></th>
+        <td>
+            <input type="checkbox" name="uselucene" value="true" <!--@if($uselucene=="true")-->checked<!--@end-->>  {$lang->about_uselucene}</input>
+            <p>{$lang->about_db_whether_lucene}</p>
+        </td>
+    </tr>
+    <tr class="row2">
+        <th class="button" colspan="3">
+            <span class="button black strong"><input type="submit" value="{$lang->cmd_registration}" accesskey="s" /></span>
+        </th>
+    </tr>
+    </table>
+</form>

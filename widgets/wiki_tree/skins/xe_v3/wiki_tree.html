@@ -1,0 +1,26 @@
+{@ $_pDepth = 0;}
+<ul>
+	<!--@foreach($list as $key => $val)-->
+	<!--@if($_pDepth > $val->depth)-->
+	<!--@for($i=$val->depth; $i<$_pDepth; $i++)-->
+</ul>
+</li>
+<!--@end-->
+{@ $_pDepth = $val->depth}
+<!--@end-->
+<li>
+<!--@if($val->childs)-->
+<!--@end-->
+	<a href="{getSiteUrl($site_module_info->domain, '','mid',$mid,'document_srl',$val->document_srl)}">{$val->title}</a>
+<!--@if($val->childs)-->
+{@$_pDepth++}
+<ul>
+	<!--@else-->
+	</li>
+	<!--@end-->
+	<!--@end-->
+	<!--@for($i=0;$i<$_pDepth;$i++)-->
+</ul>
+<!--@end-->
+</li>
+</ul>

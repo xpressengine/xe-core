@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component version="0.2">
+    <title xml:lang="ko">Naver Photo Editor</title>
+    <title xml:lang="jp">Naver Photo Editor</title>
+    <description xml:lang="ko">네이버 Photo Editor API를 이용하여 이미지를 편집하고 첨부할 수 있습니다.</description>
+    <description xml:lang="jp">ネイバー(Naver) Photo Editor APIを利用して、画像の編集・添付が出来ます。</description>
+    <version>0.1</version>
+    <date>2009-07-02</date>
+
+    <author email_address="celdi77@gmail.com">
+        <name xml:lang="ko">celdi</name>
+        <name xml:lang="jp">celdi</name>
+    </author>
+</component>

@@ -1,0 +1,32 @@
+<include target="header.html" />
+<div id="wikiComments">
+	<div id="commentsArea">
+		<h3>
+			Add comment reply
+		</h3>
+	<!--@if($oSourceComment->isExists())-->
+	<div id="commentsList">
+		<div class="item itemOnly" >
+
+			<div class="itemAside">
+				<h4 class="fHeader"><a href="#popup_menu_area" class="member_{$oSourceComment->getMemberSrl()}" onclick="return false">{$oSourceComment->getNickName()}</a></h4>
+				<p class="meta">
+					{$oSourceComment->getRegdate("Y.m.d H:i")}
+					<!--@if($grant->manager)-->
+					<br />{$oSourceComment->get('ipaddress')}
+					<!--@end-->
+				</p>
+			</div>
+
+			<div class="itemContent">
+				{$oSourceComment->getContent(false)}
+			</div>
+
+		</div>
+	</div>
+
+	<!--@end-->
+	</div>
+	<include target="comment_form.html" />
+</div>
+<include target="footer.html" />

@@ -1,0 +1,9 @@
+{@ $ws_more_url = trim($widgetstyle_extra_var->ws_more_url); }
+
+
+<div class="{$widgetstyle_extra_var->ws_class_name}">
+    <h2 cond="$widgetstyle_extra_var->ws_title">{$widgetstyle_extra_var->ws_title}</h2>
+    {$widget_content}
+    <a cond="$widgetstyle_extra_var->ws_title" href="{$ws_more_url}" class="more"><span>{$widgetstyle_extra_var->ws_title}</span> {$widgetstyle_extra_var->ws_more_text}</a>
+</div>
+

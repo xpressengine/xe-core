@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon version="0.2">
+	<title xml:lang="ko">Board 권한 확장 애드온</title>
+	<title xml:lang="en">Addon for Board grant extends</title>
+	<description xml:lang="ko">
+		게시판 사용자 권한에 대해서 수정 하기위한 애드온
+		( 1. 댓글 작성 권한이 특정 그룹에 한정되더라도 글 작성자는 자신이 작성한 글에 댓글을 작성 할 수 있음 ) 
+	</description>
+	<description xml:lang="en">
+		This addon support for Board grant.
+	</description>
+	<version>1.7</version>
+	<date>2014-01-15</date>
+
+	<author email_address="developers@xpressengine.com" link="http://xpressengine.com/">
+		<name xml:lang="ko">NAVER</name>
+		<name xml:lang="en">NAVER</name>
+	</author>
+</addon>

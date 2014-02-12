@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ruleset version="1.0">
+    <customrules>
+    </customrules>
+    <fields>
+        <field name="title" required="true" maxlength="1:250" />
+        <field name="content" required="true" />
+    </fields>
+</ruleset>

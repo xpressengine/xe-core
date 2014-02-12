@@ -1,0 +1,8 @@
+<query id="deleteLinkedDocuments" action="delete">
+    <tables>
+        <table name="wiki_links" />
+    </tables>
+    <conditions>
+        <condition operation="equal" column="cur_doc_srl" var="document_srl" filter="number" />
+    </conditions>
+</query>

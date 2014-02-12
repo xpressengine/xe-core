@@ -1,0 +1,200 @@
+<!--#include("header.html")-->	
+<!--%import("js/toggle.js")-->
+	
+	<!-- #issueBody -->
+	<div id="issueBody">
+	
+		<!-- #pxeContent -->
+		<div id="pxeContent">
+			
+			<div class="pxeHeading">
+				<h2>{$lang->project_menus['dispIssuetrackerNewIssue']}</h2>
+			</div>
+			
+			<form action="{Context::getRequestUri()}" method="post" class="pxeWrite" onsubmit="return procFilter(this, window.insert);">
+			<input type="hidden" name="vid" value="{$vid}" />
+			<input type="hidden" name="mid" value="{$mid}" />
+			<input type="hidden" name="content" value="{$oIssue->getContentText()}" />
+			<input type="hidden" name="document_srl" value="{$document_srl}" />
+			
+				<div class="pxeWriteHeader item">
+					<!--@if($oIssue->getTitleText())-->
+					<label for="title" class="iLabel" style="visibility:hidden;">{$lang->title}</label><input name="title" type="text" class="iText" id="title" value="{htmlspecialchars($oIssue->getTitleText())}"/>
+					<!--@else-->
+					<label for="title" class="iLabel">{$lang->title}</label><input name="title" type="text" class="iText" id="title" />
+					<!--@end-->
+				</div>
+				
+				<table border="1" cellspacing="0" class="pxeT5">
+				<!--@if(count($extra_keys))-->
+				<!--@foreach($extra_keys as $key => $val)-->
+				<tr>
+					<th scope="row">{$val->name} <!--@if($val->is_required=='Y')--><em>*</em><!--@end--></th>
+					<td>{$val->getFormHTML()}</td>
+				</tr>
+				<!--@end-->
+				<!--@end-->
+
+				<!--@if(!$oIssue->isExists())-->
+				<!--@if($grant->commiter)-->
+				<!--@if(count($project->milestones) > 0)-->
+				<tr>
+					<th scope="row"><label for="inputMilestone">{$lang->milestone}</label></th>
+					<td>
+						<select name="milestone_srl" id="inputMilestone">
+						<option value="0">{$lang->milestone}</option> 
+						<!--@foreach($project->milestones as $val)-->
+						<!--@if($val->is_completed != 'Y')-->
+						<option value="{$val->milestone_srl}" <!--@if($val->is_default == 'Y')-->selected="selected"<!--@end-->>{$val->title}</option>
+						<!--@endif-->
+						<!--@end-->
+						</select>
+					</td>
+				</tr>
+				<!--@endif-->
+				<!--@if(count($project->priorities) > 0)-->
+				<tr>
+					<th scope="row"><label for="inputPriority">{$lang->priority}</label></th>
+					<td>
+						<select name="priority_srl" id="inputPriority">
+						<option value="">{$lang->priority}</option> 
+						<!--@foreach($project->priorities as $key => $val)-->
+							<option value="{$val->priority_srl}" <!--@if($val->is_default=='Y')-->selected="selected"<!--@end-->>{$val->title}</option> 
+							<!--@end-->
+						</select>
+					</td>
+				</tr>
+				<!--@endif-->
+				<!--@endif-->
+				<!--@if($grant->commiter && count($project->packages))-->
+				<tr>
+					<th scope="row"><label for="inputPackage">{$lang->occured_version}</label></th>
+					<td>
+						<select name="package_srl" id="inputPackage" onchange="showRelease(this,this.form);">
+							<option value="">{$lang->package}</option> 
+							<!--@foreach($project->packages as $key => $val)-->
+							<option value="{$val->package_srl}" <!--@if($val->package_srl==$oIssue->get('package_srl'))-->selected="selected"<!--@end-->>{$val->title}</option> 
+							<!--@end-->
+						</select>
+						<select name="release_srl">
+							<option value="">{$lang->release}</option> 
+							<!--@foreach($project->packages as $key => $val)-->
+							
+							<!--@if($val->package_srl==$oIssue->get('package_srl'))-->
+								<!--@foreach($project->releases as $k => $v)-->
+								<!--@if($val->package_srl == $v->package_srl)-->
+								<option value="{$v->release_srl}" <!--@if($v->release_srl==$oIssue->get('occured_version_srl'))-->selected="selected"<!--@end-->>{$v->title}</option> 
+								<!--@end-->
+								<!--@end-->
+
+							<!--@end-->
+
+							<!--@end-->
+						</select>
+					</td>
+				</tr>
+				<!--@endif-->
+				<!--@if(count($project->types) > 0)-->
+				<tr>
+					<th scope="row"><label for="inputType">{$lang->type}</label></th>
+					<td>
+						<select name="type_srl" id="inputType">
+							<option value="">{$lang->type}</option> 
+							<!--@foreach($project->types as $key => $val)-->
+							<option value="{$val->type_srl}" <!--@if($val->is_default=='Y')-->selected="selected"<!--@end-->>{$val->title}</option> 
+							<!--@end-->
+						</select>
+					</td>
+				</tr>
+				<!--@endif-->
+				<!--@if(count($project->components) > 0)-->
+				<tr>
+					<th scope="row"><label for="inputComponent">{$lang->component}</label></th>
+					<td>
+						<select name="component_srl" id="inputComponent">
+							<option value="">{$lang->component}</option> 
+							<!--@foreach($project->components as $key => $val)-->
+							<option value="{$val->component_srl}" <!--@if($val->is_default=='Y')-->selected="selected"<!--@end-->>{$val->title}</option> 
+							<!--@end-->
+						</select>
+					</td>
+				</tr>
+				<!--@endif-->
+				<!--@endif-->
+				</table>
+				
+				<div class="editor">{$oIssue->getEditor()}</div>
+
+				<div class="pxeTag item">
+					<label for="tag" class="iLabel" <!--@if($oIssue->get('tags'))-->style="visibility:hidden"<!--@end--> >{$lang->about_tag}</label><input type="text" title="Tag" class="iText" id="tag" name="tags" value="{htmlspecialchars($oIssue->get('tags'))}" />
+				</div>
+
+				<div class="editorOption">
+				<!--@if($grant->manager)-->
+				{@ $_color = array('555555','222288','226622','2266EE','8866CC','88AA66','EE2222','EE6622','EEAA22','EEEE22') }
+					<select name="title_color" id="title_color" <!--@if($oIssue->get('title_color'))-->style="color:#{$oIssue->get('title_color')};"<!--@end--> onchange="this.style.color=this.options[this.selectedIndex].style.color;">
+					<option value="" style="color:#CCCCCC;">{$lang->title_color}</option>
+					<!--@foreach($_color as $_col)-->
+					<option value="{$_col}" style="color:#{$_col}" <!--@if($oIssue->get('title_color')==$_col)-->selected="selected"<!--@end-->>{$lang->title_color}</option>
+					<!--@endforeach-->
+					</select>
+					<input type="checkbox" name="title_bold" id="title_bold" value="Y" <!--@if($oIssue->get('title_bold')=='Y')-->checked="checked"<!--@end--> />
+					<label for="title_bold">{$lang->title_bold}</label>
+					<input type="checkbox" name="is_notice" value="Y" <!--@if($oIssue->isNotice())-->checked="checked"<!--@end--> id="is_notice" />
+					<label for="is_notice">{$lang->notice}</label>
+					<input type="checkbox" name="lock_comment" value="Y" <!--@if($oIssue->isLocked())-->checked="checked"<!--@end--> id="lock_comment" />
+					<label for="lock_comment">{$lang->lock_comment}</label>
+					<!--@endif-->
+					<input type="checkbox" name="is_secret" value="Y" <!--@if($oIssue->isSecret())-->checked="checked"<!--@end--> id="is_secret" />
+					<label for="is_secret">{$lang->secret}</label>
+					<input type="checkbox" name="allow_comment" value="Y" <!--@if($oIssue->allowComment())-->checked="checked"<!--@end--> id="allow_comment" />
+					<label for="allow_comment">{$lang->allow_comment}</label>
+					<input type="checkbox" name="allow_trackback" value="Y" <!--@if($oIssue->allowTrackback())-->checked="checked"<!--@end--> id="allow_trackback" />
+					<label for="allow_trackback">{$lang->allow_trackback}</label>
+					<!--@if($is_logged)-->
+					<input type="checkbox" name="notify_message" value="Y" <!--@if($oIssue->useNotify())-->checked="checked"<!--@end--> id="notify_message" />
+					<label for="notify_message">{$lang->notify}</label>
+					<!--@end-->
+				</div>
+				
+				<!--@if(!$is_logged)-->
+				<div class="guest">
+					<span class="item"><label for="author" class="iLabel">{$lang->writer}</label><input name="nick_name" type="text" id="author" class="iText" title="{$lang->writer}" /></span>
+					<span class="item"><label for="password" class="iLabel">{$lang->password}</label><input name="password" type="password" id="password" class="iText" title="{$lang->password}" /></span>
+					<span class="item"><label for="email" class="iLabel">{$lang->email_address}</label><input name="email_address" type="text" id="email" class="iText" title="{$lang->email_address}" /></span>
+					<span class="item"><label for="site" class="iLabel">{$lang->homepage}</label><input name="homepage" type="text" id="site" class="iText" title="{$lang->homepage}" /></span>
+				</div>
+				<!--@end-->
+				
+				<div class="buttonArea">
+					<span class="btnPxe strong"><input name="" type="submit" value="{$lang->cmd_registration}" /></span>
+				</div>
+			
+			</form>
+			
+		</div>
+		<!-- /#pxeContent -->
+		
+	</div>
+	<!-- /#issueBody -->
+<form action="{Context::getRequestUri()}" method="get" style="display:none;">
+<input type="hidden" name="vid" value="{$vid}" />
+<!--@foreach($project->packages as $key => $val)-->
+<select id="release_{$val->package_srl}">
+    <option value="">{$lang->release}</option> 
+    <!--@foreach($project->releases as $k => $v)-->
+    <!--@if($val->package_srl == $v->package_srl)-->
+    <option value="{$v->release_srl}" <!--@if($v->release_srl==$release_srl)-->selected="selected"<!--@end-->>{$v->title}</option> 
+    <!--@end-->
+    <!--@end-->
+</select>
+<!--@end-->
+</form>
+<script type="text/javascript">
+    package = new Array();
+    <!--@foreach($project->releases as $k => $v)-->
+    if(!package['{$v->package_srl}']) package['{$v->package_srl}'] = new Array();
+    package['{$v->package_srl}'][package['{$v->package_srl}'].length] = new Array('{$v->release_srl}','{$v->title}');
+    <!--@end-->
+</script>
+<!--#include("footer.html")-->

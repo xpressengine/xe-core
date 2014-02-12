@@ -1,0 +1,8 @@
+<query id="deleteBlogApiLogs" action="delete">
+    <tables>
+        <table name="textyle_blogapi_logs" />
+    </tables>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" notnull="notnull" />
+    </conditions>
+</query>

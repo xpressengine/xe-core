@@ -1,0 +1,120 @@
+<include target="include.header.html" />
+<div class="rsHeader">
+	<h2><img src="img/h2.fileManage.gif" width="66" height="18" alt="{$lang->cmd_manage_file}" /></h2>
+</div>
+<div class="rsForm">
+    <p class="notice">{$lang->about_manage_file}</p>
+    <table cellspacing="0" cellpadding="0" class="meta">
+		<tr>
+			<th scope="row">{$lang->package_title}</th>
+			<td colspan="3">{$selected_package->title}</td>
+		</tr>
+		<tr>
+			<th scope="row">{$lang->status}</th>
+			<td>
+				<!--@if($selected_package->status == 'accepted')-->
+					{$lang->package_accepted}
+				<!--@elseif($selected_package->status == 'reservation')-->
+					{$lang->package_reservation}
+				<!--@else-->
+					{$lang->package_waiting}
+				<!--@end-->
+			</td>
+			<th scope="row">{$lang->regdate}</th>
+			<td>{zdate($selected_package->regdate, "Y-m-d H:i")}</td>
+		</tr>
+		<tr>
+			<th scope="row">{$lang->package_category}</th>
+			<td>{$categories[$selected_package->category_srl]->title}</td>
+			<th scope="row">{$lang->package_license}</th>
+			<td>{$selected_package->license}</td>
+		</tr>
+		<tr>
+			<th scope="row">{$lang->package_path}</th>
+			<td colspan="3">{$selected_package->path}</td>
+		</tr>
+    </table>
+	
+	<div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/resource/skins/xe_v3/attach/1'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+		<p>{$XE_VALIDATOR_MESSAGE}</p>
+	</div>
+	
+    <form action="./" method="post" enctype="multipart/form-data" ruleset="attachOneTime">
+		<input type="hidden" name="vid" value="{$vid}" />
+		<input type="hidden" name="mid" value="{$mid}" />
+		<input type="hidden" name="act" value="procResourceAttachOneTime" />
+		<input type="hidden" name="package_srl" value="{$selected_package->package_srl}" />
+		<input type="hidden" name="item_srl" value="{$item_srl}" />
+		<input type="hidden" name="document_srl" value="{$document_srl}" />
+		<input type="hidden" name="dependency" value="" />
+		<!--// for backward compatibility, remain a 'attach_description'. 
+    		copy a value of 'attach_description' to 'description' when submit by 'BeforeValidateStub' -->
+		<input type="hidden" name="attach_description" value="" />
+		<input type="hidden" name="description" value="" />
+		<input type="hidden" name="xe_validator_id" value="modules/resource/skins/xe_v3/attach/1" />
+		<fieldset>
+		<table cellspacing="0" border="1" class="rsTable">
+            <tr>
+                <th scope="row">{$lang->attach_file} <em>*</em></th>
+                <td>
+					<input type="file" name="attach_file"/>
+                    <p>{$lang->about_attach_file}</p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">{$lang->attach_screenshot} <em>*</em></th>
+                <td>
+					<input type="file" name="attach_screenshot"/>
+                    <p>{$lang->about_attach_screenshot}</p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">{$lang->attach_version} <em>*</em></th>
+                <td>
+					<input type="text" name="version" class="iText"/>
+                    <p>{$lang->about_attach_version}</p>
+                    <!--@if($latest_item)-->
+                    <p><strong>{$lang->latest_attach_version} : {$latest_item->item_version}</strong></p>
+                    <!--@end-->
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><em>{$lang->attach_dependency}</em></th>
+                <td>
+                    <select name="sel_dependency" size="10" id="sel_dependency" style="width:400px;"></select>
+                    <p>
+                        <span class="btn25"><button type="button" onclick="doSearchDependency(); return false;">{$lang->cmd_search}</button></span>
+                        <span class="btn25"><button type="button" onclick="doDeleteDependency(); return false;">{$lang->cmd_delete}</button></span>
+                    </p>
+                    <p>{$lang->about_attach_dependency}</p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">{$lang->tag}</th>
+                <td>
+                    <input type="text" name="tag" class="iText"/>
+                    <p>{$lang->about_tag}</p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">{$lang->attach_description} <em>*</em></th>
+                <td>
+                    <div class="editor">
+						{$editor}
+						<!--// if the page is back by error, delete autosave data  -->
+                    	<script cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/resource/skins/xe_official/attach/1'">
+                    		jQuery('input[name="_saved_doc_title"], input[name="_saved_doc_content"]').val('');
+                    	</script>
+					</div>
+                    <p>{$lang->about_attach_description}</p>
+                </td>
+            </tr>
+            </table>
+        </fieldset>
+        <div class="btnArea">
+            <span class="btn25 blue"><input type="submit" value="{$lang->cmd_attach_file}" /></span>
+            <span class="btn25"><a href="{getUrl('act','dispResourcePackage')}">{$lang->cmd_back}</a></span>
+        </div>
+    </form>
+</div>
+<include target="include.footer.html" />

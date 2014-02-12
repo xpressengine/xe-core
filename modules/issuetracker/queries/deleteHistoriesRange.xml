@@ -1,0 +1,9 @@
+<query id="deleteHistoriesRange" action="delete">
+	<tables>
+		<table name="issues_history" />
+	</tables>
+	<conditions>
+		<condition operation="more" column="issues_history_srl" var="minsrl" notnull="notnull" />
+		<condition operation="less" column="issues_history_srl" var="maxsrl" notnull="notnull" pipe="and" />
+	</conditions>
+</query>

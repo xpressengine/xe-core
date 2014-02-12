@@ -1,0 +1,48 @@
+<include target="header.include.html" />
+
+<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+
+<div class="section clearfix">
+        <h2 class="sec_title">{$lang->cmd_add_question}</h2>       
+ </div><!-- //section -->
+
+<div class="section compose_question clearfix ">
+	<form action="./" method="post" ruleset="insertQuestion" id="fo_kin_write_question" class="compose_q">
+		<input type="hidden" name="act" value="procKinInsert" />
+		<input type="hidden" name="mid" value="{$mid}" />
+		<input type="hidden" name="document_srl" value="{$oDocument->document_srl}" />
+		<input type="hidden" name="content" value="{$oDocument->getContentText()}" />
+		<input type="hidden" name="enable_category" value="N" />
+		<fieldset>
+			<legend class="blind"></legend>
+			<div class="form_s_row"  cond="$module_info->use_category=='Y'">
+				<label for="cate" class="left">{$lang->ask_category}</label>
+				<select name="category_srl" class="right fe_sel">
+					<option value="">{$lang->category}</option>
+					<option loop="$categories => $val" value="{$val->category_srl}" selected="selected"|cond="$val->selected||$val->category_srl==$oDocument->get('category_srl')">
+						{str_repeat("&nbsp;&nbsp;",$val->depth)} {$val->title} ({$val->document_count})
+					</option>
+				</select>
+			</div>
+		<div class="form_s_row">
+			<label for="" class="left">{$lang->title}</label>
+			<input type="text" class="right fe_ipt"  name="title" value="{htmlspecialchars($oDocument->get('title'))}">
+		</div>
+		<div class="editor">
+			{$oDocument->getEditor()}
+		</div>
+		<div class="form_m_row">
+			<label for="" class="left">{$lang->give_point}</label>
+			<strong cond="$oDocument->isExists()">{number_format(intval($oDocument->get('point')))} {$point_name}</strong>
+			<input cond="!$oDocument->isExists()" type="text" name="give_point" value="{$max_point}" class="right" /><span class="right"> /{number_format(intval($limit_point))} {$point_name}</span>
+			<span class="desc">{sprintf($lang->about_give_point, $min_point, $limit_point)}.</span>
+		</div>
+		<a href="" onclick="location.href='{getUrl('act','','title','')}';return false;" class="btn_back"><span>{$lang->back}</span></a>
+		<span class="btn_sbmt"><input type="submit" class="kin_submit" value="{$lang->cmd_registration}"></span>
+		</fieldset>
+	</form>
+</div>
+
+<include target="footer.include.html" />

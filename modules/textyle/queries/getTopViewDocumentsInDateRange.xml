@@ -1,0 +1,27 @@
+<query id="getTopViewDocumentsInDateRange" action="select">
+    <tables>
+        <table name="documents" alias="d" />
+        <table name="document_aliases" alias="a" type="left join">
+            <conditions>
+                <condition operation="equal" column="a.document_srl" default="d.document_srl" />
+            </conditions>
+        </table>
+    </tables>
+    <columns>
+        <column name="d.*" />
+        <column name="a.alias_title" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="d.module_srl" var="module_srl" notnull="notnull" pipe="and" />
+        <group pipe="and">
+            <condition operation="more" column="regdate" var="start_date" pipe="and" />
+            <condition operation="less" column="regdate" var="end_date" pipe="and" />
+        </group>
+    </conditions>
+    <navigation>
+        <index var="sort_index" default="readed_count" order="desc" />
+        <list_count var="list_count" default="1" />
+        <page_count var="page_count" />
+        <page var="page" />
+    </navigation>
+</query>

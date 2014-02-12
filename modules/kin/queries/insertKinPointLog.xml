@@ -1,0 +1,12 @@
+<query id="insertKinPointLog" action="insert">
+    <tables>
+        <table name="kin_point_log" />
+    </tables>
+    <columns>
+        <column name="document_srl" var="document_srl" filter="number" notnull="notnull" />
+        <column name="comment_srl" var="comment_srl" filter="number" notnull="notnull" />
+        <column name="member_srl" var="member_srl" filter="number" notnull="notnull" />
+        <column name="point" var="point" filter="number" notnull="notnull" />
+        <column name="in_time" var="in_time" default="unixtime()" filter="number" notnull="notnull" />
+    </columns>
+</query>

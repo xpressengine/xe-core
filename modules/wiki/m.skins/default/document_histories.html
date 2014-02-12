@@ -1,0 +1,66 @@
+<include target="header.html" />
+
+<table cellspacing="0" border="1" summary="List of Articles" class="wikiList">
+    <thead>
+        <tr>
+	    <th scope="col">{$lang->revision}/{$lang->date}</th>
+            <th scope="col">{$lang->title}</th>
+            <th scope="col">{$lang->author}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!--@if(!$page || $page == 1)-->
+        <tr>
+	    <td class="date">{$lang->current}<br />{$oDocument->getUpdate()}</td>
+            <td class="title"><a href="{getUrl('act','',page,'','history_srl','')}">{$oDocument->getTitle()}</a></td>
+            <td class="author">{$oDocument->getNickName()}</td>
+            
+        </tr>
+        <!--@end-->
+	{@ $hcount = count($histories);}
+        <!--@foreach($histories as $val)-->
+        <tr>
+	    <td class="date">v.{$hcount}<br />{zdate($val->regdate, 'Y.m.d H:i:s')}</td>
+            <td class="title">
+                <input class="bn" type="button" onclick="jQuery('#historyContent{$val->history_srl}').toggleClass('hide');" value="{$lang->cmd_view}" />
+                <input class="bn" type="button" onclick="location.href='{getUrl('act','dispWikiEditPage','history_srl',$val->history_srl)}';return false;" value="{$lang->restore}" />
+                <input class="bn" type="button" onclick='getDiff("diff{$val->history_srl}",{$oDocument->document_srl},{$val->history_srl});' value="{$lang->diff}" />
+            </td>
+            <td class="author"><a href="#" onclick="return false;" class="member_{$val->member_srl}">{$val->nick_name}</a></td>
+         </tr>
+	<tr>
+	    <td colspan="3" id="historyContent{$val->history_srl}" class="history_content hide">
+		<div style="text-align: left;">
+			<!--@if($module_info->markup_type == 'xe_wiki_markup')-->
+			{$val->content}
+			<!--@else-->
+			{nl2br(htmlspecialchars($val->content))}
+			<!--@end-->
+		</div>
+	    </td>
+	</tr>
+	<tr>
+	    <td colspan="3" id="diff{$val->history_srl}" name="diff{$val->history_srl}" class="hide diff">
+	    </td>
+	</tr>
+	{@ $hcount--;}
+        <!--@end-->
+    </tbody>
+</table>
+
+
+<!--@if($page_navigation)-->
+    <div class="pagination a1">
+        <a href="{getUrl('page','')}" class="prevEnd">{$lang->first_page}</a> 
+        <!--@while($page_no = $page_navigation->getNextPage())-->
+            <!--@if($page == $page_no)-->
+                <strong>{$page_no}</strong> 
+            <!--@else-->
+                <a href="{getUrl('page',$page_no)}">{$page_no}</a>
+            <!--@end-->
+        <!--@end-->
+        <a href="{getUrl('page',$page_navigation->last_page)}" class="nextEnd">{$lang->last_page}</a>
+    </div>
+<!--@endif-->
+
+<include target="footer.html" />

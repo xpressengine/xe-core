@@ -1,0 +1,34 @@
+<include target="common_header.html" />
+<load target="filter/leave_member.xml" />
+<h2><img src="h2.goodbye.gif" width="67" height="17" alt="{$member_title = $lang->msg_leave_member}" /></h2>
+<form id="fo_insert_member" action="./" method="get" onsubmit="return procFilter(this, leave_member)">
+	<input type="hidden" name="mid" value="{$mid}" />
+	<input type="hidden" name="document_srl" value="{$document_srl}" />
+	<input type="hidden" name="page" value="{$page}" />
+	<table cellspacing="0" class="info">
+		<caption><span class="c1"><span class="c2">{$member_title = $lang->msg_leave_member}</span></span></caption>
+		<tbody>
+		<tr>
+			<th scope="row">
+				<div>{$lang->user_id}</div>
+			</th>
+			<td class="wide">{$member_info->user_id}</td>
+		</tr>
+		<tr>
+			<th scope="row">
+				<div>
+					<label for="cpw">{$lang->password}</label>
+				</div>
+			</th>
+			<td>
+				<input type="password" name="password" id="cpw" />
+			</td>
+		</tr>
+		</tbody>
+	</table>
+	<div class="btnArea">
+		<span class="btn25 blue"><input type="submit" value="{$lang->cmd_leave}" /></span>
+		<span class="btn25"><a href="{getUrl('act','dispMemberInfo','member_srl','')}" class="button">{$lang->cmd_back}</a></span>
+	</div>
+</form>
+<include target="common_footer.html" /> 

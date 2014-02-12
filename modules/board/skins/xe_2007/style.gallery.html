@@ -1,0 +1,160 @@
+<!-- display list -->
+
+    <form action="./" method="get">
+
+    <!--// display categories and sorting options -->
+    <div class="boardSubMenu">
+        <!--@if($module_info->use_category == "Y")-->
+        <div class="fl">
+            <!--@if($grant->manager)--><input type="checkbox" onclick="XE.checkboxToggleAll({ doClick:true }); return false;" /><!--@end-->
+        <!--// display categories if the category is enabled -->
+                <select name="category" id="board_category">
+                    <option value="">{$lang->category}</option>
+                    <!--@foreach($category_list as $val)-->
+                    <option value="{$val->category_srl}" <!--@if($category==$val->category_srl)-->selected="selected"<!--@end-->>{str_repeat("&nbsp;",$val->depth)} {$val->title} <!--@if($val->document_count)-->({$val->document_count})<!--@end--></option>
+                    <!--@end-->
+                </select>
+                <input type="button" name="go_button" id="go_button" value="GO" onclick="doChangeCategory()" />
+        </div>
+        <!--@end-->
+        <div class="fr">
+			<a href="{getUrl('sort_index','readed_count','order_type',$order_type)}">{$lang->readed_count}<!--@if($sort_index=='readed_count')--> <img src="./images/common/{$order_icon}" alt="" width="5" height="3" class="sort" /><!--@end--></a>
+			<a href="{getUrl('sort_index','voted_count','order_type',$order_type)}">{$lang->voted_count}<!--@if($sort_index=='voted_count')--> <img src="./images/common/{$order_icon}" alt="" width="5" height="3" class="sort" /><!--@end--></a>
+			<a href="{getUrl('sort_index','blamed_count','order_type',$order_type)}">{$lang->blamed_count}<!--@if($sort_index=='blamed_count')--> <img src="./images/common/{$order_icon}" alt="" width="5" height="3" class="sort" /><!--@end--></a>
+        	<a href="{getUrl('sort_index','regdate','order_type',$order_type)}">{$lang->date}<!--@if($sort_index=='regdate')--> <img src="./images/common/{$order_icon}" alt="" width="5" height="3" class="sort" /><!--@end--></a>
+        	<a href="{getUrl('sort_index','last_update','order_type',$order_type)}">{$lang->last_update}<!--@if($sort_index=='last_update')--> <img src="./images/common/{$order_icon}" alt="" width="5" height="3" class="sort" /><!--@end--></a>
+        </div>
+		<div class="clear"></div>
+    </div>
+
+    {@ $_col_count = 1; }
+
+        <!--@if(!$document_list && !$notice_list)-->
+            <table cellspacing="0" summary="" class="boardList">
+            <tr class="bg0 tCenter">
+                <td class="title no_line">
+                    {$lang->no_documents}
+                </td>
+            </tr>
+            </table>
+        <!--@else-->
+
+            <!--// display notice list -->
+            <!--@foreach($notice_list as $no => $document)-->
+                <table cellspacing="0" summary="" class="boardList boardListNoTopBorder">
+                <!--@if($grant->manager)--><col width="30" />{@ $_col_count++}<!--@end-->
+				<!--@foreach($list_config as $key=>$val)-->
+                <!--@if($val->type == 'no')--><col width="80" />{@ $_col_count++}
+                <!--@elseif($val->type == 'title')--><col />{@ $_col_count++}
+                <!--@elseif($val->type == 'nick_name')--><col width="120" />{@ $_col_count++}
+                <!--@elseif($val->type == 'user_id')--><col width="120" />{@ $_col_count++}
+                <!--@elseif($val->type == 'user_name')--><col width="120" />{@ $_col_count++}
+                <!--@elseif($val->type == 'readed_count')--><col width="70" />{@ $_col_count++}
+                <!--@elseif($val->type == 'voted_count')--><col width="70" />{@ $_col_count++}
+                <!--@elseif($val->type == 'blamed_count')--><col width="70" />{@ $_col_count++}
+                <!--@elseif($val->type == 'regdate')--><col width="90" />{@ $_col_count++}
+                <!--@elseif($val->type == 'last_update')--><col width="90" />{@ $_col_count++}
+				<!--@end-->
+				<!--@end-->
+                <tbody>
+                    <tr class="notice">
+                        <!--@if($grant->manager)--><td class="checkbox"><input type="checkbox" name="cart" value="{$document->document_srl}" onclick="doAddDocumentCart(this)" <!--@if($document->isCarted())-->checked="checked"<!--@end--> /></td><!--@end-->
+						<!--@foreach($list_config as $key=>$val)-->
+                        <!--@if($val->type == 'no')--><td class="notice">{$lang->notice}</td>
+                		<!--@elseif($val->type == 'title')-->
+						<td class="title">
+                            <!--@if($module_info->use_category == "Y" && $document->get('category_srl'))-->
+                            <strong class="category">{$category_list[$document->get('category_srl')]->title}</strong>
+                            <!--@end-->
+
+                            <a href="{getUrl('document_srl',$document->document_srl, 'listStyle', $listStyle, 'cpage','')}">{$document->getTitle($module_info->subject_cut_size)}</a>
+                            
+                            <!--@if($document->getCommentCount())-->
+                                <span class="replyAndTrackback" title="Replies"><img src="./images/{$module_info->colorset}/iconReply.gif" alt="" width="12" height="12" class="icon" /> <strong>{$document->getCommentCount()}</strong></span>
+                            <!--@end-->
+
+                            <!--@if($document->getTrackbackCount())-->
+                                <span class="replyAndTrackback" title="Trackbacks"><img src="./images/{$module_info->colorset}/iconTrackback.gif" alt="" width="12" height="13" class="trackback icon" /> <strong>{$document->getTrackbackCount()}</strong></span>
+                            <!--@end-->
+
+                            {$document->printExtraImages(60*60*$module_info->duration_new)}
+                        </td>
+                        <!--@elseif($val->type == 'nick_name')--><td class="author"><div class="member_{$document->get('member_srl')}">{$document->getNickName()}</div></td>
+                        <!--@elseif($val->type == 'user_id')--><td class="author"><div class="member_{$document->get('member_srl')}">{$document->getUserID()}</div></td>
+                        <!--@elseif($val->type == 'user_name')--><td class="author"><div class="member_{$document->get('member_srl')}">{$document->getUserName()}</div></td>
+                        <!--@elseif($val->type == 'readed_count')--><td class="reading">{$document->get('readed_count')>0?$document->get('readed_count'):'&nbsp;'}</td>
+                        <!--@elseif($val->type == 'voted_count')--><td class="recommend">{$document->get('voted_count')!=0?$document->get('voted_count'):'&nbsp;'}</td>
+                        <!--@elseif($val->type == 'blamed_count')--><td class="recommend">{$document->get('blamed_count')!=0?$document->get('blamed_count'):'&nbsp;'}</td>
+                        <!--@elseif($val->type == 'regdate')--><td class="date">{$document->getRegdate('Y-m-d')}</td>
+                        <!--@elseif($val->type == 'last_update')--><td class="date">{zdate($document->get('last_update'),'Y-m-d H:i')}</td>
+						<!--@end-->
+						<!--@end-->
+                    </tr>
+                </tbody>
+                </table>
+            <!--@end-->
+
+            <!--// display gallery list -->
+            {@ $height = $module_info->thumbnail_height + 50; }
+            <!--@if($module_info->use_category=='Y')-->{@ $height += 20 }<!--@end-->
+            <!--@if($list_config['nick_name'] || $list_config['user_id'] || $list_config['user_name'] || $list_config['regdate'])-->{@ $height += 25 }<!--@end-->
+            <!--@if($list_config['readed_count'] || $list_config['voted_count'] || $list_config['blamed_count'])-->{@ $height += 25 }<!--@end-->
+
+            <div class="thumbnailBox">
+
+                <!--@foreach($document_list as $no => $document)-->
+                <!--@if(!$document->isNotice())-->
+
+                <div class="cell" style="width:{$module_info->thumbnail_width+30}px;height:{$height}px;">
+                    <!--@if($document->thumbnailExists($module_info->thumbnail_width, $module_info->thumbnail_height, $module_info->thumbnail_type))-->
+                        <a href="{getUrl('document_srl',$document->document_srl,'listStyle',$listStyle, 'cpage','')}"><img src="{$document->getThumbnail($module_info->thumbnail_width, $module_info->thumbnail_height, $module_info->thumbnail_type)}" border="0" alt="" class="thumb"/></a>
+                    <!--@else-->
+                        <img src="./images/common/blank.gif" border="0" alt="" class="thumb" width="{$module_info->thumbnail_width}" height="{$module_info->thumbnail_height}" />
+                    <!--@end-->
+
+                    <div class="title">
+                        <!--@if($module_info->use_category == "Y" && $document->get('category_srl'))-->
+                        <strong class="category">{$category_list[$document->get('category_srl')]->title}</strong><br />
+                        <!--@end-->
+
+                        <!--@if($grant->manager)-->
+                            <input type="checkbox" name="cart" value="{$document->document_srl}" onclick="doAddDocumentCart(this)" <!--@if($document->isCarted())-->checked="checked"<!--@end--> /> 
+                        <!--@end-->
+
+                        <a href="{getUrl('document_srl',$document->document_srl, 'listStyle', $listStyle, 'cpage','')}">{$document->getTitle($module_info->subject_cut_size)}</a>
+
+                        <!--@if($document->getCommentCount())-->
+                            <span class="replyAndTrackback" title="Replies">(<strong>{$document->getCommentCount()}</strong>)</span>
+                        <!--@end-->
+
+                        <!--@if($document->getTrackbackCount())-->
+                            <span class="replyAndTrackback" title="Trackbacks">[<strong>{$document->getTrackbackCount()}</strong>]</span>
+                        <!--@end-->
+
+                        <div class="nameAndDate">
+                            <!--@if($list_config['nick_name'])--><div class="author"><div class="member_{$document->get('member_srl')}">{$document->getNickName()}</div></div><!--@end-->
+                            <!--@if($list_config['user_id'])--><div class="author"><div class="member_{$document->get('member_srl')}">{$document->getUserID()}</div></div><!--@end-->
+                            <!--@if($list_config['user_name'])--><div class="author"><div class="member_{$document->get('member_srl')}">{$document->getUserName()}</div></div><!--@end-->
+                            <!--@if($list_config['regdate'])--><div class="date">{$document->getRegdate('Y.m.d')}</div><!--@end-->
+                        </div>
+                    </div>
+                    <div class="readAndRecommend">
+                        <!--@if($list_config['readed_count'])-->{$lang->readed_count} <span class="num">{$document->get('readed_count')}</span><!--@end-->
+
+                        <!--@if($document->get('voted_count')!=0 && $list_config['voted_count'])-->
+                            <!--@if($list_config['readed_count'])--><br /><!--@end-->
+                            {$lang->voted_count} <strong class="num">{$document->get('voted_count')}</strong>
+                        <!--@end-->
+                        <!--@if($document->get('blamed_count')!=0 && $list_config['blamed_count'])-->
+                            <!--@if($list_config['readed_count'] || $list_config['voted_count'])--><br /><!--@end-->
+                            {$lang->blamed_count} <strong class="num">{$document->get('blamed_count')}</strong>
+                        <!--@end-->
+                    </div>
+                </div>
+                <!--@end-->
+                <!--@end-->
+                
+            </div>
+        <!--@end-->
+
+    </form>

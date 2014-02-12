@@ -1,0 +1,17 @@
+<!--@if($widget_info->content_items)-->
+    {@$topItem = array_shift($widget_info->content_items)}
+<!--@end-->
+<div class="xeNotice">
+    <div class="headline">
+        <!--@if($topItem)-->
+        <h2><a href="{$topItem->getLink()}">{$topItem->getTitle($widget_info->subject_cut_size)}</a></h2>
+        <p>{$topItem->getContent()}</p>
+        <!--@end-->
+    </div>
+    <ul>
+        <!--@foreach($widget_info->content_items as $key => $item)-->
+        <li><a href="{$item->getLink()}">{$item->getTitle($widget_info->subject_cut_size)}</a> {$item->printExtraImages()} <em class="feedback">{$item->getCommentCount()}</em> <span class="date">{$item->getRegdate("y.m.d")}</span></li>
+        <!--@end-->
+    </ul>
+    <!--@if($topItem)--><a href="{getSiteUrl($topItem->domain, '', 'mid', $topItem->get('mid'))}" class="more">more</a><!--@end-->
+</div>

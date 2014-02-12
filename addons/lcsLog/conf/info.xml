@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon version="0.2">
+    <title xml:lang="ko">NHN LCS TAG</title>
+    <description xml:lang="ko">
+        NHN에서 제공하는 Log Collecting Server 애드온입니다.
+    </description>
+    <version>0.1</version>
+    <date>2009-02-13</date>
+
+    <author email_address="zero@nzeo.com" link="http://blog.nzeo.com">
+        <name xml:lang="ko">zero</name>
+    </author>
+
+    <extra_vars>
+        <var name="account_name">
+            <title xml:lang="ko">Account</title>
+            <description xml:lang="ko">Account name</description>
+        </var>
+    </extra_vars>
+</addon>

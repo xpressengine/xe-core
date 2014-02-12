@@ -1,0 +1,51 @@
+<!--#include("./_header.html")-->
+<load target="./js/enroll.js" />
+<div class="summary">
+    <strong>Total</strong> <em>{number_format($total_count)}</em>, Page <strong>{number_format($page)}</strong>/{number_format($total_page)}
+	<block loop="$lang->enroll_status=>$s_k,$s_v"> | <a href="{getUrl('status',$s_k)}" style="color:#000;font-weight:bold"|cond="$s_k == Context::get('status')">{$s_v}</a></block>
+</div>
+
+<table cellspacing="0" class="rowTable">
+<thead>
+    <tr>
+        <th scope="col"><div>{$lang->no}</div></th>
+		<th scope="col" ><div>업체명</div></th>
+		<th scope="col" ><div>{$lang->user_name}</div></th>
+        <th scope="col" ><div>{$lang->email_address}</div></th>
+		<th scope="col" ><div>인증</div></th>
+		<th scope="col" ><div>신청일</div></th>
+    </tr>
+</thead>
+<tbody>
+    <!--@foreach($enroll_list as $no => $val)-->
+    <tr>
+        <td class="center number">{$no}</td>
+        <td>{$val->job}</td>
+        <td>{$val->user_name}</td>
+        <td>{$val->email_address}</td>
+        <td>
+	<select name="status">
+		<option loop="$lang->enroll_status=>$s_k,$s_v" value="{$s_k}" selected="selected"|cond="$s_k == $val->status">{$s_v}</option>
+	</select>
+	<input type="button" value="변경" onClick="updateItemStatus(this,'{$val->enroll_srl}','{$val->module_srl}')" />
+	</td>
+        <td>{zdate($val->regdate,'y.m.d H:i')}</td>
+    </tr>
+    <!--@end-->
+</tbody>
+</table>
+
+<!-- 페이지 네비게이션 -->
+<div class="pagination a1" cond="$page_no">
+    <a href="{getUrl('page','','module_srl','')}" class="prevEnd">{$lang->first_page}</a> 
+    <!--@while($page_no = $page_navigation->getNextPage())-->
+        <!--@if($page == $page_no)-->
+            <strong>{$page_no}</strong> 
+        <!--@else-->
+            <a href="{getUrl('page',$page_no,'module_srl','')}">{$page_no}</a> 
+        <!--@end-->
+    <!--@end-->
+    <a href="{getUrl('page',$page_navigation->last_page,'module_srl','')}" class="nextEnd">{$lang->last_page}</a>
+</div>
+
+

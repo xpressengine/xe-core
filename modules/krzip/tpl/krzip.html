@@ -1,0 +1,71 @@
+<load target="css/krzip.css" />
+			
+			<div class="krZip">
+				<input type="hidden" class="addr_first" name="{$krzip->column_name}[]" value="{$krzip->values[0]}" />
+				<input type="hidden" class="addr_second" name="{$krzip->column_name}[]" value="{$krzip->values[1]}" />
+				
+				<div class="addr_indicator box">
+					<input type="text" class="current_address" readonly="readonly" value="{$krzip->values[0]} {$krzip->values[1]}">
+					<button type="button" class="btn delete">{$lang->cmd_delete}</button>
+					<button type="button" class="btn cancel">{$lang->cmd_cancel}</button>
+				</div>
+				
+				<div class="addr1_selector box" style="display:none;">
+					<p>{$lang->cmd_kr_address_addr1}</p>
+					<ul>
+					</ul>
+				</div>
+
+				<div class="addr2_selector box" style="display:none;">
+					<p>{$lang->cmd_kr_address_addr2}</p>
+					<ul>
+					</ul>
+				</div>
+				
+				<div class="addr3_input box" style="display:none;">
+					<p>{$lang->cmd_kr_address_detail}</p>
+					<input type="text" value="" class="addr3_input" />
+					<button type="button" class="btn submit_addr3">검색</button>
+					<p class="info_search">
+						{$lang->about_kr_address_detail}
+					</p>
+				</div>
+
+				<div class="addr3_selector box" style="display:none;">
+					<p>'<strong></strong>'{$lang->cmd_select_detail_address}</p>
+					<div class="wrap">
+						<div class="scroll_head"></div>
+						<div class="scroll_body">
+							<table>
+								<thead>
+									<tr>
+										<th><div class="th_inner">{$lang->street_house_address}</div></th>
+										<th><div class="th_inner">{$lang->zipcode}</div></th>
+										<th><div class="th_inner">{$lang->cmd_select}</div></th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+						<div class="scroll_foot">
+							<p class="nomore" style="display:none;">{$lang->msg_nomore_address}</p>
+							<p class="islast" style="display:none;"> </p>
+							<button type="button" class="btn more_search">{$lang->more}</button>
+						</div>
+					</div>
+				</div>
+				
+				<div class="addr4_input box" style="display:none;">
+					<p>{$lang->cmd_kr_address_etc}</p>
+					<input type="text" value="" class="addr4_input">
+					<button type="button" class="btn submit_addr4">{$lang->cmd_complete}</button>
+				</div>
+
+			</div>
+			<script>
+				jQuery('.krZip').krZip({api_url: '{$krzip->api_url}'});
+			</script>
+			
+			
+			

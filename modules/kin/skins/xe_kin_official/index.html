@@ -1,0 +1,194 @@
+<include target="header.include.html" />
+
+<div class="column_left"|cond="$module_info->default_style == 'horizontal' || !$module_info->default_style" class="column_single"|cond="$module_info->default_style == 'vertical'">
+	<form class="search_form corner05 clearfix" action="{getUrl()}" method="get" id="fo_kin_search">
+		<input cond="$vid" type="hidden" name="vid" value="{$vid}" />
+		<input type="hidden" name="mid" value="{$mid}" />
+		<input type="hidden" name="category" value="{$category}" />
+		<fieldset>
+			<legend class="blind">search</legend>
+			<div class="ipt_box">
+				<span class="bullet"></span>
+				<span class="ipt_inner"><input type="text" class="ipt_txt" name="search_keyword" value="{htmlspecialchars($search_keyword)}"/></span>
+				<input type="image" src="img/btn_srch_sbmt.png" width="67" height="32" class="btn_sbmt_srch" onclick="xGetElementById('fo_kin_search').submit();return false;"/>
+			</div>
+		
+			<!-- border-round elements -->
+			<span class="corn l"></span><span class="corn r"></span>
+		</fieldset>
+	</form>
+
+	<include target="category.include.html" />
+
+	<table cond="$is_logged && $module_info->default_style == 'vertical'" class='pointFont'>
+		<thead>
+			<tr>
+				<td class="pointFont titleName">{$lang->user}:</td><td>{$logged_info->nick_name}</td>
+				<td class="pointFont titleName" style="padding-left:5px">{$lang->point}:</td><td class="pointNumFont">{number_format(intval($document_top['userPoint']['point']))}</td>
+				<td class="btns clearfix">
+					<a href="{getUrl('act','','page',1,'type','my_questions','q_target','')}" class="btn_gray pull-left"><span>{$lang->kin_main_tabs[5]}</span></a>
+					<a href="{getUrl('act','','page',1,'type','my_replies','q_target','')}" class="btn_gray pull-right"><span>{$lang->kin_main_tabs[6]}</span></a>
+				</td>
+			</tr>
+		</thead>
+	</table>
+
+	<div class="sec_list">
+		<div class="tab_header"|cond="$module_info->default_style == 'horizontal' || !$module_info->default_style" class="tab_header tab_horizontal"|cond="$module_info->default_style == 'vertical'">
+			<ul class="tabgroup" cond="$type != 'my_questions' && $type != 'my_replies' && $type != 'popular' && $type != 'popular_answers'">
+				<li class="active"|cond="$type=='questions'"><a href="{getUrl('page',1,'type','questions')}"><span>{$lang->kin_main_tabs[2]}</span></a></li>
+				<li class="active"|cond="$type=='selected'"><a href="{getUrl('page',1,'type','selected')}"><span>{$lang->kin_main_tabs[4]}</span></a></li>
+				<li class="active"|cond="$type=='score'"><a href="{getUrl('page',1,'type','score')}"><span>{$lang->kin_main_tabs[7]}</span></a></li>
+				<li  class="active"|cond="$type=='replies'"><a href="{getUrl('page',1,'type','replies')}"><span>{$lang->kin_main_tabs[3]}</span></a></li>
+			</ul>
+			<ul class="tabgroup" cond="$type == 'my_questions' || $type == 'my_replies'">
+				<li class="active"|cond="$type=='my_questions'"><a href="{getUrl('page',1,'type','my_questions')}"><span>{$lang->kin_main_tabs[5]}</span></a></li>
+				<li class="active"|cond="$type=='my_replies'"><a href="{getUrl('page',1,'type','my_replies')}"><span>{$lang->kin_main_tabs[6]}</span></a></li>
+			</ul>
+			<ul class="tabgroup" cond="$type == 'popular' || $type == 'popular_answers'">
+				<li class="active"|cond="$type=='popular'"><a href="{getUrl('page',1,'type','popular')}"><span>{$lang->kin_main_tabs[8]}</span></a></li>
+				<li class="active"|cond="$type=='popular_answers'"><a href="{getUrl('page',1,'type','popular_answers')}"><span>{$lang->kin_main_tabs[9]}</span></a></li>
+			</ul>
+			<div class="sum">
+				<em>	{number_format($page_navigation->total_count)}, {$page}/{number_format($page_navigation->total_page)} pages</em>
+			</div>
+			<div class="form_s_row" cond="$type == 'my_questions' || $type == 'popular'">
+                <select name="" id="q_select_target" class="right fe_sel">
+                    <option value="all" <!--@if($q_target=='all')-->selected<!--@end-->>{$lang->all_questions}</option>
+                    <option value="unsolved" <!--@if($q_target=='unsolved')-->selected<!--@end-->>{$lang->kin_main_tabs[2]}</option>
+					<option value="solved" <!--@if($q_target=='solved')-->selected<!--@end-->>{$lang->kin_main_tabs[4]}</option>
+                </select>
+            </div>
+		</div><!-- /header -->
+
+		<div class="board_lst">
+			<table cellspacing="0" class="articles">
+				<caption class="blind">Question List</caption>
+				<thead>
+					<tr>
+						<th scope="col" class="frst" cond="$module_info->use_category == 'Y'">{$lang->ask_category}</th>
+						<th scope="col" class="col2">{$lang->title}</th>
+						<th scope="col" class="col3" cond="$type!='replies' && $type!='my_replies'">
+							<block cond="$type!='popular' && $type!='popular_answers'">{$lang->answers}</block>
+							<block cond="$type=='popular' || $type=='popular_answers'">{$lang->voted_count}</block>
+						</th>
+						<th scope="col" class="col4" >
+							<block cond="$type!='my_questions' && $type!='my_replies'">{$lang->writer}</block>
+							<block cond="$type=='my_questions' || $type=='my_replies'">{$lang->status}</block>
+						</th>
+						<th scope="col" class="last">{$lang->regdate}</th>
+					</tr>
+				</thead>
+				<tbody class="document_list">
+				<!--@if(count($document_list) || count($reply_list))-->
+					<!--@if($document_list)-->
+						<tr loop="$document_list => $oDocument">
+
+							<td cond="$module_info->use_category == 'Y'" class="frst">
+								<a cond="$oDocument->get('category_srl')" href="{getUrl('category_srl',$oDocument->get('category_srl'))}">{$categories[$oDocument->get('category_srl')]->title}</a>
+								<block cond="!$oDocument->get('category_srl')">
+									&nbsp;
+								</block>
+							</td>
+							<td class="col2">
+								<div><span class="point">{number_format($document_kins[$oDocument->document_srl])}</span>
+								<a class="kin_document_title" href="{getUrl('','document_srl',$oDocument->document_srl,'search_keyword',$search_keyword)}">{$oDocument->getTitle()}</a></div>
+							</td>
+							<td class="col3" cond="$type!='replies'">
+								<block cond="$type != 'popular'">{$oDocument->getCommentCount()}</block>
+								<block cond="$type == 'popular'">{$oDocument->get('voted_count')}</block>
+							</td>
+							<td class="col4">
+								<a href="#" onclick="return false;" class="member_{$oDocument->get('member_srl')} kin_document_author" cond="$type!='my_questions' && $type!='my_replies'">{$oDocument->getNickname()}</a>
+								<block cond="$type=='my_questions' || $type=='my_replies'">
+									<!--@if($oDocument->get('selected'))-->
+										{$lang->solved}
+									<!--@else-->
+										{$lang->unsolved}
+									<!--@end-->
+								</block>
+							</td>
+							<td class="date">{$oDocument->getRegdate("y.m.d")}</td>
+						</tr>
+					<!--@elseif($reply_list)-->
+						<tr loop="$reply_list => $oReply">
+							<td cond="$module_info->use_category == 'Y'" class="frst">
+								<a cond="$oReply->get('category_srl')" href="{getUrl('category_srl',$oReply->get('category_srl'))}">{$categories[$oReply->get('category_srl')]->title}</a>
+								<block cond="!$oReply->get('category_srl')">
+									&nbsp;
+								</block>
+							</td>
+							<td class="col2">
+								<div><span class="point">{number_format($document_kins[$oReply->get('document_srl')])}</span>
+								<a href="{getUrl('','document_srl',$oReply->get('document_srl'))}#comment_{$oReply->get('comment_srl')}">{$oReply->getSummary(70)}</a></div>
+							</td>
+							<td class="col3" cond="$type == 'popular_answers'">{$oReply->get('voted_count')}</td>
+							<td class="col4">
+								<a href="#" onclick="return false;" class="member_{$oReply->get('member_srl')}" cond="$type!='my_questions' && $type!='my_replies'">{$oReply->getNickName()}</a>
+								<block cond="$type=='my_questions' || $type=='my_replies'">
+									<!--@if($oReply->get('selected'))-->
+										{$lang->accepted}
+									<!--@else-->
+										{$lang->unaccepted}
+									<!--@end-->
+								</block>
+							</td>
+							<td class="date">{$oReply->getRegdate("y.m.d")}</td>
+						</tr>
+					<!--@end-->
+				<!--@else-->
+					<tr><td colspan="5">
+						<p class="none">							
+							<block cond="$category_info">
+								<strong><span>{$lang->category} :</span></strong>
+								{$category_info->title},
+							</block>
+							<strong><span>{$lang->type} :</span></strong>
+							<block cond="!$type">{$lang->kin_all_questions}</block>
+							<block cond="$type=='questions'">{$lang->kin_main_tabs[2]}</block>
+							<block cond="$type=='replies'">{$lang->kin_main_tabs[3]}</block>
+							<block cond="$type=='selected'">{$lang->kin_main_tabs[4]}</block>
+							<block cond="$type=='score'">{$lang->kin_main_tabs[7]}</block>
+							<block cond="$type=='my_questions' && $is_logged">{$lang->kin_main_tabs[5]}</block>
+							<block cond="$type=='my_replies' && $is_logged">{$lang->kin_main_tabs[6]}</block>
+							<block cond="$type=='popular'">{$lang->kin_main_tabs[8]}</block>
+							<block cond="$type=='popular_answers'">{$lang->kin_main_tabs[9]}</block>
+							<block cond="$search_keyword">
+								<strong><span>, {$lang->search_keyword} :</span></strong>
+								{$search_keyword}
+							</block>
+							, {$lang->msg_no_article}
+						</p>
+					</td></tr>
+				<!--@end-->
+				</tbody>
+			</table>
+			<div class="pagination" cond="$page_navigation">
+				<a class="prevEnd" href="{getUrl('page','')}"><i class="ico_prev"></i>{$lang->first_page}</a>
+				<!--@while($page_no = $page_navigation->getNextPage())-->
+					<!--@if($page == $page_no)-->
+						<strong>{$page_no}</strong>
+					<!--@else-->
+						<a href="{getUrl('page',$page_no)}">{$page_no}</a>
+					<!--@end-->
+				<!--@end-->
+				<a class="nextEnd" href="">{$lang->last_page}<i class="ico_next"></i></a>
+			</div>
+
+			<a href="{getUrl('act','dispKinWrite','document_srl','')}" class="btn_ask"><span>{$lang->cmd_ask}</span></a>
+		</div>
+	</div><!-- //sec_list -->
+</div><!-- //column_left -->
+
+<script type="text/javascript">
+	jQuery(function($){
+		$('#q_select_target').change(function(){
+			var url = "{getUrl('page',1,'type',$type)}"+"&amp;q_target="+$(this).val();
+			url = url.replace(/&amp;/g,"&");
+			window.location = url;
+		});
+	});
+</script>
+<include target="widget.inlcude.html" />
+
+<include target="footer.include.html" />

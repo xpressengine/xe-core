@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+	<grants />
+	<permissions />
+	<actions>
+		<action name="dispKrzipAdminConfig" type="view" admin_index="true" menu_name="krzip" />
+		<action name="procKrzipAdminInsertConfig" type="controller" ruleset="configKrzip" />
+		<action name="getKrzipCodeList" type="model" index="true" />
+	</actions>
+	<menus>
+		<menu name="krzip" type="all">
+			<title xml:lang="en">Korean Zip Code</title>
+			<title xml:lang="ko">한국 우편번호</title>
+			<title xml:lang="zh-CN">Korean Zip Code</title>
+			<title xml:lang="jp">Korean Zip Code</title>
+			<title xml:lang="es">Korean Zip Code</title>
+			<title xml:lang="ru">Korean Zip Code</title>
+			<title xml:lang="fr">Korean Zip Code</title>
+			<title xml:lang="zh-TW">Korean Zip Code</title>
+			<title xml:lang="vi">Korean Zip Code</title>
+			<title xml:lang="mn">Korean Zip Code</title>
+			<title xml:lang="tr">Korean Zip Code</title>
+		</menu>
+	</menus>
+</module>

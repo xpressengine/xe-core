@@ -1,0 +1,12 @@
+                    <h2 class="postTitle">Profile</h2>
+                    <dl class="postMeta">
+                        <dt>on</dt>
+                        <dd>{zdate($textyle->get('regdate'),"Y.m.d")}</dd>
+                        <dt>at</dt>
+                        <dd>{zdate($textyle->get('regdate'),"H:i")}</dd>
+                        <dt>by</dt>
+                        <dd><span class="member_{$textyle->member_srl}">{$textyle->nick_name}</span></dd>
+                        <dd><a href="#" class="editPost">Edit</a></dd>
+                    </dl>
+                    <div class="textyleContent xe_content">{$profile_content}</div>
+

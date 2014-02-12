@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="0.2">
+    <title xml:lang="ko">공모전참가자명단</title>
+    <description xml:lang="ko">.</description>
+    <version>1.1.2</version>
+    <date>2009-09-09</date>
+    <category>service</category>
+
+    <author email_address="developers@xpressengine.com" link="http://xpressengine.com/">
+        <name xml:lang="ko">NHN</name>
+    </author>
+</module>

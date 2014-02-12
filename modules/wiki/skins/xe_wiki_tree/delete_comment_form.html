@@ -1,0 +1,23 @@
+<include target="header.html" />
+<div id="wikiComments">
+	<div id="commentsArea">
+		<h1>
+			{$lang->confirm_delete}
+		</h1>
+		<form action="./" method="get" ruleset="delete_comment" id="commentDelete">
+			<input type="hidden" name="act" value="procWikiDeleteComment" />
+			<input type="hidden" name="success_return_url" value="{getUrl('act','dispWikiContent', 'module_srl', $module_info->module_srl,'document_srl',$oDocument->document_srl,'entry',$oComment->get('alias'))}" />
+			<input type="hidden" name="module" value="wiki" />
+			<input type="hidden" name="mid" value="{$mid}" />
+			<input type="hidden" name="page" value="{$page}" />
+			<input type="hidden" name="document_srl" value="{$oComment->get('document_srl')}" />
+			<input type="hidden" name="comment_srl" value="{$oComment->get('comment_srl')}" />
+			<input type="hidden" name="xe_validator_id" value="modules/wiki/skins/xe_wiki_tree" />
+			<div class="inputPassword tCenter">
+				<input class="btn" type="submit" value="{$lang->cmd_delete}" />
+				<a href="{getUrl('act','','comment_srl','')}" class="btn">{$lang->cmd_cancel}</a>
+			</div>	
+		</form>
+	</div>		
+</div>
+<include target="footer.html" />

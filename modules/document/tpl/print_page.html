@@ -1,0 +1,15 @@
+<load target="./js/document_admin.js" />
+<h1 class="h1">{$oDocument->getTitleText()}</h1>
+<a href="#popup_menu_area" class="member_{$oDocument->get('member_srl')}">{$oDocument->get('nick_name')}</a>
+{$oDocument->getRegdate()}
+<!--@if($oDocument->isExtraVarsExists() && (!$oDocument->isSecret() || $oDocument->isGranted()) )-->
+<!--@foreach($oDocument->getExtraVars() as $key => $val)-->    
+{$val->name}: {$val->getValueHtml()}
+<!--@end-->
+<!--@end-->    
+{$oDocument->getContent(false, false)} 
+<script>
+//<![CDATA[
+    jQuery(window).load(function() { window.print(); } );
+//]]>
+</script>

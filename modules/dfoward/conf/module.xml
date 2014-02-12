@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+    <grants />
+    <actions>
+        <action name="dispDfowardContent" type="view" index="true" standalone="true" />
+
+        <action name="procDfowardInsert" type="controller" />
+        <action name="procDfowardUpdate" type="controller" />
+        <action name="procDfowardDelete" type="controller" />
+
+        <action name="getDfowardHostInfo" type="model" />
+
+        <action name="dispDfowardAdminContent" type="view" standalone="true" admin_index="true" />
+        <action name="dispDfowardAdminInfo" type="view" standalone="true" />
+
+        <action name="procDfowardAdminInsert" type="controller" standalone="true" />
+        <action name="procDfowardAdminDelete" type="controller" standalone="true" />
+    </actions>
+</module>

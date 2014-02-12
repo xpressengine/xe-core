@@ -1,0 +1,26 @@
+{@ Context::addJsFile("./common/js/jquery.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/js_app.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/common.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/xml_handler.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/xml_js_filter.js", true, '', -100000) }
+<!--%import("js/missue.js")-->
+<!--#include("_header.html")-->
+	<!--#include("changeset.html")-->
+	<!--@if($lastdate)-->
+	<div class="pn">
+		<button type="button" onclick="getMoreTimeLine();">{$lang->more}</button>
+	</div>
+	<!--@endif-->
+
+<!--@if($lastdate)-->
+<form id="hiddenForm" style="display:none;">
+	<input type="hidden" name="mid" value="{$mid}" />
+	<input type="hidden" name="vid" value="{$vid}" />
+	<input type="hidden" name="lastdatetime" value="{$lastdate}" />
+	<input type="hidden" name="displayed_date" value="{$curDate}" />
+	<input type="hidden" name="search_value" value="{$search_value}" />
+	<input type="hidden" name="startdate" value="{$startdate}" />
+    <input type="hidden" name="targets" value="{implode(',', $targets)}" />
+</form>
+<!--@end-->
+<!--#include("_footer.html")-->

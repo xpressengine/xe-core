@@ -1,0 +1,26 @@
+<include target="common_header.html" />
+<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+<form ruleset="modifyEmailAddress" class="form" action="./" method="post">
+	<input type="hidden" name="module" value="member" />
+	<input type="hidden" name="act" value="procMemberModifyEmailAddress" />
+	<input type="hidden" name="success_return_url" value="{getRequestUriByServerEnviroment()}" />
+	<h2>{$lang->cmd_modify_member_email_address}</h2>
+    <p></p>
+	<table width="100%" cellspacing="0" class="info">
+		<caption>
+			<span class="c1">
+				<span class="c2">{$lang->about_modify_member_email_address}</span>
+			</span>
+		</caption>
+		<tr>
+			<th scope="row"><label for="email_address">{$lang->email_address} <em style="color:red">*</em></label></th>
+			<td scope="row"><input type="text" id="email_address" name="email_address" value="" /></td>
+		</tr>
+	</table>
+	<div class="btnArea ar">
+		<span class="btn25 blue"><input type="submit" value="{$lang->cmd_send_auth_new_emaill_address}" /></span>
+	</div>
+</form>
+<include target="common_footer.html" />

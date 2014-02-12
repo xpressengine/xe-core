@@ -1,0 +1,35 @@
+<filter name="insert_config_communication" module="textyle" act="procTextyleConfigCommunicationInsert" confirm_msg_code="confirm_submit">
+    <form>
+        <node target="mid" required="true" filter="alpha_number" />
+        <node target="post_style" required="true" />
+        <node target="post_list_count" required="true" />
+        <node target="rss_list_count" required="true" />
+        <node target="commnet_list_count" required="true" />
+        <node target="guestbook_list_count" required="true" />
+        <node target="rss_type" required="true" />
+        <node target="input_email" required="true" />
+        <node target="input_website" required="true" />
+        <node target="post_use_prefix" required="true" />
+        <node target="post_use_suffix" required="true" />
+        <node target="post_prefix" required="true" />
+        <node target="post_suffix" required="true" />
+        <node target="ping_back"  />
+        <node target="enable_me2day"  />
+        <node target="me2day_userid"  />
+        <node target="me2day_userkey"  />
+        <node target="twitter_consumer_key"  />
+        <node target="twitter_consumer_secret"  />
+        <node target="twitter_oauth_token"  />
+        <node target="twitter_oauth_token_secret"  />
+        <node target="enable_twitter"  />
+        <node target="twitter_userid"  />
+        <node target="twitter_password"  />
+        <node target="comment_grant"  />
+        <node target="guestbook_grant"  />
+    </form>
+	<parameter />
+    <response callback_func="completeInsertConfigCommunication">
+        <tag name="error" />
+        <tag name="message" />
+    </response>
+</filter>

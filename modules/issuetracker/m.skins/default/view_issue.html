@@ -1,0 +1,149 @@
+{@ Context::addJsFile("./common/js/jquery.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/js_app.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/common.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/xml_handler.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/xml_js_filter.js", true, '', -100000) }
+<!--%import("js/missue.js")-->
+<!--#include("_header.html")-->
+<div class="hx h2">
+	<h2>{$oIssue->getTitle()}</h2>
+	<span class="ex">{$oIssue->getNickName()} | {$oIssue->getRegdate()}</span>
+</div>
+<div class="co">
+	<!--@if($oIssue->isSecret() && !$oIssue->isGranted())-->
+		<form action="./" method="get" class="ff" onsubmit="return procFilter(this, input_password)">
+			<input type="hidden" name="mid" value="{$mid}" />
+			<input type="hidden" name="page" value="{$page}" />
+			<input type="hidden" name="document_srl" value="{$oIssue->document_srl}" />
+			<label for="cpw">{$lang->msg_is_secret}</label>
+			<input type="password" name="password" id="cpw" />
+			<div class="bna">
+				<input type="submit" value="{$lang->cmd_input}" class="bn dark" />
+			</div>
+		</form>
+	<!--@else-->
+
+	<!--@if(!$oIssue->isSecret() || $oIssue->isAccessible())-->
+	<dl class="xv">
+	<!--@if($oIssue->isExtraVarsExists())-->
+		{@ $_extra_vars = $oIssue->getExtraVars(); }
+		<!--@foreach($_extra_vars as $key => $val)-->
+			<dt>{$val->name}</dt>
+			<dd>{$val->getValueHTML()}</dd>
+		<!--@end-->
+	<!--@end-->
+		<dt>{$lang->milestone}</dt>
+		<dd>{$oIssue->getMilestoneTitle()}</dd>
+		<dt>{$lang->priority}</dt>
+		<dd>{$oIssue->getPriorityTitle()}</dd>
+		<dt>{$lang->type}</dt>
+		<dd>{$oIssue->getTypeTitle()}</dd>
+		<dt>{$lang->component}</dt>
+		<dd>{$oIssue->getComponentTitle()}</dd>
+		<dt>{$lang->assignee}</dt>
+		<dd>{$oIssue->get('assignee_name')}</dd>
+		<!--@if(count($project->packages))-->
+		<dt>{$lang->package}</dt>
+		<dd>{$oIssue->getPackageTitle()}</dd>
+		<dt>{$lang->occured_version}</dt>
+		<dd>{$oIssue->getReleaseTitle()}&nbsp;</dd>
+	<!--@end-->
+	</dl>
+	<!--@end-->
+	{$oIssue->getContent(false)}
+	<!--@end-->
+</div>
+<!--@if($oIssue->hasUploadedFiles())-->
+{@ $uploaded_list = $oIssue->getUploadedFiles() }
+<div class="hx h3">
+	<h3>{$lang->uploaded_file} <em>[{count($uploaded_list)}]</em> <button type="button" class="tg" title="open/close"></button></h3>
+</div>
+<ul class="file tgo open">
+	<!--@foreach($uploaded_list as $key => $file)-->
+	<li><a href="{getUrl('')}{$file->download_url}">{$file->source_filename} <span class="size">{FileHandler::filesize($file->file_size)}</span></a></li>
+	<!--@end-->
+</ul>
+<!--@endif-->
+<!--@if($oIssue->allowTrackback() && $oIssue->getTrackbackCount())-->
+<div class="hx h3">
+	<h3>{$lang->trackback} <em>[{$oIssue->getTrackbackCount()}]</em> <button type="button" class="tg" title="open/close"></button></h3>
+</div>
+<ul class="rp tgo open">
+	{@ $_trackback_list = $oIssue->getTrackbacks() }
+	<!--@foreach($_trackback_list as $key => $val)-->
+	<li>
+		<p>{$val->excerpt}</p>
+		<em>{htmlspecialchars($val->title)} - {htmlspecialchars($val->blog_name)}</em>
+		<span>zdate($val->regdate, "Y.m.d")</span>
+		<!--@if($grant->manager)-->
+		<a href="07_password.html" class="md">삭제</a>
+		<!--@endif-->
+	</li>
+	<!--@end-->
+</ul>
+<!--@endif-->
+<!--@if($oIssue->allowComment() && $oIssue->getCommentCount())-->
+<div class="hx h3">
+	<h3 id="clb">{$lang->comment} <em>[{$oIssue->getCommentCount()}]</em> <button type="button" class="tg tgr" title="open/close"></button></h3>
+</div>
+<!--@endif-->
+<!--@if($grant->write_comment && $oIssue->isEnableComment() )-->
+<div class="hx h3">
+	<h3>{$lang->write_comment} <button type="button" class="tg" title="open/close"></button></h3>
+</div>
+<form action="./" method="post" class="ff tgo open" onsubmit="return procFilter(this, insert_comment);">
+	<input type="hidden" name="mid" value="{$mid}" />
+	<input type="hidden" name="document_srl" value="{$oIssue->document_srl}" />
+	<input type="hidden" name="comment_srl" value="" />
+	<ul>
+		<li>
+			<label for="rText">{$lang->comment}</label>
+			<textarea name="content" cols="20" rows="5" id="rText"></textarea>
+		</li>
+		<!--@if(!$is_logged)-->
+		<li>
+			<label for="uName">{$lang->writer}</label>
+			<input name="nick_name" type="text" id="uName" />
+		</li>
+		<li>
+			<label for="uMail">{$lang->email_address}</label>
+			<input name="email_address" type="text" id="uMail" />
+		</li>
+		<li>
+			<label for="uPw">{$lang->password}</label>
+			<input name="password" type="password" id="uPw" />
+		</li>
+		<li>
+			<label for="uSite">{$lang->homepage}</label>
+			<input name="homepage" type="text" id="uSite" value="http://" />
+		</li>
+		<!--@endif-->
+	</ul>
+	<div class="bna">
+		<input name="" type="submit" class="bn dark" value="{$lang->cmd_comment_registration}" />
+	</div>
+</form>
+<!--@end-->
+<!--#include("_footer.html")-->
+<script type="text/javascript">
+//<![CDATA[
+jQuery(function($){
+	$('.tgo').removeClass('open');
+	$('.tg').click(function(){
+		$(this).parent().parent().next('.tgo').toggleClass('open');
+	});
+	var loaded = false;
+	$('.tgr').click(function(){
+		if(!loaded) {
+			loaded = true;
+			{@ $lastpage = 1; }
+			{@ $temp = $oIssue->getComments() }
+			<!--@if($oIssue->comment_page_navigation)-->
+			{@ $lastpage = $oIssue->comment_page_navigation->last_page }
+			<!--@endif-->
+			loadPage({$oIssue->document_srl}, {$lastpage});
+		}
+	});
+});
+//]]>
+</script>

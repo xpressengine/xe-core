@@ -1,0 +1,23 @@
+@charset "utf-8";/* NHN (developers@xpressengine.com) */
+.header{height:81px !important}
+.body{ background:#fff !important}
+.content{ float:none !important; width:auto !important}
+.path{height:30px;margin:0 30px;line-height:30px;white-space:nowrap;overflow:hidden;color:#8f8f8f;text-align:right;font-size:11px}
+.path a{display:inline-block;text-decoration:none;color:#8f8f8f;letter-spacing:-1px;vertical-align:middle;line-height:30px}
+.path .home{position:relative;top:-1px;width:12px;height:12px;background:url(icoHome.gif) no-repeat}
+.path .home span{position:absolute;width:1px;height:1px;overflow:hidden}
+.path a.last-child{color:#4c4c4c;font-weight:bold}
+.path strong{color:#4c4c4c;letter-spacing:-1px}
+.join{margin:0 50px}
+.join fieldset{border:0;margin:0;padding:0}
+.join form{margin:0;padding:0}
+.join label{cursor:pointer}
+.join h1{margin:0 0 27px 0}
+.join h2{margin:0 0 12px 0}
+.join .step{margin:0 -3px 26px -3px}
+.join .joinAgreement{position:relative;height:250px;line-height:1.5;margin:0 0 10px 0;padding:20px;overflow:auto;border:1px solid #d2d2d2;color:#666}
+.join .checkAgreement{margin:10px 0;color:#333}
+.join .checkAgreement input{width:13px;height:13px;margin:0 3px 0 0;vertical-align:middle}
+.join .btnArea{margin:50px 0;text-align:center}
+.join .btnArea input,
+.join .btnArea button{border:0; margin:0 10px;background:none;padding:0;overflow:visible;cursor:pointer;vertical-align:top}

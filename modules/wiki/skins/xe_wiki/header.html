@@ -1,0 +1,113 @@
+<load target="css/wiki.css" />
+<load target="js/wiki.js" />
+<load target="js/diff.js" cond="$use_history != 'N' && $act == 'dispWikiHistory'" />
+<script>
+	jQuery(document).ready(function($){
+		$(".message.info").delay(1500).fadeOut('slow');
+	});
+</script>
+{$module_info->header_text}
+<div class="wiki">
+    <div class="wkHeader">
+		<div class="wkTitle" cond="$module_info->title">
+			<h2 class="wkTitleText"><a href="{getUrl('','mid',$mid,'listStyle',$listStyle)}">{$module_info->title} <em cond="$module_info->sub_title">{$module_info->sub_title}</em></a></h2>
+		</div>
+		<p class="wkDesc" cond="$module_info->comment">{$module_info->comment}</p>
+    </div>
+	<div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/wiki/skins/xe_wiki'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+			<p>{$XE_VALIDATOR_MESSAGE}</p>
+	</div>
+    <div class="wkInfo">
+        <div class="infoView">
+			<span class="btn-group">
+				<a class="btn" href="{getUrl('act','dispWikiContent','entry','','document_srl','')}">{$lang->home_page}</a>
+				<a class="btn" href="{getUrl('act','dispWikiTitleIndex','entry','','document_srl','')}">{$lang->cmd_view_document_list}</a>
+				<a class="btn" href="{getUrl('act','dispWikiTreeIndex','entry','','document_srl','')}">{$lang->cmd_view_document_tree}</a>
+				<a class="btn" href="{getUrl('','act','dispWikiEditPage','entry','','document_srl','','mid',$mid,'vid',$vid)}">{$lang->new_document}</a>
+			</span>
+        </div>
+        <form action="{getUrl()}" method="post" class="wkSearch">
+            <input type="hidden" name="mid" value="{$mid}" />
+            <input type="hidden" name="vid" value="{$vid}" />
+			<input type="hidden" name="act" value="dispWikiContent" />
+            <input type="text" class="iText" name="entry" />
+            <input class="btn" type="submit" value="{$lang->cmd_move}" />
+            <a class="btn" cond="$grant->manager" href="{getUrl('act','dispWikiAdminInsertWiki')}">{$lang->cmd_setup}</a>
+        </form>
+    </div>
+    <!--@if($oDocument && $oDocument->isExists())-->
+    <div class="wikiRead">
+        <div class="wkReadHeader">
+            <div class="titleArea">
+                <h3 class="title"><a href="{$oDocument->getPermanentUrl()}">{$oDocument->getTitle()}</a></h3>
+                <span class="sum">
+                    <span class="read">{$lang->readed_count} <span class="num">{$oDocument->get('readed_count')}</span></span>
+                    <span class="vote">{$lang->voted_count} <span class="num">{$oDocument->get('voted_count')}</span></span>
+                    <span class="date">
+                        <!--@if($history)-->
+                        <strong>{zdate($history->regdate, 'Y.m.d')}</strong> {zdate($history->regdate, 'H:i:s')}
+                        <!--@else-->
+                        <strong>{$oDocument->getUpdate('Y.m.d')}</strong> {$oDocument->getUpdate('H:i:s')} 
+                        <!--@end-->
+                    </span>
+                </span>
+            </div>
+			<div class="visitLog" cond="$visit_log">
+				{@ $bFirst = true; }
+				<block loop="$visit_log=>$_entry">
+					<!--@if(!$bFirst)--> > <!--@else-->{@ $bFirst = false; }<!--@end--> 
+					<a href="{getUrl('entry',$_entry,'document_srl','')}">{htmlspecialchars($_entry)}</a>
+				</block>
+			</div>
+            <div class="authorArea">
+                <!--@if($history)-->
+                    <a href="#popup_menu_area" class="author member_{$history->member_srl}" onclick="return false">{$history->nick_name}</a>
+                <!--@else-->
+                    <!--@if(!$oDocument->getMemberSrl())-->
+                        <!--@if($oDocument->isExistsHomepage())-->
+                            <a href="{$oDocument->getHomepageUrl()}" target="_blank" class="author">{$oDocument->getNickName()}</a>
+                        <!--@else-->
+                            <strong class="author">{$oDocument->getNickName()}</strong>
+                        <!--@end-->
+                    <!--@else-->
+                        <a href="#popup_menu_area" class="member_{$oDocument->get('member_srl')} author" onclick="return false">{$oDocument->getNickName()}</a>
+                    <!--@end-->
+                <!--@end-->
+                <span class="ipAddress" cond="$grant->manager || $module_info->display_ip_address!='N'">{$oDocument->getIpaddress()}</span>
+                <!--@if(!$history && ($oDocument->isExists()||$use_history != 'N'))-->
+                <div class="command">
+					<span class="btn-group">
+						{@
+							$oDocumentModel = getModel('document');
+							$entry = $oDocumentModel->getAlias($oDocument->get('document_srl'));
+						}
+						<a cond="$oDocument->isExists()&& $act!='dispWikiEditPage' && $grant->write_document" class="btn" href="{getUrl('act','dispWikiEditPage','entry',$entry, 'document_srl', '')}">{$lang->cmd_edit}</a>
+						<button cond="$oDocument->isExists() && $grant->delete_document" type="button" class="btn" onclick="if(confirm('{$lang->confirm_delete}')) { doDeleteWiki('{$oDocument->document_srl}'); }">{$lang->cmd_delete}</button>
+						<a cond="$use_history != 'N'" href="{getUrl('act','dispWikiHistory','document_srl',$oDocument->document_srl,'history_srl','')}" class="btn">{$lang->histories}</a>
+					</span>
+                </div>
+                <!--@else-->
+                <div class="command">
+                    <block cond="$history">{$lang->notice_old_revision}</block>
+                    <a href="{getUrl('act','','history_srl','')}" class="btn">{$lang->cmd_back}</a>
+                </div>
+                <!--@end-->
+            </div>
+        </div>
+    </div>
+    <!--@elseif($oDocument) -->
+    <div class="wikiRead">
+        <div class="wkReadHeader">
+            <div class="titleArea">
+				<!-- Needs to acces title with get('title') instead of getTitle() because oDocument is seen as invalid when doc_srl is 0 -->
+                <h3 class="title">{$oDocument->get('title')}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="visitLog" cond="$visit_log">
+        {@ $bFirst = true; }
+        <!--@foreach($visit_log as $_entry)-->
+            <!--@if(!$bFirst)--> > <!--@else-->{@ $bFirst = false; }<!--@end--> <a href="{getUrl('entry',$_entry, 'document_srl', '')}">{$_entry}</a>
+        <!--@end-->
+    </div>
+    <!--@end-->

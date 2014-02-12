@@ -1,0 +1,33 @@
+<query id="getPackageList" action="select">
+    <tables>
+        <table name="member" alias="member" />
+        <table name="resource_packages" alias="package" />
+        <table name="resource_items" alias="item" type="left join">
+            <conditions>
+                <condition operation="equal" column="item.item_srl" default="package.latest_item_srl" notnull="notnull" />
+            </conditions>
+        </table>
+    </tables>
+    <columns>
+        <column name="package.*" />
+        <column name="item.version" />
+        <column name="member.nick_name" alias="nick_name" />
+        <column name="member.user_id" alias="user_id" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="package.module_srl" var="module_srl" filter="number" />
+        <condition operation="equal" column="package.status" var="status" pipe="and" />
+        <condition operation="more" column="package.status" var="idx_status" pipe="and" />
+        <condition operation="equal" column="package.category_srl" var="category_srl" filter="number" pipe="and" />
+        <condition operation="more" column="package.category_srl" var="idx_category_srl" pipe="and" />
+        <condition operation="equal" column="package.member_srl" var="member_srl" filter="number" pipe="and" />
+        <condition operation="equal" column="package.member_srl" default="member.member_srl" filter="number" pipe="and" />
+        <condition operation="less" column="package.list_order" default="0" filter="number" notnull="notnull" pipe="and" />
+    </conditions>
+    <navigation>
+        <index var="sort_index" default="package.list_order" order="asc" />
+        <list_count var="list_count" default="40" />
+        <page_count var="page_count" default="10" />
+        <page var="page" default="1" />
+    </navigation>
+</query>

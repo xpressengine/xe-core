@@ -1,0 +1,15 @@
+<include target="header.html" />
+    <div class="wikiRead">
+        <div class="wkReadHeader">
+			<div class="authorArea"></div>
+		</div>
+		<div class="wkReadBody">
+			<div class="xe_content">
+			{$oDocument->get('content')}
+			<div class="command">
+				<a class="btn" href="{getUrl('act','dispWikiEditPage','entry',$oDocument->get('title'), 'document_srl', '')}">{$lang->cmd_create}</a>
+			</div>
+			</div>
+		</div>
+	</div>
+<include target="footer.html" />

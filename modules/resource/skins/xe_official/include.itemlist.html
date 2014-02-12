@@ -1,0 +1,93 @@
+<div class="packageInfo">
+
+    <h3>{$package->getTitle()}</h3>
+
+    <p class="description">{nl2br(htmlspecialchars($package->get('package_description')))}</p>
+
+    {@$rowspan=3}
+    <!--@if($package->get('path') && $module_info->resource_use_path=='Y')-->{@$rowspan++}<!--@end-->
+    <!--@if($package->get('homepage'))-->{@$rowspan++}<!--@end-->
+
+    <table class="packageView">
+    <colgroup>
+        <col width="120"/>
+        <col width="*"/>
+        <col width="120"/>
+        <col width="*"/>
+        <col width="120" />
+    </colgroup>
+    <tr>
+        <th>{$lang->package_category}</th>
+        <td colspan="2"><a href="{getUrl('package_srl','','category_srl', $package->get('category_srl'))}">{$categories[$package->get('category_srl')]->title}</a></td>
+        <td class="right">
+            <!--@for($i=0;$i<5;$i++)--><!--@if($i<$package->get('star'))--><img src="./img/starOn.gif" alt="" /><!--@else--><img src="./img/starOff.gif" alt="" /><!--@end--><!--@end-->
+            /{number_format($package->get('package_voter'))}
+        </td>
+        <td class="right" rowspan="{$rowspan}"><img src="{$package->get('item_screenshot_url')}" width="100" height="100" alt="" /></td>
+    </tr>
+    <tr>
+        <th>{$lang->package_license}</th>
+        <td colspan="3">{htmlspecialchars($package->get('license'))}</td>
+    </tr>
+    <tr>
+        <th>{$lang->package_author}</th>
+        <td colspan="3"><a href="#" onclick="return false;" class="member_{$member_srl}">{$package->get('nick_name')}</a></td>
+    </tr>
+    <!--@if($package->get('homepage'))-->
+    <tr>
+        <th>{$lang->homepage}</th>
+        <td colspan="3"><a href="{$package->get('homepage')}" onclick="window.open(this.href); return false;">{$package->get('homepage')}</a></td>
+    </tr>
+    <!--@end-->
+    <!--@if($package->get('path')&&$module_info->resource_use_path=='Y')-->
+    <tr>
+        <th>{$lang->package_path}</th>
+        <td colspan="3">{$package->get('path')}</td>
+    </tr>
+    <!--@end-->
+    <tr>
+        <th>{$lang->package_regdate}</th>
+        <td colspan="2">{zdate($package->get('package_regdate'), "Y-m-d H:i")}</td>
+        <th>{$lang->package_downloaded_count}</th>
+        <td>{$package->get('package_downloaded')}</td>
+    </tr>
+    <tr>
+        <th>{$lang->latest_version}</th>
+        <td colspan="4"><a href="{getUrl('type','')}">{$package->get('item_version')}</a></td>
+    </tr>
+    </table>
+    <div class="btnArea">
+        <a href="{getUrl('type','')}" class="btn" style="float:left">{$lang->cmd_back}</a>
+    </div>
+
+    <h3>{$lang->version_history}</h3>
+
+    <!--@if($items)-->
+    <table class="packageView noTopLine">
+    <colgroup>
+    <col width="120" /><col width="120" /><col width="*" />
+    </colgroup>
+    <!--@foreach($items as $key => $val)-->
+    <tr>
+        <td rowspan="4" class="center"><a href="{getUrl('type','','item_srl',$val->item_srl, 'from', 'all')}"><img src="{$val->screenshot_url}" width="100" height="100" alt="" /></a></td>
+        <th scope="row">{$lang->attach_version}</th>
+        <td><a href="{getUrl('type','','item_srl',$val->item_srl, 'from', 'all')}">{$val->version}</a></td>
+    </tr>
+    <tr>
+        <th scope="row">{$lang->downloaded_count}</th>
+        <td>{number_format($val->downloaded)}</td>
+    </tr>
+    <tr>
+        <th scope="row">{$lang->voted_count}</th>
+        <td><!--@for($i=0;$i<5;$i++)--><!--@if($i<$val->star)--><img src="./img/starOn.gif" alt="" /><!--@else--><img src="./img/starOff.gif" alt="" /><!--@end--><!--@end--> /{$val->voter}</td>
+    </tr>
+    <tr>
+        <th scope="row">{$lang->regdate}</th>
+        <td class="date">{zdate($val->regdate, "Y-m-d H:i")}</td>
+    </tr>
+    <!--@end-->
+    </table>
+    <!--@end-->
+
+</div>
+

@@ -1,0 +1,18 @@
+<query id="modifyPackage" action="update">
+    <tables>
+        <table name="resource_packages" />
+    </tables>
+    <columns>
+        <column name="have_instance" var="have_instance" default="N" />
+        <column name="license" var="license" notnull="notnull" />
+        <column name="title" var="title" notnull="notnull" />
+        <column name="category_srl" var="category_srl" />
+        <column name="path" var="path" notnull="notnull" />
+        <column name="homepage" var="homepage" notnull="notnull" />
+        <column name="description" var="description" notnull="notnull" />
+        <column name="last_update" default="curdate()" notnull="notnull" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="package_srl" var="package_srl" filter="number" notnull="notnull" />
+    </conditions>
+</query>

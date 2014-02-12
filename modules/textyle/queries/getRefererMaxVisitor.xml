@@ -1,0 +1,15 @@
+<query id="getRefererMaxVisitor" action="select">
+    <tables>
+        <table name="textyle_referers" alias="referer" />
+    </tables>
+    <columns>
+        <column name="max(visitor)" alias="visitor" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="referer.textyle_host_srl" var="textyle_host_srl" filter="number" notnull="notnull" />
+        <condition operation="equal" column="referer.regdate" var="day" pipe="and" />
+        <condition operation="like_prefix" column="referer.regdate" var="month" pipe="and" />
+        <condition operation="more" column="referer.regdate" var="start_date" pipe="and" />
+        <condition operation="less" column="referer.regdate" var="end_date" pipe="and" />
+    </conditions>
+</query>

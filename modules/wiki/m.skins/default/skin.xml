@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+    <title xml:lang="en">XE Wiki default mobile skin</title>
+    <description xml:lang="en">
+        This is the basic wiki mobile skin of XE Wiki.
+    </description>
+    <version>0.1</version>
+    <date>2012-01-25</date>
+    <author email_address="xe_dev@arnia.ro" link="http://xpressengine.org/">
+        <name xml:lang="en">Arnia</name>
+    </author>
+    <extra_vars>
+    </extra_vars>
+</skin>

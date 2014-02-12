@@ -1,0 +1,85 @@
+<load target="xe_v3_main.css" />
+<load target="xe_v3_main.js" type="body" />
+{@$imc=!($act=='IS'||$act=='dispProjectAccountManage'||strpos($act,'Member')!==false||strpos($act,'Communication')!==false)}
+<div class="xev3main">
+	<p class="skipToContent"><a href="#content">메뉴 건너뛰기</a></p>
+	<div class="header">
+		<h1><a href="/">XE : Xpress Engine</a></h1>
+		<div class="account">
+			<a cond="!$is_logged" href="{getUrl('act','dispMemberLoginForm')}" class="log">로그인</a>
+			<a cond="$is_logged" href="{getUrl('act','dispMemberLogout')}" class="log">로그아웃</a>
+			<a cond="$is_logged" href="{getUrl('act','dispMemberInfo', 'member_srl', '')}">마이페이지</a>
+			<a cond="!$is_logged" href="{getUrl('act','dispMemberSignUpForm')}">회원가입</a>
+			<a href="/sitemap">사이트맵</a>
+			<a href="https://github.com/xpressengine" class="project" target="blank">XE github project</a>
+		</div>
+		<div class="gnb">
+			<ul>{@$m=1;}
+				<li loop="$main_menu->list=>$key1,$val1" class="m{$m++}"><a href="{$val1['href']}" class="active"|cond="$val1['selected']" target="_blank"|cond="$val1['open_window']=='Y'">{$val1['link']}</a>
+					<ul cond="$val1['list']">{@$s=1;}
+						<li loop="$val1['list']=>$key2,$val2" class="s{$s++}"><a href="{$val2['href']}" cond="$val2['text']" class="active"|cond="$val2['selected']" target="_blank"|cond="$val2['open_window']=='Y'">{$val2['link']}</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<!--form action="{getUrl()}" method="get" class="search">
+			<input type="hidden" name="vid" value="{$vid}" />
+			<input type="hidden" name="mid" value="{$mid}" />
+			<input type="hidden" name="act" value="IS" />
+			<input type="text" name="is_keyword" value="{$is_keyword}" class="iText" title="{$lang->cmd_search}" />
+			<button type="submit" class="sBtn"><span>{$lang->cmd_search}</span></button>
+		</form-->
+		<hr class="hr" />
+		<div class="mVisual" cond="$imc">
+			<div class="nav one">
+				<button type="button" class="prev"><span>이전</span></button>
+				<button type="button" class="next"><span>다음</span></button>
+			</div>
+			<div class="tRotation">
+				<div class="itembox">
+					<div cond="$layout_info->r_text_1" class="item">
+						{$layout_info->r_text_1}
+					</div>
+					<div cond="$layout_info->r_text_2" class="item">
+						{$layout_info->r_text_2}
+					</div>
+					<div cond="$layout_info->r_text_3" class="item">
+						{$layout_info->r_text_3}
+					</div>
+					<div cond="$layout_info->r_text_4" class="item">
+						{$layout_info->r_text_4}
+					</div>
+					<div cond="$layout_info->r_text_5" class="item">
+						{$layout_info->r_text_5}
+					</div>
+				</div>
+			</div>
+			<div class="gStart">
+				<h2><a href="/manual">Get Started with XE</a></h2>
+				<ol>
+					<li class="s1">간편한 XE core 설치</li>
+					<li class="s2">다양한 추가 프로그램</li>
+					<li class="s3">쉬운 XE 프로그램과 스킨 제작</li>
+					<li class="s4">XE 사용자 지원</li>
+				</ol>
+			</div>
+		</div>
+	</div>
+	<hr class="hr" />
+	<div class="body">
+	
+        <div class="content" id="content">
+           {$content}
+        </div>
+    
+	</div>
+	<hr class="hr" />
+	<div class="footer">
+		<p>Xpress Engine. Copyright NAVER Corp. All rights reserved.</p>
+		<a href="/privacy">개인정보보호취급방침</a>
+		<a href="/communityRule">커뮤니티운영규칙</a>
+		<a href="/zb4_main">제로보드4</a>
+		<a href="mailto:contact@xpressengine.com">contact@xpressengine.com</a>
+	</div>
+</div>
+

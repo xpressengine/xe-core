@@ -1,0 +1,17 @@
+<filter name="change_status" module="resource" act="procResourceChangeStatus">
+    <form>
+        <node target="mid" required="true" />
+        <node target="package_srl" required="true" />
+        <node target="status" required="true" />
+    </form>
+    <parameter>
+        <param name="vid" target="vid" />
+        <param name="mid" target="mid" />
+        <param name="package_srl" target="package_srl" />
+        <param name="status" target="status" />
+    </parameter>
+    <response callback_func="completeChangeStatus">
+    <tag name="error" />
+    <tag name="message" />
+    </response>
+</filter>

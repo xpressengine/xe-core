@@ -1,0 +1,152 @@
+<!--#include("header.include.html")-->
+<!--#include("category.include.html")-->
+
+<div class="kinTabBox">
+    <ul class="kinTab">
+        <li class="noLine <!--@if(!$type)-->selected<!--@end-->">
+            <!--@if($search_keyword)-->
+            <a href="{getUrl('page',1,'type','')}">{$lang->search_result}</a>
+            <!--@else-->
+            <a href="{getUrl('page',1,'type','')}">{$lang->kin_all_questions}</a>
+            <!--@end-->
+        </li>
+        <li <!--@if($type=='questions')-->class="selected"<!--@end-->><a href="{getUrl('page',1,'type','questions')}">{$lang->kin_main_tabs[2]}</a></li>
+        <li <!--@if($type=='replies')-->class="selected"<!--@end-->><a href="{getUrl('page',1,'type','replies')}">{$lang->kin_main_tabs[3]}</a></li>
+        <li <!--@if($type=='selected')-->class="selected"<!--@end-->><a href="{getUrl('page',1,'type','selected')}">{$lang->kin_main_tabs[4]}</a></li>
+        <!--@if($is_logged)-->
+        <li <!--@if($type=='my_questions')-->class="selected"<!--@end-->><a href="{getUrl('page',1,'type','my_questions')}">{$lang->kin_main_tabs[5]}</a></li>
+        <li <!--@if($type=='my_replies')-->class="selected"<!--@end-->><a href="{getUrl('page',1,'type','my_replies')}">{$lang->kin_main_tabs[6]}</a></li>
+        <!--@end-->
+    </ul>
+    <!--@if($page_navigation)-->
+    <div class="status">
+        {number_format($page_navigation->total_count)}, {$page}/{number_format($page_navigation->total_page)} pages
+    </div>
+    <!--@end-->
+</div>
+
+<div class="listBox">
+<!--@if(count($document_list) || count($reply_list))-->
+<table cellspacing="0">
+<thead>
+<tr>
+    <!--@if($module_info->use_category == "Y")-->
+    <th class="category">{$lang->ask_category}</th>
+    <!--@end-->
+    <th class="title">{$lang->title}</th>
+    <!--@if($type !='my_questions')-->
+    <th class="author">{$lang->writer}</th>
+    <!--@end-->
+    <th class="date">{$lang->regdate}</th>
+</tr>
+</thead>
+<tbody>
+<!--@if($document_list)-->
+    <!--@foreach($document_list as $oDocument)-->
+    <tr>
+        <!--@if($module_info->use_category == "Y")-->
+        <th class="category">
+            <!--@if($oDocument->get('category_srl'))-->
+            <a href="{getUrl('category_srl',$oDocument->get('category_srl'))}">{$categories[$oDocument->get('category_srl')]->title}</a>
+            <!--@else-->
+            &nbsp;
+            <!--@end-->
+        </th>
+        <!--@end-->
+        <td class="title">
+            <span class="pointGift">{number_format($document_kins[$oDocument->document_srl])}</span>
+            <a href="{getUrl('','document_srl',$oDocument->document_srl,'search_keyword',$search_keyword)}">{$oDocument->getTitle()}</a> 
+            <!--@if($oDocument->getCommentCount())--><span>{$oDocument->getCommentCount()}</span><!--@end-->
+        </td>
+        <!--@if($type!='my_questions')-->
+        <td class="author"><a href="#" onclick="return false;" class="member_{$oDocument->get('member_srl')}">{$oDocument->getNickName()}</a></td>
+        <!--@end-->
+        <td class="date">{$oDocument->getRegdate("y.m.d")}</td>
+    </tr>
+    <!--@end-->
+<!--@elseif($reply_list)-->
+    <!--@foreach($reply_list as $oReply)-->
+    <tr>
+        <!--@if($module_info->use_category == "Y")-->
+        <th class="category">
+            <!--@if($oReply->get('category_srl'))-->
+            <a href="{getUrl('category_srl',$oReply->get('category_srl'))}">{$categories[$oReply->get('category_srl')]->title}</a>
+            <!--@else-->
+            &nbsp;
+            <!--@end-->
+        </th>
+        <!--@end-->
+        <td class="title">
+            <span class="pointGift">{number_format($document_kins[$oReply->get('document_srl')])}</span>
+            <a href="{getUrl('','document_srl',$oReply->get('document_srl'))}#comment_{$oReply->get('comment_srl')}">{$oReply->getSummary(70)}</a>
+        </td>
+        <!--@if($type!='my_questions')-->
+        <td class="author"><a href="#" onclick="return false;" class="member_{$oReply->get('member_srl')}">{$oReply->getNickName()}</a></td>
+        <!--@end-->
+        <td class="date">{$oReply->getRegdate("y.m.d")}</td>
+    </tr>
+    <!--@end-->
+<!--@end-->
+</tbody>
+</table>
+
+<div class="rightButtonBox">
+	<a href="{getUrl('act','dispKinWrite','document_srl','')}" class="button black strong"><span>{$lang->cmd_ask}</span></a>
+</div>
+
+<div class="pagination">
+    <a href="{getUrl('page','')}" class="prevEnd">{$lang->first_page}</a> 
+    <!--@while($page_no = $page_navigation->getNextPage())-->
+        <!--@if($page == $page_no)-->
+            <strong>{$page_no}</strong> 
+        <!--@else-->
+            <a href="{getUrl('page',$page_no)}">{$page_no}</a>
+        <!--@end-->
+    <!--@end-->
+    <a href="{getUrl('page',$page_navigation->last_page)}" class="nextEnd">{$lang->last_page}</a>
+</div>
+
+<!-- 검색 -->
+<div class="kinSearch">
+	<form action="{getUrl()}" method="get" onsubmit="return procFilter(this, search)" id="fo_search">
+		<!--@if($vid)-->
+		<input type="hidden" name="vid" value="{$vid}" />
+		<!--@end-->
+		<input type="hidden" name="mid" value="{$mid}" />
+		<input type="hidden" name="category" value="{$category}" />
+
+		<input type="text" name="search_keyword" value="{htmlspecialchars($search_keyword)}" class="inputTypeText"/>
+		<!--@if($last_division)-->
+			<a href="{getUrl('page',1,'document_srl','','division',$last_division,'last_division','','entry','')}" class="button {$btn_class}"><span>{$lang->cmd_search_next}</span></a>
+		<!--@end-->
+		<a href="#" onclick="xGetElementById('fo_search').submit();return false;" class="button {$btn_class}"><span>{$lang->cmd_search}</span></a>
+		<a href="{getUrl('','mid',$mid,'listStyle',$listStyle)}" class="button {$btn_class}"><span>{$lang->cmd_cancel}</span></a>
+	</form>
+</div>
+
+
+<!--@else-->
+<p class="none">
+	<strong>
+    <span>{$lang->category} :</span>
+	<!--@if(!$type)-->{$lang->kin_all_questions}<!--@end-->
+	<!--@if($type=='questions')-->{$lang->kin_main_tabs[2]}<!--@end-->
+	<!--@if($type=='replies')-->{$lang->kin_main_tabs[3]}<!--@end-->
+	<!--@if($type=='selected')-->{$lang->kin_main_tabs[4]}<!--@end-->
+	<!--@if($is_logged)--><!--@if($type=='my_questions')-->{$lang->kin_main_tabs[5]}<!--@end--><!--@end-->
+    <!--@if($search_keyword)-->
+    <span>, {$lang->search_keyword} :</span>
+    {$search_keyword}
+    <!--@end-->
+	</strong>
+	{$lang->msg_no_article}
+</p>
+
+<div class="rightButtonBox">
+	<a href="{getUrl('act','dispKinWrite','document_srl','')}" class="button black strong"><span>{$lang->cmd_ask}</span></a>
+</div>
+
+<!--@end-->
+</div>
+
+<!--#include("footer.include.html")-->

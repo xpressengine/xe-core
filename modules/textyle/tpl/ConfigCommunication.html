@@ -1,0 +1,215 @@
+<!--#include("_tool_header.html")-->
+    <!--%import("./filter/insert_config_communication.xml")-->
+
+			<!-- Content -->
+			<div id="content">
+				
+				<!-- contentHeader -->
+				<div class="contentHeader publishHeader lineBottom">
+					<h3 class="h3">{$lang->textyle_second_menus[5]['dispTextyleToolConfigCommunication']}</h3>
+				</div>
+				<!-- /contentHeader -->
+				
+				<div class="setUp">
+					<form action="./" method="post" onsubmit="return procFilter(this,insert_config_communication)">
+					<input type="hidden" name="mid" value="{$mid}" />
+					
+						<fieldset>
+							<h4 class="h4">{$lang->blog_first_page}</h4>
+							<table border="1" cellspacing="0" class="setupData">
+								<tr>
+									<th scope="row">{$lang->blog_display_target}</th>
+									<td>
+										<input name="post_style" type="radio" value="content" class="inputRadio" id="lastPost" <!--@if($textyle->getPostStyle()=='content')--> checked="checked"<!--@end--> /> <label for="lastPost">{$lang->content_body}</label>
+										<input name="post_style" type="radio" value="summary" class="inputRadio" id="lastSummary" <!--@if($textyle->getPostStyle()=='summary')--> checked="checked"<!--@end--> /> <label for="lastSummary">{$lang->content_summary}</label>
+										<input name="post_style" type="radio" value="list" class="inputRadio" id="lastList" <!--@if($textyle->getPostStyle()=='list')--> checked="checked"<!--@end--> /> <label for="lastList">{$lang->content_list}</label>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row"><label for="postNum">{$lang->blog_display_count}</label></th>
+									<td><input name="post_list_count" type="text" class="iText" id="num" maxlength="2" style="width:40px; text-align:center" value="{$textyle->getPostListCount()}" /> {$lang->item_unit}</td>
+								</tr>
+							</table>
+						</fieldset>
+
+						<fieldset>
+							<h4 class="h4">{$lang->send_me2}</h4>
+							<p><label for="enableMe2day">{$lang->about_send_me2}</label></p>
+							<table border="1" cellspacing="0" class="setupData">
+								<tr>
+									<th scope="row" rowspan="2"><label for="me2userid">{$lang->me2day_userid}</label></th>
+									<td><input name="me2day_userid" type="text" class="iText" id="me2userid" value="{$textyle->getMe2dayUserID()}" style="width:200px" /></td>
+								</tr>
+								<tr>
+									<td>{$lang->about_me2day_userid}</td>
+								</tr>
+								<tr>
+									<th scope="row" rowspan="2"><label for="me2userkey">{$lang->me2day_userkey}</label></th>
+									<td><input name="me2day_userkey" type="text" class="iText" id="me2userkey" value="{$textyle->getMe2dayUserKey()}" style="width:200px" /></td>
+								</tr>
+								<tr>
+									<td>{$lang->about_me2day_userkey}</td>
+								</tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <span class="btnGray medium"><button type="button" onclick="doCheckMe2day(); return false;">{$lang->check_me2day_info}</button></span>
+                                    </td>
+                                </tr>
+							</table>
+						</fieldset>
+						
+						<fieldset>
+							<h4 class="h4">{$lang->send_twitter}</h4>
+							<p><label for="enableTwitter">{$lang->about_send_twitter}</label></p>
+							<table border="1" cellspacing="0" class="setupData">
+								<tr>
+									<th scope="row" rowspan="2"><label for="twitterconsumerkey">{$lang->twitter_consumer_key}</label></th>
+									<td><input name="twitter_consumer_key" type="text" class="iText" id="twitterconsumerkey" value="{$textyle->getTwitterConsumerKey()}" style="width:200px" /></td>
+								</tr>
+								<tr>
+									<td>{$lang->about_twitter_consumer_key}</td>
+								</tr>
+								<tr>
+									<th scope="row" rowspan="2"><label for="twitterconsumersecret">{$lang->twitter_consumer_secret}</label></th>
+									<td><input name="twitter_consumer_secret" type="text" class="iText" id="twitterconsumersecret" value="{$textyle->getTwitterConsumerSecret()}" style="width:200px" /></td>
+								</tr>
+								<tr>
+									<td>{$lang->about_twitter_consumer_secret}</td>
+								</tr>
+								<tr>
+									<th scope="row" rowspan="2"><label for="twitteroauthtoken">{$lang->twitter_oauth_token}</label></th>
+									<td><input name="twitter_oauth_token" type="text" class="iText" id="twitteroauthtoken" value="{$textyle->getTwitterOauthToken()}" style="width:200px" /></td>
+								</tr>
+								<tr>
+									<td>{$lang->about_twitter_oauth_token}</td>
+								</tr>
+								<tr>
+									<th scope="row" rowspan="2"><label for="twitteroauthtokensecret">{$lang->twitter_oauth_token_secret}</label></th>
+									<td><input name="twitter_oauth_token_secret" type="text" class="iText" id="twitteroauthtokensecret" value="{$textyle->getTwitterOauthTokenSecret()}" style="width:200px" /></td>
+								</tr>
+								<tr>
+									<td>{$lang->about_twitter_oauth_token_secret}</td>
+								</tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <span class="btnGray medium"><button type="button" onclick="doCheckTwitter(); return false;">{$lang->check_twitter_info}</button></span>
+                                    </td>
+                                </tr>
+							</table>
+						</fieldset>
+						
+						<fieldset>
+							<h4 class="h4">RSS</h4>
+							<table border="1" cellspacing="0" class="setupData">
+								<tr>
+									<th scope="row">{$lang->feed_format}</th>
+									<td>
+										<input name="rss_type" type="radio" class="inputRadio" value="Y" id="postEntire" <!--@if($rss_config->open_rss=='Y')-->checked="checked"<!--@end--> /> <label for="postEntire">{$lang->rss_total}</label>
+										<input name="rss_type" type="radio" class="inputRadio" value="H" id="postSummary" <!--@if($rss_config->open_rss=='H')-->checked="checked"<!--@end--> /> <label for="postSummary">{$lang->rss_summary}</label>
+									</td>
+								</tr>
+							</table>
+						</fieldset>
+					
+						<fieldset>
+							<h4 class="h4">{$lang->visitor_editor_style}</h4>
+							<table border="1" cellspacing="0" class="setupData">
+								<tr>
+									<th scope="row">{$lang->email_address}</th>
+									<td>
+										<input name="input_email" type="radio" value="R" class="inputRadio" id="emailReauired"<!--@if($textyle->getInputEmail()=='R')--> checked="checked"<!--@end--> /> <label for="emailReauired">{$lang->required}</label>
+										<input name="input_email" type="radio" value="Y" class="inputRadio" id="emailOptional" <!--@if($textyle->getInputEmail()=='Y')--> checked="checked"<!--@end--> /> <label for="emailOptional">{$lang->selected}</label>
+										<input name="input_email" type="radio" value="N" class="inputRadio" id="emailNot" <!--@if($textyle->getInputEmail()=='N')--> checked="checked"<!--@end--> /> <label for="emailNot">{$lang->notaccepted}</label>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">{$lang->website_address}</th>
+									<td>
+										<input name="input_website" type="radio" value="R" class="inputRadio" id="wwwReauired" <!--@if($textyle->getInputWebsite()=='R')--> checked="checked"<!--@end--> /> <label for="wwwReauired">{$lang->required}</label>
+										<input name="input_website" type="radio" value="Y" class="inputRadio" id="wwwOptional"  <!--@if($textyle->getInputWebsite()=='Y')--> checked="checked" <!--@end-->/> <label for="wwwOptional">{$lang->selected}</label>
+										<input name="input_website" type="radio" value="N" class="inputRadio" id="wwwNot" <!--@if($textyle->getInputWebsite()=='N')--> checked="checked"<!--@end-->/> <label for="wwwNot">{$lang->notaccepted}</label>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">{$lang->comment_editor}</th>
+									<td>
+                                        <select name="comment_editor_skin" onchange="getEditorSkinColorList(this.value, null, 'comment')">
+                                        <!--@foreach($editor_skin_list as $editor)-->
+                                        <!--@if($editor!='dreditor')-->
+                                        <option value="{$editor}" <!--@if($editor==$textyle->get('comment_editor_skin'))-->selected="selected"<!--@end-->>{$editor}</option>
+                                        <!--@end-->
+                                        <!--@end-->
+                                        </select>
+                                        <select name="comment_editor_colorset" id="sel_editor_comment_colorset" style="display:none"></select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">{$lang->guestbook_editor}</th>
+									<td>
+                                        <select name="guestbook_editor_skin" onchange="getEditorSkinColorList(this.value, null, 'guestbook')">
+                                        <!--@foreach($editor_skin_list as $editor)-->
+                                        <!--@if($editor!='dreditor')-->
+                                        <option value="{$editor}" <!--@if($editor==$textyle->get('guestbook_editor_skin'))-->selected="selected"<!--@end-->>{$editor}</option>
+                                        <!--@end-->
+                                        <!--@end-->
+                                        </select>
+                                        <select name="guestbook_editor_colorset" id="sel_editor_guestbook_colorset" style="display:none"></select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row"><label for="replyNum">{$lang->comment_list_count}</label></th>
+									<td><input name="comment_list_count" type="text" class="iText" id="replyNum" maxlength="2" style="width:40px; text-align:center" value="{$textyle->getCommentListCount()}" /> {$lang->item_unit}</td>
+								</tr>
+								<tr>
+									<th scope="row"><label for="sayHello">{$lang->guestbook_list_count}</label></th>
+									<td><input name="guestbook_list_count" type="text" class="iText" id="sayHello" maxlength="2" style="width:40px; text-align:center" value="{$textyle->getGuestbookListCount()}" /> {$lang->item_unit}</td>
+								</tr>
+								<tr>
+									<th rowspan="2" scope="row"><label for="commentGrant">{$lang->comment_grant}</label></th>
+                                    <td>
+                                        <select name="comment_grant" id="commentGrant">
+                                            <option value="">{$lang->grant_to_all}</option>
+                                            <option value="1" <!--@if($textyle->getCommentGrant()==1)-->selected="selected"<!--@end-->>{$lang->grant_to_member}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{$lang->about_comment_grant}</td>
+								</tr>
+								<tr>
+									<th rowspan="2" scope="row"><label for="guestbookGrant">{$lang->guestbook_grant}</label></th>
+                                    <td>
+                                        <select name="guestbook_grant" id="guestbookGrant">
+                                            <option value="">{$lang->grant_to_all}</option>
+                                            <option value="1" <!--@if($textyle->getGuestbookGrant()==1)-->selected="selected"<!--@end-->>{$lang->grant_to_member}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{$lang->about_guestbook_grant}</td>
+								</tr>
+							</table>
+
+                            <script>
+                                jQuery(window).load(function() { 
+                                    getEditorSkinColorList('{$textyle->get('comment_editor_skin')}','{$textyle->get('comment_editor_colorset')}','comment'); 
+                                    getEditorSkinColorList('{$textyle->get('guestbook_editor_skin')}','{$textyle->get('guestbook_editor_colorset')}','guestbook'); 
+                                } );
+                            </script>
+						</fieldset>
+						<div class="btnArea">
+							<span class="btn"><input type="submit" value="{$lang->cmd_apply}" /></span>
+						</div>
+
+					</form>
+				</div>
+
+			</div>
+			<hr />
+			<!-- /Content -->
+				
+			<!-- Extension -->
+				<!--#include("_tool_menu.html")-->
+			<!-- Extension -->
+
+<!--#include("_tool_footer.html")-->

@@ -1,0 +1,19 @@
+<query id="insertBlogAPI" action="insert">
+    <tables>
+        <table name="textyle_api" />
+    </tables>
+    <columns>
+      <column name="module_srl" var="module_srl" notnull="notnull" />
+      <column name="api_srl" var="api_srl" notnull="notnull" />
+      <column name="blogapi_service" var="blogapi_service" notnull="notnull" />
+      <column name="blogapi_host_provider" var="blogapi_host_provider" notnull="notnull" />
+      <column name="blogapi_type" var="blogapi_type" notnull="notnull" />
+      <column name="blogapi_site_url" var="blogapi_site_url" notnull="notnull" />
+      <column name="blogapi_site_title" var="blogapi_site_title" notnull="notnull" />
+      <column name="blogapi_url" var="blogapi_url" notnull="notnull" />
+      <column name="blogapi_user_id" var="blogapi_user_id" notnull="notnull" />
+      <column name="blogapi_password" var="blogapi_password" notnull="notnull" />
+      <column name="blogapi_blogid" var="blogapi_blogid" />
+      <column name="regdate" default="curdate()" />
+    </columns>
+</query>

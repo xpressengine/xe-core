@@ -1,0 +1,34 @@
+<!--#include("_header.html")-->
+<div class="bd">
+	<div class="hx h2">
+		<h2> 
+			<!--@if($category_srl)-->{$category_list[$category_srl]->title}<!--@end-->
+		</h2>
+		<a class="ca" href="{getURL('act','dispTextyleCategory')}">{$lang->category}</a>
+	</div>
+
+<!--@if($document_list)-->
+	<ul class="lt">
+		<!--@foreach($document_list as $no => $document)-->
+		<li>
+			<a href="{getUrl('document_srl', $document->document_srl)}">
+				<span class="title"><!--@if($module_info->use_category == "Y" && $document->get('category_srl'))-->{$category_list[$document->get('category_srl')]->title} &rsaquo;<!--@end--><strong>{$document->getTitle($module_info->subject_cut_size)}</strong> <!--@if($document->getCommentCount())--><em>[{$document->getCommentCount()}]</em><!--@endif--></span>
+				<span class="auth">
+					<em>{$document->getNickName()}</em> 
+					<span class="time">{$document->getRegDate("Y.m.d")}</span>
+				</span>
+			</a>
+		</li>
+		<!--@end-->
+	</ul>
+	<div class="pn">
+        <!--@if($page != 1)-->
+		<a href="{getUrl('page',$page-1,'document_srl','','division',$division,'last_division',$last_division,'entry','')}" class="prev">{$lang->cmd_prev}</a> 
+        <!--@endif-->
+        <strong>{$page} / {$page_navigation->last_page}</strong>
+        <!--@if($page != $page_navigation->last_page)-->
+		<a href="{getUrl('page',$page+1,'document_srl','','division',$division,'last_division',$last_division,'entry','')}" class="next">{$lang->cmd_next}</a>
+        <!--@endif-->
+	</div>
+<!--@end--></div>
+<!--#include("_footer.html")-->

@@ -1,0 +1,12 @@
+<query id="getMemberAnswerCount" action="select">
+    <tables>
+        <table name="comments" alias="com" />
+    </tables>
+    <columns>
+        <column name="count(*)" alias="answer_count" />
+    </columns>
+    <conditions>
+		<condition operation="equal" column="com.module_srl" var="module_srl" pipe="and"/>
+        <condition operation="equal" column="com.member_srl" var="member_srl" pipe="and"/>
+    </conditions>
+</query>

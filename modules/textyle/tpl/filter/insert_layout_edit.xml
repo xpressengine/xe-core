@@ -1,0 +1,8 @@
+<filter name="insert_layout_edit" module="textyle" act="procTextyleToolLayoutConfigEdit" confirm_msg_code="confirm_submit">
+    <form />
+    <parameter />
+    <response callback_func="completeReload">
+        <tag name="error" />
+        <tag name="message" />
+    </response>
+</filter>

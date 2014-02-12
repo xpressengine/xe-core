@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout version="0.2">
+    <title xml:lang="ko">XE Official v3 Sub</title>
+    <description xml:lang="ko">XE 공식 웹 사이트 2011 서브 페이지 레이아웃.</description>
+    <version>1.0</version>
+    <date>2010-12-24</date>
+    <author email_address="developers@xpressengine.com" link="http://xpressengine.com/">
+        <name xml:lang="ko">NHN</name>
+    </author>
+    <license>LGPL v2</license>
+	<extra_vars>
+		<var name="visual_image" type="image">
+            <title xml:lang="ko">상단 이미지</title>
+            <description xml:lang="ko">GNB 하단의 헤더 영역에 이미지를 출력합니다.</description>
+		</var>
+		<var name="visual_alt" type="textarea">
+            <title xml:lang="ko">상단 이미지 대체 텍스트</title>
+            <description xml:lang="ko">GNB 하단의 헤더 영역 이미지에 대한 대체 텍스트를 출력합니다.</description>
+		</var>
+	</extra_vars>
+    <menus>
+        <menu name="main_menu" maxdepth="2" default="true">
+            <title xml:lang="ko">메뉴</title>
+        </menu>
+    </menus>
+</layout>

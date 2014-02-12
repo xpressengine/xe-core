@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="0.2">
+    <title xml:lang="ko">지식인 XE</title>
+    <title xml:lang="zh-CN">知识问答</title>
+	<title xml:lang="en">Q&amp;A System</title>
+    <description xml:lang="ko">질문과 답변을 하고 답변을 채택할 수 있는 XE 지식인 모듈입니다.</description>
+    <description xml:lang="zh-CN">提问、回答及采纳为一体的XE互动问答平台。</description>
+	<description xml:lang="en">The module enables you ask questions,get answers from real people, and share your insights and knowledge with other users around the world</description>
+    <version>1.7.0</version>
+    <date>2013-05-22</date>
+    <category>service</category>
+
+    <author email_address="developers@xpressengine.com" link="http://www.xpressengine.com">
+        <name xml:lang="ko">NHN</name>
+		<name xml:lang="zh-CN">NHN</name>
+		<name xml:lang="en">NHN</name>
+    </author>
+</module>

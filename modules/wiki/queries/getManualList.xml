@@ -1,0 +1,48 @@
+<query id="getManualList" action="select">
+    <tables>
+        <table query="true" alias="manual_sets">
+            <tables>
+                <table name="modules" alias="m" />
+                <table name="module_extra_vars" alias="e" />
+            </tables>
+            <columns>
+                <column name="e.value" alias="manual_set" />
+                <column name="min(m.module_srl)" alias="min_module_srl" />
+            </columns>
+            <conditions>
+                <condition operation="equal" column="m.module" default="wiki"/>
+                <condition operation="equal" column="e.module_srl" default="m.module_srl" pipe="and" />
+                <condition operation="equal" column="e.name" default="help_name" pipe="and" />
+            </conditions>
+            <groups>
+                    <group column="e.value" />
+            </groups>
+        </table>
+        <table name="modules" alias="m" />
+        <table name="module_extra_vars" alias="ev" />
+        <table name="module_extra_vars" alias="versions" />
+    </tables>
+    <columns>
+        <column name="manual_sets.manual_set" alias="manual_set" />
+        <column name="versions.value" alias="version_label" />
+        <column name="m.*" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="m.module" default="wiki" />
+        <condition operation="equal" column="m.module_srl" default="ev.module_srl" pipe="and" />
+        <condition operation="equal" column="ev.name" default="help_name" pipe="and" />
+        <condition operation="equal" column="ev.value" default="manual_sets.manual_set" pipe="and" />
+        <condition operation="equal" column="versions.name" default="version_label" pipe="and" />
+        <condition operation="equal" column="versions.module_srl" default="m.module_srl" pipe="and" />
+        <group pipe="and">
+            <condition operation="like" column="m.mid" var="s_mid" pipe="or" />
+            <condition operation="like" column="m.title" var="s_title" pipe="or" />
+            <condition operation="like" column="m.comment" var="s_comment" pipe="or" />
+            <condition operation="equal" column="m.module" var="s_module" pipe="or" />
+            <condition operation="equal" column="m.module_category_srl" var="s_module_category_srl" pipe="or" />
+        </group>
+    </conditions>
+    <navigation>
+        <index var="sort_order" default="manual_sets.min_module_srl" order="desc" />
+    </navigation>
+</query>

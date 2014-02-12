@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+	<grants />
+	<permissions>
+		<permission action="procCommentAdminAddCart" target="manager" />
+		<permission action="procCommentGetList" target="manager" />
+	</permissions>
+	<actions>
+		<action name="getCommentMenu" type="model" />
+		<action name="dispCommentAdminList" type="view" admin_index="true" menu_name="comment" menu_index="true" />
+		<action name="dispCommentAdminDeclared" type="view" menu_name="comment" />
+		<action name="procCommentVoteUp" type="controller" />
+		<action name="procCommentVoteDown" type="controller" />
+		<action name="procCommentDeclare" type="controller" />
+		<action name="getCommentVotedMemberList" type="model" />
+		<action name="procCommentInsertModuleConfig" type="controller" ruleset="insertCommentModuleConfig" />
+		<action name="procCommentAdminDeleteChecked" type="controller" ruleset="deleteChecked" />
+		<action name="procCommentAdminChangeStatus" type="controller"/>
+		<action name="procCommentAdminChangePublishedStatusChecked" type="controller" />
+		<action name="isModuleUsingPublishValidation" type="controller" />
+		<action name="procCommentAdminCancelDeclare" type="controller" />
+		<action name="procCommentAdminAddCart" type="controller" />
+		<action name="procCommentGetList" type="controller" />
+	</actions>
+	<menus>
+		<menu name="comment">
+			<title xml:lang="en">Comment</title>
+			<title xml:lang="ko">댓글</title>
+			<title xml:lang="zh-CN">Comment</title>
+			<title xml:lang="jp">コメント</title>
+			<title xml:lang="es">Comment</title>
+			<title xml:lang="ru">Comment</title>
+			<title xml:lang="fr">Comment</title>
+			<title xml:lang="zh-TW">回覆</title>
+			<title xml:lang="vi">Comment</title>
+			<title xml:lang="mn">Comment</title>
+			<title xml:lang="tr">Comment</title>
+		</menu>
+	</menus>
+</module>

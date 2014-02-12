@@ -1,0 +1,77 @@
+@charset "utf-8";
+.alt{ position:absolute; left:0; top:0; width:1px; height:1px; font-size:0; line-height:0; visibility:hidden;}
+.aLeft{ text-align:left !important;}
+.aRight{ text-align:right !important;}
+.fLeft{ float:left;}
+.fRight{ float:right;}
+
+body { padding-top:29px !important; }
+.displayGNB{ position:absolute; left:0; top:0; width:100%; margin:-1px 0 17px 0; border-top:1px solid #464646; *zoom:1; background:url(../img/bgBody.gif) repeat-x;}
+.displayGNB:after{ content:""; display:block; clear:both;}
+.displayGNB p{ float:left; margin:0 1em 0 0;}
+.displayGNB p a{ display:block; float:left; height:29px; color:#f90; font:bold 12px Tahoma, Geneva, sans-serif;}
+.displayGNB p a .axis{ display:inline-block; height:29px; vertical-align:middle; width:0;}
+.displayGNB p a img{ vertical-align:middle;}
+
+.displayGNB ul{ position:relative; margin:0; padding:0; list-style:none; white-space:nowrap;}
+.displayGNB li{ float:left; position:relative;}
+.displayGNB li:first-child span{ border:0;}
+.displayGNB li, 
+.displayGNB li.my a{ background-image:url(../img/iconGnb.gif); background-repeat:no-repeat; background-position:right 30px;}
+.displayGNB li.my a{ background-position:right -30px;}
+.displayGNB li a{ display:block; float:left; height:29px; line-height:29px; color:#bbb; font-size:11px; text-decoration:none !important;}
+.displayGNB li span{ position:relative; padding:0 13px; border-left:1px solid #515151;}
+.displayGNB li.my span{ padding-right:22px;}
+
+.displayGNB li.active{ z-index:2; border:1px solid #1b1b1b; border-top:0; border-bottom:0; margin:0 -1px 0 0; background-repeat:repeat-x; background-position:0 0;}
+.displayGNB .fLeft li:first-child.active{ margin-left:-1px;}
+.displayGNB li.active a{ color:#eee;}
+.displayGNB li.my.active a{ background-position:right -60px;}
+.displayGNB li.active span{ border-left:0;}
+
+.displayGNB li ul{ display:none; position:absolute; top:29px; right:0; float:none; padding:0 1px 1px; border:1px solid #878787; border-top:0; background:#fff; *width:140px;}
+.displayGNB li.active ul{ display:block;}
+.displayGNB li li{ float:none; left:0; border:0 !important; margin:0 !important;}
+.displayGNB li li.active{ background:none;}
+.displayGNB li.my li a{ float:none; height:21px; line-height:21px; padding:0 6px; color:#767676; background-position:right 30px !important;}
+.displayGNB li.my.myLanguage li a{ padding-right:21px;}
+.displayGNB li.my.myLanguage li.selected a{ background-position:right -92px !important;}
+.displayGNB li li a:hover,
+.displayGNB li li a:active,
+.displayGNB li li a:focus{ color:#333; background-color:#e8eef7;}
+
+.mwLogin{ display:none; position:fixed; _position:absolute; top:0; left:0; width:100%; height:100%; z-index:10000;}
+.mwLogin.open{ display:block;}
+.mwLogin .bg{ position:absolute; top:0; left:0; width:100%; height:100%; background:#000; opacity:.5; filter:alpha(opacity=50);}
+#login{ position:absolute; width:328px; top:50%; left:50%; padding:28px 28px 0 28px; margin:-150px 0 0 -194px; border:2px solid #555; font-size:12px; font-family:Tahoma, Geneva, sans-serif; line-height:normal; background:#fff; white-space:normal; color:#767676;}
+#login form{ display:none; margin:0; padding:0;}
+#login fieldset{ border:0; margin:0; padding:0;}
+#login legend{ position:absolute; left:0; top:0; width:1px; height:1px; font-size:0; line-height:0; visibility:hidden;}
+#login .btnLogin,
+#login .btnLogin input{ position:relative; display:inline-block; margin:0; padding:0; overflow:visible; height:32px; line-height:32px; font-size:12px; font-weight:bold; color:#fff; vertical-align:middle; cursor:pointer; border:0; text-decoration:none !important; background:transparent url(../img/btnLogin.gif) no-repeat;}
+#login .btnLogin{ margin:0 4px 0 0; background-position:left top;}
+#login .btnLogin input{ left:4px; background-position:right top; *vertical-align:top; padding:0 24px 0 36px;}
+#login .iClear{ position:relative;}
+#login .iText{ position:relative; display:block; font:bold 11px Tahoma; height:14px; color:#767676; border:1px solid #b7b7b7; border-right-color:#e1e1e1; border-bottom-color:#e1e1e1; background:transparent;}
+#login .help{ position:relative; float:none; display:block; border:0; border-top:1px solid #d9d9d9; background:#fafafa; padding:15px 0; margin:0 -28px; list-style:none; text-align:center; *zoom:1;}
+#login .help li{ display:inline; float:none; border-left:1px solid #c3c3c3 !important; padding:0 6px 0 10px; margin:0; line-height:1;}
+#login .help li.first{ border:0 !important;}
+#login .help a{ float:none; display:inline; background:none; line-height:1; padding:0; font-size:11px; color:#767676; text-decoration:none; font-family:Dotum, 돋움, Sans-serif;}
+#login .help a:hover,
+#login .help a:active,
+#login .help a:focus{ text-decoration:underline; color:#000;}
+#login .gLogin .iLabel{ position:absolute; top:9px; left:10px; font:bold 11px Tahoma;}
+#login .gLogin .iText{ width:316px; padding:8px 0 6px 10px; margin:0 0 5px 0;}
+#login .gLogin .btnLogin{ position:absolute; top:107px; right:28px;}
+#login .gLogin .keeping{ float:none; height:32px; line-height:32px; margin:10px 0; padding:0;}
+#login .gLogin .keeping label{ position:static; cursor:pointer; font-family:Dotum, 돋움, Thahoma;}
+#login .gLogin .iCheck{ width:13px; height:13px; margin:0 4px 0 0; padding:0; vertical-align:middle;}
+#login .gLogin .warning{ display:none; float:none; margin:10px 0; line-height:1.4;}
+#login .gLogin .warning.open{ display:block;}
+#login .oLogin{ text-align:center;}
+#login .oLogin .iLabel{ position:absolute; top:9px; left:36px; font:bold 11px Tahoma;}
+#login .oLogin .iText{ width:291px; padding:8px 0 6px 35px; margin:0; background:url(../img/iconOpenId.gif) no-repeat 10px center;}
+#login .oLogin .btnLogin{ margin-top:10px; margin-bottom:10px;}
+#login.gLogin .gLogin,
+#login.oLogin .oLogin{ display:block;}
+#login .close{ position:absolute; top:0; right:0; width:25px; height:25px; border:0; padding:0; background:transparent; overflow:visible; cursor:pointer; text-align:center; font:11px/25px Verdana, Geneva, sans-serif; color:#ccc; text-decoration:none !important;}

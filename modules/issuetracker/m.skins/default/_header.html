@@ -1,0 +1,11 @@
+{@ Context::addJsFile("./common/js/jquery.js", true, '', -100000) }
+<!--%import("css/missuetracker.css")-->
+<div class="ln">
+	<ul>
+	<!--@foreach($lang->mobile_it_menu as $key=>$val)-->
+		<li<!--@if($act==$key)--> class="active"<!--@end-->><a href="{getUrl('','mid',$mid,'act',$key)}">{$val}</a></li>
+	<!--@end-->
+	</ul>
+	<button type="button" class="next" title="{$lang->more}"></button>
+</div>
+<div class="bd">

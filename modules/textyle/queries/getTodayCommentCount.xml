@@ -1,0 +1,13 @@
+<query id="getTodayCommentCount" action="select">
+    <tables>
+        <table name="comments" />
+    </tables>
+    <columns>
+        <column name="count(*)" alias="count" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" notnull="notnull" filter="numbers" />
+        <condition operation="like_prefix" column="regdate" var="regdate" notnull="notnull" pipe="and" />
+    </conditions>
+</query>
+

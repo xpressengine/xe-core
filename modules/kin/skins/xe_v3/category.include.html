@@ -1,0 +1,30 @@
+<ul class="cTab" cond="$module_info->use_category == 'Y'">
+	<li class="on"|cond="!$category_srl"><a href="{getUrl('category_srl','')}">{$lang->total_articles}</a>
+		<ul>
+			<li class="on_"|cond="!$type">
+				<a cond="$search_keyword" href="{getUrl('page',1,'type','')}">{$lang->search_result}</a>
+				<a cond="!$search_keyword" href="{getUrl('page',1,'type','')}">{$lang->kin_all_questions}</a>
+			</li>
+			<li class="on_"|cond="$type=='questions'"><a href="{getUrl('page',1,'type','questions')}">{$lang->kin_main_tabs[2]}</a></li>
+			<li class="on_"|cond="$type=='replies'"><a href="{getUrl('page',1,'type','replies')}">{$lang->kin_main_tabs[3]}</a></li>
+			<li class="on_"|cond="$type=='selected'"><a href="{getUrl('page',1,'type','selected')}">{$lang->kin_main_tabs[4]}</a></li>
+			<li cond="$is_logged" class="on_"|cond="$type=='my_questions'"><a href="{getUrl('page',1,'type','my_questions')}">{$lang->kin_main_tabs[5]}</a></li>
+			<li cond="$is_logged" class="on_"|cond="$type=='my_replies'"><a href="{getUrl('page',1,'type','my_replies')}">{$lang->kin_main_tabs[6]}</a></li>
+		</ul>
+	</li>
+	<li loop="$categories => $key,$val" class="on"|cond="$category_srl==$val->category_srl">
+		<a href="{getUrl('category_srl',$val->category_srl)}">{$val->title}</a><!--<em>({number_format($val->document_count)})</em>-->
+		<ul>
+			<li class="on_"|cond="!$type">
+				<a cond="$search_keyword" href="{getUrl('page',1,'type','')}">{$lang->search_result}</a>
+				<a cond="!$search_keyword" href="{getUrl('page',1,'type','')}">{$lang->kin_all_questions}</a>
+			</li>
+			<li class="on_"|cond="$type=='questions'"><a href="{getUrl('page',1,'type','questions')}">{$lang->kin_main_tabs[2]}</a></li>
+			<li class="on_"|cond="$type=='replies'"><a href="{getUrl('page',1,'type','replies')}">{$lang->kin_main_tabs[3]}</a></li>
+			<li class="on_"|cond="$type=='selected'"><a href="{getUrl('page',1,'type','selected')}">{$lang->kin_main_tabs[4]}</a></li>
+			<li cond="$is_logged" class="on_"|cond="$type=='my_questions'"><a href="{getUrl('page',1,'type','my_questions')}">{$lang->kin_main_tabs[5]}</a></li>
+			<li cond="$is_logged" class="on_"|cond="$type=='my_replies'"><a href="{getUrl('page',1,'type','my_replies')}">{$lang->kin_main_tabs[6]}</a></li>
+		</ul>
+	</li>
+</ul>
+

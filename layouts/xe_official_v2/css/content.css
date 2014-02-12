@@ -1,0 +1,127 @@
+@charset "utf-8";
+/* NHN > UIT Center > Open UI Technology Team > Jeong Chan Myeong(dece24@nhncorp.com) */
+
+/* Home */
+.black #content a{ text-decoration:none;}
+.black #content a:hover,
+.black #content a:active,
+.black #content a:focus{ text-decoration:underline;}
+
+.black .dLink{ float:left; margin:0 0 0 0;}
+.black .dLink img{ border:1px solid #ddd;}
+
+/* Heading */
+#content .h2{ color:#333; font-size:18px; margin:0 0 40px 0; clear:both;}
+#content .h3{ position:relative; color:#333; font-size:15px; border-bottom:1px solid #dcdcdc; padding-bottom:7px; clear:both; margin:0 0 20px 0;}
+#content .h4{ color:#333; font-size:14px; margin-top:1em; margin-bottom:10px;}
+#content .h5{ color:#333; font-size:12px; margin-top:0; margin-bottom:10px;}
+
+/* Table Of Content */
+#content .toc{ margin:0 0 40px 0; padding:20px 50px; border:1px dotted #dcdcdc;}
+#content .toc li{ margin-bottom:3px;}
+
+/* Content Header */
+.contentHeader{ position:relative; border:2px solid; border-left:160px solid;  *zoom:1; margin-bottom:50px; overflow:visible;}
+.contentHeader:after{ content:""; display:block; clear:both;}
+
+.sky .contentHeader{ border-color:#4b6aa8;}
+.cyan .contentHeader{ border-color:#41a7a6;}
+.purple .contentHeader{ border-color:#8f3190;}
+.orange .contentHeader{ border-color:#eea000;}
+
+.contentHeader .title{ position:relative; float:left; width:140px; padding:20px 0 20px 20px; margin:0 0 0 -160px; color:#fff; *zoom:1;}
+.contentHeader .title h2{ margin:0 0 12px 0; font-size:8px; font-weight:normal; font-family:Tahoma; letter-spacing:2px;}
+.contentHeader .title h3{ margin:0 0 0 0; font-size:20px;}
+
+.contentHeader .summary{ *zoom:1; padding:25px 30px; height:105px; overflow:hidden;}
+.contentHeader .summary:after{ content:""; display:block; clear:both;}
+.contentHeader .summary .thumb{ float:left; display:block; margin:0 20px 0 0;}
+.contentHeader .summary .description { color:#7f7f7f; line-height:1.5;}
+.contentHeader .summary .description p{ margin-top:0;}
+.contentHeader .summary .description ul { overflow:hidden; list-style:none; margin:0; padding:0; font-size:11px; color:#8b8b8b;}
+.contentHeader .summary .description ul li{ display:inline; position:relative; left:-10px; padding-left:10px; margin-right:5px; background:url(../img/lineHeaderVr.gif) no-repeat left center;}
+.contentHeader .summary .description ul a { color:#8b8b8b;}
+
+/* Content Section */
+#content .section{ color:#666; line-height:1.5; margin-bottom:40px;}
+#content .section em{ font-style:normal; color:#ff6600;}
+#content .section strong{ color:#000;}
+
+/* Content Table */
+#content .section table { border-collapse:collapse; border:1px solid #ccc; border-right:none; border-bottom:none; margin-bottom:40px; width:100%; }
+#content .section caption { position:relative; text-align:left; font-weight:bold; padding:10px 0;}
+#content .section caption button{ overflow:visible; font:11px Tahoma; cursor:pointer;}
+#content .section th,
+#content .section td { padding:.3em .5em; vertical-align:top; border:1px solid #ccc; border-top:none; border-left:none; vertical-align:top;}
+#content .section th { background:#f4f4f4; }
+#content .section tbody th { text-align:left; }
+
+/* Content Code */
+#content .section code{ background:#f8f8f8; font-family:"Courier New", Monospace;}
+#content .section code.block{ display:block; border:1px dashed #ddd; padding:1em;}
+
+/* About */
+.blue #content .info{ position:absolute; top:10px; right:0; font-size:11px; color:#8b8b8b; margin:0;}
+
+.blue #content .history dl{ position:relative; margin:0; padding:0; *zoom:1;}
+.blue #content .history dl:after{ content:""; display:block; clear:both;}
+.blue #content .history dt{ position:absolute; top:0; font-weight:bold; color:#333; height:13px; padding-top:15px; padding-bottom:15px; text-align:center;}
+.blue #content .history dt.dt1{ left:0; border:1px solid #efefef; border-right:0; width:259px; background:url(../img/aboutXeHistoryBg.gif) no-repeat right center;}
+.blue #content .history dt.dt2{ left:260px; border:1px solid #efefef; border-left:0; border-right:0; width:259px; background:url(../img/aboutXeHistoryBg.gif) no-repeat right center;}
+.blue #content .history dt.dt3{ left:519px; border:1px solid #efefef; border-left:0; width:240px;}
+.blue #content .history dd{ float:left; _float:none; _display:inline; width:240px; margin:0 20px 0 0; padding-top:60px; *zoom:1; position:relative;}
+.blue #content .history dd.dd1{ _top:-18px;}
+.blue #content .history dd.dd3{ margin-right:0;}
+
+.blue #content .character .item{ *zoom:1; margin-bottom:20px;}
+.blue #content .character .item:after{ content:""; display:block; clear:both;}
+.blue #content .character img { float:left; clear:left; margin-right:30px;}
+.blue #content .character p{ margin-top:0;}
+
+.blue #content .recommendation{ *zoom:1;}
+.blue #content .recommendation:after{ content:""; display:block; clear:both;}
+.blue #content .recommendation .item{ float:left;}
+.blue #content .recommendation .xeType{ width:370px;}
+.blue #content .recommendation .svType{ border-left:1px solid #f2f2f2; padding-left:35px;}
+.blue #content .recommendation ul{ margin:0; padding:0; list-style:none;}
+.blue #content .recommendation li{ padding:4px 0 0 20px; background:url(../img/aboutXeRecommendation.gif) no-repeat; margin-bottom:8px;}
+.blue #content .recommendation .xeType li{ background-position:0 0;}
+.blue #content .recommendation .svType li{ background-position:0 -44px;}
+
+.blue #content .environment{ *zoom:1;}
+.blue #content .environment:after{ content:""; display:block; clear:both;}
+.blue #content .environment .item{ float:left;}
+.blue #content .environment .php{ width:370px;}
+.blue #content .environment .db{ border-left:1px solid #f2f2f2; padding-left:35px;}
+.blue #content .environment ul{ margin:0; padding:0; list-style:none;}
+.blue #content .environment li{ padding-left:8px; background:url(../img/bulletA.gif) no-repeat left center; color:#333;}
+
+.blue #content .package{ overflow:hidden;}
+.blue #content .package .item{ position:relative; top:-30px; *zoom:1; margin-bottom:20px; border-top:1px solid #eee; padding-top:30px;}
+.blue #content .package .item:after{ content:""; display:block; clear:both;}
+.blue #content .package img { float:left; clear:left; margin-right:30px;}
+.blue #content .package p{ margin-top:0;}
+
+.blue #content .communication{ overflow:hidden;}
+.blue #content .communication .item{ position:relative; top:-30px; *zoom:1; margin-bottom:20px; border-top:1px solid #eee; padding-top:30px;}
+.blue #content .communication .item:after{ content:""; display:block; clear:both;}
+.blue #content .communication img { float:left; clear:left; margin-right:30px;}
+.blue #content .communication p{ margin-top:0;}
+
+.blue #content .textyle{ overflow:hidden;}
+.blue #content .textyle .item{ position:relative; top:-30px; *zoom:1; margin-bottom:20px; border-top:1px solid #eee; padding-top:30px;}
+.blue #content .textyle .item:after{ content:""; display:block; clear:both;}
+.blue #content .textyle img { float:left; clear:left; margin-right:30px;}
+.blue #content .textyle p{ margin-top:0;}
+
+/* Download */
+.sky .contentHeader .summary h4{ color:#5e95d6;}
+.sky .contentHeader .summary h4 a{ color:#afcef3; }
+
+/* LANGUAGE */
+body.en,
+body.jp,
+body.zh { font-family:Tahoma, Sans-Serif;}
+body.ko { font-family:Dotum, Sans-Serif;}
+body.ko #content .h2,
+body.ko #content .h3{ font-family:NanumGothic, "Malgun Gothic";}

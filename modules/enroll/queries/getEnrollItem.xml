@@ -1,0 +1,12 @@
+<query id="getEnrollItem" action="select">
+    <tables>
+        <table name="enroll" />
+    </tables>
+    <columns>
+        <column name="*" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" />
+        <condition operation="equal" column="enroll_srl" var="enroll_srl" filter="number" pipe="and" notnull="notnull" />
+    </conditions>
+</query>

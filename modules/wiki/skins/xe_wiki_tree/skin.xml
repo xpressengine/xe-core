@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+	<title xml:lang="en">XE Skin with left tree</title>
+	<description xml:lang="en">This skin use in left side a tree of documents</description>
+	<version>0.2</version>
+	<date>2012-01-18</date>
+	<author email_address="xe_dev@gmail.com" link="http://www.arnia.ro">
+		<name xml:lang="en">Arnia</name>
+	</author>
+	<license>GPL</license>
+	<extra_vars>
+		<var name="menu_style" type="select">
+			<title xml:lang="en">Tree Menu style</title>
+			<description xml:lang="en">Please choose the style of tree menu.</description>
+			<options value="msdn">
+				<title xml:lang="en">MSDN style tree</title>
+			</options>		
+			<options value="classic">
+				<title xml:lang="en">Classic tree</title>
+			</options>
+
+		</var>
+	
+		<var name="title" type="text">
+			<title xml:lang="en">Title</title>
+			<description xml:lang="en">Please input the title.</description>
+		</var>
+        
+		<var name="sub_title" type="text">
+			<title xml:lang="en">Subtitle</title>
+			<description xml:lang="en">Please input the subtitle which will be displayed beside title.</description>
+		</var>
+        
+		<var name="comment" type="textarea">
+			<title xml:lang="en">Description</title>
+			<description xml:lang="en">You may input description which will be displayed under the title.</description>
+		</var>
+	</extra_vars>
+</skin>
+

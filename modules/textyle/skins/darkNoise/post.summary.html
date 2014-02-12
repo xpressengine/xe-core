@@ -1,0 +1,16 @@
+<!-- display Post Summary -->
+<block loop="$document_list => $no, $document">
+	<h2 class="postTitle sumTitle"><a href="{$document->getPermanentUrl()}">{cut_str($document->getTitle(),40)}</a></h2>
+	<p class="postMeta exMeta">
+		<span class="category">{$category_list[$document->get('category_srl')]->title}</span>
+		<span class="yymmdd">{$document->getRegdate('Y.m.d')}</span> 
+		<span class="hhmm">{$document->getRegdate('H:i')}</span>
+		<span class="author">{$document->getNickName()}</span>
+	</p>
+	<div class="xe_content">
+		<p class="summarySpot" cond="$document->thumbnailExists()"><img src="{$document->getThumbnail(150,100)}" class="summaryThumb" alt="" /></p>
+		<p>{$document->getSummary(400)}</p>
+	</div>
+</block>
+<!-- /display Post Summary -->
+<include target="pagination.num.html" />

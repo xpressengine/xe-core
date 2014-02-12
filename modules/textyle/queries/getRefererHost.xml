@@ -1,0 +1,15 @@
+<query id="getRefererHost" action="select">
+    <tables>
+        <table name="textyle_referer_hosts" />
+    </tables>
+    <columns>
+        <column name="*" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="textyle_host_srl" var="textyle_host_srl" filter="number" />
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" pipe="and" />
+        <condition operation="equal" column="document_srl" var="document_srl" filter="number" pipe="and" />
+        <condition operation="equal" column="regdate" var="regdate" pipe="and" />
+        <condition operation="equal" column="host" var="host" pipe="and" />
+    </conditions>
+</query>

@@ -1,0 +1,13 @@
+<filter name="update_textyle" module="textyle" act="procTextyleAdminUpdate" confirm_msg_code="confirm_submit">
+    <form>
+        <node target="user_id" required="true" maxlength="250" />
+        <node target="domain" maxlength="250" />
+        <node target="vid" maxlength="250" filter="alpha_number" />
+    </form>
+    <parameter />
+    <response callback_func="completeInsertTextyle">
+        <tag name="error" />
+        <tag name="message" />
+        <tag name="module_srl" />
+    </response>
+</filter>

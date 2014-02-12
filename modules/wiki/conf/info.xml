@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="0.2">
+    <title xml:lang="ko">위키</title>
+    <title xml:lang="en">Wiki</title>
+	<title xml:lang="vi">Wiki</title>
+    <title xml:lang="zh-CN">维基系统</title>
+    <title xml:lang="zh-TW">維基</title>
+    <title xml:lang="jp">wiki</title>
+    <title xml:lang="tr">Viki</title>
+    <description xml:lang="ko">위키모듈.</description>
+    <description xml:lang="en">Wiki Module.</description>
+	<description xml:lang="vi">Wiki Module.</description>
+    <description xml:lang="zh-CN">维基模块。</description>
+    <description xml:lang="zh-TW">維基百科模組。</description>
+    <description xml:lang="jp">wikiモジュール</description>
+    <description xml:lang="tr">Viki Modülü.</description>
+    <version>1.7.0.1</version>
+    <date>2013-05-28</date>
+    <category>service</category>
+
+    <author email_address="dev@xpressengine.org" link="http://www.xpressengine.org">
+        <name xml:lang="ko">Arnia</name>
+        <name xml:lang="en">Arnia</name>
+		<name xml:lang="vi">Arnia</name>
+		<name xml:lang="zh-CN">Arnia</name>
+        <name xml:lang="zh-TW">Arnia</name>
+        <name xml:lang="jp">Arnia</name>
+        <name xml:lang="tr">Arnia</name>
+    </author>
+</module>

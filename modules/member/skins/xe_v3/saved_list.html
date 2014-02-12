@@ -1,0 +1,29 @@
+<include target="common_header.html" />
+<h2><img src="h2.my_article_temp.gif" width="87" height="18" alt="{$member_title = $lang->cmd_view_saved_document}" /></h2>
+<table cellspacing="0" class="aList" summary="Total: {number_format($total_count)}, Page: {number_format($page)}/{number_format($total_page)}">
+	<thead>
+		<tr>
+			<th scope="col"><span>{$lang->title}</span></th>
+			<th scope="col"><span>{$lang->date}</span></th>
+			<th scope="col"><span>{$lang->cmd_delete}</span></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr loop="$document_list => $no,$val">
+			<td class="title"> <a href="#" onclick="jQuery('#saved_document_{$val->document_srl}').toggle(); return false;">{$val->getTitle()}</a>
+				<div id="saved_document_{$val->document_srl}" class="savedContent" style="display:none;">{$val->getContent(false)}</div>
+			</td>
+			<td class="num">{$val->getRegdate("Y-m-d H:i:s")}</td>
+			<td class="num"><button type="button" onclick="doDeleteSavedDocument('{$val->document_srl}','{$lang->confirm_delete}'); return false;" class="buttonSet buttonDelete"><span>{$lang->cmd_delete}</span></button></td>
+		</tr>
+	</tbody>
+</table>
+<div class="pagination">
+	<a href="{getUrl('page','','module_srl','')}" class="direction prev"><span></span><span></span> {$lang->first_page}</a> 
+	<block loop="$page_no=$page_navigation->getNextPage()">
+		<strong cond="$page==$page_no">{$page_no}</strong> 
+		<a cond="$page!=$page_no" href="{getUrl('page',$page_no,'module_srl','')}">{$page_no}</a> 
+	</block>
+	<a href="{getUrl('page',$page_navigation->last_page,'module_srl','')}" class="direction next">{$lang->last_page} <span></span><span></span></a>
+</div>
+<include target="common_footer.html" />

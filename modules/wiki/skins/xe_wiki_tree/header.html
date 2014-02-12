@@ -1,0 +1,72 @@
+<load target="css/jquery.treeview.css" cond="$module_info->menu_style == 'classic'" />
+<load target="css/wiki.css" />
+<load target="js/jquery.cookie.js" />
+<load target="js/jquery.treeview.js" />
+<load target="js/diff.js" cond="$use_history != 'N' && $act == 'dispWikiHistory'" />
+<load target="js/wiki.js" />
+<script>
+	jQuery(document).ready(function($){
+		$(".message.info").delay(1500).fadeOut('slow');
+	});
+</script>
+<div id="wiki">
+	<div id="wikiCustomHeader" cond="$module_info->header_text">
+			{$module_info->header_text}
+	</div>	
+	
+	<div id="wikiHeader">
+		<!--@if($module_info->title)-->
+		<h1><a href="{getUrl('','mid',$mid,'listStyle',$listStyle)}">
+			{$module_info->title}
+			<!--@if($module_info->sub_title)--> : 
+				<br /><em>{$module_info->sub_title}</em>
+			<!--@end-->
+		</a></h1>
+		<!--@end-->
+		
+		<!--@if($module_info->comment)-->
+		<p class="wikiDescription">{$module_info->comment}</p>
+		<!--@end-->		
+			
+		<ul id="navMenu">
+			<li>
+				<a class="wikiButton" href="{getUrl('act','dispWikiContent','entry','','document_srl','')}">
+					<img src="img/icon_manual_index.png" alt="" /><span>{$lang->home_page}</span></a>
+			</li>
+			<li>
+				<a class="wikiButton" href="{getUrl('act','dispWikiTitleIndex','entry','','document_srl','')}">
+					<img src="img/icon_view_all.png" alt="" />
+					<span>
+						{$lang->cmd_view_document_list}
+					</span>
+				</a>
+			</li>
+			<!--@if($grant->manager)-->
+				<li>
+					<a class="wikiButtonAdmin" href="{getUrl('act','dispWikiTreeIndex','entry','','document_srl','')}">
+						<img src="img/icon_change_toc_structure.png" alt="" />
+						<span>
+							{$lang->cmd_view_document_tree}
+						</span>
+					</a>
+				</li>
+				<li>
+					<a class="wikiButtonAdmin" href="{getUrl('act','dispWikiAdminInsertWiki','entry','','document_srl','', 'module_srl', $module_info->module_srl)}">
+						<img src="img/icon_module_setup.png" alt="" />
+						<span>
+							{$lang->cmd_setup}
+						</span>
+					</a>					
+				</li>
+			<!--@end-->
+		</ul>		
+		
+		<div class="cleared"></div>	
+	</div>
+	   
+<div id="wikiBody">
+	<include target="left_side_tree_list.html" />
+	<div id="showHideTree" class="showHideTree" title="{$lang->hide_tree}/{$lang->show_tree}"></div>
+	<div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/wiki/skins/xe_wiki_tree'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+			<p>{$XE_VALIDATOR_MESSAGE}</p>
+	</div>	

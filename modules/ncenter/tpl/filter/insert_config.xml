@@ -1,0 +1,17 @@
+<filter name="insert_config" module="poll" act="procNcenterAdminInsertConfig" confirm_msg_code="confirm_update">
+	<form>
+		<node target="use" required="true" />
+		<node target="mention_format" />
+		<node target="document_notify" />
+		<node target="skin" required="true" />
+		<node target="colorset" required="true" />
+		<node target="zindex" />
+	</form>
+
+	<parameter />
+
+	<response>
+		<tag name="error" />
+		<tag name="message" />
+	</response>
+</filter>

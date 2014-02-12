@@ -1,0 +1,185 @@
+<!--#include("_tool_header.html")-->
+    <!--%import("./filter/insert_blogapi.xml")-->
+
+			<!-- Content -->
+			<div id="content">
+				
+				<!-- contentHeader -->
+				<div class="contentHeader publishHeader lineBottom">
+					<h3 class="h3">{$lang->textyle_second_menus[5]['dispTextyleToolConfigBlogApi']}</h3>
+				</div>
+				<!-- /contentHeader -->
+
+                <div class="listHeader">
+                    <p class="info">{$lang->about_blog_api}</p>
+                </div>
+
+				<div class="setUp">
+                    <!--@if($type == 'registration')-->
+					<form action="./" method="post" onsubmit="return procFilter(this,insert_blogapi);" id="foBlogApi">
+					<input type="hidden" name="vid" value="{$vid}" />
+					<input type="hidden" name="mid" value="{$mid}" />
+					<input type="hidden" name="api_srl" value="{$api_info->api_srl}" />
+						<fieldset>
+							<table border="0" cellspacing="0" class="setupData">
+								<tr>
+									<th scope="row" rowspan="2">{$lang->blogapi_service}</th>
+									<td>
+                                        <input type="radio" name="blogapi_service" value="hosted" id="hosted" <!--@if($api_info->blogapi_service!='custom')-->checked="checked"<!--@end--> onclick="jQuery('.hosted').css('display','block');jQuery('.custom').css('display','none');" /> <label for="hosted">{$lang->blogapi_hosted}</label>
+                                        <input type="radio" name="blogapi_service" value="custom" id="custom" <!--@if($api_info->blogapi_service=='custom')-->checked="checked"<!--@end--> onclick="jQuery('.hosted').css('display','none');jQuery('.custom').css('display','block');" /> <label for="custom">{$lang->blogapi_custom}</label>
+                                    </td>
+								</tr>
+								<tr>
+									<td>{$lang->about_blogapi_service}</td>
+								</tr>
+                            </table>
+
+							<table border="0" cellspacing="0" class="setupData hosted" <!--@if($api_info->blogapi_service=='custom')-->style="display:none;"<!--@end-->>
+                                <tr>
+                                    <th scope="row" rowspan="2">{$lang->blogapi_host_provider}</th>
+                                    <td>
+									<input type="hidden" name="blogapi_host_provider_type" />
+										<select name="blogapi_host_provider" onchange="getBlogApiServiceInfo(this.value)">
+                                            <option value="">{$lang->blogapi_host_provider}</option>
+                                            <!--@foreach($api_services as $key => $val)-->
+                                            <option value="{$val->textyle_blogapi_services_srl}">{$val->service_name}</option>
+                                            <!--@end-->
+										</select>
+                                   </td>
+                                </tr>
+								<tr>
+									<td>{$lang->about_blogapi_host_provider}</td>
+								</tr>
+                            </table>
+
+							<table border="0" cellspacing="0" class="setupData custom" <!--@if($api_info->blogapi_service!='custom')-->style="display:none;"<!--@end-->>
+								<tr>
+									<th scope="row" rowspan="2"><label for="api_type">{$lang->blogapi_type}</label></th>
+									<td>
+                                        <select name="blogapi_type">
+                                            <option value="metaweblog" <!--@if($api_info->blogapi_type=='metaweblog')-->selected="selected"<!--@end-->>MetaWeblog API</option>
+                                        </select>
+                                    </td>
+								</tr>
+								<tr>
+									<td>{$lang->about_blogapi_type}</td>
+								</tr>
+                            </table>
+
+							<table border="0" cellspacing="0" class="setupData">
+								<tr>
+									<th scope="row" rowspan="2"><label for="api_url">{$lang->blogapi_url}</label></th>
+									<td>
+                                        <input name="blogapi_url" type="text" class="iText" id="api_url" value="{htmlspecialchars($api_info->blogapi_url)}" style="width:400px" />
+                                    </td>
+								</tr>
+								<tr>
+									<td id="api_url_label" class="hosted"></td>
+								</tr>
+								<tr>
+									<th scope="row" rowspan="2"><label for="blogapi_userid">{$lang->user_id}</label></th>
+									<td><input name="blogapi_user_id" type="text" class="iText" id="blogapi_userid" value="{htmlspecialchars($api_info->blogapi_user_id)}" style="width:200px" /></td>
+								</tr>
+								<tr>
+									<td id="blogapi_userid_label" class="hosted"></td>
+								</tr>
+								<tr>
+									<th scope="row" rowspan="2"><label for="blogapi_password">{$lang->password}</label></th>
+									<td>
+                                        <input name="blogapi_password" type="password" class="iText" id="blogapi_password" value="{htmlspecialchars($api_info->blogapi_password)}" style="width:200px" />
+                                    </td>
+								</tr>
+								<tr>
+									<td id="blogapi_password_label" class="hosted"></td>
+								</tr>
+								<tr>
+									<th scope="row" rowspan="2"><label for="blogapi_blogid">{$lang->blogapi_blogid}</label></th>
+									<td>
+                                        <input name="blogapi_blogid" type="text" class="iText" id="blogapi_blogid" value="{htmlspecialchars($api_info->blogapi_blogid)}" style="width:200px" />
+                                    </td>
+								</tr>
+								<tr>
+									<td id="blogapi_blogid_label">blog id는 여러개의 Blog를 운영할 경우 선택적으로 입력하는 값입니다.</td>
+								</tr>
+                            </table>
+                            <div class="btnArea">
+                                <span class="btn"><button type="button" onclick="doBlogApiTest(); return false;">{$lang->cmd_check_api_connect}</button></span>
+                            </div>
+
+							<table border="0" cellspacing="0" class="setupData" <!--@if(!$api_info->api_srl)-->style="display:none;"<!--@end--> id="response_info">
+								<tr>
+									<th scope="row" rowspan="2"><label for="site_title">{$lang->blogapi_site_title}</label></th>
+									<td>
+                                        <input name="blogapi_site_title" type="text" class="iText" id="site_title" value="{htmlspecialchars($api_info->blogapi_site_title)}" style="width:400px" />
+                                    </td>
+								</tr>
+								<tr>
+									<td>{$lang->about_blogapi_site_title}</td>
+								</tr>
+								<tr>
+									<th scope="row" rowspan="2"><label for="site_url">{$lang->blogapi_site_url}</label></th>
+									<td>
+                                        <input name="blogapi_site_url" type="text" class="iText" id="site_url" value="{htmlspecialchars($api_info->blogapi_site_url)}" style="width:400px" />
+                                    </td>
+								</tr>
+								<tr>
+									<td>{$lang->about_blogapi_site_url}</td>
+								</tr>
+                            </table>
+                            <div class="btnArea submitButton" <!--@if(!$api_info->api_srl)-->style="display:none;"<!--@end-->>
+                                    <!--@if($api_info->api_srl)-->
+                                    <span class="btn"><button type="submit" >{$lang->cmd_modify}...</button></span>
+                                    <!--@else-->
+                                    <span class="btn"><button type="submit" >{$lang->cmd_registration}</button></span>
+                                    <!--@end-->
+                            </div>
+						</fieldset>
+					</form>
+                    <!--@else-->
+
+					<table class="tableData" cellspacing="0" border="1" summary="Api List">
+						<thead>
+							<tr>
+								<th scope="col">{$lang->blogapi_site_url}</th>
+								<th scope="col">{$lang->target_site_url}</th>
+								<th scope="col">{$lang->blogapi_type}</th>
+								<th scope="col">{$lang->regdate}</th>
+								<th scope="col">{$lang->cmd_setup}</th>
+							</tr>
+						</thead>
+						<tbody>
+                            <!--@foreach($textyle->getApis() as $key => $val)-->
+							<tr>
+								<th scope="row"><a href="{$val->blogapi_site_url}" onclick="window.open(this.href);return false;">{$val->blogapi_site_title}</a></th>
+								<td><a href="{$val->blogapi_site_url}">{$val->blogapi_site_url}</a></td>
+								<td>{$val->blogapi_type}</td>
+								<td>{zdate($val->regdate, 'Y-m-d')}</td>
+								<td>
+                                    <!--@if($val->enable == 'Y')-->
+                                        {@$iconClass = 'buttonActive'}
+                                    <!--@else-->
+                                        {@$iconClass = 'buttonDisable'}
+                                    <!--@end-->
+                                    <button type="button" onclick="doToggleAPI(this,'{$val->api_srl}')" class="btn">{$lang->use}</button>
+                                    <a href="{getUrl('type','registration','api_srl',$val->api_srl)}" class="btn">{$lang->cmd_modify}</a>
+                                    <button type="button" onclick="if(confirm('{$lang->msg_remove_api}')) doRemoveApi({$val->api_srl})" class="btn">{$lang->cmd_delete}</button>
+                                </td>
+							</tr>
+                        <!--@end-->
+						</tbody>
+					</table>
+                    <div class="btnArea">
+                        <span class="btn"><input type="button" onclick="location.href=current_url.setQuery('type','registration').setQuery('api_srl','');return false;" value="{$lang->cmd_registration}" /></span>
+                    </div>
+
+                    <!--@end-->
+				</div>
+
+			</div>
+			<hr />
+			<!-- /Content -->
+				
+			<!-- Extension -->
+				<!--#include("_tool_menu.html")-->
+			<!-- Extension -->
+<!--#include("_tool_footer.html")-->

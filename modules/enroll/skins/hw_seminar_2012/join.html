@@ -1,0 +1,29 @@
+<!--%import("css/xeCamp.css")-->
+<!--%import("js/xeCamp.js")-->
+<!--@if(1)--> 
+<!--// $this->grant->enroll -->
+<form id="container" action="" method="post" onsubmit="return procFilter(this,insert_enroll_item)">
+<input type="hidden" name="mid" value="{$mid}" />
+	<div id="header">
+		<h1>Helloworld 오픈 세미나 #1 회원가입</h1>
+	</div>
+	<div id="body">
+		<fieldset>
+				<ul>
+					<li>
+						<p>이메일주소</p>
+						<p><input type="text" name="user_name" id="name" class="inputText" /></p>
+					</li>
+					<li>
+						<p>비밀번호</p>
+						<p><input type="text" name="job" id="job" class="inputText" /></p>
+				</ul>
+		</fieldset>
+	</div>
+	<div id="footer" class="aCenter">
+		<span class="button"><input name="" type="submit" value="확인" /></span>
+	</div>
+</form>
+<!--@end-->
+
+

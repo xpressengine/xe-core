@@ -1,0 +1,327 @@
+<!--%import("./filter/change_language.xml")-->
+<!--#include("_tool_header.html")-->
+
+			<!-- Content -->
+			<div id="content">
+
+				<!-- Dashboard Header -->
+				<div class="dashboardHeader">
+					<h3 class="h3">{$lang->textyle_first_menus[0][1]}</h3>
+				</div>
+				<!-- /Dashboard Header -->
+
+                <!--@if($news)-->
+				<!-- Dashboard Notice -->
+				<div class="section dashboardNotice">
+					<h4 class="h4">Textyle NEWS</h4>
+					<button type="button">{$lang->cmd_folding_xe_news}</button>
+					<ul>
+                        {@$i=0;}						
+                        <!--@foreach($news as $key => $val)-->
+                        <li<!--@if($i==0)--> class="first"<!--@end-->><a href="{$val->url}" onclick="window.open(this.href);return false;">{$val->title}</a> <span class="date">{zdate($val->date,"Y-m-d")}</span></li>
+                        {@$i++;}
+                        <!--@end-->
+					</ul>
+				</div>
+				<!-- /Dashboard Notice -->
+                <!--@end-->
+
+				<!-- Dashboard Statistic -->
+				<div class="section dashboardStatistic">
+					<div class="statistic">
+						<h4><span>TODAY <em>{date('Y.m.d')}</em></span></h4>
+						<dl class="visit">
+                            <dt>{$lang->today_visitor}</dt>
+
+							<dd>
+								<object title="{$status->visitor}" height="60" width="226" align="middle" id="count_red" class="F1239845427590201480_undefined" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000">
+									<param value="{getUrl()}modules/textyle/tpl/swf/count.swf" name="movie"/>
+									<param value="high" name="quality"/>
+									<param value="#FFFFFF" name="bgColor"/>
+									<param value="always" name="allowScriptAccess"/>
+									<param value="transparent" name="wmode"/>
+									<param value="false" name="menu"/>
+									<param value="true" name="allowFullScreen"/>
+									<param value="colorType=red&amp;viewNum={$status->visitor}" name="flashVars"/>
+									<!--[if !IE]> <-->
+									<object title="{$status->visitor}" height="60" width="226" align="middle" name="count_red" class="F1239845427590201480_undefined" data="{getUrl()}modules/textyle/tpl/swf/count.swf" type="application/x-shockwave-flash">
+										<param value="colorType=red&amp;viewNum={$status->visitor}" name="flashVars"/>
+										<param value="transparent" name="wmode"/>
+                                        {$status->visitor}
+									</object>
+									<!--> <![endif]-->
+								</object>
+                            </dd>
+						</dl>
+						<dl class="reply">
+                            <dt>{$lang->today_comments}</dt>
+							<dd>
+								<object title="{$status->comment_count}" height="60" width="226" align="middle" id="count_blue" class="F1239845427590201480_undefined" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000">
+									<param value="{getUrl()}modules/textyle/tpl/swf/count.swf" name="movie"/>
+									<param value="high" name="quality"/>
+									<param value="#FFFFFF" name="bgColor"/>
+									<param value="always" name="allowScriptAccess"/>
+									<param value="transparent" name="wmode"/>
+									<param value="false" name="menu"/>
+									<param value="true" name="allowFullScreen"/>
+									<param value="colorType=blue&amp;viewNum={$status->comment_count}" name="flashVars"/>
+									<!--[if !IE]> <-->
+									<object title="{$status->comment_count}" height="60" width="226" align="middle" name="count_blue" class="F1239845427590201480_undefined" data="{getUrl()}modules/textyle/tpl/swf/count.swf" type="application/x-shockwave-flash">
+										<param value="colorType=blue&amp;viewNum={$status->comment_count}" name="flashVars"/>
+										<param value="transparent" name="wmode"/>
+                                        {$status->comment_count}
+									</object>
+									<!--> <![endif]-->
+								</object>
+                            </dd>
+						</dl>
+						<dl class="trackback">
+                            <dt>{$lang->today_trackbacks}</dt>
+							<dd>
+								<object title="{$status->trackback_count}" height="60" width="226" align="middle" id="count_gray" class="F1239845427590201480_undefined" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000">
+									<param value="{getUrl()}modules/textyle/tpl/swf/count.swf" name="movie"/>
+									<param value="high" name="quality"/>
+									<param value="#FFFFFF" name="bgColor"/>
+									<param value="always" name="allowScriptAccess"/>
+									<param value="transparent" name="wmode"/>
+									<param value="false" name="menu"/>
+									<param value="true" name="allowFullScreen"/>
+									<param value="colorType=gray&amp;viewNum={$status->trackback_count}" name="flashVars"/>
+									<!--[if !IE]> <-->
+									<object title="{$status->trackback_count}" height="60" width="226" align="middle" name="count_gray" class="F1239845427590201480_undefined" data="{getUrl()}modules/textyle/tpl/swf/count.swf" type="application/x-shockwave-flash">
+										<param value="colorType=gray&amp;viewNum={$status->trackback_count}" name="flashVars"/>
+										<param value="transparent" name="wmode"/>
+                                        {$status->trackback_count}
+									</object>
+									<!--> <![endif]-->
+								</object>
+                            </dd>
+						</dl>
+						<div class="summary">
+							<table border="1" cellspacing="0">
+								<caption>{$lang->textyle_summary}</caption>
+								<tr>
+
+									<th scope="row">{$lang->regdate}</th>
+									<td>{zdate($textyle->get('regdate'),'Y.m.d')}</td>
+								</tr>
+                                    {@$export=$textyle->getPostCount(); $noexport=$textyle->getPostTempCount();}
+								<tr>
+									<th scope="row">{$lang->posts}</th>
+									<td><strong>{$export+$noexport}</strong>{$lang->item_unit}<span class="description">({$lang->published} <strong>{$export}</strong>, {$lang->saved} <strong>{$noexport}</strong>)</span></td>
+
+								</tr>
+								<tr>
+									<th scope="row">{$lang->comment}</th>
+									<td><strong>{$textyle->getCommentAllCount()}</strong>{$lang->item_unit}</td>
+								
+								</tr>
+								<tr>
+									<th scope="row">{$lang->trackback}</th>
+
+									<td><strong>{$textyle->getTrackbackAllCount()}</strong>{$lang->item_unit}</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<span class="outline ml"></span>
+					<span class="outline mr"></span>
+					<span class="outline tc"></span>
+					<span class="outline bc"></span>
+					<span class="outline tl"></span>
+					<span class="outline tr"></span>
+
+					<span class="outline bl"></span>
+					<span class="outline br"></span>
+				</div>
+				<!-- /Dashboard Statistic -->
+
+				<!-- Dashboard List -->
+				<div class="partitionContainer">
+					<div class="partition partitionLeft">
+
+						<!-- Last  Post -->
+						<div class="section">
+
+							<h4 class="dashboardH4">{$lang->newest_documents}</h4>
+							<div class="dashboardWire">
+                                <!--@if(count($newest_documents))-->
+								<ul class="lastPost">
+                                    <!--@foreach($newest_documents as $key => $val)-->
+									<li>
+											{@$_url='#'}
+											{@$_target=''}
+											<!--@if($val->get('module_srl') == $logged_info->member_srl)-->
+											{@$_url=getUrl('act','dispTextyleToolPostManageWrite','document_srl',$val->document_srl,'page',$page)}
+											<!--@else if($val->get('module_srl')<=0)-->
+											{@$_url=getUrl('act','dispTextyleToolPostManageWrite','document_srl',$val->document_srl,'page',$page)}
+											<!--@else-->
+											{@$_url=getUrl('','document_srl',$val->document_srl)}
+											{@$_target=" target=\"_blank\"";}
+											<!--@end-->
+
+										<p class="title"><a href="{$_url}" {$_target}>{$val->getTitle()}</a><span class="date">{$val->getRegdate("Y.m.d")}</span></p>
+										<p class="state">
+											<!--@if($val->get('module_srl') == $logged_info->member_srl)-->
+												<strong class="publishState draft"><span>{$lang->temp}</span></strong>
+											<!--@else if($val->get('module_srl')<=0)-->
+												<strong class="publishState draft"><span>{$lang->reserve}</span></strong>
+											<!--@else-->
+												<strong class="publishState out"><span>{$lang->publish}</span></strong>
+											<!--@end-->
+                                            <!--@if($val->getCommentCount())-->
+                                            <span class="reply">{$lang->comment} <strong>{$val->getCommentCount()}</strong></span> 
+                                            <!--@end-->
+                                            <!--@if($val->getTrackbackCount())-->
+                                            <span class="trackback">{$lang->trackback} <strong>{$val->getTrackbackCount()}</strong></span>
+                                            <!--@end-->
+                                        </p>
+									</li>
+                                    <!--@end-->
+								</ul>
+                                <!--@else-->
+                                <p class="noData">{@printf($lang->no_post, getUrl('act','dispTextyleToolPostManageWrite'))}</p>
+                                <!--@end-->
+								<div class="btnArea">
+									<span class="btnGray medium strong"><a href="{getUrl('','act','dispTextyleToolPostManageWrite')}">{$lang->cmd_new_post}</a></span>
+								</div>
+							</div>
+							<a href="{getUrl('','act','dispTextyleToolPostManageList')}" class="dashboardMoreTop">{$lang->more}</a>
+						</div>
+						<!-- /Last  Post -->
+
+
+						<!-- Last Guestbook -->
+						<div class="section">
+							<h4 class="dashboardH4">{$lang->newest_guestbooks}</h4>
+							<div class="dashboardWire">
+							<!--@if(count($guestbook_list))-->
+
+							<ul class="lastReply">
+									<!--@foreach($guestbook_list as $k => $v)-->
+									<li>
+										<!--@if($v->profile_image)-->
+
+										<img src="{$v->profile_image}" alt="{$v->nick_name}" class="author" />
+										<!--@else-->
+										<img height="39" width="39" alt="" src="img/iconEmoticonDefault.gif" class="author"/>
+										<!--@end-->
+										<p class="member_{$v->member_srl} content"><strong>{$v->nick_name}</strong> <a href="{getUrl('','mid',$mid,'act','dispTextyleToolCommunicationGuestbookReply','textyle_guestbook_srl',$v->textyle_guestbook_srl)}">{strip_tags($v->content)}</a> <button type="button" class="delete" onclick="deleteGuestbookItem({$v->textyle_guestbook_srl},1)"><span>{$lang->cmd_delete}</span></button></p>
+									</li>
+                                    <!--@end-->
+								</ul>
+                                <!--@else-->
+                                <p class="noData">{$lang->newest_no_guestbooks}</p>
+                                <!--@end-->
+							</div>
+							<a href="{getUrl('','act','dispTextyleToolCommunicationGuestbook')}" class="dashboardMoreTop">{$lang->more}</a>
+						</div>
+						<!-- /Last Subject -->
+
+					</div>
+
+					<div class="partition partitionRight">
+
+						<!-- Last Reply-->
+						<div class="section">
+							<h4 class="dashboardH4">{$lang->newest_comments}</h4>
+							<div class="dashboardWire">
+                                <!--@if(count($newest_comments))-->
+								<ul class="lastReply">
+                                    <!--@foreach($newest_comments as $key => $val)-->
+                                    {@$_profile_image = $val->getProfileImage()}
+									<li>
+                                        <!--@if($_profile_image)-->
+										<img src="{$_profile_image}" alt="{htmlspecialchars($val->getNickName())}" class="author" />
+                                        <!--@else-->
+										<img height="39" width="39" alt="" src="img/iconEmoticonDefault.gif" class="author"/>
+                                        <!--@end-->
+										<p class="content"><span class="member_{$val->get('member_srl')}"><strong>{$val->getNickName()}</strong></span> <a href="{$val->getPermanentUrl()}">{$val->getSummary(200)}</a> <button type="button" class="delete" onclick="deleteCommentItem({$val->comment_srl},1)"><span>{$lang->cmd_delete}</span></button></p>
+									</li>
+                                    <!--@end-->
+								</ul>
+                                <!--@else-->
+                                <p class="noData">{$lang->no_comment}</p>
+                                <!--@end-->
+							</div>
+							<a href="{getUrl('','act','dispTextyleToolCommunicationComment')}" class="dashboardMoreTop">{$lang->more}</a>
+						</div>
+						<!-- Last Reply-->
+
+						<!-- Visotors Graph -->
+						<div class="section">
+
+							<h4 class="dashboardH4">{$lang->visitor_count} <em>{date("Y.m.d")}</em></h4>
+							<div class="dashboardWire">
+								<dl class="legend">
+									<dt class="past"><img src="img/graphYesterday.gif" width="5" height="5" alt="{$lang->yesterday}" /></dt>
+									<dd>{$lang->last_week}</dd>
+									<dt class="today"><img src="img/graphToday.gif" width="5" height="5" alt="{$lang->today}" /></dt>
+									<dd>{$lang->this_week}</dd>
+
+								</dl>
+								<dl class="summary">
+									<dt>{$lang->today}</dt>
+									<dd>{number_format($status->visitor)}</dd>
+									<dt>{$lang->this_week}</dt>
+									<dd>{number_format($status->thisWeekSum)}</dd>
+									<dt>{$lang->total}</dt>
+									<dd>{number_format($status->total_visitor)}</dd>
+								</dl>
+								<div class="graph">
+									<!--object title="{$status->visitor}" height="170" width="350" align="middle" id="data2" class="F1239845427590201480_undefined" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000">
+										<param value="{getUrl()}modules/textyle/tpl/swf/MainContainer.swf" name="movie"/>
+										<param value="high" name="quality"/>
+										<param value="#FFFFFF" name="bgColor"/>
+										<param value="always" name="allowScriptAccess"/>
+										<param value="transparent" name="wmode"/>
+										<param value="false" name="menu"/>
+										<param value="true" name="allowFullScreen"/>
+										<param value="modules/textyle/tpl/swf/common/flash/statistics/&base64Code={$xml}&width=350&dSet=02" name="flashVars"/>
+										<object title="{$status->visitor}" height="170" width="350" align="middle" name="count_red" class="F1239845427590201480_undefined" data="{getUrl()}modules/textyle/tpl/swf/MainContainer.swf" type="application/x-shockwave-flash">
+											<param value="baseURL=modules/textyle/tpl/swf/common/flash/statistics/&base64Code={$xml}&dSet=02&width=350" name="flashVars"/>
+											<param value="transparent" name="wmode"/>
+											{$status->visitor}
+										</object>
+									</object-->								
+<!--@if($flash)-->
+	<script>
+		displayMultimedia('{getUrl()}modules/textyle/tpl/swf/MainContainer.swf','100%','170',{
+				'menu':'false',
+				'wmode':'transparent',
+				'flashvars':"width=350&dSet=02&baseURL=modules/textyle/tpl/swf/common/flash/statistics/&total={$detail_status->total}&base64Code="+encodeURIComponent('{$xml}')
+				});
+	</script>
+<!--@else-->
+									
+                                    <!--@foreach($status->week as $key => $val)-->
+									<dl>
+										<dt>{$key}</dt>
+										<dd class="past" style="height:{$val->last/$status->week_max * 100}%" title="{$lang->last_week}:{number_format($val->last)}"><span>{$lang->last_week}:{number_format($val->last)}</span></dd>
+										<dd class="today" style="height:{$val->this/$status->week_max * 100}%" title="{$lang->this_week}:{number_format($val->this)}"><span>{$lang->this_week}:{number_format($val->this)}</span></dd>
+
+									</dl>
+                                    <!--@end-->
+<!--@end-->
+								</div>
+							</div>
+							<a href="{getUrl('','act','dispTextyleToolStatisticsVisitor')}" class="dashboardMoreTop">{$lang->more}</a>
+						</div>
+
+						<!-- /Visotors Graph -->
+
+					</div>
+				</div>
+				<!-- Dashboard List -->
+
+			</div>
+			<hr />
+			<!-- /Content -->
+
+			<!-- Extension -->
+				<!--#include("_tool_menu.html")-->
+			<!-- Extension -->
+
+
+
+<!--#include("_tool_footer.html")-->

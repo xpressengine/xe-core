@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+    <grants>
+        <grant name="request" default="member">
+            <title xml:lang="ko">신청</title>
+            <title xml:lang="zh-TW">請求</title>
+			<title xml:lang="vi">Yêu cầu</title>
+			<title xml:lang="tr">İstek</title>
+        </grant>
+        <grant name="write_comment" default="member">
+            <title xml:lang="ko">평가</title>
+            <title xml:lang="zh-TW">評價</title>
+			<title xml:lang="vi">Đánh giá</title>
+			<title xml:lang="tr">Değerlendir</title>
+        </grant>
+    </grants>
+    <permissions>
+        <permission action="dispResourceInsertPackage" target="member" />
+        <permission action="dispResourceModifyPackage" target="member" />
+        <permission action="dispResourceDeletePackage" target="member" />
+        <permission action="dispResourcePackage" target="member" />
+        <permission action="dispResourcePackageList" target="member" />
+        <permission action="dispResourceAttach" target="member" />
+        <permission action="dispResourceModifyAttach" target="member" />
+        <permission action="dispResourceManage" target="manager" />
+
+        <permission action="dispResourceSearchDependency" target="member" />
+
+        <permission action="procResourceRequestPackage" target="member" />
+        <permission action="procResourceInsertPackage" target="member" />
+        <permission action="procResourceDeletePackage" target="member" />
+        <permission action="procResourceAttach" target="member" />
+        <permission action="procResourceModifyAttach" target="member" />
+        <permission action="procResourceAttachFile" target="member" />
+        <permission action="procResourceModifyAttachFile" target="member" />
+        <permission action="procResourceDeleteAttach" target="member" />
+        <permission action="procResourceInsertComment" target="member" />
+        <permission action="procResourceDeleteComment" target="member" />
+        <permission action="procResourceChangeStatus" target="manager" />
+        <permission action="procResourceDeleteItem" target="manager" />
+    </permissions>
+    <actions>
+        <action name="dispResourceIndex" type="view" standalone="true" index="true" />
+        <action name="dispResourceInsertPackage" type="view" />
+        <action name="dispResourceModifyPackage" type="view" />
+        <action name="dispResourceDeletePackage" type="view" />
+        <action name="dispResourceAttach" type="view" />
+        <action name="dispResourceModifyAttach" type="view" />
+        <action name="dispResourcePackage" type="view" />
+        <action name="dispResourcePackageList" type="view" />
+        <action name="dispResourceManage" type="view" />
+
+        <action name="dispResourceSearchDependency" type="view" />
+
+        <action name="procResourceInsertPackage" type="controller" ruleset="insertPackage" />
+        <action name="procResourceModifyPackage" type="controller" ruleset="modifyPackage" />
+        <action name="procResourceDeletePackage" type="controller" ruleset="deletePackage" />
+        <action name="procResourceAttachOneTime" type="controller" ruleset="attachOneTime" />
+        <action name="procResourceModifyAttachOneTime" type="controller" ruleset="modifyAttachOneTime" />
+        <action name="procResourceAttach" type="controller" ruleset="attach" />
+        <action name="procResourceModifyAttach" type="controller" ruleset="modifyAttach" />
+        <action name="procResourceAttachFile" type="controller" ruleset="attachFile" />
+        <action name="procResourceModifyAttachFile" type="controller" ruleset="modifyAttachFile" />
+        <action name="procResourceDeleteAttach" type="controller" ruleset="deleteAttach" />
+        <action name="procResourceInsertComment" type="controller" ruleset="insertComment" />
+        <action name="procResourceDeleteComment" type="controller" ruleset="deleteComment" />
+        <action name="procResourceChangeStatus" type="controller" ruleset="changeStatus" />
+
+        <action name="dispResourceAdminList" type="view" standalone="true" admin_index="true" />
+        <action name="dispResourceAdminInsert" type="view" standalone="true" setup_index="true" />
+        <action name="dispResourceAdminCategory" type="view" />
+        <action name="dispResourceAdminGrant" type="view" standalone="true" />
+        <action name="dispResourceAdminAdditions" type="view" standalone="true" />
+        <action name="dispResourceAdminSkin" type="view" standalone="true" />
+        <action name="dispResourceAdminMobileSkin" type="view" />
+        <action name="dispResourceAdminDelete" type="view" standalone="true" />
+
+        <action name="procResourceAdminInsert" type="controller" standalone="true" rulset="insertResource" />
+        <action name="procResourceAdminDelete" type="controller" standalone="true" rulset="deleteResource" />
+        <action name="procResourceAdminDeletePackage" type="controller" standalone="true" ruleset="deletePackage" />
+		<action name="getResourceItems" type="api" standalone="true" />
+
+		<action name="dispResourceCategory" type="mobile" />
+    </actions>
+</module>

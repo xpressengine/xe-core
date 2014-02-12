@@ -1,0 +1,12 @@
+<query id="getMaxLatestItem" action="select">
+    <tables>
+        <table name="resource_items" />
+    </tables>
+    <columns>
+        <column name="max(item_srl)" alias="item_srl" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" notnull="notnull" />
+        <condition operation="equal" column="package_srl" var="package_srl" filter="number" notnull="notnull" pipe="and" />
+    </conditions>
+</query>

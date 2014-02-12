@@ -1,0 +1,15 @@
+<filter name="insert_guestbook" module="textyle" act="procTextyleGuestbookWrite">
+  <form>
+    <node target="mid" required="true" />
+    <node target="content" required="true" minlength="1" />
+    <node target="nick_name" required="true" minlength="1" />
+    <node target="email_address" required="true" minlength="1" />
+    <node target="password" required="true" minlength="1" />
+  </form>
+  <parameter />
+  <response callback_func="completeInsertGuestbook">
+    <tag name="error" />
+    <tag name="message" />
+    <tag name="page" />
+  </response>
+</filter>

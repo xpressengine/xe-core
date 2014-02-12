@@ -1,0 +1,45 @@
+<!--#include("_tool_header.html")-->
+<!--%import("css/style@content.css",optimized=false)-->
+<!--%import("css/pagination.css",optimized=false)-->
+
+			<!-- Content -->
+			<div id="content">
+				
+				<!-- contentHeader -->
+				<div class="contentHeader depositHeader">
+					<h3 class="h3">{$lang->textyle_second_menus[1]['dispTextyleToolPostManageDeposit']}</h3>
+				</div>
+				<!-- /contentHeader -->
+
+				<!--@if($page_navigation && $page_navigation->total_count>0)-->
+					<!--#include('PostManageDepositList.html')-->
+				<!--@else-->
+					<!--#include('PostManageDepositHelp.html')-->
+				<!--@end-->
+				
+			</div>
+			<hr />
+			<!-- /Content -->
+			
+			<!-- Extension -->
+			<!--#include("_tool_menu.html")-->
+		
+			<div class="extension e2">
+				<div class="section bookmarklet">
+					<h3>{$lang->bookmarklet_install}</h3>
+					<p>{$lang->about_bookmarklet}</p>
+					<a href="{$bookmark_url}" class="btnBookmarklet"><img src="img/iconBookmarkletInstall.gif" width="15" height="15" alt="" />{$lang->about_set_bookmarklet}</a>
+				</div>
+				<div class="section bookmarkletHelp">
+					<h3>{$lang->about_use_bookmarklet}</h3>
+					<ul>
+					{@$_i=1}
+                        <!--@foreach($lang->about_use_bookmarklet_item as $v)-->
+						<li class="item{$_i++}">{$v}</li>
+                        <!--@end-->
+					</ul>
+				</div>
+			</div>
+			<!-- Extension -->
+
+<!--#include("_tool_footer.html")-->

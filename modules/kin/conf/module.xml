@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+    <grants>
+        <grant name="list" default="guest">
+            <title xml:lang="ko">목록</title>
+			<title xml:lang="zh-CN">查看目录</title>
+        </grant>
+        <grant name="write_document" default="member">
+            <title xml:lang="ko">글 작성</title>
+			<title xml:lang="zh-CN">提交提问</title>
+        </grant>
+        <grant name="write_reply" default="member">
+            <title xml:lang="ko">의견 작성</title>
+			<title xml:lang="zh-CN">评论</title>
+        </grant>
+        <grant name="view" default="guest">
+            <title xml:lang="ko">열람</title>
+			<title xml:lang="zh-CN">查看</title>
+        </grant>
+    </grants>
+    <permissions />
+    <actions>
+        <action name="dispKinIndex" type="view" index="true" />
+        <action name="dispKinView" type="view" />
+        <action name="dispKinWrite" type="view" />
+        <action name="dispKinReply" type="view" />
+        <action name="dispKinModifyReply" type="view" />
+		<action name="dispKinPointRank" type="view" />
+		<action name="dispKinCategory" type="mobile" />
+		<action name="getKinCommentPage" type="mobile" />
+
+        <action name="procKinInsert" type="controller" ruleset="insertQuestion"/>
+        <action name="procKinSelectReply" type="controller" />
+        <action name="procKinInsertReply" type="controller" ruleset="insertReply"/>
+        <action name="procKinUpdateReply" type="controller" ruleset="updateReply"/>
+        <action name="procKinDeleteReply" type="controller" />
+		<action name="procKinQuestionVote" type="controller" />
+		<action name="procKinAnswerVote" type="controller" />
+
+        <action name="procKinDeleteDocument" type="controller" />
+        <action name="procKinInsertComment" type="controller" standalone="true" ruleset="insertComment"/>
+        <action name="procKinDeleteComment" type="controller" />
+        <action name="getKinComments" type="model" />
+
+        <action name="dispKinAdminList" type="view" standalone="true" admin_index="true" />
+        <action name="dispKinAdminInsert" type="view" standalone="true" setup_index="true" />
+        <action name="dispKinAdminCategory" type="view" />
+        <action name="dispKinAdminGrant" type="view" standalone="true" />
+        <action name="dispKinAdminAdditions" type="view" standalone="true" />
+        <action name="dispKinAdminSkin" type="view" standalone="true" />
+        <action name="dispKinAdminDelete" type="view" standalone="true" />
+        <action name="dispKinAdminPointList" type="view" standalone="true"/>
+		<action name="dispKinAdminSkinInfo" type="view" standalone="true"  />
+		<action name="dispKinAdminMobileSkinInfo" type="view" standalone="true"  />
+
+        <action name="procKinAdminInsert" type="controller" standalone="true" ruleset="insertKin"/>
+        <action name="procKinAdminSaveCategorySettings" type="controller" standalone="true" />
+        <action name="procKinAdminDelete" type="controller" standalone="true" ruleset="deleteKin"/>
+		
+    </actions>
+</module>

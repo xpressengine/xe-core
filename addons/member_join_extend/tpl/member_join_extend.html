@@ -1,0 +1,36 @@
+<!--%import("join.css")-->
+<div class="path">
+	<a href="/" class="home"><span>Home</span></a> 
+	&gt; <strong>회원가입</strong>
+</div>
+<div class="join">
+	<h1><img src="h1.join.gif" width="87" height="23" alt="회원가입" /></h1>
+	<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}" style="margin:1em 0;" >
+		<p>{$XE_VALIDATOR_MESSAGE}</p>
+	</div>
+	<p class="step"><img src="step1.gif" width="905" height="56" alt="Step1:약관동의(현재위치). Step2:기본정보 입력. Step3:가입완료." /></p>
+	<h2><img src="h2.agreement.gif" width="191" height="15" alt="{$lang->member_join_extend_title}" /></h2>
+	<form action="" method="post" onsubmit="return false" class="member_join_extend">
+		<fieldset>
+			<!--@if($agreement)-->
+			<div class="joinAgreement">{nl2br($agreement)} </div>
+			<p class="checkAgreement"><input name="" type="checkbox" value="" id="checkAgreement" /><label for="checkAgreement">{$lang->agree_agreement}</label></p>
+			<!--@end-->
+
+			<!--@if($private_agreement)-->
+			<div class="joinAgreement">{nl2br($private_agreement)}</div>
+				<!--@if($private_gathering_agreement)--><div class="joinAgreement">{nl2br($private_gathering_agreement)}</div><!--@end-->
+			<p class="checkAgreement"><input name="" type="checkbox" value="" id="checkPrivateAgreement" /><label for="checkPrivateAgreement">{$lang->agree_private_agreement}</label></p>
+			<!--@end-->
+
+			<div class="btnArea">
+			<!--@if($use_junior_join == 'Y')-->
+				<input type="image" class="member_join_agree" src="btn14over.gif" value="{$lang->junior}" />
+				<button type="button" class="junior_join"><img src="btn14under.gif" alt="{$lang->senior}" /></button>
+			<!--@else-->
+				<input type="image" class="member_join_agree" value="{$lang->agree}" />
+			<!--@end-->
+			</div>
+		</fieldset>
+	</form>
+</div>

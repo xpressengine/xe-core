@@ -1,0 +1,54 @@
+{@ Context::addJsFile("./common/js/jquery.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/js_app.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/x.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/common.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/xml_handler.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/xml_js_filter.js", true, '', -100000) }
+<!--%import("js/mkin.js")-->
+<!--%import("css/mkin.css")-->
+<!--%import("filter/write_document.xml")-->
+<div class="bd">
+<h2 class="h2"><a href="{getUrl('','vid',$vid,'mid',$mid)}">{htmlspecialchars($module_info->browser_title)}</a> &rsaquo; {$lang->cmd_write}</h2>
+<form action="./" method="POST" onsubmit="return procFilter(this, write_document)">
+<input type="hidden" name="mid" value="{$mid}" />
+<input type="hidden" name="document_srl" value="{$document_srl}" />
+		<ul class="sn">
+			<!--@if($module_info->use_category == "Y")-->
+			<li>
+				<label for="nCategory" class="db fb">{$lang->category}</label>
+				<select name="category" id="nCategory">
+					<!--@foreach($categories as $val)-->	
+					<option <!--@if(!$val->grant)-->disabled="disabled"<!--@endif--> value="{$val->category_srl}" <!--@if($val->grant&&$val->selected||$val->category_srl==$oDocument->get('category_srl'))-->selected=="selected"<!--@endif-->>
+					{str_repeat("&nbsp;&nbsp;",$val->depth)} {$val->title} ({$val->document_count})
+					</option>
+					<!--@end-->
+				</select>
+			</li>
+			<!--@end-->
+			<li>
+				<label for="nTitle" class="db fb">{$lang->title}</label>
+				<input name="title" type="text" id="nTitle" class="itx" />
+			</li>
+			<li>
+				<label for="nText" class="db fb">{$lang->content}</label>
+				<textarea name="content" cols="20" rows="8" id="nText" class="itxx" value="{$oDocument->getContentText()}"></textarea>
+			</li>
+			<li>
+				<label for="nPoint" class="db fb">{$lang->give_point}</label>
+				<!--@if($oDocument->isExists())-->
+                {number_format($oDocument->get('point'))} {$point_name}
+				<!--@else-->
+				<input type="text" name="give_point"  id="nPoint" class="itxx" value="{$min_point}" /> {$point_name}
+				<!--@end-->
+				<p>{sprintf($lang->about_give_point, $min_point, $max_point)}</p></td>
+			</li>
+			<li>
+				<label for="nTag" class="db fb">{$lang->tag}</label>
+				<input name="tags" type="text" id="nTags" class="itx" value="{htmlspecialchars($oDocument->get('tags'))}" />
+			</li>
+		</ul>
+		<div class="cm">
+			<button type="submit" class="bn">{$lang->cmd_registration}</button>
+		</div>
+</form>
+</div>

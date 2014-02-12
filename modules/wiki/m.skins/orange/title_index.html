@@ -1,0 +1,33 @@
+<include target="header.html" />
+<header class="mod_head">
+    <h2 class="mod_title"><span>
+        <block cond="$search_keyword">&quot;{$search_keyword}&quot;</block>
+        <block cond="!$search_keyword">{$lang->cmd_view_document_list}</block>
+    </span></h2>
+    <button class="btn_srch">search</button>
+    <nav class="nav_wk b01" > <!-- [D] class opt => b00, b10, b01 -->
+        <a href="{getUrl('','mid',$mid)}" class="f">Front</a>
+        <a href="{getUrl('act','dispWikiTitleIndex','entry','','document_srl','','search_target','','search_keyword','')}" class="l">List</a>
+    </nav>
+    <form action="{getUrl()}" method="get" class="srch" no-error-return-url="true">
+        <fieldset>
+        <legend>{$lang->cmd_move}</legend>
+            <input type="hidden" name="mid" value="{$mid}" />
+            <input type="hidden" name="vid" value="{$vid}" />
+            <input type="hidden" name="act" value="dispWikiTitleIndex" />
+            <input type="hidden" name="category" value="{$category}" />
+           <input type="hidden" name="search_target" value="title_content" />
+            <span><input type="search" name="search_keyword" placeholder="Search..." /></span>
+        </fieldset>
+    </form>  
+</header>
+<ul class="entries" id="wiki_document_list">
+    <block loop="$document_list => $val">
+    <li><a href="{urldecode(getUrl('','mid',$mid,'entry',$val->get('alias'), 'document_srl', ''))}">{$val->getTitle()}</a><i class="icon_arr_cg"></i></li>
+    </block>
+</ul>
+<footer class="list_btm">
+	<a cond="$page != 1" href="{getUrl('page', $page -1)}" class="prev">Prev</a>
+	<a cond="$page != $page_navigation->last_page" href="{getUrl('page', $page + 1)}" class="next">Next</a>
+	<a href="#" class="top">Top</a>
+</footer>

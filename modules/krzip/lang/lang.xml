@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<lang>
+	<item name="krzip">
+		<value xml:lang="ko"><![CDATA[한국 우편번호]]></value>
+		<value xml:lang="en"><![CDATA[Korean Zip Code]]></value>
+		<value xml:lang="jp"><![CDATA[韓国郵便番号]]></value>
+		<value xml:lang="zh-CN"><![CDATA[韩国邮编]]></value>
+		<value xml:lang="zh-TW"><![CDATA[韓國郵編]]></value>
+		<value xml:lang="fr"><![CDATA[Code postal coréen]]></value>
+		<value xml:lang="ru"><![CDATA[Корейский почтовый индекс]]></value>
+		<value xml:lang="es"><![CDATA[Código postal de Corea]]></value>
+		<value xml:lang="tr"><![CDATA[Kore Zip Kodu]]></value>
+		<value xml:lang="vi"><![CDATA[Zip Code (Korea)]]></value>
+	</item>
+	<item name="krzip_server_hostname">
+		<value xml:lang="ko"><![CDATA[우편번호 검사 서버의 이름]]></value>
+		<value xml:lang="en"><![CDATA[Server name for zip code checking]]></value>
+		<value xml:lang="jp"><![CDATA[郵便番号検索サーバ名]]></value>
+		<value xml:lang="zh-CN"><![CDATA[邮编检测服务器名]]></value>
+		<value xml:lang="zh-TW"><![CDATA[郵編檢測主機名稱]]></value>
+		<value xml:lang="fr"><![CDATA[Nom de serveur pour vérifier le code postal]]></value>
+		<value xml:lang="ru"><![CDATA[Имя сервера для проверки почтового индекса]]></value>
+		<value xml:lang="es"><![CDATA[Nombre del servidor para el chequeo de código postal]]></value>
+		<value xml:lang="tr"><![CDATA[Posta kodu kontrolü için olan sunucu ismi]]></value>
+		<value xml:lang="vi"><![CDATA[Tên Server kiểm tra Zip Code]]></value>
+	</item>
+	<item name="krzip_server_query">
+		<value xml:lang="ko"><![CDATA[우편번호 검사 서버 경로]]></value>
+	</item>
+	<item name="zipcode">
+		<value xml:lang="ko"><![CDATA[우편번호]]></value>
+	</item>
+	<item name="street_house_address">
+		<value xml:lang="ko"><![CDATA[도로명/지번 주소]]></value>
+	</item>
+	<item name="about_krzip_server_hostname">
+		<value xml:lang="ko"><![CDATA[우편번호를 검사하여 결과 목록을 가져올 서버의 도메인을 입력해주세요.]]></value>
+		<value xml:lang="en"><![CDATA[Please input the server's domain for checking zip codes and receiving the result list]]></value>
+		<value xml:lang="jp"><![CDATA[郵便番号を検索して結果を取り寄せるサーバのドメインを入力して下さい。]]></value>
+		<value xml:lang="zh-CN"><![CDATA[请输入要导入的检测结果目录服务器域名。]]></value>
+		<value xml:lang="zh-TW"><![CDATA[請輸入要匯入的檢測結果目錄服務器域名。]]></value>
+		<value xml:lang="fr"><![CDATA[Entrez le domaine de serveur pour vérifier le code postal et recevoir le liste des résultats, S.V.P.]]></value>
+		<value xml:lang="ru"><![CDATA[Пожалуйста, введите доменное имя сервера для проверки почтового идекса и получения списка результатов]]></value>
+		<value xml:lang="es"><![CDATA[Ingresar el dominio del servidor para chequear el código postal y recibir la lista de resultado]]></value>
+		<value xml:lang="tr"><![CDATA[Lütfen posta kodu kontrolü ve alınan sonuç listesi için sunucu alan adını giriniz]]></value>
+		<value xml:lang="vi"><![CDATA[Xin hãy nhập tên miền của Server để kiểm tra và kết nối cho danh sách kết quả]]></value>
+	</item>
+	<item name="about_krzip_server_query">
+		<value xml:lang="ko"><![CDATA[우편번호를 검사서버에 요청할 query url을 입력해 주세요.]]></value>
+		<value xml:lang="en"><![CDATA[Please input the query url that will be requested for checking the zip code]]></value>
+		<value xml:lang="jp"><![CDATA[郵便番号検索サーバに問い合わせるクエリのＵＲＬを入力して下さい。]]></value>
+		<value xml:lang="zh-CN"><![CDATA[请输入向邮编检测服务器发出请求的 query url。]]></value>
+		<value xml:lang="zh-TW"><![CDATA[請輸入向郵編檢主機器發出請求的query url。]]></value>
+		<value xml:lang="fr"><![CDATA[Entrez l'URL à Requérir qui sera requis pour vérifier le code postal]]></value>
+		<value xml:lang="ru"><![CDATA[Пожалуйста, введите URL запроса на сервер для проверки почтового идекса]]></value>
+		<value xml:lang="es"><![CDATA[Ingresar el query url que será pedido para chequear el código postal]]></value>
+		<value xml:lang="tr"><![CDATA[Lütfen posta kodu kontrolünde talep edilecek sorgu urlsini giriniz]]></value>
+		<value xml:lang="vi"><![CDATA[Xin hãy nhập địa chỉ sẽ trả lời khi kiểm tra Zip Code]]></value>
+	</item>
+	<item name="about_kr_address_detail">
+		<value xml:lang="ko"><![CDATA[검색방법<br>1. 동/리와 지번을 검색하세요 예) 영평동 2181<br>2. 건물명으로 검색하세요 예) XE빌딩<br>3. 도로명으로 검색하세요 예) 첨단로 242]]></value>
+	</item>
+	<item name="msg_not_exists_addr">
+		<value xml:lang="ko"><![CDATA[검색하려는 대상이 없습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Target for searching doesn't exist]]></value>
+		<value xml:lang="jp"><![CDATA[入力された文字列では郵便番号が見つかりませんでした]]></value>
+		<value xml:lang="zh-CN"><![CDATA[没有要搜索的对象！]]></value>
+		<value xml:lang="zh-TW"><![CDATA[沒有要搜尋的對象！]]></value>
+		<value xml:lang="fr"><![CDATA[Objectifs à rechercher n'existe pas]]></value>
+		<value xml:lang="ru"><![CDATA[Назначение для поиска не существует]]></value>
+		<value xml:lang="es"><![CDATA[Objetivo para la busqueda no existe]]></value>
+		<value xml:lang="tr"><![CDATA[Arama için böyle bir hedef bulunmuyor]]></value>
+		<value xml:lang="vi"><![CDATA[Khu vực tìm kiếm không tồn tại.]]></value>
+	</item>
+	<item name="msg_fail_to_socket_open">
+		<value xml:lang="ko"><![CDATA[우편번호 검색 대상 서버 접속에 실패하였습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Unabled to connect to zip code checking server]]></value>
+		<value xml:lang="jp"><![CDATA[郵便番号サーバとの接続に失敗しました]]></value>
+		<value xml:lang="zh-CN"><![CDATA[连接邮编搜索对象服务器失败！]]></value>
+		<value xml:lang="zh-TW"><![CDATA[連接郵編搜尋對像主機失敗！]]></value>
+		<value xml:lang="fr"><![CDATA[Echoué à connecter au serveur pour vérifier le code postal]]></value>
+		<value xml:lang="ru"><![CDATA[Невозможно подключиться к серверу для проверки почтового почтового индекса]]></value>
+		<value xml:lang="es"><![CDATA[No se puede conectar al servidor de chequeo de código postal]]></value>
+		<value xml:lang="tr"><![CDATA[Posta kodu kontrol sunucusuna bağlanılamıyor]]></value>
+		<value xml:lang="vi"><![CDATA[Không thể kết nối tới Server.]]></value>
+	</item>
+	<item name="msg_nomore_address">
+		<value xml:lang="ko"><![CDATA[검색어와 일치하는 주소가 없습니다.]]></value>
+	</item>
+	<item name="cmd_kr_address_detail">
+		<value xml:lang="ko"><![CDATA[상세주소를 입력하세요.]]></value>
+	</item>
+	<item name="cmd_select_detail_address">
+		<value xml:lang="ko"><![CDATA[의 검색결과입니다. 아래의 주소중에서 해당되는 주소를 선택하세요.]]></value>
+	</item>
+	<item name="cmd_kr_address_addr1">
+		<value xml:lang="ko"><![CDATA[광역시도를 선택하세요.]]></value>
+	</item>
+	<item name="cmd_kr_address_addr2">
+		<value xml:lang="ko"><![CDATA[시/군/구를 선택하세요.]]></value>
+	</item>
+	<item name="cmd_kr_address_etc">
+		<value xml:lang="ko"><![CDATA[나머지주소가 있을 경우 나머지주소를 입력하세요.]]></value>
+	</item>
+</lang>

@@ -1,0 +1,554 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<lang>
+	<item name="resource_manager">
+		<value xml:lang="ko"><![CDATA[자료실 관리]]></value>
+		<value xml:lang="en"><![CDATA[Resources Management]]></value>
+		<value xml:lang="zh-TW"><![CDATA[資源]]></value>
+		<value xml:lang="tr"><![CDATA[Kaynak Yönetimi]]></value>
+		<value xml:lang="vi"><![CDATA[Quản lý tài nguyên]]></value>
+	</item>
+	<item name="about_resource_manager">
+		<value xml:lang="ko"><![CDATA[자료를 관리할 수 있는 모듈입니다]]></value>
+		<value xml:lang="en"><![CDATA[This module is capable of managing downloadable data]]></value>
+		<value xml:lang="zh-TW"><![CDATA[可進行資源管理的模組]]></value>
+		<value xml:lang="tr"><![CDATA[Bu modül indirilebilir verileri yönetme yetkisine sahiptir.]]></value>
+		<value xml:lang="vi"><![CDATA[Module quản lý tài nguyên.]]></value>
+	</item>
+	<item name="order_newest">
+		<value xml:lang="ko"><![CDATA[신규 등록]]></value>
+		<value xml:lang="en"><![CDATA[Registration]]></value>
+		<value xml:lang="zh-TW"><![CDATA[最新登錄]]></value>
+		<value xml:lang="tr"><![CDATA[Kayıt]]></value>
+		<value xml:lang="vi"><![CDATA[Bài mới gửi]]></value>
+	</item>
+	<item name="order_latest">
+		<value xml:lang="ko"><![CDATA[최근 업데이트]]></value>
+		<value xml:lang="en"><![CDATA[Recent Updates]]></value>
+		<value xml:lang="zh-TW"><![CDATA[最近更新]]></value>
+		<value xml:lang="tr"><![CDATA[Son Güncellemeler]]></value>
+		<value xml:lang="vi"><![CDATA[Mới cập nhật]]></value>
+	</item>
+	<item name="order_popular">
+		<value xml:lang="ko"><![CDATA[인기]]></value>
+		<value xml:lang="en"><![CDATA[Popularity]]></value>
+		<value xml:lang="zh-TW"><![CDATA[熱門]]></value>
+		<value xml:lang="tr"><![CDATA[Popülarite]]></value>
+		<value xml:lang="vi"><![CDATA[Top]]></value>
+	</item>
+	<item name="order_download">
+		<value xml:lang="ko"><![CDATA[다운로드]]></value>
+		<value xml:lang="en"><![CDATA[Downloads]]></value>
+		<value xml:lang="tr"><![CDATA[İndirilenler]]></value>
+		<value xml:lang="vi"><![CDATA[Tải về]]></value>
+	</item>
+	<item name="package_status">
+		<value xml:lang="ko"><![CDATA[등록 상태]]></value>
+		<value xml:lang="en"><![CDATA[Package Status]]></value>
+		<value xml:lang="zh-TW"><![CDATA[登錄狀態]]></value>
+		<value xml:lang="tr"><![CDATA[Paket Statüleri]]></value>
+		<value xml:lang="vi"><![CDATA[Trạng thái]]></value>
+	</item>
+	<item name="download">
+		<value xml:lang="ko"><![CDATA[다운로드]]></value>
+		<value xml:lang="en"><![CDATA[Download]]></value>
+		<value xml:lang="zh-TW"><![CDATA[檔案下載]]></value>
+		<value xml:lang="tr"><![CDATA[İndir]]></value>
+	</item>
+	<item name="package_downloaded_count">
+		<value xml:lang="ko"><![CDATA[전체 다운로드]]></value>
+		<value xml:lang="en"><![CDATA[Package Downloaded]]></value>
+		<value xml:lang="zh-TW"><![CDATA[下載總數]]></value>
+		<value xml:lang="tr"><![CDATA[İndirilen Paketler]]></value>
+		<value xml:lang="vi"><![CDATA[Download]]></value>
+	</item>
+	<item name="downloaded_count">
+		<value xml:lang="ko"><![CDATA[다운로드]]></value>
+		<value xml:lang="en"><![CDATA[Downloaded Count]]></value>
+		<value xml:lang="zh-TW"><![CDATA[下載次數]]></value>
+		<value xml:lang="tr"><![CDATA[İndirme Sayısı]]></value>
+		<value xml:lang="vi"><![CDATA[Download]]></value>
+	</item>
+	<item name="voted_count">
+		<value xml:lang="ko"><![CDATA[추천]]></value>
+		<value xml:lang="en"><![CDATA[Voted]]></value>
+		<value xml:lang="zh-TW"><![CDATA[推薦]]></value>
+		<value xml:lang="tr"><![CDATA[Oylandı.]]></value>
+		<value xml:lang="vi"><![CDATA[Bình chọn]]></value>
+	</item>
+	<item name="resource_estimate">
+		<value xml:lang="ko"><![CDATA[평가]]></value>
+		<value xml:lang="en"><![CDATA[Rate]]></value>
+		<value xml:lang="zh-TW"><![CDATA[評論]]></value>
+		<value xml:lang="tr"><![CDATA[Oran]]></value>
+		<value xml:lang="vi"><![CDATA[Đánh giá]]></value>
+	</item>
+	<item name="star_point">
+		<value xml:lang="ko"><![CDATA[별점]]></value>
+		<value xml:lang="en"><![CDATA[Rating]]></value>
+		<value xml:lang="zh-TW"><![CDATA[評分]]></value>
+		<value xml:lang="tr"><![CDATA[Sınıflandırma]]></value>
+		<value xml:lang="vi"><![CDATA[Cho điểm]]></value>
+	</item>
+	<item name="cmd_estimate">
+		<value xml:lang="ko"><![CDATA[평가하기]]></value>
+		<value xml:lang="en"><![CDATA[Rate]]></value>
+		<value xml:lang="zh-TW"><![CDATA[送出評論]]></value>
+		<value xml:lang="tr"><![CDATA[Değerlendir]]></value>
+		<value xml:lang="vi"><![CDATA[Đánh giá]]></value>
+	</item>
+	<item name="msg_already_voted">
+		<value xml:lang="ko"><![CDATA[이미 평가하셨습니다]]></value>
+		<value xml:lang="en"><![CDATA[You have already rated]]></value>
+		<value xml:lang="zh-TW"><![CDATA[已經評過分了]]></value>
+		<value xml:lang="tr"><![CDATA[Zaten değerlendirmede bulunmuştunuz.]]></value>
+		<value xml:lang="vi"><![CDATA[Bạn đã đánh giá xong. Xin cảm ơn!]]></value>
+	</item>
+	<item name="cmd_list_my_package">
+		<value xml:lang="ko"><![CDATA[나의 자료 목록]]></value>
+		<value xml:lang="en"><![CDATA[My List]]></value>
+		<value xml:lang="zh-TW"><![CDATA[檔案列表]]></value>
+		<value xml:lang="tr"><![CDATA[Listem]]></value>
+		<value xml:lang="vi"><![CDATA[Dữ liệu của tôi]]></value>
+	</item>
+	<item name="about_my_package">
+		<value xml:lang="ko"><![CDATA[등록 신청을 한 자료들의 목록 중 상태가 "등록" 인것이 신청 완료가 된 것입니다.<br/>신청 완료가 된 자료에는 직접 배포를 하실 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA["Registered" means that the resource is approved.<br /> You can attach files to approved resource.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[下列申請的資料狀態顯示為"通過"的表示登錄成功。<br/>通過的資料再登錄相關檔案即可發布。]]></value>
+		<value xml:lang="tr"><![CDATA["Kayıtlı" kaynağın onaylandığı anlamına gelir.<br /> Onaylanmış kaynaklara dosya ekleyebilirsiniz.]]></value>
+		<value xml:lang="vi"><![CDATA[Danh sách tất cả những dữ liệu do bạn gửi, và được phân phối trực tiếp tại đây.]]></value>
+	</item>
+	<item name="package_accepted">
+		<value xml:lang="ko"><![CDATA[승인]]></value>
+		<value xml:lang="en"><![CDATA[Approved]]></value>
+		<value xml:lang="zh-TW"><![CDATA[通過]]></value>
+		<value xml:lang="tr"><![CDATA[Onaylandı]]></value>
+		<value xml:lang="vi"><![CDATA[Hợp lệ]]></value>
+	</item>
+	<item name="package_waiting">
+		<value xml:lang="ko"><![CDATA[검토중]]></value>
+		<value xml:lang="en"><![CDATA[Waiting]]></value>
+		<value xml:lang="zh-TW"><![CDATA[等待]]></value>
+		<value xml:lang="tr"><![CDATA[Bekliyor]]></value>
+		<value xml:lang="vi"><![CDATA[Đang chờ duyệt]]></value>
+	</item>
+	<item name="package_reservation">
+		<value xml:lang="ko"><![CDATA[유보]]></value>
+		<value xml:lang="en"><![CDATA[Reservation]]></value>
+		<value xml:lang="zh-TW"><![CDATA[保留]]></value>
+		<value xml:lang="tr"><![CDATA[Rezervasyon]]></value>
+		<value xml:lang="vi"><![CDATA[Dự phòng]]></value>
+	</item>
+	<item name="cmd_attach_file">
+		<value xml:lang="ko"><![CDATA[파일 등록]]></value>
+		<value xml:lang="en"><![CDATA[Attach File]]></value>
+		<value xml:lang="zh-TW"><![CDATA[登錄檔案]]></value>
+		<value xml:lang="tr"><![CDATA[Dosya Ekle]]></value>
+		<value xml:lang="vi"><![CDATA[Đính kèm]]></value>
+	</item>
+	<item name="package_author">
+		<value xml:lang="ko"><![CDATA[제작자]]></value>
+		<value xml:lang="en"><![CDATA[Producer]]></value>
+		<value xml:lang="zh-TW"><![CDATA[作者]]></value>
+		<value xml:lang="tr"><![CDATA[Yapımcı]]></value>
+		<value xml:lang="vi"><![CDATA[Tác giả]]></value>
+	</item>
+	<item name="cmd_view_all_version">
+		<value xml:lang="ko"><![CDATA[모든 버전 보기]]></value>
+		<value xml:lang="en"><![CDATA[See All Versions]]></value>
+		<value xml:lang="zh-TW"><![CDATA[檢視所有版本]]></value>
+		<value xml:lang="tr"><![CDATA[Tüm sürümleri gör]]></value>
+		<value xml:lang="vi"><![CDATA[Tất cả các phiên bản]]></value>
+	</item>
+	<item name="version_history">
+		<value xml:lang="ko"><![CDATA[버전 목록]]></value>
+		<value xml:lang="en"><![CDATA[Version History]]></value>
+		<value xml:lang="zh-TW"><![CDATA[版本紀錄]]></value>
+		<value xml:lang="tr"><![CDATA[Sürüm Geçmişi]]></value>
+		<value xml:lang="vi"><![CDATA[Danh sách các phiên bản]]></value>
+	</item>
+	<item name="latest_version">
+		<value xml:lang="ko"><![CDATA[최근 버전]]></value>
+		<value xml:lang="en"><![CDATA[Latest version]]></value>
+		<value xml:lang="zh-TW"><![CDATA[最新版本]]></value>
+		<value xml:lang="tr"><![CDATA[Son Sürüm]]></value>
+		<value xml:lang="vi"><![CDATA[Phiên bản mới]]></value>
+	</item>
+	<item name="selected_version">
+		<value xml:lang="ko"><![CDATA[선택된 버전]]></value>
+		<value xml:lang="en"><![CDATA[Selected Version]]></value>
+		<value xml:lang="zh-TW"><![CDATA[選擇版本]]></value>
+		<value xml:lang="tr"><![CDATA[Seçili Sürüm]]></value>
+		<value xml:lang="vi"><![CDATA[Phiên bản đã chọn]]></value>
+	</item>
+	<item name="attach_version">
+		<value xml:lang="ko"><![CDATA[버전]]></value>
+		<value xml:lang="en"><![CDATA[Version]]></value>
+		<value xml:lang="zh-TW"><![CDATA[版本]]></value>
+		<value xml:lang="tr"><![CDATA[Sürüm]]></value>
+		<value xml:lang="vi"><![CDATA[Phiên bản]]></value>
+	</item>
+	<item name="about_attach_version">
+		<value xml:lang="ko"><![CDATA[버전을 입력해주세요.<br/>버전은 보통 a.b.c 와 같은 형태로 사용되며 작은 변화는 c를, 큰 변화는 a 를 변경하여 업그레이드의 중요도를 나타낼 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Input version. <br /> It should be formatted as a.b.c.d (c, d can be omitted).]]></value>
+		<value xml:lang="zh-TW"><![CDATA[請輸入版本。<br/>版本通常是以英文或數字來區分更新的重要度。]]></value>
+		<value xml:lang="tr"><![CDATA[Sürümü girin. <br /> a.b.c.d şeklinde biçimlendirilmelidir(c, d çıkarılabilir).]]></value>
+		<value xml:lang="vi"><![CDATA[Xin hãy nhập phiên bản.<br/>Định dạng của phiên bản thường có dạng a.b.c.<br/>c là những thay đổi nhỏ, a là những thay đổi lớn từ phiên bản trước.<br/>Qua số phiên bản giúp người sử dụng có thể hiểu được những thay đổi lớn hay nhỏ từ những phiên bản trước đó.]]></value>
+	</item>
+	<item name="latest_attach_version">
+		<value xml:lang="ko"><![CDATA[가장 최근 버전]]></value>
+		<value xml:lang="en"><![CDATA[Latest version]]></value>
+		<value xml:lang="zh-TW"><![CDATA[最新版本]]></value>
+		<value xml:lang="tr"><![CDATA[Son Sürüm]]></value>
+		<value xml:lang="vi"><![CDATA[Phiên bản mới nhất]]></value>
+	</item>
+	<item name="attach_file">
+		<value xml:lang="ko"><![CDATA[첨부파일]]></value>
+		<value xml:lang="en"><![CDATA[Attachments]]></value>
+		<value xml:lang="zh-TW"><![CDATA[附加檔案]]></value>
+		<value xml:lang="tr"><![CDATA[Ekler]]></value>
+		<value xml:lang="vi"><![CDATA[Đính kèm]]></value>
+	</item>
+	<item name="about_attach_file">
+		<value xml:lang="ko"><![CDATA[선택하신 자료와 관련된 파일을 업로드해주세요.<br/>zip, tgz, tar등과 같이 많이 쓰이는 압축 형식을 이용하시는 것을 추천합니다.]]></value>
+		<value xml:lang="en"><![CDATA[Upload files. <br /> We recommend that you use popular compress format, such as zip, tgz, tar, etc.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[請選擇要上傳的相關檔案。<br/> 建議使用 zip、tgz、tar 等已壓縮的檔案。]]></value>
+		<value xml:lang="tr"><![CDATA[Dosyaları Yükle. <br /> zip, tgz, tar, vb. popüler sıkıştırma formatları kullanmanızı tavsiye ederiz]]></value>
+		<value xml:lang="vi"><![CDATA[Xin hãy chọn File bạn muốn đính kèm.<br/>zip, tgz, tar là những định dạng File được khuyến khích sử dụng.]]></value>
+	</item>
+	<item name="attach_description">
+		<value xml:lang="ko"><![CDATA[파일 설명]]></value>
+		<value xml:lang="en"><![CDATA[File Description]]></value>
+		<value xml:lang="zh-TW"><![CDATA[檔案說明]]></value>
+		<value xml:lang="tr"><![CDATA[Dosya Tanım]]></value>
+		<value xml:lang="vi"><![CDATA[Mô tả File]]></value>
+	</item>
+	<item name="about_attach_description">
+		<value xml:lang="ko"><![CDATA[업로드하시는 파일과 관련된 설명을 적어주세요.]]></value>
+		<value xml:lang="en"><![CDATA[Upload your file, write the description associated with.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[請輸入檔案的相關說明。]]></value>
+		<value xml:lang="tr"><![CDATA[Dosyanı yükle ve ilgili tanımı yaz.]]></value>
+		<value xml:lang="vi"><![CDATA[Xin hãy nhập mô tả cho File đính kèm.]]></value>
+	</item>
+	<item name="no_packages">
+		<value xml:lang="ko"><![CDATA[등록된 자료가 없습니다.<br/>자료 등록 신청을 통해서 자료를 등록하실 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[There is no package. <br /> You may register packages.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[目前沒有資料登錄。<br/>通過申請的資料會登錄於此。]]></value>
+		<value xml:lang="tr"><![CDATA[Paket yok. <br /> Paket kaydedebilirsiniz.]]></value>
+		<value xml:lang="vi"><![CDATA[Không có dữ liệu được đăng kí.]]></value>
+	</item>
+	<item name="package_version">
+		<value xml:lang="ko"><![CDATA[버전]]></value>
+		<value xml:lang="en"><![CDATA[Version]]></value>
+		<value xml:lang="zh-TW"><![CDATA[版本]]></value>
+		<value xml:lang="tr"><![CDATA[Sürüm]]></value>
+		<value xml:lang="vi"><![CDATA[Phiên bản]]></value>
+	</item>
+	<item name="search_dependency">
+		<value xml:lang="ko"><![CDATA[연동 자료 찾기]]></value>
+		<value xml:lang="en"><![CDATA[Search Dependency]]></value>
+		<value xml:lang="zh-TW"><![CDATA[搜尋關聯檔案]]></value>
+		<value xml:lang="tr"><![CDATA[Arama Bağımlılığı]]></value>
+		<value xml:lang="vi"><![CDATA[Tìm kiếm]]></value>
+	</item>
+	<item name="attach_dependency">
+		<value xml:lang="ko"><![CDATA[연동 자료]]></value>
+		<value xml:lang="en"><![CDATA[Attach Dependency]]></value>
+		<value xml:lang="zh-TW"><![CDATA[關聯檔案]]></value>
+		<value xml:lang="tr"><![CDATA[Ekleme Bağımlılığı]]></value>
+		<value xml:lang="vi"><![CDATA[Dữ liệu đã đính kèm]]></value>
+	</item>
+	<item name="about_attach_dependency">
+		<value xml:lang="ko"><![CDATA[업로드 하시는 자료에 필수적이거나 혹은 같이 다운로드 받아야 하는 자료가 있으면 입력해주세요.<br/>파일을 다운로드 받을때 같이 다운로드 받을 수 있도록 안내됩니다.]]></value>
+		<value xml:lang="en"><![CDATA[If your data is depending on other uploaded data, please specify them. <br /> It will be guided to download your package along with them.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[請在此填寫必須或者應該一起下載的檔案。<br/>下載檔案時會提醒應該一起下載的檔案。]]></value>
+		<value xml:lang="tr"><![CDATA[Eğer verileriniz diğer yüklü dosyalara bağlıysa, lütfen dosyaları belirtiniz. <br /> Böylece paketiniz bu dosyalarla birlikte indirilmeye yönlendirilecektir.]]></value>
+		<value xml:lang="vi"><![CDATA[File đính kèm của bạn có thể trùng tên với File khác do người khác đã gửi lên.<br/>File Download có thể nhận được những hướng dẫn cụ thể.]]></value>
+	</item>
+	<item name="attach_screenshot">
+		<value xml:lang="ko"><![CDATA[스크린샷]]></value>
+		<value xml:lang="en"><![CDATA[Screenshot]]></value>
+		<value xml:lang="zh-TW"><![CDATA[螢幕截圖]]></value>
+		<value xml:lang="tr"><![CDATA[Ekran Görüntüsü]]></value>
+		<value xml:lang="vi"><![CDATA[Hình mô tả]]></value>
+	</item>
+	<item name="about_attach_screenshot">
+		<value xml:lang="ko"><![CDATA[목록등에서 보이는 스크린샷 이미지를 등록해주세요.<br/>100x100 사이즈의 이미지로 올려주시면 가장 잘 보일 수 있습니다.<br/>jpg,gif,png등의 파일로 등록을 해주세요.]]></value>
+		<value xml:lang="en"><![CDATA[Register screenshot, which will appear in the list of files. <br /> 100x100 size is recommended. <br /> Please use jpg, gif, or png.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[請上傳螢幕截圖。<br/> 圖片大小是 100x100 的常見大小。<br/> 請使用 jpg、gif、png 等圖片格式。]]></value>
+		<value xml:lang="tr"><![CDATA[Dosyalar listesinde görüntülenecek ekran görüntüsünü kaydedin. <br /> 100x100 boyutları tavsiye edilir. <br /> Lütfen jpg, gif veya png formatlarını kullanın.]]></value>
+		<value xml:lang="vi"><![CDATA[Xin hãy nhập hình mô tả cho dữ liệu của bạn.<br/>100x100px là định dạng chuẩn cho hình mô tả.<br/>Chỉ hỗ trợ những định dạng .jpg, .gif, .png.]]></value>
+	</item>
+	<item name="cmd_manage_file">
+		<value xml:lang="ko"><![CDATA[파일 관리]]></value>
+		<value xml:lang="en"><![CDATA[File Management]]></value>
+		<value xml:lang="zh-TW"><![CDATA[檔案管理]]></value>
+		<value xml:lang="tr"><![CDATA[Dosya Yönetimi]]></value>
+		<value xml:lang="vi"><![CDATA[Quản lý File]]></value>
+	</item>
+	<item name="about_manage_file">
+		<value xml:lang="ko"><![CDATA[승인된 자료에 대해 직접 파일을 업로드 하실 수 있습니다.<br/>파일 업로드시 다른 자료와의 연동등도 꼭 자세히 입력하여 주시면 다운로드 받는 사용자들이 보다 편하게 사용할 수 있습니다.<br/>파일 첨부 및 관리는 직접 관리하실 수 있습니다]]></value>
+		<value xml:lang="en"><![CDATA[For approved data, you may upload files. <br /> Specifying depending packages would help downloaders. <br />You can manage attached files. ]]></value>
+		<value xml:lang="zh-TW"><![CDATA[通過申請的資料可直接上傳相關檔案。<br/>上傳檔案時，如果將其他關聯檔案的資料都填寫清楚的話，將會使下載者更方便。<br/>可直接管理檔案與相關內容。]]></value>
+		<value xml:lang="tr"><![CDATA[Onaylı veriler için dosya yükleyebilirsiniz. <br /> Birbirine bağlı paketleri belirtmeniz indiricilere kolaylık sağlayacaktır. <br />Ekli dosyaları yönetebilirsiniz. ]]></value>
+		<value xml:lang="vi"><![CDATA[Sau khi dữ liệu muốn gửi của bạn được chấp nhận là hợp lệ, bạn có thể Upload trực tiếp File tại đây.<br/>Nếu dữ liệu đính kèm do người khác gửi lên, bạn phải công khai nguồn gốc cho người sử dụng.<br/>File đính kèm của bạn sẽ được chúng tôi trực tiếp quản lý.]]></value>
+	</item>
+	<item name="cmd_manage_package">
+		<value xml:lang="ko"><![CDATA[등록 자료 검토]]></value>
+		<value xml:lang="en"><![CDATA[Manage Package]]></value>
+		<value xml:lang="zh-TW"><![CDATA[登錄資料管理]]></value>
+		<value xml:lang="tr"><![CDATA[Paketi Yönet]]></value>
+		<value xml:lang="vi"><![CDATA[Xem xét dữ liệu]]></value>
+	</item>
+	<item name="about_manage_package">
+		<value xml:lang="ko"><![CDATA[사용자들이 등록한 자료 정보를 보고 승인/ 유보/ 삭제할 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Administrator can approve/postpone/delete registered packages]]></value>
+		<value xml:lang="zh-TW"><![CDATA[審核用戶登錄的資料是否通過/保留/刪除。]]></value>
+		<value xml:lang="tr"><![CDATA[Yönenici, kayıtlı paketleri onaylayabilir/erteleyebilir/silebilir.]]></value>
+		<value xml:lang="vi"><![CDATA[Có thể xét là hợp lệ, dự phòng hay xóa dữ liệu do người dùng gửi lên.]]></value>
+	</item>
+	<item name="cmd_insert_package">
+		<value xml:lang="ko"><![CDATA[자료 등록 신청]]></value>
+		<value xml:lang="en"><![CDATA[Insert Package]]></value>
+		<value xml:lang="zh-TW"><![CDATA[資料登錄]]></value>
+		<value xml:lang="tr"><![CDATA[Paket Ekle]]></value>
+		<value xml:lang="vi"><![CDATA[Đăng kí dữ liệu]]></value>
+	</item>
+	<item name="about_insert_package">
+		<value xml:lang="ko"><![CDATA[자료를 등록하기 이전에 먼저 자료의 신청을 하셔야 합니다.<br/>자료 신청이 접수되면 해당 자료로 파일을 등록하실 수 있습니다.<br/>자료 신청을 별도로 요청 받는 이유는 자료의 업그레이드시에 버전 관리와 연동(다른 모듈 또는 위젯등과의 연계)을 검토하기 위해서입니다.<br/>아래 내용을 입력하신후 등록 버튼을 선택하시면 신청이 됩니다.]]></value>
+		<value xml:lang="en"><![CDATA[Before uploading files, you have to register the resource. <br /> As approved, you can attach files to the resource. <br /> This is because administrator would review the files with versions and dependencies prior to that users download it.<br /> Input followings, and press the register button.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[在登錄資料前必須要先通過審核。<br/>資料通過審核後，就可以登錄相關檔案。<br/>個別資料申請的原因是檔案版本更新時，檔案管理與關聯檔案 (其他 widget 與模組) 的審核。<br/>以下內容填寫完後送出，即可完成申請。]]></value>
+		<value xml:lang="tr"><![CDATA[Dosyaları yüklemeden önce kaynağı kaydetmek zorundasınız. <br /> Onaylandıktan sonra dosyaları kaynağa ekleyebilirsiniz. <br /> Bunun nedeni, kullanıcılar indirmeden önce yöneticinin dosyaları sürümleri ve bağımlılıkları ile gözden geçirmesidir.<br /> Aşağıdakileri girin ve ardından kaydet düğmesine basın.]]></value>
+		<value xml:lang="vi"><![CDATA[Phải nhập những thông số bắt buộc cho dữ liệu trước khi đăng kí.<br/>Sau khi nhập vào những thông số hợp lệ cho dữ liệu, dữ liệu của bạn sẽ được đăng kí.<br/>Phải nêu rõ dữ liệu này được sử dụng riêng biệt hay sử dụng kết hợp với những dữ liệu khác.<br/>Sau khi hoàn tất, hãy bấm nút <b>[Gửi]</b> phía dưới.]]></value>
+	</item>
+	<item name="cmd_modify_package">
+		<value xml:lang="ko"><![CDATA[자료 수정]]></value>
+		<value xml:lang="en"><![CDATA[Modify Package]]></value>
+		<value xml:lang="zh-TW"><![CDATA[編輯檔案]]></value>
+		<value xml:lang="tr"><![CDATA[Paketi Değiştir]]></value>
+		<value xml:lang="vi"><![CDATA[Sửa dữ liệu]]></value>
+	</item>
+	<item name="about_modify_package">
+		<value xml:lang="ko"><![CDATA[등록된 자료의 정보중 제목, 라이선스, 홈페이지, 간단한 소개만 수정 가능합니다]]></value>
+		<value xml:lang="en"><![CDATA[For the approved resources, you may modify title, license, homepage, and brief introduction.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[可編輯檔案標題、使用條款、首頁與說明。]]></value>
+		<value xml:lang="tr"><![CDATA[Onaylanmış kaynaklarda başlığı, lisansı, anasayfayı ve özet bilgileri değiştirebilirsiniz.]]></value>
+		<value xml:lang="vi"><![CDATA[Bạn có thể sửa những thông số cho dữ liệu như Tên, Giấy phép, Trang chủ, Mô tả, ... một cách đơn giản.]]></value>
+	</item>
+	<item name="cmd_delete_package">
+		<value xml:lang="ko"><![CDATA[자료 삭제]]></value>
+		<value xml:lang="en"><![CDATA[Delete Package]]></value>
+		<value xml:lang="zh-TW"><![CDATA[刪除檔案]]></value>
+		<value xml:lang="tr"><![CDATA[Paketi Sil]]></value>
+		<value xml:lang="vi"><![CDATA[Xóa dữ liệu]]></value>
+	</item>
+	<item name="about_delete_package">
+		<value xml:lang="ko"><![CDATA[삭제시 자료에 등록된 모든 첨부파일들이 삭제가 됩니다.]]></value>
+		<value xml:lang="en"><![CDATA[If you delete this package, all the attached files would be deleted together.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[會連同檔案登錄時所附加的檔案一起刪除。]]></value>
+		<value xml:lang="tr"><![CDATA[Eğer bu paketi silerseniz, tüm ekli dosyalar da silinecektir.]]></value>
+		<value xml:lang="vi"><![CDATA[Sau khi xóa dữ liệu, File đính kèm cũng đồng thời được xóa.]]></value>
+	</item>
+	<item name="about_required_field">
+		<value xml:lang="ko"><![CDATA[표시는 <em>필수 입력</em> 사항입니다.]]></value>
+		<value xml:lang="en"><![CDATA[This is <em>required</em>.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[表示為<em>必須輸入</em>的項目。]]></value>
+		<value xml:lang="tr"><![CDATA[Bu <em>gerekli</em>.]]></value>
+		<value xml:lang="vi"><![CDATA[Tùy chọn <em>Yêu cầu nhập vào</em>.]]></value>
+	</item>
+	<item name="required_field">
+		<value xml:lang="ko"><![CDATA[이 항목은 반드시 기록 하셔야 합니다.]]></value>
+		<value xml:lang="en"><![CDATA[You should input this.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[此項目必須輸入。]]></value>
+		<value xml:lang="tr"><![CDATA[Bu alanı doldurmanız gerekmektedir.]]></value>
+		<value xml:lang="vi"><![CDATA[Bắt buộc phải nhập yêu cầu này.]]></value>
+	</item>
+	<item name="package_regdate">
+		<value xml:lang="ko"><![CDATA[최초 등록일]]></value>
+		<value xml:lang="en"><![CDATA[Package Regdate]]></value>
+		<value xml:lang="zh-TW"><![CDATA[登錄日期]]></value>
+		<value xml:lang="tr"><![CDATA[Paket Kayıt Tarihi]]></value>
+		<value xml:lang="vi"><![CDATA[Ngày gửi]]></value>
+	</item>
+	<item name="package_update">
+		<value xml:lang="ko"><![CDATA[최근 업데이트]]></value>
+		<value xml:lang="en"><![CDATA[Recent Updates]]></value>
+		<value xml:lang="zh-TW"><![CDATA[最新更新]]></value>
+		<value xml:lang="tr"><![CDATA[Son Güncellemeler]]></value>
+		<value xml:lang="vi"><![CDATA[Ngày cập nhật]]></value>
+	</item>
+	<item name="package_category">
+		<value xml:lang="ko"><![CDATA[자료 분류]]></value>
+		<value xml:lang="en"><![CDATA[Category]]></value>
+		<value xml:lang="zh-TW"><![CDATA[分類]]></value>
+		<value xml:lang="tr"><![CDATA[Kategori]]></value>
+		<value xml:lang="vi"><![CDATA[Thể loại]]></value>
+	</item>
+	<item name="about_package_category">
+		<value xml:lang="ko"><![CDATA[자료의 분류를 선택해주세요.]]></value>
+		<value xml:lang="en"><![CDATA[Please specify the category]]></value>
+		<value xml:lang="zh-TW"><![CDATA[請選擇分類。]]></value>
+		<value xml:lang="tr"><![CDATA[Lütfen kategoriyi belirtiniz.]]></value>
+		<value xml:lang="vi"><![CDATA[Hãy chọn thể loại cho dữ liệu muốn gửi.]]></value>
+	</item>
+	<item name="package_title">
+		<value xml:lang="ko"><![CDATA[자료 제목]]></value>
+		<value xml:lang="en"><![CDATA[Article Title]]></value>
+		<value xml:lang="zh-TW"><![CDATA[檔案標題]]></value>
+		<value xml:lang="tr"><![CDATA[Yazı Başlığı]]></value>
+		<value xml:lang="vi"><![CDATA[Tiêu đề]]></value>
+	</item>
+	<item name="about_package_title">
+		<value xml:lang="ko"><![CDATA[자료의 제목을 입력해주세요.]]></value>
+		<value xml:lang="en"><![CDATA[Please input the title]]></value>
+		<value xml:lang="zh-TW"><![CDATA[請輸入檔案標題。]]></value>
+		<value xml:lang="tr"><![CDATA[Lütfen başlığı girin]]></value>
+		<value xml:lang="vi"><![CDATA[Xin hãy nhập tiêu đề cho dữ liệu muốn gửi.]]></value>
+	</item>
+	<item name="package_path">
+		<value xml:lang="ko"><![CDATA[설치 경로]]></value>
+		<value xml:lang="en"><![CDATA[Installation path]]></value>
+		<value xml:lang="zh-TW"><![CDATA[安裝路徑]]></value>
+		<value xml:lang="tr"><![CDATA[Kurulum Yolu]]></value>
+		<value xml:lang="vi"><![CDATA[Đường dẫn cài đặt]]></value>
+	</item>
+	<item name="about_package_path">
+		<value xml:lang="ko"><![CDATA[./modules/모듈명 과 같이 해당 자료가 직접 설치될 위치를 입력해주세요]]></value>
+		<value xml:lang="en"><![CDATA[Specify installation path. e.g., ./modules/[module's name]]]></value>
+		<value xml:lang="zh-TW"><![CDATA[請直接輸入安裝位置，例)./modules/模組名稱。]]></value>
+		<value xml:lang="tr"><![CDATA[Kurulum yolunu belirtin. ör., ./modules/[modül'ün adı]]]></value>
+		<value xml:lang="vi"><![CDATA[Hãy nhập ./modules/tên module giống với tên dữ liệu cần Upload trước khi cài đặt.]]></value>
+	</item>
+	<item name="package_license">
+		<value xml:lang="ko"><![CDATA[라이선스]]></value>
+		<value xml:lang="en"><![CDATA[License]]></value>
+		<value xml:lang="zh-TW"><![CDATA[使用條款]]></value>
+		<value xml:lang="tr"><![CDATA[Lisans]]></value>
+		<value xml:lang="vi"><![CDATA[Giấy phép]]></value>
+	</item>
+	<item name="about_package_license">
+		<value xml:lang="ko"><![CDATA[자료의 라이선스를 선택해주세요.<br/>기타 라이선스 일 경우 간단한 소개에 라이선스를 표기해주세요.]]></value>
+		<value xml:lang="en"><![CDATA[Please sepcify the license. <br /> If it is not listed, choose the etc., and introduce it in the brief introduction form.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[請選擇檔案的使用條款。<br/>選擇其他條款的話，請簡單輸入說明。]]></value>
+		<value xml:lang="tr"><![CDATA[Lütfen lisansı belirtiniz. <br /> Eğer listede yoksa, vb.yi seçin ve ardından lisansı özet olarak tanıtın.]]></value>
+		<value xml:lang="vi"><![CDATA[Hãy chọn giấy phép được cấp cho dữ liệu.<br/>Nếu là giấy phép khác, xin hãy mô tả đơn giản giấy phép đó.]]></value>
+	</item>
+	<item name="package_homepage">
+		<value xml:lang="ko"><![CDATA[홈페이지]]></value>
+		<value xml:lang="en"><![CDATA[Homepage]]></value>
+		<value xml:lang="zh-TW"><![CDATA[首頁]]></value>
+		<value xml:lang="tr"><![CDATA[Anasayfa]]></value>
+		<value xml:lang="vi"><![CDATA[Trang chủ]]></value>
+	</item>
+	<item name="about_package_homepage">
+		<value xml:lang="ko"><![CDATA[자료 제공자의 홈페이지 또는 프로젝트 URL을 입력해주세요.]]></value>
+		<value xml:lang="en"><![CDATA[Input your homepage or the project's URL.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[請輸入作者的網站和 project 的網址。]]></value>
+		<value xml:lang="tr"><![CDATA[Anasayfanızı veya proje URL'sini girin.]]></value>
+		<value xml:lang="vi"><![CDATA[Hãy nhập trang chủ đã cài đặt thành công dữ liệu này.]]></value>
+	</item>
+	<item name="package_description">
+		<value xml:lang="ko"><![CDATA[간단한 소개]]></value>
+		<value xml:lang="en"><![CDATA[Brief Introduction]]></value>
+		<value xml:lang="zh-TW"><![CDATA[簡介]]></value>
+		<value xml:lang="tr"><![CDATA[Kısa Tanıtım]]></value>
+		<value xml:lang="vi"><![CDATA[Giới thiệu tóm tắt]]></value>
+	</item>
+	<item name="about_package_description">
+		<value xml:lang="ko"><![CDATA[자료에 대한 간단한 소개를 입력해주세요.<br/>자료 목록에서 보여지는 소개입니다.<br/>300자 이내로 입력해주세요.]]></value>
+		<value xml:lang="en"><![CDATA[Introduce your package briefly. <br /> It will be displayed in the resource list. <br /> Please input in 300 characters.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[請輸入簡介。<br/>瀏覽檔案時會顯示。<br/> 請輸入 300 個字以內。]]></value>
+		<value xml:lang="tr"><![CDATA[Paketinizi kısaca tanıtın. <br /> Özet bilgiler kaynak listesinde görüntülenecektir. <br /> 300 karakter genişliğinde bir tanıtım yapabilirsiniz.]]></value>
+		<value xml:lang="vi"><![CDATA[Hãy giới thiệu tóm tắt về dữ liệu muốn gửi.<br/>Giới thiệu này sẽ hiển thị kèm với thông tin của dữ liệu.<br/>Cho phép tối đa 300 kí tự.]]></value>
+	</item>
+	<item name="resource_notify_mail">
+		<value xml:lang="ko"><![CDATA[메일 통보]]></value>
+		<value xml:lang="en"><![CDATA[Mail Notification]]></value>
+		<value xml:lang="zh-TW"><![CDATA[郵件通知]]></value>
+		<value xml:lang="tr"><![CDATA[Posta Bildirimi]]></value>
+		<value xml:lang="vi"><![CDATA[Email thông báo]]></value>
+	</item>
+	<item name="about_resource_notify_mail">
+		<value xml:lang="ko"><![CDATA[등록된 메일 주소로 자료의 등록/수정등에 대한 알림을 발송합니다]]></value>
+		<value xml:lang="en"><![CDATA[Notification of register/modification of packages will be mailed to the registered address]]></value>
+		<value xml:lang="zh-TW"><![CDATA[當有檔案登錄或修改時，將會用郵件通知。]]></value>
+		<value xml:lang="tr"><![CDATA[Paketlerin kaydedilme/değiştirilme bildirimleri kayıtlı adresinize mail yoluyla gönderilecektir.]]></value>
+		<value xml:lang="vi"><![CDATA[Sẽ gửi một thông báo tới Email này khi có dữ liệu được đăng kí hay sử đổi.]]></value>
+	</item>
+	<item name="resource_use_path">
+		<value xml:lang="ko"><![CDATA[경로 정보 사용]]></value>
+		<value xml:lang="en"><![CDATA[Using the path information]]></value>
+		<value xml:lang="zh-TW"><![CDATA[使用路徑]]></value>
+		<value xml:lang="tr"><![CDATA[Yol bilgisini kullanarak]]></value>
+		<value xml:lang="vi"><![CDATA[Đường dẫn sử dụng dữ liệu]]></value>
+	</item>
+	<item name="about_resource_use_path">
+		<value xml:lang="ko"><![CDATA[사용해제 하시면 경로 정보를 받지 않도록 할 수 있습니다]]></value>
+		<value xml:lang="en"><![CDATA[If not selected, path information will not be used]]></value>
+		<value xml:lang="zh-TW"><![CDATA[取消時將無法使用路徑。]]></value>
+		<value xml:lang="tr"><![CDATA[Eğer seçili değilse, yol bilgisi kullanılamayacaktır.]]></value>
+		<value xml:lang="vi"><![CDATA[Nếu không sử dụng, bạn sẽ không nhận được thông tin đường dẫn sử dụng cho dữ liệu này.]]></value>
+	</item>
+	<item name="resource_new_notify_title">
+		<value xml:lang="ko"><![CDATA[자료 등록 요청이 있습니다]]></value>
+		<value xml:lang="en"><![CDATA[Data registration request is]]></value>
+		<value xml:lang="zh-TW"><![CDATA[資料登錄請求]]></value>
+		<value xml:lang="tr"><![CDATA[Veri kaydı gereklidir.]]></value>
+		<value xml:lang="vi"><![CDATA[Dữ liệu mới đã được gửi.]]></value>
+	</item>
+	<item name="resource_modify_notify_title">
+		<value xml:lang="ko"><![CDATA[자료 정보 변경이 있습니다]]></value>
+		<value xml:lang="en"><![CDATA[This information may change data]]></value>
+		<value xml:lang="zh-TW"><![CDATA[檔案資料變更]]></value>
+		<value xml:lang="tr"><![CDATA[Bu bilgi verileri değiştirebilir.]]></value>
+		<value xml:lang="vi"><![CDATA[Thông tin dữ liệu đã được thay đổi.]]></value>
+	</item>
+	<item name="resource_delete_notify_title">
+		<value xml:lang="ko"><![CDATA[자료가 삭제되었습니다]]></value>
+		<value xml:lang="en"><![CDATA[Package have been removed]]></value>
+		<value xml:lang="zh-TW"><![CDATA[刪除檔案]]></value>
+		<value xml:lang="tr"><![CDATA[Paket kaldırıldı.]]></value>
+		<value xml:lang="vi"><![CDATA[Dữ liệu đã được xóa.]]></value>
+	</item>
+	<item name="resource_attach_notify_title">
+		<value xml:lang="ko"><![CDATA[자료에 파일 첨부되었습니다]]></value>
+		<value xml:lang="en"><![CDATA[This package has been attached to the file]]></value>
+		<value xml:lang="zh-TW"><![CDATA[資料有附加檔案]]></value>
+		<value xml:lang="tr"><![CDATA[Bu paket dosyaya eklendi.]]></value>
+		<value xml:lang="vi"><![CDATA[Dữ liệu đã được đính kèm.]]></value>
+	</item>
+	<item name="resource_status_changed">
+		<value xml:lang="ko"><![CDATA[등록하신 자료의 상태가 변경되었습니다]]></value>
+		<value xml:lang="en"><![CDATA[Has changed the status of registered data]]></value>
+		<value xml:lang="zh-TW"><![CDATA[登錄的資料狀態變更]]></value>
+		<value xml:lang="tr"><![CDATA[Kayıtlı verilerin statüleri değişti.]]></value>
+		<value xml:lang="vi"><![CDATA[Trạng thái dữ kiệu đã được thay đổi.]]></value>
+	</item>
+	<item name="resource_status_changed_message">
+		<value xml:lang="ko"><![CDATA[[title] 자료의 상태가 [status]로 변경되었습니다]]></value>
+		<value xml:lang="en"><![CDATA[The status of [Title] is changed into [status]]]></value>
+		<value xml:lang="zh-TW"><![CDATA[[title] 的資料狀態變更成 [status]]]></value>
+		<value xml:lang="tr"><![CDATA[[Başlık] statüsü [statüler] şekline dönüştü.]]></value>
+		<value xml:lang="vi"><![CDATA[Dữ liệu [title] đã chuyển sang trạng thái [status].]]></value>
+	</item>
+		<item name="module_category_number">
+		<value xml:lang="ko"><![CDATA[모듈 카테고리 번호]]></value>
+	</item>
+	<item name="about_module_category_number">
+		<value xml:lang="ko"><![CDATA[모듈을 올리는 카테고리의 번호를 입력하세요.]]></value>
+	</item>
+	<item name="module_skin_category_number">
+		<value xml:lang="ko"><![CDATA[모듈 스킨 카테고리 번호]]></value>
+	</item>
+	<item name="about_module_skin_category_number">
+		<value xml:lang="ko"><![CDATA[모듈 스킨을 올리는 카테고리의 번호를 입력하세요.]]></value>
+	</item>
+	<item name="msg_exists_path">
+		<value xml:lang="ko"><![CDATA[해당 경로에 다른 자료가 이미 있습니다.]]></value>
+	</item>
+	<item name="is_create_page">
+		<value xml:lang="ko"><![CDATA[페이지 생성 여부]]></value>
+	</item>
+	<item name="about_is_create_page">
+		<value xml:lang="ko"><![CDATA[이 모듈은 자체 페이지를 생성합니다.]]></value>
+	</item>
+</lang>

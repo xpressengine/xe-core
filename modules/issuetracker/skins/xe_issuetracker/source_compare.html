@@ -1,0 +1,84 @@
+<!--#include("header.html")-->
+<div id="issueBody">
+<div id="pxeContent">
+	<div class="pxeHeading">
+		<h2>{$lang->project_menus["dispIssuetrackerViewSource"]}</h2>
+	</div>
+	<div class="pxeCodeHeader">
+		<table border="1" cellspacing="0" summary="Directory Information">
+		<tr>
+			<th scope="row">{$lang->repos_path}</th>
+			<td>
+				{@ end($path_tree); }
+				{@ $lastkey = key($path_tree); }
+				{@ $lastval = current($path_tree); }
+				{@ array_pop($path_tree); }
+				<!--@foreach($path_tree as $key=>$val)-->
+                    <!--@if($key=='/')-->
+                        <a href="{getUrl('type','','path',urlencode($val), revs, $revs, brev,'')}">{$module_info->svn_url}</a>
+                    <!--@else-->
+                        <a href="{getUrl('type','','path',urlencode($val), revs, $revs, brev,'')}">{$key}/</a>
+                    <!--@end-->
+				<!--@end-->
+				<!--@if($lastkey=='/')-->
+				<a href="{getUrl('type','','path',urlencode($lastval), revs, $revs, brev,'')}"><em>{$module_info->svn_url}</em></a>
+				<!--@else-->
+				<a href="{getUrl('type','file','path',urlencode($lastval), revs, $revs, brev,'')}"><em>{$lastkey}/</em></a>
+				<!--@end-->
+			</td>
+		</tr>
+		</table>
+		<div class="do">
+			<span class="btnPxe strong"><a href="{getUrl('type','log','path',urlencode($path),'erev',$erev,'brev',$brev)}">{$lang->view_log}</a></span>
+		</div>
+	</div>
+	<!--@if($comp)-->
+		<!--@foreach($comp as $item)-->
+		<table border="1" cellspacing="0" class="pxeT4">
+		<!--<caption>modules/widget/tpl/<em>widget_layer.html</em></caption>-->
+		<caption>{@ $filename_arr = explode("/",$item->filename); }{@ $last_name = array_pop($filename_arr); }<!--@foreach($filename_arr as $filepath)-->{$filepath}/<!--@end--><em>{$last_name}</em></caption>
+		<thead>
+		<tr>
+		<th scope="col"><strong>{$item->before_revision}</strong></th>
+		<th scope="col"><strong>{$item->after_revision}</strong></th>
+		<th scope="col">+/-</th>
+		<th scope="col">Code</th>
+		</tr>
+		</thead>
+		<tbody>
+		{@ $bStart = true }
+		<!--@foreach($item->blocks as $block)-->
+			<!--@if(!$bStart)-->
+			<tr>
+				<td>...</td>
+				<td>...</td>
+				<td></td>
+				<td></td>
+			</tr>
+			<!--@endif-->
+			<!--@foreach($block->lines as $line)-->
+				{@ $class = null; }
+				{@ $op = "&nbsp;";}
+				<!--@if($line->before_line_number && !$line->after_line_number)-->
+				{@ $class = "removed"; }
+				{@ $op = "-";}
+				<!--@elseif($line->after_line_number && !$line->before_line_number)-->
+				{@ $class = "added"; }
+				{@ $op = "+"; }
+				<!--@end-->
+			<tr <!--@if($class)-->class="{$class}"<!--@end--> >
+				<td>{$line->before_line_number}</td>
+				<td>{$line->after_line_number}</td>
+				<td>{$op}</td>
+				<td class="code"><code>{nl2br(str_replace("\t","&nbsp;&nbsp;&nbsp;&nbsp;",str_replace(' ','&nbsp;',htmlspecialchars($line->data))))}</code></td>
+			</tr>
+			<!--@endforeach--><!--lines-->
+			{@ $bStart = false; }
+		<!--@endforeach--><!--blocks-->
+		</tbody>
+		</table>
+		<!--@endforeach-->
+	<!--@endif-->
+</div>
+</div>
+<!--#include("footer.html")-->

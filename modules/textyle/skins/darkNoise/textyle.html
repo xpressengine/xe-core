@@ -1,0 +1,51 @@
+<div id="textyle">
+	<div id="container">
+		<include target="header.html" />
+		<hr />
+		<!-- body -->
+		<div id="body">
+			<!-- content -->
+			<div id="content">
+				<!-- main -->
+				<div class="main">
+					<!--@if($textyle_mode=='module')-->
+						{$content}
+					<!--@elseif($textyle_mode=='profile')-->
+						<include target="profile.html" />
+					<!--@elseif($textyle_mode=='guestbook')-->
+						<include target="guestbook.html" />
+					<!--@elseif($textyle_mode=='tags')-->
+						<include target="tags.html" />
+					<!--@elseif($textyle_mode=='comment_form')-->
+						<include target="comment_form.html" />
+					<!--@elseif($textyle_mode=='list')-->
+						<include target="post.list.html" />
+					<!--@elseif($textyle_mode=='summary')-->
+						<include target="post.summary.html" />
+					<!--@else-->
+						<include target="post.read.html" />
+					<!--@end-->
+					<span class="end top"></span>
+					<span class="end btm"></span>
+				</div>
+				<!-- /main -->
+				<include target="pagination.post.html" />
+				<div class="galleryWidget" cond="$textyle_mode=='list' || $textyle_mode=='summary'">
+					<img class="zbxe_widget_output" widget="content" skin="default" content_type="document" list_type="gallery" option_view="thumbnail,title,regdate" order_target="list_order" order_type="desc" thumbnail_type="crop" thumbnail_width="149" thumbnail_height="104" cols_list_count="4" list_count="4" subject_cut_size="16" module_srls="16464" markup_type="list" />
+				</div>
+			</div>
+			<!-- /content -->
+			<hr />
+			<include target="aside.html" />
+		</div>
+		<!-- /body -->
+		<hr />
+		<!-- footer -->
+		<div id="footer">
+			<address>
+			Powered by <a href="http://textyle.kr/">Textyle</a>
+			</address>
+		</div>
+		<!-- /footer -->
+	</div>
+</div>

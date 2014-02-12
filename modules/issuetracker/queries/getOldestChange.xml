@@ -1,0 +1,15 @@
+<query id="getOldestChange" action="select">
+    <tables>
+        <table name="issue_changesets" />
+    </tables>
+    <columns>
+        <column name="date" alias="regdate" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" />
+    </conditions>
+    <navigation>
+        <index var="sort_index" default="revision" order="asc" />
+        <list_count var="list_count" default="1" />
+    </navigation>
+</query>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+	<grants />
+	<permissions />
+	<actions>
+		<action name="dispNcenterAdminConfig" type="view" admin_index="true" menu_name="ncenter" menu_index="true" />
+		<action name="procNcenterAdminInsertConfig" type="controller" ruleset="insertConfig" />
+
+		<action name="procNcenterNotifyRead" type="controller" />
+		<action name="procNcenterNotifyReadAll" type="controller" />
+		<action name="procNcenterRedirect" type="controller" />
+
+		<action name="getColorsetList" type="model" />
+		<action name="getMyNotifyListTpl" type="model" />
+	</actions>
+	<menus>
+		<menu name="ncenter" type="all">
+			<title xml:lang="ko">XE 알림센터</title>
+			<title xml:lang="en">XE Notification Center</title>
+			<title xml:lang="jp">XE 通知センター</title>
+		</menu>
+	</menus>
+</module>

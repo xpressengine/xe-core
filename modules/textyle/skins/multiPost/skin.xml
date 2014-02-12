@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+    <title xml:lang="en">Multi Post</title>
+    <description xml:lang="en">
+        Textyle theme that displays multiple posts on homepage.
+    </description>
+    <version>1.2.3</version>
+    <date>2010-02-03</date>
+
+    <author email_address="xe_dev@arnia.ro" link="http://www.xpressengine.org/">
+        <name xml:lang="ko">Arnia</name>
+    </author>
+	
+	<extra_vars>
+        <var name="content_type">
+            <title>multiple_posts</title>
+        </var>
+	</extra_vars>
+
+</skin>

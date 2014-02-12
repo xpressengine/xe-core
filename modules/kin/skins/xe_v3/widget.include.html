@@ -1,0 +1,38 @@
+<table>
+	<thead>
+		<tr>
+			<th>{$lang->popular_questions} <a href="{getUrl('act', '', 'page', 1, 'type', 'popular', 'q_target', '')}">more</a>
+		</tr>
+		<tbody>
+			<tr loop="$popular_list => $key, $val">
+				<td><a href="{getUrl('', 'document_srl', $val->document_srl)}">{$val->getTitle(30)}</a></td>
+			</tr>
+		</tbody>
+	</thead>
+</table>
+<table>
+	<thead>
+		<tr>
+			<th colspan="2">{$lang->topLastWeek} <a href="{getUrl('page', 1, 'act', 'dispKinPointRank', 'rtarget', 'week', 'type', '')}">more</a>
+		</tr>
+	</thead>
+	<tbody>
+		<tr loop="$document_top['lastWeek'] => $row">
+			<td>{$row['nick_name']}</td>
+			<td>{number_format($row['point'])}</td>
+		</tr>
+	</tbody>
+</table>
+<table>
+	<thead>
+		<tr>
+			<th colspan="2">{$lang->totalPointTop} <a href="{getUrl('page', 1, 'act', 'dispKinPointRank', 'rtarget', 'total', 'type', '')}">more</a>
+		</tr>
+	</thead>
+	<tbody>
+		<tr loop="$document_top['totalPoint'] => $row">
+			<td>{$row['nick_name']}</td>
+			<td>{number_format($row['point'])}</td>
+		</tr>
+	</tbody>
+</table>

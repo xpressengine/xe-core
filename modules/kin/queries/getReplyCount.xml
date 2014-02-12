@@ -1,0 +1,15 @@
+<query id="getReplies" action="select">
+    <tables>
+        <table name="kin_replies" />
+    </tables>
+    <columns>
+        <column name="parent_srl" />
+        <column name="count(*)" alias="count" />
+    </columns>
+    <conditions>
+        <condition operation="in" column="parent_srl" var="parent_srl" notnull="notnull" />
+    </conditions>
+    <groups>
+        <group column="parent_srl" />
+    </groups>
+</query>

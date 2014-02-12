@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="0.2">
+	<title xml:lang="ko">XE 알림센터</title>
+	<description xml:lang="ko">사이트 사용자간의 커뮤니케이션에 대한 정보를 알려주는 모듈입니다.</description>
+	<version>1.5.7</version>
+	<date>2013-08-20</date>
+	<category>content</category>
+	<license>정식 구매 및 등록한 사이트에서만 사용할 수 있습니다.</license>
+	<author email_address="info@xemagazine.com" link="http://xmz.kr/">
+		<name xml:lang="ko">XE Magazine</name>
+	</author>
+</module>

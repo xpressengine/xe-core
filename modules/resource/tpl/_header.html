@@ -1,0 +1,19 @@
+<div class="x_page-header">
+	<h1>
+		{$lang->resource_manager}
+		<span class="path" cond="$module_info->mid">&gt; <a href="{getSiteUrl($module_info->domain,'','mid',$module_info->mid)}" target="_blank"|cond="$module=='admin'">{$module_info->mid}</a></span>
+		<a href="#about_resource_manager" data-toggle class="x_icon-question-sign">{$lang->help}</a>
+	</h1>
+</div>
+<p class="x_alert x_alert-info" id="about_resource_manager" hidden>{nl2br($lang->about_resource_manager)}</p>
+<ul class="x_nav x_nav-tabs" cond="$module_info && $act != 'dispResourceAdminList' && $act != 'dispResourceAdminDelete'">
+	<li cond="$module=='admin'" class="x_active"|cond="$act=='dispResourceAdminList'"><a href="{getUrl('act','dispResourceAdminList','module_srl','')}">{$lang->cmd_list}</a></li>
+	<li cond="$module!='admin'"><a href="{getUrl('act','')}">{$lang->cmd_back}</a></li>
+	<li cond="!$module_srl" class="x_active"|cond="$act=='dispResourceAdminInsert'"><a href="{getUrl('act','dispResourceAdminInsert')}">{$lang->cmd_make}</a></li>
+	<li cond="$module_srl" class="x_active"|cond="$act=='dispResourceAdminInsert'"><a href="{getUrl('act','dispResourceAdminInsert')}">{$lang->cmd_setup}</a></li>
+	<li cond="$module_srl" class="x_active"|cond="$act=='dispResourceAdminCategory'"><a href="{getUrl('act','dispResourceAdminCategory')}">{$lang->cmd_manage_category}</a></li>
+	<li cond="$module_srl" class="x_active"|cond="$act=='dispResourceAdminGrant'"><a href="{getUrl('act','dispResourceAdminGrant')}">{$lang->cmd_manage_grant}</a></li>
+	<li cond="$module_srl" class="x_active"|cond="$act=='dispResourceAdminAdditions'"><a href="{getUrl('act','dispResourceAdminAdditions')}">{$lang->cmd_addition_setup}</a></li>
+	<li cond="$module_srl" class="x_active"|cond="$act=='dispResourceAdminSkin'"><a href="{getUrl('act','dispResourceAdminSkin')}">{$lang->cmd_manage_skin}</a></li>
+	<li cond="$module_srl" class="x_active"|cond="$act=='dispResourceAdminMobileSkin'"><a href="{getUrl('act','dispResourceAdminMobileSkin')}">{$lang->cmd_manage_mobile_skin}</a></li>
+</ul>

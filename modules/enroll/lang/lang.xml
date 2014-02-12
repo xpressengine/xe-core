@@ -1,0 +1,289 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<lang>
+	<item name="filter">
+		<item name="isnull">
+			<value xml:lang="ko"><![CDATA[%s을(를) 입력해주세요.]]></value>
+			<value xml:lang="en"><![CDATA[Please enter a value for %s]]></value>
+			<value xml:lang="jp"><![CDATA[%sに値を入力してください。]]></value>
+			<value xml:lang="zh-CN"><![CDATA[请输入%s]]></value>
+			<value xml:lang="zh-TW"><![CDATA[請輸入%s]]></value>
+			<value xml:lang="fr"><![CDATA[Entrez une valeur pour %s]]></value>
+			<value xml:lang="de"><![CDATA[Bitte geben Sie einen Wert für% s ein!]]></value>
+			<value xml:lang="es"><![CDATA[Introduzca valor en el %s]]></value>
+			<value xml:lang="tr"><![CDATA[ Lütfen %s için  bir değer girin]]></value>
+			<value xml:lang="vi"><![CDATA[Xin vui lòng nhập giá trị cho %s]]></value>
+			<value xml:lang="mn"><![CDATA[%s-ийг оруулна уу]]></value>
+		</item>
+		<item name="outofrange">
+			<value xml:lang="ko"><![CDATA[%s의 글자 수를 맞추어 주세요.]]></value>
+			<value xml:lang="en"><![CDATA[Please try to keep the text length of %s.]]></value>
+			<value xml:lang="jp"><![CDATA[%sの文字の長さを合わせてください。]]></value>
+			<value xml:lang="zh-CN"><![CDATA[请确认%s字数]]></value>
+			<value xml:lang="zh-TW"><![CDATA[請確認 %s 字數]]></value>
+			<value xml:lang="fr"><![CDATA[Aligner la longueur du texte de %s]]></value>
+			<value xml:lang="de"><![CDATA[Bitte richten Sie die Textlänge von% s]]></value>
+			<value xml:lang="es"><![CDATA[Se ha excedido el máximo número de letras permitido en el %s]]></value>
+			<value xml:lang="tr"><![CDATA[Lütfen %s metninin uzunluğunu hizalayın.]]></value>
+			<value xml:lang="vi"><![CDATA[Xin vui lòng xếp thẳng hàng chiều dài văn bản của %s]]></value>
+			<value xml:lang="mn"><![CDATA[%s-ийн үсгийн тоог тааруулна уу.]]></value>
+		</item>
+		<item name="equalto">
+			<value xml:lang="ko"><![CDATA[%s이(가) 잘못되었습니다.]]></value>
+			<value xml:lang="en"><![CDATA[The value of %s is invalid]]></value>
+			<value xml:lang="jp"><![CDATA[%sが正しくありません。]]></value>
+			<value xml:lang="zh-CN"><![CDATA[%s值有误。]]></value>
+			<value xml:lang="zh-TW"><![CDATA[%s值有誤。]]></value>
+			<value xml:lang="fr"><![CDATA[La valeur de %s est invalide.]]></value>
+			<value xml:lang="de"><![CDATA[Der Wert von% s ist ungültig.]]></value>
+			<value xml:lang="es"><![CDATA[Valor inválido en el %s]]></value>
+			<value xml:lang="tr"><![CDATA[%s değeri geçersiz.]]></value>
+			<value xml:lang="vi"><![CDATA[Giá trị của %s không hợp lệ]]></value>
+			<value xml:lang="mn"><![CDATA[%s-ыг буруу оруулсан байна.]]></value>
+		</item>
+		<item name="invalid">
+			<value xml:lang="ko"><![CDATA[%s의 값이 올바르지 않습니다.]]></value>
+			<value xml:lang="en"><![CDATA[The value of %s is invalid.]]></value>
+			<value xml:lang="jp"><![CDATA[%sの値が正しくありません。]]></value>
+			<value xml:lang="zh-TW"><![CDATA[%s值有誤。]]></value>
+		</item>
+		<item name="invalid_email">
+			<value xml:lang="ko"><![CDATA[%s이 올바르지 않습니다.]]></value>
+			<value xml:lang="en"><![CDATA[%s is NOT a valid email address.]]></value>
+			<value xml:lang="jp"><![CDATA[%sのメール形式が正しくありません。(例: developers@xepressengine.com)]]></value>
+			<value xml:lang="zh-CN"><![CDATA[%s格式有误。（例：developers@xpressengine.com)]]></value>
+			<value xml:lang="zh-TW"><![CDATA[%s E-mail格式有誤。(例：developers@xpressengine.com)]]></value>
+			<value xml:lang="fr"><![CDATA[Le format de %s est invalide. ex) developers@xpressengine.com]]></value>
+			<value xml:lang="de"><![CDATA[% s ist eine ungültige Mail. ex) developers@xpressengine.com]]></value>
+			<value xml:lang="ru"><![CDATA[The format of %s is invalid. ex) developers@xpressengine.com]]></value>
+			<value xml:lang="es"><![CDATA[Formato email inválido en el %s (ej. developers@xpressengine.com)]]></value>
+			<value xml:lang="tr"><![CDATA[%s biçimi geçersiz. örn.) developers@xpressengine.com]]></value>
+			<value xml:lang="vi"><![CDATA[Định dạng của %s không hợp lệ. Ví dụ: emailname@yahoo.com]]></value>
+			<value xml:lang="mn"><![CDATA[%s-ын хэлбэрийг буруу оруулсан байна. (Жнь: developers@xpressengine.com)]]></value>
+		</item>
+		<item name="invalid_userid">
+			<value xml:lang="ko"><![CDATA[%s의 값은 영문, 숫자, _만 가능하며 첫 글자는 영문이어야 합니다.]]></value>
+			<value xml:lang="en"><![CDATA[The %s field allows only alphabets, numbers and underscore(_).
+			The first letter should be an alaphabet.]]></value>
+			<value xml:lang="jp"><![CDATA[%sの形式が正しくありません。
+			半角の英数字と記号「_」を組み合わせて入力してください。頭文字は半角英文字でなければなりません。]]></value>
+			<value xml:lang="zh-CN"><![CDATA[%s只能用英文，数字和 _，首个字符必须是英文字母。]]></value>
+			<value xml:lang="zh-TW"><![CDATA[%s只允許使用英文，數字和底線，開頭必須是英文。]]></value>
+			<value xml:lang="fr"><![CDATA[La format de %s n'est pas convenable.
+			Toutes les lettres devraient se composer des alphabets, des chiffres ou du soulignage(_) Et la première lettre doit être un de l'alphabet.]]></value>
+			<value xml:lang="de"><![CDATA[% s ist ungültig. Alle Werte sollten aus Alphatbet, Zahlen oder Unterstrich (_) und der erste Buchstabe sollte Alphabet.]]></value>
+			<value xml:lang="ru"><![CDATA[The format of %s is invalid.
+			All values should consist of alphabets, numbers or underscore(_) and the first letter should be alphabet]]></value>
+			<value xml:lang="es"><![CDATA[Formato inválido en el %s.
+			Sólo pueden introducir los alfabetos o los dígitos númericos o el guión bajo(_). Además, el primer valor sólo puede ser una letra de alfabeto]]></value>
+			<value xml:lang="tr"><![CDATA[%s biçimi geçersiz.
+			Tüm değerler alfabe harfleri, sayılar veya alttire(_)'den oluşmalı ve ilk karakter bir harf olmalıdır.]]></value>
+			<value xml:lang="vi"><![CDATA[Định dạng của %s Không hợp lệ.
+			Giá trị hợp lệ bao gồm các kí tự từ a-z, các chữ số và dấu gạch dưới (_).]]></value>
+			<value xml:lang="mn"><![CDATA[%s-ын хэлбэр буруу байна. .
+			Латин vсэг, тоо болон  '_'-р оруулж болох бeгeeд эхлэл нь vсэг байх шаардлагатай. ]]></value>
+		</item>
+		<item name="invalid_user_id">
+			<value xml:lang="ko"><![CDATA[%s의 값은 영문, 숫자, _만 가능하며 첫 글자는 영문이어야 합니다.]]></value>
+			<value xml:lang="en"><![CDATA[The %s field allows only alphabets, numbers and underscore(_).
+			The first letter should be an alaphabet.]]></value>
+			<value xml:lang="jp"><![CDATA[%sの形式が正しくありません。
+			半角の英数字と記号「_」を組み合わせて入力してください。頭文字は半角英文字でなければなりません。]]></value>
+			<value xml:lang="zh-CN"><![CDATA[%s只能用英文，数字和 _，首个字符必须是英文字母。]]></value>
+			<value xml:lang="zh-TW"><![CDATA[%s只允許使用英文，數字和底線，開頭必須是英文。]]></value>
+			<value xml:lang="fr"><![CDATA[La format de %s n'est pas convenable.
+			Toutes les lettres devraient se composer des alphabets, des chiffres ou du soulignage(_) Et la première lettre doit être un de l'alphabet.]]></value>
+			<value xml:lang="de"><![CDATA[% s ist ungültig. Alle Werte sollten aus Alphatbet, Zahlen oder Unterstrich (_) und der erste Buchstabe sollte Alphabet.]]></value>
+			<value xml:lang="ru"><![CDATA[The format of %s is invalid.
+			All values should consist of alphabets, numbers or underscore(_) and the first letter should be alphabet]]></value>
+			<value xml:lang="es"><![CDATA[Formato inválido en el %s.
+			Sólo pueden introducir los alfabetos o los dígitos númericos o el guión bajo(_). Además, el primer valor sólo puede ser una letra de alfabeto]]></value>
+			<value xml:lang="tr"><![CDATA[%s biçimi geçersiz.
+			Tüm değerler alfabe harfleri, sayılar veya alttire(_)'den oluşmalı ve ilk karakter bir harf olmalıdır.]]></value>
+			<value xml:lang="vi"><![CDATA[Định dạng của %s Không hợp lệ.
+			Giá trị hợp lệ bao gồm các kí tự từ a-z, các chữ số và dấu gạch dưới (_).]]></value>
+			<value xml:lang="mn"><![CDATA[%s-ын хэлбэр буруу байна. .
+			Латин vсэг, тоо болон  '_'-р оруулж болох бeгeeд эхлэл нь vсэг байх шаардлагатай. ]]></value>
+		</item>
+		<item name="invalid_homepage">
+			<value xml:lang="ko"><![CDATA[%s의 형식이 잘못되었습니다. (예: http://www.xpressengine.com)]]></value>
+			<value xml:lang="en"><![CDATA[The format of %s is invalid. e.g.) http://xpressengine.com/]]></value>
+			<value xml:lang="jp"><![CDATA[%sの形式が正しくありません。 (例: http://www.xepressengine.com)]]></value>
+			<value xml:lang="zh-CN"><![CDATA[%s格式有误。（例： http://xpressengine.com/)]]></value>
+			<value xml:lang="zh-TW"><![CDATA[%s格式有誤。(例： http://xpressengine.com/)]]></value>
+			<value xml:lang="fr"><![CDATA[La format de %s n'est pas convenable. ex) http://xpressengine.com/]]></value>
+			<value xml:lang="de"><![CDATA[Das Format von% s ist ungültig. Z.B. http://xpressengine.com/]]></value>
+			<value xml:lang="es"><![CDATA[Formato url inválido en el %s (ej: http://xpressengine.com/)]]></value>
+			<value xml:lang="tr"><![CDATA[%s biçimi geçersiz. örn.) http://xpressengine.com/]]></value>
+			<value xml:lang="vi"><![CDATA[Định dạng của %s không hợp lệ. Đúng sẽ là: http://xpressengine.vn hoặc http://www.xpressengine.vn]]></value>
+			<value xml:lang="mn"><![CDATA[%s-ын хэлбэр буруу байна.. (Жнь: http://xpressengine.com/)]]></value>
+		</item>
+		<item name="invalid_url">
+			<value xml:lang="ko"><![CDATA[%s의 형식이 잘못되었습니다. (예: http://www.xpressengine.com)]]></value>
+			<value xml:lang="en"><![CDATA[The format of %s is invalid. e.g.) http://xpressengine.com/]]></value>
+			<value xml:lang="jp"><![CDATA[%sの形式が正しくありません。例) http://xpressengine.com/]]></value>
+			<value xml:lang="zh-TW"><![CDATA[%s 格式錯誤。 例) http://xpressengine.com/]]></value>
+		</item>
+		<item name="invalid_korean">
+			<value xml:lang="ko"><![CDATA[%s의 형식이 잘못되었습니다. 한글로만 입력하셔야 합니다.]]></value>
+			<value xml:lang="en"><![CDATA[The format of %s is invalid. Please enter Korean letters only.]]></value>
+			<value xml:lang="jp"><![CDATA[%sの形式が正しくありません。ハングルで入力してください。]]></value>
+			<value xml:lang="zh-CN"><![CDATA[%s只能输入中文]]></value>
+			<value xml:lang="zh-TW"><![CDATA[%s只能輸入中文]]></value>
+			<value xml:lang="fr"><![CDATA[La format de %s n'est pas convenable. Entrez seulement en coréen, S.V.P.]]></value>
+			<value xml:lang="de"><![CDATA[Das Format von% s ist ungültig. Bitte hier nur Koreanisch eingeben.]]></value>
+			<value xml:lang="es"><![CDATA[Sólo puede introducir los caracteres coreanos en el %s]]></value>
+			<value xml:lang="tr"><![CDATA[%s biçimi geçersiz. Lütfen sadece Korece karakterler giriniz.]]></value>
+			<value xml:lang="vi"><![CDATA[Định dạng của %s không hợp lệ. Nội dung này bắt buộc phải sử dụng tiếng Hàn Quốc]]></value>
+			<value xml:lang="mn"><![CDATA[%s-ын хэлбэр буруу байна. Солонгосоор оруулах ёстой]]></value>
+		</item>
+		<item name="invalid_korean_number">
+			<value xml:lang="ko"><![CDATA[%s의 형식이 잘못되었습니다. 한글과 숫자로만 입력하셔야 합니다.]]></value>
+			<value xml:lang="en"><![CDATA[The format of %s is invalid. Please enter Korean letters and numbers only.]]></value>
+			<value xml:lang="jp"><![CDATA[%sの形式が正しくありません。ハングルと半角数字で入力してください。]]></value>
+			<value xml:lang="zh-CN"><![CDATA[%s只能输入中文或数字]]></value>
+			<value xml:lang="zh-TW"><![CDATA[%s只能輸入中文或數字]]></value>
+			<value xml:lang="fr"><![CDATA[La format de %s n'est pas convenable. Entrez seulement des lettres d'alphabet coréen ou des chiffres, S.V.P.]]></value>
+			<value xml:lang="de"><![CDATA[Das Format von% s ist ungültig. Bitte hier nur Koreanisch oder Zahlen eingeben.]]></value>
+			<value xml:lang="es"><![CDATA[Sólo puede introducir los caracteres coreanos o números en el %s]]></value>
+			<value xml:lang="tr"><![CDATA[%s biçimi geçersiz. Lütfen Korece karakterler ve numaralar kullanınınız.]]></value>
+			<value xml:lang="vi"><![CDATA[Định dạng của %s không hợp lệ. Nội dung này bắt buộc phải sử dụng tiếng Hàn Quốc hoặc các chữ số]]></value>
+			<value xml:lang="mn"><![CDATA[%s-ын хэлбэр буруу байна. Солонгос үсэг болон тоогоор оруулах хэрэгтэй.]]></value>
+		</item>
+		<item name="invalid_alpha">
+			<value xml:lang="ko"><![CDATA[%s의 형식이 잘못되었습니다. 영문으로만 입력하셔야 합니다.]]></value>
+			<value xml:lang="en"><![CDATA[The format of %s is invalid. Please enter English alphabets only.]]></value>
+			<value xml:lang="jp"><![CDATA[%sの形式が正しくありません。半角英字で入力してください。]]></value>
+			<value xml:lang="zh-CN"><![CDATA[%s只能输入英文字母]]></value>
+			<value xml:lang="zh-TW"><![CDATA[%s只能輸入英文字母]]></value>
+			<value xml:lang="fr"><![CDATA[La format de %s n'est pas convenable. Entrez seulement en alphabet, S.V.P.]]></value>
+			<value xml:lang="de"><![CDATA[Das Format von% s ist ungültig. Bitte nur Alphabete eingeben.]]></value>
+			<value xml:lang="es"><![CDATA[Sólo puede introducir los alfabetos en el %s]]></value>
+			<value xml:lang="tr"><![CDATA[%s biçimi geçersiz. Lütfen sadece harfleri kullanınız.]]></value>
+			<value xml:lang="vi"><![CDATA[Định dạng của %s không hợp lệ. Chỉ sử dụng các kí tự từ a-z]]></value>
+			<value xml:lang="mn"><![CDATA[%s-ын хэлбэр буруу байна. Зөвхөн латин үсгээр оруулах ёстой]]></value>
+		</item>
+		<item name="invalid_alpha_number">
+			<value xml:lang="ko"><![CDATA[%s의 형식이 잘못되었습니다. 영문과 숫자로만 입력하셔야 합니다.]]></value>
+			<value xml:lang="en"><![CDATA[The format of %s is invalid. Please enter English alphabets and numbers only.]]></value>
+			<value xml:lang="jp"><![CDATA[%sの形式が正しくありません。半角英数字で入力してください。]]></value>
+			<value xml:lang="zh-CN"><![CDATA[%s只能输入英文或数字]]></value>
+			<value xml:lang="zh-TW"><![CDATA[%s只能輸入英文或數字]]></value>
+			<value xml:lang="fr"><![CDATA[La format de %s n'est pas convenable. Entrez seulement des lettres d'alphabet ou des chiffres.]]></value>
+			<value xml:lang="de"><![CDATA[Das Format von% s ist ungültig. Bitte nur Alphabete oder Zahlen eingeben.]]></value>
+			<value xml:lang="es"><![CDATA[Sólo puede introducir los alfanuméricos en el %s es inválido]]></value>
+			<value xml:lang="tr"><![CDATA[ %s biçimi geçersiz. Lütfen harfleri ve sayıları kullanınız.]]></value>
+			<value xml:lang="vi"><![CDATA[Định dạng của %s không hợp lệ. Chỉ sử dụng các kí tự từ a-z và các chữ số]]></value>
+			<value xml:lang="mn"><![CDATA[%s-ын хэлбэр буруу байна. Зөвхөн латин үсэг болон тоогоор л оруулах ёстой.]]></value>
+		</item>
+		<item name="invalid_mid">
+			<value xml:lang="ko"><![CDATA[%s의 형식이 잘못되었습니다. 첫 글자는 영문으로 시작해야 하며 '영문+숫자+_'로만 입력하셔야 합니다.]]></value>
+			<value xml:lang="en"><![CDATA[The format of %s is invalid. Module ID should be begun with a letter. Subsequent characters may be letters, digits or underscore characters.]]></value>
+			<value xml:lang="zh-TW"><![CDATA[%s 格式錯誤。 模組名稱只能使用英文、數字及底線，開頭必須是英文。]]></value>
+		</item>
+		<item name="invalid_number">
+			<value xml:lang="ko"><![CDATA[%s의 형식이 잘못되었습니다. 숫자로만 입력하셔야 합니다.]]></value>
+			<value xml:lang="en"><![CDATA[The format of %s is invalid. Please enter numbers only.]]></value>
+			<value xml:lang="jp"><![CDATA[%sの形式が正しくありません。半角数字で入力してください。]]></value>
+			<value xml:lang="zh-CN"><![CDATA[%s只能输入数字]]></value>
+			<value xml:lang="zh-TW"><![CDATA[%s只能輸入數字]]></value>
+			<value xml:lang="fr"><![CDATA[La format de %s n'est pas convenable. Entrez seulement des chiffres.]]></value>
+			<value xml:lang="de"><![CDATA[Das Format von% s ist ungültig. Bitte nur Zahlen eingeben.]]></value>
+			<value xml:lang="es"><![CDATA[Sólo puede introducir los dígitos numéricos en el %s]]></value>
+			<value xml:lang="tr"><![CDATA[%s biçimi geçersiz . Lütfen sadece numaraları kullanın.]]></value>
+			<value xml:lang="vi"><![CDATA[Định dạng của %s không hợp lệ. Chỉ sử dụng các chữ số]]></value>
+			<value xml:lang="mn"><![CDATA[%s-ын хэлбэр буруу байна. Зөвхөн тоогоор оруулах ёстой.]]></value>
+		</item>
+	</item>
+	<item name="grant_enroll" type="array">
+		<item name="autojoin">
+		<value xml:lang="ko"><![CDATA[회원만 신청 가능 - 비회원이 신청할 경우 자동가입]]></value>
+		</item>
+		<item name="member">
+		<value xml:lang="ko"><![CDATA[회원만 신청 가능]]></value>
+		</item>
+		<item name="nonmember">
+		<value xml:lang="ko"><![CDATA[비회원만 신청 가능 - 미지원]]></value>
+		</item>
+		<item name="all">
+		<value xml:lang="ko"><![CDATA[회원/비회원 모두 신청 가능 - 미지원]]></value>
+		</item>
+	</item>
+	<item name="enroll_status" type="array">
+		<item name="W">
+		<value xml:lang="ko"><![CDATA[참가대기]]></value>
+		</item>
+		<item name="Y">
+		<value xml:lang="ko"><![CDATA[참가확정]]></value>
+		</item>
+	</item>
+	<item name="enroll">
+		<value xml:lang="ko"><![CDATA[참가신청]]></value>
+	</item>
+	<item name="job">
+		<value xml:lang="ko"><![CDATA[업체명]]></value>
+	</item>
+	<item name="job_content">
+		<value xml:lang="ko"><![CDATA[업체 간단 설명]]></value>
+	</item>
+	<item name="user_name">
+		<value xml:lang="ko"><![CDATA[이름]]></value>
+	</item>
+	<item name="phone">
+		<value xml:lang="ko"><![CDATA[휴대전화]]></value>
+	</item>
+	<item name="email_address">
+		<value xml:lang="ko"><![CDATA[이메일]]></value>
+	</item>
+	<item name="enroll_grant_setting">
+		<value xml:lang="ko"><![CDATA[참가신청 등록 권한]]></value>
+	</item>
+	<item name="about_enroll_grant_setting">
+		<value xml:lang="ko"><![CDATA[참가신청 권한을 지정합니다.]]></value>
+	</item>
+	<item name="about_enroll">
+		<value xml:lang="ko"><![CDATA[참가신청 모듈입니다.]]></value>
+	</item>
+	<item name="msg_no_enroll">
+		<value xml:lang="ko"><![CDATA[신청정보가 없습니다.]]></value>
+	</item>
+	<item name="msg_content_is_null">
+		<value xml:lang="ko"><![CDATA[제목을 입력해 주세요.]]></value>
+	</item>
+	<item name="password_1">
+		<value xml:lang="ko"><![CDATA[비밀번호]]></value>
+	</item>
+	<item name="password2">
+		<value xml:lang="ko"><![CDATA[비밀번호]]></value>
+	</item>
+	<item name="session">
+		<value xml:lang="ko"><![CDATA[세션]]></value>
+	</item>
+	<item name="email_address">
+		<value xml:lang="ko"><![CDATA[이메일]]></value>
+	</item>
+	<item name="provision">
+		<value xml:lang="ko"><![CDATA[약관]]></value>
+	</item>
+	<item name="msg_nickname_is_null">
+		<value xml:lang="ko"><![CDATA[닉네임을 입력해 주세요.]]></value>
+	</item>
+	<item name="session_list" type="array">
+		<item name="oauth">
+			<value xml:lang="ko"><![CDATA[실전 Oauth A to Z]]></value>
+		</item>
+		<item name="ffmpeg">
+			<value xml:lang="ko"><![CDATA[FFmpeg을 이용한 Android 동영상 플레이어 개발]]></value>
+		</item>
+		<item name="realtimeweb">
+			<value xml:lang="ko"><![CDATA[실시간 웹을 위한 Comet과 Socket.io 살펴보기]]></value>
+		</item>
+	</item>
+	<item name="detail_file">
+		<value xml:lang="ko"><![CDATA[1) <a href='http://happybean.naver.com/'>해피빈</a>을 통해서 5,000원 이상 기부를 진행합니다. (어떤 곳에 기부하실지 고민되신다면 <a href='http://happybean.naver.com/donation/ThemeDonate.nhn'>테마기부</a>에서 선택 후 진행하셔도 좋습니다.)<br />
+2) 기부금 결제 후 볼 수 있는 기부확인 화면을 캡쳐하시거나 기부 확인메일 내용을 캡쳐하신 후 첨부합니다.
+]]></value>
+	</item>
+	<item name="detail_insert_complete">
+			<value xml:lang="ko"><![CDATA[이후 자세한 내용은 기제해주신 메일로 안내 드리겠습니다.]]></value>
+	</item>
+</lang>

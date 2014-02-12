@@ -1,0 +1,21 @@
+<query id="insertEnrollItem" action="insert">
+    <tables>
+        <table name="enroll" />
+    </tables>
+    <columns>
+	<column name="enroll_srl" var="enroll_srl" filter="number" notnull="notnull" />
+        <column name="module_srl" var="module_srl" filter="number" default="0" />
+        <column name="member_srl" var="member_srl" notnull="notnull" filter="number" />
+        <column name="job" var="job" notnull="notnull" />
+        <column name="homepage" var="homepage" />
+        <column name="job_content" var="job_content" />
+        <column name="user_name" var="user_name" notnull="notnull"/>
+        <column name="phone" var="phone" />
+        <column name="email_address" var="email_address" notnull="notnull" filter="email_address" />
+        <column name="content" var="content" />
+        <column name="status" var="status" notnull="notnull" default="W" />
+        <column name="regdate" var="regdate" default="curdate()" notnull="notnull" />
+        <column name="last_update" var="last_update" default="curdate()" notnull="notnull" />
+        <column name="list_order" var="list_order" />
+    </columns>
+</query>

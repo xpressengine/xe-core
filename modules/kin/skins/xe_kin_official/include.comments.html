@@ -1,0 +1,24 @@
+<form cond="$grant->write_reply" action="./" id="fo_kin_insert_comment" method="post" ruleset="insertComment">
+	<input type="hidden" name="act" value="procKinInsertComment"/>
+    <input type="hidden" name="mid" value="{$mid}" />
+    <input type="hidden" name="parent_srl" value="{$parent_srl}" />
+	<input type="hidden" name="document_srl" value="{$document_srl}" />
+	<fieldset>
+		<legend class="blind"></legend>
+		<div class="ta_box"><textarea name="content" id="" cols="104" rows="3"></textarea></div>
+		<span class="btn_sbmt"><input type="submit" value="{$lang->cmd_registration}" class="kin_submit"></span>
+	</fieldset>
+</form>
+<block cond="count($comment_list)">
+<ul class="lst_comment">
+	<li loop="$comment_list => $key,$val">
+		<div class="meta">
+			<span class="author">{$val->nick_name}</span>
+			<span class="date">{zdate($val->regdate, "Y-m-d H:i")} 
+			<a cond="$grant->manager || $val->member_srl == $logged_info->member_srl" href="#" onclick="if(confirm('{$lang->confirm_delete}')) doDeleteComment({$parent_srl},{$val->reply_srl},{$page}); return false;">&nbsp;[{$lang->cmd_delete}]</a>
+			</span>
+		</div>
+		<p class="comment">{htmlspecialchars($val->content)}</p>
+	</li>
+ </ul>
+</block>

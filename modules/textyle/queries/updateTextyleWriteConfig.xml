@@ -1,0 +1,15 @@
+<query id="updateTextyleWriteConfig" action="update">
+    <tables>
+        <table name="textyle" />
+    </tables>
+	<columns>
+		<column name="post_editor_skin" var="post_editor_skin" />
+		<column name="post_use_prefix" var="post_use_prefix" default="N" />
+		<column name="post_use_suffix" var="post_use_suffix" default="N" />
+		<column name="post_prefix" var="post_prefix" default="" />
+		<column name="post_suffix" var="post_suffix" default="" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" notnull="notnull" />
+    </conditions>
+</query>

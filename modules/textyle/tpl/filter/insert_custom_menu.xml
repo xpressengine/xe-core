@@ -1,0 +1,7 @@
+<filter name="insert_custom_menu" module="textyle" act="procTextyleAdminInsertCustomMenu">
+    <form />
+    <response callback_func="completeReload">
+        <tag name="error" />
+        <tag name="message" />
+    </response>
+</filter>

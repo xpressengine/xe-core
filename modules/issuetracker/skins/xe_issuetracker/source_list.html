@@ -1,0 +1,74 @@
+<!--#include("header.html")-->
+<div id="issueBody">
+<div id="pxeContent">
+	<div class="pxeHeading">
+		<h2>{$lang->project_menus["dispIssuetrackerViewSource"]}</h2>
+	</div>
+	<div class="pxeCodeHeader">
+		<table border="1" cellspacing="0" summary="Directory Information">
+		<tr>
+			<th scope="row">{$lang->repos_path}</th>
+			<td>
+				{@ end($path_tree); }
+				{@ $lastkey = key($path_tree); }
+				{@ $lastval = current($path_tree); }
+				{@ array_pop($path_tree); }
+				<!--@foreach($path_tree as $key=>$val)-->
+                    <!--@if($key=='/')-->
+                        <a href="{getUrl('type','','path',urlencode($val), revs, $revs, brev, '')}">{$module_info->svn_url}</a>
+                    <!--@else-->
+                        <a href="{getUrl('type','','path',urlencode($val), revs, $revs, brev, '')}">{$key}/</a>
+                    <!--@end-->
+				<!--@end-->
+				<!--@if($lastkey=='/')-->
+				<a href="{getUrl('type','','path',urlencode($lastval), revs, $revs, brev, '')}"><em>{$module_info->svn_url}</em></a>
+				<!--@else-->
+				<a href="{getUrl('type','','path',urlencode($lastval), revs, $revs, brev, '')}"><em>{$lastkey}/</em></a>
+				<!--@end-->
+			</td>
+		</tr>
+		</table>
+	</div>
+
+			<table border="1" cellspacing="0" class="pxeT3">
+				<thead>
+					<tr>
+						<th scope="col">{$lang->name}</th>
+						<th scope="col">{$lang->revision}</th>
+						<th scope="col">{$lang->description}</th>
+						<th scope="col">{$lang->author}</th>
+						<th scope="col">{$lang->date}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!--@if(count($path_tree) > 0)-->
+					<tr class="dr">
+						{@ $upperval = array_pop($path_tree); }
+						<td colspan="5"><a href="{getUrl('type','','path',urlencode($upperval),revs,$revs)}">{$lang->parent_directory}</a></td>
+					</tr>
+					<!--@end-->
+					<!--@foreach($list as $item)-->
+					<!--@if($item->type == 'file')-->
+					{@ $type = 'file' }
+					<!--@else-->
+					{@ $type = 'folder' }
+					<!--@end-->
+					<tr>
+						<td class="aLeft">
+						<!--@if($item->type == "directory" || $item->ext_type == "text")-->
+						<a href="{getUrl('type',$type, path, urlencode($item->path), 'revs', $revs)}" class="{$type}">{$item->name}</a>
+						<!--@else-->
+						<a href="{$svn_url}{$item->path}" class="{$type}">{$item->name}</a>
+						<!--@end-->
+						</td>
+						<td class="num aRight"><a href="{getUrl('type','log','path',urlencode($item->path),'erev',$revs?$revs:'')}">r{$item->revision}</a></td>
+						<td class="title">{$item->msg}</td>
+						<td>{$item->author}</td>
+						<td class="time">{$item->date} <em>({$item->gap})</em></td>
+					</tr>
+					<!--@end-->
+				</tbody>
+			</table>
+</div>
+</div>
+<!--#include("footer.html")-->

@@ -1,0 +1,18 @@
+<query id="updateTextyleSupporter" action="update">
+    <tables>
+        <table name="textyle_supporter" />
+    </tables>
+	<columns>
+		<column name="member_srl" var="member_srl" />
+		<column name="nick_name" var="nick_name" />
+		<column name="homepage" var="homepage" />
+		<column name="comment_count" var="comment_count" />
+		<column name="trackback_count" var="trackback_count" />
+		<column name="guestbook_count" var="guestbook_count"  />
+		<column name="total_count" var="total_count" />
+		<column name="regdate" var="regdate" />
+	</columns>
+	<conditions>
+        <condition operation="equal" column="textyle_supporter_srl" var="textyle_supporter_srl" filter="number" notnull="notnull" />
+    </conditions>
+</query>

@@ -1,0 +1,36 @@
+<!--@if($oDocument->getTrackbackCount())-->
+<hr class="hr" />
+<div class="fbList" id="trackback">
+
+	<h3 class="fbHeader">
+		<!--@if($oDocument->allowTrackback() && $oDocument->getTrackbackCount() )-->
+			{$lang->trackback} <em>'{$oDocument->getTrackbackCount()}'</em>
+		<!--@end-->
+	</h3>
+    <p class="tbURL"><a href="{$oDocument->getTrackbackUrl()}" onclick="return false;">{$oDocument->getTrackbackUrl()}</a></p>
+
+	<div class="tbList">
+	
+		<!--@if($oDocument->getTrackbackCount())-->
+			<!--@foreach($oDocument->getTrackbacks() as $key => $val)-->
+			<div class="item" id="trackback_{$val->trackback_srl}">
+				<div class="itemAside">
+					<p class="meta">
+						{zdate($val->regdate, "Y.m.d H:i")}
+						<!--@if($grant->manager)-->
+						<br />{$val->ipaddress}
+						<!--@end-->
+					</p>
+				</div>
+				<div class="iContent">
+					<h4 class="author"><a href="{$val->url}" onclick="winopen(this.href);return false;">{htmlspecialchars($val->title)} - {htmlspecialchars($val->blog_name)}</a></h4>
+					<p>{$val->excerpt} <!--@if($grant->manager)--><a href="{getUrl('act','dispWikiDeleteTrackback','trackback_srl',$val->trackback_srl)}" class="delete">{$lang->cmd_delete}</a><!--@end--></p>
+				</div>
+			</div>
+			<!--@end-->
+		<!--@end-->
+	
+	</div>
+	
+</div>
+<!--@end-->

@@ -1,0 +1,9 @@
+<query id="deleteEnrollItem" action="delete">
+    <tables>
+        <table name="enroll" />
+    </tables>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" notnull="notnull" />
+        <condition operation="equal" column="enroll_srl" var="enroll_srl" filter="number" notnull="notnull" pipe="and" />
+    </conditions>
+</query>

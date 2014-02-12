@@ -1,0 +1,12 @@
+<query id="getTextyleDeny" action="select">
+    <tables>
+        <table name="textyle_deny" />
+    </tables>
+    <columns>
+        <column name="*" />
+    </columns>
+
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" notnull="notnull" />
+    </conditions>
+</query>

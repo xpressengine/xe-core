@@ -1,0 +1,141 @@
+<!-- GuestBook -->
+<h2 class="postTitle exTitle">GuestBook <em>{$page_navigation->total_count}</em></h2>
+<div class="replyForm pageForm" cond="!$reply && !$modify">
+	<form method="post" onsubmit="return insertGuestbookItem(this, insert_guestbook)" action="" cond="$textyle->isEnableGuestbook()">
+		<input name="mid" type="hidden" value="textyle" />
+		<fieldset>
+			<textarea class="iTextArea" name="content" rows="8" cols="42"></textarea>
+			<block cond="$is_logged">
+				<strong class="name">{$logged_info->nick_name}</strong> <span class="email">{$logged_info->email_address}</span> <span class="url">{$logged_info->homepage}</span>
+			</block>
+			<block cond="!$is_logged">
+				<input name="nick_name" type="text" class="iText name" value="Name" title="Name"/>
+				<input name="password" type="password" class="iText pw" value="Password" title="Password" />
+				<block cond="$textyle->getInputEmail()!='N'">
+					<input type="hidden" name="msg_input_email_address" value="{$lang->msg_input_email_address}"/>
+					<input name="email_address" type="text" class="iText email"|cond="$textyle->getInputEmail()!='R'" class="iText email request"|cond="$textyle->getInputEmail()=='R'" value="Email address" title="Email address" />
+				</block>
+				<block cond="$textyle->getInputWebsite()!='N'">
+					<input type="hidden" name="msg_input_homepage" value="{$lang->msg_input_homepage}"/>
+					<input name="homepage" type="text" class="iText url"|cond="$textyle->getInputWebsite()!='R'" class="iText url request"|cond="$textyle->getInputWebsite()=='R'" value="URL" title="URL" />
+				</block>
+			</block>
+			<input name="is_secret" id="secret1" type="checkbox" value="Y" class="iCheck" />
+			<label for="secret1">{$lang->secret}</label>
+			<input name="submit" type="submit" value="SUBMIT" class="inputSubmit" />
+		</fieldset>
+	</form>
+	<p cond="!$textyle->isEnableGuestbook()">{$lang->disable_guestbook}</p>
+</div>
+<div class="feedback reply pageFeedback">
+	<ol class="feedbackOrder" cond="$guestbook_list">
+		<!--@foreach($guestbook_list as $key => $val)-->
+			<block cond="$modify == $val->textyle_guestbook_srl">
+				<li class="item replyForm">
+					<form cond="$textyle->isEnableGuestbook()" method="post" onsubmit="return insertGuestbookItem(this, insert_guestbook)" action="">
+						<input name="mid" type="hidden" value="textyle" />
+						<input type="hidden" name="textyle_guestbook_srl" value="{$val->textyle_guestbook_srl}" />
+						<fieldset>
+							<textarea class="iTextArea" name="content" rows="8" cols="42">{htmlspecialchars($val->content)}</textarea>
+							<block cond="$is_logged">
+								<strong class="name">{$logged_info->nick_name}</strong> <span class="email">{$logged_info->email_address}</span> <span class="url">{$logged_info->homepage}</span>
+							</block>
+							<block cond="!$is_logged">
+								<input name="nick_name" type="text" class="iText name" value="Name" title="Name"/>
+								<input name="password" type="password" class="iText pw" value="Password" title="Password" />
+								<block cond="$textyle->getInputEmail()!='N'">
+									<input type="hidden" name="msg_input_email_address" value="{$lang->msg_input_email_address}"/>
+									<input name="email_address" type="text" class="iText email"|cond="$textyle->getInputEmail()!='R'" class="iText email request"|cond="$textyle->getInputEmail()=='R'" value="Email address" title="Email address" />
+								</block>
+								<block cond="$textyle->getInputWebsite()!='N'">
+									<input type="hidden" name="msg_input_homepage" value="{$lang->msg_input_homepage}"/>
+									<input name="homepage" type="text" class="iText url"|cond="$textyle->getInputWebsite()!='R'" class="iText url request"|cond="$textyle->getInputWebsite()=='R'" value="URL" title="URL" />
+								</block>
+							</block>
+							<input name="is_secret" id="secret1" type="checkbox" value="Y" class="iCheck" />
+							<label for="secret1">{$lang->secret}</label>
+							<input name="submit" type="submit" value="SUBMIT" class="inputSubmit" />
+						</fieldset>
+					</form>
+				</li>
+			</block>
+			<block cond="$modify != $val->textyle_guestbook_srl">
+				<li class="item<!--@if($val->parent_srl>0)--> indent indent1<!--@end-->">
+					<div class="meta">
+						<h4 class="author">
+							<a href="{$val->homepage}" cond="$val->homepage">{$val->user_name}</a>
+							<block cond="!$val->homepage">{$val->user_name}</block>
+						</h4>
+						<p class="date">{zdate($val->regdate,'Y.m.d')} {zdate($val->regdate,'H:i')}</p>
+					</div>
+					<div class="data xe_content">
+						<!--@if($val->is_secret==-1 || $val->view_grant)-->
+						{$val->content}
+						<!--@else-->
+						<form action="" method="post" class="pwForm active guestbook{$key}" onsubmit="return checkPasswordGuestbook(this)">
+							<input type="hidden" name="mid" value="{$mid}" />
+							<input type="hidden" name="page" value="{$page}" />
+							<input type="hidden" name="textyle_guestbook_srl" value="{$val->textyle_guestbook_srl}" />
+							<label for="deletePw">{$lang->password} : </label> <input name="password" type="password" class="iText" id="deletePw" value="" /><input name="" type="submit" value="{$lang->cmd_confirm}" class="submit" />
+						</form>
+						<!--@end-->
+						<form action="" method="post" class="modifyPw pwForm guestbook{$key}" onsubmit="return checkPasswordForModifyGuestbook(this)">
+							<input type="hidden" name="mid" value="{$mid}" />
+							<input type="hidden" name="page" value="{$page}" />
+							<input type="hidden" name="textyle_guestbook_srl" value="{$val->textyle_guestbook_srl}" />
+							<label for="deletePw">{$lang->password} : </label> <input name="password" type="password" class="iText" id="deletePw" value="" /><input name="" type="submit" value="{$lang->cmd_confirm}" class="submit" />
+						</form>
+						<form action="" method="post" class="deletePw pwForm guestbook{$key}"onsubmit="return checkPasswordForDeleteGuestbook(this)">
+							<input type="hidden" name="mid" value="{$mid}" />
+							<input type="hidden" name="page" value="{$page}" />
+							<input type="hidden" name="textyle_guestbook_srl" value="{$val->textyle_guestbook_srl}" />
+							<label for="deletePw">{$lang->password} : </label> <input name="password" type="password" class="iText" id="deletePw" value="" /><input name="" type="submit" value="{$lang->cmd_confirm}" class="submit" />
+						</form>
+					</div>
+					<ul class="reAction" cond="$val->view_grant">
+						<li cond="$val->parent_srl==0&&$textyle->isEnableGuestbook()"><a href="{getUrl('modify','','reply',$val->textyle_guestbook_srl)}#gusetbook_{$val->textyle_guestbook_srl}">{$lang->cmd_reply}</a></li>
+						<block cond="$val->member_srl">
+							<li cond="$logged_info->member_srl == $val->member_srl"><a href="{getUrl('reply','','modify',$val->textyle_guestbook_srl)}#gusetbook_{$val->textyle_guestbook_srl}">{$lang->cmd_modify}...</a></li>
+							<li cond="$logged_info->is_site_admin || $logged_info->member_srl == $val->member_srl"><button type="button" onclick="if(confirm('{$lang->confirm_delete}')) deleteGuestbookItem({$val->textyle_guestbook_srl});">{$lang->cmd_delete}</button></li>
+						</block>
+						<block cond="!$val->member_srl">
+							<li><button type="button" onclick="jQuery('.guestbook{$key}').removeClass('active');jQuery('.modifyPw.guestbook{$key}').addClass('active')">{$lang->cmd_modify}...</button></li>
+							<li><button type="button" onclick="jQuery('.guestbook{$key}').removeClass('active');jQuery('.deletePw.guestbook{$key}').addClass('active')">{$lang->cmd_delete}</button></li>
+						</block>
+					</ul>
+				</li>
+				<li class="item replyForm" cond="$reply == $val->textyle_guestbook_srl">
+					<form cond="$textyle->isEnableGuestbook()" method="post" onsubmit="return insertGuestbookItem(this, insert_guestbook)" action="">
+						<input name="mid" type="hidden" value="textyle" />
+						<input type="hidden" name="parent_srl" value="{$val->textyle_guestbook_srl}" />
+						<fieldset>
+							<textarea class="iTextArea" name="content" rows="8" cols="42"></textarea>
+							<block cond="$is_logged">
+								<strong class="name">{$logged_info->nick_name}</strong> <span class="email">{$logged_info->email_address}</span> <span class="url">{$logged_info->homepage}</span>
+							</block>
+							<block cond="!$is_logged">
+								<input name="nick_name" type="text" class="iText name" value="Name" />
+								<input name="password" type="password" class="iText pw" value="Password" title="Password" />
+								<block cond="$textyle->getInputEmail()!='N'">
+									<input type="hidden" name="msg_input_email_address" value="{$lang->msg_input_email_address}"/>
+									<input name="email_address" type="text" class="iText email"|cond="$textyle->getInputEmail()!='R'" class="iText email request"|cond="$textyle->getInputEmail()=='R'" value="Email address" title="Email address" />
+								</block>
+								<block cond="$textyle->getInputWebsite()!='N'">
+									<input type="hidden" name="msg_input_homepage" value="{$lang->msg_input_homepage}"/>
+									<input name="homepage" type="text" class="iText url"|cond="$textyle->getInputWebsite()!='R'" class="iText url request"|cond="$textyle->getInputWebsite()=='R'" value="URL" title="URL" />
+								</block>
+							 </block>
+							<input name="is_secret" id="secret1" type="checkbox" value="Y" class="iCheck" />
+							<label for="secret1">{$lang->secret}</label>
+							<input name="submit" type="submit" value="SUBMIT" class="inputSubmit" />
+						</fieldset>
+					</form>
+					<p cond="!$textyle->isEnableGuestbook()">{$lang->disable_guestbook}</p>
+				</li>
+			</block>
+		<!--@end-->
+	</ol>
+</div>
+<!-- /GuestBook -->
+<!-- /display Post list --> 
+<include target="pagination.num.html" />

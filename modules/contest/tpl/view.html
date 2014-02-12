@@ -1,0 +1,54 @@
+<!--#include("./_header.html")-->
+
+<form action="./" method="get" onsubmit="return doChangeCategory(this);" id="fo_list">
+<table cellspacing="0" class="rowTable">
+<thead>
+    <tr>
+        <th scope="col"><div>{$lang->no}</div></th>
+        <th scope="col"><div>Email</div></th>
+        <th scope="col"><div>이름</div></th>
+        <th scope="col">연락처</th>
+        <th scope="col" class="half_wide"><div>이미지</div></th>
+        <th scope="col"><div>파일</div></th>
+        <th scope="col"><div>수정일</div></th>
+    </tr>
+</thead>
+{@ 
+		$doc_extra_info = unserialize($val->get('extra_vars'));
+}
+    <tr>
+        <td class="center number">{$no}</td>
+        <td class="center">{$val->get('email_address')}</td>
+        <td class="center">{$doc_extra_info->a_name}</td>
+        <td class="center">{$doc_extra_info->a_contact_pre}-{$doc_extra_info->a_contact_post}-{$doc_extra_info->a_contact_post2}</td>
+        <td><a href="{$doc_extra_info->jpg_file}" class="jpg_link">{$doc_extra_info->up_thumbnail['name']}</a></td>
+        <td><a href="{$doc_extra_info->psd_file}" class="psd_link">{$doc_extra_info->up_psd['name']}</a></td>
+        <td>{$val->getRegdate('Y.m.d H:i')}</td>
+    </tr>
+</tbody>
+</table>
+<table cellspacing="0" class="rowTable">
+    <tr>
+        <th scope="col" style="width:100px"><div>소속</div></th>
+		<td>{$doc_extra_info->a_occupation}</td>
+    </tr>
+    <tr>
+        <th scope="col" style="width:100px"><div>자기소개 - 하고싶은말</div></th>
+		<td>{$doc_extra_info->a_self_intro}</td>
+    </tr>
+    <tr>
+        <th scope="col" style="width:100px"><div>컨셉</div></th>
+		<td>{$doc_extra_info->product_intro}</td>
+    </tr>
+    <tr>
+        <th scope="col" style="width:100px"><div>디자인구성</div></th>
+		<td>{$doc_extra_info->product_design}</td>
+    </tr>
+    <tr>
+        <th scope="col" style="width:100px"><div>작품소개 - 하고싶은말</div></th>
+		<td>{$doc_extra_info->product_desc}</td>
+    </tr>
+</tbody>
+</table>
+</form>
+

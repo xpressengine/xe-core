@@ -1,0 +1,17 @@
+<query id="insertTextyleSupporter" action="insert">
+    <tables>
+        <table name="textyle_supporter" />
+    </tables>
+	<columns>
+		<column name="textyle_supporter_srl" var="textyle_supporter_srl" notnull="notnull" />
+		<column name="module_srl" var="module_srl" notnull="notnull" />
+		<column name="member_srl" var="member_srl" />
+		<column name="nick_name" var="nick_name" notnull="notnull" />
+		<column name="homepage" var="homepage" />
+		<column name="comment_count" var="comment_count" default="0" notnull="notnull" />
+		<column name="trackback_count" var="trackback_count" default="0" notnull="notnull" />
+		<column name="guestbook_count" var="guestbook_count" default="0" notnull="notnull" />
+		<column name="total_count" var="total_count" default="0" notnull="notnull" />
+		<column name="regdate" var="regdate" />
+    </columns>
+</query>

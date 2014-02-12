@@ -1,0 +1,23 @@
+<query id="insertTextyleGuestbook" action="insert">
+    <tables>
+        <table name="textyle_guestbook" />
+    </tables>
+	<columns>
+		<column name="textyle_guestbook_srl" var="textyle_guestbook_srl" filter="number" notnull="notnull" />
+		<column name="module_srl" var="module_srl" filter="number" notnull="notnull"  />
+		<column name="parent_srl" var="parent_srl" filter="number" notnull="notnull" default="0" />
+		<column name="member_srl" var="member_srl" filter="number" default="0" />
+		<column name="password" var="password" default="" />
+		<column name="user_name" var="user_name" notnull="notnull" default="" />
+		<column name="user_id" var="user_id" notnull="notnull" default="" />
+		<column name="nick_name" var="nick_name" notnull="notnull" default="" />
+		<column name="email_address" var="email_address" filter="email" maxlength="250" />
+		<column name="homepage" var="homepage" default="" />
+		<column name="content" var="content"  notnull="notnull" default="" />
+		<column name="regdate" var="regdate" default="curdate()" />
+		<column name="last_update" default="curdate()" />
+		<column name="is_secret" var="is_secret" default="-1" />
+		<column name="list_order" var="list_order" default="0" />
+		<column name="ipaddress" var="ipaddress" default="ipaddress()" />
+    </columns>
+</query>

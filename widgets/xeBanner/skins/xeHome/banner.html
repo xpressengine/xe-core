@@ -1,0 +1,29 @@
+<!--%import("banner.css")-->
+<div class="xeBanner v{$xb}">
+    <div id="v1" class="section">
+        <h2>{$widget_info->title_1}</h2>
+        <p>{$widget_info->description_1}</p>
+        <a href="{$widget_info->url_1}"><span>{$widget_info->title_1}</span></a>
+    </div>
+    <div id="v2" class="section">
+        <h2>{$widget_info->title_2}</h2>
+        <p>{$widget_info->description_2}</p>
+        <a href="{$widget_info->url_2}"><span>{$widget_info->title_2}</span></a>
+    </div>
+    <div id="v3" class="section">
+        <h2>{$widget_info->title_3}</h2>
+        <p>{$widget_info->description_3}</p>
+        <a href="{$widget_info->url_3}"><span>{$widget_info->title_3}</span></a>
+    </div>
+    <div id="v4" class="section">
+        <h2>{$widget_info->title_4}</h2>
+        <p>{$widget_info->description_4}</p>
+        <a href="{$widget_info->url_4}"><span>{$widget_info->title_4}</span></a>
+    </div>
+    <ol class="vNavigation">
+        <li><button type="button" onclick="jQuery('.xeBanner').removeClass('v2').removeClass('v3').removeClass('v4').addClass('v1');return false;"><span>{$widget_info->title_1}</span></button></li>
+        <li><button type="button" onclick="jQuery('.xeBanner').removeClass('v1').removeClass('v3').removeClass('v4').addClass('v2');return false;"><span>{$widget_info->title_2}</span></button></li>
+        <li><button type="button" onclick="jQuery('.xeBanner').removeClass('v2').removeClass('v1').removeClass('v4').addClass('v3');return false;"><span>{$widget_info->title_2}</span></button></li>
+        <li><button type="button" onclick="jQuery('.xeBanner').removeClass('v2').removeClass('v1').removeClass('v3').addClass('v4');return false;"><span>{$widget_info->title_2}</span></button></li>
+    </ol>
+</div>

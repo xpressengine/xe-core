@@ -1,0 +1,9 @@
+<!--@foreach($widget_info->content_items as $key => $item)-->
+<div class="xeArticle">
+    <h2><a href="{getSiteUrl($item->domain, '', 'mid', $item->get('mid'))}">{$item->getBrowserTitle()}</a></h2>
+    <!--@if($item->getThumbnail())--><p class="thumb"><a href="{$item->getLink()}"><img src="{$item->getThumbnail()}" width="{$widget_info->thumbnail_width}" height="{$widget_info->thumbnail_height}" alt="" /></a></p><!--@end-->
+    <h3><a href="{$item->getLink()}">{$item->getTitle($widget_info->subject_cut_size)}</a></h3>
+    <p class="summary"><a href="{$item->getLink()}">{$item->getContent()}</a></p>
+    <a href="{getSiteUrl($item->domain, '', 'mid', $item->get('mid'))}" class="more">more</a>
+</div>
+<!--@end-->

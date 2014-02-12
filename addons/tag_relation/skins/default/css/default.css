@@ -1,0 +1,13 @@
+.tag_relation * {padding:0;margin:0}
+.tag_relation {border:1px solid #E5E5E5;padding:10px;margin:10px 0}
+.tag_relation div.title {font-size:1.1em;font-weight:bold;color:#444;border-bottom:#E5E5E5 1px solid;padding:0 0 2px 5px;margin-bottom:10px}
+.tag_relation li {list-style:none;margin:3px 0}
+.tag_relation li .regdate {font-family:tahoma;font-size:.85em;color:#AAA}
+.tag_relation li .module_title {font-family:tahoma;font-size:.85em;color:#AAA}
+.tag_relation li a {color:#666;text-decoration:none}
+.tag_relation li a:hover {text-decoration:underline}
+.tag_relation li .comment_cnt {font-weight:normal;font-size:0.8em;color:#F48A23}
+.tag_relation li .author {color:#AAA}
+.tag_relation li .readAndVoted {font-family:tahoma;font-size:.8em;color:#AAA}
+.tag_relation li .readAndVoted .voted {color:#C8A64B}
+.tag_relation li .readAndVoted .readed {color:#4BC4C8}

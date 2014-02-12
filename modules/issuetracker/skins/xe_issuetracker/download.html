@@ -1,0 +1,107 @@
+<!--#include("header.html")-->
+<!--%import("js/toggle.js")-->
+<!-- #issueBody -->
+<div id="issueBody">
+<!-- #pxeContent -->
+<div id="pxeContent">
+
+<div class="pxeHeading">
+	<h2>{$lang->project_menus['dispIssuetrackerDownload']}</h2>
+</div>
+
+<span class="pxeDownloadHr"></span>
+<!--@if(count($package_list) == 0)-->
+<div class="pxeNews pxeNoData">
+<p>{$lang->msg_no_releases}</p>
+</div>
+<!--@else-->
+<!--@foreach($package_list as $key => $val)-->
+<div class="pxeDownload">
+	<div class="dHeader">
+		<h3>{$val->title}</h3>
+		<p>{nl2br($val->description)}</p>
+	</div>
+
+<!--@if(count($val->releases))-->
+	<!--@foreach($val->releases as $k => $v)-->
+	{@ $sumDownload = 0; }
+	<!--@if($v->files)-->
+	<!--@foreach($v->files as $file)-->
+		{@ $sumDownload += $file->download_count }
+	<!--@endforeach-->
+	<!--@endif-->
+	<div class="dBody show">
+		<div class="vTitle">
+			<h4>{$v->title}</h4>
+			<table border="1" cellspacing="0" summary="Distribution Information">
+				<tr>
+					<th scope="row">{$lang->released_date}</th>
+					<td>{zdate($v->regdate, "Y.m.d")}</td>
+				</tr>
+				<tr>
+					<th scope="row">{$lang->download}</th>
+					<td>{$sumDownload}</td>
+				</tr>
+			</table>
+		</div>
+
+		<div class="vContent">
+
+			<!--@if($v->files)-->
+			<table border="1" cellspacing="0" summary="Programe Information">
+			<tr>
+				<th scope="col">{$lang->download}</th>
+				<th scope="col" class="desc">{$lang->description}</th>
+				<th scope="col">{$lang->filesize}</th>
+				<th scope="col">{$lang->download_count}</th>
+			</tr>
+			<!--@foreach($v->files as $file)-->
+			<tr>
+				<td><a href="{$file->download_url}">{$file->source_filename}</a></td>
+				<td class="desc">{nl2br($file->comment)}</td>
+				<td class="num">{FileHandler::filesize($file->file_size)}</td>
+				<td class="num">{$file->download_count}</td>
+			</tr>
+			<!--@endforeach-->
+			</table>
+			<!--@end-->
+
+			<!--@if($v->release_note || $v->release_changes)-->
+			<div class="vInfo openInfo <!--@if(!$v->files)-->openAlways<!--@end-->">
+				<!--@if($v->files)--><button type="button"><span class="opener">{$lang->release_note} / {$lang->release_changes}</span> <span class="closer">{$lang->cmd_close}</span> <span class="i"></span></button><!--@end-->
+				<dl>
+				<!--@if($v->release_note)-->
+				<dt>{$lang->release_note}</dt>
+				<dd>{nl2br($v->release_note)}</dd>
+				<!--@end-->
+				<!--@if($v->release_changes)-->
+				<dt>{$lang->release_changes}</dt>
+				<dd>{nl2br($v->release_changes)}</dd>
+				<!--@end-->
+				</dl>
+			</div> <!--/vInfo-->
+			<!--@endif-->
+		</div> <!--/vContent-->
+	</div> <!--/dBody-->
+	<!--@endforeach-->
+	<!--@if(count($val->releases) > 1)-->
+	<div class="dFooter">
+		<div class="fRight">
+			<span class="btnPxe strong"><button type="button" class="hidden"><span class="opener">{$lang->cmd_show_all_version}</span> <span class="closer">{$lang->cmd_hide_all_version}</span> <span class="i"></span></button></span>
+		</div>
+	</div>
+	<!--@endif-->
+<!--@else-->
+<div class="pxeNews pxeNoData">
+<p>{$lang->msg_no_releases}</p>
+</div>
+<!--@endif-->
+</div>
+<!--@end-->
+
+<!--@end-->
+</div>
+</div>
+	
+
+<!--#include("footer.html")-->

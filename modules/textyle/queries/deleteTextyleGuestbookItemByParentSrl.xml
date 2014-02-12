@@ -1,0 +1,8 @@
+<query id="deleteTextyleGuestbookItemByParentSrl" action="delete">
+    <tables>
+        <table name="textyle_guestbook" />
+    </tables>
+    <conditions>
+        <condition operation="in" column="parent_srl" var="parent_srl" notnull="notnull" />
+    </conditions>
+</query>

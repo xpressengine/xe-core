@@ -1,0 +1,86 @@
+<!--#include("_tool_header.html")-->
+<!--%load_js_plugin("ui.calendar")-->
+
+<!-- Content -->
+
+<div id="content">
+	<!-- writingHeader -->
+	<div class="contentHeader writingHeader">
+		<h3 class="h3">
+			<!--@if($document_srl)-->
+			{$lang->modify_post}
+			<!--@else-->
+			{$lang->cmd_textyle_new_page}
+			<!--@end-->
+		</h3>
+	</div>
+	<!-- /writingHeader -->
+        <!--@if($selected_extra_menu)-->
+            <form action="" method="post" class="{$editor_skin}" onsubmit="return procFilter(this, modify_extra_menu);">
+            <input type="hidden" name="menu_mid" value="{$selected_extra_menu->mid}" />
+        <!--@else-->
+            <form action="" method="post" class="{$editor_skin}" onsubmit="return procFilter(this, insert_extra_menu);">
+        <!--@end-->
+		<input type="hidden" name="publish" value="" />
+		<input type="hidden" name="_filter" value="save_post" />
+		<input type="hidden" name="mid" value="{$mid}" />
+                <input type="hidden" name="vid" value="{$vid}" />
+		<fieldset>
+			<legend>
+			<!--@if($document_srl)-->
+			{$lang->modify_post}
+			<!--@else-->
+			{$lang->new_post}
+			<!--@end-->
+			</legend>
+                        <!-- Post Title -->
+			<div class="wTitle">
+				<fieldset>
+					<div>
+                                            <b>{$lang->url}</b>
+                                                <!--@if($selected_extra_menu)-->
+                                                        {getFullUrl('').'/'.$selected_extra_menu->mid}
+                                                <!--@else-->
+                                                        {str_replace('__mid__','<input type="text" name="menu_mid"  value="" />',getFullUrl('','mid','__mid__'))}
+                                                        {$lang->msg_limit_textyle_extra_mid}
+                                                <!--@end-->
+					</div>
+                                        <div>
+                                            <b>{$lang->menu_name}</b>
+                                                <input type="text" name="menu_name" id="menu_name" value="<!--@if($selected_extra_menu->name)-->{$selected_extra_menu->name}<!--@end-->"/>
+							<a href="{getUrl('','module','module','act','dispModuleAdminLangcode','target','menu_name')}" onclick="popopen(this.href);return false;">{$lang->cmd_find_langcode}</a>
+							{$lang->about_langcode}
+					</div>
+                                        <!-- wPublish -->
+                                            <div class="wPublish" id="wPublishButtonContainer">
+                                                    <span class="btnAction actionWhite normal"><button type="submit">{$lang->cmd_save}</button></span>
+                                            </div>
+                                        <!-- /wPublish -->
+					<span class="cap capLeft"></span> <span class="cap capRight"></span>
+				</fieldset>
+			</div>
+			<!-- /Post Title -->
+			
+			<!-- Textyle Editor -->
+			<input type="hidden" name="msg_close_before_write" value="{$lang->msg_close_before_write}" />
+			<input type="hidden" name="content" value="<!--@if($material_srl && $material_content)-->{htmlspecialchars($material_content)}<!--@else-->{$oDocument->getContentText()}<!--@end-->" />
+			<input type="hidden" name="document_srl" value="{$document_srl}" />
+			<!--@if($document_srl || $material_srl)-->
+			<input type="hidden" name="_disable_autosaved" value="" />
+			<!--@end-->
+			{$editor}
+			
+			<!-- /Textyle Editor -->
+		</fieldset>
+	</form>
+</div>
+<hr />
+<!-- /Content -->
+<!-- Extension -->
+<!--#include("_tool_menu.html")-->
+
+<!--#include("_tool_footer.html")-->
+<script>//<![[CDATA
+setInterval('isLive()', 30000);
+//]]></script>
+

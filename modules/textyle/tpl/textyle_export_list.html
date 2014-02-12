@@ -1,0 +1,53 @@
+<load target="js/textle.js" />
+<include target="header.html" />
+<section class="section">
+	<h1>{$lang->cmd_textyle_export_request}</h1>
+	<table class="x_table x_table-striped x_table-hover">
+		<thead>
+			<tr>
+				<th scope="col">{$lang->textyle}</th>
+				<th scope="col">{$lang->nick_name}</th>
+				<th scope="col">{$lang->export_format}</th>
+				<th scope="col">{$lang->textyle_export_date}</th>
+				<th scope="col">{$lang->textyle_export_file}</th>
+				<th scope="col">{$lang->actions}</th>
+			</tr>
+		</thead>
+		<tbody cond="$export_list">
+			<tr loop="$export_list => $no,$val">
+				<td><a href="{getSiteUrl($val->domain)}" onclick="window.open(this.href); return false;" title="{htmlspecialchars($lang->cmd_view)}">{$val->domain}</a></td>
+				<td><a href="#popup_menu_area" class="member_{$val->member_srl}">{$val->nick_name}</a></td>
+				<td>{$val->export_type}</td>
+				<td>{zdate($val->export_date,'Y.m.d H:i')}</td>
+				<td>{$val->export_file}</td>
+				<td>
+					<button type="button" onclick="exportTextyle({$val->site_srl},'ttxml')" class="x_icon-download-alt">{$lang->cmd_textyle_export_file}</button>
+					<button type="button" onclick="deleteExportTextyle({$val->site_srl})" class="x_icon-trash">{$lang->cmd_delete}</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<form action="" style="text-align:center">
+		<input type="hidden" name="error_return_url" value="" />
+		<input type="hidden" name="module" value="{$module}" />
+		<input type="hidden" name="act" value="{$act}" />
+		<input cond="$search_keyword" type="hidden" name="search_keyword" value="{$search_keyword}" />
+		<input cond="$search_target" type="hidden" name="search_target" value="{$search_target}" />
+		{@ $page = $page_navigation->cur_page}
+		<a href="{getUrl('page', '')}">&laquo;</a>
+		<block cond="$page_navigation->first_page + $page_navigation->page_count > $page_navigation->last_page && $page_navigation->page_count != $page_navigation->total_page">
+			{@$isGoTo = true}
+			<a href="{getUrl('page', '')}" class="xe-ui-button-gray pagination">1</a>
+		</block>
+		<!--@while($page_no = $page_navigation->getNextPage())-->
+		{@$last_page = $page_no}
+		<a href="#" cond="$page_no == $page">{$page_no}</a>
+		<a cond="$page_no != $page" href="{getUrl('page', $page_no)}">{$page_no}</a>
+		<!--@end-->
+		<block cond="$last_page != $page_navigation->last_page">
+			{@$isGoTo = true}
+			<a href="{getUrl('page', $page_navigation->last_page)}">{$page_navigation->last_page}</a>
+		</block>
+		<a href="{getUrl('page', $page_navigation->last_page)}">&raquo;</a>
+	</form>
+</section>

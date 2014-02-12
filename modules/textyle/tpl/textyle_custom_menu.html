@@ -1,0 +1,48 @@
+<load target="filter/insert_custom_menu.xml" />
+<load target="js/textle.js" />
+<include target="header.html" />
+<form action="./" method="post" onsubmit="return procFilter(this, insert_custom_menu);">
+	<section class="section" loop="$lang->textyle_first_menus => $key,$val">
+		{@$_sub = $lang->textyle_second_menus[$key]}
+		{@$_attached = $custom_menu->attached_menu[$key]}
+		<h1>
+			{$val[1]}
+			<label cond="!count($_sub)" class="x_inline" style="font-weight:normal"><input type="checkbox" name="hidden_{$key}" checked="checked"|cond="in_array($key, $custom_menu->hidden_menu)" value="Y" /> {$lang->cmd_hide}</label>
+		</h1>
+		<table class="x_table x_table-striped x_table-hover" cond="count($_sub)">
+			<thead>
+				<tr>
+					<th scope="col">action</th>
+					<th scope="col">title</th>
+					<th scope="col"><label><input type="checkbox" name="hidden_{$key}" checked="checked"|cond="in_array($val, $custom_menu->hidden_menu)" value="Y" /> {$lang->cmd_select_all}</label></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr loop="$_sub => $k,$v">
+					<td>{$k}</td>
+					<td>{$v}</td>
+					<td>
+						<label for="menu_{$k}"><input type="checkbox" name="hidden_{$k}" checked="checked"|cond="in_array(strtolower($k), $custom_menu->hidden_menu)" value="Y" id="menu_{$k}" /> {$lang->cmd_hide}</label>
+					</td>
+				</tr>
+				<tr loop="$_attached => $k,$v">
+					<td>{$k}</td>
+					<td>{$v}</td>
+					<td>
+						<label for="menu_{$k}"><input type="checkbox" name="delete_{$k}" checked="checked"|cond="$custom_menu->hidden_menu[$k]" value="Y" id="menu_{$k}" /> {$lang->cmd_delete}</label>
+					</td>
+				</tr>
+				<tr>
+					<td><input type="text" name="custom_act_{$key}" /></td>
+					<td><input type="text" name="custom_name_{$key}" id="custom_name_{$key}" class="lang_code" /></td>
+					<td>
+						<input type="submit" value="{$lang->cmd_insert}" class="x_btn">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
+	<div class="x_clearfix">
+		<input type="submit" value="{$lang->save}" class="x_btn x_btn-primary x_pull-right">
+	</div>
+</form>

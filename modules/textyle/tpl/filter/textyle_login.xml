@@ -1,0 +1,12 @@
+<filter name="textyle_login" module="textyle" act="procTextyleLogin">
+    <form>
+        <node target="user_id" required="true" />
+        <node target="password" required="true" />
+    </form>
+    <parameter />
+    <response callback_func="completeTextyleLogin">
+        <tag name="error" />
+        <tag name="stat" />
+        <tag name="message" />
+    </response>
+</filter>

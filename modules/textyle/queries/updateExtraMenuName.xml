@@ -1,0 +1,11 @@
+<query id="updateExtraMenuName" action="update">
+    <tables>
+        <table name="textyle_extra_menu" />
+    </tables>
+	<columns>
+		<column name="name" var="name" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" notnull="notnull" />
+    </conditions>
+</query>

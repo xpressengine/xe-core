@@ -1,0 +1,13 @@
+<!--#include("header.html")-->
+
+{@ $output = $search_result['document'] }
+<!--#include("document.html")-->
+<!--@if(count($output->data))-->
+<div class="isMore"><a href="{getUrl('where','document','page',1)}">more</a></div>
+<!--@end-->
+
+{@ $output = $search_result['comment'] }
+<!--#include("comment.html")-->
+<!--@if(count($output->data))-->
+<div class="isMore"><a href="{getUrl('where','comment','page',1)}">more</a></div>
+<!--@end-->

@@ -1,0 +1,11 @@
+<filter name="insert_config_postwrite" module="textyle" act="procTextyleConfigPostwriteInsert" confirm_msg_code="confirm_submit">
+    <form>
+        <node target="mid" required="true" filter="alpha_number" />
+    </form>
+	<parameter />
+    <response callback_func="completeInsertConfig">
+        <tag name="error" />
+        <tag name="message" />
+        <tag name="mid" />
+    </response>
+</filter>

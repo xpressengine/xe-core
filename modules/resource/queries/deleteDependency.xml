@@ -1,0 +1,10 @@
+<query id="deleteDependency" action="delete">
+    <tables>
+        <table name="resource_dependency" />
+    </tables>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" notnull="notnull" />
+        <condition operation="equal" column="item_srl" var="item_srl" filter="number" pipe="and" />
+        <condition operation="equal" column="dependency_item_srl" var="dependency_item_srl" filter="number" pipe="and" />
+    </conditions>
+</query>

@@ -1,0 +1,29 @@
+<query id="getTopKinPoints" action="select">
+    <tables>
+        <table name="kin_point_log" alias="p" />
+        <table name="member" alias="m" />
+    </tables>
+    <columns>
+        <column name="sum(p.point)" alias="point" />
+		<column name="m.member_srl" alias="member_srl" />
+        <column name="m.user_name" alias="user_name" />
+		<column name="m.user_id" alias="user_id" />
+		<column name="m.nick_name" alias="nick_name" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="p.member_srl" var="m.member_srl" pipe="and" notnull="notnull" />
+        <condition operation="in" column="p.member_srl" var="member_srl" pipe="and"/>
+        <condition operation="excess" column="p.in_time" var="startTime" pipe="and"/>
+        <condition operation="below" column="p.in_time" var="endTime" pipe="and" />
+		<condition operation="like" column="m.nick_name" var="search_keyword" pipe="and" />
+    </conditions>
+    <groups>
+    	<group column="user_name" />
+    </groups>
+    <navigation>
+    	<index var="sort_index" default="point" order="desc" />
+        <list_count var="listNumber" default="5" />
+        <page_count var="page_count" default="10" />
+        <page var="page" default="1" />
+    </navigation>
+</query>

@@ -1,0 +1,42 @@
+<!--%import("css/xeCamp.css")-->
+<load target="./js/enroll.js" />
+	<div id="header" style="margin-top:10px;background-color:rgb(247, 247, 247);border-top:solid #999 1px;border-bottom:solid #999 1px;margin-bottom:0px">
+		<center><h1 style="color:#000">접수 현황 (<span style="color:#e37f91">대기 {$item_count['W']}명, 완료 {$item_count['Y']}명</span>)</h1></center>
+	</div>
+<table cellspacing="0" class="rowTable">
+<thead>
+    <tr>
+        <th scope="col"><div>{$lang->no}</div></th>
+		<th scope="col" ><div>{$lang->user_name}</div></th>
+        <th scope="col" ><div>{$lang->email_address}</div></th>
+		<th scope="col" ><div>인증</div></th>
+		<th scope="col" ><div>신청일</div></th>
+    </tr>
+</thead>
+<tbody>
+    <!--@foreach($enroll_list as $no => $val)-->
+    <tr>
+        <td class="center number">{$no}</td>
+        <td>{$val->user_name}</td>
+        <td>{$val->email_address}</td>
+        <td>{$lang->enroll_status[$val->status]}</td>
+        <td>{zdate($val->regdate,'y.m.d H:i')}</td>
+    </tr>
+    <!--@end-->
+</tbody>
+</table>
+
+<!-- 페이지 네비게이션 -->
+<div class="pagination a1">
+    <a href="{getUrl('page','','module_srl','')}" class="prevEnd"><<</a> 
+    <!--@while($page_no = $page_navigation->getNextPage())-->
+        <!--@if($page == $page_no)-->
+            <strong>{$page_no}</strong> 
+        <!--@else-->
+            <a href="{getUrl('page',$page_no,'module_srl','')}">{$page_no}</a> 
+        <!--@end-->
+    <!--@end-->
+    <a href="{getUrl('page',$page_navigation->last_page,'module_srl','')}" class="nextEnd">>></a>
+</div>
+
+

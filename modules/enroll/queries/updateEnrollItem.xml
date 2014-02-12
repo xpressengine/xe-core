@@ -1,0 +1,19 @@
+<query id="updateEnrollItem" action="update">
+    <tables>
+        <table name="enroll" />
+    </tables>
+    <columns>
+        <column name="job" var="job" />
+        <column name="homepage" var="homepage" />
+        <column name="job_content" var="job_content" />
+        <column name="user_name" var="user_name" />
+        <column name="phone" var="phone" />
+        <column name="content" var="content" />
+        <column name="status" var="status" />
+        <column name="last_update" var="last_update" default="curdate()" />
+    </columns>
+    <conditions>
+     <condition operation="equal" column="module_srl" var="module_srl" notnull="notnull" filter="number" />
+     <condition operation="equal" column="enroll_srl" var="enroll_srl" notnull="notnull" filter="number" pipe="and" />
+    </conditions>
+</query>

@@ -1,0 +1,13 @@
+<query id="getEnrollItemLogin" action="select">
+    <tables>
+        <table name="enroll" />
+    </tables>
+    <columns>
+        <column name="enroll_srl" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" notnull="notnull" />
+        <condition operation="equal" column="email_address" var="email_address" filter="email_address" notnull="notnull" pipe="and" />
+        <condition operation="equal" column="password" var="password" notnull="notnull" pipe="and" />
+    </conditions>
+</query>

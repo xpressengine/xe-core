@@ -1,0 +1,182 @@
+<include target="_header.html" />
+<include cond="$oDocument->isExists()" target="_read.html" />
+<p cond="!$document_list && !$notice_list" class="no_ducument">{$lang->no_documents}</p>
+{@
+	$mi = $module_info;
+	if (!$mi->thumbnail_width)  $mi->thumbnail_width  = 200;
+	if (!$mi->thumbnail_height) $mi->thumbnail_height = 120;
+	if (!$mi->content_cut_size) $mi->content_cut_size = 100;
+	if (!$mi->subject_cut_size) $mi->subject_cut_size = 30;
+	if (!$mi->img_col)  $mi->img_col  = 3;
+	if (!$mi->img_R_margin) $mi->img_R_margin = 10;
+	if (!$mi->img_B_margin) $mi->img_B_margin = 10;
+	if (!$mi->colorset_) $mi->colorset_ = Green;
+	if (!$mi->colorset__) $mi->colorset__ = round_colorA;
+	
+	
+}
+
+<div class="board_list" id="board_list">
+
+<block cond="$module_info->colorset__!=='none_color'&&$module_info->colorset__!=='none_colorB'">		
+	<ul class="FHCGallery_v3 FHCGallery {$module_info->colorset__}" style="padding-bottom:{$mi->img_B_margin}px;padding-left:{$mi->img_R_margin}px;width:{((($mi->thumbnail_width)+20)+$mi->img_R_margin)*$mi->img_col}px" cond="$document_list">
+		<li class="box {$module_info->colorset_}_li_board {$module_info->colorset_} HBC_Round"  loop="$document_list=>$no,$document" style="width:{$mi->thumbnail_width+10}px;margin-top:{$mi->img_B_margin}px;margin-right:{$mi->img_R_margin}px">
+					{@
+						$post_link     = getUrl('document_srl',$document->document_srl);
+						$perm_link     = $document->getPermanentUrl();
+						$comment_count = $document->getCommentCount();
+						$has_thumbnail = $document->thumbnailExists($mi->thumbnail_width, $mi->thumbnail_height, $mi->thumbnail_type);
+					}
+
+			<div class="Style_A">
+			<!--@if($has_thumbnail)-->
+				<p class="HBWrapImg" style="width:{$module_info->thumbnail_width}px;">
+					<a class="HBWrapImg_A" href="{$post_link}">
+					
+					<img src="{$document->getThumbnail($module_info->thumbnail_width, $module_info->thumbnail_height, $module_info->thumbnail_type)}" width="{$mi->thumbnail_width}" alt="" />
+					
+					
+					</a>
+				</p>
+				<div class="HBdateAreaA {$module_info->date_type} png_bg">
+					<span class="png_bg HB_M M_{$document->getRegdate('M')}">{$document->getRegdate('m')}</span>
+					<span class="HB_dot png_bg">.</span>
+					<span class="png_bg HB_D D_{$document->getRegdate('d')}">{$document->getRegdate('d')}</span>
+					<span class="HB_Icon png_bg">{$document->printExtraImages(60*60*$module_info->duration_new)}</span>
+				</div>
+				<!--@end-->
+				<!--@foreach($list_config as $key => $val)-->
+				<!--@if($val->idx == -1)-->
+				<!--@if($val->type == 'title')-->
+				<span class="HBCtitle">
+					<a href="{getUrl('document_srl',$document->document_srl, 'listStyle', $listStyle, 'cpage','')}" class="title Tcolor">{$document->getTitle($mi->subject_cut_size)} <span class="iefix"></span></a>
+				</span>
+				 <!--@elseif($val->type == 'summary')-->
+				<span class="HBCcontent">
+				 <a href="{getUrl('document_srl',$document->document_srl, 'listStyle', $listStyle, 'cpage','')}">{$document->getSummary($mi->content_cut_size)}</a>
+				</span>
+				<!--@elseif($val->type == 'nick_name')-->
+				<span class="HBCnick png_bg"  cond="$document->getNickName()">
+				<a href="#popup_menu_area" class="png_bg Ccolor member_{$document->get('member_srl')}" onclick="return false">{$document->getNickName()}</a>
+				</span>
+				<!--@elseif($val->type == 'readed_count' || $val->type == 'voted_count')-->
+				<div class="HBC_icon">
+					<a href="{getUrl('document_srl', $document->document_srl)}#comment" title="Replies"><span class="png_bg HBC_Replies HB_Arial">{$document->getCommentCount()}</span></a>
+					<span class="Ccolor png_bg HBC_vote HB_Arial">{$document->get('voted_count')!=0?$document->get('voted_count'):'0'}</span>
+					<span class="Ccolor png_bg HBC_read HB_Arial">{$document->get('readed_count')>0?$document->get('readed_count'):'0'}</span>
+					<span class="H_icon">{$document->printExtraImages(60*60*$module_info->duration_new)}</span>
+				</div>
+				 <!--@end-->
+				 <!--@else-->
+				<ul class="wrap_HBCExtVar">
+					<li class="HBCExtVar png_bg" loop="$list_config=>$key,$val" cond="$val->idx!=-1"><span class="Ccolor">{$val->name} : </span><span class="Ccolor png_bg">{$document->getExtraValueHTML($val->idx)}</span></li>
+				</ul>
+				 <!--@end--> <!--@end-->
+				<input cond="$grant->manager" type="checkbox" name="cart" value="{$document->document_srl}" class="iCheck" title="Check This Article" onclick="doAddDocumentCart(this)" checked="checked"|cond="$document->isCarted()" />
+			</div>
+					
+		</li>
+	</ul>
+</block>
+
+<block cond="$module_info->colorset__=='none_color'||$module_info->colorset__=='none_colorB'">	
+	<ul class="FHCGallery_v3 FHCGallery FHCGallery_ {$module_info->colorset__}" style="padding-bottom:{$mi->img_B_margin}px;padding-left:{$mi->img_R_margin}px;width:{((($mi->thumbnail_width)+20)+$mi->img_R_margin)*$mi->img_col}px" cond="$document_list">
+		<li class="box {$module_info->colorset_}_li {$module_info->colorset_}"  loop="$document_list=>$no,$document" style="width:{$mi->thumbnail_width+12}px;margin-top:{$mi->img_B_margin}px;margin-right:{$mi->img_R_margin}px">
+					{@
+						$post_link     = getUrl('document_srl',$document->document_srl);
+						$perm_link     = $document->getPermanentUrl();
+						$comment_count = $document->getCommentCount();
+						$has_thumbnail = $document->thumbnailExists($mi->thumbnail_width, $mi->thumbnail_height, $mi->thumbnail_type);
+					}
+			<span class="HBB_T">
+				<span class="HBB_T_L png_bg"></span><span class="HBB_T_M png_bg"></span><span class="HBB_T_R png_bg"></span>
+			</span>
+			<div class="HBB_M_L png_bg">
+				<div class="HBB_M_R png_bg">
+					<div class="Style_A">
+					<!--@if($has_thumbnail)-->
+						<p class="HBWrapImg" style="width:{$module_info->thumbnail_width}px;">
+							<a class="HBWrapImg_A" href="{$post_link}">
+							
+							<img src="{$document->getThumbnail($module_info->thumbnail_width, $module_info->thumbnail_height, $module_info->thumbnail_type)}" width="{$mi->thumbnail_width}" alt="" />
+							
+							
+							</a>
+						</p>
+						<div class="HBdateAreaA {$module_info->date_type} png_bg">
+							<span class="png_bg HB_M M_{$document->getRegdate('M')}">{$document->getRegdate('m')}</span>
+							<span class="HB_dot png_bg">.</span>
+							<span class="png_bg HB_D D_{$document->getRegdate('d')}">{$document->getRegdate('d')}</span>
+							<span class="HB_Icon png_bg">{$document->printExtraImages(60*60*$module_info->duration_new)}</span>
+						</div>
+						<!--@end-->
+						<span class="HBCtitle">
+							<a href="{getUrl('document_srl',$document->document_srl, 'listStyle', $listStyle, 'cpage','')}" class="title Tcolor">{$document->getTitle($mi->subject_cut_size)} <span class="iefix"></span></a>
+						</span>
+						 
+						<span class="HBCcontent">
+						 <a href="{getUrl('document_srl',$document->document_srl, 'listStyle', $listStyle, 'cpage','')}">{$document->getSummary($mi->content_cut_size)}</a>
+						
+						</span>
+						<span class="HBCnick png_bg"  cond="$document->getNickName()">
+						<a href="#popup_menu_area" class="png_bg Ccolor member_{$document->get('member_srl')}" onclick="return false">{$document->getNickName()}</a>
+						</span>
+						
+
+						<ul class="wrap_HBCExtVar">
+							<li class="HBCExtVar png_bg" loop="$document->getExtraVars() => $key,$val" cond="$val->getValueHTML()"><span class="Ccolor">{$val->name} : </span><span class="Ccolor png_bg">{$val->getValueHTML()}</span></li>
+						</ul>
+						<div class="HBC_icon">
+									
+					
+							<a href="{getUrl('document_srl', $document->document_srl)}#comment" title="Replies"><span class="png_bg HBC_Replies HB_Arial">{$document->getCommentCount()}</span></a>
+							<span class="Ccolor png_bg HBC_vote HB_Arial">{$document->get('voted_count')!=0?$document->get('voted_count'):'0'}</span>
+							<span class="Ccolor png_bg HBC_read HB_Arial">{$document->get('readed_count')>0?$document->get('readed_count'):'0'}</span>
+			
+							<span class="H_icon">{$document->printExtraImages(60*60*$module_info->duration_new)}</span>
+						</div>
+						<input cond="$grant->manager" type="checkbox" name="cart" value="{$document->document_srl}" class="iCheck" title="Check This Article" onclick="doAddDocumentCart(this)" checked="checked"|cond="$document->isCarted()" />
+					</div>
+				</div>
+			</div>
+			<span class="HBB_B">
+				<span class="HBB_B_L png_bg"></span><span class="HBB_B_M png_bg"></span><span class="HBB_B_R png_bg"></span>
+			</span>
+					
+		</li>
+	</ul>
+</block>
+
+
+
+
+
+</div>
+<div class="list_footer">
+	<div class="pagination" cond="$document_list || $notice_list">
+		<a href="{getUrl('page','','document_srl','','division',$division,'last_division',$last_division)}" class="direction prev"><span></span><span></span> {$lang->first_page}</a> 
+		<block loop="$page_no=$page_navigation->getNextPage()">
+			<strong cond="$page==$page_no">{$page_no}</strong> 
+			<a cond="$page!=$page_no" href="{getUrl('page',$page_no,'document_srl','','division',$division,'last_division',$last_division)}">{$page_no}</a>
+		</block>
+		<a href="{getUrl('page',$page_navigation->last_page,'document_srl','','division',$division,'last_division',$last_division)}" class="direction next">{$lang->last_page} <span></span><span></span></a>
+	</div>
+	<div class="btnArea">
+		<span class="btn_ btn_write btn27"><a href="{getUrl('act','dispBoardWrite','document_srl','')}">{$lang->cmd_write}...</a></span>
+		<span class="btn_" cond="$grant->manager"><a href="{getUrl('','module','document','act','dispDocumentManageDocument')}" onclick="popopen(this.href,'manageDocument'); return false;">{$lang->cmd_manage_document}</a></span>
+	</div>
+	<button type="button" class="bsToggle" title="{$lang->cmd_search}">{$lang->cmd_search}</button>
+	<form cond="$grant->view" action="{getUrl()}" method="get" onsubmit="return procFilter(this, search)" id="board_search" class="board_search" no-error-return-url="true">
+		<input type="hidden" name="vid" value="{$vid}" />
+		<input type="hidden" name="mid" value="{$mid}" />
+		<input type="hidden" name="category" value="{$category}" />
+		<input type="text" name="search_keyword" value="{htmlspecialchars($search_keyword)}" title="{$lang->cmd_search}" class="iText" />
+		<select name="search_target">
+			<option loop="$search_option=>$key,$val" value="{$key}" selected="selected"|cond="$search_target==$key">{$val}</option>
+		</select>
+		<span class="btn_ btn_search btn27"><button type="submit" onclick="xGetElementById('board_search').submit();return false;">{$lang->cmd_search}</button></span>
+        <span class="btn_" cond="$last_division"><a href="{getUrl('page',1,'document_srl','','division',$last_division,'last_division','')}">{$lang->cmd_search_next}</a></span>
+	</form>
+	<a href="{getUrl('act','dispBoardTagList')}" class="tagSearch" title="{$lang->tag}">{$lang->tag}</a>
+</div>
+<include target="_footer.html" />

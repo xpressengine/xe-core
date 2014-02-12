@@ -1,0 +1,54 @@
+@charset "utf-8";/* Manual Header */
+.manual button, .manual input[type=submit] {cursor:pointer}
+.mHeader{position:relative;zoom:1;padding:1px 0 0 0;margin:0 0 16px 0}
+.mHeader:after{content:"";display:block;clear:both}
+.mHeader h2{float:left;margin:0 10px 0 0}
+.mHeader form{float:right}
+.mTitle{position:relative;zoom:1;padding:5px 10px;margin:1em 0;border:1px solid #ddd;background:#eee}
+.mTitle:after{content:"";display:block;clear:both}
+.mTitle h1{margin:0;display:inline;margin:0 10px 0 0}
+.mWrite .btnArea{text-align:center;margin:1em 0}
+.mWriteTitle input{width:98%;padding:5px}
+.mNav{float:left;position:relative;margin:30px 0 0 0;height:28px;overflow:hidden;white-space:nowrap;width:540px;background:url(bgNav.gif) no-repeat}
+.mNav a{display:block;height:28px;line-height:28px;font-size:11px;color:#78797e;text-decoration:none}
+.mNav a:hover,
+.mNav a:active,
+.mNav a:focus{text-decoration:underline}
+.mNav .mList{position:absolute;z-index:2;left:50%;top:0;margin:0 0 0 -18px;width:35px;height:0;padding:28px 0 0 0;overflow:hidden}
+.mNav .mPrev,
+.mNav .mNext{background:url(bgNav.gif) no-repeat;width:215px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis}
+.mNav .mPrev{float:left;background-position:0 0;padding:0 0 0 24px;text-align:left}
+.mNav .mNext{float:right;background-position:right 0;padding:0 24px 0 0;text-align:right}
+.mNav .mPrev:hover, .mNav .mPrev:active, .mNav .mPrev:focus{background-position:0 -30px;color:#624cd4}
+.mNav .mNext:hover, .mNav .mNext:active, .mNav .mNext:focus{background-position:right -30px;color:#624cd4}
+
+/* Manual Body */
+.mBody{padding:0 220px 0 0;position:relative;color:#666;zoom:1}
+.mBody:after{content:"";display:block;clear:both}
+.mBody .xe_content{width:100%;float:left}
+.mBody .xe_content .toc{margin:0 0 20px 0;font-size:12px}
+.mBody .xe_content h3{font-size:16px;margin:0;color:#333}
+.mBody .xe_content h4{font-size:14px;color:#333}
+.mBody .xe_content h5{font-size:12px;margin:0 0 -1em 0;color:#624cd4}
+.mBody .xe_content blockquote{padding:1px 15px;background:#ebebeb;border-radius:0;-moz-border-radius:0;-webkit-border-radius:0;color:#333}
+.mBody .xe_content blockquote:first-line,
+.mBody .xe_content blockquote p:first-line{color:#666}
+.mBody .xe_content p.summary{padding:0 0 15px 0;margin:0 0 1em 0 !important;border-bottom:1px dashed #c7c7c7;color:#333}
+.mBody .xe_content p.img{line-height:2}
+.mBody .xe_content table{border:0;margin:1em 0;width:100%}
+.mBody .xe_content caption{text-align:left}
+.mBody .xe_content th, .mBody .xe_content td{border:0;padding:3px 5px;border-bottom:1px solid #6d6e72}
+.mBody .xe_content th{background:#6d6e72;color:#fff;text-align:left}
+
+/* Index */
+.mBody .index{position:relative;left:20px;float:right;display:inline;width:198px;margin:0 -200px 0 0;font-size:11px;background:#f8f8f8;border:1px solid #ddd;box-shadow:0 0 3px #fff inset;-moz-box-shadow:0 0 3px #fff inset;-webkit-box-shadow:0 0 3px #fff inset}
+.mBody .index ul{margin:0;padding:15px 12px;list-style:none}
+.mBody .index ul ul{padding:0}
+.mBody .index li{background:url(icoToc.gif) no-repeat 0 2px;margin:0;padding:0 0 0 15px}
+.mBody .index li a{display:inline-block;color:#333;font-weight:bold;text-decoration:none;margin:0 0 10px 0}
+.mBody .index li a:hover,
+.mBody .index li a:active,
+.mBody .index li a:focus{text-decoration:underline}
+.mBody .index li li{background-position:-400px 2px;padding:0 0 0 10px}
+.mBody .index li li a{color:#666;font-weight:normal;margin:0 0 5px 0}
+.mBody .index li li li{background-position:-800px 2px}

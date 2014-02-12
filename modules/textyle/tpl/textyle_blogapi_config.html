@@ -1,0 +1,68 @@
+<load target="js/textle.js" />
+<load target="filter/insert_blogapi_service.xml" />
+<include target="header.html" />
+<form action="./" method="post" onsubmit="return procFilter(this, insert_blogapi_service);" class="x_form-horizontal">
+	<input type="hidden" name="textyle_blogapi_services_srl" value="{$service->textyle_blogapi_services_srl}" />
+	<div class="x_control-group">
+		<label class="x_control-label" for="lang_service_name">{$lang->service_name}</label>
+		<div class="x_controls">
+			<input type="text" name="service_name" id="service_name" value="{$service->service_name}"  class="lang_code" />
+		</div>
+	</div>
+	<div class="x_control-group">
+		<label class="x_control-label" for="api_type">{$lang->api_type}</label>
+		<div class="x_controls">
+			<select name="api_type" id="api_type">
+				<option value="metaweblog">metaweblog</option>
+				<option value="movalbletype">movalbletype</option>
+				<option value="blogger">blogger</option>
+			</select>
+		</div>
+	</div>
+	<div class="x_control-group">
+		<label class="x_control-label" for="lang_url_description">{$lang->url_description}</label>
+		<div class="x_controls">
+			<input type="text" name="url_description" value="{$service->url_description}" class="lang_code" id="url_description" />
+		</div>
+	</div>
+	<div class="x_control-group">
+		<label class="x_control-label" for="lang_id_description">{$lang->id_description}</label>
+		<div class="x_controls">
+			<input type="text" name="id_description" value="{$service->id_description}" class="lang_code" id="id_description" />
+		</div>
+	</div>
+	<div class="x_control-group">
+		<label class="x_control-label" for="lang_password_description">{$lang->password_description}</label>
+		<div class="x_controls">
+			<input type="text" name="password_description" value="{$service->password_description}" class="lang_code" id="password_description" />
+		</div>
+	</div>
+	<div class="btnArea">
+		<input type="submit" value="{$lang->cmd_insert}" class="x_btn x_btn-primary x_pull-right">
+	</div>
+</form>
+<table class="x_table x_table-striped x_table-hover" cond="!$textyle_blogapi_services_srl">
+	<thead>
+		<tr>
+			<th scope="col">{$lang->service_name}</th>
+			<th scope="col">{$lang->api_type}</th>
+			<th scope="col">{$lang->url_description}</th>
+			<th scope="col">{$lang->id_description}</th>
+			<th scope="col">{$lang->password_description}</th>
+			<th scope="col">{$lang->actions}</th>
+		</tr>
+	</thead>
+	<tbody cond="$blogapi_services_list">
+		<tr loop="$blogapi_services_list => $no,$val">
+			<td>{$val->service_name}</td>
+			<td>{$val->api_type}</td>
+			<td>{$val->url_description}</td>
+			<td>{$val->id_description}</td>
+			<td>{$val->password_description}</td>
+			<td>
+				<a href="{getUrl('textyle_blogapi_services_srl',$val->textyle_blogapi_services_srl)}" class="x_icon-wrench">{$lang->cmd_modify}</a>
+				<button type="button" onclick="deleteBlogApiService({$val->textyle_blogapi_services_srl})" class="x_icon-trash">{$lang->cmd_delete}</button>
+			</td>
+		</tr>
+	</tbody>
+</table>

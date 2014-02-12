@@ -1,0 +1,8 @@
+sdfsdf
+<!--#include("header.html")-->
+<h3>{$message}</h3>
+<!--@if(!$is_logged)-->
+<span class="btn"><a href="{getUrl('act','dispMemberLoginForm')}">{$lang->cmd_login}...</a></span>
+<!--@end-->
+<span class="btn"><button type="button" onclick="history.back()">{$lang->cmd_back}</button></span>
+<!--#include("footer.html")-->

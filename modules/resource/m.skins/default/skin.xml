@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+    <title xml:lang="ko">자료실 모바일 기본 스킨</title>
+    <description xml:lang="ko">자료실 모듈의 모바일 기본 스킨입니다.</description>
+    <version>0.1</version>
+    <date>2010-07-21</date>
+    <author email_address="developers@xpressengine.com" link="http://resource.xpressengine.net">
+        <name xml:lang="ko">NHN</name>
+    </author>
+    <license>LGPL v2 or later</license>
+</skin>

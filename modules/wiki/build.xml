@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ============================================  -->
+<!-- XE Wiki build file  						   -->
+<!-- Build a new wiki distribution by running:	   -->
+<!-- phing -Dversion=1.2						   -->
+<!-- from the wiki module folder				   -->
+<!-- Make sure you update conf/info.xml and        -->
+<!-- create svn tag first. 						   -->
+<!-- Tag name should be version number.			   -->
+<!-- ============================================  -->
+
+<project name="xe-wiki" default="dist">
+	<property name="version" value="" override="true" />
+	<property name="config.build_dir" value="./build" override="true" />
+	<property name="config.build_dir_module_folder" value="./build/xe-wiki" override="true" />
+	<property name="config.module_folder_name" value="/wiki" override="true" />
+	<property name="config.svn" value="D:\svn\bin\svn.exe" override="true" />
+	<property name="release.repo" value="http://xe-wiki.googlecode.com/svn/tags/wiki-module-${version}" override="true" />
+	<property name="release.name" value="xe-wiki.${version}" override="true" />
+
+    <!-- ============================================  -->
+    <!-- Target: prepare                               -->
+    <!-- ============================================  -->
+    <target name="prepare">
+		<echo msg="Removing directory ${config.build_dir}" />
+		<exec command="rm -rf ${config.build_dir}" />
+        <echo msg="Making directory ${config.build_dir}" />
+        <mkdir dir="${config.build_dir}" />
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: build                                 -->
+    <!-- ============================================  -->
+    <target name="build" depends="prepare">
+        <echo msg="Exporting repo files to build directory..." />
+		<exec command="${config.svn} export ${release.repo} ${config.build_dir_module_folder}${config.module_folder_name}" />
+		<exec command="rm ${config.build_dir_module_folder}${config.module_folder_name}/build.xml" />
+    </target>
+
+    <!-- ============================================  -->
+    <!-- (DEFAULT)  Target: dist                       --> 
+    <!-- ============================================  -->
+    <target name="dist" depends="build">
+        <echo msg="Creating archive..." />
+
+        <tar destfile="${config.build_dir}/${release.name}.tar.gz" compression="gzip">
+            <fileset dir="${config.build_dir_module_folder}">
+                <include name="*" />
+            </fileset>
+        </tar>
+		
+		<zip destfile="${config.build_dir}/${release.name}.zip" basedir="${config.build_dir_module_folder}" />
+		
+		<exec command="rm -rf ${config.build_dir_module_folder}" />
+		
+        <echo msg="Files copied and compressed in build directory OK!" />
+    </target>
+</project>

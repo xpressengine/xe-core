@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout version="0.2">
+    <title xml:lang="ko">Ideation</title>
+    <description xml:lang="ko">
+        주제 기반의 사이트 운영에 적합한 형태의 레이아웃입니다.
+        디자인 : 이선영
+        퍼블리싱 : 정찬명
+        레이아웃 제작 : zero
+    </description>
+    <version>0.1</version>
+    <date>2009-07-13</date>
+
+    <author email_address="xpressengine@xpressengine.com" link="http://www.nhncorp.com">
+        <name xml:lang="ko">NHN</name>
+    </author>
+
+    <extra_vars>
+        <var name="colorset" type="select">
+            <title xml:lang="ko">컬러셋</title>
+            <description xml:lang="ko">원하시는 컬러셋을 선택해주세요.</description>
+            <options value="default">
+                <title xml:lang="ko">기본</title>
+            </options>
+        </var>
+        <var name="logo_image" type="image">
+            <title xml:lang="ko">로고이미지</title>
+            <description xml:lang="ko">레이아웃의 상단에 표시될 로고이미지를 입력하세요. (세로길이가 34px인 투명이미지가 가장 어울립니다)</description>
+        </var>
+        <var name="index_url" type="text">
+            <title xml:lang="ko">홈 페이지 URL</title>
+            <description xml:lang="ko">로고를 클릭시에 이동할 홈 페이지 URL을 입력해 주세요.</description>
+        </var>
+        <var name="use_subject" type="select">
+            <title xml:lang="ko">주제 표시</title>
+            <options value="N">
+                <title xml:lang="ko">표시 하지 않음</title>
+            </options>
+            <options value="Y">
+                <title xml:lang="ko">표시</title>
+            </options>
+            <description xml:lang="ko">왼쪽 영역의 상단에 주제 링크를 표시할 수 있습니다</description>
+        </var>
+        <var name="subject_title" type="text">
+            <title xml:lang="ko">주제 영역 제목</title>
+            <description xml:lang="ko">왼쪽 영역의 상단에 표시되는 주제의 제목을 지정할 수 있습니다</description>
+        </var>
+        <var name="subject_unit" type="text">
+            <title xml:lang="ko">주제 단위</title>
+            <description xml:lang="ko">왼쪽 상단에 표시되는 주제영역의 단위(예:주제1에서 '주제')와 같은 단위를 지정할 수 있습니다</description>
+        </var>
+        <var name="subject_1" type="text">
+            <title xml:lang="ko">주제 1 제목</title>
+            <description xml:lang="ko">주제 1항목의 제목을 지정할 수 있습니다.</description>
+        </var>
+        <var name="subject_1_url" type="text">
+            <title xml:lang="ko">주제 1 URL</title>
+            <description xml:lang="ko">주제 1항목에 연결되는 URL을 지정할 수 있습니다.</description>
+        </var>
+        <var name="subject_2" type="text">
+            <title xml:lang="ko">주제 2 제목</title>
+            <description xml:lang="ko">주제 2항목의 제목을 지정할 수 있습니다.</description>
+        </var>
+        <var name="subject_2_url" type="text">
+            <title xml:lang="ko">주제 2 URL</title>
+            <description xml:lang="ko">주제 2항목에 연결되는 URL을 지정할 수 있습니다.</description>
+        </var>
+        <var name="subject_3" type="text">
+            <title xml:lang="ko">주제 3 제목</title>
+            <description xml:lang="ko">주제 3항목의 제목을 지정할 수 있습니다.</description>
+        </var>
+        <var name="subject_3_url" type="text">
+            <title xml:lang="ko">주제 3 URL</title>
+            <description xml:lang="ko">주제 3항목에 연결되는 URL을 지정할 수 있습니다.</description>
+        </var>
+        <var name="service_title" type="text">
+            <title xml:lang="ko">좌측 메뉴 제목</title>
+            <description xml:lang="ko">좌측 메뉴의 제목을 입력해주세요. (아래 좌측메뉴가 tree로 나타나게 되는 영역입니다)</description>
+        </var>
+    </extra_vars>
+
+    <menus>
+        <menu name="main_menu" maxdepth="2" default="true">
+            <title xml:lang="ko">상단 메뉴</title>
+        </menu>
+        <menu name="left_menu" maxdepth="3">
+            <title xml:lang="ko">좌측 메뉴 </title>
+        </menu>
+    </menus>
+</layout>

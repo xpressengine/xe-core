@@ -1,0 +1,100 @@
+<!--#include("header.html")-->
+<!--%import("css/ui.core.css")-->
+<!--%import("css/ui.theme.css")-->
+<!--%import("css/ui.datepicker.css")-->
+<!--%import("js/toggle.js")-->
+<!--%import("js/ui.datepicker.js")-->
+
+<!-- #issueBody -->
+	<div id="issueBody">
+	
+		<!-- #pxeContent -->
+		<div id="pxeContent">
+			
+			<div class="pxeHeading">
+				<h2>{$lang->project_menus[$act]}</h2>
+			</div>
+			
+			<div class="pxeSrch">
+				<ul class="timeH">
+					<li>{$lang->issue} <em>{$issue_count}</em></li>
+					<li>{$lang->revision} <em>{$changeset_count}</em></li>
+					<!--@if($oldestItem)-->
+					<li>{$lang->startdate} <strong>{zdate($oldestItem, "Y.m.d")}</strong></li>
+					<!--@endif-->
+				</ul>
+				<form action="{Context::getRequestUri()}" method="GET" class="search openSrch">
+					<input type="hidden" name="act" value="{$act}" />
+					<input type="hidden" name="mid" value="{$mid}" />
+					<input type="hidden" name="vid" value="{$vid}" />
+					<fieldset class="basic item">
+						<legend class="alt">Basic Search</legend>
+						<label for="idContributor" class="iLabel">{$lang->issue_id}/{$lang->contributor}</label>
+						<input name="search_value" type="text" class="iText" id="idContributor" value="{$search_value}" />
+						<span class="btnPxe strong"><input type="submit" value="{$lang->cmd_search}" /></span>
+						<button type="button" class="toggleSrch">{$lang->cmd_detailed_search}<span></span></button>
+					</fieldset>
+					<fieldset class="detail time">
+						<legend class="alt">Detail Search</legend>
+						<dl>
+							<dt>{$lang->duration}</dt>
+							<dd>
+								<div class="term item">
+									<label for="term1" class="iLabel">YYYY-MM-DD</label>
+									<input name="startdate" type="text" class="iText datepicker" maxlength="10" id="term1" value="{$startdate}" />
+								</div>
+								 ~ 
+								<div class="term item">
+									<label for="term2" class="iLabel">YYYY-MM-DD</label>
+									<input name="enddate" type="text" class="iText datepicker" maxlength="10" id="term2" value="{$enddate}" />
+								</div>
+							</dd>
+							<dd>
+								<!--@foreach($lang->target_list as $key=>$val)-->
+								<input name="targets[]" type="checkbox" value="{$key}" class="iCheck" id="iTarget{$key}" <!--@if(in_array($key, $targets))-->checked="checked"<!--@endif--> /><label for="iTarget{$key}">{$val}</label>
+								<!--@end-->
+							</dd>
+							<dd>
+								<span class="btnPxe strong"><input type="submit" value="{$lang->cmd_search}" /></span>
+							</dd>
+						</dl>
+						<script type="text/javascript">
+							jQuery(function($) {
+								$('.datepicker')
+								.datepicker({
+									dateFormat:'yy-mm-dd', 
+									showAnim:'fadeIn',
+									changeYear:true,
+									showOtherMonths:true,
+									changeMonth:true, 
+									showOn: 'button'
+								})
+							});
+						</script>
+					</fieldset>
+				</form>
+			</div>
+			<!--#include("changesets.html")-->
+			
+			<!--@if($lastdate)-->
+			<div class="buttonArea">
+				<div class="fLeft" id="moreButton"><span class="btnPxe"><button type="button" onclick="getMoreTimeline()">{$lang->more}</button></span></div>
+			</div>
+			<!--@endif-->
+		</div>
+		<!-- /#pxeContent -->
+		
+	</div>
+	<!-- /#issueBody -->
+<!--@if($lastdate)-->
+<form id="hiddenForm" style="display:none;">
+	<input type="hidden" name="mid" value="{$mid}" />
+	<input type="hidden" name="vid" value="{$vid}" />
+	<input type="hidden" name="lastdatetime" value="{$lastdate}" />
+	<input type="hidden" name="displayed_date" value="{$curDate}" />
+	<input type="hidden" name="search_value" value="{$search_value}" />
+	<input type="hidden" name="startdate" value="{$startdate}" />
+    <input type="hidden" name="targets" value="{implode(',', $targets)}" />
+</form>
+<!--@end-->
+<!--#include("footer.html")-->

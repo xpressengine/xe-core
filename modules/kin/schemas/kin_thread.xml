@@ -1,0 +1,4 @@
+<table name="kin_thread">
+    <column name="document_srl" type="number" size="11" notnull="notnull" unique="idx_kin" />
+    <column name="selected" type="number" size="11" default="0" notnull="notnull" unique="idx_kin" />
+</table>

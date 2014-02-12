@@ -1,0 +1,11 @@
+<query id="getModuleCategories" action="select">
+    <tables>
+        <table name="module_categories" />
+    </tables>
+    <conditions>
+        <condition operation="in" column="module_category_srl" var="moduleCategorySrl" />
+    </conditions>
+    <navigation>
+        <index var="sort_index" default="title" order="asc" />
+    </navigation>
+</query>

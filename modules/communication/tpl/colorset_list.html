@@ -1,0 +1,7 @@
+<div loop="$skin_info->colorset => $key, $val" style="padding:3px 0 0 0;display:inline-block;*display:inline;zoom:1;min-width:220px;vertical-align:top">
+	<label cond="$type == 'P'" for="colorset_{$key}"><input type="radio" name="colorset" value="{$val->name}" id="colorset_{$key}" checked="checked"|cond="$communication_config->colorset==$val->name" /> {$val->title}</label>
+	<label cond="$type == 'M'" for="mcolorset_{$key}"><input type="radio" name="mcolorset" value="{$val->name}" id="mcolorset_{$key}" checked="checked"|cond="$communication_config->mcolorset==$val->name" /> {$val->title}</label>
+	<div class="x_thumbnail" cond="$val->screenshot" style="display:inline-block;*display:inline;zoom:1;min-width:200px">
+		<img src="{$val->screenshot}" alt="{$val->title}" style="min-width:200px" />
+	</div>
+</div>

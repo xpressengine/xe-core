@@ -1,0 +1,41 @@
+<!--%import("filter/reply_document.xml")-->
+
+<!--#include("header.include.html")-->
+
+<form action="./" method="post" onsubmit="return procFilter(this, reply_document)" class="writeForm">
+<input type="hidden" name="mid" value="{$mid}" />
+<input type="hidden" name="document_srl" value="{$oDocument->document_srl}" />
+<input type="hidden" name="comment_srl" value="{$oReply->get('comment_srl')}" />
+<input type="hidden" name="content" value="" />
+<input type="hidden" name="title" value="" />
+
+    <h3>{$lang->cmd_reply}</h3>
+
+    <div class="roundBox">
+        <div class="roundBoxGuide"><span class="roundBoxTl"></span><span class="roundBoxTr"></span></div>
+        <div class="roundContents content">
+            <div class="titleArea">
+                <h3>{$oDocument->getTitle()}</h3>
+                <a href="#" onclick="return false;" class="author member_{$oDocument->get('member_srl')}">{$oDocument->getNickName()}</a>
+                <span class="date"><strong>{$oDocument->getRegdate('Y.m.d')}</strong> {$oDocument->getRegdate('H:i')}</span>
+            </div>
+            <div class="docContent noline">
+                {$oDocument->getContent(false,false)}
+            </div>
+        </div>
+        <div class="roundBoxGuide"><span class="roundBoxBl"></span><span class="roundBoxBr"></span></div>
+    </div>
+
+
+    <div class="editor">
+        {$oReply->getEditor()}
+    </div>
+
+    <div class="buttonArea">
+        <span class="button strong black"><input type="submit" value="{$lang->cmd_reply}" accesskey="s" /></span>
+        <span class="button"><button type="button" onclick="location.href=current_url.setQuery('act','dispKinView');return false;">{$lang->cmd_back}</button></span>
+    </div>
+
+</form>
+
+<!--#include("footer.include.html")-->

@@ -1,0 +1,73 @@
+<!--%import("css/xeCamp.css")-->
+<!--%import("js/xeCamp.js")-->
+<block cond="$XE_VALIDATOR_MESSAGE">
+<script>
+alert('{$XE_VALIDATOR_MESSAGE}');
+</script>
+</block>
+<form id="container" action="./" method="post" ruleset="insert_enroll_item" enctype="multipart/form-data">
+<input type="hidden" name="act" value="procEnrollItemInsert" >
+<input type="hidden" name="mid" value="{$mid}" />
+	<div id="header">
+		<h1>XE 사업자 간담회 - 참가신청 </h1>
+	</div>
+	<div id="body">
+		<fieldset>
+				<h3 style="margin-left:10px;color:red" cond="$ck_enroll"> ※ 참가신청 이력이 있습니다. [<a href="{getUrl('act','dispEnrollModify')}"><span  style="color:red">수정페이지 바로가기</span></a>]</h3>
+				<include target="./provision.html" />
+				<h4># 업체 정보</h4>
+				<ul style="border:1px solid #e9e9e9">
+					<li>
+						<p>
+							<label class="label_bo" for="entry_0">업체 명&nbsp;<span class="require">*</span></label>
+							<label for="entry_0">준비중이신 경우 본인의 이름을 입력해주세요.</label>
+							<input type="text" name="job" id="job" class="inputText" />
+						</p>
+					</li>
+					<li>
+						<p>
+							<label class="label_bo" for="entry_0">홈페이지&nbsp;</label>
+							<input type="text" name="homepage" id="homepage" value="{$logged_info->homepage}" class="inputText"  style="width:200px" />
+						</p>
+					</li>
+					<li>
+						<p>
+							<label class="label_bo" for="entry_0">업체 간단 설명&nbsp;</label>
+							<input type="text" name="job_content" id="job_content" class="inputText"  style="width:200px" />
+						</p>
+					</li>
+				</ul>
+				<h4># 참석자 정보 </h4>
+				<ul>
+					<li>
+						<p>
+							<label class="label_bo" for="entry_0">이름&nbsp;<span class="require">*</span></label>
+							<input type="text" name="user_name" id="user_name" value="{$logged_info->user_name}" class="inputText" />
+						</p>
+					</li>
+					<li>
+						<p>
+							<label class="label_bo" for="entry_0">휴대전화&nbsp;<span class="require">*</span></label>
+							<input type="text" name="phone" id="phone" class="inputText" />
+						</p>
+					</li>
+					<li>
+						<p>
+							<label class="label_bo" for="entry_1">이메일&nbsp;<span class="require">*</span></label>
+							{$logged_info->email_address}
+						</p>
+					</li>
+					<li>
+						<p>
+							<label class="label_bo" for="entry_5">XE 간담회를 통해 기대하는 점이 있다면 자유롭게 적어주세요. </label>
+							<textarea id="content" name="content" cols="60" rows="4"></textarea>
+						</p>
+					</li>
+				</ul>
+
+		</fieldset>
+	</div>
+				<div id="footer" class="aCenter" style="margin-bottom:20px">
+					<span class="btton"><a href="#" onclick="return validEnrollItemInsert();">신청하기</a></span>
+				</div>
+</form>

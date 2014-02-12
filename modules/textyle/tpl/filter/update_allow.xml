@@ -1,0 +1,12 @@
+<filter name="update_allow" module="textyle" act="procTextylePostItemsAllowCommentTrackback">
+    <form>
+        <node target="mid" required="true" maxlength="250" />
+        <node target="vid" maxlength="250" filter="alpha_number" />
+        <node target="document_srl" required="true" />
+    </form>
+	<parameter />
+    <response callback_func="completeUpdateAllow">
+        <tag name="error" />
+        <tag name="message" />
+    </response>
+</filter>

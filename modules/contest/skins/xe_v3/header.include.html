@@ -1,0 +1,17 @@
+<!--%import("./css/kin.css")-->
+<!--%import("./js/kin.js")-->
+
+{$module_info->header_text}
+
+<!--@if($module_info->title_img)-->
+<div class="kinHeader">
+    <div class="kinTitle">
+        <h2 class="kinTitleText"><a href="{getUrl('','mid',$mid,'listStyle',$listStyle)}"><img src="{$module_info->title_img}" alt="{$module_info->title_alt}" /><!--@if($module_info->sub_title)--> : <em>{$module_info->sub_title}</em><!--@end--></a></h2>
+    </div>
+
+    <!--@if($module_info->comment)-->
+    <p class="kinDescription">{nl2br($module_info->comment)}</p>
+    <!--@end-->
+</div>
+<!--@end-->
+

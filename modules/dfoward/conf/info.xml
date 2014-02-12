@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module version="0.1">
+    <title xml:lang="ko">도메인 포워딩 서비스 모듈</title>
+    <author email_address="zero@zeroboard.com" link="http://www.zeroboard.com" date="2007. 9. 12">
+        <name xml:lang="ko">제로</name>
+        <description xml:lang="ko">도메인 포워딩 서비스를 하기 위해 사용자로부터 원하는 hostname의 등록과 수정을 받고 DB에 저장하는 모듈입니다.</description>
+    </author>
+</module>

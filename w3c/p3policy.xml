@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<POLICIES xmlns="http://www.w3.org/2002/01/P3Pv1">
+	<DATASCHEMA>
+		<DATA-DEF name="dynamic.cookies" short-description="쿠키">
+			<CATEGORIES>
+			<state/>
+			</CATEGORIES>
+		</DATA-DEF>
+		<DATA-DEF name="user.login.question" short-description="비밀번호 질문">
+			<CATEGORIES>
+			<online/>
+			</CATEGORIES>
+		</DATA-DEF>
+		<DATA-DEF name="user.home-info.postal" short-description="자택주소">
+			<CATEGORIES>
+			<physical/>
+			</CATEGORIES>
+		</DATA-DEF>
+		<DATA-DEF name="user.home-info.telecom.mobile" short-description="휴대전화번호">
+			<CATEGORIES>
+			<physical/>
+			</CATEGORIES>
+		</DATA-DEF>
+		<DATA-DEF name="user.business-info.department" short-description="회사명 ">
+			<CATEGORIES>
+			<demographic/>
+			</CATEGORIES>
+		</DATA-DEF>
+		<DATA-DEF name="user.business-info.postal.name" short-description="회사명 ">
+			<CATEGORIES>
+			<demographic/>
+			</CATEGORIES>
+		</DATA-DEF>
+		<DATA-DEF name="user.job-type" short-description="직업종류">
+			<CATEGORIES>
+			<physical/>
+			</CATEGORIES>
+		</DATA-DEF>
+		<DATA-DEF name="user.social-number" short-description="주민등록번호">
+			<CATEGORIES>
+			<government/>
+			</CATEGORIES>
+		</DATA-DEF>
+		<DATA-DEF name="user.hobby" short-description="취미">
+			<CATEGORIES>
+			<physical/>
+			</CATEGORIES>
+		</DATA-DEF>
+		<DATA-DEF name="user.religion" short-description="거주지역">
+			<CATEGORIES>
+			<demographic/>
+			</CATEGORIES>
+		</DATA-DEF>
+		<DATA-DEF name="user.wedding.wedding-y-or-n" short-description="기혼여부">
+			<CATEGORIES>
+			<physical/>
+			</CATEGORIES>
+		</DATA-DEF>
+		<DATA-DEF name="user.anniversary" short-description="기념일">
+			<CATEGORIES>
+			<physical/>
+			</CATEGORIES>
+		</DATA-DEF>
+		<DATA-DEF name="user.school-carrier" short-description="학력">
+			<CATEGORIES>
+			<physical/>
+			</CATEGORIES>
+		</DATA-DEF>
+		<DATA-DEF name="user.body" short-description="신체정보">
+			<CATEGORIES>
+			<health/>
+			</CATEGORIES>
+		</DATA-DEF>
+		<DATA-DEF name="user.credit-card" short-description="신용카드 정보">
+			<CATEGORIES>
+			<financial/>
+			</CATEGORIES>
+		</DATA-DEF>
+		<DATA-DEF name="user.account" short-description="금융계좌 정보">
+			<CATEGORIES>
+			<financial/>
+			</CATEGORIES>
+		</DATA-DEF>
+		<DATA-DEF name="dynamic.payment" short-description="결제 기록">
+			<CATEGORIES>
+			<purchase/>
+			</CATEGORIES>
+		</DATA-DEF>
+		<DATA-DEF name="user.agent" short-description="대리인 정보">
+			<CATEGORIES>
+			<other-category> 대리인 정보</other-category>
+			</CATEGORIES>
+		</DATA-DEF>
+		<DATA-DEF name="user.other-contents" short-description="기타 정보">
+			<CATEGORIES>
+			<other-category>기타 정보</other-category>
+			</CATEGORIES>
+		</DATA-DEF>
+	</DATASCHEMA>
+	<POLICY name="xpressengine" opturi="http://www.xpressengine.com/privacy" discuri="http://www.xpressengine.com/privacy" >
+		<ENTITY>
+			<DATA-GROUP>
+				<DATA ref="#business.name">XE</DATA>
+				<DATA ref="#business.contact-info.online.uri">http://www.xpressengine.com/privacy</DATA>
+			</DATA-GROUP>
+		</ENTITY>
+		<ACCESS>
+			<all/>
+			<EXTENSION optional="no">
+				<USER-RIGHT>
+					이용자 및 법정 대리인은 언제든지 등록되어 있는 자신 혹은 당해 만 14세 미만
+아동의 개인정보를 조회하거나 수정할 수 있으며 가입해지를 요청할 수도 있습니
+다.
+이용자 혹은 만 14세 미만 아동의 개인정보 조회?수정을 위해서는 ‘개인정보변
+경’(또는 ‘회원정보수정’ 등)을 가입해지(동의철회)를 위해서는 “회원탈퇴”를 클릭
+하여 본인 확인 절차를 거치신 후 직접 열람, 정정 또는 탈퇴가 가능합니다.
+혹은 개인정보관리책임자에게 서면, 전화 또는 이메일로 연락하시면 지체없이 조
+치하겠습니다.
+귀하가 개인정보의 오류에 대한 정정을 요청하신 경우에는 정정을 완료하기 전까
+지 당해 개인정보를 이용 또는 제공하지 않습니다. 또한 잘못된 개인정보를 제3자
+에게 이미 제공한 경우에는 정정 처리결과를 제3자에게 지체없이 통지하여 정정이
+이루어지도록 하겠습니다.
+oo는 이용자 혹은 법정 대리인의 요청에 의해 해지 또는 삭제된 개인정보는 “oo
+가 수집하는 개인정보의 보유 및 이용기간”에 명시된 바에 따라 처리하고 그 외의
+용도로 열람 또는 이용할 수 없도록 처리하고 있습니다.
+				</USER-RIGHT>
+			</EXTENSION>
+		</ACCESS>
+		<DISPUTES-GROUP>
+			<DISPUTES resolution-type="service" service="http://www.xpressengine.com/privacy" short-description="XE">
+				<EXTENSION optional="no">
+					<DATA ref="#business.cpo.name">고영수 팀장</DATA>
+					<DATA ref="#business.cpo.email">xpressengine@naver.com</DATA>
+					<DATA ref="#business.cpo.telephone">xpressengine@naver.com </DATA>
+				</EXTENSION>
+				<REMEDIES><correct/><money/><law/></REMEDIES>
+			</DISPUTES>
+		</DISPUTES-GROUP>
+		<STATEMENT>
+			<EXTENSION optional="no">
+				<COLLECTION-METHOD>
+					<document/>
+					<telephone/>
+					<subscription/>
+					<delivery/>
+					<purnish/>
+					<other-method>
+					<website/>
+					</other-method>
+				</COLLECTION-METHOD>
+				<DESTRUCTION-METHOD>
+					<format/>
+					<shatter/>
+				</DESTRUCTION-METHOD>
+			</EXTENSION>
+			<PURPOSE>
+				<individual-decision/><develop/><historical/><individual-analysis/>
+				
+				<EXTENSION optional="no">
+					<PPURPOSE>
+						<payment/><delivery/><finmgt/><login/><session/><marketing/>
+					</PPURPOSE>
+					<content/><payback/><cert/><age/><proxy-agreement/><complaint/><statement/>
+				</EXTENSION>
+			</PURPOSE>
+			<RECIPIENT>
+				<ours></ours>
+			</RECIPIENT>
+			<RETENTION>
+				<legal-requirement/>
+				<EXTENSION optional="no">
+					<use-duration>
+											<one-year/>
+
+					</use-duration>
+					<retention-basis>
+					<internal-company-regulation>부정 이용 방지</internal-company-regulation>
+					<e-trade-law><one-year/></e-trade-law>
+					<other-basis>방문에 관한 기록</other-basis>
+					</retention-basis>
+				</EXTENSION>
+			</RETENTION>
+			<DATA-GROUP base="">
+				<DATA ref="#user.other-contents">닉네임, 홈페이지 주소, 블로그 주소, 생일</DATA>
+			</DATA-GROUP>
+			<DATA-GROUP>
+				<DATA ref="#user.name"/>
+				<DATA ref="#user.login.id"/>
+				<DATA ref="#user.login.password"/>
+				<DATA ref="#user.home-info.online.email"/>
+			</DATA-GROUP>
+		</STATEMENT>
+		<STATEMENT>
+			<EXTENSION optional="no">
+				<COLLECTION-METHOD>
+					<document/>
+					<telephone/>
+					<subscription/>
+					<delivery/>
+					<purnish/>
+					<other-method>
+					<website/>
+					</other-method>
+				</COLLECTION-METHOD>
+				<DESTRUCTION-METHOD>
+					<format/>
+					<shatter/>
+				</DESTRUCTION-METHOD>
+			</EXTENSION>
+			<PURPOSE>
+				<individual-decision/><develop/><historical/><individual-analysis/>
+				
+				<EXTENSION optional="no">
+					<PPURPOSE>
+						<payment/><delivery/><finmgt/><login/><session/><marketing/>
+					</PPURPOSE>
+					<content/><payback/><cert/><age/><proxy-agreement/><complaint/><statement/>
+				</EXTENSION>
+			</PURPOSE>
+			<RECIPIENT>
+				<ours></ours>
+			</RECIPIENT>
+			<RETENTION>
+				<legal-requirement/>
+				<EXTENSION optional="no">
+					<use-duration>
+											<instance/>
+
+					</use-duration>
+					<retention-basis>
+					</retention-basis>
+				</EXTENSION>
+			</RETENTION>
+			<DATA-GROUP base="">
+				<DATA ref="#dynamic.cookies"/>
+			</DATA-GROUP>
+			<DATA-GROUP>
+				<DATA ref="#dynamic.clientevents"/>
+				<DATA ref="#dynamic.interactionrecord"/>
+				<DATA ref="#dynamic.clickstream.clientip"/>
+			</DATA-GROUP>
+		</STATEMENT>
+		<STATEMENT>
+<NON-IDENTIFIABLE>회사는 귀하의 정보를 수시로 저장하고 찾아내는 ‘쿠키(cookie)’ 등을 운용합니다. 쿠키란 oo의 웹사이트를 운영하는데 이용되는 서버가 귀하의 브라우저에 보내는 아주 작은 텍스트 파일로서 귀하의 컴퓨터 하드디스크에 저장됩니다. 회사은(는) 다음과 같은 목적을 위해 쿠키를 사용합니다.
+
+▶ 쿠키 등 사용 목적
+ - 회원과 비회원의 접속 빈도나 방문 시간 등을 분석, 이용자의 취향과 관심분야를 파악 및 자취 추적, 각종 이벤트 참여 정도 및 방문 회수 파악 등을 통한 타겟 마케팅 및 개인 맞춤 서비스 제공
+
+  귀하는 쿠키 설치에 대한 선택권을 가지고 있습니다. 따라서, 귀하는 웹브라우저에서 옵션을 설정함으로써 모든 쿠키를 허용하거나, 쿠키가 저장될 때마다 확인을 거치거나, 아니면 모든 쿠키의 저장을 거부할 수도 있습니다. 
+
+▶ 쿠키 설정 거부 방법
+예: 쿠키 설정을 거부하는 방법으로는 회원님이 사용하시는 웹 브라우저의 옵션을 선택함으로써 모든 쿠키를 허용하거나 쿠키를 저장할 때마다 확인을 거치거나, 모든 쿠키의 저장을 거부할 수 있습니다. 
+
+설정방법 예(인터넷 익스플로어의 경우)
+: 웹 브라우저 상단의 도구 &gt; 인터넷 옵션 &gt; 개인정보
+
+단, 귀하께서 쿠키 설치를 거부하였을 경우 서비스 제공에 어려움이 있을 수 있습니다.</NON-IDENTIFIABLE>		</STATEMENT>
+	</POLICY>
+</POLICIES>

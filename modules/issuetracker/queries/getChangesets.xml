@@ -1,0 +1,21 @@
+<query id="getChangesets" action="select">
+    <tables>
+        <table name="issue_changesets" />
+    </tables>
+    <columns>
+        <column name="*" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" />
+        <condition operation="less" column="date" var="enddate" pipe="and" />
+        <condition operation="more" column="date" var="startdate" pipe="and" />
+		<group pipe="and">
+			<condition operation="equal" column="member_srl" var="member_srl" />
+			<condition operation="equal" column="author" var="author" pipe="or" />
+		</group>
+    </conditions>
+    <navigation>
+        <index var="sort_index" default="revision" order="desc" />
+        <list_count var="list_count" default="9999999" />
+    </navigation>
+</query>

@@ -1,0 +1,71 @@
+<!--@if(!$is_logged)-->
+	{@ $ruleset = "insert_comment_not_logged"}
+	{@ $act_insert = "procWikiInsertCommentNotLogged"}
+<!--@else-->
+	{@ $ruleset = "insert_comment"}
+	{@ $act_insert = "procWikiInsertComment"}
+<!--@end-->
+<form action="./" method="post" ruleset="{$ruleset}" class="wikiEditor" >
+	<input type="hidden" name="act" value="{$act_insert}" />
+	<input type="hidden" name="success_return_url" value="{getUrl('act','dispWikiContent','mid',$mid,'entry',$entry, 'document_srl', '')}" />
+	<input type="hidden" name="module" value="wiki" />
+	<input type="hidden" name="mid" value="{$mid}" />
+	<input type="hidden" name="xe_validator_id" value="modules/wiki/skins/xe_wiki_tree" />
+	<!--@if($oComment) -->
+		<input type="hidden" name="document_srl" value="{$oComment->get('document_srl')}" />
+		<input type="hidden" name="comment_srl" value="{$oComment->get('comment_srl')}" />
+		<input type="hidden" name="content" value="{htmlspecialchars($oComment->get('content'))}" />
+		<input type="hidden" name="parent_srl" value="{$oComment->get('parent_srl')}" />
+	<!--@else-->
+		<input type="hidden" name="mid" value="{$mid}" />
+		<input type="hidden" name="document_srl" value="{$oDocument->document_srl}" />
+		<input type="hidden" name="comment_srl" value="" />
+		<input type="hidden" name="content" value="" /	
+	<!--@end-->
+
+	<div class="wikiWrite commentEditor">
+
+		<div class="editor"><!--@if($oComment) -->{$oComment->getEditor()}<!--@end--></div>
+
+		<!--@if(!$oComment)-->
+		<div id="editor-box">
+			<span id="loadEditorButton">
+				<a onclick="loadCommentForm({$oDocument->document_srl})" class="wikiBodyButton">
+					<span><span>
+					{$lang->leave_comment}
+					</span></span>
+				</a>
+			</span>
+		</div>		
+		<!--@end-->
+
+		<!--@if(!$oComment)-->
+			{@ $hide_css = 'style="display:none"';}
+		<!--@end-->
+		
+		<div class="editorOption" {$hide_css}>
+		<!--@if(!$is_logged)-->
+		<input type="text" name="nick_name" class="inputText userName" value="{$lang->writer}" onfocus="this.value=''" />
+		<input type="password" name="password" class="inputText userPw" value="{$lang->password}" onfocus="this.value=''" />
+		<input type="text" name="email_address" class="inputText emailAddress" value="{$lang->email_address}" onfocus="this.value=''" />
+		<input type="text" name="homepage" class="inputText homePage" value="{$lang->homepage}" onfocus="this.value=''" />
+		<!--@end-->
+			
+		<!--@if($is_logged)-->
+			<input type="checkbox" name="notify_message" value="Y" id="notify_message" class="inputCheck"  />
+			<label for="notify_message">{$lang->notify}</label>
+		<!--@end-->
+			<input type="checkbox" name="is_secret" value="Y" id="is_secret" class="inputCheck" />
+			<label for="is_secret">{$lang->secret}</label>
+		
+		</div>
+
+		<div class="wikiEditorSubmit" {$hide_css}>
+			<input class="btn" type="submit" value="{$lang->cmd_comment_registration}" />
+			<!--@if(!$oComment)-->
+			<input class="btn" type="button" value="{$lang->cancel}" onclick="hideEditor()" />
+			<!--@end-->
+		</div>
+
+	</div>
+</form>

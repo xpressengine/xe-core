@@ -1,0 +1,12 @@
+<query id="getMemberQuestionsCount" action="select">
+    <tables>
+        <table name="documents" alias="doc" />
+    </tables>
+    <columns>
+        <column name="count(*)" alias="question_count" />
+    </columns>
+    <conditions>
+		<condition operation="equal" column="doc.module_srl" var="module_srl" pipe="and"/>
+        <condition operation="equal" column="doc.member_srl" var="member_srl" pipe="and"/>
+    </conditions>
+</query>

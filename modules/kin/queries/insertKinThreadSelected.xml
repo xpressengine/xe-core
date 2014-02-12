@@ -1,0 +1,9 @@
+<query id="insertKinThreadSelected" action="insert">
+    <tables>
+        <table name="kin_thread" />
+    </tables>
+    <columns>
+        <column name="document_srl" var="document_srl" filter="number" notnull="notnull" />
+        <column name="selected" var="selected" filter="number" notnull="notnull" />
+    </columns>
+</query>

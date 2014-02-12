@@ -1,0 +1,167 @@
+<div class="boardRead">
+
+	<div class="boardReadHeader">
+		
+		<div class="titleArea">
+			<h3 class="title"><a href="{$oDocument->getPermanentUrl()}">{$oDocument->getTitle()}</a></h3>
+			<a href="{getUrl('category',$oDocument->get('category_srl'), 'document_srl', '')}" class="category">{$category_list[$oDocument->get('category_srl')]->title}</a>
+			<span class="sum">
+				<span class="read">{$lang->readed_count} <span class="num">{$oDocument->get('readed_count')}</span></span>
+				<span class="vote">{$lang->voted_count} <span class="num">{$oDocument->get('voted_count')}</span></span>
+				<span class="date">{$oDocument->getRegdate('Y.m.d')} {$oDocument->getRegdate('H:i:s')}</span>
+			</span>
+		</div>
+		
+		<div class="authorArea">
+		<!--@if($module_info->display_author!='N')-->
+			<!--@if(!$oDocument->getMemberSrl())-->
+				<!--@if($oDocument->isExistsHomepage())-->
+					<a href="{$oDocument->getHomepageUrl()}" onclick="window.open(this.href);return false;" class="author">{$oDocument->getNickName()}</a>
+				<!--@else-->
+					{$oDocument->getNickName()}
+				<!--@end-->
+			<!--@else-->
+				<a href="#popup_menu_area" class="member_{$oDocument->get('member_srl')} author" onclick="return false">{$oDocument->getNickName()}</a>
+			<!--@end-->
+		<!--@end-->
+			<span class="ipAddress"><!--@if($grant->manager || $module_info->display_ip_address!='N')-->{$oDocument->getIpaddress()}<!--@end--></span>
+			<a href="{$oDocument->getPermanentUrl()}" class="permaLink">{$oDocument->getPermanentUrl()}</a>
+		</div>
+
+	</div>
+
+	<!--@if($oDocument->isExtraVarsExists() && (!$oDocument->isSecret() || $oDocument->isGranted()) )-->
+    <table border="1" cellspacing="0" summary="Extra Form" class="extraVarsList">
+    <!--@foreach($oDocument->getExtraVars() as $key => $val)-->
+    <tr>
+        <th>{$val->name} :</th>
+        <td>{$val->getValueHTML()}&nbsp;</td>
+    </tr>
+    <!--@end-->
+	</table>
+	<!--@end-->
+
+	<div class="boardReadBody">
+		<!--@if($oDocument->isSecret() && !$oDocument->isGranted())-->
+			<form action="./" method="get" onsubmit="return procFilter(this, input_password)" class="secretMessage">
+			<input type="hidden" name="mid" value="{$mid}" />
+			<input type="hidden" name="page" value="{$page}" />
+			<input type="hidden" name="document_srl" value="{$oDocument->document_srl}" />
+
+				<p>&quot;{$lang->msg_is_secret}&quot;</p>
+				<dl>
+					<dt><label for="cpw">{$lang->password}</label> :</dt>
+					<dd><input type="password" name="password" id="cpw" class="iText" /><input class="btn" type="submit" value="{$lang->cmd_input}" /></dd>
+				</dl>
+
+			</form>
+		<!--@else-->
+			{$oDocument->getContent()}
+		<!--@end-->
+
+	</div>
+
+	<div class="boardReadFooter">
+	
+        <!--@if($module_info->display_sign != 'N' && ($oDocument->getProfileImage() || $oDocument->getSignature()))-->
+			<div class="memberSignature">
+			<!--@if($oDocument->getProfileImage())-->
+				<img src="{$oDocument->getProfileImage()}" alt="profile" class="profile" align="left" />
+			<!--@end-->
+			<!--@if($oDocument->getSignature())-->
+				{$oDocument->getSignature()}
+			<!--@end-->
+			</div>
+		<!--@end-->
+		
+		{@ $tag_list = $oDocument->get('tag_list') }
+		<!--@if(count($tag_list))-->
+		<dl class="tag">
+			<dt><img src="./img/common/iconTag.gif" width="27" height="11" alt="{$lang->tag}" /></dt>
+			<!--@for($i=0;$i<count($tag_list);$i++)-->
+				{@ $tag = $tag_list[$i]; }
+				<dd><a href="{getUrl('search_target','tag','search_keyword',$tag,'document_srl','')}" rel="tag">{htmlspecialchars($tag)}</a></dd>
+			<!--@end-->
+		</dl>
+		<!--@end-->
+		
+		<!--@if($oDocument->hasUploadedFiles())-->
+        <dl class="attachedFile">
+            <dt><img src="./img/common/iconFiles.gif" width="27" height="11" alt="{$lang->uploaded_file}" /> <button type="button" class="fileToggle" onclick="jQuery(this).parents('dl.attachedFile').toggleClass('open');return false;">{$lang->uploaded_file} ({$oDocument->get('uploaded_count')})</button></dt>
+            <dd>
+                <ul class="files">
+                    {@ $uploaded_list = $oDocument->getUploadedFiles() }
+                    <!--@foreach($uploaded_list as $key => $file)-->
+                    <li><a href="{getUrl('')}{$file->download_url}">{$file->source_filename} <span class="bubble">[File Size:{FileHandler::filesize($file->file_size)}/Download:{number_format($file->download_count)}]</span></a></li>
+                    <!--@end-->
+                </ul>
+            </dd>
+        </dl>
+		<!--@end-->
+		
+        
+        <!--@if(!$oDocument->getTrackbackCount())-->
+		<dl class="trackbackURL">
+			<dt>{$lang->trackback} : </dt>
+			<dd><a href="{$oDocument->getTrackbackUrl()}" onclick="return false;">{$oDocument->getTrackbackUrl()}</a></dd>
+		</dl>
+        <!--@end-->
+		
+	</div>
+
+    <div class="btnArea">
+        <!--@if($oDocument->isEditable())-->
+		<a class="btn" href="{getUrl('act','dispBoardWrite','document_srl',$oDocument->document_srl,'comment_srl','')}">{$lang->cmd_modify}</a>
+		<a class="btn" href="{getUrl('act','dispBoardDelete','document_srl',$oDocument->document_srl,'comment_srl','')}">{$lang->cmd_delete}</a>
+        <!--@end-->
+		<!--@if($module_info->default_style != 'blog')-->
+        <span class="etc">
+			<a class="btn" href="{getUrl('document_srl','')}">{$lang->cmd_list}</a>
+		</span>
+        <!--@end-->
+    </div>
+
+</div>
+
+<!--@if($oDocument->allowTrackback())-->
+<!--#include("./trackback.html")-->
+<!--@end-->
+<a name="comment"></a>
+<!--#include("./comment.html")-->
+
+<!--@if($oDocument->allowComment())-->
+    <!--@if($grant->write_comment && $oDocument->isEnableComment() )-->
+        <form action="./" method="post" onsubmit="jQuery(this).find('input').each(function(){if(this.title==this.value)this.value='';});return procFilter(this, insert_comment)" class="boardEditor" >
+        <input type="hidden" name="mid" value="{$mid}" />
+        <input type="hidden" name="document_srl" value="{$oDocument->document_srl}" />
+        <input type="hidden" name="comment_srl" value="" />
+        <input type="hidden" name="content" value="" />
+            <div class="boardWrite commentEditor">
+                <div class="editor">{$oDocument->getCommentEditor()}</div>
+
+                <div class="editOption">
+                <!--@if(!$is_logged)-->
+                   <input type="text" name="nick_name" class="iText userName" value="{$lang->writer}"  title="{$lang->writer}" onfocus="if(this.value==this.title)this.value='';return false;" />
+                   <input type="password" name="password" class="iText userPw" value="{$lang->password}" title="{$lang->password}" onfocus="if(this.value==this.title)this.value='';return false;" />
+                   <input type="text" name="email_address" class="iText emailAddress" value="{$lang->email_address}" title="{$lang->email_address}" onfocus="if(this.value==this.title)this.value='';return false;" />
+                   <input type="text" name="homepage" class="iText homePage" value="{$lang->homepage}" title="{$lang->homepage}" onfocus="if(this.value==this.title)this.value='';return false;" />
+                <!--@end-->
+
+				<!--@if($is_logged)-->
+					<input type="checkbox" name="notify_message" value="Y" id="notify_message" class="inputCheck" />
+					<label for="notify_message">{$lang->notify}</label>
+				<!--@end-->
+					<input type="checkbox" name="is_secret" value="Y" id="is_secret" class="inputCheck" />
+					<label for="is_secret">{$lang->secret}</label>
+                </div>
+        
+                <div class="btnArea">
+                    <input class="btn" type="submit" value="{$lang->cmd_comment_registration}" />
+                </div>
+
+            </div>
+
+        </form>
+    <!--@end-->
+<!--@end-->
+

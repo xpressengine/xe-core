@@ -1,0 +1,13 @@
+<query id="getSiteModules" action="select">
+	<tables>
+		<table name="sites" />
+		<table name="modules" />
+	</tables>
+	<columns>
+		<column name="modules.module_srl" />
+	</columns>
+	<conditions>
+		<condition operation="equal" column="sites.site_srl" var="site_srl" notnull="notnull" />
+		<condition operation="equal" column="modules.site_srl" var="sites.site_srl" notnull="notnull" pipe="and" />
+	</conditions>
+</query>

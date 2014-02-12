@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget version="0.2">
+	<title xml:lang="ko">XE Banner</title>
+	<description xml:lang="ko">3개의 배너 이미지를 롤링하는 위젯입니다</description>
+	<version>0.1</version>
+	<date>2009-06-10</date>
+
+	<author email_address="zero@zeroboard.com" link="http://www.zeroboard.com">
+		<name xml:lang="ko">zero</name>
+	</author>
+
+	<extra_vars>
+        <var id="banner_ko">
+            <type filter="jpg,jpeg,gif,png">filebox</type>
+			<name xml:lang="ko">한국어 배너 이미지</name>
+            <description xml:lang="ko">한국어 배너 이미지를 등록해주세요. (가로 960px, 세로 1041px) </description>
+        </var>
+        <var id="banner_en">
+            <type filter="jpg,jpeg,gif,png">filebox</type>
+			<name xml:lang="ko">영어 배너 이미지</name>
+            <description xml:lang="ko">영어 배너 이미지를 등록해주세요. (가로 960px, 세로 1041px) </description>
+        </var>
+        <var id="banner_jp">
+            <type filter="jpg,jpeg,gif,png">filebox</type>
+			<name xml:lang="ko">일본어 배너 이미지</name>
+            <description xml:lang="ko">일본어 배너 이미지를 등록해주세요. (가로 960px, 세로 1041px) </description>
+        </var>
+        <var id="banner_zh">
+            <type filter="jpg,jpeg,gif,png">filebox</type>
+			<name xml:lang="ko">중국어 배너 이미지</name>
+            <description xml:lang="ko">중국어 배너 이미지를 등록해주세요. (가로 960px, 세로 1041px) </description>
+        </var>
+        <var id="banner_title_1">
+            <type>text</type>
+            <name xml:lang="ko">제목 #1</name>
+            <description xml:lang="ko">배너 이미지에 표시될 제목을 입력해주세요.</description>
+        </var>
+        <var id="banner_description_1">
+            <type>text</type>
+            <name xml:lang="ko">설명 #1</name>
+            <description xml:lang="ko">배너 이미지에 표시될 설명을 입력해주세요.</description>
+        </var>
+        <var id="banner_url_1">
+            <type>text</type>
+            <name xml:lang="ko">URL #1</name>
+            <description xml:lang="ko">배너 이미지에 연결될 URL 1번을 입력해주세요.</description>
+        </var>
+        <var id="banner_title_2">
+            <type>text</type>
+            <name xml:lang="ko">제목 #2</name>
+            <description xml:lang="ko">배너 이미지에 표시될 제목을 입력해주세요.</description>
+        </var>
+        <var id="banner_description_2">
+            <type>text</type>
+            <name xml:lang="ko">설명 #2</name>
+            <description xml:lang="ko">배너 이미지에 표시될 설명을 입력해주세요.</description>
+        </var>
+        <var id="banner_url_2">
+            <type>text</type>
+            <name xml:lang="ko">URL #2</name>
+            <description xml:lang="ko">배너 이미지에 연결될 URL 2번을 입력해주세요.</description>
+        </var>
+        <var id="banner_title_3">
+            <type>text</type>
+            <name xml:lang="ko">제목 #3</name>
+            <description xml:lang="ko">배너 이미지에 표시될 제목을 입력해주세요.</description>
+        </var>
+        <var id="banner_description_3">
+            <type>text</type>
+            <name xml:lang="ko">설명 #3</name>
+            <description xml:lang="ko">배너 이미지에 표시될 설명을 입력해주세요.</description>
+        </var>
+        <var id="banner_url_3">
+            <type>text</type>
+            <name xml:lang="ko">URL #3</name>
+            <description xml:lang="ko">배너 이미지에 연결될 URL 3번을 입력해주세요.</description>
+        </var>
+        <var id="banner_title_4">
+            <type>text</type>
+            <name xml:lang="ko">제목 #4</name>
+            <description xml:lang="ko">배너 이미지에 표시될 제목을 입력해주세요.</description>
+        </var>
+        <var id="banner_description_4">
+            <type>text</type>
+            <name xml:lang="ko">설명 #4</name>
+            <description xml:lang="ko">배너 이미지에 표시될 설명을 입력해주세요.</description>
+        </var>
+        <var id="banner_url_4">
+            <type>text</type>
+            <name xml:lang="ko">URL #4</name>
+            <description xml:lang="ko">배너 이미지에 연결될 URL 4번을 입력해주세요.</description>
+        </var>
+
+	</extra_vars>
+</widget>

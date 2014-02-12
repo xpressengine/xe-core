@@ -1,0 +1,13 @@
+<query id="getEnrollItemByEmailAddress" action="select">
+    <tables>
+        <table name="enroll" />
+    </tables>
+    <columns>
+        <column name="*" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" notnull="notnull" />
+        <condition operation="equal" column="email_address" var="email_address" filter="email_address" pipe="and" notnull="notnull" />
+        <condition operation="equal" column="member_srl" var="member_srl" filter="number" pipe="and" />
+    </conditions>
+</query>

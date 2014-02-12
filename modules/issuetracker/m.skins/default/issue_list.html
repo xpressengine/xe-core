@@ -1,0 +1,21 @@
+<!--#include("_header.html")-->
+	<ul class="lt">
+		<!--@foreach($issue_list as $val)-->
+		<li>
+			<a href="{getUrl('document_srl',$val->get('document_srl'))}">
+				<span class="title"><strong>{$val->getTitle()}</strong> <em>[{$val->getCommentCount()}]</em></span>
+				<span class="auth">{$val->getNickName()} <span class="time">{$val->getRegdate("Y.m.d")}</span></span>
+			</a>
+		</li>
+		<!--@end-->
+	</ul>
+	<div class="pn">
+        <!--@if($page != 1)-->
+		<a href="{getUrl('page',$page-1,'document_srl','','division',$division,'last_division',$last_division,'entry','')}" class="prev">{$lang->cmd_prev}</a> 
+        <!--@endif-->
+        <strong>{$page} / {$page_navigation->last_page}</strong>
+        <!--@if($page != $page_navigation->last_page)-->
+		<a href="{getUrl('page',$page+1,'document_srl','','division',$division,'last_division',$last_division,'entry','')}" class="next">{$lang->cmd_next}</a>
+        <!--@endif-->
+	</div>
+<!--#include("_footer.html")-->

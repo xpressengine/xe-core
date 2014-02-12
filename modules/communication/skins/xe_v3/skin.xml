@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+    <title xml:lang="ko">XE Official v3 Communication</title>
+    <description xml:lang="ko">
+        XE 공식 웹 사이트 2011 커뮤니케이션 모듈 레이아웃.
+    </description>
+    <version>0.1</version>
+    <date>2010-12-24</date>
+    <author email_address="developers@xpressengine.com" link="http://xpressengine.com/">
+        <name xml:lang="ko">NHN</name>
+    </author>
+</skin>

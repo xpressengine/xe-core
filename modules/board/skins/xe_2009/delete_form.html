@@ -1,0 +1,12 @@
+<!--#include("_header.html")-->
+<h3>{$lang->confirm_delete}</h3>
+<form action="./" method="get" onsubmit="return procFilter(this, delete_document)">
+	<input type="hidden" name="mid" value="{$mid}" />
+	<input type="hidden" name="page" value="{$page}" />
+	<input type="hidden" name="document_srl" value="{$document_srl}" />
+	<div>
+		<input class="btn" type="submit" value="{$lang->cmd_delete}" />
+		<button class="btn" type="button" onclick="history.back()">{$lang->cmd_cancel}</button>
+	</div>
+</form>
+<!--#include("_footer.html")-->

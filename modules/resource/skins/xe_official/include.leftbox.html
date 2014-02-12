@@ -1,0 +1,59 @@
+<div class="leftBox">
+    <div class="categoryBox">
+        <h3><a href="{getSiteUrl($site_module_info->domain,'','mid',$module_info->mid)}">{$lang->package_category}</a> <span>({number_format($package_categories[0]->count)})</span></h3>
+
+        {@ $_pDepth = 0;}
+
+        <ul class="category">
+            <!--@foreach($categories as $key => $val)-->
+            <!--@if($_pDepth > $val->depth)-->
+            <!--@for($i=$val->depth; $i<$_pDepth; $i++)-->
+        </ul>
+        </li>
+            <!--@end-->
+            {@ $_pDepth = $val->depth}
+            <!--@end-->
+            <li>
+                <!--@if($val->child_count)-->
+                <a href="{getSiteUrl($site_module_info->domain, '', 'mid', $module_info->mid, 'category_srl',$val->category_srl,'childs', implode(',',$val->childs))}"<!--@if($val->category_srl == $category_srl)--> class="selected"<!--@end-->>{$val->text}</a>
+                <!--@else-->
+                <a href="{getSiteUrl($site_module_info->domain, '', 'mid', $module_info->mid, 'category_srl',$val->category_srl)}"<!--@if($val->category_srl == $category_srl)--> class="selected"<!--@end-->>{$val->text}</a>
+                <!--@end-->
+                <!--@if($package_categories[$val->category_srl])-->
+                <span>({$package_categories[$val->category_srl]->count})</span>
+                <!--@end-->
+            <!--@if($val->child_count)-->
+            {@$_pDepth++}
+        <ul class="category">
+            <!--@else-->
+            </li>
+            <!--@end-->
+            <!--@end-->
+            <!--@for($i=0;$i<$_pDepth;$i++)-->
+        </ul>
+        <!--@end-->
+        </li>
+        </ul>
+        <ul class="resourceManage">
+            <li><a href="{getSiteUrl($site_module_info->domain, '', 'mid',$module_info->mid,'act','dispResourcePackageList')}">{$lang->cmd_list_my_package}</a></li>
+            <!--@if($grant->manager)-->
+            <li><a href="{getSiteUrl($site_module_info->domain, '', 'mid',$module_info->mid,'act','dispResourceManage')}">{$lang->cmd_manage_package}</a></li>
+            <!--@end-->
+            <li class="insertPackage"><a href="{getSiteUrl($site_module_info->domain, '', 'mid',$module_info->mid,'act','dispResourceInsertPackage')}">{$lang->cmd_insert_package}</a></li>
+            <!--@if($grant->manager)-->
+            <li><a href="{getSiteUrl($site_module_info->domain, '', 'mid',$module_info->mid,'act','dispResourceAdminInsert')}">{$lang->cmd_setup}</a></li>
+            <!--@end-->
+        </ul>
+
+        <div class="searchBox">
+            <form action="./" method="get" no-error-return-url="true">
+                <input type="hidden" name="vid" value="{$vid}" />
+                <input type="hidden" name="mid" value="{$mid}" />
+                <input type="hidden" name="category_srl" value="{$category_srl}" />
+                <input type="text" name="search_keyword" value="{htmlspecialchars($search_keyword)}" class="input" />
+                <input type="image" src="./img/btn_search.gif" class="submit" />
+            </form>
+        </div>
+    </div>
+
+</div>

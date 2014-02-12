@@ -1,0 +1,526 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<lang>
+	<item name="kin">
+		<value xml:lang="ko"><![CDATA[지식인 XE]]></value>
+		<value xml:lang="en"><![CDATA[Q&amp;A System]]></value>
+		<value xml:lang="zh-CN"><![CDATA[知识问答]]></value>
+	</item>
+	<item name="about_kin">
+		<value xml:lang="ko"><![CDATA[질문과 답변을 하고 답변을 채택할 수 있는 XE 지식인 모듈입니다.]]></value>
+		<value xml:lang="en"><![CDATA[It is a question&answer system on XE.<br>You can ask questions, get answers from real people, and share your insights and knowledge with other users around the world.]]></value>
+		<value xml:lang="zh-CN"><![CDATA[提问、回答及采纳为一体的XE互动问答平台。]]></value>
+	</item>
+	<item name="cmd_management">
+		<value xml:lang="ko"><![CDATA[관리]]></value>
+		<value xml:lang="en"><![CDATA[Management]]></value>
+		<value xml:lang="zh-CN"><![CDATA[管理]]></value>
+	</item>
+	<item name="total_articles">
+		<value xml:lang="ko"><![CDATA[전체]]></value>
+		<value xml:lang="en"><![CDATA[All Categories]]></value>
+		<value xml:lang="zh-CN"><![CDATA[全部分类]]></value>
+	</item>
+	<item name="kin_main_tabs" type="array">
+		<item name="0">
+            <value xml:lang="ko"><![CDATA[질문하기]]></value>
+            <value xml:lang="en"><![CDATA[Ask Question]]></value>
+			<value xml:lang="zh-CN"><![CDATA[我要提问]]></value>
+        </item>
+		<item name="1">
+            <value xml:lang="ko"><![CDATA[질문찾기]]></value>
+            <value xml:lang="en"><![CDATA[Search Answer]]></value>
+			<value xml:lang="zh-CN"><![CDATA[搜索答案]]></value>
+        </item>
+		<item name="2">
+            <value xml:lang="ko"><![CDATA[답변을 기다리는 질문]]></value>
+            <value xml:lang="en"><![CDATA[Unsolved Questions]]></value>
+			<value xml:lang="zh-CN"><![CDATA[待解决的问题]]></value>
+        </item>
+		<item name="3">
+            <value xml:lang="ko"><![CDATA[최근답변]]></value>
+            <value xml:lang="en"><![CDATA[Latest Anwsers]]></value>
+			<value xml:lang="zh-CN"><![CDATA[最新回答]]></value>
+        </item>
+		<item name="4">
+            <value xml:lang="ko"><![CDATA[해결된 질문]]></value>
+            <value xml:lang="en"><![CDATA[Solved Questions]]></value>
+			<value xml:lang="zh-CN"><![CDATA[已解决的问题]]></value>
+        </item>
+		<item name="5">
+            <value xml:lang="ko"><![CDATA[나의 질문]]></value>
+            <value xml:lang="en"><![CDATA[My Questions]]></value>
+			<value xml:lang="zh-CN"><![CDATA[我的提问]]></value>
+        </item>
+		<item name="6">
+            <value xml:lang="ko"><![CDATA[나의 답변]]></value>
+            <value xml:lang="en"><![CDATA[My Anwsers]]></value>
+			<value xml:lang="zh-CN"><![CDATA[我的回答]]></value>
+        </item>
+		<item name="7">
+            <value xml:lang="ko"><![CDATA[포인트 많은순으로 ]]></value>
+            <value xml:lang="en"><![CDATA[High Score]]></value>
+			<value xml:lang="zh-CN"><![CDATA[高分问题]]></value>
+        </item>
+		<item name="8">
+            <value xml:lang="ko"><![CDATA[인기 질문]]></value>
+            <value xml:lang="en"><![CDATA[Popular Questions]]></value>
+			<value xml:lang="zh-CN"><![CDATA[热门问题]]></value>
+        </item>
+		<item name="9">
+            <value xml:lang="ko"><![CDATA[인기 답변]]></value>
+            <value xml:lang="en"><![CDATA[Popular Answers]]></value>
+			<value xml:lang="zh-CN"><![CDATA[热门回答]]></value>
+        </item>
+	</item>
+	<item name="kin_all_questions">
+		<value xml:lang="ko"><![CDATA[모든 질문]]></value>
+		<value xml:lang="en"><![CDATA[All Questions]]></value>
+		<value xml:lang="zh-CN"><![CDATA[全部提问]]></value>
+	</item>
+	<item name="cmd_ask">
+		<value xml:lang="ko"><![CDATA[질문하기]]></value>
+		<value xml:lang="en"><![CDATA[Ask Question]]></value>
+		<value xml:lang="zh-CN"><![CDATA[提问]]></value>
+	</item>
+	<item name="cmd_reply">
+		<value xml:lang="ko"><![CDATA[답변등록]]></value>
+		<value xml:lang="en"><![CDATA[Add an Answer]]></value>
+		<value xml:lang="zh-CN"><![CDATA[提交回答]]></value>
+	</item>
+	<item name="cmd_add_question">
+		<value xml:lang="ko"><![CDATA[질문하기]]></value>
+		<value xml:lang="en"><![CDATA[Add Question]]></value>
+		<value xml:lang="zh-CN"><![CDATA[添加问题]]></value>
+	</item>
+	<item name="cmd_modify_reply">
+		<value xml:lang="ko"><![CDATA[답변 수정하기]]></value>
+		<value xml:lang="en"><![CDATA[Modify Answer]]></value>
+		<value xml:lang="zh-CN"><![CDATA[修改回答]]></value>
+	</item>
+	<item name="about_ask">
+		<value xml:lang="ko"><![CDATA[질문의 제목을 입력해주세요.]]></value>
+		<value xml:lang="en"><![CDATA[Please input the question title.]]></value>
+		<value xml:lang="zh-CN"><![CDATA[请输入您的提问标题。]]></value>
+	</item>
+	<item name="cmd_find_ask">
+		<value xml:lang="ko"><![CDATA[질문찾기]]></value>
+		<value xml:lang="en"><![CDATA[Search]]></value>
+		<value xml:lang="zh-CN"><![CDATA[搜索]]></value>
+	</item>
+	<item name="about_find_ask">
+		<value xml:lang="ko"><![CDATA[찾고 싶은 질문 또는 답변을 검색할 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Search questions beased on the keywords.]]></value>
+		<value xml:lang="zh-CN"><![CDATA[根据关键字搜索相关提问及回答。]]></value>
+	</item>
+	<item name="go_more">
+		<value xml:lang="ko"><![CDATA[더보기]]></value>
+		<value xml:lang="en"><![CDATA[more]]></value>
+		<value xml:lang="zh-CN"><![CDATA[更多]]></value>
+	</item>
+	<item name="replies">
+		<value xml:lang="ko"><![CDATA[답변]]></value>
+		<value xml:lang="en"><![CDATA[Answers]]></value>
+		<value xml:lang="zh-CN"><![CDATA[回答]]></value>
+	</item>
+	<item name="msg_no_questions">
+		<value xml:lang="ko"><![CDATA[질문이 없습니다.]]></value>
+		<value xml:lang="en"><![CDATA[no questions]]></value>
+		<value xml:lang="zh-CN"><![CDATA[暂无提问。]]></value>
+	</item>
+	<item name="msg_no_replies">
+		<value xml:lang="ko"><![CDATA[답변이 없습니다.]]></value>
+		<value xml:lang="en"><![CDATA[no replies]]></value>
+		<value xml:lang="zh-CN"><![CDATA[暂无回答。]]></value>
+	</item>
+	<item name="msg_no_my_questions">
+		<value xml:lang="ko"><![CDATA[내 질문이 없습니다.]]></value>
+		<value xml:lang="en"><![CDATA[no questions]]></value>
+		<value xml:lang="zh-CN"><![CDATA[尚无我的提问。]]></value>
+	</item>
+	<item name="msg_no_article">
+		<value xml:lang="ko"><![CDATA[글이 없습니다.]]></value>
+		<value xml:lang="en"><![CDATA[no thread]]></value>
+		<value xml:lang="zh-CN"><![CDATA[对不起，没有找到相关提问。]]></value>
+	</item>
+	<item name="notify_message">
+		<value xml:lang="ko"><![CDATA[답변알림]]></value>
+		<value xml:lang="en"><![CDATA[Email Notify]]></value>
+		<value xml:lang="zh-CN"><![CDATA[通告]]></value>
+	</item>
+	<item name="about_notify_message">
+		<value xml:lang="ko"><![CDATA[답변이 추가되면 쪽지 또는 메일로 알려드립니다]]></value>
+		<value xml:lang="en"><![CDATA[When the Questions is solved, half of the given point will be paid to the owener <br/>the other half point will be paid to the replier(minimal:%d, maximal %d).]]></value>
+		<value xml:lang="zh-CN"><![CDATA[有回答时，发送短消息或电子邮件。]]></value>
+	</item>
+	<item name="ask_category">
+		<value xml:lang="ko"><![CDATA[질문분류]]></value>
+		<value xml:lang="en"><![CDATA[Category]]></value>
+		<value xml:lang="zh-CN"><![CDATA[提问分类]]></value>
+	</item>
+	<item name="cmd_load_saved_document">
+		<value xml:lang="ko"><![CDATA[임시저장된 질문 불러오기]]></value>
+		<value xml:lang="en"><![CDATA[Load the temp saved questions.]]></value>
+		<value xml:lang="zh-CN"><![CDATA[导入临时保存的提问]]></value>
+	</item>
+	<item name="give_point">
+		<value xml:lang="ko"><![CDATA[포인트 선물]]></value>
+		<value xml:lang="en"><![CDATA[Given Point]]></value>
+		<value xml:lang="zh-CN"><![CDATA[悬赏积分]]></value>
+	</item>
+	<item name="about_give_point">
+		<value xml:lang="ko"><![CDATA[답변 선택시 답변자에게 입력하신 포인트의 절반을 선물합니다.<br/>그리고 나머지 절반을 다시 돌려받게 됩니다. (최저 : %d, 최고 %d)]]></value>
+		<value xml:lang="en"><![CDATA[When the Questions is solved, half of the given point will be paid to the owener <br/>the other half point will be paid to the replier(minimal:%d, maximal %d).]]></value>
+		<value xml:lang="zh-CN"><![CDATA[回答被采纳时，将此积分的一半赠送给最佳答案回答者。<br/>另一半将返回(最低 : %d, 最高 %d)。]]></value>
+	</item>
+	<item name="limit_write">
+		<value xml:lang="ko"><![CDATA[질문 제한]]></value>
+		<value xml:lang="en"><![CDATA[Enable Point Limit]]></value>
+		<value xml:lang="zh-CN"><![CDATA[提问限制]]></value>
+	</item>
+	<item name="about_limit_write">
+		<value xml:lang="ko"><![CDATA[사용자의 포인트가 글쓰기 포인트보다 적으면 글을 쓸 수 없도록 합니다]]></value>
+		<value xml:lang="en"><![CDATA[If the question given point is great than the question point limitation, the question can't be commited.]]></value>
+		<value xml:lang="zh-CN"><![CDATA[当提问悬赏积分大于悬赏积分限制时，将无法提交提问。]]></value>
+	</item>
+	<item name="msg_limit_write">
+		<value xml:lang="ko"><![CDATA[보유하고 계신 포인트가 부족하여 질문을 하실 수 없습니다]]></value>
+		<value xml:lang="en"><![CDATA[Your point is less than needed, can't commit question.]]></value>
+		<value xml:lang="zh-CN"><![CDATA[对不起！您的积分不够，无法提交提问。]]></value>
+	</item>
+	<item name="limit_give_point">
+		<value xml:lang="ko"><![CDATA[포인트 제한]]></value>
+		<value xml:lang="en"><![CDATA[Question Point Limit]]></value>
+		<value xml:lang="zh-CN"><![CDATA[积分限制]]></value>
+	</item>
+	<item name="about_limit_give_point">
+		<value xml:lang="ko"><![CDATA[질문자가 선물할 수 있는 최대 점수를 입력하여 제한할 수 있습니다 (기본 100)]]></value>
+		<value xml:lang="en"><![CDATA[Config maximal question given point (default:100).]]></value>
+		<value xml:lang="zh-CN"><![CDATA[设置悬赏积分限制(默认：100)。]]></value>
+	</item>
+	<item name="msg_title_is_null">
+		<value xml:lang="ko"><![CDATA[제목을 입력해 주세요]]></value>
+		<value xml:lang="en"><![CDATA[Please input title]]></value>
+		<value xml:lang="zh-CN"><![CDATA[请输入标题。]]></value>
+	</item>
+	<item name="msg_content_is_null">
+		<value xml:lang="ko"><![CDATA[내용을 입력해 주세요]]></value>
+		<value xml:lang="en"><![CDATA[Please input content]]></value>
+		<value xml:lang="zh-CN"><![CDATA[请输入提问内容。]]></value>
+	</item>
+	<item name="msg_point_is_null">
+		<value xml:lang="ko"><![CDATA[답변자에게 선물 할 포인트를 입력하여 주세요]]></value>
+		<value xml:lang="en"><![CDATA[Please input given point]]></value>
+		<value xml:lang="zh-CN"><![CDATA[请输入悬赏积分。]]></value>
+	</item>
+	<item name="msg_point_is_over">
+		<value xml:lang="ko"><![CDATA[선물할 포인트가 보유한 포인트(%d) 보다 많습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Your given point is over more than your own point(%d)!]]></value>
+		<value xml:lang="zh-CN"><![CDATA[悬赏积分不能超过您的现有积分(%d)！]]></value>
+	</item>
+	<item name="msg_point_shortage">
+		<value xml:lang="ko"><![CDATA[답변자에게 선물 할 포인트가 적습니다 (%d 포인트 이상 입력해주세요)]]></value>
+		<value xml:lang="en"><![CDATA[The given point can not be less than the minimun given point (%d).]]></value>
+		<value xml:lang="zh-CN"><![CDATA[悬赏积分不能少于最低悬赏积分(需输入%d以上)！]]></value>
+	</item>
+	<item name="msg_point_limited">
+		<value xml:lang="ko"><![CDATA[답변자에게 선물 할 포인트가 많습니다 (%d 포인트 이하로 입력해주세요)]]></value>
+		<value xml:lang="en"><![CDATA[Must below %d point!]]></value>
+		<value xml:lang="zh-CN"><![CDATA[悬赏积分不能超过最高悬赏积分(需输入%d以下)！]]></value>
+	</item>
+	<item name="msg_document_is_null">
+		<value xml:lang="ko"><![CDATA[글을 찾을 수 없습니다]]></value>
+		<value xml:lang="en"><![CDATA[No found questions]]></value>
+		<value xml:lang="zh-CN"><![CDATA[没有找到相关提问。]]></value>
+	</item>
+	<item name="rank_of_this_doc">
+		<value xml:lang="ko"><![CDATA[이 지식이 받은 추천]]></value>
+		<value xml:lang="en"><![CDATA[Document rank]]></value>
+		<value xml:lang="zh-CN"><![CDATA[知识推荐]]></value>
+	</item>
+	<item name="current_replies">
+		<value xml:lang="ko"><![CDATA[현재 답변들]]></value>
+		<value xml:lang="en"><![CDATA[Replies]]></value>
+		<value xml:lang="zh-CN"><![CDATA[回答]]></value>
+	</item>
+	<item name="cmd_do_comment">
+		<value xml:lang="ko"><![CDATA[의견 쓰기]]></value>
+		<value xml:lang="en"><![CDATA[Reply]]></value>
+		<value xml:lang="zh-CN"><![CDATA[回复]]></value>
+	</item>
+	<item name="msg_reply_message">
+		<value xml:lang="ko"><![CDATA[답변 채택시 포인트]]></value>
+		<value xml:lang="en"><![CDATA[Given Point]]></value>
+		<value xml:lang="zh-CN"><![CDATA[采纳积分]]></value>
+	</item>
+	<item name="cmd_select_reply">
+		<value xml:lang="ko"><![CDATA[답변 채택]]></value>
+		<value xml:lang="en"><![CDATA[Accept Answer]]></value>
+		<value xml:lang="zh-CN"><![CDATA[采纳回答]]></value>
+	</item>
+	<item name="msg_select_reply">
+		<value xml:lang="ko"><![CDATA[선택하신 답변을 채택하시겠습니까?]]></value>
+		<value xml:lang="en"><![CDATA[Are you sure to accept?]]></value>
+		<value xml:lang="zh-CN"><![CDATA[确定要采纳所选回答吗？]]></value>
+	</item>
+	<item name="msg_selected_reply">
+		<value xml:lang="ko"><![CDATA[질문자로부터 선택받은 답변입니다]]></value>
+		<value xml:lang="en"><![CDATA[Accepted Answer.]]></value>
+		<value xml:lang="zh-CN"><![CDATA[提问者采纳的最佳答案。]]></value>
+	</item>
+	<item name="cmd_move_selected_reply">
+		<value xml:lang="ko"><![CDATA[질문자 선택 답변 보기]]></value>
+		<value xml:lang="en"><![CDATA[Accepted Answer]]></value>
+		<value xml:lang="zh-CN"><![CDATA[查看提问者采纳的最佳答案]]></value>
+	</item>
+	<item name="cmd_go_kin_index">
+		<value xml:lang="ko"><![CDATA[처음으로 돌아가기]]></value>
+		<value xml:lang="en"><![CDATA[Return]]></value>
+		<value xml:lang="zh-CN"><![CDATA[返回]]></value>
+	</item>
+	<item name="kin_ing">
+		<value xml:lang="ko"><![CDATA[진행중]]></value>
+		<value xml:lang="en"><![CDATA[Soloving]]></value>
+		<value xml:lang="zh-CN"><![CDATA[解决中]]></value>
+	</item>
+	<item name="kin_complete">
+		<value xml:lang="ko"><![CDATA[완료]]></value>
+		<value xml:lang="en"><![CDATA[Soloved]]></value>
+		<value xml:lang="zh-CN"><![CDATA[已解决]]></value>
+	</item>
+	<item name="search_result">
+		<value xml:lang="ko"><![CDATA[검색결과]]></value>
+		<value xml:lang="en"><![CDATA[Search Result]]></value>
+		<value xml:lang="zh-CN"><![CDATA[搜索结果]]></value>
+	</item>
+	<item name="short_replies">
+		<value xml:lang="ko"><![CDATA[의견]]></value>
+		<value xml:lang="en"><![CDATA[Comments]]></value>
+		<value xml:lang="zh-CN"><![CDATA[评论]]></value>
+	</item>
+	<item name="kin_manage_list">
+		<value xml:lang="ko"><![CDATA[회원 포인트 관리]]></value>
+		<value xml:lang="en"><![CDATA[Member Point Management]]></value>
+		<value xml:lang="zh-CN"><![CDATA[会员管理]]></value>
+	</item>
+	<item name="about_point_signup">
+		<value xml:lang="ko"><![CDATA[등록하기]]></value>
+		<value xml:lang="en"><![CDATA[Registration]]></value>
+		<value xml:lang="zh-CN"><![CDATA[注册]]></value>
+	</item>
+	<item name="topToltal">
+		<value xml:lang="ko"><![CDATA[연간 포인트 순위]]></value>
+		<value xml:lang="en"><![CDATA[Annually Points Top]]></value>
+		<value xml:lang="zh-CN"><![CDATA[每年总积分前]]></value>
+	</item>
+	<item name="topLastWeek">
+		<value xml:lang="ko"><![CDATA[주간 포인트 순위]]></value>
+		<value xml:lang="en"><![CDATA[Weekly Points Top]]></value>
+		<value xml:lang="zh-CN"><![CDATA[每周积分前]]></value>
+	</item>
+	<item name="topLastMonth">
+		<value xml:lang="ko"><![CDATA[월간 포인트 순위]]></value>
+		<value xml:lang="en"><![CDATA[Monthly Points Top]]></value>
+		<value xml:lang="zh-CN"><![CDATA[每月积分前]]></value>
+	</item>
+	<item name="totalPointTop">
+		<value xml:lang="ko"><![CDATA[전체 포인트 순위]]></value>
+		<value xml:lang="en"><![CDATA[Total Points Top]]></value>
+		<value xml:lang="zh-CN"><![CDATA[总积分排名]]></value>
+	</item>
+	<item name="cmd_new">
+		<value xml:lang="ko"><![CDATA[새 지식인 모듈 생성]]></value>
+		<value xml:lang="en"><![CDATA[Create a new Q&A System]]></value>
+		<value xml:lang="zh-CN"><![CDATA[新建知识问答]]></value>
+	</item>
+	<item name="user">
+		<value xml:lang="ko"><![CDATA[사용자]]></value>
+		<value xml:lang="en"><![CDATA[User]]></value>
+		<value xml:lang="zh-CN"><![CDATA[用户]]></value>
+	</item>
+	<item name="point">
+		<value xml:lang="ko"><![CDATA[포인트]]></value>
+		<value xml:lang="en"><![CDATA[Total Point]]></value>
+		<value xml:lang="zh-CN"><![CDATA[你的积分]]></value>
+	</item>
+	<item name="regdate">
+		<value xml:lang="ko"><![CDATA[등록 날짜]]></value>
+		<value xml:lang="en"><![CDATA[Reg Date]]></value>
+		<value xml:lang="zh-CN"><![CDATA[注册日期]]></value>
+	</item>
+	<item name="comment_count_kin">
+		<value xml:lang="ko"><![CDATA[답변 수]]></value>
+		<value xml:lang="en"><![CDATA[Number of Answers]]></value>
+		<value xml:lang="zh-CN"><![CDATA[回答数]]></value>
+	</item>
+	<item name="about_comment_count_kin">
+		<value xml:lang="ko"><![CDATA[한페이지에 보여지는 답변 수]]></value>
+		<value xml:lang="en"><![CDATA[Display the answers as much as user inputs the number and it will be moved to the list if the answers are over its number.]]></value>
+		<value xml:lang="zh-CN"><![CDATA[显示在页面中的回答数。]]></value>
+	</item>
+	<item name="point_insert_comment_kin">
+		<value xml:lang="ko"><![CDATA[질문 추가]]></value>
+		<value xml:lang="en"><![CDATA[On Adding Answers]]></value>
+		<value xml:lang="zh-CN"><![CDATA[添加回答]]></value>
+	</item>
+	<item name="qa_title">
+		<value xml:lang="ko"><![CDATA[모듈 타이틀]]></value>
+		<value xml:lang="en"><![CDATA[System Title]]></value>
+		<value xml:lang="zh-CN"><![CDATA[系统标题]]></value>
+	</item>
+	<item name="about_qa_title">
+		<value xml:lang="ko"><![CDATA[모듈의 이름을 입력해 주세요.]]></value>
+		<value xml:lang="en"><![CDATA[Please input the QA system title.]]></value>
+		<value xml:lang="zh-CN"><![CDATA[请输入知识问答系统标题]]></value>
+	</item>
+	<item name="answers">
+		<value xml:lang="ko"><![CDATA[답변]]></value>
+		<value xml:lang="en"><![CDATA[Answers]]></value>
+		<value xml:lang="zh-CN"><![CDATA[回答]]></value>
+	</item>
+	<item name="type">
+		<value xml:lang="ko"><![CDATA[유형]]></value>
+		<value xml:lang="en"><![CDATA[Type]]></value>
+		<value xml:lang="zh-CN"><![CDATA[类型]]></value>
+	</item>
+	<item name="solved">
+		<value xml:lang="ko"><![CDATA[해결됨]]></value>
+		<value xml:lang="en"><![CDATA[Solved]]></value>
+		<value xml:lang="zh-CN"><![CDATA[已解决]]></value>
+	</item>
+	<item name="unsolved">
+		<value xml:lang="ko"><![CDATA[해결안됨]]></value>
+		<value xml:lang="en"><![CDATA[Unsolved]]></value>
+		<value xml:lang="zh-CN"><![CDATA[未解决]]></value>
+	</item>
+	<item name="accepted">
+		<value xml:lang="ko"><![CDATA[채택됨]]></value>
+		<value xml:lang="en"><![CDATA[Accepted]]></value>
+		<value xml:lang="zh-CN"><![CDATA[已接受]]></value>
+	</item>
+	<item name="unaccepted">
+		<value xml:lang="ko"><![CDATA[채택안됨]]></value>
+		<value xml:lang="en"><![CDATA[Un-accepted]]></value>
+		<value xml:lang="zh-CN"><![CDATA[未接受]]></value>
+	</item>
+	<item name="point_insert_question_kin">
+		<value xml:lang="ko"><![CDATA[질문 추가]]></value>
+		<value xml:lang="en"><![CDATA[On Adding Questions]]></value>
+		<value xml:lang="zh-CN"><![CDATA[添加问题]]></value>
+	</item>
+	<item name="about_kin_list_count">
+		<value xml:lang="ko"><![CDATA[한 페이지에 표시될 글 수를 지정하실 수 있습니다. (기본 10개)]]></value>
+		<value xml:lang="en"><![CDATA[You can limit the number of article to show on one page. The default is 10.]]></value>
+		<value xml:lang="jp"><![CDATA[１ページ当たりに表示される書き込み数を指定できます（デフォルト10個）。]]></value>
+		<value xml:lang="zh-CN"><![CDATA[可以指定每页显示的主题数。(默认为10个)]]></value>
+		<value xml:lang="zh-TW"><![CDATA[可以指定每頁顯示的主題數。(預設為 10 個)]]></value>
+		<value xml:lang="fr"><![CDATA[Vous pouvez configurer combien d'articles soient exposés dans une page.(10 par défaut)]]></value>
+		<value xml:lang="ru"><![CDATA[Вы можете установить лимит показа статей на страницу. (по умолчанию: 10)]]></value>
+		<value xml:lang="es"><![CDATA[Usted puede definir el número límite de los documentos a mostrar en una página.(Predefinido es 10)]]></value>
+		<value xml:lang="tr"><![CDATA[Sayfada gösterilecek makalelerin sayı üstsınırını ayarlayabilirsiniz.(varsayılan : 10)]]></value>
+		<value xml:lang="vi"><![CDATA[Bạn có thể giới hạn bài viết hiển thị trên một trang.(Mặc định là 10)]]></value>
+	</item>
+	<item name="popular_questions">
+		<value xml:lang="ko"><![CDATA[인기질문]]></value>
+		<value xml:lang="en"><![CDATA[Popular Questions]]></value>
+		<value xml:lang="zh-CN"><![CDATA[热门问题]]></value>
+	</item>
+	<item name="back">
+		<value xml:lang="ko"><![CDATA[돌아가기]]></value>
+		<value xml:lang="en"><![CDATA[Back]]></value>
+		<value xml:lang="zh-CN"><![CDATA[返回]]></value>
+	</item>
+	<item name="question">
+		<value xml:lang="ko"><![CDATA[질문]]></value>
+		<value xml:lang="en"><![CDATA[Question]]></value>
+		<value xml:lang="zh-CN"><![CDATA[问题]]></value>
+	</item>
+	<item name="open_question">
+		<value xml:lang="ko"><![CDATA[해결 안된 질문]]></value>
+		<value xml:lang="en"><![CDATA[Open Question]]></value>
+		<value xml:lang="zh-CN"><![CDATA[开放的问题]]></value>
+	</item>
+	<item name="solved_question">
+		<value xml:lang="ko"><![CDATA[해결된 질문]]></value>
+		<value xml:lang="en"><![CDATA[Solved Question]]></value>
+		<value xml:lang="zh-CN"><![CDATA[已解决的问题]]></value>
+	</item>
+	<item name="all_questions">
+		<value xml:lang="ko"><![CDATA[모든 질문]]></value>
+		<value xml:lang="en"><![CDATA[All Questions]]></value>
+		<value xml:lang="zh-CN"><![CDATA[全部问题]]></value>
+	</item>
+	<item name="show">
+		<value xml:lang="ko"><![CDATA[보여주기]]></value>
+		<value xml:lang="en"><![CDATA[Show]]></value>
+		<value xml:lang="zh-CN"><![CDATA[显示]]></value>
+	</item>
+	<item name="all_answers">
+		<value xml:lang="ko"><![CDATA[모든 답변]]></value>
+		<value xml:lang="en"><![CDATA[All Answers]]></value>
+		<value xml:lang="zh-CN"><![CDATA[全部问题]]></value>
+	</item>
+	<item name="accepted_answer">
+		<value xml:lang="ko"><![CDATA[채택된 답변]]></value>
+		<value xml:lang="en"><![CDATA[Accepted Answer]]></value>
+		<value xml:lang="zh-CN"><![CDATA[已接受的回答]]></value>
+	</item>
+	<item name="rated_sort">
+		<value xml:lang="ko"><![CDATA[추천수 내림순]]></value>
+		<value xml:lang="en"><![CDATA[Rated Highest to Lowest]]></value>
+		<value xml:lang="zh-CN"><![CDATA[投票数量由高到低]]></value>
+	</item>
+	<item name="my_question_answer">
+		<value xml:lang="ko"><![CDATA[내 질문과 답변]]></value>
+		<value xml:lang="en"><![CDATA[My Questions & Answers]]></value>
+		<value xml:lang="zh-CN"><![CDATA[我的问题和回答]]></value>
+	</item>
+	<item name="popolar_question_answer">
+		<value xml:lang="ko"><![CDATA[인기질문과 답변]]></value>
+		<value xml:lang="en"><![CDATA[Popular Questions & Answers]]></value>
+		<value xml:lang="zh-CN"><![CDATA[热门问题和回答]]></value>
+	</item>
+	<item name="total_point">
+		<value xml:lang="ko"><![CDATA[전체 포인트]]></value>
+		<value xml:lang="en"><![CDATA[Total Point]]></value>
+		<value xml:lang="zh-CN"><![CDATA[总积分]]></value>
+	</item>
+	<item name="weekly_point">
+		<value xml:lang="ko"><![CDATA[주간 포인트 순위]]></value>
+		<value xml:lang="en"><![CDATA[Weekly Point]]></value>
+		<value xml:lang="zh-CN"><![CDATA[每周积分]]></value>
+	</item>
+	<item name="monthly_point">
+		<value xml:lang="ko"><![CDATA[월간 포인트 순위]]></value>
+		<value xml:lang="en"><![CDATA[Monthly Point]]></value>
+		<value xml:lang="zh-CN"><![CDATA[每月积分]]></value>
+	</item>
+	<item name="annually_point">
+		<value xml:lang="ko"><![CDATA[연간 포인트 순위]]></value>
+		<value xml:lang="en"><![CDATA[Annually Point]]></value>
+		<value xml:lang="zh-CN"><![CDATA[每年积分]]></value>
+	</item>
+	<item name="no_kin_instance">
+		<value xml:lang="ko"><![CDATA[생성된 지식인이 없습니다.]]></value>
+		<value xml:lang="en"><![CDATA[There is no Q&amp;A system created.]]></value>
+	</item>
+	<item name="cmd_manage_selected_kin">
+		<value xml:lang="ko"><![CDATA[선택한 지식인 관리]]></value>
+		<value xml:lang="en"><![CDATA[Manage selected Q&amp;A system]]></value>
+	</item>
+	<item name="choose_kin_instance">
+		<value xml:lang="ko"><![CDATA[관리할 지식인을 선택해 주세요.]]></value>
+		<value xml:lang="en"><![CDATA[Please choose one or more Q&amp;A system instance.]]></value>
+	</item>
+	<item name="category_settings">
+		<value xml:lang="ko"><![CDATA[분류 설정]]></value>
+		<value xml:lang="en"><![CDATA[Category settings]]></value>
+	</item>
+	<item name="hide_category">
+		<value xml:lang="ko"><![CDATA[분류 숨기기]]></value>
+		<value xml:lang="en"><![CDATA[Hide categories]]></value>
+	</item>
+	<item name="about_hide_category">
+		<value xml:lang="ko"><![CDATA[임시로 분류를 사용하지 않으려면 체크하세요.]]></value>
+		<value xml:lang="en"><![CDATA[You can disable a category feature.]]></value>
+	</item>
+</lang>

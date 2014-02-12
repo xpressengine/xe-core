@@ -1,0 +1,22 @@
+<query id="insertLinkedDocuments" action="insert-select">
+    <tables>
+        <table name="wiki_links" />
+    </tables>
+    <columns>
+        <column name="cur_doc_srl" />
+        <column name="link_doc_srl" />
+    </columns>
+	<query>
+		<tables>
+			<table name="document_aliases" />
+		</tables>
+		<columns>
+			<column var="document_srl" />
+			<column name="document_srl" />
+		</columns>
+		<conditions>
+			<condition operation="equal" column="module_srl" var="module_srl" notnull="notnull" />
+			<condition operation="in" column="alias_title" var="alias_list" notnull="notnull" pipe="and" />
+		</conditions>		
+	</query>
+</query>

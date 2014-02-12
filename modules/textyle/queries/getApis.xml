@@ -1,0 +1,12 @@
+<query id="getApis" action="select">
+    <tables>
+        <table name="textyle_api" />
+    </tables>
+    <columns>
+        <column name="*" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" />
+        <condition operation="equal" column="enable" var="enable" pipe="and" />
+    </conditions>
+</query>

@@ -1,0 +1,68 @@
+<!--%import("js/editor_admin.js")-->
+<!--#include("_tool_header.html")-->
+			<!-- Content -->
+			<div id="content">
+				
+				<!-- contentHeader -->
+				<div class="contentHeader addonHeader">
+					<h3 class="h3">{$lang->textyle_second_menus[5]['dispTextyleToolConfigEditorComponents']}</h3>
+				</div>
+				<!-- /contentHeader -->
+				
+				<div class="setUp">
+                    <table cellspacing="0" border="1" class="tableData" summary="Editor Components List">
+                    <thead>
+                        <tr>
+                            <th scope="col">{$lang->description}</th>
+                            <th scope="col">{$lang->component_version}</th>
+                            <th scope="col">{$lang->component_author}</th>
+                            <th scope="col">{$lang->component_date}</th>
+                            <th scope="col">{$lang->cmd_setup}</th>
+                            <th scope="col">{$lang->status}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!--@foreach($component_list as $component_name => $xml_info)-->
+                        <tr>
+                            <th rowspan="2" scope="row"><a href="{getUrl('module','editor','act','dispEditorComponentInfo','component_name',$component_name)}" onclick="popopen(this.href);return false;"><strong>{$xml_info->title}</strong></a> ({$component_name})</th>
+                            
+                            <td>{$xml_info->version}</td>
+                            <td>
+                                <!--@foreach($xml_info->author as $author)-->
+                                <a href="{$author->homepage}" onclick="window.open(this.href);return false;">{$author->name}</a>
+                                <!--@endforeach-->
+                            </td>
+                            <td>{zdate($xml_info->date, 'Y-m-d')}</td>
+         
+                            <th><button type="button" onclick="doSetupComponent('{$component_name}'); return false;" title="{htmlspecialchars($lang->cmd_setup)}" class="text">{$lang->cmd_setup}</button></th>
+                            <th>
+                                <!--@if($xml_info->enabled=='Y')-->
+                                    <button type="button" onclick="doDisableComponent('{$component_name}');return false;" title="{htmlspecialchars($lang->cmd_enable)}" class="text">{$lang->cmd_enable}</button>
+                                <!--@else-->
+                                    <button type="button" onclick="doEnableComponent('{$component_name}');return false;" title="{htmlspecialchars($lang->cmd_disable)}" class="text">{$lang->cmd_disable}</button>
+                                <!--@end-->
+                            </th>
+                            <th>
+								<button type="button" onclick="doMoveListOrder('{$component_name}','up');return false;" title="{htmlspecialchars($lang->cmd_move_up)}" class="text">{$lang->cmd_move_up}</button>
+								<button type="button" onclick="doMoveListOrder('{$component_name}','down');return false;" title="{htmlspecialchars($lang->cmd_move_down)}" class="text">{$lang->cmd_move_down}</button>
+							</th>
+                        </tr>
+                        <tr>
+                            <td colspan="6" class="wrap">{nl2br($xml_info->description)}</td>
+                        </tr>
+                        <!--@end-->
+                    </tbody>
+                    </table>
+				</div>
+
+			</div>
+			<hr />
+			<!-- /Content -->
+	
+			<!-- Extension -->
+				<!--#include("_tool_menu.html")-->
+			<!-- Extension -->
+
+			<iframe name="form_iframe" style="visibility:hidden;width:0px;height:0px;"></iframe>
+
+<!--#include("_tool_footer.html")-->

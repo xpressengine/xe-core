@@ -1,0 +1,53 @@
+<!--#include("./_header.html")-->
+
+<div class="summary">
+    <strong>Total</strong> <em>{number_format($total_count)}</em>, Page <strong>{number_format($page)}</strong>/{number_format($total_page)}
+</div>
+
+<form action="./" method="get" onsubmit="return doChangeCategory(this);" id="fo_list">
+<table cellspacing="0" class="rowTable">
+<thead>
+    <tr>
+        <th scope="col"><div>{$lang->no}</div></th>
+        <th scope="col"><div>Email</div></th>
+        <th scope="col"><div>이름</div></th>
+        <th scope="col">연락처</th>
+        <th scope="col" class="half_wide"><div>이미지</div></th>
+        <th scope="col"><div>파일</div></th>
+        <th scope="col"><div>수정일</div></th>
+        <th scope="col"><div>자세히</div></th>
+    </tr>
+</thead>
+    <!--@foreach($contest_list as $no => $val)-->
+{@ 
+		$doc_extra_info = unserialize($val->get('extra_vars'));
+}
+    <tr>
+        <td class="center number">{$no}</td>
+        <td class="center">{$val->get('email_address')}</td>
+        <td class="center">{$doc_extra_info->a_name}</td>
+        <td class="center">{$doc_extra_info->a_contact_pre}-{$doc_extra_info->a_contact_post}-{$doc_extra_info->a_contact_post2}</td>
+        <td><a href="{$doc_extra_info->jpg_file}" class="jpg_link">{$doc_extra_info->up_thumbnail['name']}</a></td>
+        <td><a href="{$doc_extra_info->psd_file}" class="psd_link">{$doc_extra_info->up_psd['name']}</a></td>
+        <td>{$val->getRegdate('Y.m.d H:i')}</td>
+        <td><a href="{getUrl('act','dispContestAdminView','document_srl',$val->document_srl)}">자세히</a></td>
+    </tr>
+    <!--@end-->
+</tbody>
+</table>
+</form>
+
+<!-- 페이지 네비게이션 -->
+<div class="pagination a1">
+    <a href="{getUrl('page','','module_srl','')}" class="prevEnd">{$lang->first_page}</a> 
+    <!--@while($page_no = $page_navigation->getNextPage())-->
+        <!--@if($page == $page_no)-->
+            <strong>{$page_no}</strong> 
+        <!--@else-->
+            <a href="{getUrl('page',$page_no,'module_srl','')}">{$page_no}</a> 
+        <!--@end-->
+    <!--@end-->
+    <a href="{getUrl('page',$page_navigation->last_page,'module_srl','')}" class="nextEnd">{$lang->last_page}</a>
+</div>
+
+

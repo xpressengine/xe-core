@@ -1,0 +1,16 @@
+<query id="insertGroup" action="insert">
+    <tables>
+        <table name="member_group" />
+    </tables>
+    <columns>
+        <column name="site_srl" var="site_srl" default="0" notnull="notnull" />
+        <column name="group_srl" var="group_srl" notnull="notnull" />
+        <column name="list_order" var="group_srl" notnull="notnull" />
+        <column name="title" var="title" notnull="notnull" />
+        <column name="is_default" var="is_default" default="N" notnull="notnull" />
+        <column name="is_admin" var="is_admin" default="N" notnull="notnull" />
+        <column name="regdate" default="curdate()" />
+        <column name="description" var="description" default="" />
+        <column name="image_mark" var="image_mark" default="" />
+    </columns>
+</query>

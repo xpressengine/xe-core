@@ -1,0 +1,218 @@
+<!--#include("_tool_header.html")-->
+<!--%import("css/pagination.css",optimized=false)-->
+
+			<!-- Content -->
+			<div id="content">
+				<!-- contentHeader -->
+				<div class="contentHeader postListHeader">
+					<h3 class="h3">{$lang->textyle_second_menus[1]['dispTextyleToolPostManageList']}</h3>
+				</div>
+				<!-- /contentHeader -->
+				
+				<!-- contentNavigation -->
+				<div class="contentNavigation">
+					<ul class="sortDefault">
+						<li<!--@if(!$published)--> class="active"<!--@end-->><a href="{getUrl('', 'mid', $mid, 'vid', $vid, 'act', $act, 'sort_index','','published','')}">{$lang->document_all}</a></li>
+						<li<!--@if($published==1)--> class="active"<!--@end-->><a href="{getUrl('', 'mid', $mid, 'vid', $vid, 'act', $act, 'sort_index','','published','1')}">{$lang->document_published}</a></li>
+						<li<!--@if($published==-1)--> class="active"<!--@end-->><a href="{getUrl('', 'mid', $mid, 'vid', $vid, 'act', $act, 'sort_index','','published','-1')}">{$lang->document_reserved}</a></li>
+					</ul>
+				</div>
+				<!-- /contentNavigation -->
+				
+				<!-- listHeader -->
+				<div class="listHeader">
+					<p class="info"> <!--@if($search_keyword)-->{sprintf($lang->search_result_count,$page_navigation->total_count)}<!--@else-->{sprintf($lang->total_result_count,$page_navigation->total_count)}<!--@end--></p>
+					<fieldset class="search">
+						<legend>{$lang->cmd_search}</legend>
+						<form action="{Context::getRequestUri()}">
+							<input type="hidden" name="published" value="{$published}" />
+							<input type="hidden" name="vid" value="{$vid}" />
+							<input type="hidden" name="act" value="{$act}" />
+							<input type="hidden" name="mid" value="{$mid}" />
+							<select name="search_category_srl">
+								<!--@foreach($category_list as $key => $val)-->
+								<option value="{$val->category_srl}" <!--@if($search_category_srl==$val->category_srl)-->selected="selected"<!--@end-->>{$val->title}</option>
+								<!--@end-->
+							</select>
+
+							<select name="search_target">
+								<!--@foreach($search_option as $key => $val)-->
+								<option value="{$key}" <!--@if($search_target==$key)-->selected="selected"<!--@end-->>{$val}</option>
+								<!--@end-->
+							</select>
+							<input name="search_keyword" type="text" title="{$lang->cmd_search}" class="iText" value="{htmlspecialchars($search_keyword)}"/>
+							<span class="btnGray medium"><input type="submit" value="{$lang->cmd_search}" /></span>
+						</form>
+					</fieldset>
+				</div>
+				<!-- /listHeader -->
+				
+				<!-- Table Data -->
+				<fieldset>
+					<legend>{$lang->my_document_management}</legend>
+					<form action="" method="post">
+						<table border="1" cellspacing="0" summary="{$lang->content_list}" class="tableData">
+							<thead>
+								<tr>
+									<th scope="col">
+										<input type="checkbox" class="inputCheck" onclick="jQuery('input.boxlist').click()" />
+									</th>
+									<th scope="col">{$lang->status}</th>
+									<th scope="col" class="title">{$lang->title}</th>
+									<th scope="col">{$lang->comment}</th>
+									<th scope="col">{$lang->trackback}</th>
+									<th scope="col">{$lang->category}</th>
+									<th scope="col">{$lang->last_update}</th>
+									<th scope="col">&nbsp;</th>
+									<th scope="col">&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody>
+
+								<!--@if(count($post_list)==0)-->								
+								<tr>
+									<td class="noData" colspan="9"><p>{sprintf($lang->no_post,getUrl('','act','dispTextyleToolPostManageWrite'))}</p></td>
+								</tr>
+								<!--@else-->
+									<!--@foreach($post_list as $no => $post)-->
+										<tr>
+											<td>
+											<input type="checkbox" name="document_srl" value="{$post->document_srl}" class="inputCheck boxlist" />
+										</td>
+										<td>
+											{@$_url='#'}
+											{@$_target=''}
+											<!--@if($post->get('module_srl') == $logged_info->member_srl)-->
+											{@$_url=getUrl('act','dispTextyleToolPostManageWrite','document_srl',$post->document_srl,'page',$page)}
+												<strong class="publishState draft"><span>{$lang->saved}</span></strong>
+											<!--@else if($post->get('module_srl')<=0)-->
+											{@$_url=getUrl('act','dispTextyleToolPostManageWrite','document_srl',$post->document_srl,'page',$page)}
+												<strong class="publishState draft"><span>{$lang->reserve}</span></strong>
+											<!--@else-->
+											{@$_url=getUrl('','document_srl',$post->document_srl)}
+											{@$_target=" target=\"_blank\"";}
+												<strong class="publishState out"><span>{$lang->publish}</span></strong>
+											<!--@end-->
+										</td>
+										<td class="title"><a href="{$_url}" class="postTitle" title="Tag : {$post->get('tags')}">{$post->getTitle()}</a>
+										{$post->printExtraImages()}
+
+										</td>
+										<td class="small">{$post->getCommentCount()}</td>
+										<td class="small">{$post->getTrackbackCount()}</td>
+										<td>{$category_list[$post->get('category_srl')]->title}&nbsp;</td>
+										<td class="small">{zdate($post->get('last_update'),'Y.m.d')}</td>
+										<td>
+											<span class="btnGray small"><a href="{getUrl('act','dispTextyleToolPostManageWrite','document_srl',$post->document_srl,'page',$page)}">{$lang->cmd_edit}</a></span>
+                                            <!--@if($post->get('module_srl')==$logged_info->member_srl)-->
+											<span class="btnGray small"><a href="{getUrl('act','dispTextyleToolPostManagePublish','document_srl',$post->document_srl,'page',$page)}">{$lang->publish_go}</a></span>
+                                            <!--@else-->
+											<span class="btnGray small"><a href="{getUrl('act','dispTextyleToolPostManagePublish','document_srl',$post->document_srl,'page',$page)}">{$lang->publish_update_go}</a></span>
+                                            <!--@end-->
+										</td>
+										<td>
+											<!--@if($post->get('module_srl') == $logged_info->member_srl)-->
+											<button type="button" class="btnTableData" onclick="confirmDeletePostItem({$post->document_srl},{$page},'{$lang->msg_confirm_delete_post}')"><span>{$lang->cmd_delete}</span></button>
+											<!--@else-->
+											<button type="button" class="btnTableData" onclick="trashPostItem({$post->document_srl},{$page})"><span>{$lang->cmd_delete}</span></button>
+											<!--@end-->
+										</td>
+									</tr>
+									<!--@end-->
+								<!--@end-->
+
+							</tbody>
+						</table>
+						
+						<div class="listFooter">
+							
+							<!-- Change-->
+							<div class="change">
+								<p class="p1">{$lang->selected_articles}</p>
+								
+								<!-- Category -->
+								<div class="select">
+									<span class="btnSelect"><button type="button" onclick="jQuery('ul.category_list').toggleClass('open')">{$lang->cmd_change_category}</button></span>
+
+									
+									<ul class="category_list">
+									<!-- ul class="" | ul class="open" -->
+										<!--@foreach($category_list as $key => $val)-->
+											<!--@if($val->text)-->
+
+												<!--@if($_pDepth > $val->depth)-->
+													<!--@for($i=$val->depth; $i<$_pDepth; $i++)-->
+												</ul>
+													<!--@end-->
+													{@ $_pDepth = $val->depth}
+												<!--@end-->
+												<li><button type="button" onclick="updatePostItemsCategory('{$mid}',{$val->category_srl},{$page})">{$val->text}</button> 
+													<!--@if($val->child_count)-->
+														{@$_pDepth++}
+														<ul>
+													<!--@else-->
+													</li>
+													<!--@end-->
+											<!--@end-->
+										<!--@end-->
+									</ul>
+
+
+								</div>
+								<!-- /Category -->
+								
+								<!-- opening -->
+								<div class="select">
+									<span class="btnSelect"><button type="button" onclick="jQuery('ul.secret_list').toggleClass('open')">{$lang->set_publish}</button></span>
+									<ul class="secret_list"> <!-- ul class="" | ul class="open" -->
+										<li><button type="button" onclick="updatePostItemsSecret('N',{$page})">{$lang->document_open}</button></li>
+										<li><button type="button" onclick="updatePostItemsSecret('Y',{$page})">{$lang->document_close}</button></li>
+									</ul>
+								</div>
+								<!-- /opening -->
+								
+								<span class="btnGray large"><button type="button" onclick="openLayerCommuicationConfig()">{$lang->comm_management}</button></span>
+								<span class="btnGray large"><button type="button" onclick="trashPostItems({$page})"><img src="img/buttonTableDataX.gif" width="7" height="7" alt="" class="icon" />{$lang->cmd_delete}</button></span>
+								
+							</div>
+							<!-- /Change -->
+							
+							<!-- Pagination -->
+							<div class="pagination">
+								<a href="{getUrl('page','','mid',$mid)}" class="prev"><span>{$lang->first_page}</span></a>
+
+								<!--@while($page_no = $page_navigation->getNextPage())-->
+									<!--@if($page == $page_no)-->
+										<strong>{$page_no}</strong> 
+									<!--@else-->
+										<a href="{getUrl('page',$page_no,'mid',$mid)}">{$page_no}</a> 
+									<!--@end-->
+								<!--@end-->
+
+								<a href="{getUrl('page',$page_navigation->last_page,'module_srl','')}" class="next"><span>{$lang->last_page}</span></a>
+								</div>
+							<!-- /Pagination -->
+							
+						</div>
+						
+					</form>
+				</fieldset>
+				<!-- /Table Data -->
+				
+			</div>
+			<hr />
+			<!-- /Content -->
+
+
+			<!-- Extension -->
+				<!--#include("_tool_menu.html")-->
+			<!-- Extension -->
+
+				<!--#include("_layerPostManageList.html")-->
+<!--#include("_tool_footer.html")-->
+
+
+<script>
+if(!xe.lang) xe.lang = {};
+xe.lang.msg_confirm_delete_post = '{$lang->msg_confirm_delete_post}';
+</script>

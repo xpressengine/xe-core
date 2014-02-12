@@ -1,0 +1,16 @@
+<query id="insertComment" action="insert">
+    <tables>
+        <table name="kin_replies" />
+    </tables>
+    <columns>
+        <column name="reply_srl" var="reply_srl" filter="number" notnull="notnull" />
+        <column name="module_srl" var="module_srl" filter="number" notnull="notnull" />
+        <column name="parent_srl" var="parent_srl" filter="number" notnull="notnull" />
+        <column name="content" var="content" notnull="notnull" />
+        <column name="member_srl" var="member_srl" notnull="notnull" />
+        <column name="nick_name" var="nick_name" notnull="notnull" />
+        <column name="regdate" default="curdate()" />
+        <column name="ipaddress" default="ipaddress()" />
+        <column name="list_order" var="list_order" filter="number" notnull="notnull" />
+    </columns>
+</query>

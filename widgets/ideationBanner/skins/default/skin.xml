@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+	<title xml:lang="ko">배너형 공지 스킨</title>
+	<description xml:lang="ko">3개까지 배너형식으로 공지할 수 있는 스킨입니다</description>
+	<version>0.1</version>
+	<date>2009-07-13</date>
+	<link>http://www.xpressengine.com</link>
+	<author email_address="zero@zeroboard.com" link="http://zero.textyle.kr">
+		<name xml:lang="ko">zero</name>
+	</author>
+	<colorset />
+</skin>

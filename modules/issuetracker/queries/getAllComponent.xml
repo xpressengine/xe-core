@@ -1,0 +1,8 @@
+<query id="getAllComponent" action="select">
+	<tables>
+		<table name="issue_components" />
+	</tables>
+	<columns>
+		<column name="*" />
+	</columns>
+</query>

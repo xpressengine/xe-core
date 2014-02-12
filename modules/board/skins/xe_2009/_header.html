@@ -1,0 +1,71 @@
+{$module_info->browser_title}
+<!--@if(!$module_info->colorset)-->
+    {@$module_info->colorset = "white"}
+<!--@end-->
+<!--%import("css/board.css")-->
+
+<!--@if($module_info->colorset == "black")-->
+	<!--%import("css/black.css")-->
+<!--@else-->
+	<!--%import("css/white.css")-->
+<!--@end-->
+
+<!--@if(!$module_info->duration_new = (int)$module_info->duration_new)-->{@ $module_info->duration_new = 12 }<!--@end-->
+<!--@if(!$module_info->content_cut_size = (int)$module_info->content_cut_size)-->{@ $module_info->content_cut_size= 240 }<!--@end-->
+
+<!--@if(!$module_info->thumbnail_type)-->{@ $module_info->thumbnail_type = 'crop'; }<!--@end-->
+<!--@if(!$module_info->thumbnail_width)-->{@ $module_info->thumbnail_width = 100; }<!--@end-->
+<!--@if(!$module_info->thumbnail_height)-->{@ $module_info->thumbnail_height = 100; }<!--@end-->
+
+<!--@if($order_type == "desc")-->
+    {@ $order_icon = "buttonDescending.gif" }
+    {@ $order_type = "asc"; }
+<!--@else-->
+    {@ $order_icon = "buttonAscending.gif" }
+    {@ $order_type = "desc"; }
+<!--@end-->
+
+<!--@if($listStyle=='gallery')-->
+    {@ $module_info->default_style = 'gallery'}
+<!--@elseif($listStyle=='webzine')-->
+    {@ $module_info->default_style = 'webzine'}
+<!--@elseif($listStyle=='list')-->
+    {@ $module_info->default_style = 'list'}
+<!--@elseif(!in_array($module_info->default_style,array('list','webzine','gallery','blog')))-->
+    {@ $module_info->default_style = 'list'}
+<!--@end-->
+
+{$module_info->header_text}
+
+<div class="board">
+    <div class="boardHeader">
+		<!--@if($module_info->title)-->
+		<div class="boardTitle">
+			<h2 class="boardTitleText"><a href="{getUrl('','mid',$mid,'listStyle',$listStyle)}">{$module_info->title}<!--@if($module_info->sub_title)--> : <em>{$module_info->sub_title}</em><!--@end--></a></h2>
+		</div>
+		<!--@end-->
+
+		<!--@if($module_info->comment)-->
+		<p class="boardDescription">{$module_info->comment}</p>
+		<!--@end-->
+    </div>
+
+    <!--@if($module_info->display_setup_button != 'N')-->
+    <div class="boardInformation">
+
+        <!--@if($total_count && $module_info->default_style != 'blog')-->
+        <div class="infoSum">{$lang->document_count} <strong>{number_format($total_count)}</strong></div>
+        <!--@end-->
+		
+		<div class="infoView">
+			<ul>
+				<!--@if($grant->manager && $module_info->display_setup_button != 'N')-->
+				<li class="setup"><a href="{getUrl('act','dispBoardAdminBoardInfo')}" title="{$lang->cmd_setup}"><span>{$lang->cmd_setup}</span></a></li>
+				<!--@end-->
+				<li class="listTypeClassic icon<!--@if($module_info->default_style=='list')--> active<!--@end-->"><a href="{getUrl('listStyle','list','act','','document_srl','')}" title="Classic Style"><span>Classic Style</span></a></li>
+				<li class="listTypeZine icon<!--@if($module_info->default_style=='webzine')--> active<!--@end-->"><a href="{getUrl('listStyle','webzine','act','','document_srl','')}" title="Zine Style"><span>Zine Style</span></a></li>
+				<li class="listTypeGallery icon<!--@if($module_info->default_style=='gallery')--> active<!--@end-->"><a href="{getUrl('listStyle','gallery','act','','document_srl','')}" title="Gallery Style"><span>Gallery Style</span></a></li>
+			</ul>
+		</div>
+    </div>
+<!--@end-->

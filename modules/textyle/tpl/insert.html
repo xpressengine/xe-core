@@ -1,0 +1,42 @@
+<include target="./header.html" />
+<section class="section">
+	<!--@if($textyle)-->
+	<load target="filter/update_textyle.xml" />
+	<h1>{$lang->cmd_textyle_modify}</h1>
+	<form action="./" method="post" onsubmit="return procFilter(this, update_textyle)" id="textyleFo" class="x_form-horizontal">
+		<input type="hidden" name="site_srl" value="{$textyle->site_srl}" />
+		<input type="hidden" name="module_srl" value="{$module_srl}" />
+	<!--@else-->
+	<load target="filter/insert_textyle.xml" />
+	<h1>{$lang->cmd_textyle_creation}</h1>
+		<form action="./" method="post" onsubmit="return procFilter(this, insert_textyle)" id="textyleFo" class="x_form-horizontal">
+	<!--@end-->
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->access_type}</label>
+			<div class="x_controls">
+				<label for="chkDomain" class="x_inline"><input type="radio" id="chkDomain" name="access_type" value="domain" onclick="toggleAccessType('domain');" checked="checked"|cond="!isSiteID($textyle->domain)" /> {$lang->access_domain}</label>
+				<label for="chkVid" class="x_inline"><input type="radio" id="chkVid" name="access_type" value="vid" onclick="toggleAccessType('vid');" checked="checked"|cond="isSiteID($textyle->domain)" /> {$lang->access_vid}</label>
+				<div id="accessDomain" hidden|cond="isSiteID($textyle->domain)" style="margin-top:10px;">
+					http:// <input type="text" name="domain" value="{$textyle->domain}"|cond="!isSiteID($textyle->domain)" title="URL" />
+					<p class="x_help-block">{$lang->about_domain}</p>
+				</div>
+				<div id="accessVid" hidden|cond="!isSiteID($textyle->domain)" style="margin-top:10px;">
+					<input type="text" name="vid" value="{$textyle->domain}"|cond="isSiteID($textyle->domain)" title="Site ID" />
+					<p class="x_help-block">{$lang->about_vid}</p>
+				</div>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label for="user_id" class="x_control-label" cond="$identifier != 'email_address'">{$lang->textyle_admin}({$lang->user_id})</label>
+			<label for="user_id" class="x_control-label" cond="$identifier == 'email_address'">{$lang->textyle_admin}({$lang->email_address})</label>
+			<div class="x_controls">
+				<input type="text" name="user_id" id="user_id" value="{$site_admin}" />
+				<p class="x_help-inline">{$lang->about_textyle_admin}</p>
+			</div>
+		</div>
+		<div class="x_clearfix btnArea">
+			<a href="{getUrl('act','dispTextyleAdminExtraMenu')}" class="x_btn x_pull-left">{$lang->cmd_textyle_extra_menu_config}</a>
+			<input type="submit" value="{$lang->cmd_save}" class="x_btn x_btn-primary x_pull-right" />
+		</div>
+	</form>
+</section>

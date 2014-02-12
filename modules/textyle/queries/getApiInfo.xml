@@ -1,0 +1,12 @@
+<query id="getApiInfo" action="select">
+    <tables>
+        <table name="textyle_api" />
+    </tables>
+    <columns>
+        <column name="*" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" notnull="notnull" />
+        <condition operation="equal" column="api_srl" var="api_srl" filter="number" pipe="and" notnull="notnull" />
+    </conditions>
+</query>

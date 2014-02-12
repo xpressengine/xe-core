@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+    <title xml:lang="ko">nLuceneXE 모듈 기본 스킨</title>
+    <title xml:lang="en">Default Skin of nLuceneXE</title>
+    <description xml:lang="ko">통합검색 모듈의 기본 스킨</description>
+    <description xml:lang="en">Default skin of integration search module</description>
+    <version>0.1</version>
+    <date>2010-10-18</date>
+
+    <author email_address="developers@xpressengine.com" link="http://xpressengine.com/">
+        <name xml:lang="ko">NHN</name>
+        <name xml:lang="en">NHN</name>
+    </author>
+
+    <colorset>
+        <color name="normal" src="screenshot/normal.gif">
+            <title xml:lang="ko">기본</title>
+            <title xml:lang="en">Default</title>
+        </color>
+    </colorset>
+
+    <extra_vars>
+        <var name="memo" type="textarea">
+            <title xml:lang="ko">설명</title>
+            <title xml:lang="en">Description</title>
+            <description xml:lang="ko">검색결과 상단에 결과가 출력됩니다.</description>
+            <description xml:lang="en">Result will be displayed on top of search result.</description>
+        </var>
+    </extra_vars>
+</skin>

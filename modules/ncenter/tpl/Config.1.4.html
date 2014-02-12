@@ -1,0 +1,111 @@
+<!--%import("filter/insert_config.xml")-->
+<!--%import("js/ncenter_admin.js")-->
+<!--%import("css/ncenter_admin.css")-->
+
+<h3 class="xeAdmin">알림센터14 <span class="gray">{$lang->cmd_management}</span> <small>Ver {$ncenter_module_info->version}</small></h3>
+
+<form action="./" method="get" onsubmit="return procFilter(this, insert_config);" id="fo_ncenter">
+	<table cellspacing="0" class="rowTable">
+	<tr>
+		<th scope="col" class="half_wide">알림센터 동작여부</th>
+		<td class="center">
+
+			<input type="radio" id="use_y" name="use" value="Y" <!--@if($config->use == 'Y')-->checked="checked"<!--@end--> /><label for="use_y">동작</label>
+
+			<input type="radio" id="use_n" name="use" value="N" <!--@if($config->use == 'N')-->checked="checked"<!--@end-->/><label for="use_n">동작 안 함</label>
+			<p>알림센터의 모든 기능을 중지 시킬 수 있습니다.</p>
+		</td>
+	</tr>
+
+	<tr>
+		<th scope="col">멘션 설정</th>
+		<td>
+			<div class="mention_option">
+				<label><input type="checkbox" name="mention_format[]" value="respect" data-mention-split="님" <!--@if(in_array('respect', $config->mention_format))-->checked="checked"<!--@end--> />'님' 허용</label>
+				<label><input type="checkbox" name="mention_format[]" value="comma" data-mention-split="," <!--@if(in_array('comma', $config->mention_format))-->checked="checked"<!--@end--> />',' 허용</label>
+				<ul class="preview">
+					<li data-mention-default="enable"><strong>@스님</strong></li>
+					<li data-mention-default="enable"><strong>@선생님이다</strong></li>
+					<li data-mention-default="enable"><strong>@NAME</strong>&nbsp;&nbsp;…</li>
+					<li data-mention-default="enable"><strong>@NAME</strong>&nbsp;&nbsp;님</li>
+					<li><strong>@NAME</strong>님</li>
+					<li><strong>@NAME</strong>님과</li>
+					<li><strong>@NAME1</strong>님,&nbsp;&nbsp;<strong>@NAME2</strong>님이&nbsp;&nbsp;…</li>
+					<li><strong>@NAME1</strong>,&nbsp;&nbsp;<strong>@NAME2</strong>&nbsp;&nbsp;…</li>
+					<li><strong>@스님</strong>,&nbsp;&nbsp;<strong>@선생님</strong>&nbsp;&nbsp;…</li>
+				</ul>
+				<p>녹색으로 표시된 예시처럼 사용할 수 있습니다.</p>
+			</div>
+		</td>
+	</tr>
+
+	<tr>
+		<th scope="col">댓글 알림 설정</th>
+		<td>
+			<label><input type="radio" name="document_notify" value="all-comment" <!--@if($config->document_notify == 'all-comment')-->checked="checked"<!--@end--> />글쓴이에게 모든 댓글 알림</label>
+			<label><input type="radio" name="document_notify" value="direct-comment" <!--@if($config->document_notify == 'direct-comment')-->checked="checked"<!--@end--> />대댓글은 알리지 않음</label>
+		</td>
+	</tr>
+
+	<tr>
+		<th scope="col">쪽지 알림 설정</th>
+		<td>
+			<label><input type="checkbox" name="message_notify" value="N" <!--@if($config->message_notify == 'N')-->checked="checked"<!--@end--> />쪽지 알림을 사용하지 않음(XE의 기본 쪽지 알림을 사용)</label>
+		</td>
+	</tr>
+
+	<tr>
+		<th scope="col">노티바를 감출 페이지</th>
+		<td>
+			<p class="desc">선택한 페이지에서 알림센터를 표시하지 않습니다.</p>
+			<!--@foreach($mid_list as $mid => $item)-->
+				<div>
+					<label><input type="checkbox" value="{$item->module_srl}" name="hide_module_srls[]" <!--@if(in_array($item->module_srl, $config->hide_module_srls))-->checked="checked"<!--@endif--> /> <strong>{$item->browser_title}</strong> ({$item->mid} / {strtoupper($item->module)})</label>
+				</div>
+			<!--@endforeach-->
+		</td>
+	</tr>
+
+	<tr>
+		<th scope="col" class="half_wide">{$lang->skin}</th>
+		<td class="center">
+			<select name="skin" onchange="doDisplaySkinColorset(this);return false;">
+			<!--@foreach($skin_list as $key => $val)-->
+				<option value="{$key}" <!--@if($config->skin == $key)-->selected="selected"<!--@end-->>{$val->title} ({htmlspecialchars($key)})</option>
+			<!--@end-->
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th scope="col" class="half_wide">{$lang->colorset}</th>
+		<td class="center">
+			<select name="colorset" id="ncenter_colorset">
+			<!--@foreach($colorset_list as $key => $val)-->
+				<option value="{$val->name}" <!--@if($config->colorset == $val->name)-->selected="selected"<!--@end-->>{$val->title} ({$val->name})</option>
+			<!--@end-->
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th scope="col" class="half_wide">알림센터의 높이(z-index)</th>
+		<td class="center">
+			<input name="zindex" value="{$config->zindex}" />
+			<p>알림센터가 다른 요소에 가려지는 경우에 100, 200 .. 으로 높여 보세요.</p>
+		</td>
+	</tr>
+	<tr>
+		<th scope="col">지식인 모듈 : 답변이 있으면 수정 제한</th>
+		<td>
+			<label><input type="radio" id="use_y" name="block_kin_modify" value="Y" checked="checked"|cond="$config->block_kin_modify == 'Y'" /> 수정 제한</label>
+			<label><input type="radio" id="use_n" name="block_kin_modify" value="N" checked="checked"|cond="$config->block_kin_modify == 'N'" /> 제한하지 않음</label>
+			<p>답변이 작성된 질문을 수정할 수 없도록 제한합니다.</p>
+		</td>
+	</tr>
+	<tr class="row2">
+		<th scope="row" colspan="2" class="button">
+			<span class="button black strong"><input type="submit" value="{$lang->cmd_registration}" accesskey="s" /></span>
+		</th>
+	</tr>
+	</tbody>
+	</table>
+</form>

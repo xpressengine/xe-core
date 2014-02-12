@@ -1,0 +1,32 @@
+<include target="header.include.html" />
+<load target="./js/editor_script.js" />
+
+<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+
+<div class="section clearfix">
+        <h2 class="sec_title">{$lang->cmd_modify_reply}</h2>       
+ </div><!-- //section -->
+
+<div class="section compose_question clearfix ">
+	<form action="./" method="post" ruleset="updateReply" id="fo_kin_modify_reply" class="writeForm">
+	<input type="hidden" name="act" value="procKinUpdateReply" />
+	<input type="hidden" name="mid" value="{$mid}" />
+	<input type="hidden" name="comment_srl" value="{$oReply->comment_srl}" />
+	<input type="hidden" name="document_srl" value="{$oReply->document_srl}" />
+	<input type="hidden" name="content" value="{$oReply->getContentText()}" />
+
+    <div class="editor">
+        {$oReply->getEditor()}
+    </div>
+
+    <div class="buttonArea">
+        <span class="btn strong black"><input type="submit" value="{$lang->cmd_modify}" /></span>
+        <span class="btn"><button type="button" onclick="location.href=current_url.setQuery('act','dispKinView','comment_srl','');return false;">{$lang->cmd_back}</button></span>
+    </div>
+
+</form>
+</div>
+
+<include target="footer.include.html" />

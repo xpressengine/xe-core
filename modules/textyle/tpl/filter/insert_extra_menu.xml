@@ -1,0 +1,11 @@
+<filter name="insert_extra_menu" module="textyle" act="procTextyleToolExtraMenuInsert">
+  <form>
+    <node target="menu_name" required="true" />
+	<node target="menu_mid" required="true" maxlength="40" filter="alpha_number" />
+  </form>
+  <parameter />
+  <response callback_func="completeModifyExtraMenu">
+     <tag name="error" />
+     <tag name="message" />
+  </response>
+</filter>

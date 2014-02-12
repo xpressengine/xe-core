@@ -1,0 +1,68 @@
+<!--@if($oComment)-->
+    {@ $document_srl = $oComment->get('document_srl')}
+    {@ $comment_srl = $oComment->comment_srl}
+    {@ $content = htmlspecialchars($oComment->get('content'))}
+    {@ $editor = $oComment->getEditor()}
+    {@ $parent_srl = $oComment->get('parent_srl')}
+    {@ $buttonText = $parent_srl ? $lang->cmd_comment_registration : $lang->cmd_submit}
+<!--@else-->
+    {@ $document_srl = $oDocument->document_srl}
+    {@ $parent_srl = ''}
+    {@ $comment_srl = ''}
+    {@ $content = ''}
+    {@ $editor = $oDocument->getCommentEditor()}
+    {@ $buttonText = $lang->cmd_comment_registration}
+<!--@end-->
+
+<form action="./" method="post" onsubmit="return procFilter(this, insert_comment)" class="wikiEditor" >
+    <input type="hidden" name="mid" value="{$module_info->mid}" />
+    <input type="hidden" name="document_srl" value="{$document_srl}" />
+    <input type="hidden" name="parent_srl" value="{$parent_srl}" />
+    <input type="hidden" name="comment_srl" value="{$comment_srl}" />
+    <input type="hidden" name="content" value="{$content}" />
+    <div class="wikiWrite commentEditor">
+        <div class="editor">{$editor}</div>
+        <div class="editorOption">
+			<!--@if($is_logged)-->
+			<input type="checkbox" name="notify_message" value="Y" id="notify_message" class="inputCheck" />
+			<label for="notify_message">{$lang->notify_for_replies}</label>
+			<!--@else-->
+			<label for="nick_name" class="placeholder">{$lang->writer}</label><input type="text" name="nick_name" class="inputText userName" placeholder="{$lang->writer}" id="nick_name" />
+			<label for="password" class="placeholder">{$lang->password}</label><input type="password" name="password" class="inputText userPw" placeholder="{$lang->password}" id="password" />
+			<label for="email_address" class="placeholder">{$lang->email_address}</label><input type="text" name="email_address" class="inputText emailAddress" placeholder="{$lang->email_address}" id="email_address" />
+			<label for="homepage" class="placeholder">{$lang->homepage}</label><input type="text" name="homepage" class="inputText homePage" placeholder="{$lang->homepage}" id="homepage" />
+			<!--@end-->
+        </div>
+        <div class="center">
+            <span class="button green"><input type="submit" value="{$buttonText}" accesskey="s" /></span>
+            <a href="#" onclick="if (confirm('{$lang->confirm_cancel_comment}')) hideCommentForm(); return false;" class="link-button" style="margin-top:7px">{$lang->cmd_cancel}</a>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+	var fakeInput = document.createElement("input");
+
+	if (!("placeholder" in fakeInput))
+	{
+		(function($)
+		{
+			$('.placeholder').each(function()
+			{
+				var $this = $(this), $input = $('#' + $this.attr('for')),
+					handlePlaceholder = function()
+					{
+						if (this.value == '')
+						{
+							$this.show();
+						}
+						else{
+							$this.hide();
+						}
+					};
+				$this.show().css({fontSize:$input.css('fontSize')}).css({marginTop: ($input.outerHeight(true) - $this.outerHeight() / 2) / 2,top:$input.offset().top - $input.outerHeight()});
+
+				$input.keyup(handlePlaceholder).blur(handlePlaceholder).focus(handlePlaceholder).change(handlePlaceholder);
+			});
+		})(jQuery)
+	}
+</script>

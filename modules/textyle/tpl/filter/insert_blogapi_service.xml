@@ -1,0 +1,10 @@
+<filter name="insert_blogapi_service" module="textyle" act="procTextyleAdminInsertBlogApiServices">
+  <form>
+    <node target="service_name" required="true" />
+  </form>
+  <parameter />
+  <response callback_func="completeInsertBlogApiService">
+    <tag name="error" />
+    <tag name="message" />
+  </response>
+</filter>

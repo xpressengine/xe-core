@@ -1,0 +1,69 @@
+<!--#include("_tool_header.html")-->
+<!--%import("css/calendar.css",optimized=false)-->
+			<!-- Content -->
+			<div id="content">
+				
+				<!-- contentHeader -->
+				<div class="contentHeader skinHeader">
+					<h3 class="h3">{$lang->textyle_second_menus[4]['dispTextyleToolLayoutConfigSkin']}</h3>
+				</div>
+				<!-- /contentHeader -->
+				
+				<!-- mySkin -->
+				<div class="section mySkin">
+					<div class="container">
+						<div class="thumb">
+							<img src="{$cur_skin->large_screenshot}" width="260" height="195" alt="{htmlspecialchars($cur_skin->title)}" />
+						</div>
+						<p class="using"><img src="img/iconUsing.png" width="57" height="58" alt="{$lang->cmd_use_ing}" /></p>
+						<div class="summary">
+							<div class="sHeader">
+								<h4 class="h4">{htmlspecialchars($cur_skin->title)}</h4>
+							</div>
+							<p class="contributor">by {$cur_skin->author}</p>
+							<p class="description">{$cur_skin->description}</p>
+							<div class="btnArea">
+								<span class="btnGray medium"><a href="{getUrl('act','dispTextyleToolLayoutConfigEdit')}">{$lang->cmd_edit_htmlcss}</a></span>
+							</div>
+						</div>
+					</div>
+					<span class="outline ml"></span>
+					<span class="outline mr"></span>
+					<span class="outline tc"></span>
+					<span class="outline bc"></span>
+					<span class="outline tl"></span>
+					<span class="outline tr"></span>
+					<span class="outline bl"></span>
+					<span class="outline br"></span>
+				</div>
+				<!-- /mySkin -->
+				
+				<!-- Skin List -->
+				<div class="skinList">
+					<ul>
+                        <!--@foreach($skins as $key => $val)-->
+						<li>
+							<dl>
+								<dt><a href="{getSiteUrl($textyle->domain, '', 'skin_preview', $key)}" onclick="window.open(this.href);return false;">{$val->title}</a></dt>
+								<dd class="thumb"><img src="{$val->small_screenshot}" width="138" height="87" alt="{htmlspecialchars($val->title)}" /></dd>
+								<dd class="download">
+									<span class="btnGray small"><a href="{getSiteUrl($textyle->domain, '', 'preview_skin', $key)}" target="_blank" title="{$lang->cmd_new_window}">{$lang->cmd_preview_skin}</a></span>
+									<span class="btnGray small"><button type="button" onclick="if(confirm('{$lang->msg_select_skin}')) doSelectSkin('{$key}'); return false;">{$lang->cmd_select_skin}</button></span>
+								</dd>
+							</dl>
+						</li>
+                        <!--@end-->
+					</ul>
+				</div>
+				<!-- /Skin List -->
+
+			</div>
+			<hr />
+			<!-- /Content -->
+			
+
+			<!-- Extension -->
+				<!--#include("_tool_menu.html")-->
+			<!-- Extension -->
+
+<!--#include("_tool_footer.html")-->

@@ -1,0 +1,52 @@
+<include target="login_header.html" />
+<!--%import("filter/openid_login.xml")-->
+<script type="text/javascript">
+    xAddEventListener(window, "load", function() { doFocusUserId('fo_member_login'); });
+	jQuery(function($){
+		var keepMsg = $('.keepMsg');
+		var keepOpt = $('.keepOpt');
+		keepMsg.hide();
+		keepOpt.change(function(){
+			if(keepOpt.attr('checked')){
+				keepMsg.slideDown(100);
+			} else {
+				keepMsg.slideUp(100);
+			};
+		});
+	});
+</script>
+<!-- XE 로그인 폼 -->
+<div class="siForm gLogin" id="gLogin">
+    <h1><img src="h1.gLogin.gif" width="222" height="41" alt="{$lang->cmd_login}" /></h1>
+	<div class="message info">
+		<p>
+			'<strong>이메일</strong>+<strong>비밀번호</strong>' 형식으로 로그인 방식이 변경되었습니다. 
+			<a href="http://www.xpressengine.com/findemail" target="_blank">아이디로 이메일주소 검색하기</a>.
+		</p>
+	</div>
+	<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+		<p>{$XE_VALIDATOR_MESSAGE}</p>
+	</div>
+	<form ruleset="@login" action="./" method="post" id="fo_member_login" class="form">
+		<input type="hidden" name="act" value="procMemberLogin" />
+		<input type="hidden" name="success_return_url" value="{getRequestUriByServerEnviroment()}" />
+		<dl>
+			<dt><label for="uid">{$lang->email_address}</label></dt>
+			<dd><input type="text" name="user_id" id="uid" value="" class="iText" /></dd>
+			<dt><label for="upw">{$lang->password}</label></dt>
+			<dd><input type="password" name="password" id="upw" value="" class="iText" /></dd>
+		</dl>
+		<p class="keep">
+			<input type="checkbox" name="keep_signed" id="keepid_opt" class="keepOpt" value="Y" />
+			<label for="keepid_opt">{$lang->keep_signed}</label>
+		</p>
+		<p class="keepMsg">브라우저를 닫더라도 로그인이 계속 유지될 수 있습니다. 로그인 유지 기능을 사용할 경우 다음 접속부터는 로그인을 하실 필요가 없습니다. 단, 게임방, 학교 등 공공장소에서 이용 시 개인정보가 유출될 수 있으니 꼭 로그아웃을 해주세요.</p>
+		<input type="submit" value="{$lang->cmd_login}" class="btn54" />
+		<p class="help">
+			<a href="{getUrl('act','dispMemberFindAccount')}"><span>{$lang->cmd_find_member_account}</span></a>
+			|
+			<a href="{getUrl('act','dispMemberSignUpForm')}"><span>{$lang->cmd_signup}</span></a>
+		</p>
+    </form>
+</div>
+<include target="common_footer.html" />

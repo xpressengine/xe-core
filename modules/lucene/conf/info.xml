@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="0.2">
+    <title xml:lang="ko">NAVER Lucene</title>
+    <description xml:lang="ko">
+        선택한 모듈들을 대상으로 통합검색을 지원합니다.
+        선택된 모듈의 글중 비밀글만 검색을 하지 않고 나머지는 모두 검색을 하기에 공개되지 않은 모듈은 대상에 포함하지 않도록 하셔야 합니다.
+    </description>
+    <version>1.2</version>
+    <date>2010-12-08</date>
+    <category>accessory</category>
+    <author email_address="developers@xpressengine.com" link="http://www.xpressengine.com">
+        <name xml:lang="ko">NHN</name>
+    </author>
+</module>

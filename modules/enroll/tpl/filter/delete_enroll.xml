@@ -1,0 +1,5 @@
+<filter name="delete_enroll" module="enroll" act="procEnrollAdminDelete">
+    <form>
+        <node target="module_srl" required="true" />
+    </form>
+</filter>

@@ -1,0 +1,50 @@
+<include target="header.html" />
+<load target="../../module/tpl/js/module_list.js" />
+
+<div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/integration_search/tpl/index/1'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+
+<form ruleset="insertConfig" action="./" method="post" class="x_form-horizontal">
+	<input type="hidden" name="act" value="procIntegration_searchAdminInsertConfig" />
+	<input type="hidden" name="module" value="admin" />
+	<input type="hidden" name="xe_validator_id" value="modules/integration_search/tpl/index/1" />
+
+	<div class="x_control-group">
+		<label for="sample_code" class="x_control-label">{$lang->sample_code}</label>
+		<div class="x_controls" style="margin-right:14px">
+			<textarea id="sample_code" readonly style="width:100%;height:100px;cursor:text;font-family:'Courier New', Courier, monospace">{$sample_code}</textarea>
+			<p class="x_help-block">{$lang->about_sample_code}</p>
+		</div>
+	</div>
+	<div class="x_control-group">
+		<label for="skin" class="x_control-label">{$lang->skin}</label>
+		<div class="x_controls">
+			<select name="skin" id="skin">
+				<option loop="$skin_list => $key, $val"  value="{$key}" selected="selected"|cond="$config->skin == $key">{$val->title}</option>
+			</select>
+			<p class="x_help-inline">{$lang->about_skin}</p>
+		</div>
+	</div>
+	<div class="x_control-group">
+		<label class="x_control-label">{$lang->target}</label>
+		<div class="x_controls">
+			<select name="target">
+				<option value="include">{$lang->include_search_target}</option>
+				<option value="exclude" selected="selected"|cond="$config->target=='exclude'">{$lang->exclude_search_target}</option>
+			</select>
+
+			<input type="hidden" name="target_module_srl" id="target_module_srl" value="{$config->target_module_srl}" />
+			<select class="modulelist_selected" size="8" multiple="multiple" style="display:block;vertical-align:top;margin:5px 0"></select>
+			<a href="#" id="__module_srl_list_target_module_srl" class="x_btn moduleTrigger" data-multiple="true" style="margin:0 -5px 0 0;border-radius:2px 0 0 0px">{$lang->cmd_add}</a>
+			<button type="button" class="x_btn modulelist_del" style="border-radius:0 2px 2px 0">{$lang->cmd_delete}</button>
+			<script>
+				xe.registerApp(new xe.ModuleListManager('target_module_srl'));
+			</script>
+		</div>
+	</div>
+
+	<div class="btnArea">
+		<button class="x_btn x_btn-primary" type="submit">{$lang->cmd_registration}</button>
+	</div>
+</form>

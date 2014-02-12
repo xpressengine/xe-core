@@ -1,0 +1,146 @@
+@charset "utf-8";
+/* NHN (developers@xpressengine.com) */
+/* HTML Reset*/
+body, input, button, textarea, table{font-family:돋움, Dotum, Tahoma, Geneva, sans-serif}
+html, body{height:100%}
+/* html{background:#ebebeb;} */
+html{background:url(strange_bullseyes.png);}
+body{margin:0;padding:0;}
+form, fieldset{border:0;margin:0;padding:0}
+/* Layout */
+.xev3main{position:relative;width:1000px;margin:0 auto;border-left:1px solid #e2e2e2;border-right:1px solid #e2e2e2;}
+.skipToContent{margin:0 auto;background:#6a6a6a;width:1000px;text-align:center}
+.skipToContent a{position:absolute;width:1px;height:1px;left:0;top:0;overflow:hidden;color:#fff;text-decoration:none;display:block;padding:5px 0;white-space:nowrap}
+.skipToContent a:hover,
+.skipToContent a:active,
+.skipToContent a:focus{position:relative;height:auto;width:auto}
+.hr{display:none}
+.header,
+.footer{background:url(bgHeaderFooter.gif) no-repeat}
+.header{position:relative;zoom:1;background-position:0 -42px;height:363px;background-color:#2d2d2d}
+.header:after{content:"";display:block;clear:both}
+.header h1{margin:0}
+.header h1 a{display:block;width:200px;height:0;padding:81px 0 0 0;overflow:hidden}
+.header .account{position:absolute;top:0;right:29px;padding:0 3px 0 0;height:26px;background:url(bgAccount.gif) no-repeat left top;overflow:hidden}
+.header .account a{display:inline-block;height:26px;margin:0 -4px 0 0;padding:0 13px;line-height:26px;font-size:11px;color:#c0c0c0;text-decoration:none;text-align:center;vertical-align:top;background:url(bgAccount.gif) no-repeat right -26px}
+.header .account a.log{padding-left:23px}
+.header .account a.project{color:#d8f75d}
+.header .account a:last-child{color:#d8f75d;background-position:right 0}
+.header .account a:hover,
+.header .account a:active,
+.header .account a:focus{color:#d8f75d}
+.header .search{position:absolute;z-index:2;top:77px;right:30px;width:234px;height:34px;background:url(bgSearch.gif) no-repeat right bottom}
+.header .search .iText{position:absolute;left:0;top:0;padding:5px 0 0 10px;border:0;font-size:12px;line-height:24px;height:29px;width:180px;background:none}
+.header .search .sBtn{position:absolute;top:0;right:0;border:0;padding:0;overflow:visible;background:none;height:34px;width:42px;cursor:pointer}
+.header .search .sBtn span{visibility:hidden}
+.footer{position:relative;height:42px;background-position:0 0;text-align:right;border-bottom:1px solid #131313}
+.footer p{position:absolute;left:0;top:0;margin:0;height:0;padding:42px 0 0 0;overflow:hidden}
+.footer a{position:relative;z-index:2;display:inline-block;height:42px;line-height:42px;padding:0 10px;vertical-align:top;color:#aaa;text-decoration:none}
+.body{zoom:1;color:#797979;padding:1px 0;margin:-1px 0;background:#262626}
+.body:after{content:"";display:block;clear:both}
+/* Visual */
+.mVisual{position:relative;z-index:1;height:282px;background:url(visual.png) no-repeat}
+.mVisual .nav{position:absolute;z-index:2;width:50px;height:130px;top:40px;right:30px;background:url(btnTextRotation.png) no-repeat}
+.mVisual .nav button{position:absolute;width:50px;height:65px;padding:0;overflow:visible;background:none;border:0;cursor:pointer}
+.mVisual .nav button span{position:absolute;width:1px;height:1px;overflow:hidden}
+.mVisual .nav .prev{top:0}
+.mVisual .nav .prev.up{background:url(btnTextRotation.png) no-repeat right top}
+.mVisual .nav .next{bottom:0}
+.mVisual .nav .next.down{background:url(btnTextRotation.png) no-repeat right bottom}
+/* Rotation Text */
+.tRotation{position:absolute;top:40px;left:30px;height:130px;width:940px;overflow:hidden}
+.tRotation .itembox{position:absolute;top:0;left:0;width:100%}
+.tRotation .item{position:relative;z-index:1;height:130px;font-weight:bold;font-family:나눔고딕, NanumGothic, "맑은 고딕", "Malgun Gothic", 돋움, Dotum, Tahoma, Geneva, sans-serif}
+.tRotation .item h2{margin:0 0 18px 0;color:#fff;font-size:32px;font-weight:normal;font-family:나눔고딕, NanumGothic, "맑은 고딕", "Malgun Gothic", 돋움, Dotum, Geneva, sans-serif}
+.tRotation .item .p1{margin:0 0 10px 0;color:#d8f75d;font-size:15px}
+.tRotation .item .p2{margin:0;color:#d9d9d9;font-size:11px;line-height:18px}
+.tRotation .item .more{position:absolute;top:0;left:0;width:880px;height:0;padding:130px 0 0 0;overflow:hidden}
+/* Getting Started */
+.gStart{position:absolute;top:196px;left:30px;width:940px;height:62px;overflow:hidden}
+.gStart h2{position:absolute;top:0;right:0;margin:0}
+.gStart h2 a{display:block;width:176px;height:0;padding:62px 0 0 0;overflow:hidden}
+.gStart ol{position:absolute;top:0;left:0;list-style:none;margin:0;padding:0;width:1px;height:1px;overflow:hidden}
+
+/* Content */
+.content{width:940px;margin:0 auto 50px auto;}
+.content:after{content:"";display:block;clear:both}
+.content .wrap{border-top:1px solid #424242;padding:25px 0 20px 0;}
+.content .wrap:after{content:"";display:block;clear:both}
+.content .notice{float:right;width:440px;height:250px;}
+.content .download{float:left;width:460px;height:250px;}
+.content .community{border-top:1px solid #424242;}
+
+/* Notice */
+.notice{position:relative;margin:2px 0 0 0}
+.notice h2{margin:0;height:0;padding:20px 0 0 0;overflow:hidden;background:url(bodySet.png) no-repeat 0 -50px}
+.notice ul{margin:0;padding:0;list-style:none}
+.notice li{margin:19px 0 16px 0; display:block;position:relative;}
+.notice .title{display:block;margin:0 0 5px 0;color:#ddd;font-size:14px;}
+.notice .date,
+.notice .hour,
+.notice .author{position:absolute;top:0;right:0;font:10px Verdana, Geneva, sans-serif;color:#aaa}
+.notice .author{text-decoration:none !important;font-weight:bold;color:#aaa !important}
+.notice .author img{display:none}
+.notice .hour{display:none}
+.notice .summary{line-height:18px;margin:13px 0 0 0}
+.notice .summary a{display:block;color:#aaa;font-size:11px}
+.notice a{text-decoration:none}
+.notice a:hover,
+.notice a:active,
+.notice a:focus{text-decoration:underline;color:#fff}
+.notice .more{position:absolute;top:5px;right:0;padding:0 0 0 7px;font-size:11px;color:#a0a0a0;text-decoration:underline;background:url(bodySet.png) no-repeat 0 -196px}
+.notice .more span{position:absolute;width:1px;height:1px;left:0;top:0;overflow:hidden}
+/* Download */
+.download{position:relative;padding:14px 0 0 0;margin:0 0 2px 0;overflow:hidden;background:url(download_bg.gif) no-repeat}
+.download h2{ display:none; }
+.download .link{ color:#fff; font-size:16px; text-decoration:none; padding: 12px 10px 8px 54px;}
+.download .link span{ display:block; color:#fff; font-size:12px; }
+.download .downloadXE { display:block; position:absolute; top:60px; left:28px; width:126px; height:40px; background:url(btn_download.gif) no-repeat; }
+.download .goGithub { display:block; position:absolute; top:60px; right:28px; width:126px; height:40px; background:url(btn_fork.gif) no-repeat; }
+/* Release Note */
+.download .release{position:absolute;top:180px; margin:0 -2px 25px -2px;width:302px;padding:0 17px 0 133px;height:64px;white-space:nowrap;line-height:19px;font-size:11px;}
+.download .release h2{position:absolute;left:0;top:0;width:1px;height:1px;overflow:hidden}
+.download .release a{color:#c8c8c8;float:left;width:236px;text-decoration:none}
+.download .release a:hover,
+.download .release a:active,
+.download .release a:focus{text-decoration:underline;color:#fff}
+.download .release ul{margin:0;padding:0;list-style:none}
+.download .release .date{color:#6f6f6f;float:right}
+.download .release .hour{display:none}
+
+/* Community */
+.community {position:relative;padding:25px 0 25px 0; }
+.community h2{margin:0 0 14px 0;height:0;padding:20px 0 0 0;overflow:hidden;background:url(bodySet.png) no-repeat;line-height:2}
+.community a{text-decoration:none;font-size:12px;color:#aaa}
+.community a:hover,
+.community a:active,
+.community a:focus{text-decoration:underline;color:#fff}
+.community .forum{float:left; width:290px;display:block;position:relative; margin-right:35px;}
+.community .forum h2{ width: 150px;}
+.community .forum ul{margin:0;padding:0;list-style:none;line-height:28px}
+.community .forum li{padding:0 0 0 7px;vertical-align:top;background:url(bodySet.png) no-repeat 0 -236px;white-space:nowrap}
+.community .forum .more{position:absolute;top:0px;right:0;padding:0 0 0 7px;font-size:11px;color:#a0a0a0;text-decoration:underline;background:url(bodySet.png) no-repeat 0 -196px}
+.community .forum .more span{position:absolute;width:1px;height:1px;left:0;top:0;overflow:hidden}
+/* User Forum */
+.forum.user{}
+.forum.user h2{background-position:0 -100px}
+/* Dev Forum */
+.forum.dev{}
+.forum.dev h2{background-position:-220px -100px}
+/* Q&A */
+.forum.qna{float:right;margin-right:0;}
+.forum.qna h2{background-position:-220px -150px}
+/* GNB */
+.gnb{position:absolute;z-index:3;top:35px;left:191px;height:46px}
+.gnb ul{list-style:none;margin:0;padding:0}
+.gnb li{position:relative;float:left;margin:0}
+.gnb ul a{float:left;width:121px;height:46px;text-align:center;font:bold 16px/46px NanumGothic,나눔고딕;color:#333;text-decoration:none}
+.gnb li .active,
+.gnb li .hover{background:url(gnb.hover.bg.gif) no-repeat;color:#fff}
+.gnb li ul{position:absolute;width:121px;overflow:hidden;top:46px;left:0;display:none;padding:3px 0 5px 0;background:url(gnb.hover.bg_.gif) no-repeat 0 bottom;opacity:.8;filter:alpha(opacity=80)}
+.gnb li li a{width:106px;height:24px;text-align:left;padding:0 0 0 15px;font:bold 12px/24px Tahoma, Geneva, sans-serif;color:#fff}
+.gnb li li a:hover,
+.gnb li li a:active,
+.gnb li li a:focus,
+.gnb li li a.active{background:url(gnb.hover.bg_.gif) no-repeat 0 0}
+

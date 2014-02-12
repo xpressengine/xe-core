@@ -1,0 +1,107 @@
+<include target="include.header.html" />
+<div class="rsHeader">
+	<h2><img src="img/h2.myResource.gif" width="111" height="18" alt="{$lang->cmd_list_my_package}" /></h2>
+</div>
+<div class="rsForm">
+    <p class="notice">{$lang->about_my_package}</p>
+    
+    {@
+    	$avail = array(
+    		'modules/resource/skins/xe_v3/attach/1' => 1,
+    		'modules/resource/skins/xe_v3/insertpackage/1' => 1,
+    		'modules/resource/skins/xe_v3/modifyattach/1' => 1
+    	);
+    }
+	<div cond="$XE_VALIDATOR_MESSAGE && isset($avail[$XE_VALIDATOR_ID])" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+		<p>{$XE_VALIDATOR_MESSAGE}</p>
+	</div>
+	
+    <!--@if($selected_package)-->
+    <table cellspacing="0" border="1" class="meta">
+		<tr>
+			<th scope="row">{$lang->package_title}</th>
+			<td colspan="3">{$selected_package->title}</td>
+		</tr>
+		<tr>
+			<th scope="row">{$lang->voted_count}</th>
+			<td><!--@for($i=0;$i<5;$i++)--><!--@if($i<$selected_package->star)--><img src="./img/starOn.gif" alt="" /><!--@else--><img src="./img/starOff.gif" alt="" /><!--@end--><!--@end--> ({$selected_package->voter})</td>
+			<th scope="row">{$lang->download}</th>
+			<td>{number_format($selected_package->downloaded)}</td>
+		</tr>
+		<tr>
+			<th scope="row">{$lang->status}</th>
+			<td class="status">
+				<!--@if($selected_package->status == 'accepted')-->
+					{$lang->package_accepted}
+				<!--@elseif($selected_package->status == 'reservation')-->
+					{$lang->package_reservation}
+				<!--@else-->
+					{$lang->package_waiting}
+				<!--@end-->
+			</td>
+			<th scope="row">{$lang->regdate}</th>
+			<td class="date">{zdate($selected_package->regdate, "Y-m-d H:i")}</td>
+		</tr>
+		<tr>
+			<th scope="row">{$lang->package_category}</th>
+			<td>{$categories[$selected_package->category_srl]->title}</td>
+			<th scope="row">{$lang->package_license}</th>
+			<td>{$selected_package->license}</td>
+		</tr>
+		<!--@if($module_info->resource_use_path=='Y')-->
+		<tr>
+			<th scope="row">{$lang->package_path}</th>
+			<td colspan="3">{$selected_package->path}</td>
+		</tr>
+		<!--@end-->
+		<tr>
+			<th scope="row">{$lang->package_homepage}</th>
+			<td colspan="3"><!--@if($selected_package->homepage)--><a href="{$selected_package->homepage}">{$selected_package->homepage}</a><!--@else-->&nbsp;<!--@end--></td>
+		</tr>
+		<tr>
+			<th scope="row">{$lang->package_description}</th>
+			<td colspan="3">{nl2br($selected_package->description)}</td>
+		</tr>
+    </table>
+	
+    <div class="btnArea">
+        <span cond="$selected_package->status=='accepted'" class="btn25 blue"><a href="{getUrl('act','dispResourceAttach')}">{$lang->cmd_attach_file}</a></span>
+        <span class="btn25"><a href="{getUrl('act','dispResourceModifyPackage')}">{$lang->cmd_modify}</a></span>
+        <span class="btn25"><a href="{getUrl('act','dispResourceDeletePackage')}">{$lang->cmd_delete}</a></span>
+        <span class="btn25"><a href="{getUrl('act','dispResourcePackageList')}">{$lang->cmd_back}</a></span>
+    </div>
+    <!--@end-->
+
+    <!--@if($attach_items)-->
+    <!--@foreach($attach_items as $key => $val)-->
+    <table cellspacing="0" border="1" class="meta">
+		<tr>
+			<td rowspan="3"><img class="thumb" src="{$val->screenshot_url}" width="130" height="100" alt="" /></td>
+			<th scope="row">{$lang->attach_file}</th>
+			<td><a href="{$val->download_url}" class="file">{$val->source_filename}</a></td>
+			<th scope="row">{$lang->attach_version}</th>
+			<td>{$val->version}
+		</tr>
+		<tr>
+			<th scope="row">{$lang->downloaded_count}</th>
+			<td>{number_format($val->downloaded)}</td>
+			<th scope="row">{$lang->voted_count}</th>
+			<td><!--@for($i=0;$i<5;$i++)--><!--@if($i<$val->star)--><img src="./img/starOn.gif" alt="" /><!--@else--><img src="./img/starOff.gif" alt="" /><!--@end--><!--@end--> ({$val->voter})</td>
+		</tr>
+		<tr>
+			<th scope="row">{$lang->regdate}</th>
+			<td>{zdate($val->regdate, "Y-m-d H:i")}</td>
+			<th scope="row">&nbsp;</th>
+			<td style="text-align:right">
+				<span class="btn25 blue"><a href="{getUrl('act','dispResourceModifyAttach','item_srl',$val->item_srl)}">{$lang->cmd_modify}</a></span>
+				<span class="btn25"><button type="button" onclick="if(confirm('{$lang->confirm_delete}')) doDeleteAttach({$val->package_srl},{$val->item_srl});">{$lang->cmd_delete}</button></span>
+			</td>
+		</tr>
+    </table>
+	<div class="btnArea">
+		
+	</div>
+    <!--@end-->
+    <!--@end-->
+</div>
+<include target="include.footer.html" />

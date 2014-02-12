@@ -1,0 +1,90 @@
+@charset "utf-8";
+/* NHN (developers@xpressengine.com) */
+/* HTML Reset */
+body, input, button, textarea, table{font-family:돋움, Dotum, Tahoma, Geneva, sans-serif}
+html, body{height:100%}
+/* html{background:#ebebeb;} */
+html{background:url(strange_bullseyes.png);}
+body{margin:0;padding:0;}
+form, fieldset{border:0;margin:0;padding:0}
+/* Layout */
+.xev3sub{position:relative;width:1000px;margin:0 auto;border-left:1px solid #e2e2e2;border-right:1px solid #e2e2e2;}
+.skipToContent{margin:0 auto;background:#6a6a6a;width:1000px;text-align:center}
+.skipToContent a{position:absolute;width:1px;height:1px;left:0;top:0;overflow:hidden;color:#fff;text-decoration:none;display:block;padding:5px 0;white-space:nowrap}
+.skipToContent a:hover,
+.skipToContent a:active,
+.skipToContent a:focus{position:relative;height:auto;width:auto}
+.hr{display:none}
+.header,
+.footer{background:url(bgHeaderFooter.png) no-repeat}
+.header{position:relative;z-index:2;zoom:1;background-position:0 -42px;background-color:#fff}
+.header:after{content:"";display:block;clear:both}
+.header h1{margin:0}
+.header h1 a{display:block;width:200px;height:0;padding:81px 0 0 0;overflow:hidden}
+.header .account{position:absolute;top:0;right:29px;padding:0 3px 0 0;height:26px;background:url(bgAccount.gif) no-repeat left top;overflow:hidden}
+.header .account a{display:inline-block;height:26px;margin:0 -4px 0 0;padding:0 13px;line-height:26px;font-size:11px;color:#c0c0c0;text-decoration:none;text-align:center;vertical-align:top;background:url(bgAccount.gif) no-repeat right -26px}
+.header .account a.log{padding-left:23px}
+.header .account a.project{color:#d8f75d}
+.header .account a:last-child{color:#d8f75d;background-position:right 0}
+.header .account a:hover,
+.header .account a:active,
+.header .account a:focus{color:#d8f75d}
+.header .visual{width:1000px;height:115px;overflow:hidden}
+.header .visual img{width:1000px;height:115px}
+.header .search{position:absolute;top:77px;right:30px;width:234px;height:34px;background:url(bgSearch.gif) no-repeat right bottom}
+.header .search .iText{position:absolute;left:0;top:0;padding:5px 0 0 10px;border:0;font-size:12px;line-height:24px;height:29px;width:180px;background:none}
+.header .search .sBtn{position:absolute;top:0;right:0;border:0;padding:0;overflow:visible;background:none;height:34px;width:42px;cursor:pointer}
+.header .search .sBtn span{visibility:hidden}
+.path{height:30px;margin:0 30px;line-height:30px;white-space:nowrap;overflow:hidden;color:#8f8f8f;text-align:right;font-size:11px}
+.path a{display:inline-block;text-decoration:none;color:#8f8f8f;letter-spacing:-1px;vertical-align:middle;line-height:30px}
+.path .home{position:relative;top:-1px;width:12px;height:12px;background:url(iSet.gif) no-repeat}
+.path .home span{position:absolute;width:1px;height:1px;overflow:hidden}
+.path a.last-child{color:#4c4c4c;font-weight:bold}
+.path strong{color:#4c4c4c;letter-spacing:-1px}
+.footer{position:relative;height:42px;background-position:0 0;text-align:right;border-bottom:1px solid #2b2b2b}
+.footer p{position:absolute;left:0;top:0;margin:0;height:0;padding:42px 0 0 0;overflow:hidden}
+.footer a{position:relative;z-index:2;display:inline-block;height:42px;line-height:42px;padding:0 10px;vertical-align:top;color:#aaa;text-decoration:none}
+.body{position:relative;z-index:1;zoom:1;min-height:500px;_height:500px;background:#fff;padding:1px 0;margin:-1px 0;font-size:12px}
+.body:after{content:"";display:block;clear:both}
+.content{float:left;width:760px;padding:0 0 50px 0}
+.content:after{content:"";display:block;clear:both}
+/* GNB */
+.gnb{position:absolute;z-index:3;top:35px;left:191px;height:46px}
+.gnb ul{list-style:none;margin:0;padding:0}
+.gnb li{position:relative;float:left;margin:0}
+.gnb ul a{float:left;width:121px;height:46px;text-align:center;font:bold 16px/46px NanumGothic,나눔고딕;color:#333;text-decoration:none}
+.gnb li .active,
+.gnb li .hover{background:url(gnb.hover.bg.gif) no-repeat;color:#fff}
+.gnb li ul{position:absolute;width:121px;overflow:hidden;top:46px;left:0;display:none;padding:3px 0 5px 0;background:url(gnb.hover.bg_.gif) no-repeat 0 bottom;opacity:.8;filter:alpha(opacity=80)}
+.gnb li li a{width:106px;height:24px;text-align:left;padding:0 0 0 15px;font:bold 12px/24px Tahoma, Geneva, sans-serif;color:#fff}
+.gnb li li a:hover,
+.gnb li li a:active,
+.gnb li li a:focus,
+.gnb li li a.active{background:url(gnb.hover.bg_.gif) no-repeat 0 0}
+/* LNB */
+.lnb{float:left;width:140px;margin:0 40px 0 30px;padding:0 0 50px 0;display:inline;}
+.lnb a{text-decoration:none}
+.lnb h2{margin:0;padding:0 0 8px 0}
+.lnb h2 a{display:block;height:42px;padding:0 0 0 10px;border-bottom:2px solid #666;color:#333;font:bold 16px/42px NanumGothic,나눔고딕}
+.lnb ul{list-style:none;margin:0;padding:0}
+.lnb li{vertical-align:top}
+.lnb li a{display:block;height:27px;padding:0 0 0 10px;font:12px/27px Tahoma, Geneva, sans-serif;color:#333}
+.lnb li a.active{font-weight:bold;background:#f4f4f4}
+.lnb li a:hover,
+.lnb li a:active,
+.lnb li a:focus{background:#f4f4f4}
+@media print{
+.header,
+.lnb,
+.footer{ display:none;}
+.content{ float:none; width:auto;}
+}
+
+.iboard_list td.lastReply span,
+.board_list .author a,
+.widgetTableA td .author {
+	display: inline-block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 90px;
+}

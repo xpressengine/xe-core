@@ -1,0 +1,82 @@
+<div id="leftSideTreeList">
+	<div id="wikiSearch">
+		<form action="{getUrl('mid', $mid, 'search_keyword', $search_keyword, 'act', 'dispWikiSearchResults', 'vid', $vid)}" method="get" >
+			<input type="hidden" name="search_target" value="title_content" />
+			<input type="hidden" name="act" value="dispWikiSearchResults" />
+			<input type="hidden" name="error_return_url" value="" />
+
+			<input id="wikiSearchText" type="text" name="search_keyword" value="{$search_keyword}" class="xeDocsInputText" />
+			<input id="wikiSearchButton" type="submit" value="" title="{$lang->Search}" />
+		</form>
+	</div>		
+	<h3>Table of contents:</h3>
+	
+    {@ $oDocumentModel = &getModel("document");}
+    <!--@if($module_info->menu_style == 'classic')-->
+		{@ $_pDepth = 0;}
+		<ul id="navigation">
+		<!--@foreach($list as $key => $val)-->
+		<!--@if($_pDepth > $val->depth)-->
+		<!--@for($i=$val->depth; $i<$_pDepth; $i++)-->
+		</ul>
+		    </li>
+		<!--@end-->
+		{@ $_pDepth = $val->depth}
+		<!--@end-->
+		<!--@if(!$val->childs)-->
+		    <li>
+		<!--@else-->
+		    <li>
+		<!--@end-->
+		<!--@if($val->childs)-->
+		<!--@end-->
+		<!--@if(isset($oDocument) && ($val->document_srl == $oDocument->document_srl || $val->title == $oDocument->get('title') || $entry == $oDocumentModel->getAlias($val->document_srl) || $alias == $oDocumentModel->getAlias($val->document_srl)))-->
+			<a href="{getSiteUrl($site_module_info->domain, '','mid',$mid,'entry',$oDocumentModel->getAlias($val->document_srl), 'document_srl', '')}"><b>{$val->title}</b></a>
+		<!--@else-->
+		    <a href="{getSiteUrl($site_module_info->domain, '','mid',$mid,'entry',$oDocumentModel->getAlias($val->document_srl), 'document_srl', '')}">{$val->title}</a>
+		<!--@end-->
+		<!--@if($val->childs)-->
+		{@$_pDepth++}
+		<ul>
+		<!--@else-->
+		</li>
+		<!--@end-->
+		<!--@end-->
+		<!--@for($i=0;$i<$_pDepth;$i++)-->
+		</ul>
+		<!--@end-->
+		</li>
+		</ul>
+    <!--@else-->
+	<!--@if(count($list))-->
+	    <ul>
+		<!--@foreach($list as $node)-->
+		<li class="wikiTreeNode" style="
+			<!--@if($node->type == 'root' || $node->type == 'active_root')-->
+				list-style-image:url('./modules/wiki/skins/xe_wiki_tree/img/icon_root.png');
+			<!--@elseif($node->type == 'parent')-->
+				list-style-image:url('./modules/wiki/skins/xe_wiki_tree/img/icon_up_one_level.png');
+			<!--@elseif($node->type == 'sibling')-->
+				list-style-image:url('./modules/wiki/skins/xe_wiki_tree/img/icon_current_directory.png'); margin-left: 15px;
+			<!--@elseif($node->type == 'child')-->
+				list-style-image:url('./modules/wiki/skins/xe_wiki_tree/img/icon_current_directory.png'); margin-left: 30px;
+			<!--@elseif($node->type == 'current')-->
+				list-style-image:url('./modules/wiki/skins/xe_wiki_tree/img/icon_current_directory.png'); margin-left: 15px; font-weight: bold;
+			<!--@elseif($node->type == 'active_root')-->
+				font-weight: bold;
+			<!--@end-->
+		">
+			<!--@if(isset($oDocument) && $node->document_srl == $oDocument->document_srl)-->
+				<a href="{$node->href}"><b>{$node->title}</b></a>
+			<!--@else-->
+				<a href="{$node->href}">{$node->title}</a>
+			<!--@end-->
+		</li>
+		<!--@end-->
+	    </ul>
+	<!--@end-->
+    <!--@end-->
+</div>
+
+
+

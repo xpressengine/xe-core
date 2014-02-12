@@ -1,0 +1,48 @@
+<include target="header.html" />
+
+<div id="wikiTitleArea">
+	<h2 id="wikiTitle">{$lang->cmd_view_document_list}</h2>
+</div>
+
+<table cellspacing="0" border="0" summary="List of Articles" class="wikiTable">
+    <thead>
+        <tr>
+            <th scope="col" class="title">{$lang->title}</th>
+            <th scope="col">{$lang->author}</th>
+            <th scope="col">{$lang->date}</th>
+        </tr>
+    </thead>
+    <tbody>
+    <!--@foreach($document_list as $val)-->
+        <tr>
+            <td class="title">
+                <a href="{urldecode(getUrl('','mid',$mid,'entry',$val->get('alias'), 'document_srl', ''))}">{$val->getTitle()}</a>
+            </td>
+            <td class="author"><a href="#" onclick="return false;" class="member_{$val->member_srl}">{$val->getNickName()}</a></td>
+            <td class="date">{$val->getRegdate("Y.m.d H:i")}</td>
+        </tr>
+    <!--@end-->
+    </tbody>
+</table>
+
+<form action="{getUrl()}" method="get" id="wikiSearchFormTitleIndex" no-error-return-url="true">
+        <input type="hidden" name="vid" value="{$vid}" />
+        <input type="hidden" name="mid" value="{$mid}" />
+        <input type="hidden" name="act" value="{$act}" />
+        <input type="hidden" name="category" value="{$category}" />
+        <input type="hidden" name="search_target" value="title_content" />
+        <select name="search_target">
+            <!--@foreach($search_option as $key => $val)-->
+            <option value="{$key}" <!--@if($search_target==$key)-->selected="selected"<!--@end-->>{$val}</option>
+            <!--@end-->
+        </select>
+        <input type="text" name="search_keyword" value="{htmlspecialchars($search_keyword)}" class="inputText" title="{$lang->cmd_search}" />
+        <!--@if($last_division)-->
+            <a href="{getUrl('page',1,'document_srl','','division',$last_division,'last_division','')}" class="btn">{$lang->cmd_search_next}</a>
+        <!--@end-->
+    	<input class="btn" type="submit" value="{$lang->cmd_search}" />
+</form>
+
+	<include target="document_pagination.html" />
+
+<include target="footer.html" />

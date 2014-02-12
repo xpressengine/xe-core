@@ -1,0 +1,11 @@
+<query id="getAuthors" action="select">
+	<tables>
+		<table name="issue_changesets" />
+	</tables>
+	<columns>
+		<column name="author" />
+	</columns>
+	<groups>
+		<group column="author" />
+	</groups>
+</query>

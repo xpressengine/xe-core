@@ -1,0 +1,9 @@
+<include target="include.header.html" />
+<!--@if($items)-->
+	<!--#include("include.itemlist.html")-->
+<!--@elseif(!$package)-->
+	<!--#include("include.list.html")-->
+<!--@else-->
+	<!--#include("include.package.html")-->
+<!--@end-->
+<include target="include.footer.html" />

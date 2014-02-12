@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout version="0.2">
+    <title xml:lang="ko">XE Official v3 Main</title>
+    <description xml:lang="ko">XE 공식 웹 사이트 2011 메인 페이지 레이아웃.</description>
+    <version>1.0</version>
+    <date>2010-12-24</date>
+    <author email_address="developers@xpressengine.com" link="http://xpressengine.com/">
+        <name xml:lang="ko">NHN</name>
+    </author>
+    <license>LGPL v2</license>
+	<extra_vars>
+		<var name="r_text_1" type="textarea">
+            <title xml:lang="ko">로테이션 텍스트 1</title>
+            <description xml:lang="ko">비주얼 영역에 로테이션으로 출력할 첫 번째 텍스트(HTML 사용 가능) 입니다.</description>
+		</var>
+		<var name="r_text_2" type="textarea">
+            <title xml:lang="ko">로테이션 텍스트 2</title>
+            <description xml:lang="ko">비주얼 영역에 로테이션으로 출력할 두 번째 텍스트(HTML 사용 가능) 입니다.</description>
+		</var>
+		<var name="r_text_3" type="textarea">
+            <title xml:lang="ko">로테이션 텍스트 3</title>
+            <description xml:lang="ko">비주얼 영역에 로테이션으로 출력할 세 번째 텍스트(HTML 사용 가능) 입니다.</description>
+		</var>
+		<var name="r_text_4" type="textarea">
+            <title xml:lang="ko">로테이션 텍스트 4</title>
+            <description xml:lang="ko">비주얼 영역에 로테이션으로 출력할 네 번째 텍스트(HTML 사용 가능) 입니다.</description>
+		</var>
+		<var name="r_text_5" type="textarea">
+            <title xml:lang="ko">로테이션 텍스트 5</title>
+            <description xml:lang="ko">비주얼 영역에 로테이션으로 출력할 다섯 번째 텍스트(HTML 사용 가능) 입니다.</description>
+		</var>
+	</extra_vars>
+    <menus>
+        <menu name="main_menu" maxdepth="2" default="true">
+            <title xml:lang="ko">메뉴</title>
+        </menu>
+    </menus>
+</layout>

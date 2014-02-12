@@ -1,0 +1,12 @@
+<query id="getCountEnrollItemByEmailAddress" action="select">
+    <tables>
+        <table name="enroll" />
+    </tables>
+    <columns>
+        <column name="count(*)" alias="count" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" notnull="notnull" />
+        <condition operation="equal" column="email_address" var="email_address" filter="email_address" notnull="notnull" pipe="and" />
+    </conditions>
+</query>

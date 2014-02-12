@@ -1,0 +1,83 @@
+<!--#include("_tool_header.html")-->
+
+<!--%import("filter/insert_profile.xml")-->
+
+		<!-- Content -->
+			<div id="content">
+				
+				<!-- contentHeader -->
+				<div class="contentHeader profileHeader lineBottom">
+					<h3 class="h3">{$lang->textyle_second_menus[5]['dispTextyleToolConfigProfile']}</h3>
+				</div>
+				<!-- /contentHeader -->
+				
+				<div class="setUp">
+					<form action="{Context::getRequestUri()}" target="form_iframe" method="post" enctype="multipart/form-data" onsubmit="return procFilter(this,insert_profile)" id="foProfile">
+						<input type="hidden" name="vid" value="{$vid}" />
+						<input type="hidden" name="mid" value="{$mid}" />
+						<input type="hidden" name="module_srl" value="{$module_srl}" />
+						<input type="hidden" name="delete_photo" value="N" />
+						<fieldset>
+							<h4 class="h4">{$lang->nick_name}</h4>
+							<table border="1" cellspacing="0" class="setupData">
+								<tr>
+									<th scope="row">{$lang->user_id}</th>
+									<td><strong>{$textyle->getUserID()}</strong></td>
+								</tr>
+								<tr>
+									<th scope="row"><label for="pName">{$lang->display_name}</label></th>
+								<td>
+								<input name="nick_name" type="text" value="{$textyle->getNickName()}" class="iText" style="width:300px" id="pName" />
+										<p>{$lang->about_display_name}</p>
+									</td>
+								</tr>
+							</table>
+						</fieldset>
+						
+						<fieldset>
+							<h4 class="h4"><label for="eMail">{$lang->email_address}</label></h4>
+							<div style="padding-left:170px">
+								<input name="email_address" value="{$textyle->getEmail()}" type="text" class="iText" style="width:300px" id="eMail" />
+								<p>{$lang->about_email}</p>
+							</div>
+						</fieldset>
+						
+						<fieldset>
+							<h4 class="h4">{$lang->profile_image}</h4>
+							<div class="thumb">
+								<img src="{$textyle->getProfilePhotoSrc()}" alt="{$lang->no_profile_image}" width="{$profile_image_width}" height="{$profile_image_height}" class="profilePhoto" />
+								<button type="button" class="deletePhoto" onclick="jQuery('input[name=delete_photo]').val('Y');jQuery('img.profilePhoto').attr('src','{$textyle->getProFileDefaultPhotoSrc()}');"><span>{$lang->cmd_delete}</span></button>
+							</div>
+							<div class="upload">
+								<input name="photo" type="file" id="photo" value="" />
+                                <p>{$lang->allow_profile_image_type}</p>
+								<p>{sprintf($lang->allow_profile_image_size, $profile_image_width, $profile_image_height)}</p>
+							</div>
+						</fieldset>
+						
+						<fieldset>
+							<h4 class="h4">{$lang->signature}</h4>
+							<input type="hidden" name="profile_content" value="{htmlspecialchars($textyle->getProfileContent())}" />
+							{$profile_content_editor}
+						</fieldset>
+						
+						<div class="btnArea">
+							<span class="btn"><input type="submit" value="{$lang->cmd_apply}" /></span>
+						</div>
+
+					</form>
+				</div>
+
+			</div>
+			<hr />
+			<!-- /Content -->
+			
+	
+			<!-- Extension -->
+				<!--#include("_tool_menu.html")-->
+			<!-- Extension -->
+
+			<iframe name="form_iframe" style="visibility:hidden;width:0px;height:0px;"></iframe>
+
+
+<!--#include("_tool_footer.html")-->

@@ -1,0 +1,8 @@
+<query id="deleteTextyleSubscriptionByPublishDate" action="delete">
+    <tables>
+        <table name="textyle_subscription" />
+    </tables>
+    <conditions>
+        <condition operation="less" column="publish_date" var="publish_date" filter="number" notnull="notnull" />
+    </conditions>
+</query>

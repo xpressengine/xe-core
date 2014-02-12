@@ -1,0 +1,11 @@
+<query id="updateRefererHost" action="update">
+    <tables>
+        <table name="textyle_referer_hosts" />
+    </tables>
+    <columns>
+        <column name="visitor" var="visitor" default="plus(1)" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="textyle_host_srl" var="textyle_host_srl" filter="number" notnull="notnull" />
+    </conditions>
+</query>

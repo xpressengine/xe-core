@@ -1,0 +1,34 @@
+<div class="tag_relation">
+	<!--@if($tag_relation->title)--><div class="title">{$tag_relation->title}</div><!--@end-->
+	<ol>
+	<!--@foreach($tag_relation_document_list as $oDocument)-->
+		<li>
+		<!--// 작성일 -->
+		<!--@if($tag_relation->print_regdate != 'N')--><span class="regdate">[{$oDocument->getRegdate('Y/m/d')}]</span><!--@end-->
+
+		<!--// 모듈제목 -->
+		<!--@if($tag_relation->print_module_title == 'Y')--><span class="module_title">{$oDocument->get('module_title')}</span><!--@end-->
+
+		<!--// 제목 -->
+		<a href="{$oDocument->getPermanentUrl()}" <!--@if($tag_relation->link_target == 'new')-->onclick="window.open(this.href); return false;"<!--@endif--> <!--@if($tag_relation->cut_subject)-->title="{$oDocument->getTitleText()}"<!--@endif-->>{$oDocument->getTitleText($tag_relation->cut_subject)}</a>
+
+		<!--// 작성자 -->
+		<!--@if($tag_relation->print_author != 'N')--><span class="author member_{$oDocument->get('member_srl')}"> by {$oDocument->getNickName()}</span><!--@end-->
+
+		<!--// 조회수/추천수 -->
+		<!--@if(($tag_relation->print_voted_count != 'N' && $oDocument->get('voted_count') > 0) || $tag_relation->print_readed_count != 'N')-->
+		{@ $vote_read_count = array()}
+			<!--@if($tag_relation->print_readed_count != 'N')-->
+				{@ $vote_read_count[] = '<span class="readed_count" title="조회 수">'.$oDocument->get('readed_count').'</span>'}
+			<!--@endif-->
+			<!--@if($tag_relation->print_voted_count != 'N' && $oDocument->get('voted_count') > 0)-->
+				{@ $vote_read_count[] = '<span class="voted_count" title="추천 수">'.$oDocument->get('voted_count').'</span>'}
+			<!--@endif-->
+			<span class="readAndVoted">({implode(', ', $vote_read_count)})</span>
+		<!--@endif-->
+
+		<!--@if($tag_relation->print_comment_count != 'N' && $oDocument->getCommentCount() >= 1)--><span class="comment_cnt" title="댓글 수">*{$oDocument->getCommentCount()}</span><!--@end-->
+		</li>
+	<!--@endforeach-->
+	</ol>
+</div>

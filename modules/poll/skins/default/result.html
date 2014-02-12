@@ -1,0 +1,67 @@
+<load target="css/poll.css" />
+<div class="poll_box" style="{$poll->style}">
+	<div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/poll/skins/default/form/1'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+		<p>{$XE_VALIDATOR_MESSAGE}</p>
+	</div>
+
+    <table cellspacing="0" class="poll_table">
+    <col width="7" />
+    <col />
+    <col width="7" />
+    <tr class="cap">
+        <td><img src="./images/lh.png" alt="lh" width="7" height="7" /></td>
+        <td class="h"><img src="./images/blank.gif" height="7" alt="blank" /></td>
+        <td><img src="./images/rh.png" alt="rh" width="7" height="7" /></td>
+    </tr>
+    <tr>
+        <td class="title" colspan="3">
+            <div style="float:left">
+                {$lang->poll_stop_date}: <strong>{zdate($poll->stop_date, "Y-m-d")}</strong> {zdate($poll->stop_date, "H:i")}
+            </div>
+            <div style="float:right">
+                {$lang->poll_join_count}: <strong>{number_format($poll->poll_count)}</strong>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="l"><img src="./images/blank.gif" height="7" alt="blank" /></td>
+        <td class="poll_content">
+
+            <!--@foreach($poll->poll as $poll_srl_index => $val)-->
+                <div class="title">{$val->title} ({$val->poll_count})</div>
+                <!--@foreach($val->item as $item_srl => $item)-->
+					<block cond="$val->poll_count">
+						{@$per = (int)(( $item->poll_count / $val->poll_count)*100) }
+					</block>
+					<block cond="!$val->poll_count">
+						{@$per = 0}
+					</block>
+
+                    <div class="item_text">
+                        <strong>{$item_srl+1}</strong> <img src="./images/pipe.png" alt="" /> {$item->title}
+                    </div>
+
+                    <table cellspacing="0" class="item_bar_table <!--@if($item_srl == count($val->item)-1)-->noborder<!--@end-->">
+                    <col width="30" />
+                    <col/>
+                    <col width="75" />
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td class="bar"><!--@if($per)--><img src="./images/color_bar.png" style="width:{$per}%;height:6px;" alt="bar" /><!--@else--><img src="./images/blank.gif" width="1" height="1" alt="" /><!--@end--></td>
+                        <td class="status"><strong>{$item->poll_count}</strong> ({$per}%)</td>
+                    </tr>
+                    </table>
+                <!--@end-->
+
+            <!--@end-->
+        </td>
+        <td class="r"><img src="./images/blank.gif" height="7" alt="blank" /></td>
+    </tr>
+    <tr class="cap">
+        <td class="rlb" ><img src="./images/rlb.png" alt="lb" width="7" height="7" /></td>
+        <td class="bb"><img src="./images/blank.gif" alt="blank" /></td>
+        <td class="rrb" ><img src="./images/rrb.png" alt="rb" width="7" height="7" /></td>
+    </tr>
+    </table>
+
+</div>

@@ -1,0 +1,39 @@
+<query id="getTextyleList" action="select">
+    <tables>
+        <table name="modules" alias="modules" />
+        <table name="sites" alias="sites" />
+        <table name="textyle" alias="textyle" />
+        <table name="member" alias="member" type="left join" >
+			<conditions>
+				<condition operation="equal" column="textyle.member_srl" default="member.member_srl" filter="number" pipe="and" />
+			</conditions>
+		</table>
+    </tables>
+    <columns>
+        <column name="sites.domain" alias="domain" />
+        <column name="sites.default_language" alias="default_language" />
+        <column name="member.nick_name" alias="nick_name" />
+        <column name="member.user_name" alias="user_name" />
+        <column name="member.user_id" alias="user_id" />
+        <column name="member.email_address" alais="email_address" />
+        <column name="modules.*" />
+        <column name="textyle.*" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="modules.module_srl" default="textyle.module_srl" filter="number" pipe="and" />
+        <condition operation="equal" column="sites.site_srl" default="modules.site_srl" pipe="and" />
+        <group pipe="and">
+            <condition operation="like" column="member.user_id" var="s_user_id" />
+            <condition operation="like" column="member.user_name" var="s_user_name" pipe="or" />
+            <condition operation="like" column="member.nick_name" var="s_nick_name" pipe="or" />
+            <condition operation="like" column="sites.domain" var="s_domain" pipe="or" />
+            <condition operation="like" column="textyle.regdate" var="s_regdate" pipe="or" />
+        </group>
+    </conditions>
+    <navigation>
+        <index var="sort_index" default="modules.module_srl" order="desc" />
+        <list_count var="list_count" default="20" />
+        <page_count var="page_count" default="10" />
+        <page var="page" default="1" />
+    </navigation>
+</query>

@@ -1,0 +1,91 @@
+<!--#include("_tool_header.html")-->
+<!--%import("css/calendar.css",optimized=false)-->
+			<!-- Content -->
+			<div id="content">
+				
+				<!-- contentHeader -->
+				<div class="contentHeader skinHeader">
+					<h3 class="h3">{$lang->textyle_second_menus[4]['dispTextyleToolLayoutConfigMobileSkin']}</h3>
+				</div>
+				<!-- /contentHeader -->
+				
+			<!--@if($module_info->mskin)-->
+				<!-- mySkin -->
+				<div class="section mySkin">
+					<div class="container">
+						<div class="thumb">
+							<img src="{$cur_skin->large_screenshot}" width="260" height="195" alt="{htmlspecialchars($cur_skin->title)}" />
+						</div>
+						<p class="using"><img src="img/iconUsing.png" width="57" height="58" alt="{$lang->cmd_use_ing}" /></p>
+						<div class="summary">
+							<div class="sHeader">
+								<h4 class="h4">{htmlspecialchars($cur_skin->title)}</h4>
+							</div>
+							<p class="contributor">by {$cur_skin->author}</p>
+							<p class="description">{$cur_skin->description}</p>
+						</div>
+					</div>
+					<span class="outline ml"></span>
+					<span class="outline mr"></span>
+					<span class="outline tc"></span>
+					<span class="outline bc"></span>
+					<span class="outline tl"></span>
+					<span class="outline tr"></span>
+					<span class="outline bl"></span>
+					<span class="outline br"></span>
+				</div>
+				<!-- /mySkin -->
+			<!--@else-->
+				<div class="section mySkin" style="height:86px">
+					<div class="container" style="padding:25px 50px; height:36px; zoom:1">
+						<p>{$lang->msg_mobile_skin_use_not}</p>
+					</div>
+					<span class="outline ml"></span>
+					<span class="outline mr"></span>
+					<span class="outline tc"></span>
+					<span class="outline bc"></span>
+					<span class="outline tl"></span>
+					<span class="outline tr"></span>
+					<span class="outline bl"></span>
+					<span class="outline br"></span>
+				</div>
+			<!--@end-->
+
+				<!-- Skin List -->
+				<div class="skinList">
+					<ul>
+						<li>
+							<dl>
+								<dt>{$lang->notuse}</dt>
+								<dd class="thumb"><span style="display:inline-block; width:138px; height:87px; text-align:center; line-height:87px; background:#f8f8f8">{$lang->notuse}</span></dd>
+								<dd class="download">
+									<span class="btnGray small"><button type="button" onclick="doSelectMobileSkin(''); return false;">{$lang->cmd_apply}</button></span>
+								</dd>
+							</dl>
+						</li>
+
+                        <!--@foreach($skins as $key => $val)-->
+						<li>
+							<dl>
+								<dt>{$val->title}</dt>
+								<dd class="thumb"><img src="{$val->small_screenshot}" width="138" height="87" alt="{htmlspecialchars($val->title)}" /></dd>
+								<dd class="download">
+									<span class="btnGray small"><button type="button" onclick="if(confirm('{$lang->msg_select_skin}')) doSelectMobileSkin('{$key}'); return false;">{$lang->cmd_select_skin}</button></span>
+								</dd>
+							</dl>
+						</li>
+                        <!--@end-->
+					</ul>
+				</div>
+				<!-- /Skin List -->
+
+			</div>
+			<hr />
+			<!-- /Content -->
+			
+
+			<!-- Extension -->
+				<!--#include("_tool_menu.html")-->
+			<!-- Extension -->
+
+<!--#include("_tool_footer.html")-->

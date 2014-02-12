@@ -1,0 +1,10 @@
+<query id="deleteItems" action="delete">
+    <tables>
+        <table name="resource_items" />
+    </tables>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" notnull="notnull" />
+        <condition operation="equal" column="package_srl" var="package_srl" filter="number" pipe="and" />
+        <condition operation="equal" column="item_srl" var="item_srl" filter="number" pipe="and" />
+    </conditions>
+</query>

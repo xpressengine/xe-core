@@ -1,0 +1,13 @@
+<div class="wikiPagination">
+	<a href="{getUrl('page','','document_srl','','division',$division,'last_division',$last_division,'entry', ($entry ? $entry : ''))}" class="prevEnd">{$lang->first_page}</a> 
+	<!--@if($page_navigation)-->
+	<!--@while($page_no = $page_navigation->getNextPage())-->
+		<!--@if($page == $page_no)-->
+			<strong>{$page_no}</strong> 
+		<!--@else-->
+			<a href="{getUrl('page',$page_no,'document_srl','','division',$division,'last_division',$last_division,'entry','')}">{$page_no}</a>
+		<!--@end-->
+	<!--@end-->
+	<!--@end-->
+	<a href="{getUrl('page',$page_navigation->last_page,'document_srl','','division',$division,'last_division',$last_division,'entry',($entry ? $entry : ''))}" class="nextEnd">{$lang->last_page}</a>
+</div>

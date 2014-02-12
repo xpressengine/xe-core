@@ -1,0 +1,17 @@
+<query id="getReplies" action="select">
+    <tables>
+        <table name="kin_replies" />
+    </tables>
+    <columns>
+        <column name="*" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="parent_srl" var="parent_srl" notnull="notnull" />
+    </conditions>
+    <navigation>
+        <index var="sort_index" default="list_order" order="asc" />
+        <list_count var="list_count" default="20" />
+        <page_count var="page_count" default="10" />
+        <page var="page" default="1" />
+    </navigation>
+</query>

@@ -1,0 +1,22 @@
+<load target="js/wiki_admin.js" />
+<div class="x_page-header">
+	<h1>
+		{$lang->wiki} {$lang->cmd_management}
+		<span class="path" cond="$module_info->mid">&gt; <a href="{getSiteUrl($module_info->domain,'','mid',$module_info->mid)}" target="_blank"|cond="$module=='admin'">{$module_info->mid}</a><block cond="$module_info->is_default=='Y'">({$lang->is_default})</block></span>
+	</h1>
+</div>
+<ul class="x_nav x_nav-tabs" cond="$act != 'dispWikiAdminDeleteWiki'">
+	<li cond="$module=='admin'" class="x_active"|cond="$act=='dispWikiAdminContent'"><a href="{getUrl('act','dispWikiAdminContent','module_srl','')}">{$lang->cmd_wiki_list}</a></li>
+	<li cond="$module_srl && $module!='admin'"><a href="{getUrl('act','')}">{$lang->cmd_back}</a></li>
+	<li cond="!$module_srl" class="x_active"|cond="$act=='dispWikiAdminInsertWiki'"><a href="{getUrl('act','dispWikiAdminInsertWiki')}">{$lang->cmd_make}</a></li>
+	<li cond="$module_srl" class="x_active"|cond="$act=='dispWikiAdminInsertWiki'"><a href="{getUrl('act','dispWikiAdminInsertWiki')}">{$lang->cmd_wiki_info}</a></li>
+	<li cond="$module_srl" class="x_active"|cond="$act=='dispWikiAdminArrange'"><a href="{getUrl('act','dispWikiAdminArrange')}">{$lang->arrange_list}</a></li>
+	<li cond="$module_srl" class="x_active"|cond="$act=='dispWikiAdminGrantInfo'"><a href="{getUrl('act','dispWikiAdminGrantInfo')}">{$lang->cmd_manage_grant}</a></li>
+	<li cond="$module_srl" class="x_active"|cond="$act=='dispWikiAdminWikiAdditionSetup'"><a href="{getUrl('act','dispWikiAdminWikiAdditionSetup')}">{$lang->cmd_addition_setup}</a></li>
+	<li cond="$module_srl" class="x_active"|cond="$act=='dispWikiAdminSkinInfo'"><a href="{getUrl('act','dispWikiAdminSkinInfo')}">{$lang->cmd_manage_skin}</a></li>
+	<li cond="$module_srl" class="x_active"|cond="$act=='dispWikiAdminMobileSkinInfo'"><a href="{getUrl('act','dispWikiAdminMobileSkinInfo')}">{$lang->cmd_manage_mobile_skin}</a></li>
+	<li class="x_active"|cond="$act=='dispWikiAdminMarkupExamples'"><a href="{getUrl('act','dispWikiAdminMarkupExamples')}">{$lang->wiki_language_help}</a></li>
+</ul>
+<div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/wiki/tpl'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>

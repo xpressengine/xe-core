@@ -1,0 +1,12 @@
+<query id="getBlogApiService" action="select">
+    <tables>
+        <table name="textyle_blogapi_services" />
+    </tables>
+    <columns>
+        <column name="*" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="textyle_blogapi_service_srl" var="textyle_blogapi_service_srl" filter="number" notnull="notnull" />
+    </conditions>
+
+</query>

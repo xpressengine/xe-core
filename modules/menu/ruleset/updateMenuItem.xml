@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ruleset version="1.5.0">
+    <customrules>
+		<rule name="mid" type="regex" test="/^[a-z][a-z0-9_]+$/i" />
+    </customrules>
+    <fields>
+		<field name="menu_name" required="true" />
+		<field name="module_id" length="0:40" rule="mid" />
+    </fields>
+</ruleset>

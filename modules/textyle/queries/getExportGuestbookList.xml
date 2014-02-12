@@ -1,0 +1,21 @@
+<query id="getExportGuestbookList" action="select">
+    <tables>
+        <table name="textyle_guestbook" alias="guestbook" />
+        <table name="member" type="left join">
+			<conditions>
+				<condition operation="equal" column="guestbook.member_srl" default="member.member_srl" />
+			</conditions>
+		</table>
+    </tables>
+    <columns>
+        <column name="guestbook.*" />
+        <column name="member.password" alias="member_password" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="guestbook.module_srl" var="module_srl" filter="number" notnull="notnull" />
+    </conditions>
+    <navigation>
+		<index var="list_order" default="guestbook.list_order" order="asc" />
+		<index var="parent_srl" default="guestbook.parent_srl" order="asc" />
+    </navigation>
+</query>

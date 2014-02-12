@@ -1,0 +1,167 @@
+<load target="textyle.js" />
+<!-- display Post Body -->
+<!--@foreach($document_list as $document)-->
+<h2 class="postTitle"><a href="{$document->getPermanentUrl()}">{$document->getTitle()}</a> <span class="category">{$category_list[$document->get('category_srl')]->title}</span></h2>
+<p class="postMeta">
+	<span class="yymmdd">{$document->getRegdate('Y.m.d')}</span> 
+	<span class="hhmm">{$document->getRegdate('H:i')}</span> 
+	<span class="author">{$document->getNickName()}</span> 
+	<a href="{getSiteUrl($textyle->domain,'document_srl',$document->document_srl,'act','dispTextyleToolPostManageWrite')}" class="editPost">EDIT</a>
+</p>
+<div class="xe_content">
+	{$post_prefix}
+	{$document->getContent(false)}
+	{$post_suffix}
+</div>
+<ul class="sns">
+	<li class="twitter"><a href="http://twitter.com/">Twitter</a></li>
+	<li class="me2day"><a href="http://me2day.net/">Me2day</a></li>
+	<li class="facebook"><a href="http://facebook.com/">Facebook</a></li>
+	<li class="delicious"><a href="http://delicious.com/">Delicious</a></li>
+</ul>
+<script>
+	jQuery(function($){
+		$('.twitter>a').snspost({
+			type : 'twitter',
+			content : '{$document->getTitle()} {$document->getPermanentUrl()}'
+		});
+		$('.me2day>a').snspost({
+			type : 'me2day',
+			content : '\"{$document->getTitle()}\":{$document->getPermanentUrl()}'
+		});
+		$('.facebook>a').snspost({
+			type : 'facebook',
+			content : '{$document->getTitle()}'
+		});
+		$('.delicious>a').snspost({
+			type : 'delicious',
+			content : '{$document->getTitle()}'
+		});
+	});
+</script>
+{@$tag_list = $document->get('tag_list');}
+<dl class="usedTag" cond="count($tag_list)">
+	<dt>Tag :</dt>
+	<dd>
+		<!--@for($i=0,$c=count($tag_list);$i<$c;$i++)-->
+		<a href="{getUrl('search_target','tag','search_keyword',$tag_list[$i],'document_srl','')}" rel="tag">{htmlspecialchars($tag_list[$i])}</a><!--@if($i<$c-1)-->, <!--@end-->
+		<!--@end-->
+	</dd>
+</dl>
+<!-- trackback -->
+<div id="trackback" class="feedback trackback">
+	<h3 class="feedbackTitle">{$lang->trackback} <em>{$document->getTrackbackCount()}</em></h3>
+	<p class="trackbackURL">
+		<a href="{$document->getTrackbackUrl()}" onclick="return false" title="{$lang->trackback_url}">{$document->getTrackbackUrl()}</a>
+	</p>
+	<ol class="feedbackOrder" cond="$document->getTrackbackCount()">
+		<li loop="$document->getTrackbacks() => $key, $val" class="item" id="trackback_{$val->trackback_srl}">
+			<div class="meta">
+				<h4 class="title"><a href="{$val->url}">{htmlspecialchars($val->blog_name)}</a></h4>
+				<p class="date">{zdate($val->regdate, "Y.m.d H:i")}</p>
+			</div>
+			<p class="data xe_content">{$val->excerpt}</p>
+		</li>
+	</ol>
+</div>
+<!-- /trackback -->
+
+<!-- comment -->
+<div id="comment" class="feedback reply" cond="$document->allowComment()">
+	<h3 class="feedbackTitle">{$lang->comment} <em>{$document->getCommentCount()}</em></h3>
+	<ol class="feedbackOrder" cond="$document->getCommentCount()">
+		<li loop="$document->getComments()=>$key, $comment" class="item"|cond="!$comment->get('depth')" class="item indent indent{$comment->get('depth')}"|cond="$comment->get('depth')">
+			<div class="meta">
+				<h4 class="author">
+					<a href="{$comment->homepage}" cond="$comment->homepage">{$comment->getNickName()}</a>
+					<block cond="!$comment->homepage">{$comment->getNickName()}</block>
+				</h4>
+				<p class="date">{$comment->getRegdate('Y.m.d H:i')}</p>
+			</div>
+			<div id="comment_{$comment->comment_srl}" class="data xe_content">
+				<block cond="$comment->isAccessible()">
+				{$comment->getContent(false)}
+				</block>
+				<form cond="!$comment->isAccessible()" action="./" method="get" onsubmit="return procFilter(this, input_password)" class="pwForm active">
+					<input type="hidden" name="mid" value="{$mid}" />
+					<input type="hidden" name="page" value="{$page}" />
+					<input type="hidden" name="document_srl" value="{$comment->get('document_srl')}" />
+					<input type="hidden" name="comment_srl" value="{$comment->get('comment_srl')}" />
+					<label for="readPw">{$lang->password} : </label> <input name="password" type="password" class="iText" id="readPw" value="" /><input name="" type="submit" value="{$lang->cmd_confirm}" class="submit" />
+				</form>
+				<form cond="!$comment->member_srl" action="" method="post" class="modifyPw pwForm comment{$key}" onsubmit="return checkPasswordForModifyComment(this)">
+					<input type="hidden" name="mid" value="{$mid}" />
+					<input type="hidden" name="page" value="{$page}" />
+					<input type="hidden" name="document_srl" value="{$comment->get('document_srl')}" />
+					<input type="hidden" name="comment_srl" value="{$comment->get('comment_srl')}" />
+					<label for="modifyPw">{$lang->password} : </label> <input name="password" type="password" class="iText" id="modifyPw" value="" /><input name="" type="submit" value="{$lang->cmd_confirm}" class="submit" />
+				</form>
+				<form cond="!$comment->member_srl" action="" method="post" class="deletePw pwForm comment{$key}" onsubmit="return checkPasswordForDeleteComment(this)">
+					<input type="hidden" name="mid" value="{$mid}" />
+					<input type="hidden" name="page" value="{$page}" />
+					<input type="hidden" name="document_srl" value="{$comment->get('document_srl')}" />
+					<input type="hidden" name="comment_srl" value="{$comment->get('comment_srl')}" />
+					<label for="deletePw">{$lang->password} : </label> <input name="password" type="password" class="iText" id="deletePw" value="" /><input name="" type="submit" value="{$lang->cmd_confirm}" class="submit" />
+				</form>
+			</div>
+			<ul class="reAction" cond="$comment->isAccessible()">
+				<li cond="$textyle->isEnableComment()"><a href="{getUrl('','mid',$mid,'comment_srl',$comment->comment_srl,'document_srl',$document->document_srl,'act','dispTextyleCommentReply')}">{$lang->cmd_reply}</a></li>
+				<block cond="$comment->member_srl">
+					<block cond="$comment->isGranted() || $comment->member_srl==$logged_info->member_srl">
+						<li><a href="{getUrl('','mid',$mid,'comment_srl',$comment->comment_srl,'document_srl',$document->document_srl,'act','dispTextyleCommentModify')}">{$lang->cmd_modify}...</a></li>
+						<li><button type="button" onclick="if(confirm('{$lang->confirm_delete}')) deleteCommentItem({$comment->comment_srl});">{$lang->cmd_delete}</button></li>
+					</block>
+				</block>
+				<block cond="!$comment->member_srl">
+					<li><button type="button" onclick="jQuery('.comment{$key}').removeClass('active');jQuery('.modifyPw.comment{$key}').addClass('active')">{$lang->cmd_modify}...</button></li>
+					<li><button type="button" onclick="jQuery('.comment{$key}').removeClass('active');jQuery('.deletePw.comment{$key}').addClass('active')">{$lang->cmd_delete}</button></li>
+				</block>
+			</ul>
+		</li>
+	</ol>
+</div>
+<!-- /comment -->
+<!--@end-->
+<!-- /display Post Body -->
+
+<div class="pn pnNum" cond="$document->comment_page_navigation">
+	<a href="{getUrl('cpage',1)}#comment" class="prev"><span>{$lang->first_page}</span></a>
+	<!--@while($page_no = $document->comment_page_navigation->getNextPage())-->
+	<strong cond="$cpage == $page_no">{$page_no}</strong>
+	<a cond="$cpage != $page_no" href="{getUrl('cpage',$page_no)}#comment">{$page_no}</a>
+	<!--@end-->
+	<a href="{getUrl('cpage',$document->comment_page_navigation->last_page)}#comment" class="next"><span>{$lang->last_page}</span></a>
+</div>
+
+<div class="replyForm" cond="$document->allowComment()">
+	<h3>Leave Comments</h3>
+	<block cond="$textyle->isEnableComment()">
+	<fieldset>
+		<form method="post" onsubmit="return insertCommentItem(this, insert_comment)" action="">
+			<input name="mid" type="hidden" value="textyle" />
+			<input type="hidden" name="document_srl" value="{$document->document_srl}" />
+			<input type="hidden" name="comment_srl" value="" />
+			<textarea class="iTextArea" name="content" rows="8" cols="42"></textarea>
+			<block cond="$is_logged">
+				<strong class="name">{$logged_info->nick_name}</strong> <span class="email">{$logged_info->email_address}</span> <span class="url">{$logged_info->homepage}</span>
+			</block>
+			<block cond="!$is_logged">
+				<input name="nick_name" type="text" class="iText name" placeholder="Name" title="Name"/>
+				<input name="password" type="password" class="iText pw" placeholder="Password" title="Password" />
+				<block cond="$textyle->getInputEmail()!='N'">
+					<input type="hidden" name="msg_input_email_address" value="{$lang->msg_input_email_address}"/>
+					<input name="email_address" type="text" class="iText email"|cond="$textyle->getInputEmail()!='R'" class="iText email request"| class="iText email"|cond="$textyle->getInputEmail()=='R'" placeholder="Email address" title="Email address" />
+				</block>
+				<block cond="$textyle->getInputWebsite()!='N'">
+					<input type="hidden" name="msg_input_homepage" value="{$lang->msg_input_homepage}"/>
+					<input name="homepage" type="text" class="iText url"|cond="$textyle->getInputWebsite()!='R'" class="iText url request"|cond="$textyle->getInputWebsite()=='R'" placeholder="URL" title="URL" />
+				</block>
+			</block>
+			<input name="is_secret" id="secret1" type="checkbox" value="Y" class="iCheck" />
+			<label for="secret1">{$lang->secret}</label>
+			<input name="submit" type="submit" value="SUBMIT" class="inputSubmit" />
+		</form>
+	</fieldset>
+	</block>
+	<p cond="!$textyle->isEnableComment()">{$lang->disable_comment}</p>
+</div>

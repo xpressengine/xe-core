@@ -1,0 +1,25 @@
+<table name="textyle">
+  <column name="module_srl" type="number" size="11" notnull="notnull" primary_key="primary_key" />
+  <column name="member_srl" type="number" size="11" notnull="notnull" index="idx_member_srl" />
+  <column name="textyle_title" type="varchar" size="250" notnull="notnull" />
+  <column name="textyle_content" type="varchar" size="250" default="" notnull="notnull" />
+  <column name="profile_content" type="text"  notnull="notnull" />
+  <column name="post_style" type="varchar" size="250" default="blog"  notnull="notnull" />
+  <column name="post_editor_skin" type="varchar" size="250" default="dreditor"  notnull="notnull" />
+  <column name="post_list_count" type="number" size="2" default="30" notnull="notnull" />
+  <column name="comment_list_count" type="number" size="2" default="30"  notnull="notnull" />
+  <column name="comment_editor_skin" type="varchar" size="250" default="xpresseditor" />
+  <column name="comment_editor_colorset" type="varchar" size="250" default="white_text_usehtml" />
+  <column name="guestbook_list_count" type="number" default="11"  notnull="notnull" />
+  <column name="guestbook_editor_skin" type="varchar" size="250" default="xpresseditor" />
+  <column name="guestbook_editor_colorset" type="varchar" size="250" default="white_text_usehtml" />
+  <column name="input_email" type="char" size="1" default="R" />
+  <column name="input_website" type="char" size="1" default="R" />
+  <column name="post_use_prefix" type="char" size="1" default="N" />
+  <column name="post_use_suffix" type="char" size="1" default="N" />
+  <column name="post_prefix" type="text" notnull="notnull" />
+  <column name="post_suffix" type="text" notnull="notnull" />
+  <column name="timezone" type="varchar" size="10" default="+0900" />
+  <column name="subscription_date" type="varchar" size="14" default="" notnull="notnull" />
+  <column name="regdate" type="date" notnull="notnull" />
+</table>

@@ -1,0 +1,80 @@
+<!--#include("_tool_header.html")-->
+<!--%import("css/pagination.css",optimized=false)-->
+<!--%load_js_plugin("ui")-->
+
+			<!-- Content -->
+			<div id="content">
+				
+				<!-- contentHeader -->
+				<div class="contentHeader setupHeader lineBottom">
+					<h3 class="h3">{$lang->textyle_second_menus[5]['dispTextyleToolExtraMenuList']}</h3>
+				</div>
+				<!-- /contentHeader -->
+
+				<div class="listHeader">
+					<p class="info">{$lang->about_textyle_extra_menu}</p>
+				</div>
+
+				<div class="setUp">
+				<!--@if($selected_extra_menu)-->
+				<form action="" method="post" onsubmit="return procFilter(this, modify_extra_menu);">
+					<input type="hidden" name="menu_mid" value="{$selected_extra_menu->mid}" />
+				<!--@else-->
+				<form action="" method="post" onsubmit="return procFilter(this, insert_extra_menu);">
+				<!--@end-->
+				<fieldset>			
+					<input type="hidden" name="mid" value="{$mid}" />
+					<input type="hidden" name="vid" value="{$vid}" />
+					<input type="hidden" name="insert_type" value="module_page" />
+					<table cellspacing="0" class="setupData">
+					<col width="100" />
+					<col width="" />
+					<tr>
+						<th scope="row">{$lang->module}</th>
+						<td>
+							<!--@if($selected_extra_menu)-->
+								{$selected_extra_menu->module}
+							<!--@else-->
+							<select name="module_type">
+								<option>{$lang->cmd_select}</option> 
+								<!--@foreach($config->allow_service as $k => $v)-->
+								{@$_left=$v-$used_extra_menu_count[$k]}
+								<option value="{$k}" <!--@if($v<1 || $_left<1)-->disabled="disabled"<!--@end-->>{$k} [{sprintf($lang->msg_limit_module,$_left)}]</option>
+								<!--@end-->
+							</select>
+							<!--@end-->
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">{$lang->url}</th>
+						<td>
+							<!--@if($selected_extra_menu)-->
+								{getFullUrl('').'/'.$selected_extra_menu->mid}
+							<!--@else-->
+								{str_replace('__mid__','<input type="text" name="menu_mid" value="" class="inputTypeText" />',getFullUrl('','mid','__mid__'))}
+								<p>{$lang->msg_limit_textyle_extra_mid}</p>
+							<!--@end-->
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">{$lang->menu_name}</th>
+						<td>
+							<input type="text" name="menu_name" id="menu_name" value="<!--@if($selected_extra_menu->name)-->{$selected_extra_menu->name}<!--@end-->" class="inputTypeText"/>
+							<a href="{getUrl('','module','module','act','dispModuleAdminLangcode','target','menu_name')}" onclick="popopen(this.href);return false;" class="buttonSet buttonSetting"><span>{$lang->cmd_find_langcode}</span></a>
+							<p>{$lang->about_langcode}</p>
+						</td>
+					</tr>
+				   </table>
+				   <div class="buttonArea">
+ 				   <span class="buttonAction actionWhite"><input type="submit" value="{$lang->cmd_save}" /></span>
+				   </div>
+				   </fieldset>			
+				</form>
+				</div>
+			</div>
+			<hr />
+			<!-- /Content -->
+
+			<!-- Extension -->
+			<!--#include("_tool_menu.html")-->
+			<!-- Extension -->

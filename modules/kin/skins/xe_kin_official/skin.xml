@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+    <title xml:lang="ko">지식인 XE 공식 스킨</title>
+    <title xml:lang="zh-CN">知识人官方默认皮肤</title>
+    <title xml:lang="en">xe offical default skin</title>
+    <description xml:lang="ko">지식인 XE 의 공식 스킨입니다. </description>
+    <description xml:lang="zh-CN">知识人官方默认皮肤。</description>
+    <description xml:lang="en">xe offical default skin</description>
+    <version>0.2</version>
+    <date>2012-09-08</date>
+    <author email_address="xe_developer@xpressengine.com" link="http://www.xpressengine.com">
+        <name xml:lang="ko">XE Developer</name>
+		<name xml:lang="zh-CN">XE Developer</name>
+		<name xml:lang="en">XE Developer</name>
+    </author>
+    <license>GPL v2 or later</license>
+
+    <extra_vars>
+		<var name="default_style" type="select">
+            <title xml:lang="ko">기본 형태</title>
+            <title xml:lang="en">Default Style</title>
+            <title xml:lang="zh-CN">默认样式</title>
+			<description xml:lang="ko">
+                 Select a skin layout style, could be vertical or horizontal 
+            </description>
+             <description xml:lang="en">
+                 Select a skin layout style, could be vertical or horizontal 
+            </description>
+            <description xml:lang="zh-CN">
+                指定皮肤布局样式： 垂直或平行
+            </description>
+			 <options value="horizontal">
+                <title xml:lang="ko">Horizontal</title>
+                <title xml:lang="en">Horizontal</title>
+				<title xml:lang="zh-CN">平行</title>
+            </options>
+            <options value="vertical">
+                <title xml:lang="ko">Vertical</title>
+                <title xml:lang="en">Vertical</title>
+				<title xml:lang="zh-CN">垂直</title>
+            </options>
+		</var>
+    </extra_vars>
+</skin>

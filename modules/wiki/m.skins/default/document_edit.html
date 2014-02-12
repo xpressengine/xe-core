@@ -1,0 +1,33 @@
+<include target="header.html" />
+
+<form action="./" method="post" onsubmit="return procFilter(this, insert)" id="fo_write">
+<input type="hidden" name="mid" value="{$mid}" />
+<input type="hidden" name="document_srl" value="{$document_srl}" />
+
+<div class="wikiWriteHeader">
+    <div class="title">
+	    <em>{$lang->write_form_title}</em>
+	    <input type="text" name="title" value="{htmlspecialchars($oDocument->get('title'))}" class="inputTypeText" />
+    </div>
+    <div class="alias">
+	    <em>{$lang->write_form_alias}</em>
+	    {getFullUrl()}
+	    <input type="text" name="alias" value="{htmlspecialchars($oDocument->get('alias'))}" class="inputTypeText" />
+    </div>
+    <!--@if($history)-->
+    <textarea class="tag" rows="5" name="content">{htmlspecialchars($history->content)}</textarea>
+    <!--@else-->
+    <textarea class="tag" rows="5" name="content">{$oDocument->getContentText()}</textarea>
+    <!--@end-->
+    <div class="tag">
+        {$lang->tag} : <input type="text" name="tags" value="{htmlspecialchars($oDocument->get('tags'))}" class="inputText" title="Tag" /> ({$lang->about_tag})
+        <p />
+    </div>
+
+    <div class="wikiNavigation">
+        <input class="bn" type="submit" value="{$lang->cmd_registration}" accesskey="s" />
+    </div>
+</div>
+
+</form>
+<include target="footer.html" />

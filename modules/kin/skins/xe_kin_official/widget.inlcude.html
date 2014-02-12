@@ -1,0 +1,114 @@
+<div class="content_bottom" cond="$module_info->default_style == 'vertical'">
+	<div class="topPeriodPoint">
+		<table width="100%" cellspacing="0" cellpadding="0" border="0" class="listBox">
+			<thead>
+				<tr>
+					<th colspan="2">{$lang->popular_questions}<span><a href="{getUrl('act','','page',1,'type','popular','q_target','')}"  class="h_more">more</a></span></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr loop="$popular_list =>$key, $val">
+					<td><a href="{getUrl('','document_srl',$val->document_srl)}">{$val->getTitle(30)}</a></td>
+				</tr>
+				<tr cond="!$popular_list"><td><a href="" onclick="return false;">No popular questions information</a></td></tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="MonthTopPoint">
+		<table width="100%" cellspacing="0" cellpadding="0" border="0" class="listBox">
+			<thead>
+				<tr>
+					<th colspan="2">{$lang->topLastWeek}<span><a href="{getUrl('page',1,'act','dispKinPointRank','rtarget','week','type','')}"  class="h_more">more</a></span></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr loop="$document_top['lastWeek'] => $row">
+					<td width="50%" class="ln23">&nbsp;{$row['nick_name']}</td>
+					<td width="50%" align="right" class="ln23">{number_format($row['point'])}&nbsp;&nbsp;</td>
+				</tr>
+				<tr cond="!$document_top['lastWeek']"><td>No weekly points rank information</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="topPoint">
+		<table width="100%" cellspacing="0" cellpadding="0" border="0" class="listBox">
+			<thead>
+				<tr>
+					<th colspan="2">{$lang->totalPointTop}<span><a href="{getUrl('page',1,'act','dispKinPointRank','rtarget','total','type','')}"  class="h_more">more</a></span></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr loop="$document_top['totalPoint'] => $row">
+					<td width="50%" class="ln23">&nbsp;{$row['nick_name']}</td>
+					<td width="50%" align="right" class="ln23">{number_format($row['point'])}&nbsp;&nbsp;</td>
+				</tr>	
+				<tr cond="!$document_top['totalPoint']"><td>No total points rank information</td></tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
+<div class="aside" cond="$module_info->default_style == 'horizontal' || !$module_info->default_style">
+<span class="bg_h"></span>
+	<div class="mb_box" cond="$logged_info">
+		<span class="mb_bg_h"></span>
+		<ul class="lst_mbinfo">
+			<li><span class="l">{$lang->user_name}</span><span class="r">{$logged_info->nick_name}</span></li>
+			<li><span class="l">{$lang->point}</span><span class="r blue">{number_format(intval($document_top['userPoint']['point']))}</span></li>
+		</ul>
+		<div class="btns clearfix">
+			<a href="{getUrl('act','','page',1,'type','my_questions','q_target','')}" class="btn_gray pull-left"><span>{$lang->kin_main_tabs[5]}</span></a>
+			<a href="{getUrl('act','','page',1,'type','my_replies','q_target','')}" class="btn_gray pull-right"><span>{$lang->kin_main_tabs[6]}</span></a>
+		</div>
+		<span class="mb_bg_b"></span>
+	</div><!-- //mb_box -->
+	<div class="w_box">
+		<h3 class="w_title">{$lang->popular_questions}</h3>
+		<div class="w_body">
+			<ul class="lst_title">
+				<li loop="$popular_list =>$key, $val">
+					<a href="{getUrl('','document_srl',$val->document_srl)}">{$val->getTitle()}</a>
+				</li>
+				<li cond="!$popular_list"><a href="" onclick="return false;">No popular questions information</a></li>
+			</ul>
+		</div>
+		<a href="{getUrl('act','','page',1,'type','popular','q_target','')}" class="w_more"><span>more</span></a>
+	</div>
+
+	<div class="w_box">
+		<h3 class="w_title">{$lang->topLastWeek}</h3>
+		<div class="w_body">
+			<ul class="point_rank">
+				{@ $rank_index = 1;}
+				<li loop="$document_top['lastWeek'] => $row" class="r1"|cond="$rank_index==1">
+					<span class="idx">{$rank_index}</span>
+					<span class="name"><a href="">{$row['nick_name']}</a></span>
+					<span class="int"><em>{number_format($row['point'])}</em></span>
+					{@ $rank_index++;}
+				</li>
+				<li cond="!$document_top['lastWeek']"><span>No weekly points rank information<span></li>
+			</ul>
+		</div>
+		<a href="{getUrl('page',1,'act','dispKinPointRank','rtarget','week','type','')}" class="w_more"><span>more</span></a>
+	</div>
+
+	<div class="w_box">
+		<h3 class="w_title">{$lang->totalPointTop}</h3>
+		<div class="w_body">
+			<ul class="point_rank">
+				{@ $rank_index = 1;}
+				<li loop="$document_top['totalPoint'] => $row" class="r1"|cond="$rank_index==1">
+					<span class="idx">{$rank_index}</span>
+					<span class="name"><a href="">{$row['nick_name']}</a></span>
+					<span class="int"><em>{number_format($row['point'])}</em></span>
+					{@ $rank_index++;}
+				</li>
+				<li cond="!$document_top['totalPoint']"><span>No total points rank information<span></li>
+			</ul>
+		</div>
+		<a  href="{getUrl('page',1,'act','dispKinPointRank','rtarget','total','type','')}" class="w_more"><span>more</span></a>
+	</div>
+
+	<span class="bg_b"></span>
+</div>

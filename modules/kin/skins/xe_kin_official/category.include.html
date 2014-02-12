@@ -1,0 +1,28 @@
+<div class="sec_category">
+	<h4 class="cate_title">
+			<a href="{getUrl('category_srl','')}" class="cate_title">{$lang->total_articles}</a> 
+			<block cond="$parent_category_info">
+				> <a href="{getUrl('category_srl',$parent_category_info->category_srl,'parent_srl',$parent_category_info->parent_srl)}" class="cate_title">{$parent_category_info->title}</a>
+			</block>
+			<block cond="$category_child_list && !$parent_category_info">
+				<em>&nbsp;&gt;&nbsp; </em> <a href="{getUrl('category_srl',$category_info->category_srl,'parent_srl','')}" class="cate_title">{$category_info->title}</a>
+			</block>
+	</h4>
+	<div class="category">
+	{@ $category_index = 0;}
+	<ul  class="gCate_ul">
+		<li loop="$categories => $key, $val" cond="$val->parent_srl == 0 && !$category_child_list" class="gCate<!--@if($category_srl == $val->category_srl)--> selected<!--@end-->" id="gCate_idx_{$key}">
+			<a href="{getUrl('category_srl',$val->category_srl,'parent_srl','')}">{$val->title}</a> <span>({number_format($val->document_count)})</span>
+			{@ $category_index++;}
+		</li>
+		<li loop="$category_child_list => $key, $val" cond="$val->parent_srl != 0 && $category_child_list" class="gCate<!--@if($category_srl == $val->category_srl)--> selected<!--@end-->" id="gCate_idx_{$key}">
+			<a href="{getUrl('parent_srl',$val->parent_srl, 'category_srl', $val->category_srl)}">{$val->title}</a> <span>({number_format($val->document_count)})</span>
+			{@ $category_index++;}
+		</li>
+		{@ $remainder = 4 - $category_index%4;}
+		<li loop="$i=0;$i<$remainder;$i++" cond="$remainder != 4">
+		</li>
+	</ul>
+	</div>
+</div>
+

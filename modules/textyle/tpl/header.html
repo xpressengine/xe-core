@@ -1,0 +1,9 @@
+<load target="js/textyle.js" />
+<div class="x_page-header">
+	<h1>
+		{$lang->textyle} {$lang->cmd_management}
+		<a href="#abuotTextyle" data-toggle class="x_icon-question-sign">도움말</a>
+		<a href="{getUrl('act','dispTextyleAdminList','module_srl')}" cond="$act!='dispTextyleAdminList'" class="x_btn" style="position:absolute;right:0;bottom:4px"><i class="x_icon-arrow-left">{$lang->cmd_back}</i></a>
+	</h1>
+</div>
+<p class="x_alert x_alert-info" id="abuotTextyle" hidden>{nl2br($lang->about_textyle)}</p>

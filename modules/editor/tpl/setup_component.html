@@ -1,0 +1,96 @@
+<load target="css/editor.css" />
+<load target="css/editor_admin.css" />
+<load target="js/editor_admin.js" />
+<div class="x_page-header">
+	<h1>{$lang->editor}</h1>
+</div>
+<div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/editor/tpl/setup_component/1'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+<section class="section">
+	<h1>{$lang->cmd_setup}</h1>
+	<form ruleset="setupComponent" action="./" method="post" class="x_form-horizontal">
+		<input type="hidden" name="module" value="editor" />
+		<input type="hidden" name="act" value="procEditorAdminSetupComponent" />
+		<input type="hidden" name="component_name" value="{$component_name}" />
+		<input type="hidden" name="xe_validator_id" value="modules/editor/tpl/setup_component/1" />
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->component_name}</label>
+			<div class="x_controls">{$component->title}({$component->component_name}) ver. {$component->version}</div>
+		</div>
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->component_author}</label>
+			<div class="x_controls">
+			<!--@foreach($component->author as $author)-->
+{$author->name} (<a href="{$author->homepage}" onclick="window.open(this.href);return false;">{$author->homepage}</a>, <a href="mailto:{$author->email_address}">{$author->email_address}</a>)<br />
+<!--@endforeach-->
+			</div>
+		</div>
+		<div class="x_control-group" cond="$component->link">
+			<label class="x_control-label">{$lang->component_link}</label>
+			<div class="x_controls">
+				<a href="#" onclick="winopen('{$component->link}');return false;">{$component->link}</a>
+			</div>
+		</div>
+		<div class="x_control-group" loop="$component->extra_vars=>$key,$val">
+			<label class="x_control-label">{$val->title}</label>
+			<div class="x_controls">
+				<input type="text" name="{$key}" value="{$val->value}" />
+				<span class="x_help-block">{$val->description}</span>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->grant}</label>
+			<div class="x_controls">
+				<label class="x_inline" loop="$group_list=>$key,$val">
+					<input type="checkbox" name="target_group[]" value="{$key}" <!--@if(in_array($key, $component->target_group))-->checked="checked"<!--@end--> id="group_{$key}"> {$val->title}
+				</label>
+			</div>
+		</div>
+		<div class="x_control-group" cond="$mid_list">
+			<label class="x_control-label">
+				{$lang->module}
+			</label>
+			<div class="x_controls">
+				<span class="x_help-block">{$lang->about_component_mid}</span>
+				 <label class="checked" for="check_all"> <input id="check_all" type="checkbox"/> Check all</label>
+				<!--@foreach($mid_list as $module_category_srl => $modules)-->
+				<!--@if(count($mid_list) > 1)-->
+				<fieldset>
+					<legend>
+						<input type="checkbox" />
+						<!--@if($modules->title)-->{$modules->title}<!--@else-->{$lang->none_category}<!--@end-->
+					</legend>
+				<!--@end-->
+					<div id="section_{$module_category_srl}">
+					<!--@foreach($modules->list as $key => $val)-->
+							<label>
+								<input type="checkbox" value="{$key}" name="mid_list[]" id="chk_mid_list_{$key}" <!--@if(in_array($key, $component->mid_list))-->checked="checked"<!--@end--> />
+								{$key} ({$val->browser_title})
+							</label>
+					<!--@end-->
+					</div>
+				<!--@if(count($mid_list) > 1)-->
+				</fieldset>
+				<!--@end-->
+				<!--@end-->
+			</div>
+		</div>
+		<div class="x_clearfix btnArea">
+			<a class="x_btn x_pull-left" href="{getUrl('', 'module', 'admin', 'act', 'dispEditorAdminIndex')}" >{$lang->cmd_back}</a>
+			<button type="submit" class="x_btn x_btn-primary x_pull-right">{$lang->cmd_save}</button>
+	    </div>
+	</form>
+</section>
+<script>
+(function($){
+	$('#check_all')
+		.bind('click', function(e){
+			if (this.checked){
+				$('input[name=mid_list\\[\\]]').attr('checked', 'checked');
+			}else{
+				$('input[name=mid_list\\[\\]]').removeAttr('checked');
+			}
+		});
+})(jQuery);
+</script>

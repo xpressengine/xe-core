@@ -1,0 +1,66 @@
+@charset "utf-8";
+/* NHNC XE Team CN14537 */
+
+/* Override */
+body{ margin:0; background:#fff url(../img/bgHtmlBody.gif) repeat-x;}
+#xe{ background:url(../img/bgFooter.gif) repeat-x left bottom;}
+.fixed #container{ width:950px;}
+.fixed .ce #body .e1, 
+.fixed .ec #body .e1 { width:361px;}
+.fixed .ce #body #content, 
+.fixed .ec #body #content{ width:556px;  margin:25px 0 45px 33px;}
+
+/* Element Reset */
+body,
+input,
+textarea,
+select{ font-size:13px; font-family:Sans-serif;}
+img{ border:0;} 
+
+a{ text-decoration:none;}
+a:hover,
+a:active,
+a:focus{ text-decoration:underline;}
+
+/* Common Class */
+.ir{ position:absolute; width:1px; height:1px; top:0; left:0; font-size:0; line-height:0; visibility:hidden;}
+
+/* Header */
+#header{height:113px;background:url(../img/bgHeader.gif) no-repeat 0 100%}
+
+/* Body */
+#body .e1{position:relative;height:711px;background:url(../img/bgE1.gif) no-repeat 0 0}
+.e1 .intro{ position:absolute; top:-38px; left:62px; width:250px; height:281px; margin:0;background:url(../img/contest_left_banner.gif) no-repeat 0 0;}
+.e1 .intro a{position:absolute;right:0;bottom:0;width:203px;height:33px}
+.e1 .intro p.date {white-space:nowrap}
+.num,.num2,.num3,.num4,.num5{display:inline-block;position:absolute;top:215px;margin-top:-5px;font-family:Tahoma, Geneva, sans-serif;font-size:16px;line-height:1.5;visibility:visible;letter-spacing:-1px}
+.num{left:74px;}
+.num2{left:124px}
+.num3{left:149px}
+.num4{left:193px}
+.num5{left:219px}
+/* Footer */
+#footer{ padding:23px 0 26px 0; text-align:center;}
+#footer address{ width:276px; height:14px; margin:0 auto; background:url(../img/address.gif) no-repeat;}
+#footer address a{ display:block; position:absolute; width:57px; height:18px;}
+
+/* GNB */
+#gnb{ position:absolute; top:75px; left:400px;top:88px\9}
+#gnb ul{ list-style:none; margin:0; padding:0;}
+#gnb li{ float:left;padding-right:50px; *zoom:1;}
+#gnb a{display:inline-block;width:68px;height:16px;background:url(../img/gnb.gif) no-repeat 0 0;font-size:0;}
+
+#gnb li.m1 a{ background-position:0 0;}
+#gnb li.m2 a{ background-position:-119px 0;}
+#gnb li.m3 a{ background-position:-222px 0;}
+#gnb li.m4 a{ background-position:-348px 0;}
+
+#gnb .contest li.m1 a{ background-position:0 -24px;}
+#gnb .contestWay li.m2 a{ background-position:-119px  -24px;}
+#gnb .contestRegistration li.m3 a,#gnb .contestUpload li.m3 a{ background-position:-222px  -24px;}
+#gnb .contestVote li.m4 a,#gnb .contestProposal li.m4 a{ background-position:-348px  -24px;}
+
+
+@media print{
+.ir{ position:static; width:auto; height:auto; top:0; left:0; font-size:12px; line-height:normal; overflow:visible; visibility:visible;}
+}

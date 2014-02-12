@@ -1,0 +1,14 @@
+<query id="updateBlogApiService" action="update">
+    <tables>
+        <table name="textyle_blogapi_services" />
+    </tables>
+	<columns>
+        <column name="service_name" var="service_name" notnull="notnull" />
+        <column name="url_description" var="url_description" />
+        <column name="id_description" var="id_description"  />
+        <column name="password_description" var="password_description" />
+	</columns>
+	<conditions>
+        <condition operation="equal" column="textyle_blogapi_services_srl" var="textyle_blogapi_services_srl" notnull="notnull" />
+    </conditions>
+</query>

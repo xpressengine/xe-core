@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ruleset version="1.5.0">
+	<fields>
+		<field name="mid" required="true" />
+		<field name="package_srl" required="true" rule="number" />
+		<field name="title" required="true" />
+		<field name="license" required="true" />
+		<field name="path" required="true" />
+		<field name="homepage" required="true" rule="url" />
+		<field name="description" required="true" />
+	</fields>
+</ruleset>

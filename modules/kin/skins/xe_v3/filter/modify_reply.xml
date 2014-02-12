@@ -1,0 +1,10 @@
+<filter name="modify_reply" module="kin" act="procKinUpdateReply">
+    <form>
+        <node target="content" required="true" />
+    </form>
+    <response callback_func="completeWriteDocument">
+        <tag name="error" />
+        <tag name="message" />
+        <tag name="document_srl" />
+    </response>
+</filter>

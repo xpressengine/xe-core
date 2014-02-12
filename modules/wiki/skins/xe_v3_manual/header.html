@@ -1,0 +1,16 @@
+<load target="manual.css" />
+<load target="manual.js" />
+<div class="manual">
+	<div class="mHeader">
+		<h2 cond="$module_info->title_image"><img src="{$module_info->title_image}" alt="{$module_info->title_alt}" /></h2>
+		<a cond="$grant->manager" href="{getUrl('act','dispWikiAdminInsertWiki')}">{$lang->cmd_setup}</a>
+		<a cond="$grant->manager" href="{getUrl('act','dispWikiTreeIndex','entry','','document_srl','')}">{$lang->cmd_view_document_tree}</a>
+		<form cond="$grant->manager" action="{getUrl()}" method="get" class="wSearch">
+			<input type="hidden" name="mid" value="{$mid}" />
+			<input type="hidden" name="vid" value="{$vid}" />
+			<input type="text" name="entry" />
+			<input type="submit" value="{$lang->cmd_move}" />
+		</form>
+	</div>
+
+	

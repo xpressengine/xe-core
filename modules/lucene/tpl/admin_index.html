@@ -1,0 +1,40 @@
+<!--#include("./header.html")-->
+<!--%import("filter/insert_index_config.xml")-->
+<!--%import("../../widget/tpl/js/widget_admin.js")-->
+<!--$import("js/lucene.js")-->
+
+
+<form action="./" method="get" onsubmit="return procFilter(this, insert_index_config)">
+    <h4 class="xeAdmin">색인 설정</h4>
+    <table cellspacing="0" class="rowTable">
+        <tr class="row">
+            <th scope="row"><div>{$lang->service_name}</div></th>
+            <td class="wide">
+				<input type="" class="fullWidth" name="service_name_prefix" value="{$service_name_prefix}">
+                <p>{$lang->about_service_name_prefix}</p>
+				<p class="print_result_status"></p>
+            </td>
+        </tr>
+        <tr class="row2">
+            <th scope="row"><div>{$lang->repo_path}</div></th>
+            <td class="wide">
+				<input type="" class="fullWidth" name="repo_path" value="{$repo_path}">
+                <p>{$lang->about_repo_path}</p>
+            </td>
+        </tr>
+        <tr class="row">
+            <th scope="row"><div>{$lang->renew_interval}</div></th>
+            <td class="wide">
+				<input type="" class="fullWidth" name="renew_interval" value="{$renew_interval}">
+                <p>{$lang->about_renew_interval}</p>
+            </td>
+        </tr>
+        <tr class="row">
+            <th class="button" colspan="3">
+                <p>{$lang->about_set_apiurl_first1}{$lang->apiurl}{$lang->about_set_apiurl_first2}</p>
+                <span class="button black strong"><input type="submit" value="{$lang->cmd_registration}" accesskey="s" /></span>
+            </th>
+        </tr>
+    </table>
+</form>
+

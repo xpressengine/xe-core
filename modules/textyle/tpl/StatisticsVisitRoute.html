@@ -1,0 +1,159 @@
+<!--#include("_tool_header.html")-->
+<!--%import("css/pagination.css",optimized=false)-->
+<!--%load_js_plugin("ui.calendar")-->
+			<!-- Content -->
+			<div id="content">
+				
+				<!-- contentHeader -->
+				<div class="contentHeader refererHeader">
+					<h3 class="h3">{$lang->textyle_second_menus[3]['dispTextyleToolStatisticsVisitRoute']}</h3>
+				</div>
+				<!-- /contentHeader -->
+				
+				<!-- contentNavigation -->
+				<div class="contentNavigation">
+					<ul class="sortDefault">
+						<li<!--@if($type=='day')--> class="active"<!--@end-->><a href="{getUrl('type','day', 'host_srl','')}">{$lang->daily}</a></li>
+						<li<!--@if($type=='week')--> class="active"<!--@end-->><a href="{getUrl('type','week', 'host_srl','')}">{$lang->weekly}</a></li>
+						<li<!--@if($type=='month')--> class="active"<!--@end-->><a href="{getUrl('type','month', 'host_srl','')}">{$lang->monthly}</a></li>
+					</ul>
+					<div class="cNavigation">
+						<div class="calendar">
+							<div id="calendar-holder"></div>
+							<button type="button" class="btnCalendar"><span>{$lang->calendar}</span></button>
+							<h4 class="h4" id="str_selected_date">{$disp_selected_date}</h4>
+							<input type="hidden" class="inputDate" value="{zdate($selected_date,'Y-m-d')}" />
+							<script>
+								jQuery(function($){
+                                    {@ $_s = array_pop($lang->unit_week)}
+									$('#calendar-holder').calendar({
+										type : '{$type}',
+										button : '#calendar-holder+button.btnCalendar',
+										activeDate : "{zdate($selected_date,'Y/m/d')}",
+										select : function(year, month, date) {
+											var str = year+'.'+(month>9?'':'0')+month+'.'+(date>9?'':'0')+date;
+											$("#str_selected_date").text(str);
+											moveDate();
+										},
+										lang : {
+											weekdays : '{$_s},{implode(',',$lang->unit_week)}',
+											today : '{$lang->today}',
+											prevmonth : '{$lang->before_month}',
+											nextmonth : '{$lang->after_month}',
+											close : '{$lang->cmd_close}'
+										}
+									});
+								});
+                            </script>
+							<button type="button" class="prevData" onclick="location.href='{$before_url}';return false;"><span>{$lang->before_day}</span></button>
+							<button type="button" class="nextData" onclick="location.href='{$after_url}';return false;"><span>{$lang->after_day}</span></button>
+						</div>
+					</div>
+					<ul class="graphInfo">
+						<!--@if($type=='day')-->
+							{@$_this=$lang->day_current}
+							{@$_last=$lang->day_before}
+						<!--@else if($type=='month')-->
+							{@$_this=$lang->this_month}
+							{@$_last=$lang->before_month}
+						<!--@else-->
+							{@$_this=$lang->this_week}
+							{@$_last=$lang->last_week}
+						<!--@end-->
+			
+
+						<li><img src="img/graphToday.gif" width="5" height="5" alt="{$_this}" class="today" /> {$_this}</li>
+						<li><img src="img/graphYesterday.gif" width="5" height="5" alt="{$_last}" class="yesterday" /> {$_last}</li>
+					</ul>
+				</div>
+				<!-- /contentNavigation -->
+
+                <!-- listHeader -->
+                <div class="listHeader">
+                    <p class="info">{$lang->about_referer}</p>
+                </div>
+                <!-- /listHeader -->
+                    
+                <!-- Table Data -->
+                <!--@if($host_srl)-->
+                <h4 class="refererDomain">
+                    {$lang->host} : <a href="http://{$referer_host->host}" onclick="window.open(this.href);return false;">{$referer_host->host}</a>
+                    <span class="btnGray medium"><button type="button" onclick="location.href='{getUrl('page','','host_srl','')}';return false;">{$lang->cmd_back}</button></span>
+                </h4>
+                <table border="1" cellspacing="0" summary="" class="tableData">
+                    <thead>
+                        <tr>
+                            <th scope="col">{$lang->rank}</th>
+                            <th scope="col" class="quarter">{$lang->referer}</th>
+                            <th scope="col" class="quarter">{$lang->link_word}</th>
+                            <th scope="col" class="title quarter">{$lang->link_document}</th>
+                            <th scope="col">{$lang->visitor}</th>
+                        </tr>
+                    </thead>
+                    {@$_idx = 1;}
+                    <!--@foreach($document_list as $key => $val)-->
+                    <!--@if($page<2 &&($_idx == 1 || $_idx == 4))--><tbody<!--@if($_idx==1)--> class="top3"<!--@end-->><!--@end-->
+                        <tr>
+                            <td class="rank">{$_idx}</td>
+                            <td class="uri quarter"><a href="{$val->get('referer_url')}" onclick="window.open(this.href);return false;">{htmlspecialchars(cut_str($val->get('referer_url'),40,'...'))}</a></td>
+                            <td class="title quarter">{htmlspecialchars(urldecode($val->get('link_word')))}&nbsp;</td>
+                            <td class="title postTitle quarter"><a href="{$val->getPermanentUrl()}" onclick="window.open(this.href); return false;">{$val->getTitle()}</a></td>
+                            <td class="graph">{number_format($val->get('visitor'))}<span class="fullBarReferer"><img src="img/graphReferer.gif" alt="" style="width:{sprintf("%02d",$val->get('visitor')/$max_visitor*100)}%" /></span></td>
+                        </tr>
+                    <!--@if($page<2 && $_idx==3)--></tbody><!--@end-->
+                    {@$_idx++}
+                    <!--@end-->
+                </table>
+                <!--@else-->
+                <table border="1" cellspacing="0" summary="" class="tableData">
+                    <thead>
+                        <tr>
+                            <th scope="col">{$lang->rank}</th>
+                            <th scope="col">{$lang->host}</th>
+                            <th scope="col" class="title">{$lang->link_document}</th>
+                            <th scope="col">{$lang->visitor}</th>
+                        </tr>
+                    </thead>
+                    {@$_idx = 1;}
+                    <!--@foreach($document_list as $key => $val)-->
+                    <!--@if($page<2 &&($_idx == 1 || $_idx == 4))--><tbody<!--@if($_idx==1)--> class="top3"<!--@end-->><!--@end-->
+                        <tr>
+                            <td class="rank">{$_idx}</td>
+                            <td class="uri"><a href="{getUrl('page','1','host_srl',$val->get('host_srl'))}">{htmlspecialchars(cut_str($val->get('host'),40,'...'))}</a></td>
+                            <td class="title postTitle"><a href="{$val->getPermanentUrl()}" onclick="window.open(this.href); return false;">{$val->getTitle()}</a></td>
+                            <td class="graph">{number_format($val->get('visitor'))}<span class="fullBarReferer"><img src="img/graphReferer.gif" alt="" style="width:{sprintf("%02d",$val->get('visitor')/$max_visitor*100)}%" /></span></td>
+                        </tr>
+                    <!--@if($page<2 && $_idx==3)--></tbody><!--@end-->
+                    {@$_idx++}
+                    <!--@end-->
+                </table>
+                <!--@end-->
+                <!-- /Table Data -->
+
+
+				<!--@if($page_navigation)-->
+                <div class="listFooter">
+                    <!-- Pagination -->
+                    <div class="pagination">
+                        <a href="{getUrl('page','','mid',$mid)}" class="prev"><span>{$lang->first_page}</span></a>
+
+                        <!--@while($page_no = $page_navigation->getNextPage())-->
+                            <!--@if($page == $page_no)-->
+                                <strong>{$page_no}</strong> 
+                            <!--@else-->
+                                <a href="{getUrl('page',$page_no,'mid',$mid)}">{$page_no}</a> 
+                            <!--@end-->
+                        <!--@end-->
+
+                        <a href="{getUrl('page',$page_navigation->last_page,'module_srl','')}" class="next"><span>{$lang->last_page}</span></a>
+                    </div>
+                    <!-- /Pagination -->
+				</div>
+				<!--@end-->
+            </div>
+            <hr />
+            <!-- /Content -->
+            <!-- Extension -->
+            <!--#include("_tool_menu.html")-->
+            <!-- Extension -->
+<!--#include("_tool_footer.html")-->

@@ -1,0 +1,96 @@
+<!--#include("_tool_header.html")-->
+
+			<!-- Content -->
+			<div id="content">
+				
+				<!-- contentHeader -->
+				<div class="contentHeader setupHeader lineBottom">
+					<h3 class="h3">{$lang->textyle_second_menus[5]['dispTextyleToolConfigInfo']}</h3>
+				</div>
+				<!-- /contentHeader -->
+				
+				<div class="setUp">
+					<form action="{Context::getRequestUri()}" target="form_iframe" method="post" enctype="multipart/form-data">
+						<input type="hidden" name="act" value="procTextyleInfoUpdate" />
+						<input type="hidden" name="module" value="textyle" />
+						<input type="hidden" name="mid" value="{$mid}" />
+						<input type="hidden" name="vid" value="{$vid}" />
+						<input type="hidden" name="delete_icon" value="" />
+
+						<fieldset>
+							<h4 class="h4">{$lang->default_config}</h4>
+							<table border="1" cellspacing="0" class="setupData">
+								<tr>
+									<th scope="row"><label for="blogTitle">{$lang->blog_title}</label></th>
+									<td>
+										<input name="textyle_title" type="text" class="iText" style="width:300px" id="blogTitle" value="{htmlspecialchars($textyle->getTextyleTitle())}" />
+										<p>{$lang->about_blog_title}</p>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row"><label for="summary">{$lang->blog_description}</label></th>
+									<td>
+										<input name="textyle_content" type="text" class="iText" style="width:300px" id="summary" value="{htmlspecialchars($textyle->getTextyleContent())}" />
+                                        <p>{$lang->about_blog_description}</p>
+									</td>
+								</tr>
+							</table>
+						</fieldset>
+						
+						<fieldset>
+							<h4 class="h4">{$lang->favicon}</h4>
+							<div class="favicon">
+								<img src="{$textyle->getFaviconSrc()}" width="16" height="16" alt="{$lang->registed_favicon}" class="iconFavicon url" />
+								<img src="{$textyle->getFaviconSrc()}" width="16" height="16" alt="{$lang->registed_favicon}" class="iconFavicon tab" />
+								<button type="button" class="deleteFavicon" onclick="jQuery('input[name=delete_icon]').val('Y');jQuery('img.iconFavicon').attr('src','{$textyle->getDefaultFaviconSrc()}');"><span>{$lang->cmd_delete_favicon}</span></button>
+							</div>
+							<div class="upload">
+								<input name="favicon" type="file" value="" />
+								<p>{$lang->about_favicon}</p>
+							</div>
+						</fieldset>
+						
+						<fieldset>
+							<h4 class="h4">{$lang->lang_time_zone}</h4>
+							<table border="1" cellspacing="0" class="setupData">
+								<tr>
+									<th scope="row"><label for="language">{$lang->language}</label></th>
+									<td>
+										<select id="language" name="language">
+                                            <!--@foreach($langs as $key => $val)-->
+											<option value="{$key}" <!--@if($key == $textyle->default_language)-->selected="selected"<!--@end-->>{$val}</option>
+                                            <!--@end-->
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row"><label for="time">{$lang->timezone}</label></th>
+									<td>
+										<select id="time" name="timezone">
+                                            <!--@foreach($time_zone_list as $key => $val)-->
+                                            <option value="{$key}" <!--@if($textyle->timezone==$key)-->selected="selected"<!--@end-->>{$val}</option>
+                                            <!--@endforeach-->
+										</select>
+									</td>
+								</tr>
+							</table>
+						</fieldset>
+						
+						<div class="btnArea">
+							<span class="btn"><input type="submit" value="{$lang->cmd_apply}" /></span>
+						</div>
+
+					</form>
+				</div>
+
+			</div>
+			<hr />
+			<!-- /Content -->
+	
+			<!-- Extension -->
+				<!--#include("_tool_menu.html")-->
+			<!-- Extension -->
+
+			<iframe name="form_iframe" style="visibility:hidden;width:0px;height:0px;"></iframe>
+
+<!--#include("_tool_footer.html")-->

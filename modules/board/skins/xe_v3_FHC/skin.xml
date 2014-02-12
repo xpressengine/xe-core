@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+    <title xml:lang="ko">xe_v3_FHC</title>
+    <description xml:lang="ko">XXE Official v3 Default 2011 기본 게시판 수정.</description>
+    <version>1.0.4</version>
+    <date>2010-12-24</date>
+    <author email_address="developers@xpressengine.com" link="http://xpressengine.com/">
+        <name xml:lang="ko">NHN</name>
+    </author>
+    <license>LGPL v2</license>
+    <extra_vars>
+        <var name="title_image" type="image">
+            <title xml:lang="ko">게시판 제목 이미지</title>
+			<description xml:lang="ko">작성하면 화면에 표시 됨</description>
+        </var>
+        <var name="title_alt" type="text">
+            <title xml:lang="ko">게시판 제목 이미지 alt</title>
+			<description xml:lang="ko">게시판 제목 이미지 대체 텍스트</description>
+        </var>
+		
+		<var name="colorset_" type="select">
+				<title xml:lang="ko">컬러셋</title>
+				<description xml:alng="ko"> 원하시는 컬러셋을 설정해 주십시오.
+				</description>
+				<options value="Green">
+                    <title xml:lang="ko">녹색</title>
+                    <title xml:lang="en">Green</title>
+                </options>
+				<options value="Pink">
+                    <title xml:lang="ko">핑크색</title>
+                    <title xml:lang="en">Pink</title>
+                </options>
+				<options value="Orange">
+                    <title xml:lang="ko">오랜지색</title>
+                    <title xml:lang="en">Orange</title>
+                </options>
+				<options value="Blue">
+                    <title xml:lang="ko">푸른색</title>
+                    <title xml:lang="en">Blue</title>
+                </options>
+				<options value="Sky">
+                    <title xml:lang="ko">하늘색</title>
+                    <title xml:lang="en">Sky</title>
+                </options>
+				<options value="Purple">
+                    <title xml:lang="ko">보라색</title>
+                    <title xml:lang="en">Purple</title>
+                </options>
+				<options value="Teal">
+                    <title xml:lang="ko">teal - 연하늘색</title>
+                    <title xml:lang="en">Teal</title>
+                </options>
+				<options value="DarkBlue">
+                    <title xml:lang="ko">어두운푸른색</title>
+                    <title xml:lang="en">DarkBlue</title>
+                </options>
+				<options value="Grey">
+                    <title xml:lang="ko">회색</title>
+                    <title xml:lang="en">DarkGrey</title>
+                </options>
+				<options value="DarkGrey">
+                    <title xml:lang="ko">진회색</title>
+                    <title xml:lang="en">DarkGrey</title>
+                </options>
+				<options value="Dark">
+                    <title xml:lang="ko">검은색</title>
+                    <title xml:lang="en">Dark</title>
+                </options>
+		</var>
+		<var name="colorset__" type="select">
+			<title xml:lang="ko">라운드 컬러셋</title>
+				<description xml:alng="ko"> 라운드 컬러셋을 설정해 주십시오.</description>
+				<options value="round_colorA">
+                    <title xml:lang="ko">연한회색</title>
+                </options>
+				<options value="round_colorB">
+                    <title xml:lang="ko">중간회색</title>
+                </options>
+				<options value="round_colorC">
+                    <title xml:lang="ko">진한회색</title>
+                </options>
+				<options value="none_color">
+                    <title xml:lang="ko">컬러셋X - 그림자 라운드처리(이미지 사이즈보다 12px 넓게 잡힘)</title>
+                </options>
+				<options value="none_colorB">
+                    <title xml:lang="ko">컬러셋X - 그림자 사각처리(이미지 사이즈보다 12px 넓게 잡힘)</title>
+                </options>
+	
+            </var>
+		<var name="img_col" type="text">
+			<title xml:lang="ko">이미지 가로 배열 갯수</title>
+			<description xml:lang="ko">이미지 가로 배열 갯수를 입력해 주십시오. (기본값 3)</description>
+			
+		</var>
+		<var name="img_R_margin" type="text">
+			<title xml:lang="ko">이미지간 가로 여백</title>
+			<description xml:lang="ko">이미지간 가로 여백을 입력해 주십시오. (기본값 10)</description>
+			
+		</var>
+		<var name="img_B_margin" type="text">
+			<title xml:lang="ko">이미지간 세로 여백</title>
+			<description xml:lang="ko">이미지간 세로 여백을 입력해 주십시오. (기본값 10)</description>
+			
+		</var>
+		<var name="subject_cut_size" type="text">
+			<title xml:lang="ko">게시판 제목 글자수 - 리스트</title>
+			<title xml:lang="jp">タイトルの文字数</title>
+			<title xml:lang="zh-CN">标题字数</title>
+			<title xml:lang="en">Length of Subject - list</title>
+			<title xml:lang="vi">Độ dài tiêu đề</title>
+			<title xml:lang="es">Length of Subject</title>
+			<title xml:lang="zh-TW">標題字數</title>
+			<description xml:lang="ko">제목 글자수를 지정할 수 있습니다. (0또는 비워주시면 자르지 않습니다)</description>
+			<description xml:lang="jp">タイトルの文字数を設定します（「0」または空欄の場合は、文字数を制限しません）。</description>
+			<description xml:lang="zh-CN">可以指定标题字数(0或留空为不限)。</description>
+			<description xml:lang="en">You may set length of title. (0 or blank value will not restrict the length)</description>
+			<description xml:lang="vi">You may set length of title. (0 or blank value will not restrict the length)</description>
+			<description xml:lang="es">You may set length of title. (0 or blank value will not restrict the length)</description>
+			<description xml:lang="zh-TW">可指定標題字數(0或留白為不限制)。</description>
+		</var>
+		<var name="content_cut_size" type="text">
+			<title xml:lang="ko">게시판 내용 글자수 - 리스트</title>
+
+			<title xml:lang="en">Length of Content - list</title>
+	
+			<title xml:lang="zh-TW">標題字數</title>
+			<description xml:lang="ko">제목 글자수를 지정할 수 있습니다. (0또는 비워주시면 자르지 않습니다)</description>
+			<description xml:lang="en">You may set length of title. (0 or blank value will not restrict the length)</description>
+	
+		</var>
+		<var name="subject_read_cut_size" type="text">
+			<title xml:lang="ko">게시판 제목 글자수 - 본문</title>
+			<title xml:lang="jp">タイトルの文字数</title>
+			<title xml:lang="zh-CN">标题字数</title>
+			<title xml:lang="en">Length of Subject</title>
+			<title xml:lang="vi">Độ dài tiêu đề</title>
+			<title xml:lang="es">Length of Subject</title>
+			<title xml:lang="zh-TW">標題字數</title>
+			<description xml:lang="ko">제목 글자수를 지정할 수 있습니다. (0또는 비워주시면 자르지 않습니다)</description>
+			<description xml:lang="jp">タイトルの文字数を設定します（「0」または空欄の場合は、文字数を制限しません）。</description>
+			<description xml:lang="zh-CN">可以指定标题字数(0或留空为不限)。</description>
+			<description xml:lang="en">You may set length of title. (0 or blank value will not restrict the length)</description>
+			<description xml:lang="vi">You may set length of title. (0 or blank value will not restrict the length)</description>
+			<description xml:lang="es">You may set length of title. (0 or blank value will not restrict the length)</description>
+			<description xml:lang="zh-TW">可指定標題字數(0或留白為不限制)。</description>
+		</var>
+
+		<var name="duration_new" type="text" default="24">
+			<title xml:lang="ko">new표시 시간 (hours)</title>
+			<title xml:lang="jp">Newの表示時間 (Hours)</title>
+			<title xml:lang="zh-CN">new图标显示时间(hours)</title>
+			<title xml:lang="en">Duration of indication for new item</title>
+			<title xml:lang="vi">Thời gian hiển thị của bài mới</title>
+			<title xml:lang="es">Duration of indication for new item</title>
+			<title xml:lang="zh-TW">new圖案顯示時間(hours)</title>
+			<description xml:lang="ko">새로 등록된 게시물의 new 표시시간을 정할 수 있습니다. </description>
+			<description xml:lang="jp">新しく登録された書き込みに対して「New」の表示時間を設定します。 </description>
+			<description xml:lang="zh-CN">可以设置最新更新主题的new图标显示时间。</description>
+			<description xml:lang="en">You may set the duration of indication for fresh item. </description>
+			<description xml:lang="vi">You may set the duration of indication for fresh item. </description>
+			<description xml:lang="es">You may set the duration of indication for fresh item. </description>
+			<description xml:lang="zh-TW">可設置最新更新主題的new圖案顯示時間。</description>
+		</var>
+		<var name="thumbnail_type" type="select">
+			<title xml:lang="ko">썸네일 생성 방법</title>
+			<title xml:lang="jp">サムネール生成方法</title>
+			<title xml:lang="zh-CN">缩略图生成方式</title>
+			<title xml:lang="en">Type of Thumbnail</title>
+			<title xml:lang="vi">Kiểu hình nhỏ</title>
+			<title xml:lang="zh-TW">縮圖建立方式</title>
+			<description xml:lang="ko">썸네일 생성 방법을 선택할 수 있습니다.</description>
+			<description xml:lang="jp">サムネールの生成方法を選択します。</description>
+			<description xml:lang="zh-CN">可以选择缩略图生成方式。</description>
+			<description xml:lang="en">Choose the type to create the thumnail.</description>
+			<description xml:lang="vi">Choose the type to create the thumnail.</description>
+			<description xml:lang="zh-TW">可選擇縮圖建立方式。</description>
+			<options value="crop">
+				<title xml:lang="ko">꽉 채우기</title>
+				<title xml:lang="jp">刈り込み</title>
+				<title xml:lang="zh-CN">裁减</title>
+				<title xml:lang="en">crop</title>
+				<title xml:lang="vi">Hình cắt</title>
+				<title xml:lang="zh-TW">裁減</title>
+			</options>
+			<options value="ratio">
+				<title xml:lang="ko">비율 맞추기</title>
+				<title xml:lang="jp">比率</title>
+				<title xml:lang="zh-CN">比例</title>
+				<title xml:lang="en">ratio</title>
+				<title xml:lang="vi">Tỷ lệ</title>
+				<title xml:lang="zh-TW">比例</title>
+			</options>
+		</var>
+		<var name="thumbnail_width" type="text" default="130">
+			<title xml:lang="ko">썸네일 가로크기</title>
+			<title xml:lang="jp">サムネールの横サイズ</title>
+			<title xml:lang="zh-CN">缩略图宽度</title>
+			<title xml:lang="en">Width of Thumbnail</title>
+			<title xml:lang="vi">Chiều rộng hình nhỏ</title>
+			<title xml:lang="zh-TW">縮圖寬度</title>
+			<description xml:lang="ko">썸네일의 가로 크기를 지정할 수 있습니다. (기본 130px)</description>
+			<description xml:lang="jp">サムネールの横サイズを指定します(デフォルト 130px)。</description>
+			<description xml:lang="zh-CN">可以指定缩略图宽度(默认为 100px)。</description>
+			<description xml:lang="en">Set the width of thumbnail. Default is 130px.</description>
+			<description xml:lang="vi">Set the width of thumbnail. Default is 130px.</description>
+			<description xml:lang="zh-TW">可指定縮圖寬度(預設是 130px)。</description>
+		</var>
+		<var name="thumbnail_height" type="text" default="100">
+			<title xml:lang="ko">썸네일 세로크기</title>
+			<title xml:lang="jp">サムネールの縦サイズ</title>
+			<title xml:lang="zh-CN">缩略图高度</title>
+			<title xml:lang="en">Height of Thumbnail</title>
+			<title xml:lang="vi">Chiều cao hình nhỏ</title>
+			<title xml:lang="zh-TW">縮圖高度</title>
+			<description xml:lang="ko">썸네일의 세로 크기를 지정할 수 있습니다. (기본 100px)</description>
+			<description xml:lang="jp">サムネールの縦サイズを指定します(デフォルト 100px)。</description>
+			<description xml:lang="zh-CN">可以指定缩略图高度(默认为 100px)。</description>
+			<description xml:lang="en">Set the height of thumbnail. Default is 100px.</description>
+			<description xml:lang="vi">Set the height of thumbnail. Default is 100px.</description>
+			<description xml:lang="zh-TW">可指定縮圖高度(預設是 100px)。</description>
+		</var>
+    </extra_vars>
+</skin>
+

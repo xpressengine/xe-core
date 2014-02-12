@@ -1,0 +1,11 @@
+<query id="updateTextyle" action="update">
+    <tables>
+        <table name="textyle" />
+    </tables>
+	<columns>
+        <column name="profile_content" var="profile_content" default="" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" notnull="notnull" />
+    </conditions>
+</query>

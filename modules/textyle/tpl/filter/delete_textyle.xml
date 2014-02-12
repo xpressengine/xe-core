@@ -1,0 +1,10 @@
+<filter name="delete_textyle" module="textyle" act="procTextyleAdminDelete">
+    <form>
+        <node target="site_srl" required="true" />
+    </form>
+    <response callback_func="completeDeleteTextyle">
+        <tag name="error" />
+        <tag name="message" />
+        <tag name="page" />
+    </response>
+</filter>

@@ -1,0 +1,34 @@
+<!--@foreach($document_list as $no => $document)-->
+<div class="post">
+	<!--@if(!$document->alias_title)-->
+		<!--@$url = getUrl('alias_title',$document->alias_title,'document_srl',$document->document_srl, 'listStyle', $listStyle, 'cpage','');--><!--@end-->
+	<!--@else-->
+		<!--@$url = "/blog/" . $document->alias_title;--><!--@end-->
+	<!--@end-->
+	<h1 class="postTitle"><a href="{$url}">{$document->getTitle()}</a></h1>
+	<p class="postMeta">Posted on: <span class="yymmdd">{$document->getRegdate('Y.m.d')}</span> in <span class="category">{$category_list[$document->get('category_srl')]->title}</span> category by <a href="#" class="author member_{$document->get('member_srl')}" onclick="return false;">{$document->get('user_name')}</a>
+	<!--@$edit_url="/?mid=textyle&vid=blog&document_srl=".$document->document_srl."&act=dispTextyleToolPostManageWrite";--><!--@end-->
+	<a href="{$edit_url}" class="editPost">Edit</a></p>
+	<div class="addthis_toolbox addthis_default_style" addthis:url="{$url}">
+        <a class="addthis_button_facebook_like" fb:like:layout="standard" fb:like:width="310"></a>
+        <a class="addthis_button_tweet"></a>
+    </div>
+	<div class="textyleContent">
+		{$post_prefix}
+		{$document->getPartialContent()}
+		{$post_suffix}
+	</div>
+	{@$tag_list = $document->get('tag_list');}
+	<!--@if(count($tag_list))-->
+	<div class="tag_list">{$lang->tagged_as}: <!--@for($i=0,$c=count($tag_list);$i<$c;$i++)--><a href="{'/blog/tags/'.$tag_list[$i].'/'}" rel="tag">{htmlspecialchars($tag_list[$i])}</a><!--@if($i<$c-1)-->,&nbsp;<!--@end--><!--@end-->
+	</div>
+	<!--@end-->
+	<br/>
+	<!-- AddThis Button BEGIN -->
+	<div class="addthis_toolbox addthis_default_style " addthis:url="{$url}">
+	<a class="addthis_button_tweet"></a>
+	</div>
+	<!-- AddThis Button END -->
+	<br/>
+</div>
+<!--@end-->

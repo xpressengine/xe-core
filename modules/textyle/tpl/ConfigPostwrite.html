@@ -1,0 +1,99 @@
+<!--#include("_tool_header.html")-->
+
+			<!-- Content -->
+			<div id="content">
+				
+				<!-- contentHeader -->
+				<div class="contentHeader writingSetupHeader lineBottom">
+					<h3 class="h3">{$lang->textyle_second_menus[5]['dispTextyleToolConfigPostwrite']}</h3>
+				</div>
+				<!-- /contentHeader -->
+				
+				<div class="setUp">
+					<form id="aa" method="post" onsubmit="return procFilter(this,insert_config_postwrite)">
+					<input type="hidden" name="mid" value="{$mid}" />
+					
+						<fieldset>
+							<h4 class="h4">{$lang->edit_style}</h4>
+							<table border="1" cellspacing="0" class="setupData">
+								<tr>
+									<th scope="row"><input name="post_editor_skin" type="radio" value="dreditor" id="textyleEditor" class="inputRadio" <!--@if($textyle->getPostEditorSkin()=='dreditor')-->checked="checked"<!--@end-->/> <label for="textyleEditor">{$lang->textyle_editor}</label></th>
+									<td>{$lang->about_textyle_editor}</td>
+								</tr>
+								<tr>
+									<th scope="row"><input name="post_editor_skin" type="radio" value="" id="etcEditor" class="inputRadio" <!--@if($textyle->getPostEditorSkin()!='dreditor')-->checked="checked"<!--@end--> /> <label for="etcEditor">{$lang->etc_editor}</label></th>
+									<td>
+										
+										<select name="etc_post_editor_skin">
+											<!--@foreach($editor_skin_list as $k => $v)-->
+											<!--@if($v!='dreditor')-->
+											<option value="{$v}" <!--@if($textyle->getPostEditorSkin()==$v)-->selected<!--@end--> >{$v}</option>
+											<!--@end-->
+											<!--@end-->
+										</select>
+                                        {$lang->about_etc_editor} <a href="{getUrl('','mid',$mid,'act','dispTextyleToolConfigEditorComponents')}">[{$lang->config_edit_components}]</a>
+									</td>
+								</tr>
+							</table>
+						</fieldset>
+					
+						<fieldset>
+							<h4 class="h4">{$lang->font_style}</h4>
+							<table border="1" cellspacing="0" class="setupData">
+								<tr>
+									<th scope="row" rowspan="2"><label for="fontFamily">{$lang->font_family}</label></th>
+									<td><input name="font_family" type="text" class="iText" id="fontFamily" value="{$textyle->getFontFamily()}" style="width:200px" /></td>
+								</tr>
+								<tr>
+									{@$_font_family=array();}
+									<!--@foreach($lang->font_family_list as $k => $v)-->
+										{@$_font_family[]='<button type="button" class="fontFamily" onclick="jQuery(\'#fontFamily\').val(\''.$k.'\')">'.$v.'</button>';}
+									<!--@end-->
+									<td>{sprintf($lang->about_font_family,join(', ',$_font_family))}</td>
+								</tr>
+								<tr>
+									<th scope="row" rowspan="2"><label for="fontSize">{$lang->font_size}</label></th>
+									<td><input name="font_size" type="text" class="iText" id="fontSize" value="{$textyle->getFontSize()}" style="width:200px" /></td>
+								</tr>
+								<tr>
+									<td>{$lang->about_font_size}</td>
+								</tr>
+							</table>
+						</fieldset>
+
+						<fieldset>
+							<h4 class="h4">{$lang->set_prefix}</h4>
+							<p><input name="post_use_prefix" type="checkbox" value="Y" class="inputCheck" id="post_use_prefix"<!--@if($textyle->getPostUsePrefix()=='Y')--> checked="checked"<!--@end--> /><label for="post_use_prefix">{$lang->about_prefix}</label></p>
+							<textarea name="post_prefix" class="iTextArea" rows="8" cols="42">{htmlspecialchars($textyle->getPostPrefix(true))}</textarea>
+						</fieldset>
+						
+						<fieldset>
+							<h4 class="h4">{$lang->set_suffix}</h4>
+							<p><input name="post_use_suffix" type="checkbox" value="Y" class="inputCheck" id="post_use_suffix"<!--@if($textyle->getPostUseSuffix()=='Y')--> checked="checked"<!--@end--> /><label for="post_use_suffix">{$lang->about_suffix}</label></p>
+							<textarea name="post_suffix" class="iTextArea" rows="8" cols="42">{htmlspecialchars($textyle->getPostSuffix(true))}</textarea>
+						</fieldset>
+						
+						<fieldset>
+							<h4 class="h4">{$lang->blogapi}</h4>
+							<p>{$lang->blogapi_support}</p>
+							<p class="example">{$lang->blogapi_example}</p>
+                            <p class="uriExample">{$lang->blogapi_url} <strong>{getFullSiteUrl($textyle->get('domain'), '', 'mid', $textyle->get('mid'), 'act','api')}</strong></p>
+						</fieldset>
+						
+						<div class="btnArea">
+							<span class="btn"><input type="submit" value="{$lang->cmd_apply}" /></span>
+						</div>
+
+					</form>
+				</div>
+
+			</div>
+			<hr />
+			<!-- /Content -->
+	
+			<!-- Extension -->
+				<!--#include("_tool_menu.html")-->
+			<!-- Extension -->
+
+
+<!--#include("_tool_footer.html")-->

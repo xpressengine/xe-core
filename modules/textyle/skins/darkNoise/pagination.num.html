@@ -1,0 +1,11 @@
+<!-- Pagination Num -->
+<div class="pn pnNum" cond="$page_navigation">
+	<a href="{getUrl('page','','document_srl','','entry','')}" class="prev"><span>{$lang->first_page}</span></a>
+	<!--@while($page_no = $page_navigation->getNextPage())-->
+		<strong cond="$page == $page_no">{$page_no}</strong>
+		<a cond="$page != $page_no" href="{getUrl('page',$page_no,'document_srl','','entry','')}">{$page_no}</a>
+	<!--@end-->
+	<a href="{getUrl('page',$page_navigation->last_page,'document_srl','','entry','')}" class="next"><span>{$lang->last_page}</span></a>
+</div>
+<!-- /Pagination Num -->
+

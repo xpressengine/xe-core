@@ -1,0 +1,28 @@
+@charset "utf-8";
+.xeNotice{ position:relative; width:100%; padding:10px 0 0 0;}
+.xeNotice .headline h2{ margin:0 0 5px 0; font-size:14px; line-height:1.2; padding-right:40px; overflow:hidden; white-space:nowrap;}
+.xeNotice .headline h2 a{ color:#000; text-decoration:none;}
+.xeNotice .headline p{ margin:0 0 12px 0; color:#646464; font-size:11px; line-height:1.6;}
+.xeNotice .headline p a{ color:#646464; text-decoration:none;}
+.xeNotice ul{ list-style:none; margin:0; padding:0;}
+.xeNotice li{ position:relative; padding-left:15px; background:url(iconNotice.gif) no-repeat left center; margin-bottom:7px; white-space:nowrap; overflow:hidden; }
+.xeNotice li.first{ background:none; padding:0;}
+.xeNotice li.first .title{ font-size:14px; font-weight:bold;}
+.xeNotice li.first .summary{}
+.xeNotice li a{ color:#000; vertical-align:middle;text-decoration:none;}
+.xeNotice li .icon{ vertical-align:middle;}
+.xeNotice li .feedback{ font-size:9px; font-family:Tahoma; font-style:normal; color:#fd2a00; vertical-align:middle;}
+.xeNotice li .date{ position:absolute; top:1px; right:0; font-size:9px; font-family:Tahoma; color:#8b8b8b;}
+.xeNotice .more{ text-decoration:none; position:absolute; top:11px; right:0; padding-right:9px; font-size:11px; color:#646464; background:url(iconMore.gif) no-repeat right center; line-height:normal;}
+
+.xeArticle{ position:relative; width:100%; padding:10px 0 0 0;}
+.xeArticle:after{ content:""; clear:both; display:block;}
+.xeArticle h2{ margin:0 0 7px 0; font-size:14px; color:#000; line-height:1.2;}
+.xeArticle h2 a{ color:#000; text-decoration:none;}
+.xeArticle .thumb{ float:left; margin:0 20px 0 0;}
+.xeArticle .thumb img{ border:1px solid #cacaca;}
+.xeArticle h3{ margin:0 0 4px 0; font-size:11px; font-weight:normal; line-height:1.2;}
+.xeArticle h3 a{ color:#e40000; text-decoration:none;}
+.xeArticle .summary{ margin:0; font-size:11px; color:#646565; line-height:1.6; text-align:left;}
+.xeArticle .summary a{color:#646565; text-decoration:none;}
+.xeArticle .more{ text-decoration:none; position:absolute; top:11px; right:0; padding-right:9px; font-size:11px; color:#646464; background:url(iconMore.gif) no-repeat right center; line-height:normal;}

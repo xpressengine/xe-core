@@ -1,0 +1,9 @@
+<query id="insertKinPoint" action="insert">
+    <tables>
+        <table name="kin_point" />
+    </tables>
+    <columns>
+        <column name="document_srl" var="document_srl" filter="number" notnull="notnull" />
+        <column name="point" var="point" filter="number" notnull="notnull" />
+    </columns>
+</query>

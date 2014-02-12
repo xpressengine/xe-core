@@ -1,0 +1,151 @@
+<!--#include("_tool_header.html")-->
+<!--%load_js_plugin("ui.calendar")-->
+			<!-- Content -->
+			<div id="content">
+				
+				<!-- contentHeader -->
+				<div class="contentHeader uvHeader">
+					<h3 class="h3">{$lang->textyle_second_menus[3]['dispTextyleToolStatisticsVisitor']}</h3>
+				</div>
+				<!-- /contentHeader -->
+				
+				<!-- contentNavigation -->
+				<div class="contentNavigation">
+					<ul class="sortDefault">
+						<li<!--@if($type=='day')--> class="active"<!--@end-->><a href="{getUrl('type','day')}">{$lang->daily}</a></li>
+						<li<!--@if($type=='week')--> class="active"<!--@end-->><a href="{getUrl('type','week')}">{$lang->weekly}</a></li>
+						<li<!--@if($type=='month')--> class="active"<!--@end-->><a href="{getUrl('type','month')}">{$lang->monthly}</a></li>
+					</ul>
+					<div class="cNavigation">
+						<div class="calendar">
+							<div id="calendar-holder"></div>
+							<button type="button" class="btnCalendar"><span>{$lang->calendar}</span></button>
+							<h4 class="h4" id="str_selected_date">{$disp_selected_date}</h4>
+							<input type="hidden" class="inputDate" value="{zdate($selected_date,'Y-m-d')}" />
+							<script>
+								jQuery(function($){
+                                    {@ $_s = array_pop($lang->unit_week)}
+									$('#calendar-holder').calendar({
+										type : '{$type}',
+										button : '#calendar-holder+button.btnCalendar',
+										activeDate : "{zdate($selected_date,'Y/m/d')}",
+										select : function(year, month, date) {
+											var str = year+'.'+(month>9?'':'0')+month+'.'+(date>9?'':'0')+date;
+											$("#str_selected_date").text(str);
+											moveDate();
+										},
+										lang : {
+											weekdays : '{$_s},{implode(',',$lang->unit_week)}',
+											today : '{$lang->today}',
+											prevmonth : '{$lang->before_month}',
+											nextmonth : '{$lang->after_month}',
+											close : '{$lang->cmd_close}'
+										}
+									});
+								});
+                            </script>
+							<button type="button" class="prevData" onclick="location.href='{$before_url}';return false;"><span>{$lang->before_day}</span></button>
+							<button type="button" class="nextData" onclick="location.href='{$after_url}';return false;"><span>{$lang->after_day}</span></button>
+						</div>
+					</div>
+					<ul class="graphInfo">
+						<!--@if($type=='day')-->
+							{@$_this=$lang->day_current}
+							{@$_last=$lang->day_before}
+						<!--@else if($type=='month')-->
+							{@$_this=$lang->this_month}
+							{@$_last=$lang->before_month}
+						<!--@else-->
+							{@$_this=$lang->this_week}
+							{@$_last=$lang->last_week}
+						<!--@end-->
+			
+
+						<li><img src="img/graphToday.gif" width="5" height="5" alt="{$_this}" class="today" /> {$_this}</li>
+						<li><img src="img/graphYesterday.gif" width="5" height="5" alt="{$_last}" class="yesterday" /> {$_last}</li>
+					</ul>
+				</div>
+				<!-- /contentNavigation -->
+				
+				<!-- Flash Data -->
+				<div class="flashGraph">
+					<script>
+					displayMultimedia('{getUrl()}modules/textyle/tpl/swf/MainContainer.swf','100%','285',{
+							'menu':'false',
+							'wmode':'transparent',
+							<!--@if($type=='day')-->
+							'flashvars':"width=770&dSet=02&baseURL=modules/textyle/tpl/swf/common/flash/statistics/&toDay={$detail_status->today}&total={$detail_status->total}&base64Code="+encodeURIComponent('{$xml}')+"&alertLabel="+encodeURIComponent('{$lang->none_visitor}')
+							<!--@else-->
+							'flashvars':"width=770&dSet=02&baseURL=modules/textyle/tpl/swf/common/flash/statistics/&total={$detail_status->total}&base64Code="+encodeURIComponent('{$xml}')+"&alertLabel="+encodeURIComponent('{$lang->none_visitor}')
+							<!--@end-->
+						});
+				</script>
+
+
+
+		</div>
+		<!-- /Flash Data -->
+		
+		<!-- listHeader -->
+		<div class="listHeader">
+			<p class="info">{$lang->about_status[$type]}</p>
+		</div>
+		<!-- /listHeader -->
+	
+
+		<!--@if(!$type || $type=='day')-->
+		<!-- Table Data -->
+		<table border="1" cellspacing="0" class="statisticData AM">
+			<thead>
+				<tr>
+					<th scope="col" class="hm">{$lang->about_unit[$type]}(AM)</th>
+					<th scope="col" class="uv">{$lang->visit_count}</th>
+					<th scope="col" class="pc">{$lang->visit_per}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!--@foreach($detail_status->list as $key => $val)-->
+				<!--@if($key<=11)-->
+				<tr<!--@if($val->selected)--> class="realTime" <!--@end-->>
+					<td class="hm">{$key}:00</td>
+					<td class="uv">{$val->val}</td>
+					<td class="pc">{number_format($val->val/ $detail_status->sum * 100)}<span class="percent">%</span></td>
+				</tr>
+				<!--@end-->
+				<!--@end-->
+			</tbody>
+		</table>
+		<!-- /Table Data -->
+		<!--@end-->
+
+		<!-- Table Data -->
+		<table border="1" cellspacing="0" class="statisticData <!--@if(!$type || $type=='day')-->PM<!--@end-->">
+			<thead>
+				<tr>
+					<th scope="col" class="hm">{$lang->about_unit[$type]}<!--@if(!$type || $type=='day')-->(PM)<!--@end--></th>
+					<th scope="col" class="uv">{$lang->visit_count}</th>
+					<th scope="col" class="pc">{$lang->visit_per}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!--@foreach($detail_status->list as $key => $val)-->
+
+				<!--@if($key>11)-->
+				<tr<!--@if($val->selected)--> class="realTime" <!--@end-->>
+					<td class="hm">{$key}<!--@if(!$type || $type=='day')-->:00<!--@end--></td>
+					<td class="uv">{$val->val}</td>
+					<td class="pc">{number_format($val->val/ $detail_status->sum * 100)}<span class="percent">%</span></td>
+				</tr>
+				<!--@end-->
+				<!--@end-->
+			</tbody>
+		</table>
+		<!-- /Table Data -->
+		
+	</div>
+	<hr />
+	<!-- /Content -->
+	<!-- Extension -->
+	<!--#include("_tool_menu.html")-->
+	<!-- Extension -->
+<!--#include("_tool_footer.html")-->

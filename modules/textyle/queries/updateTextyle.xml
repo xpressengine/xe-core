@@ -1,0 +1,31 @@
+<query id="updateTextyle" action="update">
+    <tables>
+        <table name="textyle" />
+    </tables>
+	<columns>
+		<column name="textyle_content" var="textyle_content" />
+        <column name="profile_content" var="profile_content" />
+        <column name="member_srl" var="member_srl" filter="number" notnull="notnull" />
+        <column name="textyle_title" var="textyle_title" />
+		<column name="post_style" var="post_style" />
+		<column name="post_editor_skin" var="post_editor_skin" />
+		<column name="post_list_count" var="post_list_count" filter="number" />
+		<column name="comment_list_count" var="comment_list_count" filter="number" />
+		<column name="guestbook_list_count" var="guestbook_list_count" filter="number" />
+		<column name="input_email" var="input_email" />
+		<column name="input_website" var="input_website" />
+        <column name="comment_editor_skin" var="comment_editor_skin" />
+        <column name="comment_editor_colorset" var="comment_editor_colorset" />
+        <column name="guestbook_editor_skin" var="guestbook_editor_skin" />
+        <column name="guestbook_editor_colorset" var="guestbook_editor_colorset" />
+		<column name="post_use_prefix" var="post_use_prefix" />
+		<column name="post_use_suffix" var="post_use_suffix" />
+		<column name="timezone" var="timezone" />
+		<column name="post_prefix" var="post_prefix" />
+		<column name="post_suffix" var="post_suffix" />
+		<column name="subscription_date" var="subscription_date" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" notnull="notnull" />
+    </conditions>
+</query>

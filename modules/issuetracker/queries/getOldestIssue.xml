@@ -1,0 +1,15 @@
+<query id="getOldestIssue" action="select">
+    <tables>
+        <table name="documents" alias="documents" />
+    </tables>
+    <columns>
+        <column name="regdate" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="documents.module_srl" var="module_srl" filter="number" />
+    </conditions>
+    <navigation>
+        <index var="sort_index" default="documents.document_srl" order="asc" />
+        <list_count var="list_count" default="1" />
+    </navigation>
+</query>

@@ -1,0 +1,9 @@
+<filter name="export_textyle" module="textyle" act="procTextyleAdminExport">
+    <form>
+        <node target="export_type" required="true" />
+    </form>
+    <response callback_func="completeRequestExportTextyle">
+        <tag name="error" />
+        <tag name="message" />
+    </response>
+</filter>

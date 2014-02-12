@@ -1,0 +1,42 @@
+<load target="js/module_admin.js" />
+<script>
+    jQuery( function() { jQuery('.grant_default').change( function(event) { doShowGrantZone(); } ); doShowGrantZone() } );
+</script>
+<form ruleset="insertModulesGrant" action="./" method="post" id="fo_obj" class="x_form-horizontal" style="margin:0">
+	<input type="hidden" name="module" value="module" />
+	<input type="hidden" name="act" value="procModuleAdminModuleGrantSetup" />
+	<input type="hidden" name="module_srls" value="{$module_srls}" />
+	<input type="hidden" name="xe_validator_id" value="modules/module/tpl/module_grant_setup/1" />
+	<div class="x_modal-header">
+		<h1>{$lang->bundle_grant_setup}</h1>
+	</div>
+	<div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/module/tpl/module_grant_setup/1'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+		<p>{$XE_VALIDATOR_MESSAGE}</p>
+	</div>
+	<div class="x_modal-body">
+		<div class="x_control-group" loop="$grant_list => $grant_name, $grant_item">
+			<label class="x_control-label" for="">{$grant_item->title}</label>
+			<div class="x_controls">
+				<select name="{$grant_name}_default" class="grant_default">
+					<option value="0" cond="$grant_item->default == 'guest'">{$lang->grant_to_all}</option>
+					<option value="-1" cond="$grant_item->default != 'manager'">{$lang->grant_to_login_user}</option>
+					<option value="-2" cond="$grant_item->default != 'manager'" selected="selected"|cond="$default_grant[$grant_name]=='site'">{$lang->grant_to_site_user}</option>
+					<option value="-3">{$lang->grant_to_admin}</option>
+					<option value="">{$lang->grant_to_group}</option>
+				</select>
+				<a href="#aboutGrantDetail" class="x_icon-question-sign" cond="$grant_name=='access'" data-toggle>{$lang->help}</a>
+				<p class="x_help-block" id="aboutGrantDetail" cond="$grant_name=='access'" hidden>{$lang->about_grant_deatil}</p>
+				<div id="zone_{$grant_name}" hidden style="margin:8px 0 0 0">
+					<label loop="$group_list => $group_srl, $group_item" for="grant_{$grant_name}_{$group_srl}">
+						<input type="checkbox" class="checkbox" name="{$grant_name}" value="{$group_item->group_srl}" id="grant_{$grant_name}_{$group_srl}" />
+						{$group_item->title}
+					</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="x_modal-footer">
+		<input type="submit" class="x_btn x_btn-primary" value="{$lang->cmd_registration}" />
+	</div>
+</form>
+

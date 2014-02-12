@@ -1,0 +1,13 @@
+<query id="updateExport" action="update">
+    <tables>
+        <table name="textyle_export" />
+    </tables>
+	<columns>
+		<column name="export_date" default="curdate()" var="export_date" />
+		<column name="export_status" default="C" var="export_status" />
+		<column name="export_file" var="export_file" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="site_srl" var="site_srl" filter="number" notnull="notnull" />
+    </conditions>
+</query>

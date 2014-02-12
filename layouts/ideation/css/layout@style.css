@@ -1,0 +1,116 @@
+@charset "utf-8";
+/* NHN > UIT Center > Open UI Technology Team > Jeong Chan Myeong(dece24@nhncorp.com) */
+
+/* Element Reset */
+body { margin:0; font-family:Dotum, Tahoma, Sans-serif; font-size:12px; background:#fff; color:#000;}
+address { font-style:normal;}
+hr{ display:none; position:absolute;}
+img,
+fieldset{ border:0; margin:0; padding:0;}
+legend{ position:absolute; width:0; height:0; font-size:0; line-height:0; overflow:hidden; visibility:hidden;}
+
+/* Form Controls */
+.inputText{ border:1px solid; padding:3px 4px 0 4px; _margin:-1px 0; font-size:12px;}
+
+/* Skip To Content */
+a.skipToContent{ display:block; position:relative; top:0; clear:both; overflow:hidden; height:0; text-decoration:none;}
+a.skipToContent:hover,
+a.skipToContent:active,
+a.skipToContent:focus{ height:auto; margin:0 0 10px 0; padding:5px;}
+
+/* Layout */
+#container{ margin:0 20px;}
+#header{ padding:30px 0 0 0; margin:0 0 11px 0;}
+#body{ margin-bottom:13px; background:url(../img/bgE1.gif) repeat-y;}
+.fixed .ce #body #content,
+.fixed .ec #body #content{ width:762px;}
+.fixed .ce #body .e1,
+.fixed .ec #body .e1{ width:183px; padding:20px 0 150px 0}
+#footer{ border-top:1px solid #cfcfcf; padding:1em 0 3em 0;}
+
+/* Header Extension */
+#header h1{ margin:0 0 10px 0;}
+
+#header .account{ position:absolute; top:37px; right:15px; color:#999; margin:0;}
+#header .account strong{ font-weight:normal; color:#000;}
+#header .account em{ font-size:11px; font-style:normal; letter-spacing:-1px; margin-right:5px;}
+#header .account .buttonAccount,
+#header .account .buttonAccount input, 
+#header .account .buttonAccount a { cursor:pointer; position:relative; display:inline-block; height:18px; line-height:18px; font-size:11px; color:#777; text-decoration:none; background-image:url(../img/buttonSmall.gif); background-color:transparent; background-repeat:no-repeat; vertical-align:middle; overflow:visible; border:0;}
+#header .account .buttonAccount a img { display:none; }
+#header .account .buttonAccount{ background-position:left top; margin-right:2px;}
+#header .account .buttonAccount input,
+#header .account .buttonAccount a{ left:2px; _top:-1px; background-position:right top; padding:0 7px 0 5px;}
+#header .account input.inputType { margin:0; vertical-align:middle; height:14px; width:60px; border:1px solid #ccc; color:#444; font-size:11px; padding:2px;}
+#header .account input.inputType:focus { padding:1px; border:2px solid #aaa; }
+#header .account #keepA { margin:0; padding:0; vertical-align:middle;}
+#header .account label { display:none; width:200px;  position:absolute; top:20px; left:0; background-color:#fff; border:1px solid #ccc; padding:5px; z-index:5;}
+#header .account label.show { display:block; }
+
+#header .extension{ border:1px solid #37393d; padding:9px 0 10px 12px; background:url(../img/bgGnb.gif) repeat-x; height:14px;}
+#header .extension ul{ position:relative; margin:0; padding:0; overflow:hidden; *zoom:1;}
+#header .extension li{ position:relative; left:-2px; margin:0 -4px 0 0; background:url(../img/vrGnb.gif) no-repeat left center;}
+#header .extension li a{ display:inline-block; padding:0 10px; color:#9EA1AB; text-decoration:none;}
+#header .extension li.on a{ color:#6DADDD; }
+#header .extension li img{ vertical-align:middle;}
+
+#header .extension .search{ position:absolute; top:8px; right:25px; margin:0; padding:0; _float:right;}
+#header .extension .search fieldset{ _float:right;}
+#header .extension .search *{ vertical-align:top;}
+#header .extension .search .inputText{ border-color:#23242c; height:14px; background:#cfd0d4;}
+#header .extension .search .inputText:focus{ background:#fff;}
+
+/* Footer Extension */
+#footer address{ color:#a3a3a3; font:9px Verdana;}
+#footer strong{ color:#757575;}
+
+/* Main Side */
+#content .mainSide{ width:199px; float:right;}
+#content .mainSide .section{ margin:0 0 15px 0;}
+
+/* Body Extension */
+#body .e1 h2{ margin:0 12px; padding:0 0 10px 0; text-indent:4px; color:#48494e; font:bold 12px AppleGothic, NanumGothic, "Malgun Gothic"; background:url(../img/hrE1.gif) repeat-x left bottom;}
+#body .e1 .topic{ margin:0 0 30px 20px; padding:8px 0 0 0; list-style:none;}
+#body .e1 .topic li{ margin:0 0 9px 0;}
+#body .e1 .topic strong{ display:inline-block; width:30px; height:12px; padding-top:1px; line-height:1; background:url(../img/bgTopic.gif) no-repeat; font-size:11px; color:#fff; margin:0 4px 0 0; font-weight:normal; letter-spacing:-1px; white-space:nowrap; text-indent:2px;}
+#body .e1 .topic a{ color:#7b7575; text-decoration:none;}
+#body .e1 .topic a:hover,
+#body .e1 .topic a:active,
+#body .e1 .topic a:focus{ text-decoration:underline;}
+#body .e1 .topic .first a{ color:#2893bb; font-weight:bold;}
+#body .e1 .topic .bold.top { margin-top:30px;}
+#body .e1 .topic .bold { color:#48494e; font-weight:bold; }
+
+/* WidgetTree */
+.widgetTree{ margin:0 0 0 10px; padding:22px 0 0 0;}
+.widgetTree *{ margin:0; padding:0; font-size:12px;}
+.widgetTree .all{ padding:0 0 0 5px; color:#333 !important;}
+.widgetTree a{ text-decoration:none; padding-left:5px;}
+.widgetTree a:hover,
+.widgetTree a:active,
+.widgetTree a:focus{ text-decoration:underline;}
+.widgetTree a strong{ letter-spacing:-1px; cursor:pointer;}
+.widgetTree ul{ position:relative; display:block; padding:0; margin:0; zoom:1;}
+.widgetTree ul li{ list-style:none; position:relative; padding:3px 0 2px 8px; white-space:nowrap;}
+.widgetTree ul li a{ position:relative; left:12px; top:-1px; color:#666;}
+.widgetTree ul li li a{ left:2px;}
+.widgetTree ul li em{ font-style:normal;}
+.widgetTree ul li button{ display:inline-block; position:relative; *top:-2px; width:13px; height:13px; *width:17px; *height:17px; margin:0 -13px 0 0; *margin:0 -17px -1px -2px; text-indent:-10000px; *font:0/0 Sans-serif; border:0; cursor:pointer; background:transparent url(../img/buttonTreeCollapse.gif) no-repeat; *zoom:1;}
+.widgetTree ul li ul{ display:none; padding:2px 0 0 0 !important; margin:0 0 -2px 6px; background:url(../img/lineTreeVr.gif) repeat-y left top; *zoom:0;}
+.widgetTree ul li ul li{ display:none; background:url(../img/lineTreeHr.gif) no-repeat 0 7px !important;}
+.widgetTree ul li.nav_tree_on button{ background-position:0 -17px; *background-position:2px -15px;}
+.widgetTree ul li.nav_tree_off button{ background-position:0 0; *background-position:2px 2px;}
+.widgetTree ul li.nav_tree_on a{ font-weight:bold; color:#000; letter-spacing:-1px;}
+.widgetTree ul li.nav_tree_on li a{ font-weight:normal; color:#8e8e8e; letter-spacing:normal;}
+.widgetTree ul li.nav_tree_on ul{ display:block;}
+.widgetTree ul li.nav_tree_on ul li{ display:block;}
+.widgetTree ul li.nav_tree_off ul{ display:none;}
+.widgetTree ul li.nav_tree_off ul li{ display:none;}
+.widgetTree ul li.nav_tree_last{ background:url(../img/lineTreeLastHr.gif) no-repeat 0 5px !important;}
+.widgetTree ul li.active,
+.widgetTree ul li.active a,
+.widgetTree ul li.nav_tree_on.active a{ font-weight:bold; color:#2893bb !important; letter-spacing:-1px; padding-right:1px;}
+.widgetTree ul li.active li,
+.widgetTree ul li.active li a,
+.widgetTree ul li.nav_tree_on.active li a{ font-weight:normal; color:#8e8e8e !important; letter-spacing:normal;}
+.widgetTree .icon{ position:relative; left:5px; vertical-align:top;}

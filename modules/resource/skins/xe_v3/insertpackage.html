@@ -1,0 +1,124 @@
+<include target="include.header.html" />
+<div class="rsHeader">
+	<h2><img src="img/h2.submit.gif" width="105" height="18" alt="{$lang->cmd_insert_package}" /></h2>
+</div>
+<div class="rsForm">
+    <p class="notice">{$lang->about_insert_package}</p>
+    
+    <div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/resource/skins/xe_v3/insertpackage/1'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+		<p>{$XE_VALIDATOR_MESSAGE}</p>
+	</div>
+	
+    <p class="required"><span><strong>*</strong> {$lang->about_required_field}</span></p>
+	
+    <form action="./" method="post" ruleset="insertPackage">
+    <input type="hidden" name="act" value="procResourceInsertPackage" />
+    <input type="hidden" name="vid" value="{$vid}" />
+    <input type="hidden" name="mid" value="{$mid}" />
+    <input type="hidden" name="package_srl" value="{$selected_package->package_srl}" />
+	<input type="hidden" name="xe_validator_id" value="modules/resource/skins/xe_v3/insertpackage/1" />
+    <input type="hidden" name="success_return_url" value="{getRequestUriByServerEnviroment()}" />
+    <fieldset>
+        <legend>{$lang->cmd_insert_package}</legend>
+
+		<table border="1" cellspacing="0" class="rsTable">
+            <tr>
+                <th scope="row">{$lang->package_category} <em>*</em></th>
+                <td>
+					<select name="category_srl" id="category">
+					{@ $_curDepth = 0; }
+					<!--@foreach($categories as $key => $val)-->
+						<!--@if($val->grant)-->
+						<!--@if($val->depth<$_curDepth)-->
+						</optgroup>
+						<!--@end-->
+						<!--@if($val->depth<1)-->
+						<!--@if($val->child_count>0)-->
+						<optgroup label="{$val->title}">
+						<!--@else-->
+						<option value="{$val->category_srl}" <!--@if($category_srl == $val->category_srl)-->selected="selected"<!--@end-->>{$val->title}</option>
+						<!--@end-->
+						<!--@end-->
+						<!--@if($val->depth>0)-->
+							<option value="{$val->category_srl}" <!--@if($category_srl == $val->category_srl)-->selected="selected"<!--@end-->>{$val->title}</option>
+						<!--@end-->
+						{@ $_curDepth = $val->depth}
+						<!--@end-->
+					<!--@end-->
+					<!--@for($i=0;$i<$_curDepth;$i++)--></optgroup><!--@end-->
+					</select>
+                    <p>{$lang->about_package_title}</p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">{$lang->package_title} <em>*</em></th>
+                <td>
+                    <input type="text" name="title" class="iText" />
+                    <p>{$lang->about_package_title}</p>
+                </td>
+            </tr>
+            <!--@if($module_info->resource_use_path=='Y')-->
+            <tr>
+                <th scope="row">{$lang->package_path} <em>*</em></th>
+                <td>
+                    <input type="text" name="path" class="iText" />
+                    <p>{$lang->about_package_path}</p>
+                </td>
+            </tr>
+            <!--@end-->
+			<tr cond="$module_info->module_category" id="module_page" style="display:none">
+				<th scope="row">{$lang->is_create_page}</th>
+				<td>
+					<input type="checkbox" name="have_instance" value="Y" id="have_instance" /> <label for="have_instance">{$lang->about_is_create_page}</label>
+					<script>
+						jQuery('#category').change(function(){
+							var c = jQuery(this).val();
+
+							if(c == {$module_info->module_category})
+							{
+								jQuery('#module_page').show();
+							}
+							else
+							{
+								jQuery('#module_page').hide();
+							}
+						}).trigger('change');
+					</script>
+				</td>
+			</tr>
+            <tr>
+                <th scope="row">{$lang->package_license} <em>*</em></th>
+                <td>
+					<select name="license">
+						<option value="{$val}" loop="$licenses => $key,$val">{$val}</option>
+					</select>
+                    <p>{$lang->about_package_license}</p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">{$lang->homepage} <em>*</em></th>
+                <td>
+                    <input type="text" name="homepage" class="iText" />
+                    <p>{$lang->about_package_homepage}</p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">{$lang->description} <em>*</em></th>
+                <td>
+                    <textarea name="description"></textarea>
+                    <p>{$lang->about_package_description}</p>
+                </td>
+            </tr>
+            </table>
+        </fieldset>
+
+        <div class="btnArea">
+            <span class="btn25 blue"><input type="submit" value="{$lang->cmd_registration}" /></span>
+            <span class="btn25"><a href="{$back_url}">{$lang->cmd_back}</a></span>
+        </div>
+    </form>
+</div>
+
+
+
+<include target="include.footer.html" />

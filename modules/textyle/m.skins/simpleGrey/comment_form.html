@@ -1,0 +1,59 @@
+{@ Context::addJsFile("./common/js/jquery.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/js_app.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/common.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/xml_handler.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/xml_js_filter.js", true, '', -100000) }
+<!--%import("js/mtextyle.js")-->
+<!--%import("css/mtextyle.css")-->
+
+<!--#include("_header.html")-->
+<div class="bd rd">
+
+<!--@if($oSourceComment->isExists())-->
+<div class="origin">{$oSourceComment->getContent(false)}</div>
+<!--@end-->
+
+		<form action="./" method="post" class="" onsubmit="return insertCommentItem(this, insert_comment);">
+		<input type="hidden" name="mid" value="{$mid}" />
+		<input type="hidden" name="document_srl" value="{$oComment->get('document_srl')}" />
+		<input type="hidden" name="comment_srl" value="{$oComment->get('comment_srl')}" />
+		<input type="hidden" name="parent_srl" value="{$oComment->get('parent_srl')}" />
+		<ul class="sn">
+			<li>
+				<label for="rText" class="db fb">{$lang->comment}</label>
+				<textarea name="content" rows="8" cols="42" id="rText" class="itxx"></textarea>
+			</li>
+			<!--@if(!$is_logged)-->
+			<li>
+				<label for="uName" class="db fb">{$lang->writer}</label>
+				<input name="nick_name" type="text" id="uName" class="itx" />
+			</li>
+
+			<!--@if($textyle->getInputEmail()!='N')-->
+			<li>
+				<label for="uMail" class="db fb">{$lang->email_address}</label>
+				<input name="email_address" type="text" id="uMail" class="itx" />
+				<input name="email_address" type="text" class="iText email<!--@if($textyle->getInputEmail()=='R')--> request<!--@end-->" value="Email address" title="Email address" />
+			</li>
+			<!--@end-->
+			<li>
+				<label for="uPw" class="db fb">{$lang->password}</label>
+				<input name="password" type="password" id="uPw" class="itx" />
+			</li>
+
+			<!--@if($textyle->getInputWebsite()!='N')-->
+			<li>
+				<label for="uSite" class="db fb">{$lang->homepage}</label>
+				<input name="homepage" type="text" id="uSite" class="itx" value="http://" />
+				<input type="hidden" name="msg_input_homepage" value="{$lang->msg_input_homepage}"/>
+			</li>
+			<!--@end-->
+			<!--@endif-->
+		</ul>
+		<div class="cm">
+			<input name="" type="submit" value="{$lang->cmd_comment_registration}" />
+		</div>
+		</form>
+
+</div>
+<!--#include("_footer.html")-->

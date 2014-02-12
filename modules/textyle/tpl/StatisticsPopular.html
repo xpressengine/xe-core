@@ -1,0 +1,112 @@
+<!--#include("_tool_header.html")-->
+<!--%import("css/calendar.css",optimized=false)-->
+<!--%load_js_plugin("ui.calendar")-->
+
+			<!-- Content -->
+			<div id="content">
+				
+				<!-- contentHeader -->
+				<div class="contentHeader popularHeader">
+					<h3 class="h3">{$lang->textyle_second_menus[3]['dispTextyleToolStatisticsPopular']}</h3>
+				</div>
+				<!-- /contentHeader -->
+				
+				<!-- contentNavigation -->
+				<div class="contentNavigation">
+					<ul class="sortDefault">
+						<li class="active">{$lang->monthly}</li>
+					</ul>
+					<div class="cNavigation">
+						<div class="calendar">
+							<div id="calendar-holder"></div>
+							<button type="button" class="btnCalendar"><span>{$lang->calendar}</span></button>
+							<h4 class="h4" id="str_selected_date">{$disp_selected_date}</h4>
+                            <input type="hidden" class="inputDate" value="{zdate($selected_date,'Y-m-d')}" />
+							<script>
+								jQuery(function($){
+                                    {@ $_s = array_pop($lang->unit_week)}
+									$('#calendar-holder').calendar({
+										type : '{$type}',
+										button : '#calendar-holder+button.btnCalendar',
+										activeDate : "{zdate($selected_date,'Y/m/d')}",
+										select : function(year, month, date) {
+											var str = year+'.'+(month>9?'':'0')+month+'.'+(date>9?'':'0')+date;
+											$("#str_selected_date").text(str);
+											moveDate();
+										},
+										lang : {
+											weekdays : '{$_s},{implode(',',$lang->unit_week)}',
+											today : '{$lang->today}',
+											prevmonth : '{$lang->before_month}',
+											nextmonth : '{$lang->after_month}',
+											close : '{$lang->cmd_close}'
+										}
+									});
+								});
+                            </script>
+							<button type="button" class="prevData" onclick="location.href='{$before_url}';return false;"><span>{$lang->before_month}</span></button>
+							<button type="button" class="nextData" onclick="location.href='{$after_url}';return false;"><span>{$lang->after_month}</span></button>
+						</div>
+					</div>
+				</div>
+				<!-- /contentNavigation -->
+				
+				<!-- listHeader -->
+				<div class="listHeader">
+					<p class="info">{$lang->about_popular}</p>
+				</div>
+				<!-- /listHeader -->
+				
+				<!-- Table Data -->
+				<table border="1" cellspacing="0" summary="{$lang->popular_rank}" class="tableData">
+					<thead>
+						<tr>
+							<th scope="col">{$lang->rank}</th>
+							<th scope="col" class="title">{$lang->title}</th>
+							<th scope="col"<!--@if($sort_index=='comment_count')--> class="sum"<!--@end-->>{$lang->comment}<button type="button" class="btnTableDataSort" onclick="document.location.href='{getUrl("sort_index","comment_count")}'"><span>{$lang->order_desc}</span></button></th>
+							<th scope="col"<!--@if($sort_index=='trackback_count')--> class="sum"<!--@end-->>{$lang->trackback}<button type="button" class="btnTableDataSort" onclick="document.location.href='{getUrl("sort_index","trackback_count")}'"><span>{$lang->order_desc}</span></button></th>
+							<th scope="col"<!--@if($sort_index=='readed_count')--> class="sum"<!--@end-->>{$lang->read}<button type="button" class="btnTableDataSort" onclick="document.location.href='{getUrl("sort_index","readed_count")}'"><span>{$lang->order_desc}</span></button></th>
+							<th scope="col">{$lang->regdate}</th>
+						</tr>
+					</thead>
+
+					<!--@if(count($post_list)==0)-->								
+					<tbody>
+						<tr>
+							<td class="noData" colspan="6"><p>{$lang->no_popular}</p></td>
+						</tr>
+					</tbody>
+					<!--@else-->
+
+					<tbody class="top3">
+						{@$_item_count=0}
+						<!--@foreach($post_list as $no => $post)-->
+							<!--@if($_item_count == 3 && count($post_list) > 3)-->
+								</tbody><tbody>
+							<!--@end-->
+						<tr>
+							<td class="rank">{$_item_count+1}</td>
+							<td class="title postTitle"><a href="{$post->getPermanentUrl()}" onclick="window.open(this.href); return false;">{$post->getTitle()}</a></td> 
+							<td class="small<!--@if($sort_index=='comment_count')--> sum<!--@end-->">{$post->getCommentCount()}</td>
+							<td class="small<!--@if($sort_index=='trackback_count')--> sum<!--@end-->">{$post->getTrackbackCount()}</td>
+							<td class="small<!--@if($sort_index=='readed_count')--> sum<!--@end-->">{$post->get('readed_count')}</td>
+
+							<td class="small">{zdate($post->get('last_update'),'Y.m.d')}</td>
+						</tr>
+
+						{@$_item_count++}
+						<!--@end-->
+					</tbody>
+					<!--@end-->
+				</table>
+				<!-- /Table Data -->
+				
+			</div>
+			<hr />
+			<!-- /Content -->
+	
+			<!-- Extension -->
+				<!--#include("_tool_menu.html")-->
+			<!-- Extension -->
+
+<!--#include("_tool_footer.html")-->

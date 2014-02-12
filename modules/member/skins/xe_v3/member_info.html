@@ -1,0 +1,85 @@
+<include target="common_header.html" />
+<h2><img src="h2.member_info.gif" width="107" height="18" alt="{$lang->cmd_view_member_info}" /></h2>
+<table cellspacing="0" class="info">
+	<caption><span class="c1"><span class="c2">{$lang->member_default_info}</span></span></caption>
+	<tbody>
+		<!--@foreach($member_config->signupForm as $no=>$formInfo)-->
+		<!--@if($formInfo->isUse && ($formInfo->name != 'password' && $formInfo->name != 'find_account_question'))-->
+		<!--@if($formInfo->isDefaultForm)-->
+			<!--@if($formInfo->name == 'email_address')-->
+{@$start = strpos($memberInfo['email_address'], '@')+1}
+{@$count = strlen($memberInfo['email_address']) - $start}
+{@$replaceStr = str_repeat('*', $count)}
+
+{@$title = $formInfo->title}
+{@$value = substr_replace($memberInfo['email_address'], $replaceStr, $start)}
+			<!--@elseif($formInfo->name == 'profile_image' && $memberInfo['profile_image'])-->
+{@$target = $memberInfo['profile_image']}
+{@$value = '<img src="'.$target->src.'" />'}
+			<!--@elseif($formInfo->name == 'image_name' && $memberInfo['image_name'])-->
+{@$target = $memberInfo['image_name']}
+{@$value = '<img src="'.$target->src.'" />'}
+			<!--@elseif($formInfo->name == 'image_mark' && $memberInfo['image_mark'])-->
+{@$target = $memberInfo['image_mark']}
+{@$value = '<img src="'.$target->src.'" />'}
+			<!--@else-->
+{@$title = $formInfo->title}
+{@$value = $memberInfo[$formInfo->name]}
+			<!--@end-->
+		<!--@else-->
+{@$title = $extend_form_list[$formInfo->member_join_form_srl]->column_title}
+{@$orgValue = $extend_form_list[$formInfo->member_join_form_srl]->value}
+			<!--@if($formInfo->type=='tel')-->
+				{@$value = htmlspecialchars($orgValue[0])}
+					<!--@if($orgValue[1])-->-<!--@end-->
+				{@$value .= htmlspecialchars($orgValue[1])}
+					<!--@if($orgValue[2])-->-<!--@end-->
+				{@$value .= htmlspecialchars($orgValue[2])}
+			<!--@elseif($formInfo->type=='kr_zip')-->
+				{@$value = htmlspecialchars($orgValue[0])}<!--@if($orgValue[1]&&$orgValue[0])--><br /><!--@end-->{@$value .= htmlspecialchars($orgValue[1])}
+			<!--@elseif($formInfo->type=='checkbox' && is_array($orgValue))-->
+				{@$value = htmlspecialchars(implode(", ",$orgValue))}
+			<!--@elseif($formInfo->type=='date')-->
+				{@$value = zdate($orgValue, "Y-m-d")}
+			<!--@else-->
+				{@$value = nl2br(htmlspecialchars($orgValue))}
+			<!--@end-->
+		<!--@end-->
+
+		<tr>
+			<th>{$title} <em cond="$formInfo->required || $formInfo->mustRequired">*</em></th>
+			<td>{$value}</td>
+		</tr>
+		<!--@end-->
+		<!--@end-->
+		<tr>
+			<th>{$lang->group}</th>
+			<td><block loop="$memberInfo['group_list'] => $key,$val">{$val} </block></td>
+		</tr>
+		<tr>
+			<th>{$lang->signup_date}</th>
+			<td>{zdate($memberInfo['regdate'],"Y-m-d H:i")}</td>
+		</tr>
+		<tr cond="$memberInfo['member_srl'] == $logged_info->member_srl || $logged_info->is_admin == 'Y'">
+			<th>{$lang->last_login}</th>
+			<td>{zdate($memberInfo['last_login'],"Y-m-d H:i")}</td>
+		</tr>
+		<tr cond="$member_config->enable_openid=='Y' && sizeof($openids)>0">
+			<th colspan="2" class="title">{$lang->openid} </th>
+		</tr>
+		<tr cond="$member_config->enable_openid=='Y' && sizeof($openids)>0" loop="$openids => $openid">
+			<th>{$lang->openid}</th>
+			<td> <a href="{$openid->bookmarklet}">{$openid->openid}</a> </td>
+		</tr>
+	</tbody>
+</table>
+<div class="btnArea ar">
+	<block cond="$memberInfo['member_srl'] == $logged_info->member_srl">
+		<span class="btn25 blue" cond="$member_config->identifier == 'email_address'"><a href="{getUrl('act', 'dispMemberModifyEmailAddress')}">{$lang->cmd_modify_member_email_address}</a></span>
+		<span class="btn25 blue"><a href="{getUrl('act','dispMemberModifyInfo','member_srl','')}">{$lang->cmd_modify_member_info}</a></span>
+		<span class="btn25 black"><a href="{getUrl('act','dispMemberModifyPassword','member_srl','')}">{$lang->cmd_modify_member_password}</a></span>
+		<span class="btn25"><a href="{getUrl('act','dispMemberLeave','member_srl','')}">{$lang->cmd_leave}</a></span>
+	</block>
+	<span class="btn25"><a href="{getUrl('act','','member_srl','')}">{$lang->cmd_back}</a></span>
+</div>
+<include target="common_footer.html" />

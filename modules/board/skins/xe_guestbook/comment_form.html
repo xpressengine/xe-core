@@ -1,0 +1,98 @@
+<!--#include("header.html")-->
+
+<!--// display the comment contents even if it has replies -->
+<!--@if($oSourceComment && $oSourceComment->isExists())-->
+<div class="replyBox">
+    <div class="replyItem">
+        <div class="author"><div class="member_{$oSourceComment->getMemberSrl()}">{$oSourceComment->getNickName()}</div></div>
+        <div class="date">
+            {$oSourceComment->getRegdate("Y.m.d H:i")}
+            <!--@if($grant->manager)-->
+                ({$oSourceComment->get('ipaddress')})
+            <!--@end-->
+        </div>
+        
+
+        <div class="replyContent">
+            {$oSourceComment->getContent(false)}
+        </div>
+    </div>
+</div>
+<!--// display the comment contents even if it has replies -->
+<!--@elseif($oDocument)-->
+<div class="replyBox">
+    <div class="replyItem">
+        <div class="author"><div class="member_{$oDocument->getMemberSrl()}">{$oDocument->getNickName()}</div></div>
+        <div class="date">
+            {$oDocument->getRegdate("Y.m.d H:i")}
+            <!--@if($grant->manager)-->
+                ({$oDocument->get('ipaddress')})
+            <!--@end-->
+        </div>
+        
+
+        <div class="replyContent">
+            {$oDocument->getContent(false)}
+        </div>
+    </div>
+</div>
+<!--@end-->
+
+<!-- comment form -->
+<form action="./" method="post" onsubmit="return procFilter(this, insert_comment)" class="boardEditor" >
+<input type="hidden" name="mid" value="{$mid}" />
+<input type="hidden" name="document_srl" value="{$oComment->get('document_srl')}" />
+<input type="hidden" name="comment_srl" value="{$oComment->get('comment_srl')}" />
+<input type="hidden" name="content" value="{htmlspecialchars($oComment->get('content'))}" />
+<input type="hidden" name="parent_srl" value="{$oComment->get('parent_srl')}" />
+
+<div class="boardWrite commentEditor">
+
+  <!--@if(!$is_logged)-->
+  <div class="authorInfo">
+      <div class="inputItem">
+          <label for="userName">{$lang->writer}</label>
+          <input type="text" name="nick_name" value="{$oComment->getNickName()}" class="userName iText" id="userName"/>
+      </div>
+      <div class="inputItem">
+          <label for="userPw">{$lang->password}</label>
+          <input type="password" name="password" value="" id="userPw" class="userPw iText" />
+      </div>
+      <div class="inputItem">
+          <label for="emailAddress">{$lang->email_address}</label>
+          <input type="text" name="email_address" value="{htmlspecialchars($oComment->get('email_address'))}" id="emailAddress" class="emailAddress iText"/>
+      </div>
+      <div class="inputItem">
+          <label for="homePage">{$lang->homepage}</label>
+          <input type="text" name="homepage" value="{htmlspecialchars($oComment->get('homepage'))}" id="homePage" class="homePage iText"/>
+      </div>
+      
+  </div>
+  <!--@end-->
+  <dl class="option">
+      <!--@if($is_logged)-->
+      <dd>
+          <input type="checkbox" name="notify_message" value="Y" <!--@if($oComment->useNotify())-->checked="checked"<!--@end--> id="notify_message" />
+          <label for="notify_message">{$lang->notify}</label>
+      </dd>
+      <!--@end-->
+      <dd>
+        <input type="checkbox" name="is_secret" value="Y" <!--@if($oComment->isSecret())-->checked="checked"<!--@end--> id="is_secret" />
+        <label for="is_secret">{$lang->secret}</label>
+      </dd>
+  </dl>
+
+  <div class="editor">{$oComment->getEditor()}</div>
+
+  <div class="btnArea">
+	  <a class="btn" href="{getUrl('act','','document_srl','')}">{$lang->cmd_back}</a>
+      <input class="btn" type="submit" value="{$lang->cmd_comment_registration}" />
+  </div>
+
+</div>
+
+</form>
+
+&nbsp;
+
+<!--#include("footer.html")-->

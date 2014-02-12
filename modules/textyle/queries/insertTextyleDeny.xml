@@ -1,0 +1,11 @@
+<query id="insertTextyleDeny" action="insert">
+    <tables>
+        <table name="textyle_deny" />
+    </tables>
+	<columns>
+		<column name="textyle_deny_srl" var="textyle_deny_srl" notnull="notnull" primary_key="primary_key" />
+		<column name="module_srl" var="module_srl" filter="number" notnull="notnull"  />
+		<column name="deny_type" var="deny_type" default="N" notnull="notnull" />
+		<column name="deny_content" var="deny_content" notnull="notnull" default="" />
+    </columns>
+</query>

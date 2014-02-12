@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+	<grants />
+	<permissions />
+	<actions>
+		<action name="getSyndicationList" type="model" />
+		<action name="dispSyndicationAdminConfig" type="view" admin_index="true" />
+		<action name="procSyndicationAdminInsertService" type="controller" ruleset="insertService" />
+		<action name="procSyndicationAdminCheckSitePingResult" type="controller" />
+		<action name="procSyndicationAdminCheckApiStatus" type="controller" />
+	</actions>
+</module>

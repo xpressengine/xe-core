@@ -1,0 +1,21 @@
+<query id="getKinPoint" action="select">
+    <tables>
+        <table name="point" alias="p" />
+        <table name="member" alias="m" />
+    </tables>
+    <columns>
+        <column name="p.point" alias="point" />
+		<column name="p.member_srl" alias="member_srl" />
+        <column name="m.user_name" alias="user_name" />
+    </columns>
+	<conditions>
+        <condition operation="equal" column="p.member_srl" var="m.member_srl" pipe="and" notnull="notnull" />
+		<condition operation="in" column="p.member_srl" var="member_srl" pipe="and"/>
+    </conditions>
+    <navigation>
+    	<index var="sort_index" default="point" order="desc" />
+        <list_count var="limit" default="5" />
+        <page_count var="page_count" default="10" />
+        <page var="page" default="1" />
+    </navigation>
+</query>

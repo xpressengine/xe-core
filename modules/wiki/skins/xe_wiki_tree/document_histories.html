@@ -1,0 +1,98 @@
+<include target="header.html" />
+
+<script>
+jQuery(document).ready(function($){
+	var old_radios = $("input[name=old_history_srl]");
+	var new_radios = $("input[name=history_srl]");
+
+	old_radios.first().attr('checked', 'checked');
+
+	old_radios.change(function(){
+		var current_index = old_radios.index($(this));
+		new_radios.slice(0, current_index + 1).show();
+		new_radios.slice(current_index + 1, new_radios.length).hide();
+	});
+
+	new_radios.change(function(){
+		var current_index = new_radios.index($(this));
+		old_radios.slice(0, current_index).hide();
+		old_radios.slice(current_index, old_radios.length).show();
+	});
+
+});
+</script>
+
+<div id="wikiTitleArea">
+	<h2 id="wikiTitle">{$oDocument->getTitle()} - Page history</h2>
+</div>
+
+<form method="get" action="./" no-error-return-url="true">
+<input type="hidden" name="mid" value="{$module_info->mid}" />
+<input type="hidden" name="act" value="dispWikiHistoryCompare" />
+<input type="hidden" name="document_srl" value="{$document_srl}" />
+
+
+<table cellspacing="0" border="0" summary="Document history list" class="wikiTable">
+    <thead>
+        <tr>
+			<th colspan="2">{$lang->compare}</th>
+			<th scope="col">{$lang->revision}/{$lang->date}</th>
+            <th scope="col">{$lang->title}</th>
+            <th scope="col">{$lang->author}</th> 
+        </tr>
+    </thead>
+    <tbody>
+        <!--@if(!$page || $page == 1)-->
+        <tr>
+			<td></td>
+			<td>
+				<input type="radio" name="history_srl" value="{$val->history_srl}" checked="checked" />
+			</td>
+			<td><strong>{$lang->current}</strong> - <span class="date">{$oDocument->getUpdate()}</span></td>
+            <td class="title"><a href="{getUrl('act','',page,'','history_srl','')}">{$oDocument->getTitle()}</a></td>
+            <td class="author"><a href="#" onclick="return false;" class="member_{$val->member_srl}">{$oDocument->getNickName()}</a></td>
+        </tr>
+        <!--@end-->
+	{@ $hcount = count($histories);}
+        <!--@foreach($histories as $val)-->
+        <tr>
+			<td>
+				<input type="radio" name="old_history_srl" value="{$val->history_srl}" />
+			</td>
+			<td>
+				<input type="radio" name="history_srl" value="{$val->history_srl}" class="hide" />
+			</td>
+			<td><strong>v.{$hcount}</strong> - <span class="date">{zdate($val->regdate, 'Y.m.d H:i:s')}</span></td>
+            <td class="title">
+                <a class="wikiBodyButton" onclick="jQuery('#historyContent{$val->history_srl}').toggleClass('hide');return false;"><span><span>{$lang->cmd_view}</span></span></a>
+                <a class="wikiBodyButton" onclick="location.href='{getUrl('act','dispWikiEditPage','history_srl',$val->history_srl)}';return false;"><span><span>{$lang->restore}</span></span></a>
+                <a class="wikiBodyButton" onclick="jQuery(this).parents('tr').find('td:first input[type=radio]').click(); getDiff('diff{$val->history_srl}',{$oDocument->document_srl},{$val->history_srl});"><span><span>{$lang->diff}</span></span></a>
+            </td>
+            <td class="author"><a href="#" onclick="return false;" class="member_{$val->member_srl}">{$val->nick_name}</a></td>
+        </tr>
+	<tr>
+	    <td colspan="5" id="historyContent{$val->history_srl}" class="history_content hide">
+		<div style="text-align: left;">
+			<!--@if($module_info->markup_type == 'xe_wiki_markup')-->
+			{$val->content}
+			<!--@else-->
+			{nl2br(htmlspecialchars($val->content))}
+			<!--@end-->
+		</div>
+	    </td>
+	</tr>
+	<tr>
+	    <td colspan="5" id="diff{$val->history_srl}" name="diff{$val->history_srl}" class="hide diff">
+	    </td>
+	</tr>
+	{@ $hcount--;}
+        <!--@end-->
+    </tbody>
+</table>
+
+<input type="submit" value="Compare selected revisions" class="btn" />
+</form>
+
+	<include target="document_pagination.html" />
+
+<include target="footer.html" />

@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=2, user-scalable=yes" />
+  <title> 공모전 샘플 페이지</title>
+  <style type="text/css">
+  body,button{font:13px NanumGothic, 나눔 고딕, 'Malgun Gothic', 맑은 고딕}
+  em{font-weight:bold}
+  .imagecaption{border-bottom:solid 1px}
+
+  ul{list-style:none}
+  ul li{margin-left:-25px;font-weight:bold;}
+  li li{font-weight:normal;}
+
+input[type=submit].text,
+input[type=button].text, 
+button[type=submit].text,
+button[type=button].text{border:0;overflow:visible;padding:0;margin:0 4px 0 0;color:#33a !important;background:none;text-decoration:underline;cursor:pointer;text-align:left;}
+
+.container{margin:0 0 0 240px;position:relative}
+.nav{float:left;width:240px;margin:0 0 0 -240px}
+.content{float:right;width:100%;border-left:1px dotted #ccc;}
+.content img{max-width:100%;height:auto}
+.__content{padding:0 0 0 15px}
+
+/* Message */
+.message{border:1px solid #ddd;background:#f8f8f8;margin:1em 0 1em 15px;padding:0 1em;border-radius:5px;line-height:1.4;font-size:12px}
+body>.message{margin:1em}
+.message p{margin:1em 0 !important}
+.message em{font-style:normal;color:#e00}
+.message.info{padding-left:55px}
+.message.info{border-color:#E0E8EC;background:#EDF9FF url(http://www.xpressengine.com/common/img/msg.Info.png) no-repeat 1em .5em}
+
+@media (max-width:640px) {
+.nav,.content{float:none;width:auto;margin:0}
+.container{margin:0}
+}
+  </style>
+ </head>
+ 
+ <body>
+ <script type="text/javascript" src="http://www.xpressengine.com/common/js/jquery.min.js"></script>
+ <script type="text/javascript">
+	function show(id){
+		jQuery('.__content').hide();
+		jQuery('#'+id).show();
+	}
+ </script>
+<div class="container">
+	<div class="nav">
+		<ul>
+			<li>메인페이지 보기
+				<ul>
+					<li> <button type="button" class="text"  onclick="show('main_layout')">메인 레이아웃 디자인</button></li>
+				</ul>
+			</li>
+			<li>회원관련 페이지 보기
+				<ul>
+					<li> <button type="button" class="text"  onclick="show('member')">회원가입 페이지 디자인</button></li>
+					<li> <button type="button" class="text"  onclick="show('login')">로그인 페이지 디자인</button></li>
+					<li> <button type="button" class="text"  onclick="show('info')">회원정보보기 페이지 디자인</button></li>
+					<li> <button type="button" class="text"  onclick="show('message')">쪽지보기 페이지 디자인</button></li>
+					<li> <button type="button" class="text"  onclick="show('password')">비밀번호 변경 페이지 디자인</button></li>
+					<li> <button type="button" class="text"  onclick="show('signout')">회원 탈퇴 페이지 디자인</button></li>
+				</ul>
+			</li>
+			<li>게시판관련 페이지 보기
+				<ul>
+					<li><button type="button" class="text"  onclick="show('list')">게시글 리스트 디자인</button></li>
+					<li><button type="button" class="text"  onclick="show('gallery')">게시글 리스트 갤러리 타입 디자인</button></li>
+					<li><button type="button" class="text"  onclick="show('view')">게시글 보기 디자인</button></li>
+					<li><button type="button" class="text"  onclick="show('write')">게시글 쓰기 디자인</button></li>
+					<li><button type="button" class="text"  onclick="show('comment')">대댓글 쓰기 디자인</button></li>
+				</ul>
+			</li>
+			<li>오류메시지 보기
+				<ul>
+					<li><button type="button" class="text"  onclick="show('error')">오류 메시지 화면 디자인</button>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<div class="content">
+		<div class="message info">
+			<p><span style="color:blue;font-weight:bold">파란색</span> 영역은 디자인시 선택사항입니다.<br/>
+			<span style="color:red;font-weight:bold">빨간색</span> 영역은 구분자입니다.<br/>
+			<span style="font-weight:bold">검은색</span> 영역은 디자인 제외 요소입니다.</p>
+		</div>
+		<div class="__content" id="main_layout">
+			<p>메인 페이지 디자인 주요 사항</p>
+			<ol>
+				<li> 화면 구성
+					<ol>
+						<li>반드시 컨텐츠 영역을 포함하되 컨텐츠 영역내용은 새롭게 디자인 하지 않아도 됩니다.</li>
+						<li>컨텐츠 영역 표시 단수는 자유롭게 변형 가능합니다.</li>
+					</ol>
+				</li>
+				<li> 메뉴영역 디자인
+					<ol>
+						<li>메뉴 영역의 위치 및 사이즈의 제한은 없습니다.</li>
+						<li>1depth이상의 하위 메뉴를 표현할 수 있어야 합니다.</li>
+					</ol>
+				</li>
+				<li> 컨텐츠 위젯 디자인
+					<ol>
+						<li>컨텐츠 영역을 새롭게 디자인하고자 하는 경우 "타이틀 영역"에 해당하는 <em>그림 01-03</em>부분을 디자인하시면 됩니다.</li>
+					</ol>
+				</li>
+				<li> 로그인 위젯
+					<ol>
+						<li>로그인 위젯은 포함하지 않아도 됩니다.</li>
+						<li>로그인 위젯을 포함 할 경우 반드시 로그인 실패 메시지 노출 영역 <em>그림 01-04</em> 도 디자인합니다.</li>
+						<li>로그인 위젯을 포함 할 경우 반드시 로그인 이후의 화면 <em>그림 01-05</em> 도 디자인합니다.</li>
+					</ol>
+				</li>
+				<li> 사이드 메뉴바
+					<ol>
+						<li>사이드 메뉴바는 포함하지 않아도 됩니다.</li>
+						<li>사이드 메뉴바를 포함 할 경우 </li>
+					</ol>
+				</li>
+			</ol>
+			<img src="./image/01-01.png" />
+			<img src="./image/01-02.png" />
+			<div class="imagecaption">
+				<p>그림 01-03</p>
+				<img src="./image/01-03.png"/>
+			</div>
+			<div class="imagecaption">
+				<p>그림 01-04</p>
+				<img src="./image/01-04.png"/>
+			</div>
+			<div class="imagecaption">
+				<p>그림 01-05</p>
+				<img src="./image/01-05.png"/>
+			</div>
+		</div>
+		<div class="__content" id="member">
+			<p>회원 가입페이지 디자인 주요 사항</p>
+			<ol>
+				<li>회원가입 입력 폼구성은 예시안의 내용을 참고하여 디자인 합니다.</li>
+				<li>회원가입 실패 메시지 노출 영역도 디자인 합니다.</li>
+			</ol>
+			<img src="./image/02-01.png" />
+		</div>
+		<div class="__content" id="login">
+			<p>로그인 페이지 디자인 주요 사항</p>
+			<ol>
+				<li>로그인정보 입력 폼구성은 예시안을 참고하여 디자인 합니다.</li>
+				<li>로그인 실패 메시지 노출 영역도 디자인 합니다.</li>
+			</ol>
+			<img src="./image/02-02.png" />
+		</div>
+		<div class="__content" id="info">
+			<p>회원 정보보기 페이지 디자인 주요 사항</p>
+			<ol>
+				<li>회원정보 필드 구성은 예시안을 참고하여 디자인 합니다.</li>
+				<li>회원관련 카테고리(상단의 탭)는 반드시 디자인하되 탭이 아닌 다른 형식이어도 됩니다.</li>
+			</ol>
+			<img src="./image/02-03.png" />
+		</div>
+		<div class="__content" id="message">
+			<p>쪽지보기 페이지 디자인 주요 사항</p>
+			<ol>
+				<li>쪽지함 설정 변경 영역, 내용 확인 영역과, 리스트 영역을 구분하여 디자인 하되 필수로 포함합니다.</li>
+				<li>회원관련 카테고리(상단의 탭)는 반드시 디자인하되 탭이 아닌 다른 형식이어도 됩니다.</li>
+			</ol>
+			<img src="./image/02-04.png" />
+		</div>
+		<div class="__content" id="password">
+			<img src="./image/02-05.png" />
+		</div>
+		<div class="__content" id="signout">
+			<img src="./image/02-06.png" />
+		</div>
+		<div class="__content" id="list">
+			<img src="./image/03-01.png" />
+		</div>
+		<div class="__content" id="gallery">
+			<img src="./image/03-05.png" />
+		</div>
+		<div class="__content" id="view">
+			<p>게시글 보기 디자인 주요 사항</p>
+			<ol>
+				<li> 화면 구성
+					<ol>
+						<li>반드시 타이틀과 게시글 내용역역을 포함하되 게시글 영역내용은 새롭게 디자인 하지 않아도 됩니다.</li>
+						<li>게시글 내용 필드 구성은 예시안을 참고하여 디자인 합니다.(게시글 등록일, 등록자, 조회수, 댓글 수 등등)</li>
+					</ol>
+				</li>
+				<li> 엮인글, 댓글
+					<ol>
+						<li>엮인글 영역과 댓글 영역을 구분하되 반드시 디자인에 포함합니다.</li>
+						<li>엮인글 표시 내용은 예시안을 참고하여 디자인 합니다.</li>
+						<li>댓글과 대댓글을 구분하여 디자인하고, 사용자 프로필 이미지를 추가하여도 무관합니다.</li>
+						<li>댓글 입력 에디터는 디자인하지 않고 예시안을 그대로 사용합니다.</li>
+					</ol>
+				</li>
+				<li> 게시글 리스트 영역
+					<ol>
+						<li>해당영역은 생략 가능합니다.</li>
+						<li>생략할 경우 게시글 리스트로 돌아갈 수 있는 "목록" or "돌아가기"버튼을 반드시 포함합니다.</li>
+					</ol>
+				</li>
+			</ol>
+			<img src="./image/03-02.png" />
+		</div>
+		<div class="__content" id="write">
+			<img src="./image/03-03.png" />
+		</div>
+		<div class="__content" id="comment">
+			<img src="./image/03-04.png" />
+		</div>
+		<div class="__content" id="error">
+			<img src="./image/04-01.png" />
+		</div>
+	</div>
+</div>
+	<script type="text/javascript">
+	jQuery(function($){
+		$('.__content').hide();
+		jQuery('#main_layout').show();
+	});
+	</script>
+ </body>
+</html>

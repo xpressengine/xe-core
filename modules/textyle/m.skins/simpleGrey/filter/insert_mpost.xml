@@ -1,0 +1,12 @@
+<filter name="insert_mpost" module="textyle" act="procTextylePostWrite">
+  <form>
+    <node target="mid" required="true" />
+    <node target="content" required="true" minlength="1" />
+    <node target="title" required="true" minlength="1" />
+  </form>
+  <parameter />
+  <response callback_func="completeInsertMpost">
+    <tag name="error" />
+    <tag name="message" />
+  </response>
+</filter>

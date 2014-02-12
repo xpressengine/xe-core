@@ -1,0 +1,70 @@
+
+                    <!--@if($oSourceComment->isExists())-->
+                    <div class="feedback reply">
+                        <ol class="feedbackOrder">
+                            <li class="item">
+                                <div class="meta">
+                                    <div class="thumb">
+                                        <!--@if($oSourceComment->getProfileImage())-->
+                                            <img src="{$oSourceComment->getProfileImage()}" alt="author" />
+                                        <!--@else-->
+                                            <img src="img/iconAuthorNoImage.gif" width="39" height="39" alt="Author" />
+                                        <!--@end-->
+                                    </div>
+                                    <h4 class="author">
+										<!--@if($oSourceComment->homepage)-->
+										<a href="{$oSourceComment->homepage}" onclick="window.open(this.href);return false;" class="member_{$oSourceComment->get('member_srl')}">{$oSourceComment->getNickName()}</a>
+										<!--@else-->
+										<span class="member_{$oSourceComment->get('member_srl')}">{$oSourceComment->getNickName()}</span>
+										<!--@end-->
+                                    </h4>
+                                    <p class="date">{$oSourceComment->getRegdate('Y.m.d')} <span class="hhmm">{$oSourceComment->getRegdate('H:i')}</span></p>
+                                </div>
+                                <div class="data textyleContent">
+                                    {$oSourceComment->getContent(false)}
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                    <!--@end-->
+                    <div class="replyForm">
+                        <h3>Leave Comments</h3>
+                        <!--@if($textyle->isEnableComment())-->
+                        <fieldset>
+                            <form method="post" onsubmit="return insertCommentItem(this, insert_comment)" action="">
+								<input name="mid" type="hidden" value="{$mid}" />
+                                <input type="hidden" name="document_srl" value="{$oComment->get('document_srl')}" />
+                                <input type="hidden" name="comment_srl" value="{$oComment->get('comment_srl')}" />
+                                <input type="hidden" name="content" value="{htmlspecialchars($oComment->get('content'))}" />
+                                <input type="hidden" name="parent_srl" value="{$oComment->get('parent_srl')}" />
+                                {$oComment->getEditor()}
+                                <!--@if($is_logged)-->
+                                <span class="member_{$logged_info->member_srl}"><strong class="name">{$logged_info->nick_name}</strong></span> <span class="email">{$logged_info->email_address}</span> <span class="url">{$logged_info->homepage}</span>
+                                <!--@else-->
+                                <input name="nick_name" type="text" class="iText name" value="Name" title="Name" />
+                                <input name="password" type="password" class="iText pw" value="Password" title="Password" />
+								<!--@if($textyle->getInputEmail()!='N')-->
+									<input type="hidden" name="msg_input_email_address" value="{$lang->msg_input_email_address}"/>
+									<input name="email_address" type="text" class="iText email<!--@if($textyle->getInputEmail()=='R')--> request<!--@end-->" value="Email address" title="Email address" />
+								<!--@end-->
+								<!--@if($textyle->getInputWebsite()!='N')-->
+									<input type="hidden" name="msg_input_homepage" value="{$lang->msg_input_homepage}"/>
+									<input name="homepage" type="text" class="iText url<!--@if($textyle->getInputWebsite()=='R')--> request<!--@end-->" value="URL" title="URL" />
+								<!--@end-->
+                                <!--@end-->
+
+								<!--@if($oSourceComment->isExists() && $oSourceComment->isSecret())-->
+									<input name="is_secret" id="secret1" type="hidden" value="Y"  />
+								<!--@else-->
+									<input name="is_secret" id="secret1" type="checkbox" value="Y" class="inputCheck" <!--@if($oComment->isSecret())-->checked <!--@end-->/>
+								<!--@end-->
+ 
+                                <label for="secret1">{$lang->secret}</label>
+                                <input name="submit" type="submit" value="SUBMIT" class="inputSubmit" />
+                            </form>
+                        </fieldset>
+                        <!--@else-->
+                            {$lang->disable_comment}
+                        <!--@end-->
+                    </div>
+

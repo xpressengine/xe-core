@@ -1,0 +1,64 @@
+<!--#include("header.html")-->
+<div id="issueBody">
+<div id="pxeContent">
+	<div class="pxeHeading">
+		<h2>{$lang->project_menus["dispIssuetrackerViewSource"]}</h2>
+	</div>
+	<div class="pxeCodeHeader">
+		<table border="1" cellspacing="0" summary="Directory Information">
+		<tr>
+			<th scope="row">{$lang->repos_path}</th>
+			<td>
+				{@ end($path_tree); }
+				{@ $lastkey = key($path_tree); }
+				{@ $lastval = current($path_tree); }
+				{@ array_pop($path_tree); }
+				<!--@foreach($path_tree as $key=>$val)-->
+                    <!--@if($key=='/')-->
+                        <a href="{getUrl('type','','path',urlencode($val), revs, $revs)}">{$module_info->svn_url}</a>
+                    <!--@else-->
+                        <a href="{getUrl('type','','path',urlencode($val), revs, $revs)}">{$key}/</a>
+                    <!--@end-->
+				<!--@end-->
+				<!--@if($lastkey=='/')-->
+				<a href="{getUrl('type','','path',urlencode($lastval), revs, $revs)}"><em>{$module_info->svn_url}</em></a>
+				<!--@else-->
+				<a href="{getUrl('type','file','path',urlencode($lastval), revs, $revs)}"><em>{$lastkey}/</em></a>
+				<!--@end-->
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">{$lang->revision}</th>
+			<td><strong>{$content->revision}</strong> (checked in by {$content->author})</td>
+		</tr>
+		</table>
+		<div class="do">
+			<span class="btnPxe"><a href="{getUrl('type','log','path',urlencode($path), 'erev', $revs?$revs:'')}">{$lang->view_log}</a></span>
+			<span class="btnPxe"><a href="{getUrl('type','diff','path',urlencode($path),'erev',$erev, 'brev', $brev)}">{$lang->compare_with_previous}</a></span>
+		</div>
+	</div>
+	<div class="svnMessage">
+		<p>{$content->msg}</p>
+	</div>
+
+	<div class="syntaxhighlighter">
+	<pre <!--@if($file_ext)-->class="brush: {$file_ext};"<!--@endif--> >
+	<!--@if($file_type == "code")-->
+	{htmlspecialchars($content->content)}
+	<!--@elseif($file_type == "document")-->
+	document file
+	<!--@elseif($file_type == "image")-->
+	image file
+	<!--@elseif($file_type == "movie")-->
+	movie file
+	<!--@end-->
+	</pre>
+	</div>
+
+	<div class="buttonArea">
+	<div class="fLeft"><span class="btnPxe"><button type="button" onclick="history.go(-1)">{$lang->cmd_back}</button></span></div>
+	</div>
+
+</div>
+</div>
+<!--#include("footer.html")-->

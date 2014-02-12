@@ -1,0 +1,11 @@
+<table name="kin_replies">
+    <column name="reply_srl" type="number" size="11" notnull="notnull" primary_key="primary_key" />
+    <column name="module_srl" type="number" size="11" default="0" notnull="notnull" index="idx_module_srl" />
+    <column name="parent_srl" type="number" size="11" default="0" notnull="notnull" index="idx_parent_srl" />
+    <column name="content" type="bigtext" notnull="notnull" />
+    <column name="member_srl" type="number" size="11" notnull="notnull" index="idx_member_srl" />
+    <column name="nick_name" type="varchar" size="80" notnull="notnull" />
+    <column name="regdate" type="date" index="idx_regdate" />
+    <column name="ipaddress" type="varchar" size="128" notnull="notnull" index="idx_ipaddress"/>
+    <column name="list_order" type="number" size="11" notnull="notnull" index="idx_list_order" />
+</table>

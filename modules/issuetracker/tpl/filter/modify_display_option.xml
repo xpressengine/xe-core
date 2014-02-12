@@ -1,0 +1,13 @@
+<filter name="modify_display_option" module="issuetracker" act="procIssuetrackerAdminModifyDisplayOption" confirm_msg_code="confirm_submit">
+    <form />
+    <parameter>
+    	<param name="module_srl" target="module_srl" />
+    	<param name="displayopts" target="displayopts" />
+    </parameter>
+    <response callback_func="completeInsertSetting">
+        <tag name="error" />
+        <tag name="message" />
+        <tag name="module_srl" />
+    </response>
+</filter>
+

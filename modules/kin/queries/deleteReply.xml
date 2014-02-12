@@ -1,0 +1,8 @@
+<query id="deleteReplies" action="delete">
+    <tables>
+        <table name="kin_replies" />
+    </tables>
+    <conditions>
+        <condition operation="equal" column="reply_srl" var="reply_srl" filter="number" notnull="notnull" />
+    </conditions>
+</query>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon version="0.2">
+    <title xml:lang="ko">이벤트 게시판 에드온</title>
+    <description xml:lang="ko">
+        특정 기간동안에만 게시판의 글을 등록/수정/삭제가 가능하도록 하는 addon입니다.
+		특정 기간내에도 활성화된 기능(등록/수정/삭제)만 동작하도록 설정 할 수 있습니다.
+    </description>
+    <version>0.1</version>
+    <date>2011-02-10</date>
+    <author email_address="developers@xpressengine.com" link="http://xpressengine.com/">
+        <name xml:lang="ko">NHN</name>
+    </author>
+    <extra_vars>
+        <var name="start_date">
+            <title xml:lang="ko">설정 시작일시</title>
+            <description xml:lang="ko">
+				설정 시작일 부터 설정 종료일까지만 쓰기/수정/삭제 기능이 동작하도록 합니다.
+				(일정은 YYYY-mm-dd HH:ii:ss형식으로 입력합니다.)
+            </description>
+        </var>
+        <var name="end_date">
+            <title xml:lang="ko">설정 종료일시</title>
+            <description xml:lang="ko">
+				설정 시작일 부터 설정 종료일까지만 쓰기/수정/삭제 기능이 동작하도록 합니다.
+				(일정은 YYYY-mm-dd HH:ii:ss형식으로 입력합니다.)
+            </description>
+        </var>
+        <var name="write_mode" type="select">
+            <title xml:lang="ko">등록</title>
+            <description xml:lang="ko">
+				설정 시작일 부터 설정 종료일까지만 등록 기능이 동작하도록 합니다.
+            </description>
+			<options value="on">
+				<title xml:lang="ko">활성</title>
+			</options>
+			<options value="off">
+				<title xml:lang="ko">활성안함</title>
+			</options>
+        </var>
+        <var name="modify_mode" type="select">
+            <title xml:lang="ko">수정</title>
+            <description xml:lang="ko">
+				설정 시작일 부터 설정 종료일까지만 수정 기능이 동작하도록 합니다.
+            </description>
+			<options value="on">
+				<title xml:lang="ko">활성</title>
+			</options>
+			<options value="off">
+				<title xml:lang="ko">활성안함</title>
+			</options>
+        </var>
+        <var name="delete_mode" type="select">
+            <title xml:lang="ko">삭제</title>
+            <description xml:lang="ko">
+				설정 시작일 부터 설정 종료일까지만 삭제 기능이 동작하도록 합니다.
+            </description>
+			<options value="on">
+				<title xml:lang="ko">활성</title>
+			</options>
+			<options value="off">
+				<title xml:lang="ko">활성안함</title>
+			</options>
+        </var>
+    </extra_vars>
+</addon>

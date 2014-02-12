@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="0.2">
+    <title xml:lang="ko">enroll</title>
+    <version>0.1</version>
+    <date>2009-09-09</date>
+    <category>service</category>
+    <author email_address="sol@nhn.com">
+        <name xml:lang="ko">sol</name>
+    </author>
+</module>

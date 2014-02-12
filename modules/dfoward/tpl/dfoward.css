@@ -1,0 +1,42 @@
+@charset "utf-8";
+
+#content{background:#fff;padding:50px}
+
+h1.dfoward{margin:0 0 20px 0;padding:0 0 20px 5px;border-bottom:2px solid #585858}
+h1.dfoward span{display:inline-block;height:23px;width:136px;overflow:hidden;background:transparent url(images/dfoward.gif) no-repeat 0 0;font:0/0;text-indent:300px}
+
+#dfoward_list{position:relative}
+#dfoward_list table{width:100%;border:0}
+#dfoward_list thead tr,
+#dfoward_list th div{background:transparent url(images/dfoward.gif) repeat-x -3px -64px}
+#dfoward_list th div{position:absolute;top:0;left:0;height:32px;width:4px;background-position:0 -32px;overflow:hidden}
+#dfoward_list th.last div{left:auto;right:0;background-position:right -32px}
+#dfoward_list th{position:relative;height:32px;text-align:center;padding:0;margin:0;font-size:12px}
+#dfoward_list th span{display:block;border-right:1px solid #C7C7C7}
+#dfoward_list th.last span{border:0}
+#dfoward_list tbody td{border-bottom:1px solid #e6e6e6;height:26px;padding:0 20px}
+#dfoward_list td.date,
+#dfoward_list td.action{text-align:center}
+
+.df_form{margin-top:30px}
+.df_form table{width:100%}
+.df_form caption{text-align:justify;font-weight:bold;color:#fff;background:#6D6E72;padding:8px 10px;border-radius:3px}
+.df_form tr{height:30px}
+.df_form tr.even{background:#f6f6f6}
+.df_form th{padding-left:20px;color:#666}
+.df_form td input.inputTypeText{width:210px;margin-right:10px}
+.df_form td p{display:inline;color:#888;font-size:0.9em}
+
+/* Button */
+.btn25,
+.btn25 a,
+.btn25 button,
+.btn25 input{display:inline-block;height:25px;line-height:25px;padding:0;overflow:visible;position:relative;background:url(images/btn25.gif) no-repeat;cursor:pointer}
+.btn25{background-position:0 0;margin:0 2px 0 0;vertical-align:top}
+.btn25 a,
+.btn25 button,
+.btn25 input{padding:0 12px;left:2px;font-size:12px;color:#4a4a4a;font-weight:bold;border:0;background-position:right 0;text-decoration:none !important}
+.btn25.blue{background-position:0 -30px}
+.btn25.blue *{background-position:right -30px !important;color:#fff !important}
+.btn25.black{background-position:0 -60px}
+.btn25.black *{background-position:right -60px !important;color:#fff !important}

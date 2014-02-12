@@ -1,0 +1,16 @@
+<query id="getIssueCountByStatus" action="select">
+	<tables>
+        <table name="issues" />
+	</tables>
+	<columns>
+		<column name="status" />
+		<column name="count(*)" alias="count" />
+	</columns>
+	<conditions>
+		<condition operation="equal" column="milestone_srl" var="milestone_srl" notnull="notnull" />
+		<condition operation="equal" column="module_srl" var="module_srl" notnull="notnull" pipe="and" />
+	</conditions>
+	<groups>
+		<group column="status" />
+	</groups>
+</query>

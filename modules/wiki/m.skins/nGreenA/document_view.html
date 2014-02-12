@@ -1,0 +1,32 @@
+<include target="header.html" />
+<header class="mod_head">
+    <h2 class="mod_title"><span>{$oDocument->getTitle()}</span></h2>
+    <button class="btn_srch">search</button>
+    <nav class="nav_wk b00"|cond="$oDocumentPrev" class="nav_wk b10"|cond="!$oDocumentPrev"> <!-- [D] class opt => b00, b10, b01 -->
+        <a href="{getUrl('','mid',$mid)}" class="f">Front</a>
+        <a href="{getUrl('act','dispWikiTitleIndex','entry','','document_srl','')}" class="l">List</a>
+    </nav>
+    <form action="{getUrl()}" method="get" class="srch" no-error-return-url="true">
+        <fieldset>
+        <legend>{$lang->cmd_move}</legend>
+            <input type="hidden" name="mid" value="{$mid}" />
+            <input type="hidden" name="vid" value="{$vid}" />
+            <input type="hidden" name="act" value="dispWikiTitleIndex" />
+            <input type="hidden" name="category" value="{$category}" />
+            <input type="hidden" name="search_target" value="title_content" />
+            <span><input type="search" name="search_keyword" placeholder="Search..." /></span>
+        </fieldset>
+    </form>
+</header>
+<article class="wk_article">
+   {$oDocument->getContent(false)}
+</article>
+<footer class="ctrl_btm">
+    <nav class="nav_view">
+        <ul>
+        <li><a href="{$oDocumentPrev->getPermanentUrl()}"|cond="$oDocumentPrev" class="ui_txt_sty"|cond="$oDocumentPrev" class="ui_txt_sty off"|cond="!$oDocumentPrev">Prev</a></li>
+        <li><a href="{getUrl('act','displayWikiCommentList','document_srl', $oDocument->document_srl)}" class="ui_txt_sty">Comments</a></li>
+        <li><a href="{$oDocumentNext->getPermanentUrl()}"|cond="$oDocumentNext" class="ui_txt_sty"|cond="$oDocumentNext" class="ui_txt_sty off"|cond="!$oDocumentNext" >Next</a></li>
+        </ul>
+    </nav>
+</footer>

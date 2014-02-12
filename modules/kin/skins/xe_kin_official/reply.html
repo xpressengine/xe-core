@@ -1,0 +1,58 @@
+<include target="header.include.html" />
+<load target="./js/editor_script.js" />
+
+<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+
+ <div class="section clearfix">
+        <h2 class="sec_title"><block cond="$selected_reply"><span class="red">{$lang->solved_question}</span></block><block cond="!$selected_reply"><span class="green">{$lang->open_question}</span></block></h2>
+        <div class="corner01">
+            <div class="question">
+                <div class="pf_img">
+					{@ 
+						$oMemberModel = &getModel('member');
+						$memberImage = $oMemberModel->getProfileImage($oDocument->get('member_srl'));
+					}
+					<img cond="$memberImage" border="0" src="{$memberImage->src}" width="90" height="90">
+					<img cond="!$memberImage" src="img/default_profile_pic90.png" width="90" height="90" alt="">
+				</div>
+                <div class="pg">    
+                    <div class="kin_header">
+                        <h3 class="pg_title">{$oDocument->getTitle()}</h3>
+                        <div class="meta">
+                            <span class="cate">{$categories[$oDocument->get('category_srl')]->title}</span>
+                            <span class="author">{$oDocument->getNickName()}</span>
+                            <span class="date">{$oDocument->getRegdate('Y.m.d')} {$oDocument->getRegdate('H:i')}</span>
+                            <span class="point status"><strong class="red">Given Points  {$oDocument->get('point')}</strong></span>
+                        </div>
+						<a href="#" class="kin_btn" data="{$oDocument->get('voted_count')}" onclick="voteQuestion({$oDocument->document_srl}); return false;"><span>{$lang->voted_count} ( <strong id="q_voteno_{$oDocument->document_srl}">{$oDocument->get('voted_count')}</strong> )</span></a>
+                    </div><!-- //header -->
+                    <div class="pg_txt">
+						 {$oDocument->getContent(false,false)}
+                    </div><!-- //pg_txt -->
+                </div><!-- //pg -->
+            </div><!-- //question -->
+            <!-- border-round elements -->
+            <span class="corn tl"></span><span class="corn tr"></span><span class="corn bl"></span><span class="corn br"></span>
+        </div><!-- //corner01 -->
+</div><!-- //section -->
+
+<form action="./" method="post" ruleset="insertReply" id="fo_kin_reply" class="writeForm">
+	<input type="hidden" name="act" value="procKinInsertReply" />
+	<input type="hidden" name="mid" value="{$mid}" />
+	<input type="hidden" name="document_srl" value="{$oDocument->document_srl}" />
+	<input type="hidden" name="comment_srl" value="{$oReply->get('comment_srl')}" />
+	<input type="hidden" name="content" value="" />
+	<input type="hidden" name="title" value="" />
+    <div class="section compose_ans clearfix ">
+        <h2 class="sec_title">{$lang->cmd_reply}</h2>
+        <div class="ta_box">
+			{$oReply->getEditor()}
+        </div><!-- //ta_box -->
+        <a href="" class="btn_back" onclick="location.href=current_url.setQuery('act','dispKinView');return false;"><span>{$lang->back}</span></a>
+        <span class="btn_sbmt"><input type="submit" value="{$lang->cmd_registration}"></span>
+    </div>
+</form>
+
+<include target="footer.include.html" />

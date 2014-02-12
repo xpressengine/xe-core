@@ -1,0 +1,28 @@
+@charset "utf-8";
+
+/* Main Topic */
+.ideationBanner{ position:relative; height:170px; margin:0 0 26px 0; background:#F2F2F1 url(../img/bgMainTopic.gif) no-repeat right top; border:1px solid #DBDBDB; position:relative; overflow:hidden; padding-right:30px;}
+.ideationBanner .topicContainer{ position:relative; height:170px; overflow:auto; margin-right:-20px; overflow:hidden;}
+.ideationBanner dl{ position:relative; margin:0; padding:50px 25px 0 25px; display:none; overflow:hidden;}
+.ideationBanner dl.show { display:block; }
+.ideationBanner dt{ margin:0; padding:0; font-family:AppleGothic, NanumGothic, "Malgun Gothic"; font-size:21px; font-weight:bold; letter-spacing:-1px; line-height:1;}
+.ideationBanner dt em,
+.ideationBanner dt em span{ position:relative; font-style:normal; font-size:11px; color:#fff; display:inline-block; height:19px; line-height:17px; background:url(../img/bgTopicLabel.gif) no-repeat;}
+.ideationBanner dt em{ position:absolute; top:26px; left:25px; background-position:left top; margin-right:8px;}
+.ideationBanner dt em span{ left:8px; background-position:right top; padding:0 10px 0 2px;}
+.ideationBanner dt strong{ color:#6caedf;}
+.ideationBanner dd { margin:0; padding:0; color:#7d7d7d; font-size:11px; line-height:1.5; letter-spacing:-1px;}
+.ideationBanner dd p{ margin-top:0; padding-top:0.5em;}
+.ideationBanner dd a{ color:#7d7d7d; font-weight:bold; background:url(../img/iconJoin.gif) no-repeat right center; padding-right:8px;}
+
+.ideationNavigation {position:absolute; right:24px; bottom:18px; list-style:none; margin:0; padding:0;}
+.ideationNavigation li{ display:inline;}
+.ideationNavigation li a{ display:inline-block; width:19px; height:13px; overflow:hidden; background-image:url(../img/buttonTopicNavigator.gif); background-repeat:no-repeat;}
+.ideationNavigation li.nav1 a{ background-position:0 0;}
+.ideationNavigation li.nav2 a{ background-position:0 -13px;}
+.ideationNavigation li.nav3 a{ background-position:0 -26px;}
+.ideationNavigation li a span{ font-size:0; line-height:0;}
+.ideationNavigation.topic1 .nav1 a{ background-position:-19px 0;}
+.ideationNavigation.topic2 .nav2 a{ background-position:-19px -13px;}
+.ideationNavigation.topic3 .nav3 a{ background-position:-19px -26px;}
+

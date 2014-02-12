@@ -1,0 +1,34 @@
+<include target="_header.html" />
+
+<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+
+<form action="./" method="get" ruleset="deleteKin">
+<input type="hidden" name="act" value="procKinAdminDelete" />
+<input type="hidden" name="page" value="{$page}" />
+<input type="hidden" name="module_srl" value="{$module_info->module_srl}" />
+
+    <h3 class="xeAdmin">{$lang->confirm_delete}</h3>
+	<div class="table">
+		<table cellspacing="0" class="rowTable">
+		<tr>
+			<th scope="row" width="20%"><div>{$lang->module_name}</div></th>
+			<td class="wide">{$module_info->mid}</td>
+		</tr>
+		<tr>
+			<th scope="row"><div>{$lang->module}</div></th>
+			<td>{$module_info->module}</td>
+		</tr>
+		<tr>
+			<th scope="row"><div>{$lang->document_count}</div></th>
+			<td>{$document_count}</td>
+		</tr>
+		</table>
+	</div>
+	<div class="btnArea">
+		<span class="btn"><input type="submit" value="{$lang->cmd_delete}" /></span>
+		<span class="btn"><a href="{getUrl('act','dispKinAdminList')}">{$lang->cmd_back}</a></span>
+	</div>
+
+</form>

@@ -1,0 +1,23 @@
+<include target="header.html" />
+<section class="section">
+	<div class="x_tabbable">
+		<ul class="x_nav x_nav-tabs">
+			<li loop="$wiki_markup_list => $markup">
+				<a href="#{$markup}"><!--@ echo $lang->{$markup}; --><!--@end--></a>
+			</li>
+		</ul>
+		<div class="x_tab-content">
+			<div loop="$wiki_markup_list => $markup" id="{$markup}" class="x_tab-pane">
+				<!--@ echo nl2br($lang->{$markup . '_help'}); --><!--@end-->
+			</div>
+		</div>
+	</div>
+</section>
+<script>
+jQuery(function($) {
+	$('.x_tabbable .x_tab-pane').each(function(index){
+		$(this).attr('data-index', index+1);
+	}).eq(0).show();
+	$('.x_tabbable>.x_nav-tabs>li:first-child, .x_tabbable .x_tab-pane:first-child').addClass('x_active');
+});
+</script>

@@ -1,0 +1,12 @@
+<filter name="insert_guestbook_reply" module="textyle" act="procTextyleGuestbookWrite">
+  <form>
+    <node target="mid" required="true" />
+    <node target="content" required="true" minlength="1" />
+  </form>
+  <parameter />
+  <response callback_func="completeInsertGuestbookReply">
+    <tag name="error" />
+    <tag name="message" />
+    <tag name="page" />
+  </response>
+</filter>

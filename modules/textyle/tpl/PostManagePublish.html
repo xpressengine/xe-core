@@ -1,0 +1,286 @@
+<!--#include("_tool_header.html")-->
+<!--%load_js_plugin("ui.calendar")-->
+
+<!-- Content -->
+
+<div id="content">
+	<!-- writingHeader -->
+	<div class="contentHeader depositHeader">
+		<h3 class="h3">{$lang->cmd_publish}</h3>
+	</div>
+	<!-- /writingHeader -->
+	<form action="" method="post" onsubmit="return publishPost(this, publish_post)" class="{$editor_skin}">
+		<input type="hidden" name="document_srl" value="{$oDocument->document_srl}" />
+		<input type="hidden" name="mid" value="{$mid}" />
+		<input type="hidden" name="vid" value="{$vid}" />
+		<fieldset>
+			<legend>{$lang->cmd_publish}</legend>
+			<!-- Post Title -->
+			<div class="pTitle">
+				<fieldset>
+					<legend>{$lang->title}</legend>
+					<div class="title">
+						<h2>{$oDocument->getTitleText()}</h2>
+						<!-- wPublish -->
+						<div class="wPublish">
+							<span class="btnGray medium"><a href="{getUrl('act','dispTextyleToolPostManageWrite')}">{$lang->cmd_edit}</a></span>
+						</div>
+						<!-- /wPublish -->
+					</div>
+					<span class="cap capLeft"></span> <span class="cap capRight"></span>
+				</fieldset>
+			</div>
+			<!-- /Post Title -->
+			
+			<!-- /Textyle Editor -->
+			<!-- wOption -->
+			<div class="wOption">
+				<fieldset class="visualFieldset">
+					<legend class="visualLabel">Where</legend>
+					<fieldset class="optionTextyle">
+						<legend>{$lang->posting_option} - Textyle</legend>
+						<table border="1" cellspacing="0" summary="{$lang->posting_option}" class="tableData">
+							<caption class="check">{$textyle->getTextyleTitle()} - {$lang->publish_option}</caption>
+							<tr class="first">
+								<th scope="row">
+									<label for="category">{$lang->category}</label>
+								</th>
+								<td class="title">
+									<select name="category_srl" id="category">
+										<option value="">{$lang->category}&nbsp;</option>
+	
+										{@$_i=0}
+										<!--@foreach($category_list as $val)-->
+											<option 
+											
+<!--@if(!$val->grant)-->disabled="disabled"<!--@end--> value="{$val->category_srl}" <!--@if((!$oDocument->get('category_srl')&&$_i==0)||($val->category_srl == $oDocument->get('category_srl')))-->selected="selected"<!--@end-->>{str_repeat("&nbsp;&nbsp;",$val->depth)} {$val->title} ({$val->document_count})</option>
+
+											{@$_i++}
+										<!--@endforeach-->
+									</select>
+									<span class="btnGray medium addCategoryToggle"><button type="button" onclick="jQuery('#add_category').toggleClass('open')"><img src="img/iconAdd.gif" width="8" height="8" alt="{$lang->add_category}" /></button></span>
+									<span id="add_category" class="addCategory">
+										<input type="text" name="add_category" class="iText" />
+										<span class="btnGray medium"><button type="button" onclick="addCategory()">{$lang->cmd_insert}</button></span>
+									</span>
+	
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">
+									<label for="tag">{$lang->tag}</label>
+								</th>
+								<td class="title">
+									<div class="fItem">
+										<label class="iLabel" for="tags">{$lang->about_tag}</label>
+										<input type="text" id="tags" name="tags" class="iText iText" title="{$lang->about_tag}" value="<!--@if(htmlspecialchars($oDocument->get('tags')))-->{htmlspecialchars($oDocument->get('tags'))}<!--@end-->" />
+									</div>
+									<!--@if($tag_list)-->
+									{@$_i=0;}
+									<div class="usedTag">
+										<ul class="usedTagA">
+											<!--@foreach($tag_list as $v)-->
+											<li>
+											<button type="button" onclick="appendTag('{$v->tag}')">{$v->tag}</button>
+											</li>
+											<!--@if($_i==10)-->
+										</ul>
+										<ul class="usedTagB">
+											<!--@end-->
+											{@$_i++}
+											<!--@end-->
+										</ul>
+										<button type="button" class="more" onclick="jQuery('ul.usedTagB').toggleClass('open')">&raquo; {$lang->more}</button>
+									</div>
+									<!--@end-->
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">
+									<label for="tag">{$lang->send_trackback}</label>
+								</th>
+								<td class="title">
+									<div class="trackbackOption">
+										<div class="item">
+											<input type="text" name="trackback_url" class="iText trackbackURL" />
+											<select name="trackback_charset">
+												<option value='UTF-8'>UTF-8</option>
+												<option value='EUC-KR'>EUC-KR</option>
+												<option value='EUC-JP'>EUC-JP</option>
+												<option value='SHIFT_JIS'>SHIFT_JIS</option>
+												<option value='EUC-CN'>EUC-CN</option>
+												<option value='HZ'>HZ</option>
+												<option value='BIG5'>BIG5</option>
+											</select>
+										</div>
+										<span class="btnGray medium addTrackbackURL"><button type="button" onclick="appendTrackbackForm();return false;"><img src="img/iconAdd.gif" width="8" height="8" alt="{$lang->add_input_trackback}" /></button></span>
+									</div>
+									{@$trackbacks = $oPublish->getTrackbacks()}
+									<!--@if(count($trackbacks))-->
+									<ul class="trackbackLogs">
+									<!--@foreach($trackbacks as $key => $val)-->
+										<li>{$key} - {$val->log}</li>
+									</div>
+									<!--@end-->
+									</ul>
+									<!--@end-->
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">
+									<label for="postURL">{$lang->post_url}</label>
+								</th>
+								<td class="title">
+								{str_replace('__entry__',"<input name=\"alias\" type=\"text\" class=\"iText\" style=\"width:200px\" id=\"postURL\" value=\"$alias\" onblur=\"checkAlias(this.value,'$alias')\"/>",getFullUrl('','mid',$mid,'entry','__entry__'))}
+									<input type="hidden" name="use_alias" value="N"/>
+									<em class="msg_used_alias" style="display:none">{$lang->msg_already_used_url}</em></td>
+							</tr>
+							<tr>
+								<th scope="row">{$lang->comm_management}</th>
+								<td class="title">
+									<input name="allow_comment" type="checkbox" value="Y" class="inputCheck" id="checkReply" <!--@if($from_saved || $oDocument->allowComment())-->checked="checked"<!--@end--> />
+									<label for="checkReply">{$lang->allow_comment} </label>
+									<input name="allow_trackback" type="checkbox" value="Y" class="inputCheck" id="checkTrackback" <!--@if($from_saved || $oDocument->allowTrackback())-->checked="checked"<!--@end--> />
+									<label for="checkTrackback">{$lang->allow_trackback} </label>
+								</td>
+							</tr>
+						</table>
+					</fieldset>
+					{@$_apis = $oPublish->getApis()}
+					<!--@foreach($_apis as $val)-->
+					<!--@if($val->enable == 'Y')-->
+					<fieldset class="optionAPI">
+						<legend>API {$lang->posting_option}</legend>
+						<table border="1" cellspacing="0" summary="{$lang->posting_option}" class="tableData">
+							<caption class="check">{$val->blogapi_site_title} <span class="domain">(<a href="{$val->blogapi_site_url}" onclick="window.open(this.href);return false;">{$val->blogapi_site_url}</a>)</span> - {$lang->publish_option}</caption>
+							<tr class="first">
+								<th scope="row">{$lang->publish}</th>
+								<td class="title"><input name="blogapi_{$val->api_srl}" type="checkbox" value="Y" <!--@if($val->log)-->checked="checked"<!--@end--> class="inputCheck" id="blog_{$val->api_srl}" /><label for="blog_{$val->api_srl}">{$lang->publish_this_blog}</label> {$val->log}</td>
+							</tr>
+							<tr>
+								<th scope="row">
+									<label for="category">{$lang->category}</label>
+								</th>
+								<td class="title">
+									<select name="blogapi_category_{$val->api_srl}" id="api_category">
+										<option value="">{$lang->category}</option>
+										<!--@foreach($val->categories as $v)-->
+										<option value="{$v}" <!--@if($v==$val->category)-->selected="selected"<!--@end-->>{$v}</option>
+										<!--@end-->
+									</select>
+								</td>
+							</tr>
+						</table>
+					</fieldset>
+					<!--@end-->
+					<!--@end-->
+					<fieldset class="optionMicroBlog">
+<!--@if($oTextyle->getEnableMe2day()||$oTextyle->getEnableTwitter())--> 
+						<legend>{$lang->posting_option} - Micro Blog</legend>
+						<table border="1" cellspacing="0" summary="{$lang->posting_option}" class="tableData">
+							<caption class="check">{$lang->ask_micro_publish} </caption>
+							<tr class="first">
+								<th scope="row">{$lang->noti_publish}</th>
+								<td class="title">
+									<p><input name="send_me2day" type="checkbox" id="noti_me2day" class="inputCheck" value="Y" <!--@if(!$oTextyle->getEnableMe2day())-->disabled="disabled"<!--@end-->/><label for="noti_me2day">me2DAY <!--@if($oPublish->isMe2dayPublished())-->({$lang->published})<!--@end--></label><input name="send_twitter" type="checkbox" id="noti_twitter" class="inputCheck" value="Y" <!--@if(!$oTextyle->getEnableTwitter())-->disabled="disabled"<!--@end-->/><label for="noti_twitter">Twitter <!--@if($oPublish->isTwitterPublished())-->({$lang->published})<!--@end--></label></p>
+								</td>
+							</tr>
+						</table>
+<!--@else-->
+
+						<p>&middot; {sprintf($lang->msg_microblog_setup,"<a href=\"" . getUrl('','mid',$mid,'act','dispTextyleToolConfigCommunication') . "\">" . $lang->textyle_second_menus[5]['dispTextyleToolConfigCommunication'] . "</a>")}
+<!--@end-->
+					</fieldset>
+				</fieldset>
+				<fieldset class="visualFieldset">
+					<legend class="visualLabel">When</legend>
+					<fieldset class="optionTime">
+						<legend>{$lang->posting_option} - Time</legend>
+						<table border="1" cellspacing="0" summary="{$lang->posting_option}" class="tableData">
+							<caption class="check">{$lang->ask_time_publish}</caption>
+							<tr class="first">
+								<th scope="row">{$lang->publish_date}</th>
+								<td class="title">
+									<input name="subscription" type="radio" value="N" class="inputRadio subscription" id="publishNow" <!--@if($subscription!='Y')-->checked="checked"<!--@end--> />
+									<label for="publishNow">{$lang->publish_now}</label>
+									<input name="subscription" type="radio" value="Y" class="inputRadio subscription" id="publishBooking" <!--@if($subscription=='Y')-->checked="checked"<!--@end-->/>
+									<label for="publishBooking">{$lang->publish_reserve}</label>
+									<div class="bookingLayer<!--@if($subscription=='Y')--> open<!--@end-->">
+										<input name="publish_date_yyyymmdd" type="text" class="disabled_subscription_n iText yymmdd inputDate" value="{$publish_date_yyyymmdd}" maxlength="10"  title="{$lang->ymd}" disabled="disabled" id="publishDate" />
+										<div class="calendar">
+											<div id="calendar-holder"></div>
+											<button type="button" class="btnCalendar"><span>{$lang->calendar}</span></button>
+										</div>
+										<input name="publish_date_hh" value="{$publish_date_hh}" type="text" class="disabled_subscription_n iText hh" maxlength="2" title="{$lang->unit_hour}" disabled="disabled" />
+										:
+										<input name="publish_date_ii" value="{$publish_date_ii}" type="text" class="disabled_subscription_n iText mm" maxlength="2" title="{$lang->unit_min}" disabled="disabled" />
+									</div>
+								</td>
+							</tr>
+						</table>
+					</fieldset>
+				</fieldset>
+				<!-- wPublish -->
+				<div class="wPublish">
+					<span class="btn"><button type="submit">{$lang->cmd_publish}</button></span>
+				</div>
+				<!-- /wPublish -->
+			</div>
+			<!-- /wOption -->
+		</fieldset>
+	</form>
+</div>
+<hr />
+<!-- /Content -->
+<!-- Extension -->
+<!--#include("_tool_menu.html")-->
+<!-- Extension -->
+<script>
+	jQuery(function($){
+		{@ $_s = array_pop($lang->unit_week)}
+		$('#calendar-holder').calendar({
+			type : '{$type}',
+			button : '#calendar-holder+button.btnCalendar',
+			activeDate : "{zdate($selected_date,'Y/m/d')}",
+			select : function(year, month, date) {
+				var str = year+'.'+(month>9?'':'0')+month+'.'+(date>9?'':'0')+date;
+				$('#publishDate').val(str);
+				$('#publishBooking').get(0).checked = true;
+				$('.disabled_subscription_y').each(function(){ this.disabled = true; });
+				$('.disabled_subscription_n').each(function(){ this.disabled = false; });
+			},
+			lang : {
+				weekdays : '{$_s},{implode(',',$lang->unit_week)}',
+				today : '{$lang->today}',
+				prevmonth : '{$lang->before_month}',
+				nextmonth : '{$lang->after_month}',
+				close : '{$lang->cmd_close}'
+			}
+		});
+
+
+		jQuery('input[name=subscription]').change(function(e) {
+			if(jQuery(this).val()=="Y") {
+				jQuery('.disabled_subscription_y').each(function(){ this.disabled = true; });
+				jQuery('.disabled_subscription_n').each(function(){ this.disabled = false; });
+				jQuery('.bookingLayer').addClass('open');
+			} else {
+				jQuery('.disabled_subscription_y').each(function(){ this.disabled = false; });
+				jQuery('.disabled_subscription_n').each(function(){ this.disabled = true; });
+				jQuery('.bookingLayer').removeClass('open');
+			}
+		});
+<!--@if($subscription=='Y')-->
+	jQuery('input[name=subscription][value=Y]').change();
+<!--@end-->
+
+
+
+
+	});
+	
+</script>
+
+<!--#include("_tool_footer.html")-->
+
+

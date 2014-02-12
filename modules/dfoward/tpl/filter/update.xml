@@ -1,0 +1,10 @@
+<filter name="update" module="dfoward" act="procDfowardUpdate" confirm_msg_code="confirm_update">
+    <form>
+        <node target="dfoward_srl" required="true" filter="number" />
+        <node target="hostname" required="true" filter="alpha_number" minlength="2" maxlength="250" />
+        <node target="target_url" required="true" maxlength="250" />
+        <node target="title" required="true" maxlength="250" minlength="2" />
+    </form>
+    <parameter />
+    <response callback_func="completeUpdate" />
+</filter>

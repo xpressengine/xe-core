@@ -1,0 +1,17 @@
+<include target="header.html" />
+<div cond="$oDocument && $oDocument->isExists() && $grant->manager" class="mTitle">
+	<h1><a href="{$oDocument->getPermanentUrl()}">{$oDocument->getTitle()}</a></h1>
+	<a cond="$oDocument->isExists()&&$act!='dispWikiEditPage'" href="{getUrl('act','dispWikiEditPage','entry',$entry)}">{$lang->cmd_edit}</a>
+	<button cond="$oDocument->isExists()&&$grant->delete_document&&$oDocument->get('title')!='Front Page'" type="button" onclick="if(confirm('{$lang->confirm_delete}')) { doDeleteWiki('{$oDocument->document_srl}'); }; return false;">{$lang->cmd_delete}</button>
+</div>
+<div class="mBody">
+	{$oDocument->getContent(false)}
+	<div class="index"><img widget="wiki_tree" skin="xe_v3" colorset="white" srl="{$module_info->module_srl}" /></div>
+	<div class="mNav">
+		<a cond="$oDocumentPrev && $oDocumentPrev->getTitle() != 'Front Page'" href="{$oDocumentPrev->getPermanentUrl()}" class="mPrev">{$oDocumentPrev->getTitle()}</a>
+		<a cond="$oDocumentPrev && $oDocumentPrev->getTitle() == 'Front Page'" href="{$oDocumentPrev->getPermanentUrl()}" class="mPrev">{$module_info->title_alt}</a>
+		<a href="{getUrl('','mid',$mid,'listStyle',$listStyle)}" class="mList">처음으로</a>
+		<a cond="$oDocumentNext" href="{$oDocumentNext->getPermanentUrl()}" class="mNext">{$oDocumentNext->getTitle()}</a>
+	</div>
+</div>
+<include target="footer.html" />

@@ -1,0 +1,4 @@
+<table name="kin_answer_vote">
+    <column name="comment_srl" type="number" size="11" notnull="notnull" unique="idx_kin" />
+    <column name="vote_ipaddress" type="varchar"  size="128"/>
+</table>

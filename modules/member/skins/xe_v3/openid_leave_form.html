@@ -1,0 +1,23 @@
+<include target="common_header.html" />
+<!--%import("filter/openid_leave_member.xml")-->
+
+
+<form id="fo_insert_member" action="./" method="get" onsubmit="return procFilter(this, openid_leave_member)">
+	<input type="hidden" name="mid" value="{$mid}" />
+	<input type="hidden" name="document_srl" value="{$document_srl}" />
+	<input type="hidden" name="page" value="{$page}" />
+	<h1 class="h1">{$member_title = $lang->msg_leave_member}</h1>
+    <table width="100%" border="1" cellspacing="0">
+    <tr>
+        <th>{$lang->user_id}</th>
+        <td class="wide">
+            {$member_info->user_id}
+            <p>{$lang->about_openid_leave}</p>
+        </td>
+    </tr>
+    </table>
+    <div class="btnArea">
+		<span class="btn"><input type="submit" value="{$lang->cmd_leave}" /></span>
+	</div>
+</form>
+<include target="common_footer.html" />

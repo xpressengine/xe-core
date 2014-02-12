@@ -1,0 +1,123 @@
+<!--#include("_tool_header.html")-->
+<!--%import("css/pagination.css",optimized=false)-->
+
+		<!-- Content -->
+			<div id="content">
+				
+				<!-- contentHeader -->
+				<div class="contentHeader wasteHeader">
+					<h3 class="h3">{$lang->textyle_second_menus[1]['dispTextyleToolPostManageBasket']}</h3>
+				</div>
+				<!-- /contentHeader -->
+				
+				<!-- listHeader -->
+				<div class="listHeader">
+					<p class="info"> <!--@if($search_keyword)-->{sprintf($lang->search_result_count,$page_navigation->total_count)}<!--@else-->{sprintf($lang->total_result_count,$page_navigation->total_count)}<!--@end--></p>
+					<fieldset class="search">
+						<legend>{$lang->cmd_search}</legend>
+						<form action="{Context::getRequestUri()}">
+							<input type="hidden" name="published" value="{$published}" />
+							<input type="hidden" name="act" value="{$act}" />
+							<input type="hidden" name="mid" value="{$mid}" />
+							<input type="hidden" name="vid" value="{$vid}" />
+							<select name="search_target">
+								<!--@foreach($search_option as $key => $val)-->
+								<option value="{$key}" <!--@if($search_target==$key)-->selected="selected"<!--@end-->>{$val}</option>
+								<!--@end-->
+							</select>
+							<input name="search_keyword" type="text" title="{$lang->cmd_search}" class="iText" value="{htmlspecialchars($search_keyword)}"/>
+							<span class="btnGray medium"><input type="submit" value="{$lang->cmd_search}" /></span>
+						</form>
+					</fieldset>
+				</div>
+				<!-- /listHeader -->
+				
+				<!-- Table Data -->
+				<fieldset>
+					<legend>{$lang->basket_management}</legend>
+					<form action="" method="post">
+						<table border="1" cellspacing="0" summary="{$lang->basket_list}" class="tableData">
+							<thead>
+								<tr>
+									<th scope="col">
+										<input type="checkbox" class="inputCheck" onclick="jQuery('input.boxlist').click()" />
+									</th>
+									<th scope="col" class="title">{$lang->title}</th>
+									<th scope="col">{$lang->category}</th>
+									<th scope="col">{$lang->comment}</th>
+									<th scope="col">{$lang->trackback}</th>
+									<th scope="col">{$lang->last_updated}</th>
+									<th scope="col">&nbsp;</th>
+									<th scope="col">&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody>
+
+								<!--@if(count($trash_list)==0)-->								
+								<tr>
+									<td class="noData" colspan="8"><p>{$lang->no_trash}</p></td>
+								</tr>
+								<!--@else-->
+									<!--@foreach($trash_list as $no => $post)-->
+
+								<tr>
+									<td>
+										<input type="checkbox" name="document_srl" value="{$post->document_srl}" class="inputCheck boxlist" />
+									</td>
+
+									<td class="title"><a href="#" class="postTitle">{$post->getTitle()}</a></td>
+									<td>{$category_list[$post->get('category_srl')]->title}</td>
+									<td class="small">{$post->getCommentCount()}</td>
+									<td class="small">{$post->getTrackbackCount()}</td>
+									<td class="small">{zdate($post->get('last_update'),'Y.m.d')}</td>
+									<td><span class="btnGray small"><button type="button" onclick="restorePostItem({$post->document_srl},{$page})">{$lang->cmd_restore}</button></span></td>
+									<td><button type="button" class="btnTableData" onclick="deletePostItem({$post->document_srl},{$page})"><span>{$lang->cmd_empty}</span></button></td>
+								</tr>
+									<!--@end-->
+								<!--@end-->
+
+							</tbody>
+						</table>
+						
+						<div class="listFooter">
+							
+							<!-- Change-->
+							<div class="change">
+								<p class="p1">{$lang->selected_articles}</p>
+								<span class="btnGray large"><button type="button" onclick="restorePostItems({$page})">{$lang->cmd_restore}</button></span>
+								<span class="btnGray large"><button type="button" onclick="deletePostItems({$page})"><img src="img/iconClear.gif" width="8" height="8" alt="" class="icon" />{$lang->cmd_empty_basket}</button></span>
+								
+							</div>
+							<!-- /Change -->
+							
+							<!-- Pagination -->
+							<div class="pagination">
+								<a href="{getUrl('page','','mid',$mid)}" class="prev"><span>{$lang->first_page}</span></a>
+
+								<!--@while($page_no = $page_navigation->getNextPage())-->
+									<!--@if($page == $page_no)-->
+										<strong>{$page_no}</strong> 
+									<!--@else-->
+										<a href="{getUrl('page',$page_no,'mid',$mid)}">{$page_no}</a> 
+									<!--@end-->
+								<!--@end-->
+
+								<a href="{getUrl('page',$page_navigation->last_page,'module_srl','')}" class="next"><span>{$lang->last_page}</span></a>
+								</div>
+							<!-- /Pagination -->
+							
+						</div>
+						
+					</form>
+				</fieldset>
+				<!-- /Table Data -->
+				
+			</div>
+			<hr />
+			<!-- /Content -->
+			
+			<!-- Extension -->
+				<!--#include("_tool_menu.html")-->
+			<!-- Extension -->
+
+<!--#include("_tool_footer.html")-->

@@ -1,0 +1,20 @@
+<query id="updateTextyleGuestbook" action="update">
+    <tables>
+        <table name="textyle_guestbook" />
+    </tables>
+	<columns>
+		<column name="password" var="password" default="" />
+		<column name="user_name" var="user_name" notnull="notnull" default="" />
+		<column name="user_id" var="user_id" notnull="notnull" default="" />
+		<column name="nick_name" var="nick_name" notnull="notnull" default="" />
+		<column name="email_address" var="email_address" filter="email" maxlength="250" />
+		<column name="homepage" var="homepage" default="" />
+		<column name="content" var="content"  notnull="notnull" default="" />
+		<column name="is_secret" var="is_secret" default="N" />
+		<column name="last_update" var="last_update" default="curdate()" />
+		<column name="ipaddress" var="ipaddress" default="ipaddress()" />
+	</columns>
+	<conditions>
+        <condition operation="equal" column="textyle_guestbook_srl" var="textyle_guestbook_srl" filter="number" notnull="notnull" />
+    </conditions>
+</query>

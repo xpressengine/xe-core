@@ -1,0 +1,2158 @@
+  8253     gonom9 <?php
+  8253     gonom9     /**
+  8253     gonom9      * @class  memberController
+  8253     gonom9      * @author NHN (developers@xpressengine.com)
+  9275 sinsy200@gmail.com      * @brief Controller class of member module
+  8253     gonom9      **/
+  8253     gonom9 
+  8253     gonom9     class memberController extends member {
+  8357     ovclas 		var $memberInfo;
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Initialization
+  8253     gonom9          **/
+  8253     gonom9         function init() {
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Log-in by checking user_id and password
+  8253     gonom9          **/
+  8253     gonom9         function procMemberLogin($user_id = null, $password = null, $keep_signed = null) {
+ 10182 ngleader@gmail.com 			if(!$user_id && !$password && Context::getRequestMethod() == 'GET')
+ 10182 ngleader@gmail.com 			{
+ 10182 ngleader@gmail.com 				$this->setRedirectUrl(getNotEncodedUrl(''));
+ 10182 ngleader@gmail.com 				return new Object(-1, 'null_user_id');
+ 10182 ngleader@gmail.com 			}
+ 10182 ngleader@gmail.com 
+  9531 namnyams@gmail.com 			// Variables
+  9531 namnyams@gmail.com 			if(!$user_id) $user_id = Context::get('user_id');
+  9531 namnyams@gmail.com 			$user_id = trim($user_id);
+  8253     gonom9 
+  9531 namnyams@gmail.com 			if(!$password) $password = Context::get('password');
+  9531 namnyams@gmail.com 			$password = trim($password);
+  8253     gonom9 
+  9531 namnyams@gmail.com 			if(!$keep_signed) $keep_signed = Context::get('keep_signed');
+  9531 namnyams@gmail.com 			// Return an error when id and password doesn't exist
+  9531 namnyams@gmail.com 			if(!$user_id) return new Object(-1,'null_user_id');
+  9531 namnyams@gmail.com 			if(!$password) return new Object(-1,'null_password');
+  8253     gonom9 
+  9531 namnyams@gmail.com 			$output = $this->doLogin($user_id, $password, $keep_signed=='Y'?true:false);
+  9531 namnyams@gmail.com 			if (!$output->toBool()) return $output;
+  8253     gonom9 
+  9531 namnyams@gmail.com 			$oModuleModel = &getModel('module');
+  9531 namnyams@gmail.com 			$config = $oModuleModel->getModuleConfig('member');
+  8253     gonom9 
+  9531 namnyams@gmail.com 			// Check change_password_date
+  9531 namnyams@gmail.com 			$limit_date = $config->change_password_date;
+  8253     gonom9 
+  9531 namnyams@gmail.com 			// Check if change_password_date is set
+  9531 namnyams@gmail.com 			if ($limit_date > 0) {
+  9531 namnyams@gmail.com 				$oMemberModel = &getModel('member');
+  9531 namnyams@gmail.com 				//$member_info = $oMemberModel->getMemberInfoByUserID($user_id, $columnList);
+  9531 namnyams@gmail.com 				if ($this->memberInfo->change_password_date < date ('YmdHis', strtotime ('-' . $limit_date . ' day'))) {
+  9531 namnyams@gmail.com 					$this->setRedirectUrl(getNotEncodedUrl('','vid',Context::get('vid'),'mid',Context::get('mid'),'act','dispMemberModifyPassword'));
+ 10400 namnyams@gmail.com 					return;
+  9531 namnyams@gmail.com 				}
+  9531 namnyams@gmail.com 			}
+  8253     gonom9 
+  9531 namnyams@gmail.com 			if(!in_array(Context::getRequestMethod(),array('XMLRPC','JSON'))) {
+  9825 chschy@gmail.com 				
+  9825 chschy@gmail.com 				if(!$config->after_login_url) {
+  9825 chschy@gmail.com 					$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'mid', Context::get('mid'), 'act', '');
+  9825 chschy@gmail.com 				} else {
+  9825 chschy@gmail.com 					$returnUrl = $config->after_login_url;
+  9825 chschy@gmail.com 				}
+  9825 chschy@gmail.com 
+  9531 namnyams@gmail.com 				$this->setRedirectUrl($returnUrl);
+  9531 namnyams@gmail.com 				return;
+  9531 namnyams@gmail.com 			}
+  8253     gonom9 
+  9531 namnyams@gmail.com 			return $output;
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Login by openid
+  8253     gonom9          **/
+  8253     gonom9         function procMemberOpenIDLogin($validator = "procMemberOpenIDValidate") {
+  8253     gonom9             $oModuleModel = &getModel('module');
+  8253     gonom9             $config = $oModuleModel->getModuleConfig('member');
+  8253     gonom9             if($config->enable_openid != 'Y') $this->stop('msg_invalid_request');
+  8253     gonom9 
+  8253     gonom9             if(!defined('Auth_OpenID_RAND_SOURCE') && !file_exists("/dev/urandom"))
+  8253     gonom9             {
+  8253     gonom9                 define('Auth_OpenID_RAND_SOURCE', null);
+  8253     gonom9             }
+  8253     gonom9 
+  8253     gonom9             set_include_path(_XE_PATH_."modules/member/php-openid-1.2.3");
+  8253     gonom9             require_once('Auth/OpenID.php');
+  8253     gonom9             require_once('Auth/OpenID/Consumer.php');
+  8253     gonom9             require_once('Auth/OpenID/XEStore.php');
+  8253     gonom9             $store = new Auth_OpenID_XEStore();
+  8253     gonom9             $consumer = new Auth_OpenID_Consumer($store);
+  8253     gonom9 
+  8253     gonom9             $user_id = Context::get('user_id');
+  8253     gonom9             if (!$user_id) $user_id = Context::get('openid');
+  9275 sinsy200@gmail.com             $auth_request = $consumer->begin($user_id);
+  8253     gonom9             $auth_request->addExtensionArg('sreg', 'required', 'email');
+  8253     gonom9             $auth_request->addExtensionArg('sreg', 'optional', 'dob');
+  8253     gonom9             if(!$auth_request)
+  8253     gonom9             {
+  8253     gonom9                 return new Object(-1, "association failed");
+  8253     gonom9             }
+  8253     gonom9 
+  8253     gonom9             $trust_root = 'http://'.$_SERVER["HTTP_HOST"];
+  8253     gonom9             $referer_url = Context::get('referer_url');
+  8253     gonom9             if (!$referer_url) $referer_url = $_SERVER['HTTP_REFERER'];
+  8253     gonom9             if (!$referer_url)
+  8253     gonom9                 $referer_url = htmlspecialchars_decode(getRequestUri(RELEASE_SSL));
+  8253     gonom9             $goto = urlencode($referer_url);
+  8253     gonom9             $ApprovedURL = Context::getRequestUri(RELEASE_SSL) . "?module=member&act=" . $validator. "&goto=" . $goto;
+  8253     gonom9             $redirect_url = $auth_request->redirectURL($trust_root, $ApprovedURL);
+  8253     gonom9             $this->add("redirect_url", $redirect_url);
+  8253     gonom9             if (Context::getRequestMethod() == 'POST')
+  8253     gonom9                 header("location:" . $redirect_url);
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         function getLegacyUserIDsFromOpenID($openid_identity) {
+  8253     gonom9             //  Issue 17515512: workaround
+  8253     gonom9             $result = array();
+  8253     gonom9             $uri_matches = array();
+  8253     gonom9             preg_match(Auth_OpenID_getURIPattern(), $openid_identity, $uri_matches);
+  8253     gonom9 
+  8253     gonom9             if (count($uri_matches) < 9) {
+  8253     gonom9                 for ($i = count($uri_matches); $i <= 9; $i++) {
+  8253     gonom9                     $uri_matches[] = '';
+  8253     gonom9                 }
+  8253     gonom9             }
+  8253     gonom9 
+  8253     gonom9             $scheme = $uri_matches[2];
+  8253     gonom9             $authority = $uri_matches[4];
+  8253     gonom9             $path = $uri_matches[5];
+  8253     gonom9             $query = $uri_matches[6];
+  8253     gonom9             $fragment = $uri_matches[8];
+  8253     gonom9 
+  8253     gonom9             if ($scheme === null) $scheme = '';
+  8253     gonom9             if ($authority === null) $authority = '';
+  8253     gonom9             if ($path === null) $path = '';
+  8253     gonom9             if ($query === null) $query = '';
+  8253     gonom9             if ($fragment === null) $fragment = '';
+  8253     gonom9 
+  8253     gonom9             if ($scheme == 'http' or $scheme == '')
+  8253     gonom9                 $scheme_part = '';
+  8253     gonom9             else
+  8253     gonom9                 $scheme_part = $scheme."://";
+  8253     gonom9 
+  8253     gonom9 
+  8253     gonom9             if ($path == '' || $path == '/') {
+  8253     gonom9                 $result[] = $scheme_part.$authority.''.$query.$fragment;
+  8253     gonom9                 $result[] = $scheme_part.$authority.'/'.$query.$fragment;
+  8253     gonom9             }
+  8253     gonom9             else {
+  8253     gonom9                 $result[] = $scheme_part.$authority.$path.$query.$fragment;
+  8253     gonom9             }
+  8253     gonom9 
+  8253     gonom9             return $result;
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief openid authentication check
+  8253     gonom9          **/
+  8253     gonom9         function procMemberOpenIDValidate() {
+  8253     gonom9             set_include_path(_XE_PATH_."modules/member/php-openid-1.2.3");
+  8253     gonom9             require_once('Auth/OpenID.php');
+  8253     gonom9             require_once('Auth/OpenID/Consumer.php');
+  8253     gonom9             require_once('Auth/OpenID/XEStore.php');
+  8253     gonom9             require_once('Auth/OpenID/URINorm.php');
+  8253     gonom9 
+  8253     gonom9             $store = new Auth_OpenID_XEStore();
+  8253     gonom9             $consumer = new Auth_OpenID_Consumer($store);
+  8253     gonom9             $response = $consumer->complete($_GET);
+  8357     ovclas 			switch($response->status) {
+  8357     ovclas 				case Auth_OpenID_CANCEL :
+  8357     ovclas 					// Handle if user authentication is canceled
+  8357     ovclas 					return $this->stop('authorization_canceled');
+  8357     ovclas 				case Auth_OpenID_FAILURE :
+  8357     ovclas 					// Handle if user authentication is failed due to a certain problem (for example, openid doesn't exist) (there is no authentication required deunga openid ..)
+  8357     ovclas 					return $this->stop('invalid_authorization');
+  8357     ovclas 				case Auth_OpenID_SUCCESS :
+  8357     ovclas 					// Authentication success!
+  8357     ovclas 					break;
+  8357     ovclas 				default:
+  8357     ovclas 					return $this->stop('invalid_authorization');
+  8357     ovclas 			}
+  8287     ovclas             // Authentication success
+  8253     gonom9             $oMemberModel = &getModel('member');
+  8287     ovclas             // Get zeroboard ID which is corresponded to the openID ID.
+  8253     gonom9             $login_success = false;
+  8253     gonom9             $assoc_member_info = null;
+  8253     gonom9             $openid_identity = $response->signed_args["openid.identity"];
+  8253     gonom9             $args->openid = $openid_identity;
+  8253     gonom9             $output = executeQuery('member.getMemberSrlByOpenID', $args);
+  8253     gonom9 
+  8253     gonom9             if ($output->toBool() && $output->data && !is_array($output->data)) {
+  8253     gonom9                 $member_srl = $output->data->member_srl;
+  8357     ovclas 				$columnList = array('member_srl', 'user_id');
+  8357     ovclas                 $member_info = $oMemberModel->getMemberInfoByMemberSrl($member_srl, 0, $columnList);
+  8253     gonom9                 if ($member_info) {
+  8253     gonom9                     $assoc_member_info = $member_info;
+  8253     gonom9                 }
+  8253     gonom9             }
+  9275 sinsy200@gmail.com 
+  8253     gonom9             $user_id_candidates = $this->getLegacyUserIDsFromOpenID($openid_identity);
+  8253     gonom9             $default_user_id = $user_id_candidates[0];
+  8253     gonom9 
+  8253     gonom9             if ($assoc_member_info != null) {
+  8253     gonom9                 $user_id_candidates = array_merge(array($assoc_member_info->user_id), $user_id_candidates);
+  8253     gonom9             }
+  8253     gonom9             $sreg = $response->extensionResponse('sreg');
+  8253     gonom9 
+  8253     gonom9             foreach($user_id_candidates as $user_id) {
+  8253     gonom9                 $args->user_id = $args->nick_name = $user_id;
+  8287     ovclas                 // Get basic information
+  9275 sinsy200@gmail.com                 $args->email_address = $sreg['email'];
+  8253     gonom9                 $args->user_name = $sreg['fullname'];
+  8253     gonom9                 if(!$args->user_name) list($args->user_name) = explode('@', $args->email_address);
+  8253     gonom9                 $args->birthday = str_replace('-','',$sreg['dob']);
+  8287     ovclas                 // Attempts self-authentication
+  8253     gonom9                 $output = $this->doLogin($args->user_id);
+  8253     gonom9 
+  8253     gonom9                 if ($output->toBool()) {
+  8253     gonom9                     if ($assoc_member_info == null) {
+  8253     gonom9                         $logged_info = Context::get('logged_info');
+  8253     gonom9                         $args->member_srl = $logged_info->member_srl;
+  8253     gonom9                         $args->openid = $openid_identity;
+  8253     gonom9                         executeQuery('member.addOpenIDToMember', $args);
+  8253     gonom9                     }
+  8253     gonom9                     $login_success = true;
+  8253     gonom9                     break;
+  8253     gonom9                 }
+  8253     gonom9             }
+  8287     ovclas             // Member join if self-authentication is failed
+  8253     gonom9             if(!$login_success) {
+  8253     gonom9                 $args->user_id = $args->nick_name = $default_user_id;
+  8253     gonom9                 $args->password = md5(getmicrotime());
+  8253     gonom9 
+  8253     gonom9                 $output = $this->insertMember($args);
+  8253     gonom9                 if(!$output->toBool()) return $this->stop($output->getMessage());
+  8253     gonom9                 $output = $this->doLogin($args->user_id);
+  8253     gonom9                 if(!$output->toBool()) return $this->stop($output->getMessage());
+  8253     gonom9 
+  8253     gonom9                 $logged_info = Context::get('logged_info');
+  8253     gonom9                 $args->member_srl = $logged_info->member_srl;
+  8253     gonom9                 $args->openid = $openid_identity;
+  8253     gonom9                 executeQuery('member.addOpenIDToMember', $args);
+  8253     gonom9             }
+  8253     gonom9 
+  8253     gonom9             Context::close();
+  8287     ovclas             // Move the page
+  8253     gonom9             if(Context::get('goto')) {
+  8253     gonom9                 $goto = Context::get('goto');
+  8253     gonom9                 header("location:" . $goto);
+  8253     gonom9             } else {
+  8253     gonom9                 header("location:./");
+  8253     gonom9             }
+  8253     gonom9 
+  8253     gonom9             exit();
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Request member join by openID
+  8253     gonom9          **/
+  8253     gonom9         function procMemberAddOpenIDToMember() {
+  8253     gonom9             return $this->procMemberOpenIDLogin("procMemberValidateAddOpenIDToMember");
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Validate openID processing
+  8253     gonom9          **/
+  8253     gonom9         function procMemberValidateAddOpenIDToMember() {
+  8253     gonom9             set_include_path(_XE_PATH_."modules/member/php-openid-1.2.3");
+  8253     gonom9             require_once('Auth/OpenID.php');
+  8253     gonom9             require_once('Auth/OpenID/Consumer.php');
+  8253     gonom9             require_once('Auth/OpenID/XEStore.php');
+  8253     gonom9             require_once('Auth/OpenID/URINorm.php');
+  8253     gonom9 
+  8253     gonom9             $store = new Auth_OpenID_XEStore();
+  8253     gonom9             $consumer = new Auth_OpenID_Consumer($store);
+  8253     gonom9             $response = $consumer->complete($_GET);
+  8253     gonom9 
+  8253     gonom9             switch($response->status) {
+  8253     gonom9                 case Auth_OpenID_CANCEL :
+  8287     ovclas                 // Handle if user authentication is canceled
+  8253     gonom9                 return $this->stop('authorization_canceled');
+  8253     gonom9             case Auth_OpenID_FAILURE :
+  8287     ovclas                 // Handle if user authentication is failed due to a certain problem (for example, openid doesn't exist) (there is no authentication required deunga openid ..)
+  8253     gonom9                 return $this->stop('invalid_authorization');
+  8253     gonom9             case Auth_OpenID_SUCCESS :
+  8253     gonom9                 {
+  8253     gonom9                     $logged_info = Context::get('logged_info');
+  8253     gonom9                     if (!Context::get('is_logged')) return $this->stop('msg_not_logged');
+  8253     gonom9 
+  8253     gonom9                     $member_srl = $logged_info->member_srl;
+  8253     gonom9 
+  8253     gonom9                     $args->member_srl = $member_srl;
+  8253     gonom9                     $openid_identity = $response->signed_args["openid.identity"];
+  8253     gonom9                     $args->openid = $openid_identity;
+  8253     gonom9 
+  8253     gonom9                     $output = executeQuery('member.addOpenIDToMember', $args);
+  8253     gonom9                     if (!$output->toBool()) return $output;
+  8253     gonom9 
+  8253     gonom9                     Context::close();
+  8253     gonom9 
+  8253     gonom9                     if(Context::get('goto')){
+  8253     gonom9                         $goto = Context::get('goto');
+  8253     gonom9                         header("location:" . $goto);
+  8253     gonom9                     }else{
+  8253     gonom9                         header("location:./");
+  8253     gonom9                     }
+  8253     gonom9                     exit();
+  8253     gonom9                 }
+  8287     ovclas                 // Authentication success!
+  8253     gonom9                 break;
+  8253     gonom9             default:
+  8253     gonom9                 return $this->stop('invalid_authorization');
+  8253     gonom9             }
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Disconnect OpenID
+  8253     gonom9          **/
+  8253     gonom9         function procMemberDeleteOpenIDFromMember() {
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9             $openid_identity = Context::get('openid_to_delete');
+  8253     gonom9             $arg->openid = $openid_identity;
+  8253     gonom9             $result = executeQuery('member.getMemberSrlByOpenID', $arg);
+  8253     gonom9 
+  8253     gonom9             if (!Context::get('is_logged')) {
+  8253     gonom9                 $this->setError(-1);
+  8253     gonom9                 $this->setMessage('msg_not_logged');
+  8253     gonom9                 return;
+  8253     gonom9             } else if (!$result->data || is_array($result->data)) {
+  8253     gonom9                 $this->setError(-1);
+  8253     gonom9                 $this->setMessage('msg_not_founded');
+  8253     gonom9                 return;
+  8253     gonom9             } else if ($result->data->member_srl != $logged_info->member_srl) {
+  8253     gonom9                 $this->setError(-1);
+  8253     gonom9                 $this->setMessage('msg_not_permitted');
+  8253     gonom9                 return;
+  8253     gonom9             }
+  8253     gonom9 
+  8253     gonom9             $arg->openid = $openid_identity;
+  8253     gonom9 
+  8253     gonom9             $output = executeQuery('member.deleteMemberOpenID', $arg);
+  8253     gonom9             if(!$output->toBool()) return $output;
+  8253     gonom9 
+  8253     gonom9             $this->setMessage('success_updated');
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Log-out
+  8253     gonom9          **/
+  8253     gonom9         function procMemberLogout() {
+  8287     ovclas             // Call a trigger before log-out (before)
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9             $trigger_output = ModuleHandler::triggerCall('member.doLogout', 'before', $logged_info);
+  8253     gonom9             if(!$trigger_output->toBool()) return $trigger_output;
+  8287     ovclas             // Destroy session information
+  8253     gonom9             $this->destroySessionInfo();
+  8287     ovclas             // Call a trigger after log-out (after)
+  8253     gonom9             $trigger_output = ModuleHandler::triggerCall('member.doLogout', 'after', $logged_info);
+  8253     gonom9             if(!$trigger_output->toBool()) return $trigger_output;
+  8253     gonom9 
+  8253     gonom9             $output = new Object();
+  8253     gonom9 
+  8253     gonom9             $oModuleModel = &getModel('module');
+  8253     gonom9             $config = $oModuleModel->getModuleConfig('member');
+  9818 chschy@gmail.com             if($config->after_logout_url) 
+  9818 chschy@gmail.com 				$output->redirect_url = $config->after_logout_url;
+  8253     gonom9 
+  8253     gonom9             return $output;
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Scrap
+  8253     gonom9          **/
+  8253     gonom9         function procMemberScrapDocument() {
+  8287     ovclas             // Check login information
+  8253     gonom9             if(!Context::get('is_logged')) return new Object(-1, 'msg_not_logged');
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9 
+  8253     gonom9             $document_srl = (int)Context::get('document_srl');
+  8253     gonom9             if(!$document_srl) $document_srl = (int)Context::get('target_srl');
+  8253     gonom9             if(!$document_srl) return new Object(-1,'msg_invalid_request');
+  8287     ovclas             // Get document
+  8253     gonom9             $oDocumentModel = &getModel('document');
+  8253     gonom9             $oDocument = $oDocumentModel->getDocument($document_srl);
+  8287     ovclas             // Variables
+  8253     gonom9             $args->document_srl = $document_srl;
+  8253     gonom9             $args->member_srl = $logged_info->member_srl;
+  8253     gonom9             $args->user_id = $oDocument->get('user_id');
+  8253     gonom9             $args->user_name = $oDocument->get('user_name');
+  8253     gonom9             $args->nick_name = $oDocument->get('nick_name');
+  8253     gonom9             $args->target_member_srl = $oDocument->get('member_srl');
+  8253     gonom9             $args->title = $oDocument->get('title');
+  8287     ovclas             // Check if already scrapped
+  8253     gonom9             $output = executeQuery('member.getScrapDocument', $args);
+  8253     gonom9             if($output->data->count) return new Object(-1, 'msg_alreay_scrapped');
+  8287     ovclas             // Insert
+  8253     gonom9             $output = executeQuery('member.addScrapDocument', $args);
+  8253     gonom9             if(!$output->toBool()) return $output;
+  8253     gonom9 
+  8253     gonom9             $this->setError(-1);
+  8253     gonom9             $this->setMessage('success_registed');
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Delete a scrap
+  8253     gonom9          **/
+  8253     gonom9         function procMemberDeleteScrap() {
+  8287     ovclas             // Check login information
+  8253     gonom9             if(!Context::get('is_logged')) return new Object(-1, 'msg_not_logged');
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9 
+  8253     gonom9             $document_srl = (int)Context::get('document_srl');
+  8253     gonom9             if(!$document_srl) return new Object(-1,'msg_invalid_request');
+  8287     ovclas             // Variables
+  8253     gonom9             $args->member_srl = $logged_info->member_srl;
+  8253     gonom9             $args->document_srl = $document_srl;
+  8253     gonom9             return executeQuery('member.deleteScrapDocument', $args);
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Save posts
+  8401     ovclas 		 * @Deplicated - instead Document Controller - procDocumentTempSave method use
+  8253     gonom9          **/
+  8253     gonom9         function procMemberSaveDocument() {
+  8401     ovclas 			return new Object(0, 'Deplicated method');
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Delete the post
+  8253     gonom9          **/
+  8253     gonom9         function procMemberDeleteSavedDocument() {
+  8287     ovclas             // Check login information
+  8253     gonom9             if(!Context::get('is_logged')) return new Object(-1, 'msg_not_logged');
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9 
+  8253     gonom9             $document_srl = (int)Context::get('document_srl');
+  8253     gonom9             if(!$document_srl) return new Object(-1,'msg_invalid_request');
+  8287     ovclas             // Variables
+  8253     gonom9             $oDocumentController = &getController('document');
+  8253     gonom9             $oDocumentController->deleteDocument($document_srl, true);
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Check values when member joining
+  8253     gonom9          **/
+  8253     gonom9         function procMemberCheckValue() {
+  8253     gonom9             $name = Context::get('name');
+  8253     gonom9             $value = Context::get('value');
+  8253     gonom9             if(!$value) return;
+  8253     gonom9 
+  8253     gonom9             $oMemberModel = &getModel('member');
+  8287     ovclas             // Check if logged-in
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9 
+  8253     gonom9 
+  8253     gonom9             switch($name) {
+  8253     gonom9                 case 'user_id' :
+  8287     ovclas                         // Check denied ID
+  8253     gonom9                         if($oMemberModel->isDeniedID($value)) return new Object(0,'denied_user_id');
+  8287     ovclas                         // Check if duplicated
+  8253     gonom9                         $member_srl = $oMemberModel->getMemberSrlByUserID($value);
+  8253     gonom9                         if($member_srl && $logged_info->member_srl != $member_srl ) return new Object(0,'msg_exists_user_id');
+  8253     gonom9                     break;
+  8253     gonom9                 case 'nick_name' :
+  8287     ovclas                         // Check if duplicated
+  8253     gonom9                         $member_srl = $oMemberModel->getMemberSrlByNickName($value);
+  8253     gonom9                         if($member_srl && $logged_info->member_srl != $member_srl ) return new Object(0,'msg_exists_nick_name');
+  8253     gonom9 
+  8253     gonom9                     break;
+  8253     gonom9                 case 'email_address' :
+  8287     ovclas                         // Check if duplicated
+  8253     gonom9                         $member_srl = $oMemberModel->getMemberSrlByEmailAddress($value);
+  8253     gonom9                         if($member_srl && $logged_info->member_srl != $member_srl ) return new Object(0,'msg_exists_email_address');
+  8253     gonom9                     break;
+  8253     gonom9             }
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Join Membership
+  8253     gonom9          **/
+  8253     gonom9         function procMemberInsert() {
+  8253     gonom9             if (Context::getRequestMethod () == "GET") return new Object (-1, "msg_invalid_request");
+  8253     gonom9             $oMemberModel = &getModel ('member');
+  8253     gonom9             $config = $oMemberModel->getMemberConfig ();
+  8253     gonom9 
+  9275 sinsy200@gmail.com             // call a trigger (before)
+  8253     gonom9             $trigger_output = ModuleHandler::triggerCall ('member.procMemberInsert', 'before', $config);
+  8253     gonom9             if (!$trigger_output->toBool ()) return $trigger_output;
+  8287     ovclas             // Check if an administrator allows a membership
+  8253     gonom9             if ($config->enable_join != 'Y') return $this->stop ('msg_signup_disabled');
+  8287     ovclas             // Check if the user accept the license terms (only if terms exist)
+  8253     gonom9             if ($config->agreement && Context::get('accept_agreement')!='Y') return $this->stop('msg_accept_agreement');
+  8253     gonom9 
+  8287     ovclas             // Extract the necessary information in advance
+  9075 namnyams@gmail.com 			$getVars = array();
+  9075 namnyams@gmail.com 			if ($config->signupForm){
+  9075 namnyams@gmail.com 				foreach($config->signupForm as $formInfo){
+ 10150 namnyams@gmail.com 					if($formInfo->isDefaultForm && ($formInfo->isUse || $formInfo->required || $formInfo->mustRequired)){
+  9075 namnyams@gmail.com 						$getVars[] = $formInfo->name;
+  9075 namnyams@gmail.com 					}
+  9075 namnyams@gmail.com 				}
+  9075 namnyams@gmail.com 			}
+  9075 namnyams@gmail.com 			foreach($getVars as $val){
+  9075 namnyams@gmail.com 				$args->{$val} = Context::get($val);
+  9075 namnyams@gmail.com 			}
+  8253     gonom9             $args->member_srl = getNextSequence();
+  8253     gonom9             $args->list_order = -1 * $args->member_srl;
+  9315 namnyams@gmail.com 			$args->find_account_answer = Context::get('find_account_answer');
+  9650 namnyams@gmail.com 			$args->allow_mailing = Context::get('allow_mailing');
+  9650 namnyams@gmail.com 			$args->allow_message = Context::get('allow_message');
+  9315 namnyams@gmail.com 
+  8533 ovclas@gmail.com 			if($args->password1) $args->password = $args->password1;
+  8253     gonom9 
+  8287     ovclas             // Remove some unnecessary variables from all the vars
+  8253     gonom9             $all_args = Context::getRequestVars();
+  8253     gonom9             unset($all_args->module);
+  8253     gonom9             unset($all_args->act);
+  8253     gonom9             unset($all_args->is_admin);
+  8253     gonom9             unset($all_args->description);
+  8253     gonom9             unset($all_args->group_srl_list);
+  8253     gonom9             unset($all_args->body);
+  8253     gonom9             unset($all_args->accept_agreement);
+  8253     gonom9             unset($all_args->signature);
+  9531 namnyams@gmail.com             unset($all_args->password);
+  8253     gonom9             unset($all_args->password2);
+  9075 namnyams@gmail.com             unset($all_args->mid);
+  9075 namnyams@gmail.com             unset($all_args->error_return_url);
+  9075 namnyams@gmail.com             unset($all_args->ruleset);
+  9650 namnyams@gmail.com             unset($all_args->captchaType);
+  9650 namnyams@gmail.com             unset($all_args->secret_text);
+  8253     gonom9 
+  8287     ovclas             // Set the user state as "denied" when using mail authentication
+  8253     gonom9             if ($config->enable_confirm == 'Y') $args->denied = 'Y';
+  8287     ovclas             // Add extra vars after excluding necessary information from all the requested arguments
+  8253     gonom9             $extra_vars = delObjectVars($all_args, $args);
+  8253     gonom9             $args->extra_vars = serialize($extra_vars);
+  8287     ovclas             // Execute insert or update depending on the value of member_srl
+  9075 namnyams@gmail.com 
+  9075 namnyams@gmail.com 			if (!$args->user_id) $args->user_id = 't'.$args->member_srl;
+  9075 namnyams@gmail.com 			if (!$args->user_name) $args->user_name = $args->member_srl;
+  9075 namnyams@gmail.com 			if (!$args->nick_name) $args->nick_name = $args->member_srl;
+  9504 namnyams@gmail.com 
+  9504 namnyams@gmail.com 			// remove whitespace
+  9504 namnyams@gmail.com 			$checkInfos = array('user_id', 'nick_name', 'email_address');
+  9504 namnyams@gmail.com 			$replaceStr = array("\r\n", "\r", "\n", " ", "\t", "\xC2\xAD");
+  9504 namnyams@gmail.com 			foreach($checkInfos as $val){
+  9504 namnyams@gmail.com 				if(isset($args->{$val})){
+  9504 namnyams@gmail.com 					$args->{$val} = str_replace($replaceStr, '', $args->{$val});
+  9504 namnyams@gmail.com 				}
+  9504 namnyams@gmail.com 			}
+  8253     gonom9             $output = $this->insertMember($args);
+  8253     gonom9             if(!$output->toBool()) return $output;
+  8926 namnyams@gmail.com 
+  8926 namnyams@gmail.com 			// insert ProfileImage, ImageName, ImageMark
+  8287     ovclas             // If a virtual site, join the site
+  8253     gonom9             $site_module_info = Context::get('site_module_info');
+  8253     gonom9             if($site_module_info->site_srl > 0) {
+  8357     ovclas 				$columnList = array('site_srl', 'group_srl');
+  8357     ovclas                 $default_group = $oMemberModel->getDefaultGroup($site_module_info->site_srl, $columnList);
+  8253     gonom9                 if($default_group->group_srl) {
+  8253     gonom9                     $this->addMemberToGroup($args->member_srl, $default_group->group_srl, $site_module_info->site_srl);
+  8253     gonom9                 }
+  8253     gonom9 
+  8253     gonom9             }
+  8287     ovclas             // Log-in
+ 10150 namnyams@gmail.com             if ($config->enable_confirm != 'Y')
+ 10150 namnyams@gmail.com 			{
+ 10150 namnyams@gmail.com 				if($config->identifier == 'email_address')
+ 10150 namnyams@gmail.com 				{
+ 10150 namnyams@gmail.com 					$this->doLogin($args->email_address);
+ 10150 namnyams@gmail.com 				}
+ 10150 namnyams@gmail.com 				else
+ 10150 namnyams@gmail.com 				{
+ 10150 namnyams@gmail.com 					$this->doLogin($args->user_id);
+ 10150 namnyams@gmail.com 				}
+ 10150 namnyams@gmail.com 			}
+ 10136 namnyams@gmail.com 
+  8287     ovclas             // Results
+  8253     gonom9             $this->add('member_srl', $args->member_srl);
+  8253     gonom9             if($config->redirect_url) $this->add('redirect_url', $config->redirect_url);
+  8253     gonom9             if ($config->enable_confirm == 'Y') {
+  8253     gonom9                 $msg = sprintf(Context::getLang('msg_confirm_mail_sent'), $args->email_address);
+  8253     gonom9                 $this->setMessage($msg);
+  8253     gonom9             }
+  8253     gonom9             else $this->setMessage('success_registed');
+  8287     ovclas             // Call a trigger (after)
+  8253     gonom9             $trigger_output = ModuleHandler::triggerCall('member.procMemberInsert', 'after', $config);
+  8253     gonom9             if(!$trigger_output->toBool()) return $trigger_output;
+  8533 ovclas@gmail.com 
+ 10136 namnyams@gmail.com 			if(!in_array(Context::getRequestMethod(),array('XMLRPC','JSON')))
+ 10136 namnyams@gmail.com 			{
+ 10136 namnyams@gmail.com 				if($config->redirect_url)
+ 10136 namnyams@gmail.com 				{
+ 10136 namnyams@gmail.com 					$returnUrl = $config->redirect_url;
+ 10136 namnyams@gmail.com 				}
+ 10136 namnyams@gmail.com 				else
+ 10136 namnyams@gmail.com 				{
+ 10150 namnyams@gmail.com 					if(Context::get('success_return_url'))
+ 10150 namnyams@gmail.com 					{
+ 10150 namnyams@gmail.com 						$returnUrl = Context::get('success_return_url');
+ 10150 namnyams@gmail.com 					}
+ 10150 namnyams@gmail.com 					else if($_COOKIE['XE_REDIRECT_URL'])
+ 10150 namnyams@gmail.com 					{
+ 10150 namnyams@gmail.com 						$returnUrl = $_COOKIE['XE_REDIRECT_URL'];
+ 10150 namnyams@gmail.com 						setcookie("XE_REDIRECT_URL", '', 1);
+ 10150 namnyams@gmail.com 					}
+ 10136 namnyams@gmail.com 				}
+ 10136 namnyams@gmail.com 
+ 10150 namnyams@gmail.com 				header('location:' . $returnUrl);
+  8533 ovclas@gmail.com 				return;
+  8533 ovclas@gmail.com 			}
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Edit member profile
+  8253     gonom9          **/
+  8253     gonom9         function procMemberModifyInfo() {
+  8253     gonom9             if(!Context::get('is_logged')) return $this->stop('msg_not_logged');
+  8287     ovclas             // Extract the necessary information in advance
+  9080 namnyams@gmail.com             $oMemberModel = &getModel ('member');
+  9080 namnyams@gmail.com             $config = $oMemberModel->getMemberConfig ();
+  9080 namnyams@gmail.com 			$getVars = array('find_account_answer','allow_mailing','allow_message');
+  9080 namnyams@gmail.com 			if ($config->signupForm){
+  9080 namnyams@gmail.com 				foreach($config->signupForm as $formInfo){
+  9175 namnyams@gmail.com 					if($formInfo->isDefaultForm && ($formInfo->isUse || $formInfo->required || $formInfo->mustRequired)){
+  9080 namnyams@gmail.com 						$getVars[] = $formInfo->name;
+  9080 namnyams@gmail.com 					}
+  9080 namnyams@gmail.com 				}
+  9080 namnyams@gmail.com 			}
+  9080 namnyams@gmail.com 			foreach($getVars as $val){
+  9080 namnyams@gmail.com 				$args->{$val} = Context::get($val);
+  9080 namnyams@gmail.com 			}
+  8287     ovclas             // Login Information
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9             $args->member_srl = $logged_info->member_srl;
+  8287     ovclas             // Remove some unnecessary variables from all the vars
+  8253     gonom9             $all_args = Context::getRequestVars();
+  8253     gonom9             unset($all_args->module);
+  8253     gonom9             unset($all_args->act);
+  8253     gonom9             unset($all_args->is_admin);
+  8253     gonom9             unset($all_args->description);
+  8253     gonom9             unset($all_args->group_srl_list);
+  8253     gonom9             unset($all_args->body);
+  8253     gonom9             unset($all_args->accept_agreement);
+  8253     gonom9             unset($all_args->signature);
+  8253     gonom9             unset($all_args->_filter);
+  9080 namnyams@gmail.com             unset($all_args->mid);
+  9080 namnyams@gmail.com             unset($all_args->error_return_url);
+  9080 namnyams@gmail.com             unset($all_args->ruleset);
+  9531 namnyams@gmail.com             unset($all_args->password);
+  8253     gonom9 
+  8287     ovclas             // Add extra vars after excluding necessary information from all the requested arguments
+  8253     gonom9             $extra_vars = delObjectVars($all_args, $args);
+  8253     gonom9             $args->extra_vars = serialize($extra_vars);
+  8287     ovclas             // Create a member model object
+  8253     gonom9             $oMemberModel = &getModel('member');
+  9504 namnyams@gmail.com 
+  9504 namnyams@gmail.com 			// remove whitespace
+  9504 namnyams@gmail.com 			$checkInfos = array('user_id', 'nick_name', 'email_address');
+  9504 namnyams@gmail.com 			$replaceStr = array("\r\n", "\r", "\n", " ", "\t", "\xC2\xAD");
+  9504 namnyams@gmail.com 			foreach($checkInfos as $val){
+  9504 namnyams@gmail.com 				if(isset($args->{$val})){
+  9504 namnyams@gmail.com 					$args->{$val} = str_replace($replaceStr, '', $args->{$val});
+  9504 namnyams@gmail.com 				}
+  9504 namnyams@gmail.com 			}
+  8287     ovclas             // Execute insert or update depending on the value of member_srl
+  8253     gonom9             $output = $this->updateMember($args);
+  8253     gonom9             if(!$output->toBool()) return $output;
+  9213 namnyams@gmail.com 
+  9213 namnyams@gmail.com 			$profile_image = $_FILES['profile_image'];
+  9213 namnyams@gmail.com 			if (is_uploaded_file($profile_image['tmp_name'])){
+  9213 namnyams@gmail.com 				$this->insertProfileImage($args->member_srl, $profile_image['tmp_name']);
+  9213 namnyams@gmail.com 			}
+  9213 namnyams@gmail.com 
+  9213 namnyams@gmail.com 			$image_mark = $_FILES['image_mark'];
+  9213 namnyams@gmail.com 			if (is_uploaded_file($image_mark['tmp_name'])){
+  9213 namnyams@gmail.com 				$this->insertImageMark($args->member_srl, $image_mark['tmp_name']);
+  9213 namnyams@gmail.com 			}
+  9213 namnyams@gmail.com 
+  9213 namnyams@gmail.com 			$image_name = $_FILES['image_name'];
+  9213 namnyams@gmail.com 			if (is_uploaded_file($image_name['tmp_name'])){
+  9213 namnyams@gmail.com 				$this->insertImageName($args->member_srl, $image_name['tmp_name']);
+  9213 namnyams@gmail.com 			}
+  9213 namnyams@gmail.com 
+  8287     ovclas             // Save Signature
+  8253     gonom9             $signature = Context::get('signature');
+  8253     gonom9             $this->putSignature($args->member_srl, $signature);
+  8287     ovclas             // Get user_id information
+  8357     ovclas             $this->memberInfo = $oMemberModel->getMemberInfoByMemberSrl($args->member_srl);
+  8287     ovclas             // Call a trigger after successfully log-in (after)
+  8357     ovclas             $trigger_output = ModuleHandler::triggerCall('member.doLogin', 'after', $this->memberInfo);
+  8253     gonom9             if(!$trigger_output->toBool()) return $trigger_output;
+  8253     gonom9 
+  8357     ovclas             $this->setSessionInfo();
+  8287     ovclas             // Return result
+  8253     gonom9             $this->add('member_srl', $args->member_srl);
+  8253     gonom9             $this->setMessage('success_updated');
+  8533 ovclas@gmail.com 			if(!in_array(Context::getRequestMethod(),array('XMLRPC','JSON'))) {
+  8533 ovclas@gmail.com 				$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'mid', Context::get('mid'), 'act', 'dispMemberInfo');
+  8533 ovclas@gmail.com 				header('location:'.$returnUrl);
+  8533 ovclas@gmail.com 				return;
+  8533 ovclas@gmail.com 			}
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Change the user password
+  8253     gonom9          **/
+  8253     gonom9         function procMemberModifyPassword() {
+  8253     gonom9             if(!Context::get('is_logged')) return $this->stop('msg_not_logged');
+  8287     ovclas             // Extract the necessary information in advance
+  8253     gonom9             $current_password = trim(Context::get('current_password'));
+  8533 ovclas@gmail.com             $password = trim(Context::get('password1'));
+  8287     ovclas             // Get information of logged-in user
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9             $member_srl = $logged_info->member_srl;
+  8287     ovclas             // Create a member model object
+  8253     gonom9             $oMemberModel = &getModel('member');
+  8287     ovclas             // Get information of member_srl
+  8357     ovclas 			$columnList = array('member_srl', 'password');
+  8357     ovclas             $member_info = $oMemberModel->getMemberInfoByMemberSrl($member_srl, 0, $columnList);
+  8287     ovclas             // Verify the cuttent password
+  8253     gonom9             if(!$oMemberModel->isValidPassword($member_info->password, $current_password)) return new Object(-1, 'invalid_password');
+  8253     gonom9 
+  9275 sinsy200@gmail.com             // Check if a new password is as same as the previous password
+  8253     gonom9             if ($current_password == $password) return new Object(-1, 'invalid_new_password');
+  8253     gonom9 
+  8287     ovclas             // Execute insert or update depending on the value of member_srl
+  8253     gonom9             $args->member_srl = $member_srl;
+  8253     gonom9             $args->password = $password;
+  8253     gonom9             $output = $this->updateMemberPassword($args);
+  8253     gonom9             if(!$output->toBool()) return $output;
+  8253     gonom9 
+  8253     gonom9             $this->add('member_srl', $args->member_srl);
+  8253     gonom9             $this->setMessage('success_updated');
+  8533 ovclas@gmail.com 			if(!in_array(Context::getRequestMethod(),array('XMLRPC','JSON'))) {
+  8533 ovclas@gmail.com 				$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'mid', Context::get('mid'), 'act', 'dispMemberInfo');
+  8533 ovclas@gmail.com 				header('location:'.$returnUrl);
+  8533 ovclas@gmail.com 				return;
+  8533 ovclas@gmail.com 			}
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  9275 sinsy200@gmail.com          * @brief Membership withdrawal
+  8253     gonom9          **/
+  8253     gonom9         function procMemberLeave() {
+  8253     gonom9             if(!Context::get('is_logged')) return $this->stop('msg_not_logged');
+  8287     ovclas             // Extract the necessary information in advance
+  8253     gonom9             $password = trim(Context::get('password'));
+  8287     ovclas             // Get information of logged-in user
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9             $member_srl = $logged_info->member_srl;
+  8287     ovclas             // Create a member model object
+  8253     gonom9             $oMemberModel = &getModel('member');
+  8287     ovclas             // Get information of member_srl
+  8357     ovclas 			if(!$this->memberInfo->password)
+  8357     ovclas 			{
+  8357     ovclas 				$columnList = array('member_srl', 'password');
+  8357     ovclas 	            $memberInfo = $oMemberModel->getMemberInfoByMemberSrl($member_srl, 0, $columnList);
+  8357     ovclas 				$this->memberInfo->password = $memberInfo->password;
+  8357     ovclas 			}
+  8287     ovclas             // Verify the cuttent password
+  8357     ovclas             if(!$oMemberModel->isValidPassword($this->memberInfo->password, $password)) return new Object(-1, 'invalid_password');
+  8253     gonom9 
+  8253     gonom9             $output = $this->deleteMember($member_srl);
+  8253     gonom9             if(!$output->toBool()) return $output;
+  8287     ovclas             // Destroy all session information
+  8253     gonom9             $this->destroySessionInfo();
+  8287     ovclas             // Return success message
+  8253     gonom9             $this->setMessage('success_leaved');
+  8533 ovclas@gmail.com 			if(!in_array(Context::getRequestMethod(),array('XMLRPC','JSON'))) {
+  8533 ovclas@gmail.com 				$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'mid', Context::get('mid'), 'act', '');
+  8533 ovclas@gmail.com 				header('location:'.$returnUrl);
+  8533 ovclas@gmail.com 				return;
+  8533 ovclas@gmail.com 			}
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief OpenID Withdrawal
+  8253     gonom9          **/
+  8253     gonom9         function procMemberOpenIDLeave() {
+  8287     ovclas             // Return an error if in the non-login state
+  8253     gonom9             if(!Context::get('is_logged')) return $this->stop('msg_not_logged');
+  8287     ovclas             // Compare the current IP with session IP
+  8253     gonom9             if($_SESSION['ipaddress']!=$_SERVER['REMOTE_ADDR']) return $this->stop('msg_not_permitted');
+  8287     ovclas             // Get information of logged-in user
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9             $member_srl = $logged_info->member_srl;
+  8253     gonom9 
+  8253     gonom9             $output = $this->deleteMember($member_srl);
+  8253     gonom9             if(!$output->toBool()) return $output;
+  8287     ovclas             // Destroy all session information
+  8253     gonom9             $this->destroySessionInfo();
+  8287     ovclas             // Return success message
+  8253     gonom9             $this->setMessage('success_leaved');
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Add a profile image
+  8253     gonom9          **/
+  8253     gonom9         function procMemberInsertProfileImage() {
+  8287     ovclas             // Check if the file is successfully uploaded
+  8253     gonom9             $file = $_FILES['profile_image'];
+  8253     gonom9             if(!is_uploaded_file($file['tmp_name'])) return $this->stop('msg_not_uploaded_profile_image');
+  8287     ovclas             // Ignore if member_srl is invalid or doesn't exist.
+  8253     gonom9             $member_srl = Context::get('member_srl');
+  8253     gonom9             if(!$member_srl) return $this->stop('msg_not_uploaded_profile_image');
+  8253     gonom9 
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9             if($logged_info->is_admin != 'Y' && $logged_info->member_srl != $member_srl) return $this->stop('msg_not_uploaded_profile_image');
+  8287     ovclas             // Return if member module is set not to use an image name or the user is not an administrator ;
+  8253     gonom9             $oModuleModel = &getModel('module');
+  8253     gonom9             $config = $oModuleModel->getModuleConfig('member');
+  8253     gonom9             if($logged_info->is_admin != 'Y' && $config->profile_image != 'Y') return $this->stop('msg_not_uploaded_profile_image');
+  8253     gonom9 
+  8253     gonom9             $this->insertProfileImage($member_srl, $file['tmp_name']);
+  8287     ovclas             // Page refresh
+  8533 ovclas@gmail.com             //$this->setRefreshPage();
+  8533 ovclas@gmail.com 			if(!in_array(Context::getRequestMethod(),array('XMLRPC','JSON'))) {
+  8533 ovclas@gmail.com 				$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'mid', Context::get('mid'), 'act', 'dispMemberModifyInfo');
+  8533 ovclas@gmail.com 				header('location:'.$returnUrl);
+  8533 ovclas@gmail.com 				return;
+  8533 ovclas@gmail.com 			}
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         function insertProfileImage($member_srl, $target_file) {
+  8253     gonom9             $oModuleModel = &getModel('module');
+  8253     gonom9             $config = $oModuleModel->getModuleConfig('member');
+  8287     ovclas             // Get an image size
+  8253     gonom9             $max_width = $config->profile_image_max_width;
+  8253     gonom9             if(!$max_width) $max_width = "90";
+  8253     gonom9             $max_height = $config->profile_image_max_height;
+  8253     gonom9             if(!$max_height) $max_height = "20";
+  8287     ovclas             // Get a target path to save
+  8253     gonom9             $target_path = sprintf('files/member_extra_info/profile_image/%s', getNumberingPath($member_srl));
+  8253     gonom9             FileHandler::makeDir($target_path);
+  8287     ovclas             // Get file information
+  8253     gonom9             list($width, $height, $type, $attrs) = @getimagesize($target_file);
+  8253     gonom9             if($type == 3) $ext = 'png';
+  8253     gonom9             elseif($type == 2) $ext = 'jpg';
+  8253     gonom9             else $ext = 'gif';
+  8253     gonom9 
+  8253     gonom9             $target_filename = sprintf('%s%d.%s', $target_path, $member_srl, $ext);
+  8287     ovclas             // Convert if the image size is larger than a given size or if the format is not a gif
+  8253     gonom9             if($width > $max_width || $height > $max_height || $type!=1) FileHandler::createImageFile($target_file, $target_filename, $max_width, $max_height, $ext);
+  8253     gonom9             else @copy($target_file, $target_filename);
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Add an image name
+  8253     gonom9          **/
+  8253     gonom9         function procMemberInsertImageName() {
+  8287     ovclas             // Check if the file is successfully uploaded
+  8253     gonom9             $file = $_FILES['image_name'];
+  8253     gonom9             if(!is_uploaded_file($file['tmp_name'])) return $this->stop('msg_not_uploaded_image_name');
+  8287     ovclas             // Ignore if member_srl is invalid or doesn't exist.
+  8253     gonom9             $member_srl = Context::get('member_srl');
+  8253     gonom9             if(!$member_srl) return $this->stop('msg_not_uploaded_image_name');
+  8253     gonom9 
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9             if($logged_info->is_admin != 'Y' && $logged_info->member_srl != $member_srl) return $this->stop('msg_not_uploaded_image_name');
+  8287     ovclas             // Return if member module is set not to use an image name or the user is not an administrator ;
+  8253     gonom9             $oModuleModel = &getModel('module');
+  8253     gonom9             $config = $oModuleModel->getModuleConfig('member');
+  8253     gonom9             if($logged_info->is_admin != 'Y' && $config->image_name != 'Y') return $this->stop('msg_not_uploaded_image_name');
+  8253     gonom9 
+  8253     gonom9             $this->insertImageName($member_srl, $file['tmp_name']);
+  8287     ovclas             // Page refresh
+  8533 ovclas@gmail.com             //$this->setRefreshPage();
+  8533 ovclas@gmail.com 			if(!in_array(Context::getRequestMethod(),array('XMLRPC','JSON'))) {
+  8533 ovclas@gmail.com 				$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'mid', Context::get('mid'), 'act', 'dispMemberModifyInfo');
+  8533 ovclas@gmail.com 				header('location:'.$returnUrl);
+  8533 ovclas@gmail.com 				return;
+  8533 ovclas@gmail.com 			}
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         function insertImageName($member_srl, $target_file) {
+  8253     gonom9             $oModuleModel = &getModel('module');
+  8253     gonom9             $config = $oModuleModel->getModuleConfig('member');
+  8287     ovclas             // Get an image size
+  8253     gonom9             $max_width = $config->image_name_max_width;
+  8253     gonom9             if(!$max_width) $max_width = "90";
+  8253     gonom9             $max_height = $config->image_name_max_height;
+  8253     gonom9             if(!$max_height) $max_height = "20";
+  8287     ovclas             // Get a target path to save
+  8253     gonom9             $target_path = sprintf('files/member_extra_info/image_name/%s/', getNumberingPath($member_srl));
+  8253     gonom9             FileHandler::makeDir($target_path);
+  8253     gonom9 
+  8253     gonom9             $target_filename = sprintf('%s%d.gif', $target_path, $member_srl);
+  8287     ovclas             // Get file information
+  8253     gonom9             list($width, $height, $type, $attrs) = @getimagesize($target_file);
+  8287     ovclas             // Convert if the image size is larger than a given size or if the format is not a gif
+  8253     gonom9             if($width > $max_width || $height > $max_height || $type!=1) FileHandler::createImageFile($target_file, $target_filename, $max_width, $max_height, 'gif');
+  8253     gonom9             else @copy($target_file, $target_filename);
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Delete profile image
+  8253     gonom9          **/
+  8253     gonom9         function procMemberDeleteProfileImage() {
+  8253     gonom9             $member_srl = Context::get('member_srl');
+  8253     gonom9             if(!$member_srl) return new Object(0,'success');
+  8253     gonom9 
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9 
+  8253     gonom9             if($logged_info->is_admin != 'Y') {
+  8253     gonom9                 $oModuleModel = &getModel('module');
+  8253     gonom9                 $config = $oModuleModel->getModuleConfig('member');
+  8253     gonom9                 if($config->profile_image == 'N') return new Object(0,'success');
+  8253     gonom9             }
+  8253     gonom9 
+  8253     gonom9             if($logged_info->is_admin == 'Y' || $logged_info->member_srl == $member_srl) {
+  8253     gonom9                 $oMemberModel = &getModel('member');
+  8253     gonom9                 $profile_image = $oMemberModel->getProfileImage($member_srl);
+  8253     gonom9                 FileHandler::removeFile($profile_image->file);
+  8253     gonom9             }
+  8253     gonom9             return new Object(0,'success');
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Delete Image name
+  8253     gonom9          **/
+  8253     gonom9         function procMemberDeleteImageName() {
+  8253     gonom9             $member_srl = Context::get('member_srl');
+  8253     gonom9             if(!$member_srl) return new Object(0,'success');
+  8253     gonom9 
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9 
+  8253     gonom9             if($logged_info->is_admin != 'Y') {
+  8253     gonom9                 $oModuleModel = &getModel('module');
+  8253     gonom9                 $config = $oModuleModel->getModuleConfig('member');
+  8253     gonom9                 if($config->image_name == 'N') return new Object(0,'success');
+  8253     gonom9             }
+  8253     gonom9 
+  8253     gonom9             if($logged_info->is_admin == 'Y' || $logged_info->member_srl == $member_srl) {
+  8253     gonom9                 $oMemberModel = &getModel('member');
+  8253     gonom9                 $image_name = $oMemberModel->getImageName($member_srl);
+  8253     gonom9                 FileHandler::removeFile($image_name->file);
+  8253     gonom9             }
+  8253     gonom9             return new Object(0,'success');
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Add an image to mark
+  8253     gonom9          **/
+  8253     gonom9         function procMemberInsertImageMark() {
+  8287     ovclas             // Check if the file is successfully uploaded
+  8253     gonom9             $file = $_FILES['image_mark'];
+  8253     gonom9             if(!is_uploaded_file($file['tmp_name'])) return $this->stop('msg_not_uploaded_image_mark');
+  8287     ovclas             // Ignore if member_srl is invalid or doesn't exist.
+  8253     gonom9             $member_srl = Context::get('member_srl');
+  8253     gonom9             if(!$member_srl) return $this->stop('msg_not_uploaded_image_mark');
+  8253     gonom9 
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9             if($logged_info->is_admin != 'Y' && $logged_info->member_srl != $member_srl) return $this->stop('msg_not_uploaded_image_mark');
+  8287     ovclas             // Membership in the images mark the module using the ban was set by an administrator or return;
+  8253     gonom9             $oModuleModel = &getModel('module');
+  8253     gonom9             $config = $oModuleModel->getModuleConfig('member');
+  8253     gonom9             if($logged_info->is_admin != 'Y' && $config->image_mark != 'Y') return $this->stop('msg_not_uploaded_image_mark');
+  8253     gonom9 
+  8253     gonom9             $this->insertImageMark($member_srl, $file['tmp_name']);
+  8287     ovclas             // Page refresh
+  8533 ovclas@gmail.com             //$this->setRefreshPage();
+  8533 ovclas@gmail.com 			if(!in_array(Context::getRequestMethod(),array('XMLRPC','JSON'))) {
+  8533 ovclas@gmail.com 				$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'mid', Context::get('mid'), 'act', 'dispMemberModifyInfo');
+  8533 ovclas@gmail.com 				header('location:'.$returnUrl);
+  8533 ovclas@gmail.com 				return;
+  8533 ovclas@gmail.com 			}
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         function insertImageMark($member_srl, $target_file) {
+  8253     gonom9             $oModuleModel = &getModel('module');
+  8253     gonom9             $config = $oModuleModel->getModuleConfig('member');
+  8287     ovclas             // Get an image size
+  8253     gonom9             $max_width = $config->image_mark_max_width;
+  8253     gonom9             if(!$max_width) $max_width = "20";
+  8253     gonom9             $max_height = $config->image_mark_max_height;
+  8253     gonom9             if(!$max_height) $max_height = "20";
+  8253     gonom9 
+  8253     gonom9             $target_path = sprintf('files/member_extra_info/image_mark/%s/', getNumberingPath($member_srl));
+  8253     gonom9             FileHandler::makeDir($target_path);
+  8253     gonom9 
+  8253     gonom9             $target_filename = sprintf('%s%d.gif', $target_path, $member_srl);
+  8287     ovclas             // Get file information
+  8253     gonom9             list($width, $height, $type, $attrs) = @getimagesize($target_file);
+  8253     gonom9 
+  8253     gonom9             if($width > $max_width || $height > $max_height || $type!=1) FileHandler::createImageFile($target_file, $target_filename, $max_width, $max_height, 'gif');
+  8253     gonom9             else @copy($target_file, $target_filename);
+  8253     gonom9 
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Delete Image Mark
+  8253     gonom9          **/
+  8253     gonom9         function procMemberDeleteImageMark() {
+  8253     gonom9             $member_srl = Context::get('member_srl');
+  8253     gonom9             if(!$member_srl) return new Object(0,'success');
+  8253     gonom9 
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9             if($logged_info->is_admin == 'Y' || $logged_info->member_srl == $member_srl) {
+  8253     gonom9                 $oMemberModel = &getModel('member');
+  8253     gonom9                 $image_mark = $oMemberModel->getImageMark($member_srl);
+  8253     gonom9                 FileHandler::removeFile($image_mark->file);
+  8253     gonom9             }
+  8253     gonom9             return new Object(0,'success');
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  9275 sinsy200@gmail.com          * @brief Find ID/Password
+  8253     gonom9          **/
+  8253     gonom9         function procMemberFindAccount() {
+  8253     gonom9             $email_address = Context::get('email_address');
+  8253     gonom9             if(!$email_address) return new Object(-1, 'msg_invalid_request');
+  8253     gonom9 
+  8253     gonom9             $oMemberModel = &getModel('member');
+  8253     gonom9             $oModuleModel = &getModel('module');
+  8287     ovclas             // Check if a member having the same email address exists
+  8253     gonom9             $member_srl = $oMemberModel->getMemberSrlByEmailAddress($email_address);
+  8253     gonom9             if(!$member_srl) return new Object(-1, 'msg_email_not_exists');
+  8287     ovclas             // Get information of the member
+  8357     ovclas 			$columnList = array('denied', 'member_srl', 'user_id', 'user_name', 'email_address', 'nick_name');
+  8357     ovclas             $member_info = $oMemberModel->getMemberInfoByMemberSrl($member_srl, 0, $columnList);
+  8287     ovclas             // Check if possible to find member's ID and password
+  8253     gonom9             if ($member_info->denied == 'Y') {
+  8253     gonom9                 $chk_args->member_srl = $member_info->member_srl;
+  8253     gonom9                 $output = executeQuery('member.chkAuthMail', $chk_args);
+  8253     gonom9                 if ($output->toBool() && $output->data->count != '0') return new Object(-1, 'msg_user_not_confirmed');
+  8253     gonom9             }
+  8287     ovclas             // Insert data into the authentication DB
+  8253     gonom9             $args->user_id = $member_info->user_id;
+  8253     gonom9             $args->member_srl = $member_info->member_srl;
+  8253     gonom9             $args->new_password = rand(111111,999999);
+  8253     gonom9             $args->auth_key = md5( rand(0,999999 ) );
+  8253     gonom9             $args->is_register = 'N';
+  8253     gonom9 
+  8253     gonom9             $output = executeQuery('member.insertAuthMail', $args);
+  8253     gonom9             if(!$output->toBool()) return $output;
+  8287     ovclas             // Get content of the email to send a member
+  8253     gonom9             Context::set('auth_args', $args);
+  8253     gonom9 
+  8253     gonom9             $member_config = $oModuleModel->getModuleConfig('member');
+  9315 namnyams@gmail.com 			global $lang;
+  9315 namnyams@gmail.com 			if (is_array($member_config->signupForm)){
+  9315 namnyams@gmail.com 				$exceptForm=array('password', 'find_account_question');
+  9315 namnyams@gmail.com 				foreach($member_config->signupForm as $form){
+  9315 namnyams@gmail.com 					if(!in_array($form->name, $exceptForm) && $form->isDefaultForm && ($form->required || $form->mustRequired)){
+  9315 namnyams@gmail.com 						$memberInfo[$lang->{$form->name}] = $member_info->{$form->name};
+  9315 namnyams@gmail.com 					}
+  9315 namnyams@gmail.com 				}
+  9315 namnyams@gmail.com 			}else{
+  9315 namnyams@gmail.com 				$memberInfo[$lang->user_id] = $args->user_id;
+  9315 namnyams@gmail.com 				$memberInfo[$lang->user_name] = $args->user_name;
+  9315 namnyams@gmail.com 				$memberInfo[$lang->nick_name] = $args->nick_name;
+  9315 namnyams@gmail.com 				$memberInfo[$lang->email_address] = $args->email_address;
+  9315 namnyams@gmail.com 			}
+  9315 namnyams@gmail.com 			Context::set('memberInfo', $memberInfo);
+  9315 namnyams@gmail.com 
+  8253     gonom9             if(!$member_config->skin) $member_config->skin = "default";
+  8253     gonom9             if(!$member_config->colorset) $member_config->colorset = "white";
+  8253     gonom9 
+  8253     gonom9             Context::set('member_config', $member_config);
+  8253     gonom9 
+  8253     gonom9             $tpl_path = sprintf('%sskins/%s', $this->module_path, $member_config->skin);
+  8253     gonom9             if(!is_dir($tpl_path)) $tpl_path = sprintf('%sskins/%s', $this->module_path, 'default');
+  8253     gonom9 
+  8253     gonom9             $find_url = getFullUrl ('', 'module', 'member', 'act', 'procMemberAuthAccount', 'member_srl', $member_info->member_srl, 'auth_key', $args->auth_key);
+  8253     gonom9             Context::set('find_url', $find_url);
+  8253     gonom9 
+  8253     gonom9             $oTemplate = &TemplateHandler::getInstance();
+  8253     gonom9             $content = $oTemplate->compile($tpl_path, 'find_member_account_mail');
+  8287     ovclas             // Get information of the Webmaster
+  8253     gonom9             $oModuleModel = &getModel('module');
+  8253     gonom9             $member_config = $oModuleModel->getModuleConfig('member');
+  8287     ovclas             // Send a mail
+  8253     gonom9             $oMail = new Mail();
+  8253     gonom9             $oMail->setTitle( Context::getLang('msg_find_account_title') );
+  8253     gonom9             $oMail->setContent($content);
+  8253     gonom9             $oMail->setSender( $member_config->webmaster_name?$member_config->webmaster_name:'webmaster', $member_config->webmaster_email);
+  8253     gonom9             $oMail->setReceiptor( $member_info->user_name, $member_info->email_address );
+  8253     gonom9             $oMail->send();
+  8287     ovclas             // Return message
+  8253     gonom9             $msg = sprintf(Context::getLang('msg_auth_mail_sent'), $member_info->email_address);
+  8253     gonom9             return new Object(0,$msg);
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Generate a temp password by answering to the pre-determined question
+  8253     gonom9          **/
+  8253     gonom9         function procMemberFindAccountByQuestion() {
+  9315 namnyams@gmail.com             $oMemberModel = &getModel('member');
+  9315 namnyams@gmail.com 			$config = $oMemberModel->getMemberConfig();
+  9315 namnyams@gmail.com 
+  8253     gonom9             $email_address = Context::get('email_address');
+  8253     gonom9             $user_id = Context::get('user_id');
+  8253     gonom9             $find_account_question = trim(Context::get('find_account_question'));
+  8253     gonom9             $find_account_answer = trim(Context::get('find_account_answer'));
+  8253     gonom9 
+  9315 namnyams@gmail.com             if(($config->identifier == 'user_id' && !$user_id) || !$email_address || !$find_account_question || !$find_account_answer) return new Object(-1, 'msg_invalid_request');
+  8253     gonom9 
+  8253     gonom9             $oModuleModel = &getModel('module');
+  8287     ovclas             // Check if a member having the same email address exists
+  8253     gonom9             $member_srl = $oMemberModel->getMemberSrlByEmailAddress($email_address);
+  8253     gonom9             if(!$member_srl) return new Object(-1, 'msg_email_not_exists');
+  8287     ovclas             // Get information of the member
+  8357     ovclas 			$columnList = array('member_srl', 'find_account_question', 'find_account_answer');
+  8357     ovclas             $member_info = $oMemberModel->getMemberInfoByMemberSrl($member_srl, 0, $columnList);
+  8253     gonom9 
+  8287     ovclas             // Display a message if no answer is entered
+  8253     gonom9             if (!$member_info->find_account_question || !$member_info->find_account_answer) return new Object(-1, 'msg_question_not_exists');
+  8253     gonom9 
+ 10233 ngleader@gmail.com 			if(trim($member_info->find_account_question) != $find_account_question || trim($member_info->find_account_answer) != $find_account_answer) return new Object(-1, 'msg_answer_not_matches');
+  8253     gonom9 
+  9315 namnyams@gmail.com 			if ($config->identifier == 'email_address'){
+  9315 namnyams@gmail.com 				$user_id = $email_address;
+  9315 namnyams@gmail.com 			}
+  9315 namnyams@gmail.com 
+  8287     ovclas             // Update to a temporary password and set change_password_date to 1
+  8253     gonom9             $args->member_srl = $member_srl;
+  9275 sinsy200@gmail.com             list($usec, $sec) = explode(" ", microtime());
+  8253     gonom9             $temp_password = substr(md5($user_id . $member_info->find_account_answer. $usec . $sec),0,15);
+  8253     gonom9 
+  8253     gonom9             $args->password = $temp_password;
+  8253     gonom9             $args->change_password_date = '1';
+  8253     gonom9             $output = $this->updateMemberPassword($args);
+  8253     gonom9             if(!$output->toBool()) return $output;
+  8253     gonom9 
+  8253     gonom9             $_SESSION['xe_temp_password_'.$user_id] = $temp_password;
+  8253     gonom9 
+  8253     gonom9             $this->add('user_id',$user_id);
+  9315 namnyams@gmail.com 
+  9315 namnyams@gmail.com 			if(!in_array(Context::getRequestMethod(),array('XMLRPC','JSON'))) {
+  9315 namnyams@gmail.com 				$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'mid', Context::get('mid'), 'act', '');
+  9315 namnyams@gmail.com 				$this->setRedirectUrl($returnUrl.'&user_id='.$user_id);
+  9315 namnyams@gmail.com 				return;
+  9315 namnyams@gmail.com 			}
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Execute finding ID/Passoword
+  8287     ovclas          * When clicking the link in the verification email, a method is called to change the old password and to authenticate it
+  8253     gonom9          **/
+  8253     gonom9         function procMemberAuthAccount() {
+  8287     ovclas             // Test user_id and authkey
+  8253     gonom9             $member_srl = Context::get('member_srl');
+  8253     gonom9             $auth_key = Context::get('auth_key');
+  8253     gonom9             if(!$member_srl || !$auth_key) return $this->stop('msg_invalid_request');
+  8287     ovclas             // Test logs for finding password by user_id and authkey
+  8253     gonom9             $args->member_srl = $member_srl;
+  8253     gonom9             $args->auth_key = $auth_key;
+  8253     gonom9             $output = executeQuery('member.getAuthMail', $args);
+  8253     gonom9             if(!$output->toBool() || $output->data->auth_key != $auth_key) return $this->stop('msg_invalid_auth_key');
+  8287     ovclas             // If credentials are correct, change the password to a new one
+  8253     gonom9             if ($output->data->is_register == 'Y') {
+  8253     gonom9                 $args->password = $output->data->new_password;
+  8253     gonom9                 $args->denied = 'N';
+  8253     gonom9             } else {
+  8253     gonom9                 $args->password = md5($output->data->new_password);
+  8253     gonom9                 unset($args->denied);
+  8253     gonom9             }
+  8287     ovclas             // Back up the value of $Output->data->is_register
+  8253     gonom9             $is_register = $output->data->is_register;
+  8253     gonom9 
+ 10134 namnyams@gmail.com             $output = $this->updateMemberPassword($args);
+  8253     gonom9             if(!$output->toBool()) return $this->stop($output->getMessage());
+  8287     ovclas             // Remove all values having the member_srl from authentication table
+  8253     gonom9             executeQuery('member.deleteAuthMail',$args);
+  8287     ovclas             // Notify the result
+  8253     gonom9             Context::set('is_register', $is_register);
+  8253     gonom9             $this->setTemplatePath($this->module_path.'tpl');
+  8253     gonom9             $this->setTemplateFile('msg_success_authed');
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Execute finding ID/Passoword
+  8287     ovclas          * When clicking the link in the verification email, a method is called to change the old password and to authenticate it
+  8253     gonom9          **/
+  8253     gonom9         function procMemberUpdateAuthMail() {
+  8253     gonom9             $member_srl = Context::get('member_srl');
+  8253     gonom9             if(!$member_srl) return new Object(-1, 'msg_invalid_request');
+  8253     gonom9 
+  8253     gonom9             $oMemberModel = &getModel('member');
+  8287     ovclas             // Get information of the member
+  8253     gonom9             $member_info = $oMemberModel->getMemberInfoByMemberSrl($member_srl);
+  9275 sinsy200@gmail.com             // Check if the member is set to allow a request to re-send an authentication mail
+  8253     gonom9             if ($member_info->denied != 'Y')
+  8253     gonom9                 return new Object(-1, 'msg_invalid_request');
+  8253     gonom9 
+  8253     gonom9             $chk_args->member_srl = $member_srl;
+  8253     gonom9             $output = executeQuery('member.chkAuthMail', $chk_args);
+  8253     gonom9             if ($output->toBool() && $output->data->count == '0') return new Object(-1, 'msg_invalid_request');
+  8287     ovclas             // Insert data into the authentication DB
+  8253     gonom9             $auth_args->member_srl = $member_srl;
+  8253     gonom9             $auth_args->auth_key = md5(rand(0, 999999));
+  8253     gonom9 
+  8253     gonom9             $output = executeQuery('member.updateAuthMail', $auth_args);
+  8253     gonom9             if (!$output->toBool()) {
+  8253     gonom9                 $oDB->rollback();
+  8253     gonom9                 return $output;
+  8253     gonom9             }
+  8287     ovclas             // Get content of the email to send a member
+  8253     gonom9             Context::set('auth_args', $auth_args);
+  8253     gonom9             Context::set('member_info', $member_info);
+  8253     gonom9 
+  8253     gonom9             $oModuleModel = &getModel('module');
+  8253     gonom9             $member_config = $oModuleModel->getModuleConfig('member');
+  8253     gonom9             if(!$member_config->skin) $member_config->skin = "default";
+  8253     gonom9             if(!$member_config->colorset) $member_config->colorset = "white";
+  8253     gonom9 
+  8253     gonom9             Context::set('member_config', $member_config);
+  8253     gonom9 
+  8253     gonom9             $tpl_path = sprintf('%sskins/%s', $this->module_path, $member_config->skin);
+  8253     gonom9             if(!is_dir($tpl_path)) $tpl_path = sprintf('%sskins/%s', $this->module_path, 'default');
+  8253     gonom9 
+  8253     gonom9             $auth_url = getFullUrl('','module','member','act','procMemberAuthAccount','member_srl',$member_info->member_srl, 'auth_key',$auth_args->auth_key);
+  8253     gonom9             Context::set('auth_url', $auth_url);
+  8253     gonom9 
+  8253     gonom9             $oTemplate = &TemplateHandler::getInstance();
+  8253     gonom9             $content = $oTemplate->compile($tpl_path, 'confirm_member_account_mail');
+  8287     ovclas             // Get information of the Webmaster
+  8253     gonom9             $oModuleModel = &getModel('module');
+  8253     gonom9             $member_config = $oModuleModel->getModuleConfig('member');
+  8287     ovclas             // Send a mail
+  8253     gonom9             $oMail = new Mail();
+  8253     gonom9             $oMail->setTitle( Context::getLang('msg_confirm_account_title') );
+  8253     gonom9             $oMail->setContent($content);
+  8253     gonom9             $oMail->setSender( $member_config->webmaster_name?$member_config->webmaster_name:'webmaster', $member_config->webmaster_email);
+  8253     gonom9             $oMail->setReceiptor( $member_info->user_name, $member_info->email_address );
+  8253     gonom9             $oMail->send();
+  8287     ovclas             // Return message
+  8253     gonom9             $msg = sprintf(Context::getLang('msg_auth_mail_sent'), $member_info->email_address);
+  8253     gonom9             return new Object(-1, $msg);
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Request to re-send the authentication mail
+  8253     gonom9          **/
+  8253     gonom9         function procMemberResendAuthMail() {
+  8287     ovclas             // Get an email_address
+  8253     gonom9             $email_address = Context::get('email_address');
+  8253     gonom9             if(!$email_address) return $this->stop('msg_invalid_request');
+  8287     ovclas             // Log test by using email_address
+  8253     gonom9             $oMemberModel = &getModel('member');
+  8253     gonom9 
+  8253     gonom9             $args->email_address = $email_address;
+  8357     ovclas             $memberSrl = $oMemberModel->getMemberSrlByEmailAddress($email_address);
+  8357     ovclas             if(!$memberSrl) return $this->stop('msg_not_exists_member');
+  8253     gonom9 
+  8357     ovclas 			$columnList = array('member_srl', 'user_id', 'user_name', 'nick_name', 'email_address');
+  8357     ovclas             $memberInfo = $oMemberModel->getMemberInfoByMemberSrl($memberSrl, 0, $columnList);
+  8253     gonom9 
+  8287     ovclas             // Check if a authentication mail has been sent previously
+  8357     ovclas             $chk_args->member_srl = $memberInfo->member_srl;
+  8253     gonom9             $output = executeQuery('member.chkAuthMail', $chk_args);
+  8253     gonom9             if($output->toBool() && $output->data->count == '0') return new Object(-1, 'msg_invalid_request');
+  8253     gonom9 
+  8357     ovclas             $auth_args->member_srl = $memberInfo->member_srl;
+  8253     gonom9             $output = executeQueryArray('member.getAuthMailInfo', $auth_args);
+  8253     gonom9             if(!$output->data || !$output->data[0]->auth_key)  return new Object(-1, 'msg_invalid_request');
+  8253     gonom9             $auth_info = $output->data[0];
+  8287     ovclas             // Get content of the email to send a member
+  8357     ovclas             Context::set('member_info', $memberInfo);
+  8253     gonom9             $oModuleModel = &getModel('module');
+  8253     gonom9             $member_config = $oModuleModel->getModuleConfig('member');
+  8253     gonom9             if(!$member_config->skin) $member_config->skin = "default";
+  8253     gonom9             if(!$member_config->colorset) $member_config->colorset = "white";
+  8253     gonom9 
+  8253     gonom9             Context::set('member_config', $member_config);
+  8253     gonom9 
+  8253     gonom9             $tpl_path = sprintf('%sskins/%s', $this->module_path, $member_config->skin);
+  8253     gonom9             if(!is_dir($tpl_path)) $tpl_path = sprintf('%sskins/%s', $this->module_path, 'default');
+  8253     gonom9 
+  8357     ovclas             $auth_url = getFullUrl('','module','member','act','procMemberAuthAccount','member_srl',$memberInfo->member_srl, 'auth_key',$auth_info->auth_key);
+  8253     gonom9             Context::set('auth_url', $auth_url);
+  8253     gonom9 
+  8253     gonom9             $oTemplate = &TemplateHandler::getInstance();
+  8253     gonom9             $content = $oTemplate->compile($tpl_path, 'confirm_member_account_mail');
+  8287     ovclas             // Get information of the Webmaster
+  8253     gonom9             $oModuleModel = &getModel('module');
+  8253     gonom9             $member_config = $oModuleModel->getModuleConfig('member');
+  8287     ovclas             // Send a mail
+  8253     gonom9             $oMail = new Mail();
+  8253     gonom9             $oMail->setTitle( Context::getLang('msg_confirm_account_title') );
+  8253     gonom9             $oMail->setContent($content);
+  8253     gonom9             $oMail->setSender( $member_config->webmaster_name?$member_config->webmaster_name:'webmaster', $member_config->webmaster_email);
+  8253     gonom9             $oMail->setReceiptor( $args->user_name, $args->email_address );
+  8253     gonom9             $oMail->send();
+  8253     gonom9 
+  8253     gonom9             $msg = sprintf(Context::getLang('msg_confirm_mail_sent'), $args->email_address);
+  8253     gonom9             $this->setMessage($msg);
+  8533 ovclas@gmail.com 			if(!in_array(Context::getRequestMethod(),array('XMLRPC','JSON'))) {
+  8533 ovclas@gmail.com 				$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'mid', Context::get('mid'), 'act', '');
+  8533 ovclas@gmail.com 				header('location:'.$returnUrl);
+  8533 ovclas@gmail.com 				return;
+  8533 ovclas@gmail.com 			}
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Join a virtual site
+  8253     gonom9          **/
+  9732 chschy@gmail.com         function procMemberSiteSignUp() {
+  8253     gonom9             $site_module_info = Context::get('site_module_info');
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9             if(!$site_module_info->site_srl || !Context::get('is_logged') || count($logged_info->group_srl_list) ) return new Object(-1,'msg_invalid_request');
+  8253     gonom9 
+  8253     gonom9             $oMemberModel = &getModel('member');
+  8357     ovclas 			$columnList = array('site_srl', 'group_srl', 'title');
+  8357     ovclas             $default_group = $oMemberModel->getDefaultGroup($site_module_info->site_srl, $columnList);
+  8253     gonom9             $this->addMemberToGroup($logged_info->member_srl, $default_group->group_srl, $site_module_info->site_srl);
+  8253     gonom9             $groups[$default_group->group_srl] = $default_group->title;
+  8253     gonom9             $logged_info->group_list = $groups;
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Leave the virtual site
+  8253     gonom9          **/
+  9732 chschy@gmail.com         function procMemberSiteLeave() {
+  8253     gonom9             $site_module_info = Context::get('site_module_info');
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9             if(!$site_module_info->site_srl || !Context::get('is_logged') || count($logged_info->group_srl_list) ) return new Object(-1,'msg_invalid_request');
+  8253     gonom9 
+  8253     gonom9             $args->site_srl= $site_module_info->site_srl;
+  8253     gonom9             $args->member_srl = $logged_info->member_srl;
+  8253     gonom9             $output = executeQuery('member.deleteMembersGroup', $args);
+  8253     gonom9             if(!$output->toBool()) return $output;
+  8253     gonom9             $this->setMessage('success_deleted');
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Save the member configurations
+  8253     gonom9          **/
+  8253     gonom9         function setMemberConfig($args) {
+  8253     gonom9             if(!$args->skin) $args->skin = "default";
+  8253     gonom9             if(!$args->colorset) $args->colorset = "white";
+  8253     gonom9             if(!$args->editor_skin) $args->editor_skin= "xpresseditor";
+  8253     gonom9             if(!$args->editor_colorset) $args->editor_colorset = "white";
+  8253     gonom9             if($args->enable_join!='Y') $args->enable_join = 'N';
+  8253     gonom9             if($args->enable_openid!='Y') $args->enable_openid= 'N';
+  8253     gonom9             if($args->profile_image !='Y') $args->profile_image = 'N';
+  8253     gonom9             if($args->image_name!='Y') $args->image_name = 'N';
+  8253     gonom9             if($args->image_mark!='Y') $args->image_mark = 'N';
+  8253     gonom9             if($args->group_image_mark!='Y') $args->group_image_mark = 'N';
+  8253     gonom9             if(!trim(strip_tags($args->agreement))) $args->agreement = null;
+  8253     gonom9             $args->limit_day = (int)$args->limit_day;
+  8253     gonom9 
+  8253     gonom9             $agreement = trim($args->agreement);
+  8253     gonom9             unset($args->agreement);
+  8253     gonom9 
+  8253     gonom9             $oModuleController = &getController('module');
+  8253     gonom9             $output = $oModuleController->insertModuleConfig('member',$args);
+  8253     gonom9             if(!$output->toBool()) return $output;
+  8253     gonom9 
+  8253     gonom9             $agreement_file = _XE_PATH_.'files/member_extra_info/agreement.txt';
+  8253     gonom9             FileHandler::writeFile($agreement_file, $agreement);
+  8253     gonom9 
+  8253     gonom9             return new Object();
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Save the signature as a file
+  8253     gonom9          **/
+  8253     gonom9         function putSignature($member_srl, $signature) {
+  8253     gonom9             $signature = trim(removeHackTag($signature));
+  8253     gonom9             $signature = preg_replace('/<(\/?)(embed|object|param)/is', '&lt;$1$2', $signature);
+  8253     gonom9 
+  8253     gonom9             $check_signature = trim(str_replace(array('&nbsp;',"\n","\r"),'',strip_tags($signature,'<img><object>')));
+  8253     gonom9             $path = sprintf('files/member_extra_info/signature/%s/', getNumberingPath($member_srl));
+  8253     gonom9             $filename = sprintf('%s%d.signature.php', $path, $member_srl);
+  8253     gonom9 
+  8253     gonom9             if(!$check_signature) return FileHandler::removeFile($filename);
+  8253     gonom9 
+  8253     gonom9             $buff = sprintf('<?php if(!defined("__ZBXE__")) exit();?>%s', $signature);
+  8253     gonom9             FileHandler::makeDir($path);
+  8253     gonom9             FileHandler::writeFile($filename, $buff);
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Delete the signature file
+  8253     gonom9          **/
+  8253     gonom9         function delSignature($member_srl) {
+  8253     gonom9             $filename = sprintf('files/member_extra_info/signature/%s%d.gif', getNumberingPath($member_srl), $member_srl);
+  8253     gonom9             FileHandler::removeFile($filename);
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  9275 sinsy200@gmail.com          * @brief Add group_srl to member_srl
+  8253     gonom9          **/
+  8253     gonom9         function addMemberToGroup($member_srl,$group_srl,$site_srl=0) {
+  8253     gonom9             $args->member_srl = $member_srl;
+  8253     gonom9             $args->group_srl = $group_srl;
+  8253     gonom9             if($site_srl) $args->site_srl = $site_srl;
+  8253     gonom9 
+  8253     gonom9             $oModel =& getModel('member');
+  8253     gonom9             $groups = $oModel->getMemberGroups($member_srl, $site_srl, true);
+  8253     gonom9             if($groups[$group_srl]) return new Object();
+  8253     gonom9 
+  8287     ovclas             // Add
+  8253     gonom9             $output = executeQuery('member.addMemberToGroup',$args);
+  8253     gonom9             $output2 = ModuleHandler::triggerCall('member.addMemberToGroup', 'after', $args);
+  8253     gonom9 
+  8253     gonom9             return $output;
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Change a group of certain members
+  8287     ovclas          * Available only when a member has a single group
+  8253     gonom9          **/
+  8253     gonom9         function replaceMemberGroup($args) {
+  8253     gonom9             $obj->site_srl = $args->site_srl;
+  8253     gonom9             $obj->member_srl = implode(',',$args->member_srl);
+  8253     gonom9 
+  8253     gonom9             $output = executeQueryArray('member.getMembersGroup', $obj);
+  8253     gonom9             if($output->data) foreach($output->data as $key => $val) $date[$val->member_srl] = $val->regdate;
+  8253     gonom9 
+  8253     gonom9             $output = executeQuery('member.deleteMembersGroup', $obj);
+  8253     gonom9             if(!$output->toBool()) return $output;
+  8253     gonom9 
+  8253     gonom9             $inserted_members = array();
+  8253     gonom9             foreach($args->member_srl as $key => $val) {
+  8253     gonom9                 if($inserted_members[$val]) continue;
+  8253     gonom9                 $inserted_members[$val] = true;
+  8253     gonom9 
+  8253     gonom9                 unset($obj);
+  8253     gonom9                 $obj->member_srl = $val;
+  8253     gonom9                 $obj->group_srl = $args->group_srl;
+  8253     gonom9                 $obj->site_srl = $args->site_srl;
+  8253     gonom9                 $obj->regdate = $date[$obj->member_srl];
+  8253     gonom9                 $output = executeQuery('member.addMemberToGroup', $obj);
+  8253     gonom9                 if(!$output->toBool()) return $output;
+  8253     gonom9             }
+  8253     gonom9             return new Object();
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Auto-login
+  8253     gonom9          **/
+  8253     gonom9         function doAutologin() {
+  8287     ovclas             // Get a key value of auto log-in
+  8253     gonom9             $args->autologin_key = $_COOKIE['xeak'];
+  9275 sinsy200@gmail.com             // Get information of the key
+  8253     gonom9             $output = executeQuery('member.getAutologin', $args);
+  8287     ovclas             // If no information exists, delete a cookie
+  8253     gonom9             if(!$output->toBool() || !$output->data) {
+  8253     gonom9                 setCookie('xeak',null,time()+60*60*24*365, '/');
+  8253     gonom9                 return;
+  8253     gonom9             }
+  8253     gonom9 
+ 10250 namnyams@gmail.com 			$oMemberModel = &getModel('member');
+ 10250 namnyams@gmail.com 			$config = $oMemberModel->getMemberConfig();
+ 10250 namnyams@gmail.com 
+ 10250 namnyams@gmail.com 			$user_id = ($config->identifier == 'user_id') ? $output->data->user_id : $output->data->email_address;
+  8253     gonom9             $password = $output->data->password;
+ 10250 namnyams@gmail.com             
+ 10250 namnyams@gmail.com 			if(!$user_id || !$password) {
+  8253     gonom9                 setCookie('xeak',null,time()+60*60*24*365, '/');
+  8253     gonom9                 return;
+  8253     gonom9             }
+  8253     gonom9 
+  8253     gonom9             $do_auto_login = false;
+  8253     gonom9 
+ 10250 namnyams@gmail.com 
+  8287     ovclas             // Compare key values based on the information
+ 10179 ngleader@gmail.com             $key = md5($user_id . $password . $_SERVER['HTTP_USER_AGENT']);
+  8253     gonom9 
+  8253     gonom9             if($key == $args->autologin_key) {
+  8253     gonom9 
+  8287     ovclas                 // Check change_password_date
+  8253     gonom9                 $oModuleModel = &getModel('module');
+  8253     gonom9                 $member_config = $oModuleModel->getModuleConfig('member');
+  8253     gonom9                 $limit_date = $member_config->change_password_date;
+  8253     gonom9 
+  8287     ovclas                 // Check if change_password_date is set
+  8253     gonom9                 if($limit_date > 0) {
+  8253     gonom9                     $oMemberModel = &getModel('member');
+  8357     ovclas 					$columnList = array('member_srl', 'change_password_date');
+  8253     gonom9 
+ 10400 namnyams@gmail.com 					if($config->identifier == 'user_id')
+ 10400 namnyams@gmail.com 					{
+ 10400 namnyams@gmail.com                     	$member_info = $oMemberModel->getMemberInfoByUserID($user_id, $columnList);
+ 10400 namnyams@gmail.com 					}
+ 10400 namnyams@gmail.com 					else
+ 10400 namnyams@gmail.com 					{
+ 10400 namnyams@gmail.com 						$member_info = $oMemberModel->getMemberInfoByEmailAddress($user_id, $columnList);
+ 10400 namnyams@gmail.com 					}
+ 10400 namnyams@gmail.com 
+  8253     gonom9                     if($member_info->change_password_date >= date('YmdHis', strtotime('-'.$limit_date.' day')) ){
+  8253     gonom9                         $do_auto_login = true;
+  8253     gonom9                     }
+  8253     gonom9 
+  8253     gonom9                 } else {
+  8253     gonom9                     $do_auto_login = true;
+  8253     gonom9                 }
+  8253     gonom9             }
+  9275 sinsy200@gmail.com 
+  9275 sinsy200@gmail.com 
+  8253     gonom9             if($do_auto_login) {
+  8253     gonom9                 $output = $this->doLogin($user_id);
+  8253     gonom9             } else {
+  8253     gonom9                 executeQuery('member.deleteAutologin', $args);
+  8253     gonom9                 setCookie('xeak',null,time()+60*60*24*365, '/');
+  8253     gonom9             }
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Log-in
+  8253     gonom9          **/
+  8253     gonom9         function doLogin($user_id, $password = '', $keep_signed = false) {
+  8253     gonom9             $user_id = strtolower($user_id);
+  8287     ovclas             // Call a trigger before log-in (before)
+  8253     gonom9             $trigger_obj->user_id = $user_id;
+  8253     gonom9             $trigger_obj->password = $password;
+  8253     gonom9             $trigger_output = ModuleHandler::triggerCall('member.doLogin', 'before', $trigger_obj);
+  8253     gonom9             if(!$trigger_output->toBool()) return $trigger_output;
+  8287     ovclas             // Create a member model object
+  8253     gonom9             $oMemberModel = &getModel('member');
+  9110 namnyams@gmail.com 
+  9422 namnyams@gmail.com 	    // check identifier
+  9422 namnyams@gmail.com 	    $config = $oMemberModel->getMemberConfig();
+  9422 namnyams@gmail.com 	    if ($config->identifier == 'email_address'){
+  9422 namnyams@gmail.com 		    // Get user_id information
+  9422 namnyams@gmail.com 		    $this->memberInfo = $oMemberModel->getMemberInfoByEmailAddress($user_id);
+  9422 namnyams@gmail.com 		    // Set an invalid user if no value returned
+  9422 namnyams@gmail.com 		    if(!$user_id || strtolower($this->memberInfo->email_address) != strtolower($user_id)) return new Object(-1, 'invalid_email_address');
+  9110 namnyams@gmail.com 
+  9422 namnyams@gmail.com 	    }else{
+  9422 namnyams@gmail.com 		    // Get user_id information
+  9422 namnyams@gmail.com 		    $this->memberInfo = $oMemberModel->getMemberInfoByUserID($user_id);
+  9422 namnyams@gmail.com 		    // Set an invalid user if no value returned
+  9422 namnyams@gmail.com 		    if(!$user_id || strtolower($this->memberInfo->user_id) != strtolower($user_id)) return new Object(-1, 'invalid_user_id');
+  9422 namnyams@gmail.com 	    }
+  8287     ovclas             // Password Check
+  8357     ovclas             if($password && !$oMemberModel->isValidPassword($this->memberInfo->password, $password)) return new Object(-1, 'invalid_password');
+  8287     ovclas             // If denied == 'Y', notify
+  8357     ovclas             if($this->memberInfo->denied == 'Y') {
+  8357     ovclas                 $args->member_srl = $this->memberInfo->member_srl;
+  8253     gonom9                 $output = executeQuery('member.chkAuthMail', $args);
+  8253     gonom9                 if ($output->toBool() && $output->data->count != '0') return new Object(-1,'msg_user_not_confirmed');
+  8253     gonom9                 return new Object(-1,'msg_user_denied');
+  8253     gonom9             }
+  8287     ovclas             // Notify if denied_date is less than the current time
+  8357     ovclas             if($this->memberInfo->limit_date && substr($this->memberInfo->limit_date,0,8) >= date("Ymd")) return new Object(-1,sprintf(Context::getLang('msg_user_limited'),zdate($this->memberInfo->limit_date,"Y-m-d")));
+  8287     ovclas             // Update the latest login time
+  8357     ovclas             $args->member_srl = $this->memberInfo->member_srl;
+  8253     gonom9             $output = executeQuery('member.updateLastLogin', $args);
+  8287     ovclas             // Call a trigger after successfully log-in (after)
+  8357     ovclas             $trigger_output = ModuleHandler::triggerCall('member.doLogin', 'after', $this->memberInfo);
+  8253     gonom9             if(!$trigger_output->toBool()) return $trigger_output;
+  8287     ovclas             // When user checked to use auto-login
+  8253     gonom9             if($keep_signed) {
+  8287     ovclas                 // Key generate for auto login
+ 10179 ngleader@gmail.com                 $autologin_args->autologin_key = md5(strtolower($user_id).$this->memberInfo->password.$_SERVER['HTTP_USER_AGENT']);
+  8357     ovclas                 $autologin_args->member_srl = $this->memberInfo->member_srl;
+  8253     gonom9                 executeQuery('member.deleteAutologin', $autologin_args);
+  8253     gonom9                 $autologin_output = executeQuery('member.insertAutologin', $autologin_args);
+  8253     gonom9                 if($autologin_output->toBool()) setCookie('xeak',$autologin_args->autologin_key, time()+60*60*24*365, '/');
+  8253     gonom9             }
+  9367 chschy@gmail.com 			if($this->memberInfo->is_admin == 'Y') {
+  9373 chschy@gmail.com 				 $oMemberAdminModel = &getAdminModel('member');
+  9373 chschy@gmail.com 				if(!$oMemberAdminModel->getMemberAdminIPCheck()) {
+  9367 chschy@gmail.com 		            $_SESSION['denied_admin'] = 'Y';
+  9367 chschy@gmail.com 				}
+  9367 chschy@gmail.com 			}
+  8253     gonom9 
+  8357     ovclas             $this->setSessionInfo();
+  8253     gonom9 
+  8253     gonom9             return $output;
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Update or create session information
+  8253     gonom9          **/
+  8357     ovclas         function setSessionInfo() {
+  8253     gonom9             $oMemberModel = &getModel('member');
+  8287     ovclas             // If your information came through the current session information to extract information from the users
+  8357     ovclas             if(!$this->memberInfo && $_SESSION['member_srl'] && $oMemberModel->isLogged() ) {
+  8357     ovclas                 $this->memberInfo = $oMemberModel->getMemberInfoByMemberSrl($_SESSION['member_srl']);
+  8287     ovclas                 // If you do not destroy the session Profile
+  8357     ovclas                 if($this->memberInfo->member_srl != $_SESSION['member_srl']) {
+  8253     gonom9                     $this->destroySessionInfo();
+  8253     gonom9                     return;
+  8253     gonom9                 }
+  8253     gonom9             }
+  8287     ovclas             // Stop using the session id is destroyed
+  8357     ovclas             if($this->memberInfo->denied=='Y') {
+  8253     gonom9                 $this->destroySessionInfo();
+  8253     gonom9                 return;
+  8253     gonom9             }
+  8287     ovclas             // OpenID is a check (only for a determined identity types)
+  8357     ovclas             if(preg_match("/^([_0-9a-zA-Z]+)$/is", $this->memberInfo->user_id)) $this->memberInfo->is_openid = false;
+  8357     ovclas             else $this->memberInfo->is_openid = true;
+  8287     ovclas             // Log in for treatment sessions set
+  8253     gonom9             $_SESSION['is_logged'] = true;
+  8253     gonom9             $_SESSION['ipaddress'] = $_SERVER['REMOTE_ADDR'];
+  8357     ovclas             $_SESSION['member_srl'] = $this->memberInfo->member_srl;
+  9367 chschy@gmail.com 			$_SESSION['is_admin'] = '';
+  9367 chschy@gmail.com 			// Do not save your password in the session jiwojum;;
+  8357     ovclas             //unset($this->memberInfo->password);
+  8287     ovclas             // User Group Settings
+  8253     gonom9             /*
+  8357     ovclas             if($this->memberInfo->group_list) {
+  8357     ovclas                 $group_srl_list = array_keys($this->memberInfo->group_list);
+  8253     gonom9                 $_SESSION['group_srls'] = $group_srl_list;
+  8287     ovclas                 // If the group is designated as an administrator administrator
+  8253     gonom9                 $oMemberModel = &getModel('member');
+  8253     gonom9                 $admin_group = $oMemberModel->getAdminGroup();
+  8253     gonom9                 if($admin_group->group_srl && in_array($admin_group->group_srl, $group_srl_list)) $_SESSION['is_admin'] = 'Y';
+  8253     gonom9             }
+  8253     gonom9             */
+  9875 sinsy200@gmail.com 
+  8287     ovclas             // Information stored in the session login user
+  8253     gonom9             Context::set('is_logged', true);
+  8357     ovclas             Context::set('logged_info', $this->memberInfo);
+  8567 ovclas@gmail.com 
+  8287     ovclas             // Only the menu configuration of the user (such as an add-on to the menu can be changed)
+  8253     gonom9             $this->addMemberMenu( 'dispMemberInfo', 'cmd_view_member_info');
+  8253     gonom9             $this->addMemberMenu( 'dispMemberScrappedDocument', 'cmd_view_scrapped_document');
+  8253     gonom9             $this->addMemberMenu( 'dispMemberSavedDocument', 'cmd_view_saved_document');
+  8253     gonom9             $this->addMemberMenu( 'dispMemberOwnDocument', 'cmd_view_own_document');
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Logged method for providing a personalized menu
+  8287     ovclas          * Login information is used in the output widget, or personalized page
+  8253     gonom9          **/
+  8253     gonom9         function addMemberMenu($act, $str) {
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9 
+  8253     gonom9             $logged_info->menu_list[$act] = Context::getLang($str);
+  8253     gonom9 
+  8253     gonom9             Context::set('logged_info', $logged_info);
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Nickname and click Log In to add a pop-up menu that appears when the method
+  8253     gonom9          **/
+  8253     gonom9         function addMemberPopupMenu($url, $str, $icon = '', $target = 'self') {
+  8253     gonom9             $member_popup_menu_list = Context::get('member_popup_menu_list');
+  8253     gonom9             if(!is_array($member_popup_menu_list)) $member_popup_menu_list = array();
+  8253     gonom9 
+  8253     gonom9             $obj->url = $url;
+  8253     gonom9             $obj->str = $str;
+  8253     gonom9             $obj->icon = $icon;
+  8253     gonom9             $obj->target = $target;
+  8253     gonom9             $member_popup_menu_list[] = $obj;
+  8253     gonom9 
+  8253     gonom9             Context::set('member_popup_menu_list', $member_popup_menu_list);
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Add users to the member table
+  8253     gonom9          **/
+  8253     gonom9         function insertMember(&$args, $password_is_hashed = false) {
+  8287     ovclas             // Call a trigger (before)
+  8253     gonom9             $output = ModuleHandler::triggerCall('member.insertMember', 'before', $args);
+  8253     gonom9             if(!$output->toBool()) return $output;
+  8287     ovclas             // Terms and Conditions portion of the information set up by members reaffirmed
+  8253     gonom9             $oModuleModel = &getModel('module');
+  8253     gonom9             $config = $oModuleModel->getModuleConfig('member');
+  8253     gonom9 
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8287     ovclas             // If the date of the temporary restrictions limit further information on the date of
+  8253     gonom9             if($config->limit_day) $args->limit_date = date("YmdHis", time()+$config->limit_day*60*60*24);
+  9321 namnyams@gmail.com 
+  9321 namnyams@gmail.com             $args->member_srl = getNextSequence();
+  8287     ovclas             // Enter the user's identity changed to lowercase
+  9321 namnyams@gmail.com 			if (!$args->user_id) $args->user_id = 't'.$args->member_srl;
+  9321 namnyams@gmail.com 			else $args->user_id = strtolower($args->user_id);
+  8287     ovclas             // Control of essential parameters
+  8253     gonom9             if($args->allow_mailing!='Y') $args->allow_mailing = 'N';
+  8253     gonom9             if($args->denied!='Y') $args->denied = 'N';
+  8253     gonom9             $args->allow_message= 'Y';
+  8253     gonom9 
+  8253     gonom9             if($logged_info->is_admin == 'Y') {
+  8253     gonom9                 if($args->is_admin!='Y') $args->is_admin = 'N';
+  8253     gonom9             } else {
+  8253     gonom9                 unset($args->is_admin);
+  8253     gonom9             }
+  8253     gonom9 
+  8253     gonom9             list($args->email_id, $args->email_host) = explode('@', $args->email_address);
+  8287     ovclas             // Website, blog, checks the address
+  8253     gonom9             if($args->homepage && !preg_match("/^[a-z]+:\/\//i",$args->homepage)) $args->homepage = 'http://'.$args->homepage;
+  8253     gonom9             if($args->blog && !preg_match("/^[a-z]+:\/\//i",$args->blog)) $args->blog = 'http://'.$args->blog;
+  8287     ovclas             // Create a model object
+  8253     gonom9             $oMemberModel = &getModel('member');
+  8287     ovclas             // ID check is prohibited
+  8253     gonom9             if($oMemberModel->isDeniedID($args->user_id)) return new Object(-1,'denied_user_id');
+  8287     ovclas             // ID, nickname, email address of the redundancy check
+  8253     gonom9             $member_srl = $oMemberModel->getMemberSrlByUserID($args->user_id);
+  8253     gonom9             if($member_srl) return new Object(-1,'msg_exists_user_id');
+  8253     gonom9 
+  8253     gonom9             $member_srl = $oMemberModel->getMemberSrlByNickName($args->nick_name);
+  8253     gonom9             if($member_srl) return new Object(-1,'msg_exists_nick_name');
+  8253     gonom9 
+  8253     gonom9             $member_srl = $oMemberModel->getMemberSrlByEmailAddress($args->email_address);
+  8253     gonom9             if($member_srl) return new Object(-1,'msg_exists_email_address');
+  8253     gonom9 
+  8253     gonom9             $oDB = &DB::getInstance();
+  8253     gonom9             $oDB->begin();
+  8287     ovclas             // Insert data into the DB
+  8253     gonom9             $args->list_order = -1 * $args->member_srl;
+  9275 sinsy200@gmail.com 			$args->nick_name = htmlspecialchars($args->nick_name);
+  9275 sinsy200@gmail.com 			$args->homepage = htmlspecialchars($args->homepage);
+  9275 sinsy200@gmail.com 			$args->blog = htmlspecialchars($args->blog);
+  9275 sinsy200@gmail.com 
+  8253     gonom9             if($args->password && !$password_is_hashed) $args->password = md5($args->password);
+  8253     gonom9             elseif(!$args->password) unset($args->password);
+  8253     gonom9 
+  9275 sinsy200@gmail.com 			if (!$args->user_id) $args->user_id = 't'.$args->member_srl;
+  9125 namnyams@gmail.com 			if (!$args->user_name) $args->user_name = $args->member_srl;
+  9124 namnyams@gmail.com 
+ 10201 ngleader@gmail.com 			if(trim($args->find_account_answer))
+ 10201 ngleader@gmail.com 			{
+ 10201 ngleader@gmail.com 				$args->find_account_answer = md5($args->find_account_answer);
+ 10201 ngleader@gmail.com 			}
+ 10201 ngleader@gmail.com 
+  8253     gonom9             $output = executeQuery('member.insertMember', $args);
+  8253     gonom9             if(!$output->toBool()) {
+  8253     gonom9                 $oDB->rollback();
+  8253     gonom9                 return $output;
+  8253     gonom9             }
+  8512 ovclas@gmail.com 
+  8512 ovclas@gmail.com 			if(is_array($args->group_srl_list)) $group_srl_list = $args->group_srl_list;
+  8512 ovclas@gmail.com 			else $group_srl_list = explode('|@|', $args->group_srl_list);
+  8287     ovclas             // If no value is entered the default group, the value of group registration
+  8253     gonom9             if(!$args->group_srl_list) {
+  8357     ovclas 				$columnList = array('site_srl', 'group_srl');
+  8357     ovclas                 $default_group = $oMemberModel->getDefaultGroup(0, $columnList);
+ 10121 namnyams@gmail.com 				if ($default_group)
+ 10121 namnyams@gmail.com 				{
+ 10121 namnyams@gmail.com 					 // Add to the default group
+ 10121 namnyams@gmail.com 					$output = $this->addMemberToGroup($args->member_srl,$default_group->group_srl);
+ 10121 namnyams@gmail.com 					if(!$output->toBool()) 
+ 10121 namnyams@gmail.com 					{
+ 10121 namnyams@gmail.com 						$oDB->rollback();
+ 10121 namnyams@gmail.com 						return $output;
+ 10121 namnyams@gmail.com 					}
+ 10121 namnyams@gmail.com 				}
+  8287     ovclas             // If the value is the value of the group entered the group registration
+  8253     gonom9             } else {
+  8253     gonom9                 for($i=0;$i<count($group_srl_list);$i++) {
+  8253     gonom9                     $output = $this->addMemberToGroup($args->member_srl,$group_srl_list[$i]);
+  8253     gonom9 
+  8253     gonom9                     if(!$output->toBool()) {
+  8253     gonom9                         $oDB->rollback();
+  8253     gonom9                         return $output;
+  8253     gonom9                     }
+  8253     gonom9                 }
+  8253     gonom9             }
+  9311 namnyams@gmail.com 
+  9311 namnyams@gmail.com 			$member_config = $oModuleModel->getModuleConfig('member');
+  8287     ovclas             // When using email authentication mode (when you subscribed members denied a) certified mail sent
+  8253     gonom9             if ($args->denied == 'Y') {
+  8287     ovclas                 // Insert data into the authentication DB
+  8253     gonom9                 $auth_args->user_id = $args->user_id;
+  8253     gonom9                 $auth_args->member_srl = $args->member_srl;
+  8253     gonom9                 $auth_args->new_password = $args->password;
+  8253     gonom9                 $auth_args->auth_key = md5(rand(0, 999999));
+  8253     gonom9                 $auth_args->is_register = 'Y';
+  8253     gonom9 
+  8253     gonom9                 $output = executeQuery('member.insertAuthMail', $auth_args);
+  8253     gonom9                 if (!$output->toBool()) {
+  8253     gonom9                     $oDB->rollback();
+  8253     gonom9                     return $output;
+  8253     gonom9                 }
+  8287     ovclas                 // Get content of the email to send a member
+  8253     gonom9                 Context::set('auth_args', $auth_args);
+  8253     gonom9 
+  9311 namnyams@gmail.com 				global $lang;
+  9311 namnyams@gmail.com 				if (is_array($member_config->signupForm)){
+  9311 namnyams@gmail.com 					$exceptForm=array('password', 'find_account_question');
+  9311 namnyams@gmail.com 					foreach($member_config->signupForm as $form){
+  9311 namnyams@gmail.com 						if(!in_array($form->name, $exceptForm) && $form->isDefaultForm && ($form->required || $form->mustRequired)){
+  9311 namnyams@gmail.com 							$memberInfo[$lang->{$form->name}] = $args->{$form->name};
+  9311 namnyams@gmail.com 						}
+  9311 namnyams@gmail.com 					}
+  9311 namnyams@gmail.com 				}else{
+  9311 namnyams@gmail.com 					$memberInfo[$lang->user_id] = $args->user_id;
+  9311 namnyams@gmail.com 					$memberInfo[$lang->user_name] = $args->user_name;
+  9311 namnyams@gmail.com 					$memberInfo[$lang->nick_name] = $args->nick_name;
+  9311 namnyams@gmail.com 					$memberInfo[$lang->email_address] = $args->email_address;
+  9311 namnyams@gmail.com 				}
+  9311 namnyams@gmail.com                 Context::set('memberInfo', $memberInfo);
+  9311 namnyams@gmail.com 
+  8253     gonom9                 if(!$member_config->skin) $member_config->skin = "default";
+  8253     gonom9                 if(!$member_config->colorset) $member_config->colorset = "white";
+  8253     gonom9 
+  8253     gonom9                 Context::set('member_config', $member_config);
+  8253     gonom9 
+  8253     gonom9                 $tpl_path = sprintf('%sskins/%s', $this->module_path, $member_config->skin);
+  8253     gonom9                 if(!is_dir($tpl_path)) $tpl_path = sprintf('%sskins/%s', $this->module_path, 'default');
+  8253     gonom9 
+  8253     gonom9                 $auth_url = getFullUrl('','module','member','act','procMemberAuthAccount','member_srl',$args->member_srl, 'auth_key',$auth_args->auth_key);
+  8253     gonom9                 Context::set('auth_url', $auth_url);
+  8253     gonom9 
+  8253     gonom9                 $oTemplate = &TemplateHandler::getInstance();
+  8253     gonom9                 $content = $oTemplate->compile($tpl_path, 'confirm_member_account_mail');
+  8287     ovclas                 // Get information of the Webmaster
+  8253     gonom9                 $oModuleModel = &getModel('module');
+  8253     gonom9                 $member_config = $oModuleModel->getModuleConfig('member');
+  8287     ovclas                 // Send a mail
+  8253     gonom9                 $oMail = new Mail();
+  8253     gonom9                 $oMail->setTitle( Context::getLang('msg_confirm_account_title') );
+  8253     gonom9                 $oMail->setContent($content);
+  8253     gonom9                 $oMail->setSender( $member_config->webmaster_name?$member_config->webmaster_name:'webmaster', $member_config->webmaster_email);
+  8253     gonom9                 $oMail->setReceiptor( $args->user_name, $args->email_address );
+  8253     gonom9                 $oMail->send();
+  8253     gonom9             }
+  8287     ovclas             // Call a trigger (after)
+  8253     gonom9             if($output->toBool()) {
+  8253     gonom9                 $trigger_output = ModuleHandler::triggerCall('member.insertMember', 'after', $args);
+  8253     gonom9                 if(!$trigger_output->toBool()) {
+  8253     gonom9                     $oDB->rollback();
+  8253     gonom9                     return $trigger_output;
+  8253     gonom9                 }
+  8253     gonom9             }
+  8253     gonom9 
+  8253     gonom9             $oDB->commit(true);
+  8253     gonom9 
+  8253     gonom9             $output->add('member_srl', $args->member_srl);
+  8253     gonom9             return $output;
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Modify member information
+  8253     gonom9          **/
+  8253     gonom9         function updateMember($args) {
+  8287     ovclas             // Call a trigger (before)
+  8253     gonom9             $output = ModuleHandler::triggerCall('member.updateMember', 'before', $args);
+  8253     gonom9             if(!$output->toBool()) return $output;
+  8287     ovclas             // Create a model object
+  8253     gonom9             $oMemberModel = &getModel('member');
+  8253     gonom9 
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8287     ovclas             // Get what you want to modify the original information
+  8357     ovclas 			if(!$this->memberInfo) $this->memberInfo = $oMemberModel->getMemberInfoByMemberSrl($args->member_srl);
+  8287     ovclas             // Control of essential parameters
+  8253     gonom9             if($args->allow_mailing!='Y') $args->allow_mailing = 'N';
+  8253     gonom9             if($args->allow_message && !in_array($args->allow_message, array('Y','N','F'))) $args->allow_message = 'Y';
+  8253     gonom9 
+  8253     gonom9             if($logged_info->is_admin == 'Y') {
+  8253     gonom9                 if($args->denied!='Y') $args->denied = 'N';
+  8253     gonom9                 if($args->is_admin!='Y' && $logged_info->member_srl != $args->member_srl) $args->is_admin = 'N';
+  8253     gonom9             } else {
+  8253     gonom9                 unset($args->is_admin);
+  8253     gonom9                 unset($args->denied);
+  8253     gonom9             }
+  8253     gonom9 
+  9297 namnyams@gmail.com 			// check mamber identifier form
+  9297 namnyams@gmail.com 			$config = $oMemberModel->getMemberConfig();
+  9297 namnyams@gmail.com 
+  9297 namnyams@gmail.com 			$output = executeQuery('member.getMemberInfoByMemberSrl', $args);
+  9297 namnyams@gmail.com 			$orgMemberInfo = $output->data;
+  9297 namnyams@gmail.com 
+  9297 namnyams@gmail.com 			if ($config->identifier == 'email_address'){
+  9297 namnyams@gmail.com 				$member_srl = $oMemberModel->getMemberSrlByEmailAddress($args->email_address);
+  9297 namnyams@gmail.com 				if($member_srl&&$args->member_srl!=$member_srl) return new Object(-1,'msg_exists_email_address');
+  9297 namnyams@gmail.com 
+  9450 namnyams@gmail.com 				$args->email_address = $orgMemberInfo->email_address;
+  9297 namnyams@gmail.com 			}else{
+  9297 namnyams@gmail.com 				$member_srl = $oMemberModel->getMemberSrlByUserID($args->user_id);
+  9297 namnyams@gmail.com 				if($member_srl&&$args->member_srl!=$member_srl) return new Object(-1,'msg_exists_email_address');
+  9297 namnyams@gmail.com 
+  9450 namnyams@gmail.com 				$args->user_id = $orgMemberInfo->user_id;
+  9297 namnyams@gmail.com 			}
+  9297 namnyams@gmail.com 
+  9297 namnyams@gmail.com 			list($args->email_id, $args->email_host) = explode('@', $args->email_address);
+  8287     ovclas             // Website, blog, checks the address
+  8253     gonom9             if($args->homepage && !preg_match("/^[a-z]+:\/\//is",$args->homepage)) $args->homepage = 'http://'.$args->homepage;
+  8253     gonom9             if($args->blog && !preg_match("/^[a-z]+:\/\//is",$args->blog)) $args->blog = 'http://'.$args->blog;
+  8253     gonom9 
+  8253     gonom9 
+  8253     gonom9             $oDB = &DB::getInstance();
+  8253     gonom9             $oDB->begin();
+  8287     ovclas             // DB in the update
+  8992 namnyams@gmail.com 
+  8253     gonom9             if($args->password) $args->password = md5($args->password);
+  8992 namnyams@gmail.com             else $args->password = $orgMemberInfo->password;
+  8992 namnyams@gmail.com 			if(!$args->user_name) $args->user_name = $orgMemberInfo->user_name;
+  8992 namnyams@gmail.com 			if(!$args->user_id) $args->user_id = $orgMemberInfo->user_id;
+  9297 namnyams@gmail.com 			if(!$args->nick_name) $args->nick_name = $orgMemberInfo->nick_name;
+  8992 namnyams@gmail.com 
+  8253     gonom9 			if(!$args->description) $args->description = '';
+  9297 namnyams@gmail.com 
+  8253     gonom9             $output = executeQuery('member.updateMember', $args);
+  8253     gonom9             if(!$output->toBool()) {
+  8253     gonom9                 $oDB->rollback();
+  8253     gonom9                 return $output;
+  8253     gonom9             }
+  9080 namnyams@gmail.com 
+  9080 namnyams@gmail.com 			if ($args->group_srl_list){
+  9080 namnyams@gmail.com 				if(is_array($args->group_srl_list)) $group_srl_list = $args->group_srl_list;
+  9080 namnyams@gmail.com 				else $group_srl_list = explode('|@|', $args->group_srl_list);
+  9080 namnyams@gmail.com 				// If the group information, group information changes
+  9080 namnyams@gmail.com 				if(count($group_srl_list) > 0) {
+  9080 namnyams@gmail.com 					$args->site_srl = 0;
+  9080 namnyams@gmail.com 					// One of its members to delete all the group
+  9080 namnyams@gmail.com 					$output = executeQuery('member.deleteMemberGroupMember', $args);
+  9080 namnyams@gmail.com 					if(!$output->toBool()) {
+  9080 namnyams@gmail.com 						$oDB->rollback();
+  9080 namnyams@gmail.com 						return $output;
+  9080 namnyams@gmail.com 					}
+  9080 namnyams@gmail.com 					// Enter one of the loop a
+  9080 namnyams@gmail.com 					for($i=0;$i<count($group_srl_list);$i++) {
+  9080 namnyams@gmail.com 						$output = $this->addMemberToGroup($args->member_srl,$group_srl_list[$i]);
+  9080 namnyams@gmail.com 						if(!$output->toBool()) {
+  9080 namnyams@gmail.com 							$oDB->rollback();
+  9080 namnyams@gmail.com 							return $output;
+  9080 namnyams@gmail.com 						}
+  9080 namnyams@gmail.com 					}
+  9853 ovclas@gmail.com 
+  9853 ovclas@gmail.com 					// if group is changed, point changed too.
+  9853 ovclas@gmail.com 					$this->_updatePointByGroup($orgMemberInfo->member_srl, $group_srl_list);
+  9080 namnyams@gmail.com 				}
+  9080 namnyams@gmail.com 			}
+  8287     ovclas             // Call a trigger (after)
+  8253     gonom9             if($output->toBool()) {
+  8253     gonom9                 $trigger_output = ModuleHandler::triggerCall('member.updateMember', 'after', $args);
+  8253     gonom9                 if(!$trigger_output->toBool()) {
+  8253     gonom9                     $oDB->rollback();
+  8253     gonom9                     return $trigger_output;
+  8253     gonom9                 }
+  8253     gonom9             }
+  8253     gonom9 
+  8253     gonom9             $oDB->commit();
+  8287     ovclas             // Save Session
+  8357     ovclas             if(!$this->memberInfo) $this->memberInfo = $oMemberModel->getMemberInfoByMemberSrl($args->member_srl);
+  8745 ddan.dragan@gmail.com 			//remove from cache
+  8745 ddan.dragan@gmail.com             $oCacheHandler = &CacheHandler::getInstance('object');
+  8745 ddan.dragan@gmail.com             if($oCacheHandler->isSupport()){
+  8745 ddan.dragan@gmail.com             	$cache_key = 'object:'.$args->member_srl;
+  8745 ddan.dragan@gmail.com             	$oCacheHandler->delete($cache_key);
+  8745 ddan.dragan@gmail.com             }
+  8253     gonom9             $logged_info = Context::get('logged_info');
+  8253     gonom9 
+  8253     gonom9             $output->add('member_srl', $args->member_srl);
+  8253     gonom9             return $output;
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Modify member password
+  8253     gonom9          **/
+  8253     gonom9         function updateMemberPassword($args) {
+  8253     gonom9             $output = executeQuery('member.updateChangePasswordDate', $args);
+  8745 ddan.dragan@gmail.com 			//remove from cache
+  8745 ddan.dragan@gmail.com        		$oCacheHandler = &CacheHandler::getInstance('object');
+  8745 ddan.dragan@gmail.com             if($oCacheHandler->isSupport()){
+  8745 ddan.dragan@gmail.com             	$cache_key = 'object:'.$args->member_srl;
+  8745 ddan.dragan@gmail.com             	$oCacheHandler->delete($cache_key);
+  8745 ddan.dragan@gmail.com             }
+  8253     gonom9             $args->password = md5($args->password);
+  8253     gonom9             return executeQuery('member.updateMemberPassword', $args);
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Delete User
+  8253     gonom9          **/
+  8253     gonom9         function deleteMember($member_srl) {
+  8287     ovclas             // Call a trigger (before)
+  8253     gonom9             $trigger_obj->member_srl = $member_srl;
+  8253     gonom9             $output = ModuleHandler::triggerCall('member.deleteMember', 'before', $trigger_obj);
+  8253     gonom9             if(!$output->toBool()) return $output;
+  8287     ovclas             // Create a model object
+  8253     gonom9             $oMemberModel = &getModel('member');
+  8287     ovclas             // Bringing the user's information
+  8357     ovclas             if(!$this->memberInfo) {
+  8357     ovclas 				$columnList = array('member_srl', 'is_admin');
+  8357     ovclas 				$this->memberInfo = $oMemberModel->getMemberInfoByMemberSrl($member_srl, 0, $columnList);
+  8357     ovclas 			}
+  8357     ovclas             if(!$this->memberInfo) return new Object(-1, 'msg_not_exists_member');
+  8287     ovclas             // If managers can not be deleted
+  8357     ovclas             if($this->memberInfo->is_admin == 'Y') return new Object(-1, 'msg_cannot_delete_admin');
+  8253     gonom9 
+  8253     gonom9             $oDB = &DB::getInstance();
+  8253     gonom9             $oDB->begin();
+  8253     gonom9 
+  8253     gonom9             $args->member_srl = $member_srl;
+  8287     ovclas             // Delete the entries in member_auth_mail
+  8253     gonom9             $output = executeQuery('member.deleteAuthMail', $args);
+  8253     gonom9             if (!$output->toBool()) {
+  8253     gonom9                 $oDB->rollback();
+  8253     gonom9                 return $output;
+  8253     gonom9             }
+  8287     ovclas             // Delete the entries in member_openid
+  8253     gonom9             $output = executeQuery('member.deleteMemberOpenIDByMemberSrl', $ags);
+  8287     ovclas             // TODO: If the table is not an upgrade may fail.
+  8253     gonom9             /*
+  8253     gonom9             if(!$output->toBool()) {
+  8253     gonom9                 $oDB->rollback();
+  8253     gonom9                 return $output;
+  8253     gonom9             }
+  8253     gonom9             */
+  8287     ovclas             // Delete the entries in member_group_member
+  8253     gonom9             $output = executeQuery('member.deleteMemberGroupMember', $args);
+  8253     gonom9             if(!$output->toBool()) {
+  8253     gonom9                 $oDB->rollback();
+  8253     gonom9                 return $output;
+  8253     gonom9             }
+  8287     ovclas             // member removed from the table
+  8253     gonom9             $output = executeQuery('member.deleteMember', $args);
+  8253     gonom9             if(!$output->toBool()) {
+  8253     gonom9                 $oDB->rollback();
+  8253     gonom9                 return $output;
+  8253     gonom9             }
+  8287     ovclas             // Call a trigger (after)
+  8253     gonom9             if($output->toBool()) {
+  8253     gonom9                 $trigger_output = ModuleHandler::triggerCall('member.deleteMember', 'after', $trigger_obj);
+  8253     gonom9                 if(!$trigger_output->toBool()) {
+  8253     gonom9                     $oDB->rollback();
+  8253     gonom9                     return $trigger_output;
+  8253     gonom9                 }
+  8253     gonom9             }
+  8253     gonom9 
+  8253     gonom9             $oDB->commit();
+  8287     ovclas             // Name, image, image, mark, sign, delete
+  8253     gonom9             $this->procMemberDeleteImageName();
+  8253     gonom9             $this->procMemberDeleteImageMark();
+  8253     gonom9             $this->delSignature($member_srl);
+  8253     gonom9 
+  8253     gonom9             return $output;
+  8253     gonom9         }
+  8253     gonom9 
+  8253     gonom9         /**
+  8287     ovclas          * @brief Destroy all session information
+  8253     gonom9          **/
+  8253     gonom9         function destroySessionInfo() {
+  8253     gonom9             if(!$_SESSION || !is_array($_SESSION)) return;
+  8253     gonom9             foreach($_SESSION as $key => $val) {
+  8253     gonom9                 $_SESSION[$key] = '';
+  8253     gonom9             }
+  8253     gonom9             session_destroy();
+  8253     gonom9             setcookie(session_name(), '', time()-42000, '/');
+  8253     gonom9             setcookie('sso','',time()-42000, '/');
+  8253     gonom9 
+  8253     gonom9             if($_COOKIE['xeak']) {
+  8253     gonom9                 $args->autologin_key = $_COOKIE['xeak'];
+  8253     gonom9                 executeQuery('member.deleteAutologin', $args);
+  8253     gonom9             }
+  8253     gonom9         }
+  9853 ovclas@gmail.com 
+  9853 ovclas@gmail.com 		function _updatePointByGroup($memberSrl, $groupSrlList)
+  9853 ovclas@gmail.com 		{
+  9853 ovclas@gmail.com 			$oModuleModel = &getModel('module');
+  9853 ovclas@gmail.com 			$pointModuleConfig = $oModuleModel->getModuleConfig('point');
+  9853 ovclas@gmail.com 			$pointGroup = $pointModuleConfig->point_group;
+  9853 ovclas@gmail.com 
+  9961 namnyams@gmail.com 			$levelGroup = array();
+  9853 ovclas@gmail.com 			if(is_array($pointGroup) && count($pointGroup)>0)
+  9853 ovclas@gmail.com 			{
+  9853 ovclas@gmail.com 				$levelGroup = array_flip($pointGroup);
+  9853 ovclas@gmail.com 				ksort($levelGroup);
+  9853 ovclas@gmail.com 			}
+  9853 ovclas@gmail.com 			$maxLevel = 0;
+  9853 ovclas@gmail.com 			$resultGroup = array_intersect($levelGroup, $groupSrlList);
+  9853 ovclas@gmail.com 			if(count($resultGroup) > 0)
+  9853 ovclas@gmail.com 				$maxLevel = max(array_flip($resultGroup));
+  9853 ovclas@gmail.com 
+  9853 ovclas@gmail.com 			if($maxLevel > 0)
+  9853 ovclas@gmail.com 			{
+  9853 ovclas@gmail.com 				$oPointModel = &getModel('point');
+  9853 ovclas@gmail.com 				$originPoint = $oPointModel->getPoint($memberSrl);
+  9853 ovclas@gmail.com 
+  9853 ovclas@gmail.com 				if($pointModuleConfig->level_step[$maxLevel] > $originPoint)
+  9853 ovclas@gmail.com 				{
+  9853 ovclas@gmail.com 					$oPointController = &getController('point');
+  9853 ovclas@gmail.com 					$oPointController->setPoint($memberSrl, $pointModuleConfig->level_step[$maxLevel], 'update');
+  9853 ovclas@gmail.com 				}
+  9853 ovclas@gmail.com 			}
+  9853 ovclas@gmail.com 		}
+  9937 namnyams@gmail.com 		function procMemberModifyEmailAddress(){
+  9937 namnyams@gmail.com             if(!Context::get('is_logged')) return $this->stop('msg_not_logged');
+  9937 namnyams@gmail.com 
+  9937 namnyams@gmail.com 			$member_info = Context::get('logged_info');
+  9937 namnyams@gmail.com 			$newEmail = Context::get('email_address');
+  9937 namnyams@gmail.com 
+  9937 namnyams@gmail.com             if(!$newEmail) return $this->stop('msg_invalid_request');
+  9937 namnyams@gmail.com 
+  9937 namnyams@gmail.com 			$oMemberModel = &getModel('member');
+  9937 namnyams@gmail.com             $member_srl = $oMemberModel->getMemberSrlByEmailAddress($newEmail);
+  9937 namnyams@gmail.com             if($member_srl) return new Object(-1,'msg_exists_email_address');
+  9937 namnyams@gmail.com 
+  9937 namnyams@gmail.com 			$auth_args->user_id = $newEmail;
+  9937 namnyams@gmail.com 			$auth_args->member_srl = $member_info->member_srl;
+  9937 namnyams@gmail.com 			$auth_args->auth_key = md5(rand(0, 999999));
+  9937 namnyams@gmail.com 			$auth_args->new_password = 'XE_change_emaill_address';
+  9937 namnyams@gmail.com 
+  9937 namnyams@gmail.com 			$output = executeQuery('member.insertAuthMail', $auth_args);
+  9937 namnyams@gmail.com 			if (!$output->toBool()) {
+  9937 namnyams@gmail.com 				$oDB->rollback();
+  9937 namnyams@gmail.com 				return $output;
+  9937 namnyams@gmail.com 			}
+  9937 namnyams@gmail.com 			
+  9937 namnyams@gmail.com             $oModuleModel = &getModel('module');
+  9937 namnyams@gmail.com             $member_config = $oModuleModel->getModuleConfig('member');
+  9937 namnyams@gmail.com 
+  9937 namnyams@gmail.com             $tpl_path = sprintf('%sskins/%s', $this->module_path, $member_config->skin);
+  9937 namnyams@gmail.com             if(!is_dir($tpl_path)) $tpl_path = sprintf('%sskins/%s', $this->module_path, 'default');
+  9937 namnyams@gmail.com 
+  9950 namnyams@gmail.com 			global $lang;
+  9937 namnyams@gmail.com 
+  9950 namnyams@gmail.com 			$memberInfo[$lang->email_address] = $member_info->email_address;
+  9950 namnyams@gmail.com 			$memberInfo[$lang->nick_name] = $member_info->nick_name;
+  9950 namnyams@gmail.com 
+  9950 namnyams@gmail.com 			Context::set('memberInfo', $memberInfo);
+  9950 namnyams@gmail.com 
+  9950 namnyams@gmail.com 			Context::set('newEmail', $newEmail);
+  9950 namnyams@gmail.com 
+  9937 namnyams@gmail.com             $auth_url = getFullUrl('','module','member','act','procMemberAuthEmailAddress','member_srl',$member_info->member_srl, 'auth_key',$auth_args->auth_key);
+  9937 namnyams@gmail.com             Context::set('auth_url', $auth_url);
+  9937 namnyams@gmail.com 
+  9937 namnyams@gmail.com             $oTemplate = &TemplateHandler::getInstance();
+  9937 namnyams@gmail.com             $content = $oTemplate->compile($tpl_path, 'confirm_member_new_email');
+  9937 namnyams@gmail.com 
+  9937 namnyams@gmail.com             $oMail = new Mail();
+  9937 namnyams@gmail.com             $oMail->setTitle( Context::getLang('title_modify_email_address') );
+  9937 namnyams@gmail.com             $oMail->setContent($content);
+  9937 namnyams@gmail.com             $oMail->setSender( $member_config->webmaster_name?$member_config->webmaster_name:'webmaster', $member_config->webmaster_email);
+  9937 namnyams@gmail.com             $oMail->setReceiptor( $member_info->nick_name, $newEmail );
+  9937 namnyams@gmail.com             $result = $oMail->send();
+  9937 namnyams@gmail.com 
+  9937 namnyams@gmail.com             $msg = sprintf(Context::getLang('msg_confirm_mail_sent'), $newEmail);
+  9937 namnyams@gmail.com             $this->setMessage($msg);
+  9937 namnyams@gmail.com 
+  9937 namnyams@gmail.com 			if(!in_array(Context::getRequestMethod(),array('XMLRPC','JSON'))) {
+  9937 namnyams@gmail.com 				$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'mid', Context::get('mid'), 'act', '');
+  9937 namnyams@gmail.com 				header('location:'.$returnUrl);
+  9937 namnyams@gmail.com 				return;
+  9937 namnyams@gmail.com 			}
+  9937 namnyams@gmail.com 		}
+  9937 namnyams@gmail.com 
+  9937 namnyams@gmail.com 		function procMemberAuthEmailAddress(){
+  9937 namnyams@gmail.com             $member_srl = Context::get('member_srl');
+  9937 namnyams@gmail.com             $auth_key = Context::get('auth_key');
+  9937 namnyams@gmail.com             if(!$member_srl || !$auth_key) return $this->stop('msg_invalid_request');
+  9937 namnyams@gmail.com 
+  9937 namnyams@gmail.com             // Test logs for finding password by user_id and authkey
+  9937 namnyams@gmail.com             $args->member_srl = $member_srl;
+  9937 namnyams@gmail.com             $args->auth_key = $auth_key;
+  9937 namnyams@gmail.com             $output = executeQuery('member.getAuthMail', $args);
+  9937 namnyams@gmail.com             if(!$output->toBool() || $output->data->auth_key != $auth_key) return $this->stop('msg_invalid_modify_email_auth_key');
+  9937 namnyams@gmail.com 
+  9937 namnyams@gmail.com 			$newEmail = $output->data->user_id;
+  9937 namnyams@gmail.com 			$args->email_address = $newEmail;
+  9937 namnyams@gmail.com             list($args->email_id, $args->email_host) = explode('@', $newEmail);
+  9937 namnyams@gmail.com 
+  9937 namnyams@gmail.com             $output = executeQuery('member.updateMemberEmailAddress', $args);
+  9937 namnyams@gmail.com             if(!$output->toBool()) return $this->stop($output->getMessage());
+  9937 namnyams@gmail.com             
+  9937 namnyams@gmail.com 			// Remove all values having the member_srl and new_password equal to 'XE_change_emaill_address' from authentication table
+  9937 namnyams@gmail.com             executeQuery('member.deleteAuthChangeEmailAddress',$args);
+  9937 namnyams@gmail.com 
+  9937 namnyams@gmail.com             // Notify the result
+  9937 namnyams@gmail.com             $this->setTemplatePath($this->module_path.'tpl');
+  9937 namnyams@gmail.com             $this->setTemplateFile('msg_success_modify_email_address');
+  9937 namnyams@gmail.com 		}
+  8253     gonom9     }
+  9297 namnyams@gmail.com ?>

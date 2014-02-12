@@ -1,0 +1,12 @@
+<script type="text/javascript">
+    if(typeof(opener)=="undefined") window.close();
+    var settings = opener.uploaderSettings[{$editor_sequence}];
+    if(typeof(settings)=='undefined') window.close();
+
+    opener.editorFocus(opener.editorPrevSrl);
+    var iframe_obj = opener.editorGetIFrame(opener.editorPrevSrl)
+    opener.editorReplaceHTML(iframe_obj, '<img src="{$image_file}" alt="" width="{$image_width}" height="{$image_height}" />');
+    opener.editorFocus(opener.editorPrevSrl);
+    opener.reloadFileList(settings); 
+    window.close();
+</script>

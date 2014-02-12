@@ -1,0 +1,91 @@
+{@ Context::addJsFile("./common/js/jquery.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/js_app.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/common.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/xml_handler.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/xml_js_filter.js", true, '', -100000) }
+<!--%import("filter/reply_document.xml")-->
+<!--%import("js/mkin.js")-->
+<!--%import("css/mkin.css")-->
+<div class="bd">
+	<div class="rd">
+		<div class="hx">
+			<h2><a href="{getUrl('document_srl','','category','','page','')}">{htmlspecialchars($module_info->browser_title)}</a> 
+				<!--@if($module_info->use_category == "Y" && $oDocument->get('category_srl'))-->&rsaquo; <a href="{getUrl('document_srl','','category',$oDocument->get('category_srl'))}">{$categories[$oDocument->get('category_srl')]->title}</a><!--@end--> 
+				&rsaquo; {$oDocument->getTitle()}
+			</h2>
+			<em><a href="#">{$oDocument->getNickName()}</a></em>
+			<span>{$oDocument->getRegdate()}</span>
+		</div>
+		<div class="co">
+			    {$oDocument->getContent(false)}
+
+				<div class="op">
+					<a href="#replies_{$oDocument->document_srl}" onclick="doGetComments({$oDocument->document_srl}); return false;" id="replies_{$oDocument->document_srl}">{$lang->short_replies}</a> ({number_format($replies_count[$oDocument->document_srl])})
+					<span class="givePoint">{$lang->give_point} : {$oDocument->get('point')} {$point_name}</span>
+				</div>
+				<div id="replies_content_{$oDocument->document_srl}" style="display:none;"></div>
+
+		</div>
+
+		<!--@if($oDocument->hasUploadedFiles())-->
+		{@ $uploaded_list = $oDocument->getUploadedFiles() }
+		<h3 class="h3">{$lang->uploaded_file} <em>[{count($uploaded_list)}]</em> <button type="button" class="tg" title="open/close"></button></h3>
+		<ul class="sn tgo open">
+			<!--@foreach($uploaded_list as $key => $file)-->
+			<li><a href="{getUrl('')}{$file->download_url}">{$file->source_filename}</a></li>
+			<!--@end-->
+		</ul>
+		<!--@endif-->
+
+		<!--@if($oDocument->allowComment() && $oDocument->getCommentCount())-->
+		<h3 class="h3" id="clb">{$lang->replies} <em>[{$oDocument->getCommentCount()}]</em> <button type="button" class="tg tgr" title="open/close"></button></h3>
+		<!--@endif-->
+		<!--@if($grant->write_reply && $oDocument->isEnableComment() )-->
+		<h3 class="h3">{$lang->cmd_reply} <button type="button" class="tg" title="open/close"></button></h3>
+		<form action="./" method="POST" class="sn tgo open" onsubmit="return procFilter(this, reply_document);">
+		<input type="hidden" name="mid" value="{$mid}" />
+		<input type="hidden" name="document_srl" value="{$oDocument->document_srl}" />
+		<input type="hidden" name="comment_srl" value="{$oReply->get('comment_srl')}" />
+		<ul>
+			<li>
+				<textarea name="content" cols="20" rows="5" id="rText" class="itxx"></textarea>
+			</li>
+		</ul>
+		<div class="ar">
+			<input name="" type="submit" value="{$lang->cmd_reply}" />
+		</div>
+		</form>
+		<!--@end-->
+	</div>
+	<ul class="cm">
+		<li class="fl"><a href="{getUrl('document_srl','','act','')}" class="bn">{$lang->cmd_list}</a></li>
+		<!--@if($oDocument->getCommentCount()<1 && $oDocument->isGranted())-->
+		<li class="fr"><a href="#" onclick="if(confirm('{$lang->confirm_delete}')) doDeleteDocument('{$oDocument->document_srl}'); return false;" class="button red"><span>{$lang->cmd_delete}</span></a></li>
+		<!--@end-->
+	</ul>
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+jQuery(function($){
+	$('.co .mm').next().hide();
+	$('.mm').click(function(){ $(this).hide().next().show();});
+	$('.tgo').removeClass('open');
+	$('.tg').click(function(){
+		$(this).parent('.h3').next('.tgo').toggleClass('open');
+	});
+	var loaded = false;
+	$('.tgr').click(function(){
+		if(!loaded) {
+			loaded = true;
+			{@ $lastpage = 1; }
+			{@ $temp = $oDocument->getComments() }
+			<!--@if($oDocument->comment_page_navigation)-->
+			{@ $lastpage = $oDocument->comment_page_navigation->last_page }
+			<!--@endif-->
+			loadPage({$oDocument->document_srl}, {$lastpage});
+		}
+	});
+});
+//]]>
+</script>

@@ -1,0 +1,100 @@
+<!--#include("_header.html")-->
+
+<form action="./" method="post" onsubmit="jQuery(this).find('input').each(function(){if(this.title==this.value)this.value='';});return procFilter(this, window.insert)" id="fo_write" class="boardWrite">
+<input type="hidden" name="mid" value="{$mid}" />
+<input type="hidden" name="content" value="{$oDocument->getContentText()}" />
+<input type="hidden" name="document_srl" value="{$document_srl}" />
+
+	<div class="boardWriteHeader">
+	
+		<!--@if($module_info->use_category=="Y")-->
+		<select name="category_srl" class="category">
+			<option value="">{$lang->category}</option>
+			<!--@foreach($category_list as $val)-->
+			<option <!--@if(!$val->grant)-->disabled="disabled"<!--@endif--> value="{$val->category_srl}" <!--@if($val->grant&&$val->selected||$val->category_srl==$oDocument->get('category_srl'))-->selected="selected"<!--@endif-->>
+				{str_repeat("&nbsp;&nbsp;",$val->depth)} {$val->title} ({$val->document_count})
+			</option>
+			<!--@endforeach-->
+		</select>
+		<!--@endif-->
+		
+		<!--@if($oDocument->getTitleText())-->
+		<input type="text" name="title" id="postTitle" class="iText" value="{htmlspecialchars($oDocument->getTitleText())}" />
+		<!--@else-->
+		<input type="text" name="title" id="postTitle" class="iText" value="{$lang->title}" title="{$lang->title}" onfocus="if(this.value==this.title) this.value='';" />
+		<!--@end-->
+	
+        <!--@if($is_logged)-->
+        <button class="btn" type="button" onclick="doDocumentLoad(this)">{$lang->cmd_load}</button>
+        <!--@end-->
+		
+	</div>
+
+    <!--@if(count($extra_keys))-->
+    <table border="1" cellspacing="0" summary="Extra Form" class="extraVarsList">
+	<caption><em>*</em> : {$lang->is_required}</caption>
+    <!--@foreach($extra_keys as $key => $val)-->
+    <tr>
+        <th scope="row">{$val->name} <!--@if($val->is_required=='Y')--><em>*</em><!--@end--></th>
+        <td>{$val->getFormHTML()}</td>
+    </tr>
+    <!--@endforeach-->
+    </table>
+    <!--@endif-->
+
+    <div class="editor">{$oDocument->getEditor()}</div>
+
+    <div class="tag">
+        <input type="text" name="tags" value="{htmlspecialchars($oDocument->get('tags'))}" class="iText" title="Tag" />
+		<p>{$lang->about_tag}</p>
+    </div>
+
+	<div class="editOption">
+		<!--@if(!$is_logged)-->
+		   <input type="text" name="nick_name" class="iText userName" value="{$lang->writer}" title="{$lang->writer}" onfocus="if(this.value==this.title)this.value='';return false;" />
+		   <input type="password" name="password" class="iText userPw" value="{$lang->password}" title="{$lang->password}"  onfocus="if(this.value==this.title)this.value='';return false;" />
+		   <input type="text" name="email_address" class="iText emailAddress" value="{$lang->email_address}" title="{$lang->email_address}"  onfocus="if(this.value==this.title)this.value='';return false;" />
+		   <input type="text" name="homepage" class="iText homePage" value="{$lang->homepage}" title="{$lang->homepage}"  onfocus="if(this.value==this.title)this.value='';return false;" />
+		<!--@end-->
+		
+        <!--@if($grant->manager)-->
+        {@ $_color = array('555555','222288','226622','2266EE','8866CC','88AA66','EE2222','EE6622','EEAA22','EEEE22') }
+        <select name="title_color" id="title_color" <!--@if($oDocument->get('title_color'))-->style="color:#{$oDocument->get('title_color')};"<!--@end--> onchange="this.style.color=this.options[this.selectedIndex].style.color;">
+			<option value="" style="color:#CCCCCC;">{$lang->title_color}</option>
+			<!--@foreach($_color as $_col)-->
+			<option value="{$_col}" style="color:#{$_col}" <!--@if($oDocument->get('title_color')==$_col)-->selected="selected"<!--@end-->>{$lang->title_color}</option>
+			<!--@endforeach-->
+		</select>
+		<input type="checkbox" name="title_bold" id="title_bold" value="Y" <!--@if($oDocument->get('title_bold')=='Y')-->checked="checked"<!--@end--> />
+		<label for="title_bold">{$lang->title_bold}</label>
+		<input type="checkbox" name="is_notice" value="Y" <!--@if($oDocument->isNotice())-->checked="checked"<!--@end--> id="is_notice" />
+		<label for="is_notice">{$lang->notice}</label>
+        <!--@endif-->
+		<input type="checkbox" name="comment_status" value="ALLOW" <!--@if($oDocument->allowComment())-->checked="checked"<!--@end--> id="comment_status" />
+		<label for="comment_status">{$lang->allow_comment}</label>
+		<input type="checkbox" name="allow_trackback" value="Y" <!--@if($oDocument->allowTrackback())-->checked="checked"<!--@end--> id="allow_trackback" />
+		<label for="allow_trackback">{$lang->allow_trackback}</label>
+		<!--@if($is_logged)-->
+		<input type="checkbox" name="notify_message" value="Y" <!--@if($oDocument->useNotify())-->checked="checked"<!--@end--> id="notify_message" />
+		<label for="notify_message">{$lang->notify}</label>
+        <!--@end-->
+		<!--@if(is_array($status_list))-->
+			<!--@foreach($status_list AS $key=>$value)-->
+			<input type="radio" name="status" value="{$key}" id="{$key}" <!--@if($oDocument->get('status') == $key || ($key == 'PUBLIC' && !$document_srl))-->checked="checked"<!--@end--> /> 
+			<label for="{$key}">{$value}</label>
+			<!--@end-->
+		<!--@end-->
+    </div>
+
+	<div class="btnArea">
+		<input class="btn" type="submit" value="{$lang->cmd_registration}" />
+		<span class="etc">
+			<!--@if(!$oDocument->isExists() || $oDocument->get('status') == 'TEMP')-->
+			<button class="btn" type="button" onclick="doDocumentSave(this)">{$lang->cmd_temp_save}</button>
+			<button class="btn" type="button" onclick="doDocumentLoad(this)">{$lang->cmd_load}</button>
+			<!--@end-->
+		</span>
+	</div>
+
+    </form>
+<!--#include("_footer.html")-->

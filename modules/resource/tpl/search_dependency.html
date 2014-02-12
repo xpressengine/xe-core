@@ -1,0 +1,63 @@
+<load target="js/resource.js" />
+<div class="x_modal-header">
+	<h1>{$lang->search_dependency}</h1>
+</div>
+<div class="x_modal-body">
+	<form action="./" class="search" style="text-align:right" onsubmit="location.href=location.href.setQuery('search_keyword',jQuery('#search_keyword').get(0).value); return false;">
+		<span class="x_input-append">
+			<input type="search" required name="search_keyword" id="search_keyword" value="{htmlspecialchars($search_keyword)}"/>
+			<input type="submit" value="{$lang->cmd_search}" class="x_btn x_btn-inverse" />
+			<a cond="$search_keyword" href="{getUrl('search_keyword', '')}" class="x_btn">{$lang->cmd_cancel}</a>
+		</span>
+	</form>
+	<table class="x_table x_table-striped x_table-hover">
+		<tr>
+			<th scope="col">
+				<form action="./" method="get" style="margin:0;display:inline">
+					<select name="category_srl" id="category_srl" style="width:auto;margin:0">
+						<option value="">{$lang->package_category}</option>
+						{@ $_curDepth = 0; }
+						<!--@foreach($categories as $key => $val)-->
+							<!--@if($val->depth<$_curDepth)-->
+							</optgroup>
+							<!--@end-->
+							<!--@if($val->depth<1)-->
+							<!--@if($val->child_count>0)-->
+							<optgroup label="{$val->title}">
+							<!--@else-->
+							<option value="{$val->category_srl}" <!--@if($category_srl == $val->category_srl)-->selected="selected"<!--@end-->>{$val->title}</option>
+							<!--@end-->
+							<!--@end-->
+							<!--@if($val->depth>0)-->
+							<option value="{$val->category_srl}" <!--@if($category_srl == $val->category_srl)-->selected="selected"<!--@end-->>{$val->title}</option>
+							<!--@end-->
+							{@ $_curDepth = $val->depth}
+						<!--@end-->
+						<!--@for($i=0;$i<$_curDepth;$i++)-->
+							</optgroup>
+						<!--@end-->
+					</select>
+					<button type="button" onclick="location.href=location.href.setQuery('category_srl',jQuery('#category_srl option:selected').val())" class="x_btn">GO</button>
+				</form>
+			</th>
+			<th scope="col">{$lang->package_path}</th>
+			<th scope="col">{$lang->package_version}</th>
+			<th scope="col">{$lang->cmd_select}</th>
+		</tr>
+		<tr loop="$item_list => $key,$val">
+			<td>[{$categories[$val->category_srl]->title}] {$val->title}</td>
+			<td>{$val->path}</td>
+			<td>{$val->item_version}</td>
+			<td><button type="button" class="x_btn" onclick="doInsertDependency({$val->item_srl},'[{$categories[$val->category_srl]->title}] {$val->title} (ver. {$val->item_version})'); return false;">{$lang->cmd_select}</button></td>
+		</tr>
+	</table>
+	<div class="x_pagination x_pagination-centered">
+		<ul>
+			<li><a href="{getUrl('page','')}">&lsaquo; {$lang->first_page}</a></li>
+			<!--@while($page_no = $page_navigation->getNextPage())-->
+			<li><a href="{getUrl('page',$page_no)}" class="x_active"|cond="$page == $page_no">{$page_no}</a></li> 
+			<!--@end-->
+			<li><a href="{getUrl('page',$page_navigation->last_page)}">{$lang->last_page} &rsaquo;</a></li>
+		</ul>
+	</div>
+</div>

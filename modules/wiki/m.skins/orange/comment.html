@@ -1,0 +1,50 @@
+<include target="header.html" />
+<header class="mod_head">
+    <h2 class="mod_title"><span>{$oDocument->getTitle()}</span></h2>
+    <button class="btn_srch">search</button>
+   <nav class="nav_wk b00"|cond="$oDocumentPrev" class="nav_wk b10"|cond="!$oDocumentPrev"> <!-- [D] class opt => b00, b10, b01 -->
+        <a href="{getUrl('','mid',$mid)}" class="f">Front</a>
+        <a href="{getUrl('act','dispWikiTitleIndex','entry','','document_srl','')}" class="l">List</a>
+    </nav>
+    <form action="{getUrl()}" method="get" class="srch" no-error-return-url="true">
+        <fieldset>
+        <legend>{$lang->cmd_move}</legend>
+            <input type="hidden" name="mid" value="{$mid}" />
+            <input type="hidden" name="vid" value="{$vid}" />
+            <input type="hidden" name="act" value="dispWikiTitleIndex" />
+            <input type="hidden" name="category" value="{$category}" />
+           	<input type="hidden" name="search_target" value="title_content" />
+            <span><input type="search" name="search_keyword" placeholder="Search..." /></span>
+        </fieldset>
+    </form>
+</header>
+<ul class="comments">
+	<li loop="$_comment_list => $key, $comment">
+		<div class="indent">
+                            <span class="c_reply" <!--@if($comment->get('depth'))--> style="display:block;float:left;height:20px;margin-right:5px;width:{($comment->get('depth'))*15}px" <!--@end-->></span>
+			<!--@if(!$comment->isAccessible())-->
+			&quot;{$lang->msg_is_secret}&quot;
+			<!--@else-->
+			 <div class="comment">
+				{$comment->getContent(false)}
+			 </div>
+			 <span class="meta">{$comment->getRegdate('Y.m.d')} {$comment->getRegdate('H:i:s')}  by {$comment->getNickName()}
+				<!--@if($comment->hasUploadedFIles())-->
+				<img src="img/iconFiles.gif" alt="" class="ico_attach" width="27" height="11" />
+				{@ $_uploaded_files = $comment->getUploadedFiles() }
+				<!--@foreach($_uploaded_files as $key => $file)-->
+                                                <span class="attached_file">{$file->source_filename}</span>
+				<!--@end-->
+				<!--@endif-->
+			</span>
+		 	<!--@endif-->
+
+		 </div>
+	</li>
+	<li cond="!$_comment_list">There are no comments for this document</li>
+</ul>
+<footer class="ctrl_btm">
+    <a href="{getUrl('act','dispWikiAddComment','document_srl', $oDocument->document_srl)}" class="blue_btn ui_txt_sty">Add Comments</a>
+</footer>
+
+<!-- // html markup -->

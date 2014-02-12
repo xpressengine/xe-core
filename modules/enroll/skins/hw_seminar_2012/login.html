@@ -1,0 +1,30 @@
+<!--%import("css/xeCamp.css")-->
+<!--%import("js/xeCamp.js")-->
+<block cond="$XE_VALIDATOR_MESSAGE">
+<script>
+alert('{$XE_VALIDATOR_MESSAGE}');
+</script>
+</block>
+<form id="container" action="{getUrl('mid',$mid,'act','dispEnrollModify','confirm','modify')}" method="post" >
+	<div id="header">
+		<h1>Helloworld 오픈 세미나 # 신청정보 수정</h1>
+	</div>
+	<div id="body">
+		<fieldset style="text-align:center">
+				<ul>
+					<li>
+						<p>이메일 <input type="text" name="email_address" id="name" class="inputText" style="margin-left:15px" /></p>
+					</li>
+					<li>
+						<p>비밀번호<input type="password" name="password" /></p>
+					</li>
+					<li style="padding-left:120px">
+						<p id="footer" class="aCenter" style="padding:3px 0 1px 0;width:60px">
+							<span class="button"><input type="submit" value="확 인" style="font-weight:bold" /></span>
+						</p>
+					</li>
+				</ul>
+		</fieldset>
+	</div>
+</form>
+

@@ -1,0 +1,17 @@
+<filter name="insert_comment" module="resource" act="procResourceInsertComment">
+    <form>
+        <node target="mid" required="true" />
+        <node target="item_srl" required="true" />
+        <node target="star_point" required="true" />
+        <node target="content" required="true" />
+    </form>
+    <parameter>
+        <param name="vid" target="vid" />
+        <param name="mid" target="mid" />
+        <param name="package_srl" target="package_srl" />
+        <param name="item_srl" target="item_srl" />
+        <param name="star_point" target="star_point" />
+        <param name="content" target="content" />
+    </parameter>
+    <response/>
+</filter>

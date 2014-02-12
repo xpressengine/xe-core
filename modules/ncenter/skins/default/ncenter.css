@@ -1,0 +1,51 @@
+#nc_container { margin:0; padding:0; z-index:99; position:fixed; font-size:12px; width:100%; height:30px; top:0; left:0; border-bottom:1px solid; line-height: 15px;}
+.ncenter_block { height:28px;}
+#nc_container a { font-size:12px; padding:0;text-decoration:none; } 
+#nc_container a:hover { text-decoration:none; }
+
+#nc_container ul.nc_memu { list-style:none; margin:0; padding:4px; display:block; line-height:20px; }
+#nc_container ul:after{content:"";display:block;clear:both}
+#nc_container ul.nc_memu li{ height:20px; padding:0 5px 0 5px; width:auto; background:transparent !important; }
+#nc_container ul.nc_memu li.fLeft{ float:left; }
+#nc_container ul.nc_memu li.fRight{ float:right; }
+#nc_container ul.nc_memu li a.notify{display:block;float:left;}
+#nc_container a.close { display:block; }
+
+#nc_container ul.nc_memu li{ height:20px; padding:0 5px 0 5px; width:auto; display:inline-block; }
+
+#nc_container .nc_profile img { width:20px;height:20px; vertical-align:top; }
+
+#nc_container a.notify .num { font-size:12px; padding:1px 2px 1px 2px; font-weight:bold; border:0; -webkit-border-radius:3px; -moz-border-radius:3px; border-radius:3px; font-family:Gulim,"lucida grande",tahoma,verdana,arial,sans-serif; }
+
+#nc_container .list {width:100%; box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; -o-box-sizing:border-box;}
+#nc_container a.readall { display:none; float:left; margin:0 4px; font-size:11px; font-weight:bold;}
+
+#nc_container .list { display:none; position:relative; left:0; max-width:330px; *width:330px; }
+#nc_container .listscroll { overflow-y:auto; overflow-x:hidden; }
+#nc_container .list ul { list-style:none; overflow:hidden; margin:-1px 0; padding:0; }
+#nc_container .list li {margin:-1px 0; border:1px solid #555; border-width:1px 0;}
+#nc_container .list li img { width:45px; height:45px; border:0; float:left; margin-right:5px;  } 
+#nc_container .list li a { font-size:12px; display: block; padding: 10px; overflow: hidden; }
+#nc_container .list li a:hover { text-decoration: none; }
+#nc_container .list span.ago { display: block; font-size:10px; }
+#nc_container .list .more { display: block; padding: 10px;  text-align: center; }
+#nc_container .list .more:hover { text-decoration: none; }
+
+#nc_container ~ .navbar.navbar-fixed-top {
+top:28px;
+}
+
+@media only screen and (max-device-width : 480px) {
+#nc_container { height:auto; position:relative; }
+#nc_container .list {  top:2px; position:relative; }
+#nc_container .list ul { display:block; position:relative; }
+#nc_container ul.nc_memu:after {
+	content: "";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+#nc_container .listscroll { overflow: visible; }
+.ncenter_block { display:none; }
+}

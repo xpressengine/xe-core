@@ -1,0 +1,12 @@
+<query id="getHistoryChanges" action="select">
+	<tables>
+		<table name="issue_history_change" />
+	</tables>
+	<columns>
+		<column name="*" />
+	</columns>
+	<conditions>
+		<condition operation="in" column="comment_srl" var="comment_srls" notnull="notnull" />
+		<condition operation="equal" column="type" var="type" pipe="and" />
+	</conditions>
+</query>

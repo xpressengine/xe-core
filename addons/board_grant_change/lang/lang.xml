@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<lang>
+	<item name="msg_not_modify">
+		<value xml:lang="ko"><![CDATA[사용자 권한 수정. 댓글 작성 권한이 없더라도 본인이 작성한 글에는 댓글 작성 가능.]]></value>
+		<value xml:lang="en"><![CDATA[User have grant acount comment.]]></value>
+	</item>
+</lang>

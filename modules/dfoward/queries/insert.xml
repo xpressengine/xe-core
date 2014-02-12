@@ -1,0 +1,17 @@
+<query id="insert" action="insert">
+    <tables>
+        <table name="dfoward" />
+    </tables>
+    <columns>
+        <column name="dfoward_srl" var="dfoward_srl" filter="number" notnull="notnull" />
+        <column name="member_srl" var="member_srl" filter="number" notnull="notnull" />
+        <column name="hostname" var="hostname" notnull="notnull" />
+        <column name="target_url" var="target_url" notnull="notnull" />
+        <column name="title" var="title" notnull="notnull" />
+        <column name="content" var="content" />
+        <column name="ipaddress" notnull="notnull" default="ipaddress()" />
+        <column name="list_order" var="list_order" notnull="notnull" />
+        <column name="visited_count" default="0" />
+        <column name="regdate" default="curdate()" />
+    </columns>
+</query>

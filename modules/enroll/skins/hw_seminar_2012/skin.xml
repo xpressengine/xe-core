@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+    <title xml:lang="ko">참가신청 기본양식 2012</title>
+    <description xml:lang="ko"> 참가신청 기본양식 2012스킨입니다.</description>
+    <version>0.1</version>
+    <date>2012-04-27</date>
+    <author email_address="sun@xpressengine.com">
+        <name xml:lang="ko">sun</name>
+    </author>
+    <license>GPL v2 or later</license>
+    <colorset>
+        <color name="default" >
+            <title xml:lang="ko">기본</title>
+        </color>
+    </colorset>
+</skin>

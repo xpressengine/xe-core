@@ -1,0 +1,94 @@
+<form ruleset="insertModuleSetup" action="./" method="post" class="x_form-horizontal" id="manageSelectedModuleSetup">
+	<input type="hidden" name="module" value="module" />
+	<input type="hidden" name="act" value="procModuleAdminModuleSetup" />
+	<input type="hidden" name="success_return_url" value="{getRequestUriByServerEnviroment()}" />
+	<input type="hidden" name="module_srls" value="" />
+	<input type="hidden" name="xe_validator_id" value="modules/module/tpl/manage_selected" />
+	<div class="x_control-group">
+		<label class="x_control-label" for="module_category_srl">{$lang->module_category}</label>
+		<div class="x_controls">
+			<select name="module_category_srl" id="module_category_srl">
+				<option value="" selected="selected">{$lang->keep_existing_value}</option>
+				<option value="0">{$lang->notuse}</option>
+				<option loop="$module_category => $key, $val" value="{$key}" selected="selected"|cond="$module_info->module_category_srl==$key">{$val->title}</option>
+			</select>
+			<p class="x_help-inline">{$lang->about_module_category}</p>
+		</div>
+	</div>
+	<div class="x_control-group">
+		<label class="x_control-label" for="layout_srl">{$lang->layout}</label>
+		<div class="x_controls">
+			<select name="layout_srl" id="layout_srl">
+				<option value="" selected="selected">{$lang->keep_existing_value}</option>
+				<option value="0">{$lang->notuse}</option>
+				<option loop="$layout_list => $key, $val" value="{$val->layout_srl}" selected="selected"|cond="$module_info->layout_srl==$val->layout_srl">{$val->title} ({$val->layout})</option>
+			</select>
+			<p class="x_help-inline">{$lang->about_layout}</p>
+		</div>
+	</div>
+	<div class="x_control-group" cond="count($skin_list)">
+		<label class="x_control-label" for="skin">{$lang->skin}</label>
+		<div class="x_controls">
+			<select name="skin" id="skin">
+				<option value="" selected="selected">{$lang->keep_existing_value}</option>
+				<option loop="$skin_list => $key, $val" value="{$key}" selected="selected"|cond="$module_info->skin==$key">{$val->title}</option>
+			</select>
+			<p class="x_help-inline">{$lang->about_skin}</p>
+		</div>
+	</div>
+	<div class="x_control-group">
+		<label class="x_control-label" for="use_mobile">{$lang->mobile_view}</label>
+		<div class="x_controls">
+			<select name="use_mobile" id="use_mobile">
+				<option value="" selected="selected">{$lang->keep_existing_value}</option>
+				<option value="Y">{$lang->use}</option>
+				<option value="N">{$lang->notuse}</option>
+			</select>
+			<p class="x_help-inline">{$lang->about_mobile_view}</p>
+		</div>
+	</div>
+	<div class="x_control-group">
+		<label class="x_control-label" for="mlayout_srl">{$lang->mobile_layout}</label>
+		<div class="x_controls">
+			<select name="mlayout_srl" id="mlayout_srl">
+				<option value="" selected="selected">{$lang->keep_existing_value}</option>
+				<option value="0">{$lang->notuse}</option>
+				<option loop="$mlayout_list => $key, $val" value="{$val->layout_srl}" selected="selected"|cond="$module_info->mlayout_srl== $val->layout_srl">{$val->title} ({$val->layout})</option>
+			</select>
+		</div>
+	</div>
+	<div class="x_control-group">
+		<label class="x_control-label" for="mskin">{$lang->mobile_skin}</label>
+		<div class="x_controls">
+			<select name="mskin" id="mskin">
+				<option value="" selected="selected">{$lang->keep_existing_value}</option>
+				<option loop="$mskin_list=> $key, $val" value="{$key}" selected="selected"|cond="$module_info->mskin== $key">{$val->title}</option>
+			</select>
+		</div>
+	</div>
+	<div class="x_control-group">
+		<label class="x_control-label" for="description">{$lang->description}</label>
+		<div class="x_controls">
+			<textarea name="description" id="description" rows="8" cols="42">{htmlspecialchars($module_info->description, ENT_COMPAT | ENT_HTML401, 'UTF-8', false)}</textarea>
+			<p class="x_help-inline">{$lang->about_description}</p>
+		</div>
+	</div>
+	<div class="x_control-group">
+		<label class="x_control-label" for="lang_header_text">{$lang->header_text}</label>
+		<div class="x_controls">
+			{@$use_multilang_textarea=true}
+			<textarea id="header_text" name="header_text" class="lang_code" rows="8" cols="42"></textarea>
+			<p class="x_help-inline" style="vertical-align:top">{$lang->about_header_text}</p>
+		</div>
+	</div>
+	<div class="x_control-group">
+		<label class="x_control-label" for="lang_footer_text">{$lang->footer_text}</label>
+		<div class="x_controls">
+			<textarea id="footer_text" name="footer_text" class="lang_code" rows="8" cols="42"></textarea>
+			<p class="x_help-inline" style="vertical-align:top">{$lang->about_footer_text}</p>
+		</div>
+	</div>
+	<div class="btnArea">
+		<input type="submit" class="x_btn x_btn-primary" value="{$lang->cmd_registration}" />
+	</div>
+</form>

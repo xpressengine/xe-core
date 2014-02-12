@@ -1,0 +1,44 @@
+<load target="css/widget.css" />
+<load target="../../admin/tpl/css/admin.css" />
+
+<h1>{$lang->widget}</h1>
+<h2>{$lang->widget_maker}</h2>
+<table class="x_table x_table-striped x_table-hover">
+<tr>
+	<th scope="row"><div>{$lang->title}</div></th>
+	<td>{$widget_info->title} ver {$widget_info->version}</td>
+</tr>
+<tr>
+	<th scope="row"><div>{$lang->author}</div></th>
+	<td>
+		<!--@foreach($widget_info->author as $author)-->
+		{$author->name} <!--@if($author->homepage || $author->email_address)-->(<!--@if($author->homepage)--><a href="{$author->homepage}" onclick="window.open(this.href);return false;">{$author->homepage}</a><!--@end--><!--@if($author->homepage && $author->email_address)-->, <!--@end--><!--@if($author->email_address)--><a href="mailto:{$author->email_address}">{$author->email_address}</a><!--@end-->)<!--@end--><br />
+		<!--@endforeach-->
+	</td>
+</tr>
+<!--@if($widget_info->homepage)-->
+<tr>
+	<th scope="row"><div>{$lang->homepage}</div></th>
+	<td><a href="{$widget_info->homepage}" onclick="window.open(this.href);return false;">{$widget_info->homepage}</a></td>
+</tr>
+<!--@end-->
+<tr>
+	<th scope="row"><div>{$lang->regdate}</div></th>
+	<td>{zdate($widget_info->date, 'Y-m-d')}</td>
+</tr>
+<!--@if($widget_info->license || $widget_info->license_link)-->
+<tr>
+	<th scope="row"><div>{$lang->widget_license}</div></th>
+	<td>
+		{nl2br(trim($widget_info->license))}
+	<!--@if($widget_info->license_link)-->
+		<p><a href="{$widget_info->license_link}" onclick="window.close(); return false;">{$widget_info->license_link}</a></p>
+	<!--@end-->
+	</td>
+</tr><!--@end-->
+<!--@if($widget_info->description)-->
+<tr>
+	<th scope="row"><div>{$lang->description}</div></th>
+	<td>{nl2br(trim($widget_info->description))}</td>
+</tr><!--@end-->
+</table>

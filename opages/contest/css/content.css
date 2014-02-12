@@ -1,0 +1,56 @@
+@charset "utf-8";
+/* NHN CHINA XE team CN14537 */
+
+#content{ font:12px/1.5 NanumGothic, 나눔고딕, "Malgun Gothic", "맑은 고딕", Dotum, 돋움;}
+#content .board{ font-family:NanumGothic, 나눔고딕, "Malgun Gothic", "맑은 고딕", Dotum, 돋움;}
+
+/* Common Class */
+ul,ol{list-style:none;margin:0;padding:0}
+.invisibleElement{ position:absolute; width:1px; height:1px; top:0; left:0; font-size:0; line-height:0; overflow:hidden;}
+
+/* XE 공모전 소개 */
+#contest_overview .xe_intro{position:relative;width:556px;height:287px;background:url(../img_content/bg_detail_txt.gif) no-repeat 0 0}
+#contest_overview .xe_intro dl.invisibleElement{overflow:visible}
+#contest_overview .xe_intro dd{position:absolute;margin:0;font-size:14px;line-height:19px;height:18px;color:#505050;font-weight:bold;}
+#contest_overview .xe_intro .dd{left:61px;top:222px;width:50px;}
+#contest_overview .xe_intro .dd2{left:366px;top:222px;width:130px}
+#contest_overview .xe_intro .dd3{left:61px;top:246px;width:140px}
+#contest_overview .xe_intro .dd4{left:366px;top:246px;width:70px}
+#contest_overview .xe_intro .dd5{left:61px;top:270px;width:460px}
+#contest_overview .p_txt{position:absolute;left:0;bottom:85px;margin:0;padding:0;font-size:13px;color:#5d5d5d}
+#contest_overview .xe_prize{margin:35px 0 45px 0;width:556px;height:515px;background:url(../img_content/bg_prize.png) no-repeat 0 0}
+#contest_way h2{margin-bottom:24px}
+#contest_way ol{list-style:none}
+
+#contest_way li,#content .program li{margin-top:25px;padding-top:25px;background:url(../img_content/bg_li.gif) no-repeat 0 0}
+#contest_way h3,#content .program h4{margin:0 0 13px 0;padding:0;font-size:16px;line-height:20px;color:#1b83c7}
+#contest_way li li{margin:0;padding:0 0 0 10px;background:url(../img_content/bg_li2.gif) no-repeat 0 9px;font-size:12px;line-height:20px;color:#818181}
+#contest_way .none_style li{background:none}
+#contest_way .none_style a{display:inline-block;padding:0 11px 0 33px;height:24px;line-height:24px;border:1px solid #d3d3d3;border-radius:5px;color:#292929;font-size:12px}
+#contest_way .none_style a span{padding-right:22px;background:url(../img_content/bg_span_txt.gif) no-repeat 100% 5px;}
+#content li input,#content li textarea{padding-left:5px;font-size:12px;font-family:Arial, Helvetica, sans-serif;color:#818181;line-height:20px;}
+#content .m_title{margin-bottom:35px}
+#content .m_title2{margin-bottom:25px}
+
+#content .program li p{margin-bottom:12px}
+#content .program li .txt_lbl{display:inline-block;width:71px;vertical-align:middle}
+#content .program li .user_name{margin-right:20px;width:159px;height:24px;border:1px solid #cecece}
+#content .program li .tel_lbl{display:inline-block;margin-right:5px;vertical-align:middle}
+#content .program li .tel{width:58px;height:25px;border:1px solid #cecece}
+#content .program li .connect{margin:0 5px;font-size:25px;vertical-align:middle}
+#content .program li .prof{width:464px;height:25px;border:1px solid #cecece}
+#content .program li .textarea_lbl{display:inline-block;width:71px;vertical-align:top}
+#content .program li .desc{width:464px;height:125px;border:1px solid #cecece}
+#content .program li .txtarea{width:464px;height:75px;border:1px solid #cecece}
+#content .program li .file_lbl{display:inline-block;margin-right:30px;width:178px;vertical-align:middle}
+#content .btn_box .input_submt{display:inline-block;width:111px;height:36px;border:none;background:url(../img_content/btn_submit.gif) no-repeat 0 0;font-size:0;line-height:0;overflow:hidden;cursor:pointer}
+#content .program li .file_box{position:relative;width:500px;height:58px;}
+.jpg_link {position:absolute;left:220px;bottom:4px;color: #1677FF !important;font-size:11px; }
+.psd_link {position:absolute;left:220px;top:28px;color: #1677FF !important;font-size:11px}
+#content .lnk{color:#818181}
+.required_input {color: red; margin-left: 3px;}
+
+.m_title1 { margin: 0px auto 10px; width: 740px; font-size: 16px; line-height: 1.5em; text-shadow: 0pt 1px 1px white, 0pt -1px 0px rgb(221, 221, 221); }
+.step p { margin: 5px 0pt 20px; color: rgb(102, 102, 102); }
+.btn_box { width: 100%; padding: 20px 0pt 0pt; text-align: left; }
+.step .input_checkbox1 { height: 10px; }

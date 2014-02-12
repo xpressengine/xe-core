@@ -1,0 +1,31 @@
+<ul class="tl">
+	{@ $curDate = null}
+	<!--@foreach($changesets as $changeset)-->
+	<!--@if(!$curDate || $curDate != zdate($changeset->date, "Y.m.d"))--> <!--table Open-->
+	<!--@if($curDate)--></p></li><!--@endif-->
+	{@ $curDate = zdate($changeset->date, "Y.m.d")}
+	{@ $newopen = true; }
+	<li>
+		<p class="title"><strong>{$curDate}</strong></p>
+		<p class="summary">
+	<!--@endif--> <!--/table Open-->
+
+			<!--@if($newopen)-->
+			{@ $newopen = false; }
+			<!--@else-->
+			<br />
+			<!--@end-->
+			&rsaquo; 
+			<!--@if($changeset->type)-->
+			{@ $oIssue = $issues[$changeset->target_srl];}
+			<a href="{getUrl('','document_srl',$changeset->target_srl)}">#{$changeset->target_srl}</a> | <em>{$lang->timeline_msg[$changeset->type]}</em> 
+			| {$oIssue->getTitleText(50)} - <!--@if($changeset->type=="changed")-->{$changeset->message}<!--@else-->{$oIssue->getContentText(80)}<!--@end--> | {$changeset->author} 
+			<!--@else-->
+			<strong>r{$changeset->revision}</strong> | <em>{$lang->target_list["commit"]}</em> | {$changeset->message} | {$changeset->author} 
+			<!--@end-->
+			| {zdate($changeset->date,"H:i")}
+	<!--@endforeach-->
+	<!--@if($curDate)-->
+		</p>
+	</li><!--@endif-->
+</ul>

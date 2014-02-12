@@ -1,0 +1,11 @@
+<!--@if($module_info->use_category == 'Y')-->
+<div class="kinCategory">
+	<ul>
+		<li <!--@if(!$category_srl)-->class="selected"<!--@end-->><a href="{getUrl('category_srl','')}">{$lang->total_articles}</a></li>
+	<!--@foreach($categories as $key => $val)-->
+		<li <!--@if($category_srl == $val->category_srl)-->class="selected"<!--@end-->><a href="{getUrl('category_srl',$val->category_srl)}">{$val->title}</a> <span>({number_format($val->document_count)})</span></li>
+	<!--@end-->
+	</ul>
+</div>
+<!--@end-->
+

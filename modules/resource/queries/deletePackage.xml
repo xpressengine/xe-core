@@ -1,0 +1,10 @@
+<query id="deletePackage" action="delete">
+    <tables>
+        <table name="resource_packages" />
+    </tables>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" notnull="notnull" />
+        <condition operation="equal" column="member_srl" var="member_srl" filter="number" pipe="and" />
+        <condition operation="equal" column="package_srl" var="package_srl" filter="number" notnull="notnull" pipe="and" />
+    </conditions>
+</query>

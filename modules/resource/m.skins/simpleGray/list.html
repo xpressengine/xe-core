@@ -1,0 +1,87 @@
+<div class="bd">
+	<div class="hx">
+		<h2>
+		<a href="{getUrl('','vid',$vid,'mid',$mid)}">{$module_info->title}<!--@if($module_info->sub_title)--> - {$module_info->sub_title}<!--@end--></a>
+		<a href="{getUrl('page','','act','dispResourceCategory','')}" class="bn">{$lang->category}</a>
+		</h2>
+	</div>
+	<!--@if($module_info->comment)-->
+    <p class="p">{nl2br($module_info->comment)}</p>
+	<!--@end-->
+
+	<div class="ln">
+		<ul>
+			<!--@if($order_target=='newest')-->
+				<!--@if($order_type == 'desc')-->{@$_order_type = 'asc'}<!--@else-->{@$_order_type = 'desc'}<!--@end-->
+			<!--@else-->
+				{@$_order_type = 'desc'}
+			<!--@end-->
+			<li <!--@if($order_target=='newest')-->class="active"<!--@end-->><a href="{getUrl('order_target','newest','order_type',$_order_type)}">{$lang->order_newest}</a></li>
+			<!--@if($order_target=='download')-->
+				<!--@if($order_type == 'desc')-->{@$_order_type = 'asc'}<!--@else-->{@$_order_type = 'desc'}<!--@end-->
+			<!--@else-->
+				{@$_order_type = 'desc'}
+			<!--@end-->
+			<li <!--@if($order_target=='download')-->class="active"<!--@end-->><a href="{getUrl('order_target','download','order_type',$_order_type)}">{$lang->order_download}</a></li>
+			<!--@if($order_target=='popular')-->
+				<!--@if($order_type == 'desc')-->{@$_order_type = 'asc'}<!--@else-->{@$_order_type = 'desc'}<!--@end-->
+			<!--@else-->
+				{@$_order_type = 'desc'}
+			<!--@end-->
+			<li <!--@if($order_target=='popular')-->class="active"<!--@end-->><a href="{getUrl('order_target','popular','order_type',$_order_type)}">{$lang->order_popular}</a></li>
+		</ul>
+	</div>
+	<ul class="lt">
+		<!--@foreach($item_list as $key => $val)-->
+		<li>
+			<a href="{getUrl('package_srl', $val->package_srl)}">
+				<img src="{$val->item_screenshot_url}" alt="" class="th" /> 
+				<span class="title">
+					<!--@if($val->category_srl)-->{$categories[$val->category_srl]->title} &rsaquo; <!--@end-->
+					<strong>{htmlspecialchars($val->title)} ver. {htmlspecialchars($val->item_version)}</strong>
+				</span>
+				<span class="auth"><strong>{$val->nick_name}</strong> <span>{zdate($val->item_regdate, "Y-m-d H:i")}</span></span>
+			</a>
+			<p>{cut_str(htmlspecialchars($val->package_description),200)}</p>
+			<em>
+				<!--@for($i=0;$i<5;$i++)--><!--@if($i<$val->package_star)-->★<!--@else-->☆<!--@end--><!--@end--> |
+				<!--@if($val->package_voter)-->
+				{sprintf("%0.1f",$val->package_voted/$val->package_voter*2)} /{number_format($val->package_voter)} |
+				<!--@else-->
+				0 / 0
+				<!--@end-->
+				{$lang->package_downloaded_count} : {number_format($val->package_downloaded)} 
+			</em>
+		</li>
+		<!--@end-->
+	</ul>
+	<div class="pn">
+        <!--@if($page != 1)-->
+		<a href="{getUrl('page',$page-1,'document_srl','','division',$division,'last_division',$last_division,'entry','')}">&lsaquo; {$lang->cmd_prev}</a> 
+        <!--@endif-->
+        <strong>{$page} / {$page_navigation->last_page}</strong>
+        <!--@if($page != $page_navigation->last_page)-->
+		<a href="{getUrl('page',$page+1,'document_srl','','division',$division,'last_division',$last_division,'entry','')}">{$lang->cmd_next} &rsaquo;</a>
+        <!--@endif-->
+	</div>
+</div>
+<script>
+//<![CDATA[
+jQuery(function($){
+	var lnb = $('.ln>ul');
+	if($('.ln').width() > lnb.width()){
+		$('.ln>button').hide();
+	}
+	$('.ln>button').click(function(){
+		var t = $(this);
+		if (t.hasClass('next')) {
+			lnb.animate({left:"-100%"},100);
+			$(this).removeClass('next').addClass('prev');
+		} else {
+			lnb.animate({left:"0"},100);
+			$(this).removeClass('prev').addClass('next');
+		}
+	});
+});
+//]]>
+</script>

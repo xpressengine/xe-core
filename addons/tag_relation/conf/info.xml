@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon version="0.2">
+	<title xml:lang="ko">연관 글 출력</title>
+	<description xml:lang="ko">
+		글 하단에 같은 태그를 가진 연관된 글을 출력합니다.
+	</description>
+	<version>1.4.1</version>
+	<date>2013-08-21</date>
+	<license>New BSD</license>
+
+	<author email_address="bnufactory@gmail.com" link="http://xmz.kr/">
+		<name xml:lang="ko">XE Magazine</name>
+	</author>
+
+	<extra_vars>
+		<group>
+			<title xml:lang="ko">출력 설정</title>
+			<var name="skin">
+				<title xml:lang="ko">스킨</title>
+				<description xml:lang="ko">출력 템플릿 (기본 값 : default)</description>
+			</var>
+
+			<var name="title">
+				<title xml:lang="ko">상자 제목</title>
+				<description xml:lang="ko">상자의 제목으로 표시되며, 비워두면 제목을 보이지 않습니다.</description>
+			</var>
+			<var name="list_count">
+				<title xml:lang="ko">목록 수</title>
+				<description xml:lang="ko">출력될 목록의 수를 정하실 수 있습니다. (숫자만 입력해주세요. 기본 값 : 5)</description>
+			</var>
+			<var name="print_regdate" type="select">
+				<title xml:lang="ko">작성일 표시</title>
+				<options value="Y">
+					<title xml:lang="ko">보임</title>
+				</options>
+				<options value="N">
+					<title xml:lang="ko">보이지 않음</title>
+				</options>
+				<description />
+			</var>
+			<var name="print_module_title" type="select">
+				<title xml:lang="ko">모듈 제목 표시</title>
+				<options value="N">
+					<title xml:lang="ko">보이지 않음</title>
+				</options>
+				<options value="Y">
+					<title xml:lang="ko">보임</title>
+				</options>
+				<description />
+			</var>
+			<var name="cut_subject">
+				<title xml:lang="ko">제목 자르기</title>
+				<description xml:lang="ko">게시물의 제목을 잘라서 출력합니다. (비워두면 자르지 않습니다.)</description>
+			</var>
+			<var name="print_comment_count" type="select">
+				<title xml:lang="ko">댓글 수 표시</title>
+				<options value="Y">
+					<title xml:lang="ko">보임</title>
+				</options>
+				<options value="N">
+					<title xml:lang="ko">보이지 않음</title>
+				</options>
+				<description />
+			</var>
+			<var name="print_author" type="select">
+				<title xml:lang="ko">작성자 표시</title>
+				<options value="Y">
+					<title xml:lang="ko">보임</title>
+				</options>
+				<options value="N">
+					<title xml:lang="ko">보이지 않음</title>
+				</options>
+				<description />
+			</var>
+			<var name="print_voted_count" type="select">
+				<title xml:lang="ko">추천수 표시</title>
+				<options value="Y">
+					<title xml:lang="ko">보임</title>
+				</options>
+				<options value="N">
+					<title xml:lang="ko">보이지 않음</title>
+				</options>
+				<description />
+			</var>
+			<var name="print_readed_count" type="select">
+				<title xml:lang="ko">조회수 표시</title>
+				<options value="Y">
+					<title xml:lang="ko">보임</title>
+				</options>
+				<options value="N">
+					<title xml:lang="ko">보이지 않음</title>
+				</options>
+				<description />
+			</var>
+		</group>
+
+		<group>
+			<title xml:lang="ko">동작 설정</title>
+
+			<var name="link_target" type="select">
+				<title xml:lang="ko">링크</title>
+				<options value="self">
+					<title xml:lang="ko">현재 창(탭)에 열기</title>
+				</options>
+				<options value="new">
+					<title xml:lang="ko">새 창(탭)으로 열기</title>
+				</options>
+				<description />
+			</var>
+		</group>
+
+		<group>
+			<title xml:lang="ko">글 수집 설정</title>
+
+			<var name="target" type="select">
+				<title xml:lang="ko">대상 모듈</title>
+				<options value="All">
+					<title xml:lang="ko">전체 글</title>
+				</options>
+				<options value="current_site">
+					<title xml:lang="ko">동일 사이트의 글</title>
+				</options>
+				<options value="current_mid">
+					<title xml:lang="ko">동일 모듈(mid)의 글</title>
+				</options>
+				<options value="selected_mid">
+					<title xml:lang="ko">사용 대상 모듈의 글</title>
+				</options>
+				<description xml:lang="ko">* '사용 대상 모듈의 글'은 아래에서 선택된 대상으로 글을 수집합니다. 사용 대상 모듈이 선택되지 않으면 전체 글을 대상으로 합니다.</description>
+			</var>
+
+			<var name="lowest_tag">
+				<title xml:lang="ko">최소 태그 수</title>
+				<description xml:lang="ko">최소 n개 이상의 태그가 일치하도록 제한합니다. (기본 값 : 1개 이상)</description>
+			</var>
+
+			<var name="exclude_tags">
+				<title xml:lang="ko">수집 제외 태그</title>
+				<description xml:lang="ko">글 수집에서 제외 할 태그를 지정합니다.
+				태그 입력시 , (쉼표)를 이용하시면 복수 등록이 가능합니다.</description>
+			</var>
+		</group>
+	</extra_vars>
+</addon>

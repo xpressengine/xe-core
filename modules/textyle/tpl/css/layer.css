@@ -1,0 +1,76 @@
+@charset "utf-8";
+/* NHN (developers@xpressengine.com) */
+
+/* LayerContainer */
+.layerContainer{display:none;position:fixed;_position:absolute;top:0;bottom:0;left:0;width:100%;height:100%;z-index:100}
+.layerContainer.open{display:block}
+.layerContainer .darkNight{position:fixed;*position:absolute;top:0;left:0;width:100%;height:100%;background:#000;opacity:.3;filter:alpha(opacity=30)}
+.layerContainer .layer{position:fixed;*position:absolute;top:300px;left:50%}
+.layerContainer.open .layer{display:block}
+
+/* Layer */
+.layer{display:none;position:absolute;padding:30px 50px;border:2px solid #737373;background:#fff;font-size:12px;z-index:100}
+.layer.open{display:block}
+.layer .h4{_float:left;clear:both;font-size:16px;margin:0;white-space:nowrap;margin:15px 0}
+.layer .h4 .icon{margin-right:5px;vertical-align:middle}
+.layer form,
+.layer fieldset{_float:left;clear:both}
+.layer .btnArea{_float:left;clear:both;text-align:center;padding:15px 0 0 0}
+.layer .btnCloseLayer{padding:0;position:absolute;top:5px;right:5px;width:17px;height:17px;border:0;background:transparent url(../img/buttonCloseLayerX.gif) no-repeat center center;cursor:pointer}
+.layer .btnCloseLayer span{position:absolute;width:0;height:0;font-size:0;line-height:0;overflow:hidden;visibility:hidden}
+.layer em{font-style:normal;color:#ff6600}
+
+/* feedbackSetup */
+#feedbackSetup .layer{_float:left;margin:-100px 0 0 -150px}
+#feedbackSetup ul{_float:left;clear:both;margin:0;_margin-right:30px;padding:15px 70px;list-style:none;border:1px solid #f2f2f2;background:#fcfcfc}
+#feedbackSetup li{white-space:nowrap;margin:5px 0}
+
+/* sending */
+#sending .layer{_float:left;margin:-100px 0 0 -150px}
+
+/* booking */
+#booking .layer{_float:left;margin:-100px 0 0 -150px}
+
+/* Legacy */
+.layer h4.xeAdmin{font-size:14px !important;font-family:Dotum;background:#f4f4f4 !important;padding:8px 30px 8px 15px !important;letter-spacing:-1px !important}
+.layer .xButton{position:absolute;top:9px;right:9px;width:15px;height:14px;background-color:transparent;background:url(../img/buttonClose.gif) no-repeat;border:0;cursor:pointer;overflow:hidden}
+.layer .xButton span{position:relative;z-index:-1;visibility:hidden}
+.layer .layerBody{margin:15px}
+
+.boxModelControler select{margin-bottom:3px}
+.boxModelControler .iText{border:1px solid #ccc;padding:2px 3px;margin-bottom:3px;vertical-align:top;*margin-top:-1px}
+.boxModelControler .inputCheck{width:13px;height:13px;vertical-align:middle}
+.boxModelControler .layerBody{margin:15px}
+.boxModelControler .preview{overflow:hidden;margin-bottom:20px}
+.boxModelControler .dragAble{position:relative;padding:15px 0 0 15px;background:url(../img/bgRuler.gif) no-repeat;zoom:1;cursor:move}
+.boxModelControler .dragAble .prevGrid{position:relative;margin:-1px;background:url(../img/bgGrid.gif) 0 0;border:1px solid #000;zoom:1}
+.boxModelControler .dragAble .prevBox{position:relative}
+.boxModelControler .dragAble .prevBox .prevContent{position:relative}
+.boxModelControler .boxModelTable{width:100%;border:0;border-bottom:1px solid #ddd;margin:0;padding:0}
+.boxModelControler .boxModelTable th,
+.boxModelControler .boxModelTable td{border:0;border-top:1px solid #ddd;vertical-align:top;padding:5px 10px;text-align:left}
+.boxModelControler .boxModelTable th{height:50px;*height:40px;background:#f1f1f1;padding-left:70px;background-repeat:no-repeat;background-position:10px 10px}
+.boxModelControler .boxModelTable th.width{background-image:url(../img/exWidth.gif)}
+.boxModelControler .boxModelTable th.margin{background-image:url(../img/exMargin.gif)}
+.boxModelControler .boxModelTable th.padding{background-image:url(../img/exPadding.gif)}
+.boxModelControler .boxModelTable th.border{background-image:url(../img/exBorder.gif)}
+.boxModelControler .boxModelTable th.bgColor{background-image:url(../img/exBgColor.gif)}
+.boxModelControler .boxModelTable th.bgImage{background-image:url(../img/exBgImage.gif)}
+.boxModelControler .boxModelTable th sup{font-weight:normal;font-size:11px;font-family:Dotum;color:#999}
+.boxModelControler .boxModelTable td dl.iList dt{display:inline;position:relative;top:3px}
+.boxModelControler .boxModelTable td dl.iList dd{display:inline}
+.boxModelControler .boxModelTable td dl.dList dt{float:left;clear:left;margin-right:5px;padding-top:3px}
+.boxModelControler .boxModelTable td dl.dList dd{clear:right}
+.boxModelControler .colorPicker{position:relative;display:inline;vertical-align:top}
+.boxModelControler .colorPicker .picker{position:relative;top:2px;left:-22px;width:16px;height:16px;border:1px solid #ccc;background-color:transparent;background-position:right top;cursor:pointer;vertical-align:top}
+.boxModelControler .colorPicker .picker span{font-size:0;line-height:0;z-index:-1;visibility:hidden}
+.boxModelControler .colorPicker .palette{position:absolute;top:0px;left:0;display:none;width:272px;height:64px;list-style:none;margin:0;padding:1px 0 0 1px;border:1px solid #ccc;background:#fff;overflow:hidden}
+.boxModelControler .colorPicker .palette.open{display:block}
+.boxModelControler .colorPicker .palette li{float:left;margin:0 1px 1px 0;font-size:0;line-height:0}
+.boxModelControler .colorPicker .palette li button{width:15px;height:15px;border:0;cursor:pointer}
+.boxModelControler .colorPicker .palette li button span{position:relative;z-index:-1;font-size:0;line-height:0;visibility:hidden}
+.boxModelControler .colorPicker .palette li button.transparent{background:url(../img/bgNone.gif) no-repeat right top;border:1px solid #ddd}
+.boxModelControler .borderDetach{display:none}
+.boxModelControler .borderDetach.open{display:block}
+.boxModelControler .btnArea{padding:15px 0 0 0;text-align:center}
+

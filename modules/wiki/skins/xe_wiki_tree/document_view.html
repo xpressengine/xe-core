@@ -1,0 +1,201 @@
+<include target="header.html" />
+<!--@if($module_info->markup_type != 'xe_wiki_markup')-->
+	<load target="../../lib/google-code-prettify/prettify.css" />
+	<load target="../../lib/google-code-prettify/prettify.js" />
+
+	<script>
+		jQuery(document).ready(function($){
+			prettyPrint();
+		});
+	</script>
+<!--@end-->
+<div id="wikiDocument">
+	<!--@if($oDocument && $oDocument->isExists())-->
+	
+		<div id="wikiAboveTitleArea">
+			<div id="wikiBreadcrumbs">{$breadcrumbs}</div>
+			
+			<div id="wikiLanguages">
+				{@ $current_lang = Context::getLangType(); }
+				<!--@foreach($langs as $key => $val)-->
+					<!--@if ($key == $current_lang) -->
+					<span class="currentLanguage" title="{@ printf($lang->you_are_viewing, $val) }">{strtoupper($key)}</span>
+					<!--@elseif (in_array($key, $translatedlangs))-->
+					<a href="#" onclick="doChangeLangType('{$key}');return false;" title="{@ printf($lang->view_this_page_in, $val)}" class="languageTranslated">{strtoupper($key)}</a>
+					<!--@else-->
+						<!--@if($is_logged)-->
+						<a href="#" onclick="doChangeLangType('{$key}');return false;" title="{@ printf($lang->translate_page_into, $val)}" class="languageNotTranslated">{strtoupper($key)}</a>
+						<!--@end-->
+					<!--@end-->
+				<!--@endforeach-->
+			</div>		
+			
+			<div class="cleared"></div>
+		</div>
+	
+		<div id="wikiTitleArea">
+			<div id="wikiEditorActions">
+		    <!--@if(!$history && ($oDocument->isExists()||$use_history != 'N'))-->
+				<!--@if($grant->write_document)-->
+					<a href="{getUrl('act','dispWikiEditPage', 'entry', '', 'document_srl', '')}"><img src="img/icon_add_page.png" alt="Add new page" title="Add new page"/></a>
+				<!--@end-->
+				<!--@if($oDocument->isExists()&&$act!='dispWikiEditPage'&&$grant->write_document)-->
+					<a href="{getUrl('act','dispWikiEditPage','entry',$entry, 'document_srl', '')}">
+						<img src="img/icon_edit_page.png" alt="{$lang->cmd_edit}" title="{$lang->cmd_edit}"/>
+					</a>
+				<!--@end-->
+				<!--@if($oDocument->isExists() && $grant->delete_document && $oDocument->document_srl != (int)$root->document_srl)-->
+					<a href="#" onclick="if(confirm('{$lang->confirm_delete}')) { doDeleteWiki('{$oDocument->document_srl}'); }; return false;">
+						<img src="img/icon_delete_page.png" alt="{$lang->cmd_delete}" title="{$lang->cmd_delete}"/>
+					</a>
+				<!--@end-->
+				<!--@if($use_history != 'N')-->
+					<a href="{getUrl('act','dispWikiHistory','entry',$entry,'history_srl','', 'document_srl', '')}">
+						<img src="img/icon_history.png" alt="{$lang->histories}" title="{$lang->histories}"/>
+					</a>
+				<!--@end-->
+		    <!--@else-->		    
+				<!--@if($history)-->
+					{$lang->notice_old_revision}
+				<!--@end-->
+				<a href="{getUrl('act','dispWikiEditPage', 'entry', '', 'document_srl', '')}"><img src="img/icon_add_page.png" alt="Add new page" title="Add new page"/></a>
+				<a class="btn" href="{getUrl('act','','history_srl','')}">{$lang->cmd_back}</a>
+		    <!--@end-->
+			</div>						
+			
+		    <h2 id="wikiTitle"><a href="{getUrl('document_srl',$document_srl)}">{$oDocument->getTitle()}</a></h2>			
+		</div>
+
+		<div id="wikiBelowTitleArea">
+			<div id="wikiSum">
+				<span class="read">{$lang->readed_count} <span class="num">{$oDocument->get('readed_count')}</span></span>
+				<span class="vote">{$lang->voted_count} <span class="num">{$oDocument->get('voted_count')}</span></span>
+
+				<span class="date">
+					<!--@if($history)-->
+					<strong>{zdate($history->regdate, 'Y.m.d')}</strong> {zdate($history->regdate, 'H:i:s')}
+					<!--@else-->
+					<strong>{$oDocument->getUpdate('Y.m.d')}</strong> {$oDocument->getUpdate('H:i:s')} 
+					<!--@end-->
+				</span>					
+			</div>				
+
+			<div id="wikiAuthorArea">
+				<!--@if($history)-->
+				<a href="#" class="author member_{$history->member_srl}" onclick="return false;">{$history->nick_name}</a>
+				<!--@else-->
+				<!--@if(!$oDocument->getMemberSrl())-->
+					<!--@if($oDocument->isExistsHomepage())-->
+					<a href="{$oDocument->getHomepageUrl()}" onclick="window.open(this.href);return false;" class="author">{$oDocument->getNickName()}</a>
+					<!--@else-->
+					{$oDocument->getNickName()}
+					<!--@end-->
+				<!--@else-->
+					<a href="#popup_menu_area" class="member_{$oDocument->get('member_srl')} author" onclick="return false">{$oDocument->getNickName()}</a>
+				<!--@end-->
+				<!--@end-->
+
+				<span class="ipAddress"><!--@if($grant->manager || $module_info->display_ip_address!='N')-->{$oDocument->getIpaddress()}<!--@end--></span>
+			</div>
+			
+			<div class="cleared"></div>
+		</div>
+	
+	<!--@elseif($oDocument)-->
+		<div id="wikiTitleArea">
+			<!-- Needs to acces title with get('title') instead of getTitle() because oDocument is seen as invalid when doc_srl is 0 -->
+		    <h2 class="title">{$oDocument->get('title')}</h2>
+		</div>
+	<!--@end-->
+
+	<div id="wikiContentContainer" class="xe_content">
+		<!--@if($oDocument->isSecret() && !$oDocument->isGranted())-->
+			<form action="./" method="get" ruleset="input_password" class="secretMessage">
+				<input type="hidden" name="act" value="procWikiVerificationPassword" />
+				<input type="hidden" name="success_return_url" value="{getUrl('act','dispWikiContent','mid',$mid,'entry',$entry, 'document_srl', '')}" />
+				<input type="hidden" name="mid" value="{$mid}" />
+				<input type="hidden" name="page" value="{$page}" />
+				<input type="hidden" name="document_srl" value="{$oDocument->document_srl}" />
+				<input type="hidden" name="xe_validator_id" value="modules/wiki/skins/xe_wiki_tree" />
+
+				<p>&quot;{$lang->msg_is_secret}&quot;</p>
+				<dl>
+					<dt><label for="cpw">{$lang->password}</label> :</dt>
+					<dd><input type="password" name="password" id="cpw" class="inputText" /> <input type="submit" class="btn" value="{$lang->cmd_input}" /></dd>
+				</dl>
+
+			</form>
+		<!--@else-->
+            <!--@if($history)-->
+                {@ $document_content = $history->content}
+            <!--@else-->
+                {@ $document_content = $oDocument->getContent()}
+            <!--@end-->
+			{$document_content}
+		<!--@end-->
+	</div>
+
+	<div id="wikiNavigation">
+	<!--@if($oDocumentPrev)-->
+		<a href="{getUrl('document_srl',$oDocumentPrev->document_srl)}" class="wikiPrev">&laquo; {$oDocumentPrev->getTitle()}</a>
+	<!--@end-->
+	<!--@if($oDocumentNext)-->
+		<a href="{getUrl('document_srl',$oDocumentNext->document_srl)}" class="wikiNext">{$oDocumentNext->getTitle()} &raquo;</a>
+	<!--@end-->
+	</div>
+	
+	{@ $tag_list = $oDocument->get('tag_list') }
+	<!--@if(count($tag_list))-->
+	<dl id="wikiTags">
+		<dt>{$lang->tag}</dt>
+		<!--@for($i=0;$i<count($tag_list);$i++)-->
+			{@ $tag = $tag_list[$i]; }
+			<dd><a href="{getUrl('search_target','tag','search_keyword',$tag,'document_srl','')}" rel="tag">{htmlspecialchars($tag)}</a></dd>
+		<!--@end-->
+	</dl>
+	<!--@end-->
+
+	<!--@if($oDocument->hasUploadedFiles())-->
+	<dl id="wikiAttachedFiles">
+		<dt>{$lang->uploaded_file}<input type="button" class="fileToggle" onclick="jQuery(this).parents('dl#wikiAttachedFiles').toggleClass('open');return false;" value="{$lang->uploaded_file} ({$oDocument->get('uploaded_count')})" /></dt>
+		<dd>
+			<ul class="files">
+				{@ $uploaded_list = $oDocument->getUploadedFiles() }
+				<!--@foreach($uploaded_list as $key => $file)-->
+				<li><a href="{getUrl('')}{$file->download_url}">{$file->source_filename} <span class="bubble">[File Size:{FileHandler::filesize($file->file_size)}/Download:{number_format($file->download_count)}]</span></a></li>
+				<!--@end-->
+			</ul>
+		</dd>
+	</dl>
+	<!--@end-->
+
+	<!--@if(!$oDocument->getTrackbackCount())-->
+	<dl id="wikiTrackback">
+		<dt>{$lang->trackback} : </dt>
+		<dd><a href="{$oDocument->getTrackbackUrl()}" onclick="return false;">{$oDocument->getTrackbackUrl()}</a></dd>
+	</dl>
+	<!--@end-->
+
+	<!--@if($contributors)-->
+	<dl id="wikiContributors">
+		<dt>{$lang->contributors} : </dt>
+		<dd><!--@foreach($contributors as $key => $val)--><a href="#" class="member_{$val->member_srl}" onclick="return false;">{$val->nick_name}</a><!--@if($key<count($contributors)-1)-->, <!--@end--><!--@end--></dd>
+	</dl>
+	<!--@end-->
+
+	<!--@if($oDocument->allowTrackback())-->
+		<include target="./trackback.html" />
+	<!--@end-->
+	
+	<div id="wikiComments">
+	<!--@if($oDocument->allowComment())-->
+		<include target="./comment_list.html" />
+
+		<!--@if($grant->write_comment && $oDocument->isEnableComment() )-->
+			<include target="./comment_form.html" />
+		<!--@end-->
+	<!--@end-->
+	</div>
+	
+	<div class="cleared" /></div>
+<include target="footer.html" />

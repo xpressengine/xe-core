@@ -1,0 +1,47 @@
+<load target="rs.css" />
+<load target="rs.js" />
+<div class="lnb">
+	<h2 style="background:url({$module_info->menu_img}) no-repeat"><a href="{getSiteUrl($site_module_info->domain,'','mid',$module_info->mid)}">다운로드</a></h2>
+	{@ $menus = array(); }
+	<!--@foreach($categories as $key => $val)-->
+		<!--@if(!$val->depth)-->{@ $menus[$key] = $val; $menus[$key]->children = array(); $menus[$key]->count = 0; }<!--@end-->
+	<!--@end-->
+	<!--@foreach($categories as $key => $val)-->
+		<!--@if($val->depth && $val->parent_srl && $menus[$val->parent_srl])-->
+			{@
+				$menus[$val->parent_srl]->children[] = $val;
+				$menus[$val->parent_srl]->count += (int)$package_categories[$val->category_srl]->count;
+			}
+		<!--@end-->
+	<!--@end-->
+	<ul>{@$x=1;}
+		<li loop="$menus=>$val" class="x{$x++}">
+			<a href="{getSiteUrl($site_module_info->domain, '', 'mid', $module_info->mid, 'category_srl',$val->category_srl,'childs', implode(',',$val->childs))}" style="background-image:url({$module_info->menu_img})" class="active"|cond="$val->category_srl == $category_srl || $val->category_srl == $parent_srl">{$val->text} <em cond="$val->count">{$val->count}</em></a>
+			<ul cond="$val->children">
+				<li loop="$val->children=>$child" class="on"|cond="$child->category_srl == $category_srl">
+					<a href="{getSiteUrl($site_module_info->domain, '', 'mid', $module_info->mid, 'category_srl',$child->category_srl,'parent_srl',$child->parent_srl)}">{$child->text} <em cond="$package_categories[$child->category_srl]">[{$package_categories[$child->category_srl]->count}]</em></a>
+				</li>
+			</ul>
+		</li>
+		<li><a href="{getSiteUrl($site_module_info->domain, '', 'mid',$module_info->mid,'act','dispResourceInsertPackage')}" style="background:url({$module_info->menu_img}) no-repeat 0 -104px"|cond="!is_array($licenses)" style="background:url({$module_info->menu_img}) no-repeat -140px -104px"|cond="is_array($licenses)">{$lang->cmd_insert_package}</a></li>
+	</ul>
+	<div class="rsManager" cond="$is_logged">
+		<a href="{getSiteUrl($site_module_info->domain, '', 'mid',$module_info->mid,'act','dispResourcePackageList')}">{$lang->cmd_list_my_package}</a>
+		<a cond="$grant->manager" href="{getSiteUrl($site_module_info->domain, '', 'mid',$module_info->mid,'act','dispResourceManage')}">{$lang->cmd_manage_package}</a>
+		<a cond="$grant->manager" href="{getSiteUrl($site_module_info->domain, '', 'mid',$module_info->mid,'act','dispResourceAdminInsert')}">{$lang->cmd_setup}</a>
+	</div>
+</div>
+{@ $end = $act==('dispResourcePackage'||'dispResourceModifyPackage'||'dispResourceModifyAttach');}
+<div class="resource">
+	<div class="rsHeader" cond="!$category_srl && !$end">
+		<h2><img src="img/h2.download.gif" width="67" height="18" alt="다운로드" /> <em>[{number_format($package_categories[0]->count)}]</em></h2>
+	</div>
+	<div class="rsHeader" cond="$category_srl && !$end">
+		<h2 cond="$category_srl && !$end">
+			<img cond="$module_info->core_img && ($category_srl=='18322907'||$parent_srl=='18322907')" src="{$module_info->core_img}" alt="{$module_info->core_alt}" />
+			<img cond="$module_info->program_img && ($category_srl=='18322917'||$parent_srl=='18322917')" src="{$module_info->program_img}" alt="{$module_info->program_alt}" />
+			<img cond="$module_info->skin_img && ($category_srl=='18322919'||$parent_srl=='18322919')" src="{$module_info->skin_img}" alt="{$module_info->skin_alt}" />
+			<img cond="$module_info->mskin_img && ($category_srl=='18994168'||$parent_srl=='18994168')" src="{$module_info->mskin_img}" alt="{$module_info->mskin_alt}" />
+			<img cond="$module_info->etc_img && ($category_srl=='18322921'||$parent_srl=='18322921')" src="{$module_info->etc_img}" alt="{$module_info->etc_alt}" />
+		</h2>
+	</div>

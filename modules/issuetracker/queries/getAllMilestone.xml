@@ -1,0 +1,8 @@
+<query id="getAllMilestone" action="select">
+	<tables>
+		<table name="issue_milestones" />
+	</tables>
+	<columns>
+		<column name="*" />
+	</columns>
+</query>

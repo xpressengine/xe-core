@@ -1,0 +1,119 @@
+@charset "utf-8";
+/* NHN (developers@xpressengine.com) */
+
+/* -- Button Gray Style -- */
+.btnGray,
+.btnGray a,
+.btnGray button,
+.btnGray input{position:relative;overflow:visible;border:0;margin:0;padding:0;top:0;display:inline-block;color:#000 !important;cursor:pointer;text-decoration:none !important;white-space:nowrap;vertical-align:top;background-color:transparent;background-image:url(../img/buttonGray.gif);background-repeat:no-repeat}
+.btnGray{margin-right:2px}
+.btnGray a,
+.btnGray button,
+.btnGray input{left:2px}
+
+.btnGray.small{height:20px;background-position:left top !important}
+.btnGray.medium{height:24px;background-position:left -30px !important}
+.btnGray.large{height:27px;background-position:left -60px !important}
+
+/* Anchor */
+.btnGray.small a{padding:4px 6px 5px 4px;font:11px/11px Tahoma, Sans-serif;background-position:right top;_top:0px}
+.btnGray.medium a{padding:6px 10px 7px 8px;font:12px/12px Tahoma, Sans-serif;background-position:right -30px;_top:-1px}
+.btnGray.large a{padding:8px 10px 7px 8px;font:12px/12px Tahoma, Sans-serif;background-position:right -60px}
+
+/* Button & Input */
+.btnGray.small button,
+.btnGray.small input{height:20px;padding:0 6px 0 4px;font:11px/20px Tahoma, Sans-serif !important;background-position:right top !important;_top:0 !important}
+.btnGray.medium button,
+.btnGray.medium input{height:24px;padding:0 10px 0 8px;font:12px/25px Tahoma, Sans-serif;background-position:right -30px !important;_top:-1px}
+.btnGray.large button,
+.btnGray.large input{height:27px;padding:0 10px 0 8px;font:12px/28px Tahoma, Sans-serif;background-position:right -60px !important;_top:-1px}
+
+/* Strong Button */
+.btnGray.strong *{font-weight:bold !important}
+
+/* Icon Add */
+.btnGray a .icon{position:relative;border:0;vertical-align:middle}
+.btnGray button .icon,
+.btnGray input .icon{position:relative;margin-right:5px;vertical-align:middle;_top:4px}
+
+/* -- Button New Post -- */
+.btnNewPost,
+.btnNewPost a{position:relative;border:0;margin:0;display:inline-block;color:#000;font-family:Tahoma, Sans-serif;cursor:pointer;text-decoration:none !important;white-space:nowrap;vertical-align:middle;background-color:transparent;background-image:url(../img/buttonNewPost.gif);background-repeat:no-repeat}
+.btnNewPost{margin-right:5px;background-position:left top}
+.btnNewPost a{padding:7px 10px 11px 20px;*padding:7px 10px 11px 20px;font-size:12px;line-height:12px;font-weight:bold;color:#fff;left:5px;background-position:right top}
+
+/* -- Button Favorite Menu -- */
+.btnFavoriteMenu,
+.btnFavoriteMenu span{position:relative;border:0;margin:0;display:block;color:#000;font-family:Tahoma, Sans-serif;cursor:pointer;text-decoration:none !important;white-space:nowrap;vertical-align:middle;background-color:transparent;background-image:url(../img/buttonFavoriteMenu.gif);background-repeat:no-repeat}
+.btnFavoriteMenu{margin-right:28px;background-position:left top}
+.btnFavoriteMenu span{padding:9px 35px 9px 8px;*padding:7px 35px 11px 8px;font-size:12px;line-height:12px;color:#fff;left:23px;background-position:right top}
+
+/* -- Publish State -- */
+.publishState,
+.publishState span{position:relative;border:0;margin:0;display:inline-block;height:17px;line-height:19px;color:#000;font-family:Tahoma, Sans-serif;text-decoration:none !important;white-space:nowrap;vertical-align:top;background-color:transparent;background-image:url(../img/bgPublishState.gif);background-repeat:no-repeat;font-weight:normal}
+.publishState{margin-right:2px}
+.publishState span{left:2px;padding:0 3px 0 1px;font-size:11px;_top:-1px;*vertical-align:top}
+.publishState.draft{background-position:left top}
+.publishState.draft span{background-position:right top;color:#b1b1b1}
+.publishState.out{background-position:left -20px}
+.publishState.out span{background-position:right -20px;color:#fff}
+
+/* -- Active State -- */
+.activeState,
+.activeState button{position:relative;border:0;margin:0;padding:0;overflow:visible;display:inline-block;height:17px;line-height:19px;color:#000;font-family:Tahoma, Sans-serif;text-decoration:none !important;white-space:nowrap;vertical-align:top;background-color:transparent;background-image:url(../img/bgPublishState.gif);background-repeat:no-repeat;font-weight:normal;cursor:pointer}
+.activeState{margin-right:2px}
+.activeState button{left:2px;padding:0 3px 0 1px;font-size:11px}
+.activeState.turnOff{background-position:left top}
+.activeState.turnOff button{background-position:right top;color:#b1b1b1}
+.activeState.turnOn{background-position:left -20px}
+.activeState.turnOn button{background-position:right -20px;color:#fff}
+
+/* -- Button Action -- */
+.btnAction,
+.btnAction button,
+.btnAction input,
+.btnAction a{position:relative;border:0;margin:0;display:inline-block;font-family:Tahoma, Sans-serif;font-weight:bold !important;cursor:pointer;text-decoration:none !important;white-space:nowrap;vertical-align:middle;*vertical-align:top;background-color:transparent;background-image:url(../img/buttonAction.gif);background-repeat:no-repeat}
+.btnAction{margin-right:7px}
+
+/* Control Button + Submit Button */
+.btnAction button,
+.btnAction input,
+.btnAction a{height:39px;padding:0 25px 0 0;font:12px/39px Sans-serif;background-position:right top;overflow:visible}
+
+/* Blue */
+.btnAction.actionBlue{background-position:left top;top: 40px}
+.btnAction.actionBlue button,
+.btnAction.actionBlue input,
+.btnAction.actionBlue a{left:7px;padding-left:40px;color:#fff;background-position:right top}
+
+/* White */
+.btnAction.actionWhite{background-position:left -40px}
+.btnAction.actionWhite button,
+.btnAction.actionWhite input,
+.btnAction.actionWhite a{left:7px;color:#555;background-position:right -40px;padding-left:18px}
+
+/* Normal */
+.btnAction.normal *{font-weight:normal !important}
+
+/* Select */
+.select{position:relative;display:inline-block;height:27px;*float:left}
+.select .btnSelect,
+.select .btnSelect button{position:relative;border:0;margin:0;display:inline-block;color:#000;font-family:Tahoma, Sans-serif;cursor:pointer;text-decoration:none !important;white-space:nowrap;vertical-align:middle;*vertical-align:top;background-color:transparent;background-image:url(../img/buttonGray.gif);background-repeat:no-repeat}
+.select .btnSelect{margin-right:2px;*margin-right:5px;background-position:left -90px}
+.select .btnSelect button{left:2px;height:27px;padding:0 25px 0 8px;*padding:0 5px 0 8px;*text-align:left;font:12px/28px Sans-serif;background-position:right -90px;_top:-1px}
+.select ul{display:none;position:absolute;bottom:30px;left:0;border:1px solid #a5a5a5;border-bottom-color:#ddd;*border-bottom-color:#a5a5a5;background:#fff;margin:0;padding:0;list-style:none;*filter:progid:DXImageTransform.Microsoft.dropshadow(OffX='0', OffY='1', Color='#dddddd', positive='true')}
+.select ul:after{content:"";display:block;clear:both;height:1px;background:#a5a5a5}
+.select ul.open{display:block}
+.select ul ul{display:block !important;position:static;border:0;padding:0}
+.select ul ul:after{content:"";display:none}
+.select ul li:hover{background:#f7fafc}
+.select ul li:hover button{color:#ea3f22}
+.select ul li li{padding:0 0 0 20px}
+.select ul li button{display:block;padding:2px 10px;white-space:nowrap;background-color:transparent;border:0;font-size:12px;color:#555;text-align:left;cursor:pointer}
+.select ul li li button{background:url(../img/lineSelectL.gif) no-repeat left center}
+
+/* Table Data Sort */
+.btnTableDataSort{width:20px;height:20px;border:0;cursor:pointer;padding:0;background:transparent url(../img/buttonTableDataSort.gif) no-repeat center center;vertical-align:middle}
+.btnTableDataSort span{position:absolute;width:0;height:0;overflow:hidden;font-size:0;line-height:0;visibility:hidden}
+.sum .btnTableDataSort{width:20px;height:20px;border:0;cursor:pointer;padding:0;background:transparent url(../img/buttonTableSumSort.gif) no-repeat center center;vertical-align:middle}
+.sum .btnTableDataSort span{position:absolute;width:0;height:0;overflow:hidden;font-size:0;line-height:0;visibility:hidden}

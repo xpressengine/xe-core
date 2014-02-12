@@ -1,0 +1,158 @@
+{@ Context::addJsFile("./common/js/jquery.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/js_app.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/common.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/xml_handler.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/xml_js_filter.js", true, '', -100000) }
+<!--#include("_header.html")-->
+<div class="bd rd">
+	<div class="hx">
+		<h2>{$oIssue->getTitle()}</h2>
+		<em><a href="#">{$oIssue->getNickName()}</a></em>
+		<span>{$oIssue->getRegdate()}</span>
+	</div>
+	<div class="co">
+                <!--@if($oIssue->isSecret() && !$oIssue->isGranted())-->
+                    <div class="secretContent">
+                        <form action="./" method="get" onsubmit="return procFilter(this, input_password)">
+                        <input type="hidden" name="mid" value="{$mid}" />
+                        <input type="hidden" name="page" value="{$page}" />
+                        <input type="hidden" name="document_srl" value="{$oIssue->document_srl}" />
+
+                            <div class="title">{$lang->msg_is_secret}</div>
+                            <div class="content"><input type="password" name="password" id="cpw" class="inputTypeText" /><span class="button {$btn_class}"><input type="submit" value="{$lang->cmd_input}" accesskey="s" /></span></div>
+
+                        </form>
+                    </div>
+                <!--@else-->
+
+				<!--@if(!$oIssue->isSecret() || $oIssue->isAccessible())-->
+				<dl class="xv">
+				<!--@if($oIssue->isExtraVarsExists())-->
+					{@ $_extra_vars = $oIssue->getExtraVars(); }
+					<!--@foreach($_extra_vars as $key => $val)-->
+						<dt>{$val->name}</dt>
+						<dd>{$val->getValueHTML()}</dd>
+					<!--@end-->
+				<!--@end-->
+					<dt>{$lang->milestone}</dt>
+					<dd>{$oIssue->getMilestoneTitle()}</dd>
+					<dt>{$lang->priority}</dt>
+					<dd>{$oIssue->getPriorityTitle()}</dd>
+					<dt>{$lang->type}</dt>
+					<dd>{$oIssue->getTypeTitle()}</dd>
+					<dt>{$lang->component}</dt>
+					<dd>{$oIssue->getComponentTitle()}</dd>
+					<dt>{$lang->assignee}</dt>
+					<dd>{$oIssue->get('assignee_name')}</dd>
+					<!--@if(count($project->packages))-->
+					<dt>{$lang->package}</dt>
+					<dd>{$oIssue->getPackageTitle()}</dd>
+					<dt>{$lang->occured_version}</dt>
+					<dd>{$oIssue->getReleaseTitle()}&nbsp;</dd>
+				<!--@end-->
+				</dl>
+				<!--@end-->
+
+			    {$oIssue->getContent(false)}
+				<!--@end-->
+	</div>
+		<!--@if($oIssue->hasUploadedFiles())-->
+		{@ $uploaded_list = $oIssue->getUploadedFiles() }
+		<h3 class="h3">{$lang->uploaded_file} <em>[{count($uploaded_list)}]</em> <button type="button" class="tg" title="open/close"></button></h3>
+		<ul class="sn tgo open">
+			<!--@foreach($uploaded_list as $key => $file)-->
+			<li><a href="{getUrl('')}{$file->download_url}">{$file->source_filename}</a></li>
+			<!--@end-->
+		</ul>
+		<!--@endif-->
+		<!--@if($oIssue->allowTrackback() && $oIssue->getTrackbackCount())-->
+		<h3 class="h3">{$lang->trackback} <em>[{$oIssue->getTrackbackCount()}]</em> <button type="button" class="tg" title="open/close"></button></h3>
+		<ul class="rp tgo open">
+			{@ $_trackback_list = $oIssue->getTrackbacks() }
+			<!--@foreach($_trackback_list as $key => $val)-->
+			<li>
+				<p>{$val->excerpt}</p>
+				<em>{htmlspecialchars($val->title)} - {htmlspecialchars($val->blog_name)}</em>
+				<span>zdate($val->regdate, "Y.m.d")</span>
+				<!--@if($grant->manager)-->
+				<a href="07_password.html" class="md">삭제</a>
+				<!--@endif-->
+			</li>
+			<!--@end-->
+		</ul>
+		<!--@endif-->
+		<!--@if($oIssue->allowComment() && $oIssue->getCommentCount())-->
+		<h3 class="h3" id="clb">{$lang->comment} <em>[{$oIssue->getCommentCount()}]</em> <button type="button" class="tg tgr" title="open/close"></button></h3>
+		<!--@endif-->
+		<!--@if($grant->write_comment && $oIssue->isEnableComment() )-->
+		<h3 class="h3">{$lang->write_comment} <button type="button" class="tg" title="open/close"></button></h3>
+		<form action="./" method="POST" class="sn tgo open" onsubmit="return procFilter(this, insert_comment);">
+		<input type="hidden" name="mid" value="{$mid}" />
+		<input type="hidden" name="document_srl" value="{$oIssue->document_srl}" />
+		<input type="hidden" name="comment_srl" value="" />
+		<ul>
+			<li>
+				<label for="rText" class="db fb">{$lang->comment}</label>
+				<textarea name="content" cols="20" rows="5" id="rText" class="itxx"></textarea>
+			</li>
+			<!--@if(!$is_logged)-->
+			<li>
+				<label for="uName" class="db fb">{$lang->writer}</label>
+				<input name="nick_name" type="text" id="uName" class="itx" />
+			</li>
+			<li>
+				<label for="uMail" class="db fb">{$lang->email_address}</label>
+				<input name="email_address" type="text" id="uMail" class="itx" />
+			</li>
+			<li>
+				<label for="uPw" class="db fb">{$lang->password}</label>
+				<input name="password" type="password" id="uPw" class="itx" />
+			</li>
+			<li>
+				<label for="uSite" class="db fb">{$lang->homepage}</label>
+				<input name="homepage" type="text" id="uSite" class="itx" value="http://" />
+			</li>
+			<!--@endif-->
+		</ul>
+		<div class="ar">
+			<input name="" type="submit" value="{$lang->cmd_comment_registration}" />
+		</div>
+		</form>
+		<!--@end-->
+</div>
+<!--#include("_footer.html")-->
+<script type="text/javascript">
+//<![CDATA[
+jQuery(function($){
+	$('.co .mm').next().hide();
+	$('.mm').click(function(){ $(this).hide().next().show();});
+	$('.tgo').removeClass('open');
+	$('.tg').click(function(){
+		$(this).parent('.h3').next('.tgo').toggleClass('open');
+	});
+	var loaded = false;
+	$('.tgr').click(function(){
+		if(!loaded) {
+			loaded = true;
+			{@ $lastpage = 1; }
+			{@ $temp = $oIssue->getComments() }
+			<!--@if($oIssue->comment_page_navigation)-->
+			{@ $lastpage = $oIssue->comment_page_navigation->last_page }
+			<!--@endif-->
+			loadPage({$oIssue->document_srl}, {$lastpage});
+		}
+	});
+	function completeGetPage(ret_val) {
+		jQuery("#cl").remove();
+		jQuery("#clpn").remove();
+		jQuery("#clb").parent().after(ret_val['html']);
+	}
+	function loadPage(document_srl, page) {
+		var params = {};
+		params["cpage"] = page; 
+		params["document_srl"] = document_srl 
+		exec_xml("textyle", "getTextyleCommentPage", params, completeGetPage, ['html','error','message'], params);
+	}
+});
+//]]>
+</script>

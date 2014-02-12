@@ -1,0 +1,12 @@
+<table name="textyle_supporter">
+	<column name="textyle_supporter_srl" type="number" size="11" notnull="notnull" index="idx_textyle_srl" />
+	<column name="module_srl" type="number" size="11" notnull="notnull" index="idx_textyle_srl" />
+	<column name="member_srl" type="number" size="11" notnull="notnull" index="idx_textyle_member_srl" />
+	<column name="nick_name" type="varchar" size="80" notnull="notnull" />
+	<column name="homepage" type="varchar" size="255" notnull="notnull" />
+	<column name="comment_count" type="number" default="0" size="11" notnull="notnull" />
+	<column name="trackback_count" type="number" default="0" size="11"  notnull="notnull" />
+	<column name="guestbook_count" type="number" default="0" size="11" notnull="notnull" />
+	<column name="total_count" type="number" default="0" size="11" notnull="notnull" index="idx_textyle_srl" />
+	<column name="regdate" type="char" default="" size="6" notnull="notnull" />
+</table>

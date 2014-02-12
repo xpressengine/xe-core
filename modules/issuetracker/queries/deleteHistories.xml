@@ -1,0 +1,8 @@
+<query id="deleteHistories" action="delete">
+    <tables>
+        <table name="issue_history_change" />
+    </tables>
+    <conditions>
+        <condition operation="equal" column="comment_srl" var="comment_srl" notnull="notnull" />
+    </conditions>
+</query>

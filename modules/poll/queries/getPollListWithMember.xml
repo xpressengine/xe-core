@@ -1,0 +1,43 @@
+<query id="getPollListWithMember" action="select">
+    <tables>
+        <table name="poll_title" alias="P" />
+		<table name="poll" alias="P2" type="left join">
+			<conditions>
+				<condition operation="equal" column="P2.poll_srl" var="P.poll_srl" />
+			</conditions>
+		</table>
+        <table name="member" alias="M" type="left outer join">
+			<conditions>
+				<condition operation="equal" column="P2.member_srl" var="M.member_srl" />
+			</conditions>
+		</table>
+    </tables>
+    <columns>
+        <column name="P.poll_srl" alias="poll_srl" />
+        <column name="P.poll_index_srl" alias="poll_index_srl" />
+        <column name="P.title" alias="title" />
+        <column name="P.checkcount" alias="checkcount" />
+        <column name="P.poll_count" alias="poll_count" />
+        <column name="P.upload_target_srl" alias="upload_target_srl" />
+        <column name="P.ipaddress" alias="ipaddress" />
+        <column name="P.regdate" alias="poll_regdate" />
+        <column name="P2.stop_date" alias="poll_stop_date" />
+        <column name="M.*" />
+    </columns>
+    <conditions>
+		
+		<condition operation="in" column="poll_index_srl" var="pollIndexSrlList" filter="number" pipe="and" />
+		
+		<group pipe="and">
+			<condition operation="like" column="P.title" var="s_title" pipe="or"/>
+			<condition operation="like_prefix" column="P.regdate" var="s_regdate" pipe="or" />
+			<condition operation="like_prefix" column="P.ipaddress" var="s_ipaddress" pipe="or" />
+		</group>
+    </conditions>
+    <navigation>
+        <index var="sort_index" default="P.list_order" order="asc" />
+        <list_count var="list_count" default="20" />
+        <page_count var="page_count" default="10" />
+        <page var="page" default="1" />
+    </navigation>
+</query>

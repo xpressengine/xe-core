@@ -1,0 +1,147 @@
+<div id="index">
+    <!--@if($mostPopularBlogs)-->
+        <div id="trendyTopics">
+            <span class="topTrendyBlock">
+                <div class="block-title"><span>{$lang->trending_story}</span></div>
+                {@ $topTrendyStory = reset($mostPopularBlogs)}
+                {@ $title = $topTrendyStory->getTitle()}
+                <!--@if($topTrendyStory->thumbnailExists(357, 0, 'ratio'))-->
+                <a href="{$topTrendyStory->variables['url']}" title="{$title}"><img src="{$topTrendyStory->getThumbnail(357, 0, 'ratio')}" alt="{$title}"></a>
+                <!--@end-->
+                <span class="sns-buttons addthis_toolbox addthis_default_style" addthis:url="{$topTrendyStory->variables['url']}">
+                    <a class="addthis_button_tweet" tw:count="vertical"></a>
+                    <a class="addthis_button_facebook_like" fb:like:layout="box_count"></a>
+                </span><span class="summary">
+                    <h2><a href="{$topTrendyStory->variables['url']}">{$title}</a></h2>
+                    {@ $docCategory = $category_list[$topTrendyStory->get('category_srl')]}
+                    <p><a class="category" href="{$docCategory->url}">{$docCategory->title}</a> {$topTrendyStory->getContentText(180)}</p>
+                    <div class="meta"><span class="date" title="{date('Y/m/d @ H:i', $date)}">{$topTrendyStory->variables['relative_date']} by</span> <a href="#" class="author member_{$topTrendyStory->get('member_srl')}" onclick="return false;">{$topTrendyStory->get('user_id')}</a> <a href="{$topTrendyStory->variables['url']}#comments" title="{$lang->story_comments}"><span class="sprite comments"></span> {$topTrendyStory->get('comment_count')}</a> <span title="{$lang->view_number}"><span class="sprite views"></span> {$topTrendyStory->get('readed_count')}</span></div>
+                </span>
+            </span><span id="topTrendyMore">
+                <div class="block-title"><span>{$lang->trending_story_more}</span></div>
+                {@ $nextTrendyStory = next($mostPopularBlogs)}
+                <!--@if($nextTrendyStory)-->
+                    <div class="trendy-more-post">
+                        {@ $title = $nextTrendyStory->getTitle()}
+                        <a href="{$nextTrendyStory->variables['url']}" class="thumb" title="{$title}"><!--@if($nextTrendyStory->thumbnailExists(200, 125, 'ratio'))-->
+                            <img src="{$nextTrendyStory->getThumbnail(200, 125, 'ratio')}" alt="{$title}" /><!--@end--></a><span class="trendy-post-title"><h2><a href="{$nextTrendyStory->variables['url']}">{$title}</a></h2><div class="meta"><a href="{$nextTrendyStory->variables['url']}#comments" title="{$lang->story_comments}"><span class="sprite comments"></span> {$nextTrendyStory->get('comment_count')}</a>  <span title="{$lang->view_number}"><span class="sprite views"></span> {$nextTrendyStory->get('readed_count')}</span></div></span>
+                    </div>
+                <!--@end-->
+                {@ $nextTrendyStory = next($mostPopularBlogs)}
+                <!--@if($nextTrendyStory)-->
+                    <div class="trendy-more-post">
+                        {@ $title = $nextTrendyStory->getTitle()}
+                        <a href="{$nextTrendyStory->variables['url']}" class="thumb" title="{$title}"><!--@if($nextTrendyStory->thumbnailExists(200, 125, 'ratio'))-->
+                        <img src="{$nextTrendyStory->getThumbnail(200, 125, 'ratio')}" alt="{$title}" /><!--@end--></a><span class="trendy-post-title"><h2><a href="{$nextTrendyStory->variables['url']}">{$title}</a></h2><div class="meta"><a href="{$nextTrendyStory->variables['url']}#comments" title="{$lang->story_comments}"><span class="sprite comments"></span> {$nextTrendyStory->get('comment_count')}</a> <span title="{$lang->view_number}"><span class="sprite views"></span> {$nextTrendyStory->get('readed_count')}</span></div></span>
+                    </div>
+                <!--@end-->
+                <div id="trendy-all">
+                    <div class="block-title"><span>{$lang->trending_stories_all_time}</span></div>
+                    <!--@if($allPopularBlogs)-->
+                        <!--@foreach($allPopularBlogs as $document)-->
+                    		{@ $title = $document->getTitle()}
+                            <h2><a href="{$document->variables['url']}">{$document->getTitle(60)}</a></h2>
+                        <!--@end-->
+                    <!--@end-->
+                </div>
+            </span>
+        </div>
+    <!--@end-->
+    <div class="block-title"><span>{$lang->all_stories}</span></div>
+    <div id="all-stories">
+        <!--@if($latestBlogs)-->
+            <!--@foreach($latestBlogs as $document)-->
+                <div class="post-summary">
+                    {@ $title = $document->getTitle()}
+                    <a href="{$document->variables['url']}" class="thumb" title="{$title}"><!--@if($document->thumbnailExists(200, 125, 'ratio'))-->
+                    <img src="{$document->getThumbnail(200, 125, 'ratio')}" alt="{$title}">
+                    <!--@end--></a><span class="post-body">
+                        <h2><a href="{$document->variables['url']}">{$document->getTitle()}</a></h2>
+                        <span class="summary">
+                            {@ $docCategory = $category_list[$document->get('category_srl')]}
+                            <p><a class="category" href="{getUrl('','category',$docCategory->title)}">{$docCategory->title}</a> {$document->getContentText(150)}</p>
+                            <div class="meta">
+                                <span class="date" title="{date('Y/m/d @ H:i', $date)}">{$document->variables['relative_date']} by</span> <a href="#" class="author member_{$document->get('member_srl')}" onclick="return false;">{$document->get('user_id')}</a> <a href="{$document->variables['url']}#comments" title="{$lang->story_comments}"><span class="sprite comments"></span> {$document->get('comment_count')}</a> <span title="{$lang->view_number}"><span class="sprite views"></span> {$document->get('readed_count')}</span>
+                                <!--@if($logged_info->is_site_admin)-->
+                                    <!--@$edit_url="/?mid=textyle&vid=blog&document_srl=".$document->document_srl."&act=dispTextyleToolPostManageWrite";--><!--@end-->
+                                    <a href="{$edit_url}" class="editPost">Edit</a></p>
+                                <!--@end-->
+                            </div>
+                        </span>
+                        <span class="sns-buttons addthis_toolbox addthis_default_style " addthis:url="{$document->variables['url']}">
+                        	<a class="addthis_button_tweet" tw:count="vertical"></a>
+                        	<a class="addthis_button_google_plusone" g:plusone:size="tall"></a>
+                        	<a class="addthis_button_facebook_like" fb:like:layout="box_count"></a>
+                        </span>
+                    </span>
+                </div>
+            <!--@end-->
+        <!--@end-->
+    </div>
+    <!--@if($page_navigation)-->
+    <div class="pagination">
+        {@ $catUrl = $root_url. $module_name . '/' . ($category ? $category . '/' : ($search_target ? $search_target . '/' . $search_keyword . '/' : ''))}
+        <!--@if($page > 1)-->
+            <a href="{getUrl('page',$page-1)}" class="prev">{$lang->prev_page}</a>
+        <!--@end-->
+        <!--@while($page_no = $page_navigation->getNextPage())-->
+            <!--@if($page == $page_no)-->
+                <strong>{$page_no}</strong>
+            <!--@else-->
+                <a href="{getUrl('page',$page_no)}">{$page_no}</a>
+            <!--@end-->
+        <!--@end-->
+        <!--@if($page < $page_navigation->last_page)-->
+            <a href="{getUrl('page',$page+1)}" class="next">{$lang->next_page}</a>
+        <!--@end-->
+    </div>
+    <!--@end-->
+</div><div class="e1">
+    <div id="subscribe-box">
+        <div class="block-title"><span>{$lang->subscribe}</span></div>
+		<g:plus href="https://plus.google.com/117678621522135486540" rel="publisher" width="223" height="131" theme="light"></g:plus>
+        <div id="fb-root"></div><div class="fb-like" data-href="http://www.facebook.com/XpressEngine" data-send="false" data-width="225" data-show-faces="true"></div>
+        <div class="twitter-box"><a href="https://twitter.com/xeglobal" class="twitter-follow-button">Follow @My Twitter</a></div>
+        <div class="rss-box"><a href="{getUrl('mid','','entry','').'/rss'}" title="Subscribe to Blog RSS"><span class="sprite rss"></span><span style="margin:5px 0 0 5px">{$lang->subscribe_blog}</span></a></div>
+    </div>
+    <!--@if($logged_info->is_site_admin)-->
+    <div class="section">
+        <div class="block-title"><span>{$lang->admin_blog}</span></div>
+        <span class="button blue"><a href="{getUrl('act','dispTextyleToolDashboard','mid',$module_info->mid,'vid', $module_info->site_id)}">{$lang->dashboard}</a></span>
+        <span class="button green"><a href="{getUrl('act','dispTextyleToolPostManageWrite','mid',$module_info->mid,'vid', $module_info->site_id)}">{$lang->new_post}</a></span>
+    </div>
+    <!--@end-->
+    <div class="section">
+        <div class="block-title"><span>{$lang->categories}</span></div>
+       <div class="widgetContainer">
+			<ul>
+			<!--@foreach($category_list as $key => $val)-->
+				<!--@if($val->document_count)--><li class="<!--@if($val->last)-->nav_tree_last<!--@end--> <!--@if($val->expand)-->nav_tree_on<!--@else-->nav_tree_off<!--@end--> <!--@if($category==$val->category_srl)-->active<!--@end-->" id="category_parent_{$val->category_srl}">
+					{str_repeat('&nbsp;&nbsp;&nbsp;',$val->depth)}	
+					<!--@$link = "/blog/categories/".strtolower(str_replace(".","-",str_replace("&amp;","",str_replace(" ","-",$val->text))))."/";-->
+					<a href="{getUrl('','category',$val->text)}" class="nav_tree_label <!--@if($val->selected)-->selected<!--@end-->">{$val->text}</a>
+					<span class="sum">({$val->document_count})</span>
+				<!--@end-->
+			<!--@end-->
+			<!--@for($i=0;$i<$_pDepth;$i++)-->
+				</ul>
+				</li>
+			<!--@end-->
+		<!--@end-->
+			</ul>
+		</div>
+    </div><div class="section">
+        <div class="block-title"><span>{$lang->newest_comment}</span></div>
+        <img class="zbxe_widget_output" widget="content" markup_type="list" list_count="10" skin="default" content_type="comment" option_view="title" show_comment_count="N" show_trackback_count="N" show_category="N" show_icon="N" order_target="list_order" order_type="desc" thumbnail_type="crop" page_count="1" subject_cut_size="30" module_srls="{$textyle->module_srl}"/>
+    </div><div class="section" id="tagCloud">
+        <div class="block-title"><span>{$lang->recent_tags}</span></div>
+        <!--@foreach($recentTags as $tag => $tagCount)-->
+            <div><a class="tag" href="{getUrl('','search_target','tags','search_keyword',$tag)}" rel="tag">{$tag}</a> x {$tagCount}</div>
+        <!--@end-->
+    </div>
+</div>
+<script type="text/javascript">
+    $LAB.queueWait(function(){
+        addthis.init();
+    });
+</script>

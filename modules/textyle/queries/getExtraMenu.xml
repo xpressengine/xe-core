@@ -1,0 +1,16 @@
+<query id="getExtraMenu" action="select">
+    <tables>
+        <table name="modules" alias="modules" />
+        <table name="textyle_extra_menu" alias="extra_menu" />
+    </tables>
+    <columns>
+        <column name="modules.module_srl" alias="module_srl" />
+        <column name="modules.module" alias="module" />
+        <column name="modules.mid" alais="mid" />
+        <column name="extra_menu.name" alais="name" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="extra_menu.module_srl" var="module_srl" notnull="notnull" filter="number" />
+        <condition operation="equal" column="modules.module_srl" default="extra_menu.module_srl" pipe="and" />
+	</conditions>
+</query>

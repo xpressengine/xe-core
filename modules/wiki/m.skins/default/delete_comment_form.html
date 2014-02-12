@@ -1,0 +1,16 @@
+<include target="header.html" />
+<h3>{$lang->confirm_delete}</h3>
+<form action="./" method="get" ruleset="delete_comment">
+	<input type="hidden" name="act" value="procWikiDeleteComment" />
+	<input type="hidden" name="success_return_url" value="{getUrl('act','dispWikiContent', 'module_srl', $module_info->module_srl,'document_srl',$oDocument->document_srl)}" />
+	<input type="hidden" name="module" value="wiki" />
+	<input type="hidden" name="mid" value="{$mid}" />
+	<input type="hidden" name="page" value="{$page}" />
+	<input type="hidden" name="document_srl" value="{$oComment->get('document_srl')}" />
+	<input type="hidden" name="comment_srl" value="{$oComment->get('comment_srl')}" />
+	<div class="inputPassword tCenter">
+		<input class="bn" type="submit" value="{$lang->cmd_delete}" accesskey="s" />
+		<a class="bn" href="{getUrl('act','','comment_srl','')}">{$lang->cmd_cancel}</a>
+	</div>
+</form>
+<include target="footer.html" />

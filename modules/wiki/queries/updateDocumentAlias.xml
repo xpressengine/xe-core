@@ -1,0 +1,11 @@
+<query id="updateDocumentAlias" action="update">
+	<tables>
+		<table name="document_aliases" />
+	</tables>
+	<columns>
+		<column name="alias_title" var="alias_title" />
+	</columns>
+	<conditions>
+		<condition operation="equal" column="alias_srl" var="alias_srl" />
+	</conditions>
+</query>

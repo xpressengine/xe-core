@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon version="0.2">
+	<title xml:lang="ko">게시판 태그 수정 애드온</title>
+	<title xml:lang="en">Addon for Board tag modify</title>
+	<description xml:lang="ko">
+		게시판 관리자가 글 "태그"만 수정 할 수 있도록 하며 태그 수정시 글 수정 시간은 변경하지 않습니다. 
+	</description>
+	<description xml:lang="en">
+		This addon support for modify tag by board administrator.
+	</description>
+	<version>1.7</version>
+	<date>2013-12-31</date>
+
+	<author email_address="developers@xpressengine.com" link="http://xpressengine.com/">
+		<name xml:lang="ko">NAVER</name>
+		<name xml:lang="en">NAVER</name>
+	</author>
+</addon>

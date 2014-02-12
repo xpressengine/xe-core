@@ -1,0 +1,17 @@
+<!--%import("js/lucene.js")-->
+
+<h3 class="xeAdmin">{$lang->integration_search} <span class="gray">{$lang->cmd_management}</span></h3>
+
+<div class="header4 gap1">
+    <ul class="localNavigation">
+        <!--@if($config->service_name_prefix)--><li <!--@if($act=='dispLuceneAdminIndicesStatus')-->class="on"<!--@end-->><a href="{getUrl('act','dispLuceneAdminIndicesStatus')}">{$lang->cmd_indices_status}</a></li><!--@end-->
+
+
+        <li <!--@if($act=='dispLuceneAdminContent')-->class="on"<!--@end-->><a href="{getUrl('act','dispLuceneAdminContent')}">{$lang->cmd_searchsetup}</a></li>
+        <li <!--@if($act=='dispLuceneAdminIndex')-->class="on"<!--@end-->><a href="{getUrl('act','dispLuceneAdminIndex')}">{$lang->cmd_indexsetup}</a></li>
+        <!--@if($module!='admin')-->
+        <li><a href="{getUrl('act','IS')}">{$lang->cmd_back}</a></li>
+        <!--@end-->
+    </ul>
+</div>
+

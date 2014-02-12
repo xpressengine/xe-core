@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon version="0.2">
+    <title xml:lang="ko">GNB 출력 애드온</title>
+    <description xml:lang="ko">
+        웹페이지 제일 상단에 GNB를 출력하는 애드온입니다.
+    </description>
+    <version>0.1</version>
+    <date>2009-12-02</date>
+
+    <author email_address="developers@xpressengine.com" link="http://www.xpressengine.com">
+        <name xml:lang="ko">XpressEngine</name>
+    </author>
+</addon>

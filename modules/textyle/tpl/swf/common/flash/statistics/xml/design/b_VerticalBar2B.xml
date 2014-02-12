@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<GraphDesign>
+	<topGap>0</topGap>
+	<leftGap>0</leftGap>
+	<graphWidth>770</graphWidth>
+	<graphHeight>205</graphHeight>
+	<bgType option='d'>graph</bgType>
+	<title show="off" id="none" />
+	<index checkBox="on">
+		<state>bottom</state>
+		<align>center</align>
+		<xgap>10</xgap>
+		<ygap>40</ygap>
+	</index>
+	<label id="TextData1" gap="6">
+		<rotation />
+	</label>
+	<design>
+		<sourceSWF>dataSource/b_VerticalBar2B.swf</sourceSWF>
+		<startPoint x="0" y="198" />
+		<item id="1" top="Top1" topalign='center' color='0x595959' motionNum="1">
+			<type flag="0" value="off" ygap="0" xgap="1" maxLength="156" w="7">0</type>
+		</item>
+		<item id="1" top="Top1" topalign='center' color='0x595959' motionNum="1">
+			<type flag="0" value="off" ygap="0" xgap="1" maxLength="156" w="7">0</type>
+		</item>
+		<item id="1" top="Top1" topalign='center' color='0x595959' motionNum="1">
+			<type flag="0" value="off" ygap="0" xgap="1" maxLength="156" w="7">0</type>
+		</item>
+	</design>
+</GraphDesign>

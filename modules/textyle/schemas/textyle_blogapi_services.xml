@@ -1,0 +1,9 @@
+<table name="textyle_blogapi_services">
+  <column name="textyle_blogapi_services_srl" type="number" size="11" notnull="notnull" primary_key="primary_key" />
+  <column name="service_name" type="varchar" size="50" notnull="notnull" />
+  <column name="api_type" type="varchar" size="50" notnull="notnull" />
+  <column name="url_description" type="varchar" size="50" notnull="notnull" />
+  <column name="id_description" type="varchar" size="50" notnull="notnull" />
+  <column name="password_description" type="varchar" size="50" notnull="notnull" />
+  <column name="list_order" type="number" size="11" notnull="notnull" index="idx_list_order" />
+</table>

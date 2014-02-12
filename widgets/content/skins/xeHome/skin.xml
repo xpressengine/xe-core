@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+    <title xml:lang="ko">공지/ 웹진 위젯 스킨</title>
+    <description xml:lang="ko">Content 위젯의 내용을 공지사항 형태와 웹진형태로 출력하는 스킨입니다</description>
+    <version>0.1</version>
+    <date>2009-06-10</date>
+
+    <author email_address="zero@zerobaord.com" link="http://www.zeroboard.com">
+        <name xml:lang="ko">zero</name>
+    </author>
+
+    <colorset>
+        <color name="notice">
+            <title xml:lang="ko">공지사항 형태</title>
+        </color>
+        <color name="webzine">
+            <title xml:lang="ko">웹진 형태</title>
+        </color>
+    </colorset>
+</skin>

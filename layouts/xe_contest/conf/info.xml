@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout version="0.2">
+    <title xml:lang="ko">XE Contest 2012</title>
+	<title xml:lang="en">XE Contest 2012</title>
+	<title xml:lang="zh-CN">XE Contest 2012</title>
+    <description xml:lang="ko">
+        XE Contest 2012 전용 레이아웃입니다.
+    </description>
+    <description xml:lang="en">
+        XE Contest 2012 official layout.
+    </description>
+    <description xml:lang="zh-CN">
+        XE Contest 2012 官方布局.
+    </description>
+    <version>0.1</version>
+    <date>2012-03-12</date>
+    <link>http://www.xpressengine.com</link>
+
+    <author email_address="developers@xpressengine.com" link="http://www.xpressengine.com">
+        <name xml:lang="ko">XpressEngine</name>
+		<name xml:lang="en">XpressEngine</name>
+		<name xml:lang="zh-CN">XpressEngine</name>
+    </author>
+
+    <extra_vars>
+        <group>
+            <title xml:lang="ko">모양 설정</title>
+            <var name="content_position" type="select">
+                <title xml:lang="ko">본문 위치</title>
+                <description xml:lang="ko">본문의 위치를 좌/우중 선택할 수 있습니다.</description>
+                <options value="left">
+                    <title xml:lang="ko">왼쪽</title>
+                </options>
+                <options value="right">
+                    <title xml:lang="ko">오른쪽</title>
+                </options>
+            </var>
+        </group>
+    </extra_vars>
+
+    <menus>
+        <menu name="main_menu" maxdepth="5" default="true">
+            <title xml:lang="ko">메인 메뉴</title>
+        </menu>
+    </menus>
+</layout>

@@ -1,0 +1,10 @@
+    <script type="text/javascript">
+        <!--@if($disable_to_file_upload)-->
+            alert("{$lang->msg_disable_to_file_upload}");
+            window.close();
+        <!--@else-->
+        var export_url = request_uri.setQuery('module','editor').setQuery('act','procEditorCall').setQuery('component','photo_editor').setQuery('method','exportImage').setQuery('editor_sequence','{$editor_sequence}').setQuery('mid',opener.current_mid);
+        window.resizeTo(1024,768);
+        location.href= "{$api_url}?exportTo="+escape(export_url)+"&exportField=file&exportMethod=BROWSER&exportTitle="+encodeURIComponent("{$lang->photo_editor_export_to_xe}");
+        <!--@end-->
+    </script>

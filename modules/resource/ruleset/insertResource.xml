@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ruleset version="1.5.0">
+	<fields>
+		<field name="resource_name" required="true" length="1:40" rule="alpha_number">
+			<title xml:lang="ko"><![CDATA[모듈 이름]]></title>
+			<title xml:lang="en"><![CDATA[Module Name]]></title>
+			<title xml:lang="jp"><![CDATA[モジュール名]]></title>
+			<title xml:lang="zh-CN"><![CDATA[模块名称]]></title>
+			<title xml:lang="zh-TW"><![CDATA[模組名稱]]></title>
+			<title xml:lang="fr"><![CDATA[Nom]]></title>
+			<title xml:lang="de"><![CDATA[Modul]]></title>
+			<title xml:lang="ru"><![CDATA[Имя Модуля]]></title>
+			<title xml:lang="es"><![CDATA[ID del Módulo]]></title>
+			<title xml:lang="tr"><![CDATA[Modül Adı]]></title>
+			<title xml:lang="vi"><![CDATA[Tên Module]]></title>
+			<title xml:lang="mn"><![CDATA[Модиул нэр]]></title>
+		</field>
+		<field name="browser_title" required="true" length="1:250" />
+	</fields>
+</ruleset>

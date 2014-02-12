@@ -1,0 +1,13 @@
+<include target="_header.html" />
+<form action="./" method="get" onsubmit="return procFilter(this, delete_trackback)" class="context_message">
+	<input type="hidden" name="mid" value="{$mid}" />
+	<input type="hidden" name="page" value="{$page}" />
+	<input type="hidden" name="document_srl" value="{document_srl}" />
+	<input type="hidden" name="trackback_srl" value="{$trackback_srl}" />
+	<h1>{$lang->confirm_delete}</h1>
+	<div class="btnArea">
+		<span class="btn25 blue"><input type="submit" value="{$lang->cmd_delete}" /></span>
+		<span class="btn25"><button type="button" onclick="history.back()">{$lang->cmd_cancel}</button></span>
+	</div>
+</form>
+<include target="_footer.html" />

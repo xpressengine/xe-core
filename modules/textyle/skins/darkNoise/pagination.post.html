@@ -1,0 +1,12 @@
+<div class="pn pnPost" cond="$prev_document || $next_document">
+	<block cond="$prev_document">
+		<a href="{getUrl('document_srl',$prev_document->document_srl)}" class="prev">{$prev_document->getTitle()}</a>
+		<span class="line btm" cond="$next_document"></span>
+	</block>
+	<block cond="$next_document">
+		<span class="line top" cond="$prev_document"></span>
+		<a href="{getUrl('document_srl',$next_document->document_srl)}" class="next">{$next_document->getTitle()}</a>
+	</block>
+	<span class="end top"></span>
+	<span class="end btm"></span>
+</div>

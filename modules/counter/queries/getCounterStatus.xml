@@ -1,0 +1,13 @@
+<query id="getCounterStatus" action="select">
+    <tables>
+        <table name="counter_status" />
+    </tables>
+    <columns>
+        <column name="sum(unique_visitor)" alias="unique_visitor" />
+        <column name="sum(pageview)" alias="pageview" />
+    </columns>
+    <conditions>
+        <condition operation="more" column="regdate" var="start_date" notnull="notnull" pipe="and" />
+        <condition operation="less" column="regdate" var="end_date" notnull="notnull" pipe="and" />
+    </conditions>
+</query>

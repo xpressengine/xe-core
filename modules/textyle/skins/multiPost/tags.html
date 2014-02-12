@@ -1,0 +1,22 @@
+{@  $fontSmallest = 8;
+    $fontLargest = 22;
+}
+<h2 class="postTitle">Tag <!--@if(count($tag_list>0))--> <em>{count($tag_list)}</em> <!--@end--></h2>
+<!--@if($tag_list)-->
+<ul class="tagCloud">
+    <!--@foreach($tag_list as $val)-->
+        <!--@if($val->count>5)-->
+            {@ $_level = "4" }
+        <!--@elseif($val->count>3)-->
+            {@ $_level = "3" }
+        <!--@elseif($val->count>1)-->
+            {@ $_level = "2" }
+        <!--@else-->
+            {@ $_level = "1" }
+        <!--@end-->
+        <li class="level{$_level}"><a href="{getUrl('','search_target','tags','search_keyword',$val->tag,'act','')}">{$val->tag}</a></li>
+    <!--@end-->
+</ul>
+<!--@else-->
+<p>no tags</p>
+<!--@end-->

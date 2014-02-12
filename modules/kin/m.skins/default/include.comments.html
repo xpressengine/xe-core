@@ -1,0 +1,40 @@
+<div class="sr">
+    <!--@if(count($comment_list))-->
+		<ul>
+		<!--@foreach($comment_list as $key => $val)-->
+		<li>
+			<p>{htmlspecialchars($val->content)}</p>
+			<em>{$val->nick_name}</em>
+			<span>{zdate($val->regdate, "Y-m-d H:i")}</span>
+			<!--@if($grant->manager || $val->member_srl == $logged_info->member_srl)-->
+			<a href="#" onclick="if(confirm('{$lang->confirm_delete}')) doDeleteComment({$parent_srl},{$val->reply_srl}); return false;" class="md">[{$lang->cmd_delete}]</a>
+			<!--@end-->
+		</li>
+		<!--@end-->
+		</ul>
+
+		<!--@if($page_navigation->total_page>1)-->
+		<div class="pn">
+			<!--@if($page_navigation->cur_page > 1)-->
+			<a href="#" onclick="doGetComments({$parent_srl}, {$page_navigation->cur_page-1}); return false;">&lsaquo; {$lang->cmd_prev}</a>
+			<!--@endif-->
+			<strong id="curpage">{$page_navigation->cur_page} / {$page_navigation->last_page}</strong>
+			<!--@if($page_navigation->cur_page < $page_navigation->last_page)-->
+			<a href="#" onclick="doGetComments({$parent_srl}, {$page_navigation->cur_page+1}); return false;">{$lang->cmd_next} &rsaquo;</a>
+			<!--@endif-->
+		</div>
+		<!--@end-->
+    <!--@else-->
+		<p>{$lang->msg_no_article}</p>
+    <!--@end-->
+
+    <!--@if($grant->write_reply)-->
+		<form action="./" method="post" onsubmit="return procFilter(this, insert_comment);">
+			<input type="hidden" name="mid" value="{$mid}" />
+			<input type="hidden" name="parent_srl" value="{$parent_srl}" />
+			<input type="text" name="content" class="itx"/>
+			<button type="submit" class="bn">{$lang->cmd_registration}</button>
+		</form>
+    <!--@end-->
+
+</div>

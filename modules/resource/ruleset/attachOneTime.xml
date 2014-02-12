@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ruleset version="1.5.0">
+	<customrules>
+		<rule name="dependency" type="regex" test="/^[0-9]+(?:,[0-9]+)*$/" />
+	</customrules>
+	<fields>
+		<field name="mid" required="true" />
+		<field name="package_srl" required="true" rule="number" />
+		<field name="attach_file" required="true" />
+		<field name="attach_screenshot"  required="true" />
+		<field name="version" required="true">
+			<title xml:lang="ko"><![CDATA[버전]]></title>
+			<title xml:lang="en"><![CDATA[Version]]></title>
+			<title xml:lang="zh-TW"><![CDATA[版本]]></title>
+			<title xml:lang="tr"><![CDATA[Sürüm]]></title>
+			<title xml:lang="vi"><![CDATA[Phiên bản]]></title>
+		</field>
+		<field name="dependency" rule="dependency" />
+		<field name="description" required="true" />
+	</fields>
+</ruleset>

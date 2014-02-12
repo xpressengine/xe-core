@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+    <title xml:lang="ko">기본 스킨</title>
+    <title xml:lang="zh-TW">資源面板</title>
+	<title xml:lang="vi">Skin mặc định</title>
+    <description xml:lang="ko">Resource 모듈의 기본 스킨입니다.</description>
+    <description xml:lang="zh-TW">資源模組的預設面板。</description>
+	<description xml:lang="vi">Skin mặc định cho Module Dữ liệu.</description>
+    <version>0.1</version>
+    <date>2009-09-14</date>
+    <author email_address="developers@xpressengine.com" link="http://xpressengine.com/">
+        <name xml:lang="ko">NHN</name>
+        <name xml:lang="zh-TW">NHN</name>
+		<name xml:lang="vi">NHN</name>
+    </author>
+    <license>GPL v2 or later</license>
+    <colorset>
+        <color name="default" >
+            <title xml:lang="ko">기본</title>
+            <title xml:lang="zh-TW">預設</title>
+			<title xml:lang="vi">Mặc định</title>
+        </color>
+    </colorset>
+
+    <extra_vars>
+        <var name="title" type="text">
+            <title xml:lang="ko">제목</title>
+            <title xml:lang="zh-TW">標題</title>
+			<title xml:lang="vi">Tiêu đề</title>
+            <description xml:lang="ko">제목을 적어주세요.</description>
+            <description xml:lang="zh-TW">請輸入標題。</description>
+			<description xml:lang="vi">Xin hãy nhập tiêu đề.</description>
+        </var>
+        <var name="sub_title" type="text">
+            <title xml:lang="ko">부제목</title>
+            <title xml:lang="zh-TW">副標題</title>
+			<title xml:lang="vi">Tiêu đề phụ</title>
+            <description xml:lang="ko">제목 옆에 나타날 부제목을 적어주세요.</description>
+            <description xml:lang="zh-TW">請輸入副標題。</description>
+			<description xml:lang="vi">Tiêu đề phụ sẽ hiển thị bên cạnh tiêu đề chính.</description>
+        </var>
+        <var name="comment" type="textarea">
+            <title xml:lang="ko">상세 설명</title>
+            <title xml:lang="zh-TW">詳細說明</title>
+			<title xml:lang="vi">Mô tả chi tiết</title>
+            <description xml:lang="ko">제목 아래 표시될 설명을 입력하실 수 있습니다.</description>
+            <description xml:lang="zh-TW">請輸入詳細說明。</description>
+			<description xml:lang="vi">Mô tả này sẽ hiển thị phía dưới tiêu đề.</description>
+        </var>
+    </extra_vars>
+</skin>

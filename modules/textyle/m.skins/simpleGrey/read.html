@@ -1,0 +1,152 @@
+{@ Context::addJsFile("./common/js/jquery.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/js_app.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/common.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/xml_handler.js", true, '', -100000) }
+{@ Context::addJsFile("./common/js/xml_js_filter.js", true, '', -100000) }
+<!--%import("js/mtextyle.js")-->
+
+<!--#include("_header.html")-->
+<div class="bd">
+<!--@if($oDocument->isExists())-->
+	<div class="rd">
+		<div class="hx">
+			<h2> 
+			 <!--@if($oDocument->get('category_srl'))--><a href="{getUrl('document_srl','','category_srl',$oDocument->get('category_srl'))}">{$category_list[$oDocument->get('category_srl')]->title}</a> &rsaquo; <!--@end-->{$oDocument->getTitle()}</h2>
+			<em><a href="#">{$oDocument->getNickName()}</a></em>
+			<span>{$oDocument->getRegdate()}</span>
+		</div>
+		<div class="co">
+                <!--@if($oDocument->isSecret() && !$oDocument->isGranted())-->
+                    <div class="secretContent">
+                        <form action="./" method="get" onsubmit="return procFilter(this, input_password)">
+							<input type="hidden" name="mid" value="{$mid}" />
+							<input type="hidden" name="page" value="{$page}" />
+							<input type="hidden" name="document_srl" value="{$oDocument->document_srl}" />
+                            <div class="title">{$lang->msg_is_secret}</div>
+                            <div class="content">
+								<input type="password" name="password" id="cpw" /><input type="submit" value="{$lang->cmd_input}" />
+							</div>
+                        </form>
+                    </div>
+                <!--@else-->
+			    {$oDocument->getContent(false)}
+				<!--@end-->
+		</div>
+		<!--@if($oDocument->hasUploadedFiles())-->
+		{@ $uploaded_list = $oDocument->getUploadedFiles() }
+		<div class="hx h3">
+			<h3>{$lang->uploaded_file} <em>[{count($uploaded_list)}]</em> <button type="button" class="tg" title="{$lang->cmd_open_close}"></button></h3>
+		</div>
+		<ul class="sn tgo open">
+			<!--@foreach($uploaded_list as $key => $file)-->
+			<li><a href="{getUrl('')}{$file->download_url}">{$file->source_filename}</a></li>
+			<!--@end-->
+		</ul>
+		<!--@endif-->
+		<!--@if($oDocument->allowTrackback() && $oDocument->getTrackbackCount())-->
+		<div class="hx h3">
+			<h3>{$lang->trackback} <em>[{$oDocument->getTrackbackCount()}]</em> <button type="button" class="tg" title="{$lang->cmd_open_close}"></button></h3>
+		</div>
+		<ul class="rp tgo open">
+			{@ $_trackback_list = $oDocument->getTrackbacks() }
+			<!--@foreach($_trackback_list as $key => $val)-->
+			<li>
+				<p>{$val->excerpt}</p>
+				<em>{htmlspecialchars($val->title)} - {htmlspecialchars($val->blog_name)}</em>
+				<span>zdate($val->regdate, "Y.m.d")</span>
+				<!--@if($grant->manager)-->
+				<a href="07_password.html" class="md">{$lang->cmd_delete}</a>
+				<!--@endif-->
+			</li>
+			<!--@end-->
+		</ul>
+		<!--@endif-->
+		<!--@if($oDocument->allowComment() && $oDocument->getCommentCount())-->
+		<h3 id="clb" class="hx h3">{$lang->comment} <em>[{$oDocument->getCommentCount()}]</em> <button type="button" class="tg tgr" title="{$lang->cmd_open_close}"></button></h3>
+		<!--@endif-->
+		<!--@if($textyle->isEnableComment() )-->
+		<h3 class="hx h3">{$lang->msg_write_comment}<button type="button" class="tg" title="{$lang->cmd_open_close}"></button></h3>
+		<form action="./" method="post" class="sn tgo open" onsubmit="return insertCommentItem(this, insert_comment);">
+		<input type="hidden" name="mid" value="{$mid}" />
+		<input type="hidden" name="document_srl" value="{$oDocument->document_srl}" />
+		<input type="hidden" name="comment_srl" value="" />
+		<ul>
+			<li>
+				<label for="rText" class="db fb">{$lang->comment}</label>
+				<textarea name="content" rows="8" cols="42" id="rText" class="itxx"></textarea>
+			</li>
+			<!--@if(!$is_logged)-->
+			<li>
+				<label for="uName" class="db fb">{$lang->writer}</label>
+				<input name="nick_name" type="text" id="uName" class="itx" />
+			</li>
+
+			<!--@if($textyle->getInputEmail()!='N')-->
+			<li>
+				<label for="uMail" class="db fb">{$lang->email_address}</label>
+				<input name="email_address" type="text" id="uMail" class="itx" />
+				<input name="email_address" type="text" class="iText email<!--@if($textyle->getInputEmail()=='R')--> request<!--@end-->" value="Email address" title="Email address" />
+			</li>
+			<!--@end-->
+			<li>
+				<label for="uPw" class="db fb">{$lang->password}</label>
+				<input name="password" type="password" id="uPw" class="itx" />
+			</li>
+
+			<!--@if($textyle->getInputWebsite()!='N')-->
+			<li>
+				<label for="uSite" class="db fb">{$lang->homepage}</label>
+				<input name="homepage" type="text" id="uSite" class="itx" value="http://" />
+				<input type="hidden" name="msg_input_homepage" value="{$lang->msg_input_homepage}"/>
+			</li>
+			<!--@end-->
+
+			<!--@endif-->
+		</ul>
+		<div class="ar">
+			<input name="" type="submit" value="{$lang->cmd_comment_registration}" />
+		</div>
+		</form>
+		<!--@end-->
+		<ul class="apn">
+			<!--@if($prev_document)-->
+			<li class="prev">
+				<a href="{getUrl('','document_srl',$prev_document->document_srl)}" class="prev">&lsaquo; {$prev_document->getTitle()}</a>
+			</li>
+			<!--@end-->
+
+			<!--@if($next_document)-->
+			<li class="next">
+				<a href="{getUrl('','document_srl',$next_document->document_srl)}" class="next">{$next_document->getTitle()} &rsaquo;</a>
+			</li>
+			<!--@end-->
+		</ul>
+	</div>
+
+<script>
+//<![CDATA[
+	jQuery(function($){
+		$('.co .mm').next().hide();
+		$('.mm').click(function(){ $(this).hide().next().show();});
+		$('.tgo').removeClass('open');
+		$('.tg').click(function(){
+			$(this).parents('.h3').eq(0).next('.tgo').toggleClass('open');
+		});
+		var loaded = false;
+		$('.tgr').click(function(){
+			if(!loaded) {
+				loaded = true;
+				{@ $lastpage = 1; }
+				{@ $temp = $oDocument->getComments() }
+				<!--@if($oDocument->comment_page_navigation)-->
+				{@ $lastpage = $oDocument->comment_page_navigation->last_page }
+				<!--@endif-->
+				loadPage({$oDocument->document_srl}, {$lastpage});
+			}
+		});
+	});
+//]]>
+</script>
+<!--@end-->
+</div>
+<!--#include("_footer.html")-->

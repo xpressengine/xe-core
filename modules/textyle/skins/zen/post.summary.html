@@ -1,0 +1,10 @@
+                    <!--@foreach($document_list as $no => $document)-->
+                    <h2 class="postTitle"><a href="{getUrl('','document_srl',$document->document_srl,'cpage','')}">{$document->getTitle()}</a></h2>
+                    <div class="textyleContent xe_content">
+                        <!--@if($document->thumbnailExists())-->
+                        <p class="summarySpot"><img src="{$document->getThumbnail(200,133)}" class="summaryThumb" alt="" /></p>
+                        <!--@end-->
+                        <p>{$document->getSummary(600)}</p>
+                        <p class="summaryMore"><a href="{$document->getPermanentUrl()}">&raquo; More</a></p>
+                    </div>
+                    <!--@end-->

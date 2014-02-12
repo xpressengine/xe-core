@@ -1,0 +1,22 @@
+<query id="getExtraMenus" action="select">
+    <tables>
+        <table name="modules" alias="modules" />
+        <table name="textyle_extra_menu" alias="extra_menu" />
+    </tables>
+    <columns>
+        <column name="modules.module_srl" alias="module_srl" />
+        <column name="modules.module" alias="module" />
+        <column name="modules.mid" alais="mid" />
+        <column name="extra_menu.name" alais="name" />
+        <column name="extra_menu.type" alais="type" />
+        <column name="extra_menu.list_order" alais="name" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="extra_menu.site_srl" var="site_srl" notnull="notnull" filter="number" />
+        <condition operation="equal" column="modules.module_srl" default="extra_menu.module_srl" pipe="and" />
+	</conditions>
+    <navigation>
+		<index var="list_order" default="extra_menu.list_order" order="asc" />
+    </navigation>
+
+</query>

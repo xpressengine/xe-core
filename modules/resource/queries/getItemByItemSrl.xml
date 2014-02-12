@@ -1,0 +1,13 @@
+<query id="getItemByItemSrl" action="select">
+    <tables>
+        <table name="resource_items" />
+    </tables>
+    <columns>
+        <column name="*" />
+    </columns>
+    <conditions>
+        <condition operation="more" column="module_srl" default="0" notnull="notnull" />
+        <condition operation="more" column="package_srl" default="0" notnull="notnull" pipe="and" />
+        <condition operation="in" column="item_srl" var="item_srl" filter="numbers" notnull="notnull" pipe="and" />
+    </conditions>
+</query>

@@ -1,0 +1,75 @@
+<load target="xe_v3_sub.css" />
+<load target="xe_v3_sub.js" type="body" />
+{@$imc=!($act=='IS'||$act=='dispProjectAccountManage'||strpos($act,'Member')!==false||strpos($act,'Communication')!==false)}
+<div class="xev3sub">
+	<p class="skipToContent"><a href="#content">메뉴 건너뛰기</a></p>
+	<div class="header">
+		<h1><a href="/">XE : Xpress Engine</a></h1>
+		<div class="account">
+			<a cond="!$is_logged" href="{getUrl('act','dispMemberLoginForm')}" class="log">로그인</a>
+			<a cond="$is_logged" href="{getUrl('act','dispMemberLogout')}" class="log">로그아웃</a>
+			<a cond="$is_logged" href="{getUrl('act','dispMemberInfo', 'member_srl', '')}">마이페이지</a>
+			<a cond="!$is_logged" href="{getUrl('act','dispMemberSignUpForm')}">회원가입</a>
+			<a href="/sitemap">사이트맵</a>
+			<a href="https://github.com/xpressengine" class="project" target="blank">XE github project</a>
+		</div>
+		<div class="gnb">
+			<ul>{@$m=1;}
+				<li loop="$main_menu->list=>$key1,$val1" class="m{$m++}"><a href="{$val1['href']}" class="active"|cond="$val1['selected']" target="_blank"|cond="$val1['open_window']=='Y'">{$val1['link']}</a>
+					<ul cond="$val1['list']">{@$s=1;}
+						<li loop="$val1['list']=>$key2,$val2" class="s{$s++}"><a href="{$val2['href']}" cond="$val2['text']" class="active"|cond="$val2['selected']" target="_blank"|cond="$val2['open_window']=='Y'">{$val2['link']}</a></li>
+					</ul>		
+				</li>
+			</ul>
+		</div>
+		<!--form action="{getUrl()}" method="get" class="search">
+			<input type="hidden" name="vid" value="{$vid}" />
+			<input type="hidden" name="mid" value="{$mid}" />
+			<input type="hidden" name="act" value="IS" />
+			<input type="text" name="is_keyword" value="{$is_keyword}" class="iText" title="{$lang->cmd_search}" />
+			<button type="submit" class="sBtn"><span>{$lang->cmd_search}</span></button>
+		</form-->
+		<hr class="hr" />
+		<block loop="$main_menu->list=>$key1,$val1" cond="$val1['selected']">
+			<div class="visual" cond="$imc">
+				<img src="./title_img{$val1['href']}.jpg" 
+					alt="eXpress 표현하다 Press 발행하다 Engine 엔진 - 콘텐츠의 생산, 발행, 유통을 도와주는 자유/오픈 소스 소프트웨어 XpressEngine에 대해 소개합니다."|cond="$val1['href']=='/intro'" 
+					alt="XE core 및 구성요소의 안정버전 배포 - XE의 안정버전을 배포하는 곳입니다. 최신 버전을 사용하고 싶으신 분은 프로젝트에서 직접 코드를 내려받을 수 있습니다."|cond="$val1['href']=='/download'" 
+					alt="사용자 문서 및 개발자 문서 제공 - XE를 더 잘 사용하고 싶은 분은 사용자 매뉴얼을, 스킨 혹은 모듈을 개발하실 분은 개발자 매뉴얼을 읽어주세요."|cond="$val1['href']=='/manual'" 
+					alt="XE에 대한 생각! XE에 대한 공감! - XE를 사용하는 다른 사람들과 의견을 나눌 수 있는 곳입니다. 많은 의견 공유로 더 좋은 XE를 만들어 주세요."|cond="$val1['href']=='/community'" 
+					alt="XE 개발에 필요한 정보 공유 - XE의 새로운 기능을 개발하는데 유용한 정보를 나누어 보세요."|cond="$val1['href']=='/xeForum'" 
+					alt="XE의 적용사례 소개 - XE의 다양한 기능을 잘 살려 만들어진 멋진 웹 사이트를 소개합니다."|cond="$val1['href']=='/showCase'" 
+					alt="XE 개인정보취급방침 - XE는 관련 법령에 의한 개인정보취급방침을 정하여 이용자 권익 보호에 최선을 다하고 있습니다."|cond="$val1['href']=='/privacy'" 
+					alt="XE 콘텐츠를 한눈에 - XE의 전체 메뉴를 확인 하실 수 있는 공간입니다."|cond="$val1['href']=='/sitemap'" 
+				/>
+			</div>
+			<div class="path" cond="$imc">
+				<a href="/" class="home"><span>Home</span></a> 
+				&gt; <a href="{$val1['href']}">{$val1['link']}</a>
+				<block cond="$val1['selected'] && $val1['list']"><block loop="$val1['list']=>$key2,$val2" cond="$val2['selected']">&gt; <a href="{$val2['href']}">{$val2['link']}</a></block></block>
+			</div>
+		</block>
+	</div>
+	<hr class="hr" />
+	<div class="body">
+		<div class="lnb" cond="$imc">
+			<block loop="$main_menu->list=>$key1,$val1" cond="$val1['selected']">
+				<h2 ><a href="{$val1['href']}" target="_blank"|cond="$val1['open_window']=='Y'">{$val1['link']}</a></h2>
+				<ul cond="$val1['list']">{@$x=1;}
+					<li loop="$val1['list']=>$key2,$val2" class="x{$x++}"><a href="{$val2['href']}" cond="$val2['text']" class="active"|cond="$val2['selected']" target="_blank"|cond="$val2['open_window']=='Y'">{$val2['link']}</a>
+					</li>
+				</ul>
+			</block>
+		</div>
+		<hr class="hr" cond="$imc" />
+		<div class="content" id="content" >{$content}</div>
+	</div>
+	<hr class="hr" />
+	<div class="footer">
+		<p>Xpress Engine. Copyright NAVER Corp. All rights reserved.</p>
+		<a href="/privacy">개인정보보호취급방침</a>
+		<a href="/communityRule">커뮤니티운영규칙</a>
+		<a href="/zb4_main">제로보드4</a>
+		<a href="mailto:contact@xpressengine.com">contact@xpressengine.com</a>
+	</div>
+</div>

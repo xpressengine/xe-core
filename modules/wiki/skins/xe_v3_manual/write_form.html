@@ -1,0 +1,13 @@
+<include target="header.html">
+<form action="./" method="post" onsubmit="return procFilter(this, insert)" class="mWrite">
+	<input type="hidden" name="mid" value="{$mid}" />
+	<input type="hidden" name="content" value="{$oDocument->getContentText()}" />
+	<input type="hidden" name="document_srl" value="{$document_srl}" />
+	<input type="hidden" name="title" value="{$oDocument->get('title')}" cond="$oDocument->isExists()&&$oDocument->get('title')=='Front Page'" />
+	<div class="mWriteTitle" cond="$oDocument->get('title')!='Front Page'"><input type="text" name="title" value="{$entry}" /></div>
+    <div class="editor">{$oDocument->getEditor()}</div>
+	<div class="btnArea">
+        <input type="submit" value="{$lang->cmd_registration}" />
+    </div>
+</form>
+<include target="footer.html">

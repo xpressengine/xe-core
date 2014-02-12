@@ -1,0 +1,46 @@
+<include target="include.header.html" />
+
+<div class="form requestPackage">
+
+    <h3>{$lang->cmd_delete_package}</h3>
+    <p class="information">{$lang->about_delete_package}</p>
+    
+    <div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/resource/skins/xe_official/deletepackage/1'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+		<p>{$XE_VALIDATOR_MESSAGE}</p>
+	</div>
+    
+    <form action="./" method="post" ruleset="deletePackage">
+    <input type="hidden" name="act" value="procResourceDeletePackage" />
+    <input type="hidden" name="vid" value="{$vid}" />
+    <input type="hidden" name="mid" value="{$mid}" />
+    <input type="hidden" name="package_srl" value="{$selected_package->package_srl}" />
+    <input type="hidden" name="xe_validator_id" value="modules/resource/skins/xe_official/deletepackage/1" />
+    <fieldset>
+        <legend>{$lang->cmd_delete_package}</legend>
+
+            <table class="form">
+            <tr class="first_child">
+                <th scope="row"><em>{$lang->package_title}</em></th>
+                <td>
+                    <p>{$selected_package->title}</p>
+                </td>
+            </tr>
+            <tr class="last_child">
+                <th scope="row"><em>{$lang->package_description}</em></th>
+                <td>
+                    <p>{nl2br($selected_package->description)}</p>
+                </td>
+            </tr>
+            </table>
+        </fieldset>
+
+        <div class="btnArea">
+            <a href="{getUrl('act','dispResourcePackage')}" class="btn" style="float:left">{$lang->cmd_back}</a>
+            <input type="submit" class="btn btn-inverse" value="{$lang->cmd_delete}" />
+        </div>
+    </form>
+</div>
+
+
+
+<include target="include.footer.html" />

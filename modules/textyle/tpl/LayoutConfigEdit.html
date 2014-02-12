@@ -1,0 +1,102 @@
+<!--#include("_tool_header.html")-->
+<!--%import("filter/insert_layout_edit.xml")-->
+
+			<!-- Content -->
+			<div id="content">
+				
+				<!-- contentHeader -->
+				<div class="contentHeader editHeader">
+					<h3 class="h3">{$lang->textyle_second_menus[4]['dispTextyleToolLayoutConfigEdit']}</h3>
+				</div>
+				<!-- /contentHeader -->
+
+				<script>
+				function tab(i){
+					var tab = i.parentNode.className;
+					document.getElementById('codeEdit').className='codeEdit'+' '+tab;
+				} 
+				</script>
+				
+				<form action="./" method="post" id="codeEdit" class="codeEdit" onsubmit="return procFilter(this,insert_layout_edit);">
+					<span class="btnGray medium widgetCreator"><a href="{getUrl('','module','widget','act','dispWidgetGenerateCode')}" onclick="popopen(this.href); return false">{$lang->cmd_generate_widget_code}</a></span>
+					<input type="hidden" name="mid" value="{$mid}" />
+					<input type="hidden" name="vid" value="{$vid}" />
+					
+					<ul>
+						{@$i=0;}
+						<!--@foreach($skin_file_content as $file => $content)-->
+						<li class="s{$i}">
+							<a href="#" onclick="tab(this)">{$file}</a>
+							<textarea name="{$file}" rows="8" cols="42">{htmlspecialchars($content)}</textarea>
+						</li>
+						{@$i++;}						
+						<!--@end-->
+					</ul>
+	
+					<!-- Button Area -->
+					<div class="btnArea">
+						<span class="btn"><input type="submit" value="{$lang->cmd_save}" /></span>
+					</div>
+					<!-- /Button Area -->
+				</form>
+
+
+
+
+<form action="{Context::getRequestUri()}" class="userImage" target="hidden_iframe" method="post" onsubmit="return checkUserImage(this,'{$lang->msg_check_userimage}')" enctype="multipart/form-data">
+	<h4>{$lang->textyle_skin_userimage}</h4>
+    <input type="hidden" name="mid" value="{$mid}" />
+    <input type="hidden" name="vid" value="{$vid}" />
+    <input type="hidden" name="act" value="procTextyleToolUserImageUpload" />
+	<p class="upload"><input name="user_image" type="file" /> <em>{$lang->msg_check_userimage}</em> <span class="btnGray medium"><button type="submit">{$lang->cmd_save}</button></span></p>
+	<!--@if($user_image_list)-->
+	<ul>
+		<!--@foreach($user_image_list as $no => $file)-->
+		<li>
+			{@$ext=substr(strrchr($file,'.'),1)}
+			<div class="thumb">
+				<!--@if($ext=='swf'||$ext=='flv')-->
+				<script>//<![CDATA[
+				displayMultimedia('{getUrl('')}{$user_image_path}{$file}', '100%', '100%');
+				//]]></script>
+				<!--@elseif(in_array($ext,array('gif','png','jpg','jpeg')))-->
+					<img src="{getUrl('')}{$user_image_path}{$file}" alt="User Upload Image" />
+				<!--@end-->
+			</div>
+			<p class="path">{$user_image_path}{$file}</p>
+			<button type="button" onclick="deleteUserImage('{$file}')" class="delete"><span>{$lang->cmd_delete}</span></button>
+		</li>
+		<!--@end-->
+	</ul>
+	<!--@end-->
+</form>
+
+<div class="userDefineSkin">
+	<div class="btnArea">
+		<span class="btn"><a href="{getUrl('','act','procTextyleToolUserSkinExport','mid',$mid,'vid',$vid)}">{$lang->cmd_textyle_skin_export}</a></span>
+		<span class="btn"><button type="button" onclick="jQuery('#rediscover').toggleClass('open')">{$lang->textyle_skin_import}</button></span>
+		<span class="btn"><input type="button" value="{$lang->cmd_reset}" onclick="if(confirm('{$lang->alert_reset_skin}')) doResetLayoutConfig(); return false;"/></span>
+	</div>
+	<div id="rediscover" class="">
+		<h4>{$lang->textyle_skin_import}</h4>
+		<form action="{getUrl('')}" method="post" enctype="multipart/form-data" target="hidden_iframe" class="upload">
+			<input type="hidden" name="module" value="layout" />
+			<input type="hidden" name="act" value="procTextyleToolUserSkinImport" />
+			<input type="hidden" name="mid" value="{$mid}" />
+			<input type="hidden" name="vid" value="{$vid}" />
+			<input type="file" name="file" /> <em>{$lang->about_textyle_skin_import}</em>
+			<span class="btnGray medium"><button type="submit">{$lang->cmd_submit}</button></span>
+		</form>	
+	</div>
+</div>
+
+			</div>
+			<hr />
+			<!-- /Content -->
+
+			<!-- Extension -->
+			<!--#include("_tool_menu.html")-->
+			<!-- Extension -->
+
+<!--#include("_tool_footer.html")-->
+<iframe name="hidden_iframe" style="width:0;height:0;border:0" ></iframe>

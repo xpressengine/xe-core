@@ -1,0 +1,177 @@
+@charset "utf-8";
+/* NHN (developers@xpressengine.com) */
+.content{ width:1000px !important;}
+.header{ height:81px !important;}
+.body{ background:#fff !important;}
+.member{ width:760px; float:left; position:relative;}
+.member, .member input, .member select, .member textarea, .member table,
+.join, .join input, .join select, .join textarea, .join table{ font-size:12px;}
+.member input[type=checkbox],
+.join input[type=checkbox],
+.member input[type=radio],
+.join input[type=radio]{ width:13px; height:13px; vertical-align:middle;}
+.member .iText,
+.login .iText,
+.join .iText{padding:3px 4px; border:1px solid #a6a6a6; border-right-color:#d8d8d8; border-bottom-color:#d8d8d8; color:#666; background:transparent;}
+.member h2{ margin:0; height:40px;}
+/* Path */
+.path{height:30px;margin:0 30px;line-height:30px;white-space:nowrap;overflow:hidden;color:#8f8f8f;text-align:right;font-size:11px}
+.path a{display:inline-block;text-decoration:none;color:#8f8f8f;letter-spacing:-1px;vertical-align:middle;line-height:30px}
+.path .home{position:relative;top:-1px;width:12px;height:12px;background:url(iSet.gif) no-repeat}
+.path .home span{position:absolute;width:1px;height:1px;overflow:hidden}
+.path a.last-child{color:#4c4c4c;font-weight:bold}
+.path strong{color:#4c4c4c;letter-spacing:-1px}
+/* LNB */
+.lnb{float:left;width:140px;margin:0 40px 0 30px;padding:0 0 50px 0;display:inline;}
+.lnb a{text-decoration:none}
+.lnb h2{margin:0;padding:0 0 8px 0}
+.lnb h2 a{display:block;height:42px;padding:0 0 0 10px;border-bottom:2px solid #666;color:#333;font:bold 16px/42px NanumGothic,나눔고딕}
+.lnb ul{list-style:none;margin:0;padding:0}
+.lnb li{vertical-align:top}
+.lnb li a{display:block;height:27px;padding:0 0 0 10px;font:12px/27px Tahoma, Geneva, sans-serif;color:#333}
+.lnb li a.active{font-weight:bold;background:#f4f4f4}
+.lnb li a:hover,
+.lnb li a:active,
+.lnb li a:focus{background:#f4f4f4}
+/* Table */
+.member .info{ width:100%; color:#666; border-bottom:1px solid #c2c2c2; margin:0 0 15px 0;}
+.member .info caption{ padding:0; text-align:left; color:#fff; font-weight:bold;}
+.member .info caption .c1,
+.member .info caption .c2{ display:block; background:#6d6e72;}
+.member .info caption .c1{ padding:1px 0; margin:0 1px;}
+.member .info caption .c2{ padding:8px 15px; margin:0 -1px;}
+.member .info caption .required{ font-size:11px; margin:0 0 0 15px; font-weight:normal;}
+.member .info tbody tr.odd{ background:#f4f4f4;}
+.member .info tbody th{ width:160px; text-align:left;}
+.member .info tbody th,
+.member .info tbody td{ padding:10px 15px; vertical-align:top;}
+.member .info tbody th em.require{ color:#624cd4; font-style:normal;}
+.member .info p{ margin:0;}
+.member .info input[type=text],
+.member .info input[type=password]{ height:13px; padding:3px 4px; border:1px solid #a6a6a6; border-right-color:#d8d8d8; border-bottom-color:#d8d8d8; color:#666;}
+.member .info input+p,
+.member .info p+p{ margin:5px 0 0 0; font-size:11px;}
+/* Project */
+.member .svn{ position:absolute; top:5px; right:0;}
+.member .svn .svnToggle{ position:absolute; top:0; right:0; text-decoration:underline; white-space:nowrap; color:#666; background:none; border:0; cursor:pointer; overflow:visible; padding:0;}
+.member .svn .svnSetup{ position:absolute; width:720px; top:35px; right:0; padding:15px 19px; background:#fff; border:1px solid #ccc;}
+.member .svn p{ margin:0; line-height:1.4; color:#666;}
+.member .svn ul{ margin:15px 0; padding:0; list-style:none;}
+.member .svn li{ margin:0 0 2px 0;}
+.member .svn label{ display:inline-block; width:120px; font-weight:bold;}
+/* Button */
+.btnArea{ padding:0 5px; margin:15px 0; text-align:center;}
+.btnArea.ar{ text-align:right;}
+.btn25,
+.btn25 a,
+.btn25 button,
+.btn25 input{ display:inline-block; height:25px; line-height:25px; padding:0; overflow:visible; position:relative; background:url(btn25.gif) no-repeat; cursor:pointer;}
+.btn25{ background-position:0 0; margin:0 2px 0 0; vertical-align:top;}
+.btn25 a,
+.btn25 button,
+.btn25 input{ padding:0 12px; left:2px; font-size:12px; color:#4a4a4a; font-weight:bold; border:0; background-position:right 0; text-decoration:none;}
+.btn25.blue{ background-position:0 -30px;}
+.btn25.blue *{ background-position:right -30px !important; color:#fff !important;}
+.btn25.black{ background-position:0 -60px;}
+.btn25.black *{ background-position:right -60px !important; color:#fff !important;}
+.btn22,
+.btn22 *{ display:inline-block; height:22px; line-height:22px; padding:0; overflow:visible; position:relative; background:url(btn22.gif) no-repeat; cursor:pointer;}
+.btn22{ background-position:0 0; margin:0 2px 0 0; vertical-align:top;}
+.btn22 *{ padding:0 10px 0 25px; left:2px; font-size:11px; color:#4a4a4a; border:0; background-position:right 0; text-decoration:none;}
+.btn22.sub{ background-position:0 0;}
+.btn22.sub *{ background-position:right 0;}
+.btn22.del{ background-position:0 -30px;}
+.btn22.del *{ background-position:right -30px;}
+.btn22.add{ background-position:0 -60px;}
+.btn22.add *{ background-position:right -60px;}
+/* Login */
+.login .siForm{ margin:0 auto; padding:100px 0 200px 0; width:465px; color:#666;}
+.login .siForm h1{ margin:0 0 14px 4px;}
+.login .siForm form{ position:relative; margin:0;}
+.login .siForm dl{ margin:0; padding:0 120px 0 77px; zoom:1;}
+.login .siForm dl:after{ content:""; display:block; clear:both;}
+.login .siForm dt,
+.login .siForm dd{ margin:0 0 6px 0; padding:0; height:24px; line-height:24px;}
+.login .siForm dt{ float:left; width:70px; font-weight:bold; color:#333;}
+.login .siForm dd{ float:right; width:190px;}
+.login .siForm .iText{ width:173px; height:16px; _margin:-1px 0;}
+.login .gLogin form{ padding:37px 0 0 0; background:url(gLogin.gif) no-repeat;}
+.login .gLogin .keep{ padding:0 0 0 155px; margin:5px 0 24px 0; left:137px; }
+.login .gLogin .keep input{ width:13px; height:13px; margin:0 4px 0 0; vertical-align:middle;}
+.login .gLogin .keepMsg{ margin:-10px 30px 15px 30px; line-height:1.3;}
+.login .gLogin .btn54{ position:absolute; top:37px; left:345px; width:68px; height:54px; line-height:54px; padding:0; overflow:visible; cursor:pointer; border:0; font-size:14px; color:#fff; font-weight:bold; background:url(btn54.gif) no-repeat;}
+.login .gLogin .help{ width:100%; text-align:center; line-height:36px; margin:0; color:#b7b7b7; background:url(gLogin.gif) no-repeat 0 bottom;}
+.login .gLogin .help a{ color:#666; text-decoration:none; margin:0 8px;}
+.login .gLogin .help a:hover,
+.login .gLogin .help a:active,
+.login .gLogin .help a:focus{ text-decoration:underline;}
+.login .oLogin form{ padding:52px 0 0 0; background:url(oLogin.gif) no-repeat;}
+.login .oLogin .btn28{ position:absolute; top:50px; left:326px; width:64px; height:28px; line-height:28px; padding:0; overflow:visible; cursor:pointer; border:0; font-size:12px; color:#fff; font-weight:bold; background:url(btn28.gif) no-repeat;}
+.login .oLogin .iText{ width:153px; padding-left:24px;}
+.login .oLogin .help{ padding:45px 30px 15px 40px; margin:0; font-size:11px; line-height:1.5;}
+/* Join */
+.join{ margin:0 50px; padding:0 0 50px 0;}
+.join h1{ margin:0 0 27px 0;}
+.join .step{ margin:0 -3px 27px -3px}
+.join .joinAgreement{position:relative;height:250px;line-height:1.5;margin:0 0 10px 0;padding:20px;overflow:auto;border:1px solid #d2d2d2;color:#666}
+.join .checkAgreement{margin:10px 0 30px 0;color:#333}
+.join .checkAgreement input{width:13px;height:13px;margin:0 3px 0 0;vertical-align:middle}
+.join .info{ width:100%; color:#666; border:0; border-bottom:1px solid #c2c2c2; margin:0 0 15px 0;}
+.join .info caption{ padding:0; text-align:left; color:#fff; font-weight:bold;}
+.join .info caption .c1,
+.join .info caption .c2{ display:block; background:#6d6e72;}
+.join .info caption .c1{ padding:1px 0; margin:0 1px;}
+.join .info caption .c2{ padding:8px 15px; margin:0 -1px;}
+.join .info caption .required{ font-size:11px; margin:0 0 0 15px; font-weight:normal;}
+.join .info tbody tr.odd{ background:#f4f4f4;}
+.join .info tbody th{ width:160px; text-align:left;}
+.join .info tbody th,
+.join .info tbody td{ border:0; padding:10px 15px; vertical-align:top;}
+.join .info tbody th em.require{ color:#624cd4; font-style:normal;}
+.join .info tbody td{ font-size:11px;}
+.join .info p{ margin:0;}
+.join .info input[type=text],
+.join .info input[type=password]{ height:13px; padding:3px 4px; border:1px solid #a6a6a6; border-right-color:#d8d8d8; border-bottom-color:#d8d8d8; color:#666;}
+.join .info input+p,
+.join .info p+p{ margin:5px 0 0 0; font-size:11px;}
+/* aList */
+.aList{ width:100%; color:#4a4a4a; background:url(bgListHeader.gif) no-repeat;}
+.aList th{ color:#333; padding:8px 0 9px 0; white-space:nowrap;}
+.aList th span{ display:block; border-left:1px solid #c7c7c7; padding:0 15px;}
+.aList th:first-child span{ border:0;}
+.aList td{ border-bottom:1px solid #cdcdcd; padding:8px 15px 7px 15px; white-space:nowrap; vertical-align:top;}
+.aList input[type=checkbox]{ margin:0;}
+.aList a{ text-decoration:none; color:#4a4a4a;}
+.aList a:hover,
+.aList a:active,
+.aList a:focus{ text-decoration:underline;}
+.aList .title{ width:100%; white-space:normal;}
+.aList .title p{ margin:1em 0; color:#666;}
+.aList .num{ text-align:center; font:11px Tahoma, Geneva, sans-serif;}
+.aList .buttonSet{ overflow:visible; padding:0; cursor:pointer;}
+/* Pagination */
+.pagination{ margin:15px 0; text-align:center; line-height:normal;}
+.pagination a,
+.pagination strong{ position:relative; color:#767676; font:bold 12px/16px Tahoma, Sans-serif; vertical-align:top; display:inline-block; text-decoration:none; padding:1px 8px; margin:0 -3px; border-left:1px solid #ccc; border-right:1px solid #ccc; background-color:#fff; z-index:2;}
+.pagination a:hover,
+.pagination a:active,
+.pagination a:focus{ background-color:#f8f8f8;}
+.pagination strong{ color:#4e3db4;}
+.pagination .direction{ font-weight:normal; color:#767676; text-decoration:none !important; border:0; z-index:1;}
+.pagination .direction:hover,
+.pagination .direction:active,
+.pagination .direction:focus{ color:#333; background-color:#fff;}
+.pagination .prev{ border-left:0;}
+.pagination .next{ border-right:0;}
+.pagination .direction span{ position:relative; display:inline-block; width:0; height:0; font-size:0; line-height:0; vertical-align:top; top:4px;}
+.pagination .prev span{ border:3px solid; border-top:solid #fff; border-bottom:solid #fff; border-left:0; margin-right:1px; *left:-4px;}
+.pagination .next span{ border:3px solid; border-top:solid #fff; border-bottom:solid #fff; border-right:0; margin-left:1px;}
+
+@media print{
+.header,
+.visual,
+.path,
+.lnb,
+.footer{ display:none;}
+.member{ float:none; width:auto;}
+}

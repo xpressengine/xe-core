@@ -1,0 +1,6 @@
+<include target="header.html" />
+<h1>{$message}</h1>
+<p><a cond="!$is_logged" href="{getUrl('act','dispMemberLoginForm')}">{$lang->cmd_login}</a>
+	<button type="button" onclick="history.back()">{$lang->cmd_back}</button>
+</p>
+<include target="footer.html" /> 

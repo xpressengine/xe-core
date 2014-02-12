@@ -1,0 +1,30 @@
+<!--#include("_header.html")-->
+	<!--@foreach($milestones as $val)-->
+	<!--@if($val->milestone_srl == 0)-->
+		{@ $val->title = $lang->not_assigned}
+		{@ $val->description = $lang->not_assigned_description}
+	<!--@end-->
+	<h3 class="h3"><a href="{getUrl('','mid',$mid,'act','dispIssuetrackerViewIssue','milestone_srl', $val->milestone_srl)}">{$val->title}</a></h3>
+	<ul class="gh">
+		<!--@if($val->issues["total"] > 0)-->
+		<li><span class="bar" style="width:100%"></span>{$lang->total_issue}: <em>{$val->issues["total"]}</em></li>
+		<!--@foreach($lang->status_list as $key=>$status_name)-->
+		{@ $per = sprintf("%3.1f", floor($val->issues[$key]/$val->issues["total"]*1000)/10); }
+		<li><span class="bar" style="width:{$per}%"></span>{$status_name}: <em>{$val->issues[$key]}</em></li>
+		<!--@end-->
+		<!--@else-->
+		<li>{$lang->noissue}</li>	
+		<!--@end-->
+		<li>완료기한: {zdate($val->deadline, 'Y-m-d')} </li>
+		<li>완료일: {zdate($val->release_date, "Y-m-d")} </li>
+	</ul>
+	<!--@endforeach-->
+	<div class="pn">
+        <!--@if($page != 1)-->
+		<a href="{getUrl('page',$page-1,'document_srl','','division',$division,'last_division',$last_division,'entry','')}">&lsaquo; {$lang->cmd_prev}</a> 
+        <!--@endif-->
+        <strong>{$page} / {$page_navigation->last_page}</strong>
+        <!--@if($page != $page_navigation->last_page)-->
+		<a href="{getUrl('page',$page+1,'document_srl','','division',$division,'last_division',$last_division,'entry','')}">{$lang->cmd_next} &rsaquo;</a>
+        <!--@endif-->
+	</div>

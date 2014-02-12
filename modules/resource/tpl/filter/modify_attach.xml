@@ -1,0 +1,27 @@
+<filter name="modify_attach" module="resource" act="procResourceModifyAttach">
+    <form>
+        <node target="mid" required="true" />
+        <node target="package_srl" required="true" />
+        <node target="item_srl" required="true" />
+        <node target="document_srl" required="true" />
+        <node target="attach_version" required="true" />
+        <node target="attach_description" required="true" />
+    </form>
+    <parameter>
+        <param name="vid" target="vid" />
+        <param name="mid" target="mid" />
+        <param name="package_srl" target="package_srl" />
+        <param name="item_srl" target="item_srl" />
+        <param name="document_srl" target="document_srl" />
+        <param name="file" target="attach_file" />
+        <param name="screenshot" target="attach_screenshot" />
+        <param name="version" target="attach_version" />
+        <param name="tag" target="tag" />
+        <param name="description" target="attach_description" />
+        <param name="dependency" target="attach_dependency" />
+    </parameter>
+    <response callback_func="completeModifyAttach">
+        <tag name="error" />
+        <tag name="message" />
+    </response>
+</filter>

@@ -1,0 +1,29 @@
+<query id="getNotRepliedQuestions" action="select">
+    <tables>
+        <table name="documents" alias="doc" />
+        <table name="kin_thread" alias="kin" />
+    </tables>
+    <columns>
+        <column name="doc.*" />
+        <column name="kin.selected" alias="selected" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="doc.module_srl" var="module_srl" filter="number" />
+		<group pipe="and">
+			<condition operation="in" column="doc.category_srl" var="category_srl"/>
+			<condition operation="in" column="doc.category_srl" var="category_childs" pipe="or"/>
+		</group>
+        <condition operation="equal" column="kin.document_srl" default="doc.document_srl" pipe="and" />
+        <condition operation="more" column="kin.selected" default="0" pipe="and" />
+        <group pipe="and">
+            <condition operation="like" column="doc.title" var="search_keyword" />
+            <condition operation="like" column="doc.content" var="search_keyword" pipe="or" />
+        </group>
+    </conditions>
+    <navigation>
+        <index var="sort_index" default="list_order" order="order_type" />
+        <list_count var="list_count" default="20" />
+        <page_count var="page_count" default="10" />
+        <page var="page" default="1" />
+    </navigation>
+</query>

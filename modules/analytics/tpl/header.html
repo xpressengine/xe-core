@@ -1,0 +1,51 @@
+<!--%import("css/analytics.css")-->
+<!--%import("js/analytics.js")-->
+<!--%import("js/flashObject.js")-->
+
+<h3 class="xeAdmin">{$lang->analytics}<span class="gray">{$lang->cmd_management}</span></h3>
+<p class="summeary">{$lang->about_analytics}</p>
+
+<div>
+	<ul class="localNavigation">
+		<!--@if($api_key != "")-->
+		<li <!--@if($act == 'dispAnalyticsVisitInfoAdminVisitChart' || $act == 'dispAnalyticsVisitInfoAdminVisitPageViewChart')-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsVisitInfoAdminVisitChart')}">{$lang->cmd_analytics_recent_visiting_status}</a>
+			<ul>
+				<li <!--@if($act=='dispAnalyticsVisitInfoAdminVisitChart')-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsVisitInfoAdminVisitChart')}">{$lang->analytics_api_method['visit']}</a></li>	
+				<li <!--@if($act=='dispAnalyticsVisitInfoAdminVisitPageViewChart')-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsVisitInfoAdminVisitPageViewChart')}">{$lang->analytics_api_method['visitPageView']}</a></li>	
+			</ul>
+		</li>
+		<li <!--@if($act == 'dispAnalyticsVisitInfoAdminVisitTimeChart' || $act == 'dispAnalyticsVisitInfoAdminVisitDayChart')-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsVisitInfoAdminVisitTimeChart')}">{$lang->cmd_analytics_visiting_pattern_in_cycle}</a>
+			<ul>
+				<li <!--@if($act=='dispAnalyticsVisitInfoAdminVisitTimeChart')-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsVisitInfoAdminVisitTimeChart')}">{$lang->analytics_api_method['visitTime']}</a></li>	
+				<li <!--@if($act=='dispAnalyticsVisitInfoAdminVisitDayChart')-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsVisitInfoAdminVisitDayChart')}">{$lang->analytics_api_method['visitDay']}</a></li>	
+			</ul>
+		</li>
+		<li <!--@if($act == 'dispAnalyticsVisitInfoAdminVisitBackChart' || $act == 'dispAnalyticsVisitInfoAdminVisitStayTimeChart' || $act == 'dispAnalyticsVisitInfoAdminVisitPathChart')-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsVisitInfoAdminVisitBackChart')}">{$lang->cmd_analytics_visitor_behaviour}</a>
+			<ul>
+				<li <!--@if($act=='dispAnalyticsVisitInfoAdminVisitBackChart')-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsVisitInfoAdminVisitBackChart')}">{$lang->analytics_api_method['visitBack']}</a></li>	
+				<li <!--@if($act=='dispAnalyticsVisitInfoAdminVisitStayTimeChart')-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsVisitInfoAdminVisitStayTimeChart')}">{$lang->analytics_api_method['visitStayTime']}</a></li>	
+				<li <!--@if($act=='dispAnalyticsVisitInfoAdminVisitPathChart')-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsVisitInfoAdminVisitPathChart')}">{$lang->analytics_api_method['visitPath']}</a></li>	
+			</ul>
+		</li>
+
+		<li <!--@if(!(strpos($act, 'dispAnalyticsComeInfo')=== false))-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsComeInfoAdminComeEngineChart')}">{$lang->cmd_analytics_come_info}</a>
+			<ul>
+				<li <!--@if($act=='dispAnalyticsComeInfoAdminComeEngineChart')-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsComeInfoAdminComeEngineChart')}">{$lang->analytics_api_method['comeEngine']}</a></li>	
+				<li <!--@if($act=='dispAnalyticsComeInfoAdminComeSearchTextChart')-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsComeInfoAdminComeSearchTextChart')}">{$lang->analytics_api_method['comeSearchText']}</a></li>	
+				<li <!--@if($act=='dispAnalyticsComeInfoAdminComeUrlChart')-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsComeInfoAdminComeUrlChart')}">{$lang->analytics_api_method['comeUrl']}</a></li>	
+			</ul>
+		</li>
+		<li <!--@if(!(strpos($act, 'dispAnalyticsPageInfo')=== false))-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsPageInfoAdminPagePopChart')}">{$lang->cmd_analytics_page_info}</a>
+			<ul>
+				<li <!--@if($act=='dispAnalyticsPageInfoAdminPagePopChart')-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsPageInfoAdminPagePopChart')}">{$lang->analytics_api_method['pagePop']}</a></li>	
+				<li <!--@if($act=='dispAnalyticsPageInfoAdminPageDrillDownChart')-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsPageInfoAdminPageDrillDownChart')}">{$lang->analytics_api_method['pageDrillDown']}</a></li>	
+				<li <!--@if($act=='dispAnalyticsPageInfoAdminPageStartChart')-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsPageInfoAdminPageStartChart')}">{$lang->analytics_api_method['pageStart']}</a></li>	
+				<li <!--@if($act=='dispAnalyticsPageInfoAdminPageEndChart')-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsPageInfoAdminPageEndChart')}">{$lang->analytics_api_method['pageEnd']}</a></li>	
+				<li <!--@if($act=='dispAnalyticsPageInfoAdminPageReturnChart')-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsPageInfoAdminPageReturnChart')}">{$lang->analytics_api_method['pageReturn']}</a></li>	
+			</ul>
+		</li>
+		<!--@end-->
+		<li <!--@if($act=='dispAnalyticsAdminContent')-->class="on"<!--@end-->><a href="{getUrl('', 'module', 'admin', 'act', 'dispAnalyticsAdminContent')}">{$lang->cmd_analytics_info}</a></li>
+	</ul>
+</div>
+	

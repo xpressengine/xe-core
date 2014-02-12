@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon version="0.2">
+    <title xml:lang="ko">14세이상/미만 회원가입 애드온</title>
+    <description xml:lang="ko">
+        회원가입시 14세이상/미만 구분 및 이용약관/개인정보취급방침을 표출하는 애드온입니다.
+    </description>
+    <version>0.1</version>
+    <date>2009-08-25</date>
+
+    <author email_address="sol@ngleader.com" link="http://blog.ngleader.com">
+        <name xml:lang="ko">sol</name>
+		<name xml:lang="zh-CN">sol</name>
+		<name xml:lang="jp">sol</name>
+        <name xml:lang="zh-TW">sol</name>
+    </author>
+    <extra_vars>
+		<var name="use_agreement" type="select">
+			<title xml:lang="ko">이용약관 표시</title>
+			<description xml:lang="ko">이용약관을 표시 및 동의를 받습니다.</description>
+			<options value="">
+				<title xml:lang="ko">표시하지 않음</title>
+			</options>
+			<options value="Y">
+				<title xml:lang="ko">표시함</title>
+			</options>
+		</var>
+		<var name="agreement" type="textarea">
+			<title xml:lang="ko">이용약관</title>
+		</var>
+
+		<var name="use_private_agreement" type="select">
+			<title xml:lang="ko">개인정보취급방침 표시</title>
+			<description xml:lang="ko">개인정보취급방침을 표시 및 동의를 받습니다.</description>
+			<options value="">
+				<title xml:lang="ko">표시하지 않음</title>
+			</options>
+			<options value="Y">
+				<title xml:lang="ko">표시함</title>
+			</options>
+		</var>
+		<var name="private_agreement" type="textarea">
+			<title xml:lang="ko">개인정보취급방침</title>
+		</var>
+		<var name="private_gathering_agreement" type="textarea">
+			<title xml:lang="ko">개인정보 수집 및 이용</title>
+		</var>
+
+		<var name="use_junior_join" type="select">
+			<title xml:lang="ko">14세 이상/미만 구분</title>
+			<options value="">
+				<title xml:lang="ko">구분하지 않음</title>
+			</options>
+			<options value="Y">
+				<title xml:lang="ko">구분함</title>
+			</options>
+		</var>
+		<var name="msg_junior_join" type="textarea">
+			<title xml:lang="ko">14세미만 메세지</title>
+			<description xml:lang="ko">14세미만 회원가입시 출력할 메시지를 입력합니다.</description>
+		</var>
+
+    </extra_vars>
+</addon>

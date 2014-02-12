@@ -1,0 +1,74 @@
+<!--@if(__DEBUG__)-->
+	<load target="css/poll.css" />
+	<load target="../../tpl/js/poll.js" />
+<!--@else-->
+	<load target="css/poll.min.css" />
+	<load target="../../tpl/js/poll.min.js" />
+<!--@end-->
+
+<script>
+    var poll_alert_lang = "{$lang->msg_check_poll_item}";
+</script>
+
+<div id="poll_{$poll->poll_srl}" style="{$poll->style}">
+
+	<div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'module/poll/skins/simple/form/1'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+		<p>{$XE_VALIDATOR_MESSAGE}</p>
+	</div>
+    <form action="./" method="post" onsubmit="return doPoll(this)">
+	<input type="hidden" name="module" value="poll" />
+	<input type="hidden" name="act" value="procPoll" />
+    <input type="hidden" name="poll_srl" value="{$poll->poll_srl}" />
+    <input type="hidden" name="poll_srl_indexes" value="" />
+    <input type="hidden" name="skin" value="{$skin}" />
+	<input type="hidden" name="success_return_url" value="{getRequestUriByServerEnviroment()}" />
+	<input type="hidden" name="xe_validator_id" value="module/poll/skins/simple/form/1" />
+
+    <table cellspacing="0" class="simple_poll">
+    <tr>
+        <td>
+            {@ $_key = 0}
+            <!--@foreach($poll->poll as $poll_srl_index => $val)-->
+            <div <!--@if($_key>0)-->class="itemDiv"<!--@end-->>
+                <input type="hidden" name="checkcount_{$poll_srl_index}" value="{$val->checkcount}" />
+
+                <div class="title">{$val->title}</div>
+
+                <!--@if($val->checkcount>1)-->
+                <div class="checkcount">({$lang->poll_checkcount} : {$val->checkcount})</div>
+                <!--@end-->
+
+                <!--@foreach($val->item as $item_srl => $item)-->
+                {@$_idx = $poll->poll_srl.'_'.$poll_srl_index.'_'.$item_srl}
+
+                <div class="item">
+                    <!--@if($val->checkcount>1)-->
+                        <input type="checkbox" name="item_{$poll->poll_srl}_{$poll_srl_index}" value="{$item->poll_item_srl}" id="item_{$item->poll_item_srl}" /> 
+                    <!--@else-->
+                        <input type="radio" name="item_{$poll->poll_srl}_{$poll_srl_index}" value="{$item->poll_item_srl}" id="item_{$item->poll_item_srl}" /> 
+                    <!--@end-->
+                        <label for="item_{$item->poll_item_srl}">{$item->title}</label>
+                </div>
+            </div>
+            <!--@end-->
+
+            {@ $_key++}
+            <!--@end-->
+        </td>
+    </tr>
+    <tr>
+        <td class="stopDate">
+            ~<strong>{zdate($poll->stop_date, "Y-m-d")}</strong> (<a href="#" class="_poll_result _srl_{$poll->poll_srl} _skin_{$skin}">{$lang->cmd_view_result}</a>)
+        </td>
+    </tr>
+    <tr>
+        <td class="poll_button">
+            <input type="submit" value="{$lang->cmd_apply_poll}" class="poll_button" />
+        </td>
+    </tr>
+    </tr>
+    </table>
+
+    </form>
+
+</div>

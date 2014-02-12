@@ -1,0 +1,109 @@
+@charset "utf-8";
+/* NHN (developers@xpressengine.com) */
+.btn{opacity:.7}
+/* Board Reset */
+.board{background:#000;color:#fff}
+.board .iText,
+.board textarea,
+.board select{background:#333;color:#fff;border-color:#444}
+.board .document_popup_menu a,
+.board .comment_popup_menu a{color:#8b8b8b}
+.board .boardNavigation{border-color:#666}
+/* Board Header */
+.boardHeader .boardTitle{border-color:#999}
+.boardHeader .boardTitleText{border-color:#ccc;background-image:url(../img/black/lineVr11.gif)}
+.boardHeader .boardTitleText a{color:#fff}
+.boardHeader .boardTitleText em{color:#ccc}
+.boardHeader .boardDescription{background:#333}
+/* Board Information */
+.boardInformation em,
+.boardInformation strong{color:#ff6600}
+.boardInformation .infoView li.icon a{background-image:url(../img/common/icons.gif)}
+.boardInformation .infoView li.setup a{background-image:url(../img/common/buttonSetup.gif)}
+/* Board List Form */
+.boardListForm em,
+.boardListForm strong{color:#ff3636}
+/* Board List */
+.boardList{border-color:#333}
+.boardList a{color:#eee}
+.boardList .jumpTo button{background-color:#333;border-color:#444;color:#fff}
+.boardList .meta li{background-image:url(../img/black/lineVr9.gif)}
+.boardList .replyNum{color:#ff3636}
+.boardList .trackbackNum{color:#66c}
+.boardList .replyAnchor{color:#6CF}
+.boardList th{border-color:#555;color:#fff}
+.boardList th a{color:#66c}
+.boardList td{border-color:#333;color:#fff}
+.boardList td.title a.forum:link,
+.boardList td.recommend{color:#ff3636}
+.boardList td.summary .thumb{border-color:#999;background:#444}
+.boardList td .notice{background-image:url(../img/black/lineVr9.gif)}
+.boardList td .category{color:#ddd;background-image:url(../img/black/lineVr9.gif)}
+.boardList td .by{color:#666}
+.boardList.webZine td.title p.summary a{color:#888}
+.boardList.webZine td.title .thumb{border-color:#999}
+.thumbList{border-color:#333}
+.thumbList li .thumb{background:#222;border-color:#333}
+.thumbList li .thumb a .text{color:#ccc}
+.thumbList li .thumb a .category{background:#000;opacity:.6;filter:alpha(opacity=60);color:#fff}
+.thumbList li .thumb a .noPhoto{background:#333}
+.thumbList li .title a{color:#eee}
+.thumbList li .summary a{color:#888}
+/* Search Form */
+.boardSearchForm .infoEtc li a{background-image:url(../img/common/buttonContributorsTaglist.gif)}
+/* Board Read */
+.boardReadHeader a{color:#eee}
+.boardReadHeader .titleArea{border-top-color:#333;border-bottom-color:#222}
+.boardReadHeader .titleArea .category{color:#b3b3b3;background-image:url(../img/black/lineVr9.gif)}
+.boardReadHeader .titleArea .num{color:#474747}
+.boardReadHeader .titleArea .date{color:#474747;background-image:url(../img/black/lineVr9.gif)}
+.boardReadHeader .authorArea .ipAddress{color:#474747}
+.boardReadHeader .authorArea .permaLink{color:#474747}
+.boardReadFooter .memberSignature{border-color:#8a8a8a;background-color:#979797}
+.boardReadFooter .memberSignature img.profile{border-color:#888}
+.boardReadFooter .tag dd a{color:#b3b3b3}
+.boardReadFooter .trackbackURL dt{color:#b3b3b3}
+.boardReadFooter .trackbackURL dd a{color:#474747}
+.feedbackList{border-color:#8a8a8a}
+.feedbackList .feedbackHeader a{color:#fff}
+.feedbackList .feedbackHeader em{color:#ff6600}
+.feedbackList .trackbackURL a{color:#474747}
+.feedbackList .item{border-color:#666}
+.feedbackList .item.itemReply .indent{background-image:url(../img/common/iconReply.gif)}
+.feedbackList .item .author{color:#8b8b8b}
+.feedbackList .item .author a{color:#eee}
+.feedbackList .item .itemContent .option li{background-image:url(../img/black/lineVr9.gif)}
+.feedbackList .item .itemContent .option li a{color:#999}
+.feedbackList .item .itemContent .delete{background-image:url(../img/common/buttonDelete.gif)}
+.feedbackList .item .itemAside img.profile{border-color:#333}
+.feedbackList .item .itemAside .meta{color:#474747}
+.feedbackList .item .itemAside .vote *{color:#8b8b8b}
+/* Time */
+.time *{color:#ccc}
+.time dt{background:#000}
+/* Attached File */
+.attachedFile ul.files a{padding-left:15px;background-image:url(../img/common/iconFile.gif);color:#b3b3b3}
+.attachedFile dt a{color:#b3b3b3}
+.attachedFile ul.files a .bubble{border:1px solid #333;background-color:#000;color:#b3b3b3}
+/* Editor */
+.board .boardEditor{border-color:#666;background:#333}
+/* Extra Var Table */
+.extraVarsList{border-color:#333}
+.extraVarsList caption{color:#999}
+.extraVarsList em{color:#ff6600}
+.extraVarsList th,
+.extraVarsList td{border-color:#333}
+.extraVarsList th{background:#222}
+.extraVarsList td{background:#000}
+.extraVarsList td .inputNum{border-color:#444;background:#333}
+/* Tag Cloud */
+.tagCloud{border-color:#666}
+.tagCloud li.rank1 a{color:#fff}
+.tagCloud li.rank2 a{color:#ddd}
+.tagCloud li.rank3 a{color:#bbb}
+.tagCloud li.rank4 a{color:#999}
+.tagCloud li.rank5 a{color:#777}
+/* Layer */
+#popup_menu_area{background:#fff;border-color:#eee}
+#popup_menu_area ul{border-color:#ddd}
+#popup_menu_area li a{color:#000}

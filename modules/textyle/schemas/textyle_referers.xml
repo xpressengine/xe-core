@@ -1,0 +1,10 @@
+<table name="textyle_referers">
+    <column name="module_srl" type="number" size="11" notnull="notnull" index="module_srl" />
+    <column name="textyle_referer_srl" type="number" size="11" notnull="notnull" primary_key="primary_key" />
+    <column name="textyle_host_srl" type="number" size="11" notnull="notnull" index="referer_srl" />
+    <column name="document_srl" type="number" size="11" notnull="notnull" index="referer_srl" />
+    <column name="regdate" type="date" notnull="notnull" index="referer_srl" />
+    <column name="visitor" type="number" size="11" notnull="notnull" />
+    <column name="referer_url" type="text" notnull="notnull" />
+    <column name="link_word" type="varchar" size="250" notnull="notnull" index="link_word" />
+</table>

@@ -1,0 +1,126 @@
+<!--%import("js/textyle.js")-->
+<!--%import("js/LAB.min.js")-->
+<script type="text/javascript">
+ document.createElement('header');
+ document.createElement('hgroup');
+ document.createElement('nav');
+ document.createElement('menu');
+ document.createElement('section');
+ document.createElement('article');
+ document.createElement('aside');
+ document.createElement('footer');
+</script>
+<header>
+    <div class="centerLayout">
+        <a id="logo" class="sprite-logo sprite_header" href="{getUrl('','mid','')}"></a><span class="slogan">CMS for the future</span>
+        <div id="userActions">
+			<a href="#" onclick="jQuery('#selectLang').toggleClass('hideLang'); return false;" class="current" title="{$lang_type}">{$lang_supported[$lang_type]}</a>
+           	<ul class="hideLang" id="selectLang">
+               	<!--@foreach($lang_supported as $key => $val)--><!--@if($key!= $lang_type)-->
+               	<li><a href="{getUrl('l', $key)}" >{$val}</a></li>
+               	<!--@end--><!--@end-->
+           	</ul>
+            <!--@if(!$logged_info || !$logged_info->member_srl)-->
+                <span><a href="{getUrl('act','dispMemberLoginForm')}">Login</a></span>
+                <a href="{getUrl('act','dispMemberSignUpForm')}" class="redButton">Register</a>
+            <!--@else-->
+                <span><a href="{getUrl('act','dispMemberLogout')}">Logout</a></span>
+                <a href="{getUrl('act','dispMemberInfo', 'member_srl', '')}" class="redButton">My Profile</a>
+            <!--@end-->
+        </div>
+    </div>
+</header>
+<nav>
+	<ul id="mainUl">
+		<li<!--@if($act=='' && $mid=='textyle')--> class="selected"<!--@end-->><a href="{getUrl('','mid','')}">Home</a></li>
+		<li<!--@if($act=='dispTextyleGuestbook')--> class="selected"<!--@end-->><a href="{$guestbook_url}">GuestBook</a></li>
+		<li<!--@if($act=='dispTextyleTag')--> class="selected"<!--@end-->><a href="{$tag_url}">Tag</a></li>
+        <!--@foreach($extra_menus as $key => $val)-->
+		<li<!--@if($key==$mid || $val==getUrl('','mid',$mid))--> class="selected"<!--@end-->><a href="{$val}">{$key}</a></li>
+        <!--@end-->
+                 
+	</ul>
+	<form action="{getUrl()}" method="get" id="isSearch">
+		<input type="hidden" name="act" value="IS" />
+		<input type="hidden" name="search_target" value="title_content" />
+		<p id="search">
+			<input name="is_keyword" type="text" value="{htmlspecialchars($is_keyword)}" class="inputText" title="keyword" style="width: 200px;" />
+			<span class="redButton" id="searchIcon"><input type="submit" value="" class="sprite-icon_search sprite_footer" /></span>
+		</p>
+	</form>
+</nav>
+<div class="cleared"></div>
+<br/>
+<div id="bg" class="textyle"> 
+	<div id="content" style="align:center">
+		<!--@if($textyle_mode == 'module')-->
+			{$content}
+		<!--// Profile -->
+		<!--@elseif($textyle_mode == 'profile')-->
+			<h2 class="postTitle">Profile</h2>
+			<div class="textyleContent xe_content">{$profile_content}</div>
+
+		<!--// GuestBook -->
+		<!--@else if($textyle_mode == 'guestbook')-->
+			<!--#include('guestbook.html')-->
+
+		<!--// Tags -->
+		<!--@else if($textyle_mode=='tags')-->
+			<!--#include('tags.html')-->
+
+		<!--// Comment Reply, Modify -->
+		<!--@else if($textyle_mode == 'comment_form')-->
+			<!--#include('comment_form.html')-->
+		<!--// display Post list. Used in /categories/ posts -->
+		<!--@elseif($textyle_mode=='list')-->
+			<!--#include('index.html')-->
+		<!--// display Post Summary -->
+		<!--@elseif($textyle_mode=='summary')-->
+			<!--#include('post.summary.html')-->
+
+		<!--// display post body or body list -->
+		<!--@else-->
+			<!--@if($nr_documents == 1)-->
+				<!--#include('post.list.html')-->
+			<!--@else-->
+				<!--#include('index.html')-->
+			<!--@end-->
+		<!--@end-->
+	</div>
+</div>
+<footer>
+    <div id="footerContainer">
+        <p class="menu"><span>&copy; 2012 Textyle XpressEngine. All rights reserved. </span></p>
+        <p class="socials">
+            <span>Tune in to the following for updates: </span>
+            <a href="http://www.facebook.com/XpressEngine" target="_blank"><span id="facebook" class="sprite-icon_facebook sprite_footer"></span></a>
+            <a href="http://twitter.com/xeglobal" target="_blank"><span id="twitter" class="sprite-icon_twitter sprite_footer"></span></a>
+            <a href="{getUrl('mid','','entry','').'/rss'}" target="_blank"><span id="rss" class="sprite-icon_rss sprite_footer"></span></a>
+        </p>
+        <div class="cleared"></div>
+    </div>
+</footer>
+<script type="text/javascript">
+    $LAB
+        .script('http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4fa92d7f11b454b9')
+        .script('http://platform.twitter.com/widgets.js')
+        .wait(function(){
+            (function(d, s, id) {
+              var js, fjs = d.getElementsByTagName(s)[0];
+              if (d.getElementById(id)) {return;}
+              js = d.createElement(s); js.id = id;
+              js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+              fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+            // "Blog" main menu item
+            jQuery('#menu_parent_68').addClass('selected');
+
+			window.___gcfg = {lang: 'en'};
+			(function()
+			{var po = document.createElement("script");
+				po.type = "text/javascript"; po.async = true;po.src = "https://apis.google.com/js/plusone.js";
+				var s = document.getElementsByTagName("script")[0];
+				s.parentNode.insertBefore(po, s);
+			})();
+        });
+</script>

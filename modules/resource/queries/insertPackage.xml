@@ -1,0 +1,28 @@
+<query id="insertPackage" action="insert">
+    <tables>
+        <table name="resource_packages" />
+    </tables>
+    <columns>
+        <column name="module_srl" var="module_srl" filter="number" notnull="notnull" />
+        <column name="package_srl" var="package_srl" filter="number" notnull="notnull" />
+        <column name="category_srl" var="category_srl" notnull="notnull" />
+        <column name="member_srl" var="member_srl" notnull="notnull" />
+        <column name="path" var="path" default="" />
+        <column name="have_instance" var="have_instance" default="N" />
+        <column name="parent_program" var="parent_program" />
+        <column name="license" var="license" notnull="notnull" />
+        <column name="title" var="title" notnull="notnull" />
+        <column name="homepage" var="homepage" notnull="notnull" />
+        <column name="description" var="description" notnull="notnull" />
+        <column name="status" var="status" default="waiting" notnull="notnull" />
+        <column name="downloaded" default="0" />
+        <column name="latest_item_srl" default="0" />
+        <column name="update_order" default="0" />
+        <column name="voted" default="0" />
+        <column name="voter" default="0" />
+        <column name="comment_count" default="0" />
+        <column name="regdate" default="curdate()" notnull="notnull" />
+        <column name="last_update" default="curdate()" notnull="notnull" />
+        <column name="list_order" var="list_order" notnull="notnull" />
+    </columns>
+</query>

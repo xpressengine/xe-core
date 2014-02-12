@@ -1,0 +1,18 @@
+<div class="x_page-header">
+	<h1>
+		{$lang->kin} {$lang->cmd_management}
+		<span class="path" cond="$module_info->mid">
+			&gt; <a href="{getSiteUrl($module_info->domain, '', 'mid', $module_info->mid)}" target="_blank"|cond="$module == 'admin'">{$module_info->mid}<block cond="$module_info->is_default == 'Y'">({$lang->is_default})</block></a>
+		</span>
+		<a href="#aboutModule" data-toggle class="x_icon-question-sign">{$lang->help}</a>
+</div>
+<p class="x_alert x_alert-info" id="aboutModule" hidden>{$lang->about_kin}</p>
+
+<ul class="x_nav x_nav-tabs" cond="$module_info && $act != 'dispKinAdminList' && $act != 'dispKinAdminDelete'">
+	<li cond="$module == 'admin'"><a href="{getUrl('act', 'dispKinAdminList', 'module_srl', '')}">{$lang->cmd_list}</a></li>
+	<li class="x_active"|cond="$act == 'dispKinAdminInsert'"><a href="{getUrl('act', 'dispKinAdminInsert')}">{$lang->module_info}</a></li>
+	<li class="x_active"|cond="$act == 'dispKinAdminCategory'"><a href="{getUrl('act', 'dispKinAdminCategory')}">{$lang->cmd_manage_category}</a></li>
+	<li class="x_active"|cond="$act == 'dispKinAdminAdditions'"><a href="{getUrl('act', 'dispKinAdminAdditions')}">{$lang->cmd_addition_setup}</a></li>
+	<li class="x_active"|cond="$act == 'dispKinAdminSkinInfo'"><a href="{getUrl('act', 'dispKinAdminSkinInfo')}">{$lang->cmd_manage_skin}</a></li>
+	<li class="x_active"|cond="$act == 'dispKinAdminMobileSkinInfo'"><a href="{getUrl('act', 'dispKinAdminMobileSkinInfo')}">{$lang->cmd_manage_mobile_skin}</a></li>
+</ul>

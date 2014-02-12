@@ -1,0 +1,96 @@
+<!--#include("_tool_header.html")-->
+
+			<!-- Content -->
+			<div id="content">
+				
+				<!-- contentHeader -->
+				<div class="contentHeader dataHeader lineBottom">
+					<h3 class="h3">{$lang->textyle_second_menus[5]['dispTextyleToolConfigData']}</h3>
+				</div>
+				<!-- /contentHeader -->
+				
+				<div class="setUp">
+					<form action="./" method="post" onsubmit="return procFilter(this,<!--@if($logged_info->is_admin=='Y')-->export_textyle<!--@else-->request_export_textyle<!--@end-->);">
+					<input type="hidden" name="export_type" value="ttxml" />
+					<input type="hidden" name="vid" value="{$vid}" />
+					<input type="hidden" name="mid" value="{$mid}" />
+						<fieldset>
+							<h4>{$lang->data_export}</h4>
+							<!--@if($export)-->
+								<dl>
+									<dt style="font-weight:bold">{$lang->textyle_export_recode}</dt>
+									<dd style="margin:0">
+										<!--@if($export->export_status=='C')-->
+											<a href="{$export->export_file}">{getUrl()}{$export->export_file}</a>
+										<!--@else-->
+											{$lang->textyle_export_waiting}
+										<!--@end-->
+									</dd>
+								</dl>
+							<!--@end-->
+
+							<span class="btn"><button type="submit">{$lang->textyle_export_request}</button></span>
+
+							<dl class="progress">
+							<!-- class="progress" | class="progress open" -->
+								<dt>{$lang->data_import_progress} : </dt>
+								<dd><span class="bar"><span class="fill" style="width:0%"></span></span> <em>0%</em></dd>
+							</dl>
+						</fieldset>
+					</form>
+					
+					<form action="./" method="post" id="fo_process" onsubmit="return doPreProcessing(this)">
+                        <input type="hidden" name="target_module" value="{$site_module_info->index_module_srl}" id="target_module" />
+                        <input type="hidden" name="unit_count" value="10" />
+                        <input type="hidden" name="user_id" value="{$logged_info->user_id}" />
+                        <input type="hidden" name="total" value="" />
+                        <input type="hidden" name="cur" value="" />
+                        <input type="hidden" name="key" value="" />
+						<fieldset>
+							<h4>{$lang->data_import}</h4>
+							<table class="setupData" cellspacing="0" border="1">
+								<tbody>
+									<tr>
+										<th scope="row"><input name="type" type="radio" value="module" id="xeXml" class="inputRadio" checked="checked"/> <label for="xeXml">XE XML</label></th>
+										<td>{$lang->about_export_xexml}</td>
+									</tr>
+									<tr>
+										<th scope="row"><input name="type" type="radio" value="ttxml" id="ttXml" class="inputRadio" /> <label for="ttXml">TT XML</label></th>
+										<td>{$lang->about_export_ttxml}</td>
+									</tr>
+									<tr>
+										<th scope="row"><label for="fileLocation">{$lang->migration_file_path}</label></th>
+										<td><input name="xml_file" type="text" class="iText" id="fileLocation" style="width:400px;" value="http://" /> <span class="btnGray medium"><button type="submit">{$lang->cmd_import}</button></span></td>
+									</tr>
+								</tbody>
+							</table>
+							<dl class="progress prepare">
+							<!-- class="progress" | class="progress open" -->
+								<dt>{$lang->migration_prepare} : </dt>
+								<dd><span class="bar"><span class="fill preProgress" style="width:0%"></span></span></dd>
+							</dl>
+							<dl class="progress doing">
+							<!-- class="progress" | class="progress open" -->
+								<dt>{$lang->data_export_progress} : </dt>
+								<dd><span class="bar"><span class="fill" style="width:0%"></span></span> <em>0%</em></dd>
+							</dl>
+						</fieldset>
+					</form>
+					<fieldset>
+						<h4>{$lang->textyle_init}</h4>
+						<p><strong>{$lang->msg_textyle_init_about}</strong></p>
+						<span class="btn"><button type="button" onclick="if(confirm('{$lang->msg_confirm_textyle_init}')){initTextyle();}">{$lang->cmd_textyle_init}</button></span>
+					</fieldset>
+				</div>
+
+			</div>
+			<hr />
+			<!-- /Content -->
+	
+			<!-- Extension -->
+				<!--#include("_tool_menu.html")-->
+			<!-- Extension -->
+
+			<iframe name="form_iframe" style="visibility:hidden;width:0px;height:0px;"></iframe>
+
+<!--#include("_tool_footer.html")-->

@@ -1,0 +1,17 @@
+<query id="getInboundLinks" action="select">
+    <tables>
+        <table name="wiki_links" /> 
+		<table name="document_aliases" /> 
+		<table name="documents" /> 
+    </tables>
+    <columns>
+        <column name="document_aliases.alias_title" alias="alias" />
+		<column name="documents.title" alias="title" />
+		<column name="documents.document_srl" alias="document_srl" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="link_doc_srl" var="document_srl" notnull="notnull" />
+		<condition operation="equal" column="cur_doc_srl" default="document_aliases.document_srl" pipe="and" />
+		<condition operation="equal" column="documents.document_srl" default="document_aliases.document_srl" pipe="and" />
+    </conditions>
+</query>

@@ -1,0 +1,54 @@
+@charset "utf-8";
+/* Log On Layout */
+html,
+body,
+#textyleAdmin,
+#container,
+#content{height:100%}
+#body{height:90%}
+
+h1{position:relative;float:left;margin:0;padding:0 10px 0 18px;background:#282e3f}
+fieldset{border:0;margin:0;padding:0}
+legend{position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;font-size:0;line-height:0;z-index:-1}
+input{font-family:Tahoma, Sans-serif}
+
+.logOn{background:#fff url(../img/bgLogOnBody.gif) repeat-x left top;font-family:Dotum, Tahoma, Sans-serif}
+.logOn #textyleAdmin{background:none}
+.logOn #textyleAdmin.hybrid .c{width:100%}
+.logOn .logOnInterface{position:absolute;width:350px;top:15%;left:50%;margin:0 0 0 -175px}
+.logOn .logOnInterface h2{margin:0 0 10px 0}
+.logOn .logOnInterface form{display:none;border:1px solid #f2f2f2;background:#fcfcfc;font-size:12px}
+.logOn .logOnInterface.default form#defaultLogOn,
+.logOn .logOnInterface.openid form#openidLogOn{display:block}
+.logOn .logOnInterface dl{margin:0;padding:30px 0 0 30px}
+.logOn .logOnInterface dt{margin-bottom:3px;font-weight:bold;color:#868d95}
+.logOn .logOnInterface dd{margin:0 0 19px 0}
+.logOn .logOnInterface dd input{font-size:20px;font-weight:bold;padding:5px 0 0 8px;height:32px;width:279px;border:1px solid #ddd;background-image:url(../img/bgInputText.gif);background-repeat:no-repeat}
+.logOn .logOnInterface dd input:focus{background-color:#fbfbfb}
+.logOn .logOnInterface .btnArea{position:relative;margin:0;padding:0 30px 30px 30px;font-size:11px;zoom:1}
+.logOn .logOnInterface .btnArea:after{content:"";display:block;clear:both}
+.logOn .logOnInterface .keep{height:36px;padding:4px 0 0 0}
+.logOn .logOnInterface .keep .iCheck{width:13px;height:13px;margin:0;vertical-align:middle}
+.logOn .logOnInterface .keep label{vertical-align:middle}
+.logOn .logOnInterface .keepDesc{color:#666;margin:15px 0 0 0;line-height:1.2}
+.logOn .logOnInterface .btnArea .btnAction{position:absolute;top:0;right:30px}
+.logOn .logOnInterface .btnArea .btnAction input{_top:-1px}
+.logOn .logOnInterface .toggleID{text-decoration:none;color:#333}
+.logOn .logOnInterface #defaultLogOn .toggleID{position:absolute;top:24px;left:30px;padding:0 0 0 15px;background:url(../img/iconOpenid.gif) no-repeat left top}
+.logOn .logOnInterface #openidLogOn .btnArea{height:40px}
+.logOn .logOnInterface #openidLogOn dd input{font-size:20px;font-weight:bold;padding:5px 0 0 40px;height:32px;width:247px;border:1px solid #ddd;background-image:url(../img/bgInputTextOpenid.gif);background-repeat:no-repeat}
+.logOn .logOnInterface #openidLogOn dd input:focus{background-color:#fbfbfb}
+.logOn .logOnInterface .attention{display:none;padding:12px 0;margin:5px 0 0 0;border:1px solid #f2f2f2;background:#f7fafc;font-size:12px;color:#ea3f22;text-align:center}
+.logOn .logOnInterface .attention img{vertical-align:middle;margin-right:5px}
+.logOn .logOnInterface .attention.open{display:block}
+.logOn .logOnInterface .help{font-size:11px;margin:0;padding:20px 0;text-align:left;text-align:center}
+.logOn .logOnInterface .help li{padding:0 0 0 9px;margin:0 4px 0 0;white-space:nowrap;display:inline;background:url(../img/vrContentNavigation.gif) no-repeat left center}
+.logOn .logOnInterface .help li.first{background:none}
+.logOn .logOnInterface .help li.default,
+.logOn .logOnInterface .help li.openid{display:none}
+.logOn .logOnInterface.default .help li.openid,
+.logOn .logOnInterface.openid .help li.default{display:inline}
+.logOn .logOnInterface .help a{color:#555;text-decoration:none;zoom:1}
+.logOn .logOnInterface .help a:hover,
+.logOn .logOnInterface .help a:active,
+.logOn .logOnInterface .help a:focus{text-decoration:underline}

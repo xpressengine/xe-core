@@ -1,0 +1,24 @@
+                    <h2 class="postTitle">
+                        <!--@if($search_keyword)-->
+                            {$lang->search_result} <em>{$page_navigation->total_count}</em>{$lang->item_unit}
+                        <!--@elseif($category)-->
+                            {$selected_category} <em> {$page_navigation->total_count}</em>{$lang->item_unit}
+                        <!--@else-->
+                            {$lang->view_all} <em>{$page_navigation->total_count}</em>{$lang->item_unit}
+                        <!--@end-->
+                    </h2>
+                    <ul class="searchResult xe_content">
+                        <!--@foreach($document_list as $no => $document)-->
+                        <li>
+                            <!--@if($document->document_srl==$document_srl)-->
+                            <strong>
+                            <!--@end-->
+                            <a href="{getUrl('document_srl',$document->document_srl, 'listStyle', $listStyle, 'cpage','')}">{$document->getTitle()}</a>
+                            <!--@if($document->document_srl==$document_srl)-->
+                            </strong>
+                            <!--@end-->
+                            <span class="date">{zdate($document->get('last_update'),'Y.m.d')}</span>
+                        </li>
+                        <!--@end-->
+                    </ul>
+

@@ -1,0 +1,36 @@
+{@ $histories = $oIssue->get('histories') }
+<!--@if($histories)-->
+<ul class="pxeFeedback">
+<!--@foreach($histories as $history)-->
+	<li>
+		<div class="author">
+			<a href="#popup_menu_area" class="member_{$history->member_srl}" onclick="return false"><strong>{$history->nick_name}</strong></a> 
+			<em>{zdate($history->regdate, "Y.m.d H:i")}</em>
+		</div>
+		<div class="fContent">
+			<!--@if($history->history && count($history->history))-->
+			<ul class="change">
+				<!--@foreach($history->history as $key => $val)-->
+				<li>{$val}</li>
+				<!--@end-->
+			</ul>
+			<!--@endif-->
+			<!--@if($history->content)-->
+			<div class="xe_content">{$oIssue->replaceContent(nl2br($history->content))}</div>
+			<!--@endif-->
+
+			<!--@if($history->hasUploadedFiles())-->
+			<div class="file">
+				{@ $uploadedFiles = $history->getUploadedFiles() }
+				<!--@foreach($uploadedFiles as $file)-->
+				<a href="{getUrl('')}{$file->download_url}"><span class="fName">{$file->source_filename}</span> <span class="bubble">[File Size:{FileHandler::filesize($file->file_size)}/Download:{number_format($file->download_count)}]</span></a> 
+				<!--@end-->
+			</div>
+			<!--@end-->
+
+		</div>
+	</li>
+<!--@end-->
+</ul>
+<!--@end-->
+<!--첨부파일, pagination-->

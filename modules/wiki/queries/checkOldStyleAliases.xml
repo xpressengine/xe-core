@@ -1,0 +1,12 @@
+<query id="checkOldStyleAliases" action="select">
+	<tables>
+		<table name="document_aliases" />
+	</tables>
+	<columns>
+		<column name="alias_srl" />
+		<column name="alias_title" />
+	</columns>
+	<conditions>
+		<condition operation="in" column="module_srl" var="wiki_srls" notnull="notnull" />
+	</conditions>
+</query>

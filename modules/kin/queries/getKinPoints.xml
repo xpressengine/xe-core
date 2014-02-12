@@ -1,0 +1,12 @@
+<query id="getKinPoints" action="select">
+    <tables>
+        <table name="kin_point" />
+    </tables>
+    <columns>
+        <column name="document_srl" />
+        <column name="point" />
+    </columns>
+    <conditions>
+        <condition operation="in" column="document_srl" var="document_srls" notnull="notnull" />
+    </conditions>
+</query>

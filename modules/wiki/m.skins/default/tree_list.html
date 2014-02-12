@@ -1,0 +1,38 @@
+<include target="header.html" />
+
+<div id="tree">
+    <!--@if($grant->write_document)-->
+    <div class="treeUI">
+	<a href="#" class="bn" onclick="doRecompileTree(); return false;"><span>{$lang->cmd_remake_cache}</span></a>
+    </div>
+    <!--@end-->
+    {@ $_pDepth = 0;}
+    <ul id="navigation">
+	    <!--@foreach($document_tree as $key => $val)-->
+	    <!--@if($_pDepth > $val->depth)-->
+	    <!--@for($i=$val->depth; $i<$_pDepth; $i++)-->
+    </ul>
+    </li>
+    <!--@end-->
+    {@ $_pDepth = $val->depth}
+    <!--@end-->
+    <li>
+    <!--@if($val->childs)-->
+    <!--@end-->
+    <a href="{getSiteUrl($site_module_info->domain, '','mid',$mid,'document_srl',$val->document_srl)}">{$val->title}</a>
+    <!--@if($val->childs)-->
+    {@$_pDepth++}
+    <ul>
+	    <!--@else-->
+	    </li>
+	    <!--@end-->
+	    <!--@end-->
+	    <!--@for($i=0;$i<$_pDepth;$i++)-->
+    </ul>
+    <!--@end-->
+    </li>
+    </ul>
+    
+</div>
+
+<include target="footer.html" />

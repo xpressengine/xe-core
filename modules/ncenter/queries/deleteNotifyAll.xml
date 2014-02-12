@@ -1,0 +1,5 @@
+<query id="deleteNotifyAll" action="delete">
+	<tables>
+		<table name="ncenter_notify" />
+	</tables>
+</query>

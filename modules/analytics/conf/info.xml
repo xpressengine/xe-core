@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="0.2">
+	<title xml:lang="ko">NAVER Analytics</title>
+	<description xml:lang="ko">NAVER Analytics</description>
+	<version>0.2.2</version>
+	<date>2011-03-16</date>
+	<category>statistics</category>
+	<author email="developers@xpressengine.com" link="http://www.xpressengine.com">
+		<name xml:lang="ko">NHN</name>
+	</author>
+</module>

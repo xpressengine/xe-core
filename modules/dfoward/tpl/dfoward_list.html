@@ -1,0 +1,120 @@
+<load target="dfoward.css" />
+<load target="js/dfoward.js" />
+<load target="filter/insert.xml" />
+<load target="filter/update.xml" />
+
+<div id="content">
+<h1 class="dfoward"><span>도메인포워딩</span></h1>
+
+<div class="intro">
+<p><strong>hostname을 abc로 하였다면 abc.zetyx.net를 사용할 수 있습니다.</strong></p>
+<p>이 도메인 포워딩은 광고를 하지 않으며 계속 무료로 사용할 수 있도록 할 것입니다.<br />
+필요한 분들에게 도움이 되었으면 좋겠습니다.</p>
+</div>
+
+<!-- 사용자의 등록된 도메인 포워딩 정보 표시 -->
+<div id="dfoward_list">
+<table border="0" cellspacing="0" cellpadding="0">
+<col width="160" />
+<col />
+<col />
+<col width="120" />
+<col width="100" />
+<col width="100" />
+<thead>
+<tr>
+	<th scope="col" class="first"><span>{$lang->hostname}</span><div></div></th>
+	<th scope="col"><span>{$lang->target_url}</span></th>
+	<th scope="col"><span>{$lang->title}</span></th>
+	<th scope="col"><span>{$lang->regdate}</span></th>
+	<th scope="col"><span>{$lang->cmd_modify}</span></th>
+	<th scope="col" class="last"><span>{$lang->cmd_delete}</span><div></div></th>
+</tr>
+</thead>
+<tbody>
+<tr loop="$dfoward_list=>$key,$val">
+	<td>{$val->hostname}</td>
+	<td><a href="{$val->target_url}" onclick="window.open(this.href);return false;">{$val->target_url}</a></td>
+	<td>{$val->title}</td>
+	<td class="date">{zdate($val->regdate, "Y-m-d")}</td>
+	<td class="action"><a href="#" onclick="doDisplayUpdateDfoward('{$val->dfoward_srl}'); return false;" class="button black"><span>{$lang->cmd_modify}</span></a></td>
+	<td class="action"><a href="#" onclick="doDeleteDfoward('{$val->dfoward_srl}', '{$lang->confirm_delete}'); return false;" class="button black"><span>{$lang->cmd_delete}</span></a></td>
+</tr>
+</tbody>
+</table>
+
+	<div class="tRight gap1" cond="count($dfoward_list) < 5">
+		<span class="btn25 blue"><a href="#" onclick="doDisplayInsertDfoward();return false;">{$lang->cmd_insert}</a></span>
+	</div>
+</div>
+
+<!-- 등록 폼 -->
+<div id="dfoward_insert_form" style="display:none;" cond="count($dfoward_list) < 5">
+    <form action="./" method="post" onsubmit="return procFilter(this, insert)" enctype="multipart/form-data" class="df_form">
+        <table cellspacing="0">
+		<caption>정보입력</caption>
+        <col width="150" />
+        <col />
+        <tr>
+            <th scope="row">{$lang->hostname}</th>
+            <td><input type="text" name="hostname" value="" class="inputTypeText" />
+                <p>{$lang->about_hostname}</p>
+            </td>
+        </tr>
+        <tr class="even">
+            <th scope="row">{$lang->target_url}</th>
+            <td><input type="text" name="target_url" value="" class="inputTypeText" />
+                <p>{$lang->about_target_url}</p>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">{$lang->title}</th>
+            <td><input type="text" name="title" value="" class="inputTypeText" />
+                <p>{$lang->about_dfoward_title}</p>
+            </td>
+        </tr>
+        </table>
+
+        <div class="tRight gap1">
+            <span class="btn25 blue"><input type="submit" value="{$lang->cmd_submit}" /></span>
+            <span class="btn25"><input type="button" value="{$lang->cmd_cancel}" onclick="doDisplayDfowardListUp(); return false;"/></span>
+        </div>
+    </form>
+</div>
+
+<!-- 수정 폼 -->
+<div id="dfoward_update_form" style="display:none;">
+    <form id="update_form" action="./" method="post" onsubmit="return procFilter(this, update)" enctype="multipart/form-data" class="df_form">
+    <input type="hidden" name="dfoward_srl" value="" />
+
+        <table cellspacing="0">
+		<caption>정보입력</caption>
+        <col width="150" />
+        <col />
+        <tr>
+            <th scope="row">{$lang->hostname}</th>
+            <td><input type="text" name="hostname" value="" class="inputTypeText" />
+                <p>{$lang->about_hostname}</p>
+            </td>
+        </tr>
+        <tr class="even">
+            <th scope="row">{$lang->target_url}</th>
+            <td><input type="text" name="target_url" value="" class="inputTypeText" />
+                <p>{$lang->about_target_url}</p>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">{$lang->title}</th>
+            <td><input type="text" name="title" value="" class="inputTypeText" />
+                <p>{$lang->about_dfoward_title}</p>
+            </td>
+        </tr>
+        </table>
+
+        <div class="tRight gap1">
+            <span class="btn25 blue"><input type="submit" value="{$lang->cmd_modify}" /></span>
+        </div>
+    </form>
+</div>
+
+</div>

@@ -1,0 +1,126 @@
+<include target="header.html" />
+<!--@if($module_info->markup_type != 'xe_wiki_markup')-->
+	<load target="../../lib/google-code-prettify/prettify.css" />
+	<load target="../../lib/google-code-prettify/prettify.js" />
+	<script>
+		jQuery(document).ready(function($){
+			prettyPrint();
+		});
+	</script>
+<!--@end-->
+<div class="wikiRead">
+	<div class="wkReadBody">
+		<!--@if($oDocument->isSecret() && !$oDocument->isGranted())-->
+			<form action="./" method="get" ruleset="input_password" class="secretMessage">
+				<input type="hidden" name="act" value="procWikiVerificationPassword" />
+				<input type="hidden" name="success_return_url" value="{getUrl('act','dispWikiContent','mid',$mid,'entry',$entry, 'document_srl', '')}" />
+				<input type="hidden" name="mid" value="{$mid}" />
+				<input type="hidden" name="page" value="{$page}" />
+				<input type="hidden" name="document_srl" value="{$oDocument->document_srl}" />
+				<input type="hidden" name="xe_validator_id" value="modules/wiki/skins/xe_wiki" />
+
+				<p>&quot;{$lang->msg_is_secret}&quot;</p>
+				<dl>
+					<dt><label for="cpw">{$lang->password}</label> :</dt>
+					<dd><input type="password" name="password" id="cpw" class="iText" /><input class="btn" type="submit" value="{$lang->cmd_input}" /></dd>
+				</dl>
+
+			</form>
+		<!--@else-->
+            <!--@if($history)-->
+                {$history->content}
+            <!--@else-->
+                {$oDocument->getContent()}
+            <!--@endif-->
+		<!--@end-->
+	</div>
+	<div class="wkReadFooter">
+        <!--@if(!$oDocument->getTrackbackCount())-->
+		<dl class="tbURL">
+			<dt>{$lang->trackback} : </dt>
+			<dd><a href="{$oDocument->getTrackbackUrl()}" onclick="return false;">{$oDocument->getTrackbackUrl()}</a></dd>
+		</dl>
+        <!--@end-->
+        <!--@if($contributors)-->
+		<dl class="contributors">
+			<dt>{$lang->contributors} : </dt>
+			<dd><!--@foreach($contributors as $key => $val)--><a href="#" class="member_{$val->member_srl}" onclick="return false;">{$val->nick_name}</a><!--@if($key<count($contributors)-1)-->, <!--@end--><!--@end--></dd>
+		</dl>
+        <!--@end-->
+		<div class="wkNav" cond="$oDocumentPrev||$oDocumentNext">
+			<a cond="$oDocumentPrev" href="{$oDocumentPrev->getPermanentUrl()}" class="wikiPrev">&laquo; {$oDocumentPrev->getTitle()}</a>
+			<a cond="$oDocumentNext" href="{$oDocumentNext->getPermanentUrl()}" class="wikiNext">{$oDocumentNext->getTitle()} &raquo;</a>
+		</div>
+		<!--@if($oDocument->hasUploadedFiles())-->
+        <dl class="attachedFile">
+            <dt><img src="./img/iconFiles.gif" width="27" height="11" alt="{$lang->uploaded_file}" /> <button type="button" class="fileToggle" onclick="jQuery(this).parents('dl.attachedFile').toggleClass('open');return false;">{$lang->uploaded_file} ({$oDocument->get('uploaded_count')})</button></dt>
+            <dd>
+                <ul class="files">
+                    {@ $uploaded_list = $oDocument->getUploadedFiles() }
+                    <!--@foreach($uploaded_list as $key => $file)-->
+                    <li><a href="{getUrl('')}{$file->download_url}">{$file->source_filename} <span class="bubble">[File Size:{FileHandler::filesize($file->file_size)}/Download:{number_format($file->download_count)}]</span></a></li>
+                    <!--@end-->
+                </ul>
+            </dd>
+        </dl>
+		<!--@end-->
+        
+	</div>
+
+</div>
+
+<!--@if($oDocument->allowTrackback())-->
+    <include target="./trackback.html" />
+<!--@end-->
+<!--@if($oDocument->allowComment())-->
+    <a name="comment"></a>
+    <include target="./comment.html" />
+
+    <!--@if($grant->write_comment && $oDocument->isEnableComment() )-->
+        <!--@if(!$is_logged)-->
+			{@ $ruleset = "insert_comment_not_logged"}
+			{@ $act_insert = "procWikiInsertCommentNotLogged"}
+		<!--@else-->
+			{@ $ruleset = "insert_comment"}
+			{@ $act_insert = "procWikiInsertComment"}
+		<!--@end-->
+		<form action="./" method="post" ruleset="{$ruleset}" class="wkEditor" >
+			<input type="hidden" name="act" value="{$act_insert}" />
+			<input type="hidden" name="success_return_url" value="{getUrl('act','dispWikiContent', 'module_srl', $module_info->module_srl,'document_srl',$oDocument->document_srl)}" />
+			<input type="hidden" name="module" value="wiki" />
+			<input type="hidden" name="mid" value="{$mid}" />
+			<input type="hidden" name="document_srl" value="{$oDocument->document_srl}" />
+			<input type="hidden" name="comment_srl" value="" />
+			<input type="hidden" name="content" value="" />
+			<input type="hidden" name="xe_validator_id" value="modules/wiki/skins/xe_wiki" />
+            <div class="wkWrite commentEditor">
+                <div class="editor">{$oDocument->getCommentEditor()}</div>
+
+                <div class="editOption">
+                <!--@if(!$is_logged)-->
+                   <input type="text" name="nick_name" class="iText userName" value="{$lang->writer}" onfocus="this.value=''" />
+				   <input type="password" name="password" class="iText userPw" value="{$lang->password}" onfocus="this.value=''" />
+				   <input type="text" name="email_address" class="iText emailAddress" value="{$lang->email_address}" onfocus="this.value=''" />
+				   <input type="text" name="homepage" class="iText homePage" value="{$lang->homepage}" onfocus="this.value=''" />
+                <!--@end-->
+
+				<!--@if($is_logged)-->
+					<input type="checkbox" name="notify_message" value="Y" id="notify_message" class="inputCheck" />
+					<label for="notify_message">{$lang->notify}</label>
+				<!--@end-->
+					<input type="checkbox" name="is_secret" value="Y" id="is_secret" class="inputCheck" />
+					<label for="is_secret">{$lang->secret}</label>
+                </div>
+        
+                <div class="wkNav">
+                    <input class="btn" type="submit" value="{$lang->cmd_comment_registration}" />
+                </div>
+
+            </div>
+
+        </form>
+    <!--@end-->
+<!--@end-->
+
+
+<include target="footer.html" />

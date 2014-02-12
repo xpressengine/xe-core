@@ -1,0 +1,59 @@
+<include target="header.html" />
+
+	<!--ul id="tabSystem">
+		<!--@foreach($module_list as $module)-->
+		<li>
+			<form action="{getUrl()}" method="get" >
+				<input type="hidden" name="vid" value="{$vid}" />
+
+				<input type="hidden" name="mid" value="{$module->mid}" />
+
+				<input type="hidden" name="category" value="" />
+				<input type="hidden" name="search_target" value="title_content" />
+				<input class="xeDocsInputText" type="hidden" name="search_keyword" value="{$search_keyword}"/>
+
+				<input type="hidden" name="act" value="dispWikiSearchResults" />
+
+				<input class="<!--@if($mid==$module->mid)-->on<!--@end-->" type="submit" value = "{$lang->ResultsFrom.$modul->browser_title}" />
+			</form>
+		</li>
+		<!--@end-->
+	</ul-->
+
+	<div id="wikiTitleArea">
+		<h2 id="wikiTitle">{$lang->search_results}</h2>
+	</div>
+	
+	<!--@if(!count($document_list))-->
+	<p id="wikiSearchInfo">
+		<p style="margin: 10px; font-weight: bold;">{$lang->xewiki_no_results}</p>
+		<!--@if($last_division)-->
+		<p>{$lang->msg_document_more_search}</p>
+		<!--@end-->
+		
+		<p style="margin: 10px;">{$lang->cmd_create} <a href="{getUrl('act','dispWikiEditPage','entry',$search_keyword, 'search_title','','search_keyword','', 'document_srl', '')}">{$search_keyword}</a></p>
+		
+	</p>
+	<!--@else-->	
+	<p id="wikiSearchInfo">
+		<strong>{number_format($total_count)} {$lang->results_number}</strong>
+		<!--@if($total_count>50)-->
+			{$lang->too_many_results}
+		<!--@end-->
+	</p>
+
+	<ul id="wikiSearchResults">
+		<!--@foreach($document_list as $document)-->
+			<li>
+				<h4><a href="{getFullUrl( '','mid',$document->mid).'/entry/'.$document->entry}">{$document->get('title')}</a>&nbsp;&nbsp;<span><em>({$document->browser_title})</em></span></h4>
+				<p>{preg_replace('/^[ \t]*[\r\n]+/m', '', $document->getSummary(400))}</p>
+				<p><a href="{getFullUrl( '','mid',$document->mid).'/entry/'.$document->entry}">{getFullUrl( '','mid',$document->mid).'/entry/'.$document->entry}{$itemURL}</a></p>
+			</li>
+		<!--@end-->
+	</ul>
+
+	<include target="document_pagination.html" />
+
+	<!--@end-->
+
+<include target="footer.html" />
