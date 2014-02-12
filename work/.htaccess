@@ -1,0 +1,7 @@
+RewriteEngine on
+
+RewriteRule ^(?!index.php)(.+)$ ./index.php [L]
+
+Order Allow,Deny
+Deny from 10.64.81.211
+Allow from all
