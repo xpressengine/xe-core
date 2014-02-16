@@ -455,7 +455,7 @@ class Context
 			}
 
 			$db_info->slave_db = array($db_info->master_db);
-			self::$setDBInfo($db_info);
+			self::setDBInfo($db_info);
 
 			$oInstallController = getController('install');
 			$oInstallController->makeConfigFile();
@@ -481,9 +481,9 @@ class Context
 		self::set('_use_ssl', $db_info->use_ssl);
 
 		if($db_info->http_port)
-			self::$set('_http_port', $db_info->http_port);
+			self::set('_http_port', $db_info->http_port);
 		if($db_info->https_port)
-			self::$set('_https_port', $db_info->https_port);
+			self::set('_https_port', $db_info->https_port);
 
 		if(!$db_info->sitelock_whitelist) {
 			$db_info->sitelock_whitelist = '127.0.0.1';
@@ -693,12 +693,12 @@ class Context
 	 */
 	public static function getFTPInfo()
 	{
-		if(!self::$isFTPRegisted())
+		if(!self::isFTPRegisted())
 		{
 			return null;
 		}
 
-		include(self::$getFTPConfigFile());
+		include(self::getFTPConfigFile());
 
 		return $ftp_info;
 	}
@@ -1558,7 +1558,7 @@ class Context
 		}
 		elseif($_use_ssl == 'optional')
 		{
-			$ssl_mode = ($get_vars['act'] && self::$isExistsSSLAction($get_vars['act'])) ? ENFORCE_SSL : RELEASE_SSL;
+			$ssl_mode = ($get_vars['act'] && self::isExistsSSLAction($get_vars['act'])) ? ENFORCE_SSL : RELEASE_SSL;
 			$query = self::getRequestUri($ssl_mode, $domain) . $query;
 			// no SSL
 		}
@@ -1761,7 +1761,7 @@ class Context
 		$output = new stdClass();
 		foreach($args_list as $v)
 		{
-			$output->{$v} = self::$get($v);
+			$output->{$v} = self::get($v);
 		}
 		return $output;
 	}
