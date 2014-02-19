@@ -2283,6 +2283,9 @@ class memberController extends member
 
 		$this->_clearMemberCache($member_srl);
 
+		$oPointController = getController('point');
+		$output = $oPointController->deletePoint($member_srl);
+
 		return $output;
 	}
 
