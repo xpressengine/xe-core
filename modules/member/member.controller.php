@@ -230,7 +230,8 @@ class memberController extends member
 				}
 				// Check if duplicated
 				$member_srl = $oMemberModel->getMemberSrlByNickName($value);
-				if($member_srl && $logged_info->member_srl != $member_srl ) return new Object(0,'msg_exists_nick_name');
+				$member_srl_by_decode = $oMemberModel->getMemberSrlByNickName(html_entity_decode($value));
+				if(($member_srl && $logged_info->member_srl != $member_srl) || ($member_srl_by_decode && $logged_info->member_srl != $member_srl_by_decode)) return new Object(0,'msg_exists_nick_name');
 
 				break;
 			case 'email_address' :
