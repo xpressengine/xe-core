@@ -1,0 +1,14 @@
+# XE 공식홈페이지에 관련된 실행 파일들을 정의 합니다.
+
+* xecore.load.php 는 xe코어의 모듈을 사용하기 위해 필요한 요소만 간단히 정의했습니다.
+
+* 목적을 담당하는 기능은 폴더별로 구분합니다.
+	crontab 은
+	```
+		# sudo crontab -u nobody -e
+	```
+	를 이용해서 등록 합니다.
+	웹서버를 구동시키는 user 와 일치시키기위해 nobody 의 crontab 을 사용합니다.
+	특히 xe코어를 사용하는 경우 권한문제가 발생할 수 있기 때문에 웹서버를 구동하는 user 와 동일한 crontab 을 이용해야 합니다.
+
+* 실재 구동되는 서버를 확인하기 위해서는 rsync.to.bin.www.xpressengine.com.sh 파일을 확인하세요.
