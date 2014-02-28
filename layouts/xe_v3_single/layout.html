@@ -10,7 +10,6 @@
 			<a cond="$is_logged" href="{getUrl('act','dispMemberLogout')}" class="log">로그아웃</a>
 			<a cond="$is_logged" href="{getUrl('act','dispMemberInfo', 'member_srl', '')}">마이페이지</a>
 			<a cond="!$is_logged" href="{getUrl('act','dispMemberSignUpForm')}">회원가입</a>
-			<a href="/sitemap">사이트맵</a>
 			<a href="https://github.com/xpressengine" class="project" target="blank">XE github project</a>
 		</div>
 		<div class="gnb">
@@ -22,30 +21,21 @@
 				</li>
 			</ul>
 		</div>
-		<!--form action="{getUrl()}" method="get" class="search">
-			<input type="hidden" name="vid" value="{$vid}" />
-			<input type="hidden" name="mid" value="{$mid}" />
-			<input type="hidden" name="act" value="IS" />
-			<input type="text" name="is_keyword" value="{$is_keyword}" class="iText" title="{$lang->cmd_search}" />
-			<button type="submit" class="sBtn"><span>{$lang->cmd_search}</span></button>
-		</form-->
 		<hr class="hr" />
-		
+
 		{@ $titleImg = array('privacy'=>'privacy', 'findemail'=>'privacy', 'download'=>'download', 'download_xe'=>'download', 'sitemap'=>'sitemap', 'notice'=>'intro', 'releases'=>'intro', 'communityRule'=>'visual')}
 
 		<div class="visual" cond="$imc">
-			<img src="./title_img/{$titleImg[$mid]}.jpg" 
-				alt="XE core 및 구성요소의 안정버전 배포 - XE의 안정버전을 배포하는 곳입니다. 최신 버전을 사용하고 싶으신 분은 프로젝트에서 직접 코드를 내려받을 수 있습니다."|cond="$mid=='download'" 
-				alt="XE 개인정보취급방침 - XE는 관련 법령에 의한 개인정보취급방침을 정하여 이용자 권익 보호에 최선을 다하고 있습니다."|cond="$mid=='privacy'" 
-				alt="XE 콘텐츠를 한눈에 - XE의 전체 메뉴를 확인 하실 수 있는 공간입니다."|cond="$mid=='sitemap'" 
+			<img src="./title_img/{$titleImg[$mid]}.jpg"
+			alt="XE core 및 구성요소의 안정버전 배포 - XE의 안정버전을 배포하는 곳입니다. 최신 버전을 사용하고 싶으신 분은 프로젝트에서 직접 코드를 내려받을 수 있습니다."|cond="$mid=='download'"
+			alt="XE 개인정보취급방침 - XE는 관련 법령에 의한 개인정보취급방침을 정하여 이용자 권익 보호에 최선을 다하고 있습니다."|cond="$mid=='privacy'"
+			alt="XE 콘텐츠를 한눈에 - XE의 전체 메뉴를 확인 하실 수 있는 공간입니다."|cond="$mid=='sitemap'"
 			/>
 		</div>
 		<div class="path" cond="$imc">
 			<a href="/" class="home"><span>Home</span></a> &gt; <a href="{$current_url}">{$module_info->browser_title}</a>
 		</div>
-		
-		
-		
+
 	</div>
 	<hr class="hr" />
 	<div class="body">
