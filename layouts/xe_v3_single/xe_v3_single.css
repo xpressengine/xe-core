@@ -47,7 +47,7 @@ form, fieldset{border:0;margin:0;padding:0}
 .footer a{position:relative;z-index:2;display:inline-block;height:42px;line-height:42px;padding:0 10px;vertical-align:top;color:#aaa;text-decoration:none}
 .body{position:relative;z-index:1;zoom:1;min-height:500px;_height:500px;background:#fff;padding:1px 0;margin:-1px 0;font-size:12px}
 .body:after{content:"";display:block;clear:both}
-.content{padding:0 0 50px 0;zoom:1}
+.content{padding:0 20px 50px;zoom:1}
 .content:after{content:"";display:block;clear:both}
 /* GNB */
 .gnb{position:absolute;z-index:3;top:35px;left:191px;height:46px}

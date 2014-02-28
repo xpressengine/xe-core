@@ -10,7 +10,6 @@
 			<a cond="$is_logged" href="{getUrl('act','dispMemberLogout')}" class="log">로그아웃</a>
 			<a cond="$is_logged" href="{getUrl('act','dispMemberInfo', 'member_srl', '')}">마이페이지</a>
 			<a cond="!$is_logged" href="{getUrl('act','dispMemberSignUpForm')}">회원가입</a>
-			<a href="/sitemap">사이트맵</a>
 			<a href="https://github.com/xpressengine" class="project" target="blank">XE github project</a>
 		</div>
 		<div class="gnb">
@@ -22,13 +21,6 @@
 				</li>
 			</ul>
 		</div>
-		<!--form action="{getUrl()}" method="get" class="search">
-			<input type="hidden" name="vid" value="{$vid}" />
-			<input type="hidden" name="mid" value="{$mid}" />
-			<input type="hidden" name="act" value="IS" />
-			<input type="text" name="is_keyword" value="{$is_keyword}" class="iText" title="{$lang->cmd_search}" />
-			<button type="submit" class="sBtn"><span>{$lang->cmd_search}</span></button>
-		</form-->
 		<hr class="hr" />
 		<div class="mVisual" cond="$imc">
 			<div class="nav one">
@@ -67,11 +59,11 @@
 	</div>
 	<hr class="hr" />
 	<div class="body">
-	
-        <div class="content" id="content">
-           {$content}
-        </div>
-    
+
+		<div class="content" id="content">
+			{$content}
+		</div>
+
 	</div>
 	<hr class="hr" />
 	<div class="footer">
