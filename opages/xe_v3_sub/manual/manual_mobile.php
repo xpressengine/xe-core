@@ -11,35 +11,35 @@
 				<th scope="col">최근 갱신일</th>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-User_Manual-ko(v2.0).pdf">XE 사용자 매뉴얼 v2.0 (Korean, PDF)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-User_Manual-ko(v2.0).pdf">XE 사용자 매뉴얼 v2.0 (Korean, PDF)</a></td>
 				<td>2012-01-04</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-User_Manual-ko(v2.0).docx">XE 사용자 매뉴얼 v2.0 (Korean, DOCX)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-User_Manual-ko(v2.0).docx">XE 사용자 매뉴얼 v2.0 (Korean, DOCX)</a></td>
 				<td>2012-01-04</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-User_Manual-en(v2.0).pdf">XE User Manual v2.0 (English, PDF)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-User_Manual-en(v2.0).pdf">XE User Manual v2.0 (English, PDF)</a></td>
 				<td>2012-01-04</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-User_Manual-en(v2.0).docx">XE User Manual v2.0 (English, DOCX)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-User_Manual-en(v2.0).docx">XE User Manual v2.0 (English, DOCX)</a></td>
 				<td>2012-01-04</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-User_Manual-ja(v2.0).pdf">XE ユーザーマニュアル v2.0 (Japanese, PDF)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-User_Manual-ja(v2.0).pdf">XE ユーザーマニュアル v2.0 (Japanese, PDF)</a></td>
 				<td>2012-01-04</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-User_Manual-ja(v2.0).doc">XE ユーザーマニュアル v2.0 (Japanese, DOC)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-User_Manual-ja(v2.0).doc">XE ユーザーマニュアル v2.0 (Japanese, DOC)</a></td>
 				<td>2012-01-04</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-User_Manual-ch(v2.0).pdf">XE 用户手册 v2.0 (Chinese, PDF)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-User_Manual-ch(v2.0).pdf">XE 用户手册 v2.0 (Chinese, PDF)</a></td>
 				<td>2012-04-09</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-User_Manual-ch(v2.0).docx">XE 用户手册 v2.0 (Chinese, DOCX)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-User_Manual-ch(v2.0).docx">XE 用户手册 v2.0 (Chinese, DOCX)</a></td>
 				<td>2012-04-09</td>
 			</tr>
 		</table>
@@ -54,35 +54,35 @@
 				<th scope="col">최근 갱신일</th>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-Skin_Manual-ko(v1.1).pdf">XE 스킨 제작 매뉴얼 v1.1 (Korean, PDF)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-Skin_Manual-ko(v1.1).pdf">XE 스킨 제작 매뉴얼 v1.1 (Korean, PDF)</a></td>
 				<td>2012-01-04</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-Skin_Manual-ko(v1.1).docx">XE 스킨 제작 매뉴얼 v1.1 (Korean, DOCX)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-Skin_Manual-ko(v1.1).docx">XE 스킨 제작 매뉴얼 v1.1 (Korean, DOCX)</a></td>
 				<td>2012-01-04</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-Skin_Manual-en(v1.1).pdf">XE Skin Creation User Manual v1.1 (English, PDF)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-Skin_Manual-en(v1.1).pdf">XE Skin Creation User Manual v1.1 (English, PDF)</a></td>
 				<td>2012-01-04</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-Skin_Manual-en(v1.1).docx">XE Skin Creation User Manual v1.1 (English, DOCX)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-Skin_Manual-en(v1.1).docx">XE Skin Creation User Manual v1.1 (English, DOCX)</a></td>
 				<td>2012-01-04</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-Skin_Manual-ja(v1.1).pdf">XE スキン制作マニュアル v1.1 (Japanese, PDF)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-Skin_Manual-ja(v1.1).pdf">XE スキン制作マニュアル v1.1 (Japanese, PDF)</a></td>
 				<td>2012-01-04</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-Skin_Manual-ja(v1.1).doc">XE スキン制作マニュアル v1.1 (Japanese, DOC)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-Skin_Manual-ja(v1.1).doc">XE スキン制作マニュアル v1.1 (Japanese, DOC)</a></td>
 				<td>2012-01-04</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-Skin_Manual-ch(v1.1).pdf">XE 皮肤制作指南 v1.1 (Chinese, PDF)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-Skin_Manual-ch(v1.1).pdf">XE 皮肤制作指南 v1.1 (Chinese, PDF)</a></td>
 				<td>2012-04-09</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-Skin_Manual-ch(v1.1).docx">XE 皮肤制作指南 v1.1 (Chinese, DOCX)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-Skin_Manual-ch(v1.1).docx">XE 皮肤制作指南 v1.1 (Chinese, DOCX)</a></td>
 				<td>2012-04-09</td>
 			</tr>
 		</table>
@@ -97,35 +97,35 @@
 				<th scope="col">최근 갱신일</th>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-Dev_Manual-ko(v1.1).pdf">XE 개발자 매뉴얼 v1.1 (Korean, PDF)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-Dev_Manual-ko(v1.1).pdf">XE 개발자 매뉴얼 v1.1 (Korean, PDF)</a></td>
 				<td>2012-01-04</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-Dev_Manual-ko(v1.1).docx">XE 개발자 매뉴얼 v1.1 (Korean, DOCX)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-Dev_Manual-ko(v1.1).docx">XE 개발자 매뉴얼 v1.1 (Korean, DOCX)</a></td>
 				<td>2012-01-04</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-Dev_Manual-en(v1.1).pdf">XE Developer Manual v1.1 (English, PDF)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-Dev_Manual-en(v1.1).pdf">XE Developer Manual v1.1 (English, PDF)</a></td>
 				<td>2012-01-04</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-Dev_Manual-en(v1.1).docx">XE Developer Manual v1.1 (English, DOCX)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-Dev_Manual-en(v1.1).docx">XE Developer Manual v1.1 (English, DOCX)</a></td>
 				<td>2012-01-04</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-Dev_Manual-ja(v1.1).pdf">XE 開発者マニュアル v1.1 (Japanese, PDF)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-Dev_Manual-ja(v1.1).pdf">XE 開発者マニュアル v1.1 (Japanese, PDF)</a></td>
 				<td>2012-01-04</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-Dev_Manual-ja(v1.1).doc">XE 開発者マニュアル v1.1 (Japanese, DOC)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-Dev_Manual-ja(v1.1).doc">XE 開発者マニュアル v1.1 (Japanese, DOC)</a></td>
 				<td>2012-01-04</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-Dev_Manual-ch(v1.1).pdf">XE 开发人员指南 v1.1 (Chinese, PDF)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-Dev_Manual-ch(v1.1).pdf">XE 开发人员指南 v1.1 (Chinese, PDF)</a></td>
 				<td>2012-04-09</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-Dev_Manual-ch(v1.1).docx">XE 开发人员指南 v1.1 (Chinese, DOCX)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-Dev_Manual-ch(v1.1).docx">XE 开发人员指南 v1.1 (Chinese, DOCX)</a></td>
 				<td>2012-04-09</td>
 			</tr>
 		</table>
@@ -139,11 +139,11 @@
 				<th scope="col">최근 갱신일</th>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-1.5-Update-Guide-ko(v1.0).pdf">XE 1.5 업데이트 가이드 v1.0 (Korean, PDF)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-1.5-Update-Guide-ko(v1.0).pdf">XE 1.5 업데이트 가이드 v1.0 (Korean, PDF)</a></td>
 				<td>2012-05-09</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-1.5-Update-Guide-ko(v1.0).docx">XE 1.5 업데이트 가이드 v1.0 (Korean, DOCX)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-1.5-Update-Guide-ko(v1.0).docx">XE 1.5 업데이트 가이드 v1.0 (Korean, DOCX)</a></td>
 				<td>2012-05-09</td>
 			</tr>
 			<tr>
@@ -151,11 +151,11 @@
 				<td>2012-05-10</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-1.5-Cache-Guide-ko(v1.0).pdf">XE 1.5 캐시 설정 가이드 v1.0 (Korean, PDF)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-1.5-Cache-Guide-ko(v1.0).pdf">XE 1.5 캐시 설정 가이드 v1.0 (Korean, PDF)</a></td>
 				<td>2012-05-31</td>
 			</tr>
 			<tr>
-				<td><a href="http://doc.xpressengine.com/manual/XE-1.5-Cache-Guide-ko(v1.0).docx">XE 1.5 캐시 설정 가이드 v1.0 (Korean, DOCX)</a></td>
+				<td><a href="http://www.xpressengine.com/manual/XE-1.5-Cache-Guide-ko(v1.0).docx">XE 1.5 캐시 설정 가이드 v1.0 (Korean, DOCX)</a></td>
 				<td>2012-05-31</td>
 			</tr>
 			<tr>
