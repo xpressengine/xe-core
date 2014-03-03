@@ -53,11 +53,11 @@
 			</tr>
 		</table>
 	</div>
-	<p class="tx">XpressEngine은 위의 구조를 기반으로 Core를 통해 개별 프로그램과 스킨을 실행하여 결과물을 생성합니다.<br />
-	다양한 개성을 가지고 만들어진 프로그램, 스킨의 조합을 통해 다채로운 기능과 다양한 디자인을 가진 웹 사이트를 만들 수 있습니다.</p>
-	<h2 class="h2">오픈 소스 소프트웨어 / 오픈 소스 프로젝트</h2>
-	<p class="tx">XpressEngine과 같은 CMS는 다루어야 할 영역이 너무 방대하기 때문에 특정 기업, 개인 또는 단체가 모든 기능을 개발하고 모든 문제점을 해결하기 힘듭니다. 이러한 한계를 극복하기 위해 XpressEngine은 LGPL v2라는 오픈소스 라이선스를 적용하여 개발자, 디자이너는 물론 사용자와의 협업을 이끌어낼 수 있는 오픈소스 프로젝트로 개발이 진행되고 있습니다. 공식 사이트의 프로젝트 호스팅 서비스를 통해 공개적으로 프로젝트를 운용함으로써 누구나 사용하고 누구나 개발에 참여할 수 있습니다.<br />
-	XpressEngine 프로젝트의 참여에는 제한이 없습니다. 이미 많은 분들이 개발, 디자인, 마크업, 기획 등의 전문 분야는 물론 다국어 번역, 문제점 보고 등  기능 개선 및 문제점 해결을 위해 많은 노력을 해주고 계십니다. 참여를 원하시는 분은 XpressEngine 공식 웹사이트의 개발자 포럼 또는 각 프로그램/ 스킨별 프로젝트 사이트에 방문하시면 됩니다.</p>
+		<p class="tx">XpressEngine은 위의 구조를 기반으로 Core를 통해 개별 프로그램과 스킨을 실행하여 결과물을 생성합니다.<br />
+다양한 개성을 가지고 만들어진 프로그램, 스킨의 조합을 통해 다채로운 기능과 다양한 디자인을 가진 웹 사이트를 만들 수 있습니다.</p>
+	<h2 class="h2"><img src="h2.open.gif" alt="오픈 소스 소프트웨어 / 오픈 소스 프로젝트" width="244" height="24" /></h2>
+	<p class="tx">XpressEngine과 같은 CMS는 다루어야 할 영역이 너무 방대하기 때문에 특정 기업, 개인 또는 단체가 모든 기능을 개발하고 모든 문제점을 해결하기 힘듭니다. 이러한 한계를 극복하기 위해 XpressEngine은 LGPL v2라는 오픈소스 라이선스를 적용하여 개발자, 디자이너는 물론 사용자와의 협업을 이끌어낼 수 있는 오픈소스 프로젝트로 개발이 진행되고 있습니다. <a href="https://github.com/xpressengine" target="_blank">github.com의 프로젝트 페이지</a>를 통해 개발에 참여할 수 있습니다.<br />
+XpressEngine 프로젝트의 참여에는 제한이 없습니다. 이미 많은 분들이 개발, 디자인, 마크업, 기획 등의 전문 분야는 물론 다국어 번역, 문제점 보고 등  기능 개선 및 문제점 해결을 위해 많은 노력을 해주고 계십니다. 참여를 원하시는 분은 XpressEngine 공식 웹사이트의 개발자 포럼 또는 각 프로그램/스킨별 프로젝트 사이트에 방문하시면 됩니다.</p>
 	<h2 class="h2">XE 설치 환경</h2>
 
 	<table border="1" cellspacing="0" class="install">
@@ -71,9 +71,9 @@
 		<tr>
 			<td>
 				<span>&bull;</span> PHP 5.2.4 이상<br />
-				<span>&bull;</span> XML 라이브러리 필수<br />
-				<span>&bull;</span> GD 라이브러리 필수<br />
-				<span>&bull;</span> ICONV 선택
+				<span>&bull;</span> XML 라이브러리 - 필수<br />
+				<span>&bull;</span> GD 라이브러리 - 필수<br />
+				<span>&bull;</span> ICONV - 선택
 			</td>
 			<td style="border-left:1px solid #ebebeb;">
 				<div style="float:left; width:160px;">
@@ -94,8 +94,8 @@
 		<tr>
 			<td>
 				<span>&bull;</span> PHP 4.x ~ 5.x<br />&nbsp;&nbsp;(PHP 5.2.2 버전 제외)<br />
-				<span>&bull;</span> XML 라이브러리 필수<br />
-				<span>&bull;</span> GD 라이브러리 필수<br />
+				<span>&bull;</span> XML 라이브러리 - 필수<br />
+				<span>&bull;</span> GD 라이브러리 - 필수<br />
 				<span>&bull;</span> ICONV 선택
 			</td>
 			<td style="border-left:1px solid #ebebeb;">
