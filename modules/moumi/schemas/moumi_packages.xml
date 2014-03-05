@@ -1,0 +1,4 @@
+<table name="moumi_packages">
+	<column name="package_srl" type="number" size="11" notnull="notnull" primary_key="primary_key" />
+	<column name="include_news" type="varchar" size="1" default="N" />
+</table>

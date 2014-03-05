@@ -1,0 +1,10 @@
+<query id="insertCronResult" action="insert">
+	<tables>
+		<table name="moumi_cron_result" />
+	</tables>
+	<columns>
+		<column name="regdate" var="regdate" notnull="notnull" filter="number" />
+		<column name="result_type" var="result_type" notnull="notnull" />
+		<column name="result" var="result" notnull="notnull" />
+	</columns>
+</query>

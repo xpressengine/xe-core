@@ -1,0 +1,5 @@
+<table name="moumi_cron_result">
+	<column name="regdate" type="number" size="11" notnull="notnull" primary_key="primary_key" />
+	<column name="result_type" type="varchar" size="40" notnull="notnull" primary_key="primary_key" />
+	<column name="result" type="text" />
+</table>

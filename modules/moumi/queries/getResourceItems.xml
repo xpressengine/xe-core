@@ -1,0 +1,15 @@
+<query id="getResurceItems" action="select">
+	<tables>
+		<table name="resource_items" alias="items" />
+	</tables>
+	<columns>
+		<column name="items.*" />
+	</columns>
+	<conditions>
+		<condition operation="equal" column="items.package_srl" var="package_srl" filter="number" notnull="notnull" pipe="and" />
+	</conditions>
+	<navigation>
+		<index var="sort_index" default="list_order" order="asc" />
+		<list_count var="list_count" default="5" />
+	</navigation>
+</query>

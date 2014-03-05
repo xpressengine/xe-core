@@ -88,3 +88,13 @@ form, fieldset{border:0;margin:0;padding:0}
 	text-overflow: ellipsis;
 	width: 90px;
 }
+
+.feedback .fbMeta .profile {
+	width:60px;
+	height:60px;
+	border-radius:100px;
+	background-position:center center;
+}
+.read_footer .sign .pf {
+	border-radius:80px;
+}

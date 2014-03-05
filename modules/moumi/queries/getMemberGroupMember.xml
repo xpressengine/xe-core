@@ -1,0 +1,18 @@
+<query id="getMemberGroupMember" action="select">
+	<tables>
+		<table name="member_group_member" />
+	</tables>
+	<columns>
+		<column name="*" />
+	</columns>
+	<conditions>
+		<condition operation="equal" column="member_srl" var="member_srl" filter="number" pipe="and" />
+		<condition operation="equal" column="group_srl" var="group_srl" pipe="and" />
+		<condition operation="equal" column="site_srl" var="site_srl" pipe="and" />
+		<condition operation="equal" column="regdate" var="regdate" pipe="and" />
+		<condition operation="less" column="regdate" var="less_regdate" pipe="and" />
+		<condition operation="more" column="regdate" var="more_regdate" pipe="and" />
+		<condition operation="in" column="member_srl" var="in_member_srl" pipe="and" />
+		<condition operation="in" column="group_srl" var="in_group_srl" pipe="and" />
+	</conditions>
+</query>

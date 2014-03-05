@@ -1,0 +1,23 @@
+<table cellspacing="0" class="rowTable">
+<tr>
+	<th>{$lang->no}</th>
+	<th>{$lang->title}</th>
+	<th>{$lang->nick_name}</th>
+	<th>&nbsp;</th>
+</tr>
+<tr loop="$package_list => $no, $package">
+	<td>{$no}</td>
+	<td><a href="{$package->url}" target="_blank">{$package->title}</a></td>
+	<td>{$package->nick_name}</td>
+	<td><span class="button"><button onclick="selectPackage({$package->package_srl}, '{$package->title}'); return false">{$lang->cmd_select}</button></span></td>
+</tr>
+</table>
+
+<div class="pagination a1">
+	<a href="#" onclick="searchResultPage(1, '{$keyword}'); return false;" class="prevEnd">{$lang->first_page}</a>
+	<!--@while($page_no = $navigation->getNextPage())-->
+		<strong cond="$page == $page_no">{$page_no}</strong>
+		<a cond="$page != $page_no" href="#" onclick="searchResultPage({$page_no}, '{$keyword}'); return false;">{$page_no}</a>
+	<!--@end-->
+	<a href="#" onclick="searchResultPage({$navigation->last_page}, '{$keyword}'); return false;" class="nextEnd">{$lang->last_page}</a>
+</div>

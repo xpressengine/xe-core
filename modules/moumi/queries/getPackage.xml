@@ -1,0 +1,15 @@
+<query id="getPackage" action="select">
+	<tables>
+		<table name="resource_packages" alias="p" />
+		<table name="moumi_packages" alias="m" />
+	</tables>
+	<columns>
+		<column name="p.package_srl" alias="package_srl" />
+		<column name="p.title" alias="title" />
+		<column name="m.include_news" alias="include_news" />
+	</columns>
+	<conditions>
+		<condition operation="equal" column="m.package_srl" var="package_srl" notnull="notnull" filter="number" />
+		<condition operation="equal" column="p.package_srl" default="m.package_srl" pipe="and" />
+	</conditions>
+</query>

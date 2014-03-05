@@ -1,0 +1,31 @@
+<query id="getStatisticsPackage" action="select">
+	<tables>
+		<table name="resource_packages" alias="package" />
+		<table name="document_categories" alias="category" />
+	</tables>
+	<columns>
+		<column name="category.title" alias="category_title" />
+		<column name="package.category_srl" alias="category_srl" />
+		<column name="count(*)" alias="count" />
+	</columns>
+	<conditions>
+		<condition operation="equal" column="category.category_srl" default="package.category_srl" notnull="notnull" pipe="and" />
+		<query operation="in" column="package.package_srl" notnull="notnull" pipe="and">
+			<tables>
+				<table name="resource_items" alias="items" />
+			</tables>
+			<columns>
+				<column name="package_srl" />
+			</columns>
+			<conditions>
+				<condition operation="equal" column="module_srl" var="module_srl" />
+			</conditions>
+			<groups>
+				<group column="package_srl" />
+			</groups>
+		</query>
+	</conditions>
+	<groups>
+		<group column="package.category_srl" />
+	</groups>
+</query>

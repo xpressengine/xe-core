@@ -1,0 +1,34 @@
+<load target="filter/insert_package.xml" />
+
+<include target="header.html" />
+
+<h4 class="xeAdmin">{$lang->cmd_insert_package}</h4>
+
+<form action="./" method="post" onsubmit="return procFilter(this, insert_package);">
+<table cellspacing="0" class="rowTable">
+<tr>
+	<th width="150">{$lang->select_package}</th>
+	<td>
+		<p id="package_select_result" style="display: none;"|cond="!$package_info">{$package_info->title}</p>
+		<input type="hidden" name="package_srl" value="{$package_info->package_srl}"/>
+		<block cond="!$package_info">
+			<input id="package_search_keyword" />
+			<span class="button"><button class="button" id="package_search_button">{$lang->cmd_search}</button></span>
+			<div id="package_search_result"></div>
+		</block>
+	</td>
+</tr>
+<tr>
+	<th>{$lang->is_include_news}</th>
+	<td>
+		<input type="checkbox" name="include_news" id="include_news" value="Y" checked="checked"|cond="$package_info->include_news == 'Y'" />
+		<label for="include_news">{$lang->include_news}</label>
+	</td>
+</tr>
+</table>
+
+<div class="fr">
+	<span class="button black"><input type="submit" value="{$lang->cmd_insert}"|cond="!$package_info" value="{$lang->cmd_modify}"|cond="$package_info" /></span>
+</div>
+
+</form>

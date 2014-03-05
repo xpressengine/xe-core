@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+	<grants />
+	<permissions />
+	<actions>
+		<action name="dispMoumiAdminIndex" type="view" admin_index="true" />
+		<action name="dispMoumiAdminInsertPackage" type="view" />
+
+		<action name="procMoumiAdminInsertPackage" type="controller" />
+		<action name="procMoumiAdminDeletePackage" type="controller" />
+
+		<action name="searchPackageList" type="model" />
+
+		<action name="getStatistics" type="api" />
+		<action name="getNews" type="api" />
+		<action name="getCronResultPormotion" type="api" />
+	</actions>
+</module>

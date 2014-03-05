@@ -1,0 +1,16 @@
+<query id="getCronResult" action="select">
+	<tables>
+		<table name="moumi_cron_result" />
+	</tables>
+	<columns>
+		<column name="*" />
+	</columns>
+	<conditions>
+		<condition operation="equal" column="result_type" var="result_type" pipe="and" />
+		<condition operation="in" column="result_type" var="in_result_type" pipe="and" />
+		<condition operation="equal" column="regdate" var="regdate" pipe="and" />
+		<condition operation="less" column="regdate" var="less_regdate" pipe="and" />
+		<condition operation="more" column="regdate" var="more_regdate" pipe="and" />
+		<condition operation="like_prefix" column="regdate" var="like_regdate" pipe="and" />
+	</conditions>
+</query>

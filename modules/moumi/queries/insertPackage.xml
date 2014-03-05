@@ -1,0 +1,9 @@
+<query id="insertPackage" action="insert">
+	<tables>
+		<table name="moumi_packages" />
+	</tables>
+	<columns>
+		<column name="package_srl" var="package_srl" notnull="notnull" filter="number" />
+		<column name="include_news" var="include_news" default="N" />
+	</columns>
+</query>

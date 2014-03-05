@@ -1,0 +1,29 @@
+<include target="header.html" />
+
+<h4 class="xeAdmin">{$lang->package}</h4>
+
+<table cellspacing="0" class="rowTable">
+<thead>
+<tr>
+	<th>{$lang->no}</th>
+	<th>{$lang->package_name}</th>
+	<th>{$lang->is_include_news}</th>
+	<th>{$lang->cmd_management}</th>
+</tr>
+</thead>
+<tbody>
+<tr loop="$package_list => $no, $package">
+	<td>{$no}</td>
+	<td>{$package->title}</td>
+	<td>{$package->include_news}</td>
+	<td>
+		<a href="{getUrl('act', 'dispMoumiAdminInsertPackage', 'package_srl', $package->package_srl)}" class="button"><span>{$lang->cmd_modify}</span></a>
+		<a href="#" onclick="deletePackage({$package->package_srl}); return false;" class="button"><span>{$lang->cmd_delete}</span></a>
+	</td>
+</tr>
+</tbody>
+</table>
+
+<div class="fr">
+	<a href="{getUrl('act', 'dispMoumiAdminInsertPackage', 'package_srl', '')}" class="button"><span>{$lang->cmd_insert_package}</span></a>
+</div>

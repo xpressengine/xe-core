@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="0.2">
+	<title xml:lang="ko">모우미</title>
+	<title xml:lang="en">Moumi</title>
+	<description xml:lang="ko">이 모듈은 각종 통계를 모아 제공합니다.</description>
+	<version>1.0</version>
+	<date>2011-07-18</date>
+	<category>accessory</category>
+
+	<author email_address="developers@xpressengine.com" link="http://xpressengine.com/">
+		<name xml:lang="ko">NAVER</name>
+	</author>
+</module>
