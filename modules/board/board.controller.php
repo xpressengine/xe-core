@@ -449,7 +449,7 @@ class boardController extends board
 		}
 
 		//search
-		$url = getUrl('','mid',$mid,'search_target','nick_name','search_keyword',$member_info->nick_name);
+		$url = getUrl('','mid',$mid,'search_target','member_srl','search_keyword',$member_info->member_srl);
 		$oMemberController = getController('member');
 		$oMemberController->addMemberPopupMenu($url, 'cmd_view_own_document', '');
 
