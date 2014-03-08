@@ -162,6 +162,10 @@
 				<value xml:lang="tr"><![CDATA[Etiketler]]></value>
 				<value xml:lang="vi"><![CDATA[Tag]]></value>
 			</item>
+			<item name="member_srl">
+				<value xml:lang="ko"><![CDATA[회원번호]]></value>
+				<value xml:lang="en"><![CDATA[Member number]]></value>
+			</item>
 		</item>
 		<item name="trackback" type="array">
 			<item name="url">
