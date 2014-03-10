@@ -319,7 +319,7 @@ class moumiAdminController extends moumi
 		$content = $this->getReadableText($content);
 		if(!$content)
 			return "";
-		return mb_strlen($content, 0, 20, "utf-8");
+		return mb_substr($content, 0, 20, "utf-8");
 	}
 
 	function getReadableText($content)
