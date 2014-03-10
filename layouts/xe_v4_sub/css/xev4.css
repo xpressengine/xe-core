@@ -1,0 +1,58 @@
+body,
+#page-container {
+	background: #FFF;
+}
+body {
+	font-family: "Helvetica Neue", "Apple SD 산돌고딕 Neo", "Apple SD Gothic Neo", "나눔고딕", "Nanum Gothic", "돋움", "Dotum", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+	font-family: inherit;
+}
+
+.row.row-full-top {
+	margin: -20px -20px 0;
+}
+.row.row-full {
+	margin: 0 -20px;
+}
+
+
+
+/* manual */
+.manual {
+	margin:0 0 30px;
+}
+.manual .dList {
+	border: 0;
+	border-top: 2px solid #999;
+	width: 100%;
+}
+.manual .dList a {
+	text-decoration: none;
+}
+.manual .dList a:hover,
+.manual .dList a:active,
+.manual .dList a:focus {
+	text-decoration: underline;
+}
+.manual .dList th,
+.manual .dList td {
+	border: 0;
+	border-bottom: 1px solid #ddd;
+	padding: 7px 10px;
+}
+.manual .dList th {
+	text-align: left;
+}
+.manual .dList td {
+
+}
+
+
+header.navbar-inverse.navbar-fixed-top {
+	box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
+	opacity: 0.95;
+	border-color: #AAAAAA;
+}

@@ -1,0 +1,153 @@
+<load target="css/bootstrap.min.css" />
+<load target="css/plugins.css" />
+<load target="css/main.css" />
+<load target="css/themes.css" />
+<load target="css/themes/night.css" />
+<load target="css/xev4.css" />
+<load target="js/vendor/modernizr-2.7.1-respond-1.4.2.min.js" />
+
+<div id="page-container" class="header-fixed-top style-alt">
+	<!-- Main Container -->
+	<div id="main-container" class="container">
+		<header class="navbar navbar-inverse navbar-fixed-top themed-background-night" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="./"><img src="img/bi.png" alt="XpressEngine"></a>
+				</div>
+
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						{@$m=1;}
+						<li loop="$main_menu->list=>$key1,$val1" class="<!--@if($val1['list'])-->dropdown<!--@endif-->">
+							<a href="{$val1['href']}" class="<!--@if($val1['selected'])-->active<!--@endif--> <!--@if($val1['list'])-->dropdown-toggle<!--@endif-->" data-toggle="dropdown"|cond="$val1['list']">{$val1['link']} <b cond="$val1['list']" class="caret"></b></a>
+							<ul class="dropdown-menu" cond="$val1['list']">
+								{@$s=1;}
+								<li loop="$val1['list']=>$key2,$val2" class="s{$s++}">
+									<a href="{$val2['href']}" cond="$val2['text']" class="active"|cond="$val2['selected']">{$val2['link']}</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</header>
+		<!-- END Header -->
+
+		<!-- Page content -->
+		<div id="page-content">
+			<div class="pull-right">
+				<ol class="breadcrumb">
+					<li><a href="javascript:void(0)"><i class="fa fa-home"></i></a></li>
+					<li><a href="javascript:void(0)">Profile</a></li>
+					<li><a href="javascript:void(0)">Settings</a></li>
+				</ol>
+			</div>
+
+			{$content}
+
+		</div>
+		<!-- END Page Content -->
+
+		<!-- Footer -->
+		<footer class="clearfix">
+
+			<div class="pull-left">
+				<span id="year-copy"></span> &copy; <a href="http://goo.gl/TDOSuC" target="_blank">ProUI 1.1</a>
+			</div>
+			<div>
+				<ul>
+					<li><a href="#">개인정보보호취급방침</a></li>
+					<li><a href="#">커뮤니티운영규칙</a></li>
+					<li><a href="#">공지사항</a></li>
+				</ul>
+			</div>
+			<div class="pull-right">
+				Crafted with <i class="fa fa-heart text-danger"></i> by <a href="http://goo.gl/vNS3I" target="_blank">pixelcave</a>
+			</div>
+		</footer>
+		<!-- END Footer -->
+	</div>
+	<!-- END Main Container -->
+</div>
+<!-- END Page Container -->
+
+<!-- Scroll to top link, initialized in js/app.js - scrollToTop() -->
+<a href="#" id="to-top"><i class="fa fa-angle-double-up"></i></a>
+
+<!-- User Settings, modal which opens from Settings link (found in top right user menu) and the Cog link (found in sidebar user info) -->
+<div id="modal-user-settings" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal Header -->
+			<div class="modal-header text-center">
+				<h2 class="modal-title"><i class="fa fa-pencil"></i> Settings</h2>
+			</div>
+			<!-- END Modal Header -->
+
+			<!-- Modal Body -->
+			<div class="modal-body">
+				<form action="index.html" method="post" enctype="multipart/form-data" class="form-horizontal form-bordered" onsubmit="return false;">
+					<fieldset>
+						<legend>Vital Info</legend>
+						<div class="form-group">
+							<label class="col-md-4 control-label">Username</label>
+							<div class="col-md-8">
+								<p class="form-control-static">Admin</p>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-4 control-label" for="user-settings-email">Email</label>
+							<div class="col-md-8">
+								<input type="email" id="user-settings-email" name="user-settings-email" class="form-control" value="admin@example.com">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-4 control-label" for="user-settings-notifications">Email Notifications</label>
+							<div class="col-md-8">
+								<label class="switch switch-primary">
+									<input type="checkbox" id="user-settings-notifications" name="user-settings-notifications" value="1" checked>
+									<span></span>
+								</label>
+							</div>
+						</div>
+					</fieldset>
+					<fieldset>
+						<legend>Password Update</legend>
+						<div class="form-group">
+							<label class="col-md-4 control-label" for="user-settings-password">New Password</label>
+							<div class="col-md-8">
+								<input type="password" id="user-settings-password" name="user-settings-password" class="form-control" placeholder="Please choose a complex one..">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-4 control-label" for="user-settings-repassword">Confirm New Password</label>
+							<div class="col-md-8">
+								<input type="password" id="user-settings-repassword" name="user-settings-repassword" class="form-control" placeholder="..and confirm it!">
+							</div>
+						</div>
+					</fieldset>
+					<div class="form-group form-actions">
+						<div class="col-xs-12 text-right">
+							<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-sm btn-primary">Save Changes</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!-- END Modal Body -->
+		</div>
+	</div>
+</div>
+<!-- END User Settings -->
+
+<!-- Remember to include excanvas for IE8 chart support -->
+<!--[if IE 8]><script src="js/helpers/excanvas.min.js"></script><![endif]-->
+
+<!-- Bootstrap.js, Jquery plugins and Custom JS code -->
+<script src="js/vendor/bootstrap.min.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/app.js"></script>
+
+<!-- Load and execute javascript code used only in this page -->
+<script src="js/pages/index.js"></script>
+<script>jQuery(function(){ Index.init(); });</script>
