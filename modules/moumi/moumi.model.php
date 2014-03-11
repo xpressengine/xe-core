@@ -63,17 +63,24 @@ class moumiModel extends moumi
 
 	function getStatistics()
 	{
+		$cond_major = new stdClass;
+		$cond_major->module_srl_list = '121,122,19433087,19778968';
+		// 121=tip,122=qna,19433087=devForum,19778968=userForum
 		$package = $this->getPackageStatistics();
 		$document = (int)$this->getDocumentStatistics();
+		$document_major = (int)$this->getDocumentStatistics($cond_major);
 		$comment = (int)$this->getCommentStatistics();
+		$comment_major = (int)$this->getCommentStatistics($cond_major);
 		$member = (int)$this->getMemberStatistics();
 		$location = $this->getLocationInfo();
 
 		$result = new stdClass;
 		$result->packages = $package->package;
-		$result->count_package = $package->count_packages;
 		$result->document_count = $document;
+		$result->document_major_count = $document_major;
 		$result->comment_count = $comment;
+		$result->comment_major_count = $comment_major;
+		$result->count_package = $package->count_packages;
 		$result->member_count = $member;
 		$result->location_info = $location;
 
@@ -154,11 +161,12 @@ class moumiModel extends moumi
 		return $result;
 	}
 
-	function getDocumentStatistics()
+	function getDocumentStatistics($args = null)
 	{
 		// $target_date = date('Ymd', strtotime('-1 day'));
 
-		// $cond = new stdClass();
+		$cond = new stdClass();
+		if($args->module_srl_list) $cond->module_srl_list = $args->module_srl_list;
 		// $cond->start_date = $target_date . '000000';
 		// $cond->end_date = $target_date . '595959';
 		$output = executeQuery('moumi.getDocumentCount', $cond);
@@ -166,11 +174,12 @@ class moumiModel extends moumi
 		return $output->data->count;
 	}
 
-	function getCommentStatistics()
+	function getCommentStatistics($args = null)
 	{
 		// $target_date = date('Ymd', strtotime('-1 day'));
 
-		// $cond = new stdClass();
+		$cond = new stdClass();
+		if($args->module_srl_list) $cond->module_srl_list = $args->module_srl_list;
 		// $cond->start_date = $target_date . '000000';
 		// $cond->end_date = $target_date . '595959';
 		$output = executeQuery('moumi.getCommentCount', $cond);
