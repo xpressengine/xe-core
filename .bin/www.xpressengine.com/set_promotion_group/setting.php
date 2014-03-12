@@ -5,7 +5,7 @@
  */
 
 $searchDay = 7;	// 게시물 대상 날짜 ( 동작 날짜 부터  $searchDay 이전 날짜 까지 검색 ) 
-$searchDocuments = array('tip','serverClass','phpClass','htmlCssClass','jsClass','designClass');	// document module_srl
+$searchDocuments = array('tip','tiptech_server','tiptech_php','tiptech_ui');	// document module_srl
 $searchComments = array('qna'); 	// comment module_srl
 
 $checkDocumentWordCount = 10;	// documents의content 글자 수 체크
