@@ -14,8 +14,8 @@ if ($called_position == 'before_module_init' && $_REQUEST['act'] == 'api') {
 	$result->message = 'failed';
 	$result->data = null;
 
-	if ($vars->resource == 'member_info') {
-		$email = base64_decode($vars->email);
+	if ($_REQUEST['resource'] == 'member_info') {
+		$email = base64_decode($_REQUEST['email']);
 		$iv_dec = substr($email, 0, $iv_size);
 		$email = substr($email, $iv_size);
 		$email = trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $email, MCRYPT_MODE_CBC, $iv_dec));
@@ -25,7 +25,7 @@ if ($called_position == 'before_module_init' && $_REQUEST['act'] == 'api') {
 		if (!$member_info) {
 			$result->message = 'not_exists_member';
 		} else {
-			$password = base64_decode($vars->password);
+			$password = base64_decode($_REQUEST['password']);
 			$iv_dec = substr($password, 0, $iv_size);
 			$password = substr($password, $iv_size);
 			$password = trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $password, MCRYPT_MODE_CBC, $iv_dec));
