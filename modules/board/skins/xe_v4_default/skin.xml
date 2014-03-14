@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+	<title xml:lang="ko">XE V4 Default</title>
+	<version>1.0</version>
+	<date>2014-03-13</date>
+	<author email_address="developers@xpressengine.com" link="http://xpressengine.com/">
+		<name xml:lang="ko">NAVER</name>
+	</author>
+	<license>LGPL v2</license>
+</skin>
+
