@@ -79,3 +79,18 @@ header.navbar-inverse.navbar-fixed-top {
 	box-sizing: content-box;
 }
 
+#member-menu-container {
+	width: 300px;
+}
+
+.ncenter-notification img {
+	border:1px solid #DDD;
+}
+
+.ncenter-notification > li  a {
+	color:#333;
+}
+
+.ncenter-notification p {
+	margin:0;
+}
