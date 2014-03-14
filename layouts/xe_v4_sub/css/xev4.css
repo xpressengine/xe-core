@@ -2,15 +2,22 @@ body,
 #page-container {
 	background: #FFF;
 }
-body {
+body, table, input, textarea, select, button {
 	font-family: "Helvetica Neue", "Apple SD 산돌고딕 Neo", "Apple SD Gothic Neo", "나눔고딕", "Nanum Gothic", "돋움", "Dotum", Helvetica, Arial, sans-serif;
+}
+body {
 	font-size: 14px;
 }
-
+table, input, textarea, select, button {
+	font-size: inherit;
+}
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 	font-family: inherit;
 }
 
+.input-group-addon select {
+	font-size: 11px;
+}
 .row.row-full-top {
 	margin: -20px -20px 0;
 }
@@ -56,3 +63,19 @@ header.navbar-inverse.navbar-fixed-top {
 	opacity: 0.95;
 	border-color: #AAAAAA;
 }
+
+
+.xeofficial-page-content-about .block dt {
+	margin-top: 15px;
+}
+
+.x *,
+.control-group button,
+.control-group select,
+.control-group input {
+	-webkit-box-sizing: content-box;
+	-o-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+}
+

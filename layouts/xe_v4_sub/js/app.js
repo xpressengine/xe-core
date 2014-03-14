@@ -11,15 +11,15 @@
 var App = function() {
 
     /* Cache variables of some often used jquery objects */
-    var page            = $('#page-container');
-    var pageContent     = $('#page-content');
-    var header          = $('header');
-    var footer          = $('#page-content + footer');
+    var page            = jQuery('#page-container');
+    var pageContent     = jQuery('#page-content');
+    var header          = jQuery('header');
+    var footer          = jQuery('#page-content + footer');
 
     /* Sidebar */
-    var sidebar         = $('#sidebar');
-    var sidebarAlt      = $('#sidebar-alt');
-    var sScroll         = $('.sidebar-scroll');
+    var sidebar         = jQuery('#sidebar');
+    var sidebarAlt      = jQuery('#sidebar-alt');
+    var sScroll         = jQuery('.sidebar-scroll');
 
     /* Initialization UI Code */
     var uiInit = function() {
@@ -38,30 +38,30 @@ var App = function() {
 
         // Resize #page-content to fill empty space if exists (also add it to resize and orientationchange events)
         resizePageContent();
-        $(window).resize(function(){ resizePageContent(); });
-        $(window).bind('orientationchange', resizePageContent);
+        jQuery(window).resize(function(){ resizePageContent(); });
+        jQuery(window).bind('orientationchange', resizePageContent);
 
         // Add the correct copyright year at the footer
-        var yearCopy = $('#year-copy'), d = new Date();
+        var yearCopy = jQuery('#year-copy'), d = new Date();
         if (d.getFullYear() === 2014) { yearCopy.html('2014'); } else { yearCopy.html('2014-' + d.getFullYear().toString().substr(2,2)); }
 
         // Initialize chat demo functionality (in sidebar)
         chatUi();
 
         // Initialize tabs
-        $('[data-toggle="tabs"] a, .enable-tabs a').click(function(e){ e.preventDefault(); $(this).tab('show'); });
+        jQuery('[data-toggle="tabs"] a, .enable-tabs a').click(function(e){ e.preventDefault(); jQuery(this).tab('show'); });
 
         // Initialize Tooltips
-        $('[data-toggle="tooltip"], .enable-tooltip').tooltip({container: 'body', animation: false});
+        jQuery('[data-toggle="tooltip"], .enable-tooltip').tooltip({container: 'body', animation: false});
 
         // Initialize Popovers
-        $('[data-toggle="popover"], .enable-popover').popover({container: 'body', animation: true});
+        jQuery('[data-toggle="popover"], .enable-popover').popover({container: 'body', animation: true});
 
         // Initialize single image lightbox
-        $('[data-toggle="lightbox-image"]').magnificPopup({type: 'image', image: {titleSrc: 'title'}});
+        jQuery('[data-toggle="lightbox-image"]').magnificPopup({type: 'image', image: {titleSrc: 'title'}});
 
         // Initialize image gallery lightbox
-        $('[data-toggle="lightbox-gallery"]').magnificPopup({
+        jQuery('[data-toggle="lightbox-gallery"]').magnificPopup({
             delegate: 'a.gallery-link',
             type: 'image',
             gallery: {
@@ -76,37 +76,37 @@ var App = function() {
         });
 
         // Initialize Editor
-        // $('.textarea-editor').wysihtml5();
+        // jQuery('.textarea-editor').wysihtml5();
 
         // Initialize Chosen
-        $('.select-chosen').chosen({width: "100%"});
+        jQuery('.select-chosen').chosen({width: "100%"});
 
         // Initiaze Slider for Bootstrap
-        $('.input-slider').slider();
+        jQuery('.input-slider').slider();
 
         // Initialize Tags Input
-        $('.input-tags').tagsInput({ width: 'auto', height: 'auto'});
+        jQuery('.input-tags').tagsInput({ width: 'auto', height: 'auto'});
 
         // Initialize Datepicker
-        $('.input-datepicker, .input-daterange').datepicker({weekStart: 1});
-        $('.input-datepicker-close').datepicker({weekStart: 1}).on('changeDate', function(e){ $(this).datepicker('hide'); });
+        jQuery('.input-datepicker, .input-daterange').datepicker({weekStart: 1});
+        jQuery('.input-datepicker-close').datepicker({weekStart: 1}).on('changeDate', function(e){ jQuery(this).datepicker('hide'); });
 
         // Initialize Timepicker
-        $('.input-timepicker').timepicker({minuteStep: 1,showSeconds: true,showMeridian: true});
-        $('.input-timepicker24').timepicker({minuteStep: 1,showSeconds: true,showMeridian: false});
+        jQuery('.input-timepicker').timepicker({minuteStep: 1,showSeconds: true,showMeridian: true});
+        jQuery('.input-timepicker24').timepicker({minuteStep: 1,showSeconds: true,showMeridian: false});
 
         // Easy Pie Chart
-        $('.pie-chart').easyPieChart({
-            barColor: $(this).data('bar-color') ? $(this).data('bar-color') : '#777777',
-            trackColor: $(this).data('track-color') ? $(this).data('track-color') : '#eeeeee',
-            lineWidth: $(this).data('line-width') ? $(this).data('line-width') : 3,
-            size: $(this).data('size') ? $(this).data('size') : '80',
+        jQuery('.pie-chart').easyPieChart({
+            barColor: jQuery(this).data('bar-color') ? jQuery(this).data('bar-color') : '#777777',
+            trackColor: jQuery(this).data('track-color') ? jQuery(this).data('track-color') : '#eeeeee',
+            lineWidth: jQuery(this).data('line-width') ? jQuery(this).data('line-width') : 3,
+            size: jQuery(this).data('size') ? jQuery(this).data('size') : '80',
             animate: 800,
             scaleColor: false
         });
 
         // Initialize Placeholder
-        $('input, textarea').placeholder();
+        jQuery('input, textarea').placeholder();
     };
 
     /* Sidebar Navigation functionality */
@@ -117,13 +117,13 @@ var App = function() {
         var downSpeed   = 250;
 
         // Get all vital links
-        var allTopLinks     = $('.sidebar-nav a');
-        var menuLinks       = $('.sidebar-nav-menu');
-        var submenuLinks    = $('.sidebar-nav-submenu');
+        var allTopLinks     = jQuery('.sidebar-nav a');
+        var menuLinks       = jQuery('.sidebar-nav-menu');
+        var submenuLinks    = jQuery('.sidebar-nav-submenu');
 
         // Primary Accordion functionality
         menuLinks.click(function(){
-            var link = $(this);
+            var link = jQuery(this);
 
             if (link.parent().hasClass('active') !== true) {
                 if (link.hasClass('open')) {
@@ -133,7 +133,7 @@ var App = function() {
                     setTimeout(resizePageContent, upSpeed);
                 }
                 else {
-                    $('.sidebar-nav-menu.open').removeClass('open').next().slideUp(upSpeed);
+                    jQuery('.sidebar-nav-menu.open').removeClass('open').next().slideUp(upSpeed);
                     link.addClass('open').next().slideDown(downSpeed);
 
                     // Resize #page-content to fill empty space if exists
@@ -146,7 +146,7 @@ var App = function() {
 
         // Submenu Accordion functionality
         submenuLinks.click(function(){
-            var link = $(this);
+            var link = jQuery(this);
 
             if (link.parent().hasClass('active') !== true) {
                 if (link.hasClass('open')) {
@@ -179,9 +179,9 @@ var App = function() {
             // Close the other sidebar if we hover over a partial one
             // In smaller screens (the same applies to resized browsers) two visible sidebars
             // could mess up our main content (not enough space), so we hide the other one :-)
-            $('.sidebar-partial #sidebar')
+            jQuery('.sidebar-partial #sidebar')
                 .mouseenter(function(){ handleSidebar('close-sidebar-alt'); });
-            $('.sidebar-alt-partial #sidebar-alt')
+            jQuery('.sidebar-alt-partial #sidebar-alt')
                 .mouseenter(function(){ handleSidebar('close-sidebar'); });
         } else {
             var windowW = window.innerWidth
@@ -268,11 +268,11 @@ var App = function() {
             else if (mode == 'sidebar-scroll') { // Init sidebars scrolling
                 if (sScroll.length && (!sScroll.parent('.slimScrollDiv').length)) {
                     // Initialize Slimscroll plugin on both sidebars
-                    sScroll.slimScroll({ height: $(window).height(), color: '#fff', size: '3px', touchScrollStep: 100 });
+                    sScroll.slimScroll({ height: jQuery(window).height(), color: '#fff', size: '3px', touchScrollStep: 100 });
 
                     // Resize sidebars scrolling height on window resize or orientation change
-                    $(window).resize(sidebarScrollResize);
-                    $(window).bind('orientationchange', sidebarScrollResizeOrient);
+                    jQuery(window).resize(sidebarScrollResize);
+                    jQuery(window).bind('orientationchange', sidebarScrollResizeOrient);
                 }
             }
         }
@@ -281,12 +281,12 @@ var App = function() {
     };
 
     // Sidebar Scrolling Resize Height on window resize and orientation change
-    var sidebarScrollResize         = function() { sScroll.css('height', $(window).height()); };
-    var sidebarScrollResizeOrient   = function() { setTimeout(sScroll.css('height', $(window).height()), 500); };
+    var sidebarScrollResize         = function() { sScroll.css('height', jQuery(window).height()); };
+    var sidebarScrollResizeOrient   = function() { setTimeout(sScroll.css('height', jQuery(window).height()), 500); };
 
     /* Resize #page-content to fill empty space if exists */
     var resizePageContent = function() {
-        var windowH         = $(window).height();
+        var windowH         = jQuery(window).height();
         var sidebarH        = sidebar.outerHeight();
         var sidebarAltH     = sidebarAlt.outerHeight();
         var headerH         = header.outerHeight();
@@ -311,14 +311,14 @@ var App = function() {
     /* Scroll to top functionality */
     var scrollToTop = function() {
         // Get link
-        var link = $('#to-top');
+        var link = jQuery('#to-top');
         var windowW = window.innerWidth
                         || document.documentElement.clientWidth
                         || document.body.clientWidth;
 
-        $(window).scroll(function() {
+        jQuery(window).scroll(function() {
             // If the user scrolled a bit (150 pixels) show the link in large resolutions
-            if (($(this).scrollTop() > 150) && (windowW > 991)) {
+            if ((jQuery(this).scrollTop() > 150) && (windowW > 991)) {
                 link.fadeIn(100);
             } else {
                 link.fadeOut(100);
@@ -327,24 +327,24 @@ var App = function() {
 
         // On click get to top
         link.click(function() {
-            $('html, body').animate({scrollTop: 0}, 400);
+            jQuery('html, body').animate({scrollTop: 0}, 400);
             return false;
         });
     };
 
     /* Demo chat functionality (in sidebar) */
     var chatUi = function() {
-        var chatUsers       = $('.chat-users');
-        var chatTalk        = $('.chat-talk');
-        var chatMessages    = $('.chat-talk-messages');
-        var chatInput       = $('#sidebar-chat-message');
+        var chatUsers       = jQuery('.chat-users');
+        var chatTalk        = jQuery('.chat-talk');
+        var chatMessages    = jQuery('.chat-talk-messages');
+        var chatInput       = jQuery('#sidebar-chat-message');
         var chatMsg         = '';
 
         // Initialize scrolling on chat talk list
-        $('.chat-talk-messages').slimScroll({ height: 210, color: '#fff', size: '3px', position: 'left', touchScrollStep: 100 });
+        jQuery('.chat-talk-messages').slimScroll({ height: 210, color: '#fff', size: '3px', position: 'left', touchScrollStep: 100 });
 
         // If a chat user is clicked show the chat talk
-        $('a', chatUsers).click(function(){
+        jQuery('a', chatUsers).click(function(){
             chatUsers.slideUp();
             chatTalk.slideDown();
 
@@ -352,7 +352,7 @@ var App = function() {
         });
 
         // If chat talk close button is clicked show the chat user list
-        $('#chat-talk-close-btn').click(function(){
+        jQuery('#chat-talk-close-btn').click(function(){
             chatTalk.slideUp();
             chatUsers.slideDown();
 
@@ -360,14 +360,14 @@ var App = function() {
         });
 
         // When the chat message form is submitted
-        $('#sidebar-chat-form').submit(function(e){
+        jQuery('#sidebar-chat-form').submit(function(e){
             // Get text from message input
             chatMsg = chatInput.val();
 
             // If the user typed a message
             if (chatMsg) {
                 // Add it to the message list
-                chatMessages.append('<li class="chat-talk-msg chat-talk-msg-highlight themed-border animation-slideLeft">' + $('<div />').text(chatMsg).html() + '</li>');
+                chatMessages.append('<li class="chat-talk-msg chat-talk-msg-highlight themed-border animation-slideLeft">' + jQuery('<div />').text(chatMsg).html() + '</li>');
 
                 // Scroll the message list to the bottom
                 chatMessages.animate({ scrollTop: chatMessages[0].scrollHeight}, 500);
@@ -386,45 +386,45 @@ var App = function() {
         /*
          * Color Themes
          */
-        var colorList = $('.sidebar-themes');
-        var themeLink = $('#theme-link');
+        var colorList = jQuery('.sidebar-themes');
+        var themeLink = jQuery('#theme-link');
         var theme;
 
         if (themeLink.length) {
             theme = themeLink.attr('href');
 
-            $('li', colorList).removeClass('active');
-            $('a[data-theme="' + theme + '"]', colorList).parent('li').addClass('active');
+            jQuery('li', colorList).removeClass('active');
+            jQuery('a[data-theme="' + theme + '"]', colorList).parent('li').addClass('active');
         }
 
-        $('a', colorList).click(function(e){
+        jQuery('a', colorList).click(function(e){
             // Get theme name
-            theme = $(this).data('theme');
+            theme = jQuery(this).data('theme');
 
-            $('li', colorList).removeClass('active');
-            $(this).parent('li').addClass('active');
+            jQuery('li', colorList).removeClass('active');
+            jQuery(this).parent('li').addClass('active');
 
             if (theme === 'default') {
                 if (themeLink.length) {
                     themeLink.remove();
-                    themeLink = $('#theme-link');
+                    themeLink = jQuery('#theme-link');
                 }
             } else {
                 if (themeLink.length) {
                     themeLink.attr('href', theme);
                 } else {
-                    $('link[href="css/themes.css"]').before('<link id="theme-link" rel="stylesheet" href="' + theme + '">');
-                    themeLink = $('#theme-link');
+                    jQuery('link[href="css/themes.css"]').before('<link id="theme-link" rel="stylesheet" href="' + theme + '">');
+                    themeLink = jQuery('#theme-link');
                 }
             }
         });
 
         // Prevent template options dropdown from closing on clicking options
-        $('.dropdown-options a').click(function(e){ e.stopPropagation(); });
+        jQuery('.dropdown-options a').click(function(e){ e.stopPropagation(); });
 
         /* Page Style */
-        var optMainStyle        = $('#options-main-style');
-        var optMainStyleAlt     = $('#options-main-style-alt');
+        var optMainStyle        = jQuery('#options-main-style');
+        var optMainStyleAlt     = jQuery('#options-main-style-alt');
 
         if (page.hasClass('style-alt')) {
             optMainStyleAlt.addClass('active');
@@ -434,21 +434,21 @@ var App = function() {
 
         optMainStyle.click(function() {
             page.removeClass('style-alt');
-            $(this).addClass('active');
+            jQuery(this).addClass('active');
             optMainStyleAlt.removeClass('active');
         });
 
         optMainStyleAlt.click(function() {
             page.addClass('style-alt');
-            $(this).addClass('active');
+            jQuery(this).addClass('active');
             optMainStyle.removeClass('active');
         });
 
         /* Header options */
-        var optHeaderDefault    = $('#options-header-default');
-        var optHeaderInverse    = $('#options-header-inverse');
-        var optHeaderTop        = $('#options-header-top');
-        var optHeaderBottom     = $('#options-header-bottom');
+        var optHeaderDefault    = jQuery('#options-header-default');
+        var optHeaderInverse    = jQuery('#options-header-inverse');
+        var optHeaderTop        = jQuery('#options-header-top');
+        var optHeaderBottom     = jQuery('#options-header-bottom');
 
         if (header.hasClass('navbar-default')) {
             optHeaderDefault.addClass('active');
@@ -464,20 +464,20 @@ var App = function() {
 
         optHeaderDefault.click(function() {
             header.removeClass('navbar-inverse').addClass('navbar-default');
-            $(this).addClass('active');
+            jQuery(this).addClass('active');
             optHeaderInverse.removeClass('active');
         });
 
         optHeaderInverse.click(function() {
             header.removeClass('navbar-default').addClass('navbar-inverse');
-            $(this).addClass('active');
+            jQuery(this).addClass('active');
             optHeaderDefault.removeClass('active');
         });
 
         optHeaderTop.click(function() {
             page.removeClass('header-fixed-bottom').addClass('header-fixed-top');
             header.removeClass('navbar-fixed-bottom').addClass('navbar-fixed-top');
-            $(this).addClass('active');
+            jQuery(this).addClass('active');
             optHeaderBottom.removeClass('active');
             handleSidebar('sidebar-scroll');
 
@@ -488,7 +488,7 @@ var App = function() {
         optHeaderBottom.click(function() {
             page.removeClass('header-fixed-top').addClass('header-fixed-bottom');
             header.removeClass('navbar-fixed-top').addClass('navbar-fixed-bottom');
-            $(this).addClass('active');
+            jQuery(this).addClass('active');
             optHeaderTop.removeClass('active');
             handleSidebar('sidebar-scroll');
 
@@ -497,8 +497,8 @@ var App = function() {
         });
 
         /* Footer */
-        var optFooterStatic = $('#options-footer-static');
-        var optFooterFixed  = $('#options-footer-fixed');
+        var optFooterStatic = jQuery('#options-footer-static');
+        var optFooterFixed  = jQuery('#options-footer-fixed');
 
         if (page.hasClass('footer-fixed')) {
             optFooterFixed.addClass('active');
@@ -508,7 +508,7 @@ var App = function() {
 
         optFooterStatic.click(function() {
             page.removeClass('footer-fixed');
-            $(this).addClass('active');
+            jQuery(this).addClass('active');
             optFooterFixed.removeClass('active');
 
             // Resize #page-content
@@ -517,7 +517,7 @@ var App = function() {
 
         optFooterFixed.click(function() {
             page.addClass('footer-fixed');
-            $(this).addClass('active');
+            jQuery(this).addClass('active');
             optFooterStatic.removeClass('active');
 
             // Resize #page-content
@@ -527,7 +527,7 @@ var App = function() {
 
     /* Datatables Basic Bootstrap integration (pagination integration included under the Datatables plugin in plugins.js) */
     var dtIntegration = function() {
-        $.extend(true, $.fn.dataTable.defaults, {
+        jQuery.extend(true, jQuery.fn.dataTable.defaults, {
             "sDom": "<'row'<'col-sm-6 col-xs-5'l><'col-sm-6 col-xs-7'f>r>t<'row'<'col-sm-5 hidden-xs'i><'col-sm-7 col-xs-12 clearfix'p>>",
             "sPaginationType": "bootstrap",
             "oLanguage": {
@@ -556,4 +556,4 @@ var App = function() {
 }();
 
 /* Initialize app when page loads */
-$(function(){ App.init(); });
+jQuery(function(){ App.init(); });

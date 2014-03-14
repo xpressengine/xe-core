@@ -2,14 +2,17 @@
 <load target="css/plugins.css" />
 <load target="css/main.css" />
 <load target="css/themes.css" />
-<load target="css/themes/night.css" />
 <load target="css/xev4.css" />
+
+<load target="js/vendor/bootstrap.min.js" type="body"></script>
+<load target="js/plugins.js" type="body"></script>
+<load target="js/app.js" type="body"></script>
 <load target="js/vendor/modernizr-2.7.1-respond-1.4.2.min.js" />
 
 <div id="page-container" class="header-fixed-top style-alt">
 	<!-- Main Container -->
 	<div id="main-container" class="container">
-		<header class="navbar navbar-inverse navbar-fixed-top themed-background-night" role="navigation">
+		<header class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div class="container">
 				<div class="navbar-header">
 					<a class="navbar-brand" href="./"><img src="img/bi.png" alt="XpressEngine"></a>
@@ -28,6 +31,9 @@
 							</ul>
 						</li>
 					</ul>
+					<ul class="nav navbar-nav pull-right">
+						<li><a href="{getUrl('act','dispMemberLoginForm')}">로그인</a></li>
+					</ul>
 				</div>
 			</div>
 		</header>
@@ -37,9 +43,9 @@
 		<div id="page-content">
 			<div class="pull-right">
 				<ol class="breadcrumb">
-					<li><a href="javascript:void(0)"><i class="fa fa-home"></i></a></li>
-					<li><a href="javascript:void(0)">Profile</a></li>
-					<li><a href="javascript:void(0)">Settings</a></li>
+					<li><a href="#"><i class="fa fa-home"></i></a></li>
+					<li><a href="#">Profile</a></li>
+					<li><a href="#">Settings</a></li>
 				</ol>
 			</div>
 
@@ -128,8 +134,8 @@
 					</fieldset>
 					<div class="form-group form-actions">
 						<div class="col-xs-12 text-right">
-							<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
-							<button type="submit" class="btn btn-sm btn-primary">Save Changes</button>
+							<button type="button" class="tb-btn btn-sm btn-default" data-dismiss="modal">Close</button>
+							<button type="submit" class="tb-btn btn-sm btn-primary">Save Changes</button>
 						</div>
 					</div>
 				</form>
@@ -139,15 +145,3 @@
 	</div>
 </div>
 <!-- END User Settings -->
-
-<!-- Remember to include excanvas for IE8 chart support -->
-<!--[if IE 8]><script src="js/helpers/excanvas.min.js"></script><![endif]-->
-
-<!-- Bootstrap.js, Jquery plugins and Custom JS code -->
-<script src="js/vendor/bootstrap.min.js"></script>
-<script src="js/plugins.js"></script>
-<script src="js/app.js"></script>
-
-<!-- Load and execute javascript code used only in this page -->
-<script src="js/pages/index.js"></script>
-<script>jQuery(function(){ Index.init(); });</script>
