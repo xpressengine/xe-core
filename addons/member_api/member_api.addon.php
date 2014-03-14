@@ -3,7 +3,7 @@ if (!defined('__XE__')) exit();
 
 if ($called_position == 'before_module_init' && $_REQUEST['act'] == 'api') {
 	$vars = Context::getRequestVars();
-	$key = pack('H*', '6AE0DA7F-3638-47AB-8EBF-D8632DA3BA24');
+	$key = pack('H*', '6AE0DA7F363847AB8EBFD8632DA3BA24');
 	$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
 	$iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
 
