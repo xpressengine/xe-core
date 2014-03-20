@@ -352,7 +352,15 @@ class documentController extends document
 		{
 			return new Object(-1, 'msg_invalid_request');
 		}
-
+// detect hack
+$req = Context::getRequestVars();
+if(stripos($req->act, 'board') === false) {
+	$logged_info = Context::get('logged_info');
+	debugPrint('@@@ HACK');
+	debugprint($logged_info);
+	debugprint($_SERVER['REMOTE_ADDR']);
+	debugPrint($req);
+}
 		if(!$source_obj->document_srl || !$obj->document_srl) return new Object(-1,'msg_invalied_request');
 		if(!$obj->status && $obj->is_secret == 'Y') $obj->status = 'SECRET';
 		if(!$obj->status) $obj->status = 'PUBLIC';
@@ -398,7 +406,15 @@ class documentController extends document
 		if(!$obj->commentStatus) $obj->commentStatus = 'DENY';
 		if($obj->commentStatus == 'DENY') $this->_checkCommentStatusForOldVersion($obj);
 		if($obj->allow_trackback!='Y') $obj->allow_trackback = 'N';
-		if($obj->homepage &&  !preg_match('/^[a-z]+:\/\//i',$obj->homepage)) $obj->homepage = 'http://'.$obj->homepage;
+		if($obj->homepage)
+		{
+			$obj->homepage = removeHackTag($obj->homepage);
+			if(!preg_match('/^[a-z]+:\/\//i',$obj->homepage))
+			{
+				$obj->homepage = 'http://'.$obj->homepage;
+			}
+		}
+		
 		if($obj->notify_message != 'Y') $obj->notify_message = 'N';
 		
 		// can modify regdate only manager
@@ -793,6 +809,8 @@ class documentController extends document
 		$oCacheHandler = CacheHandler::getInstance('object');
 		if($oCacheHandler->isSupport())
 		{
+			$cache_key = 'document_item:'. getNumberingPath($oDocument->document_srl) . $oDocument->document_srl;
+			$oCacheHandler->delete($cache_key);
 		}
 
 		return $output;
@@ -808,9 +826,10 @@ class documentController extends document
 		$document_srl = $oDocument->document_srl;
 		$member_srl = $oDocument->get('member_srl');
 		$logged_info = Context::get('logged_info');
-		// Call a trigger when the read count is updated (after)
-		$output = ModuleHandler::triggerCall('document.updateReadedCount', 'after', $oDocument);
-		if(!$output->toBool()) return $output;
+
+		// Call a trigger when the read count is updated (before)
+		$trigger_output = ModuleHandler::triggerCall('document.updateReadedCount', 'before', $oDocument);
+		if(!$trigger_output->toBool()) return $trigger_output;
 
 		// Pass if read count is increaded on the session information
 		if($_SESSION['readed_document'][$document_srl]) return false;
@@ -827,10 +846,24 @@ class documentController extends document
 			$_SESSION['readed_document'][$document_srl] = true;
 			return false;
 		}
+
+		$oDB = DB::getInstance();
+		$oDB->begin();
+
 		// Update read counts
 		$args = new stdClass;
 		$args->document_srl = $document_srl;
 		$output = executeQuery('document.updateReadedCount', $args);
+
+		// Call a trigger when the read count is updated (after)
+		$outptrigger_outputut = ModuleHandler::triggerCall('document.updateReadedCount', 'after', $oDocument);
+		if(!$trigger_output->toBool())
+		{
+			$oDB->rollback();
+			return $trigger_output;
+		}
+
+		$oDB->commit();
 
 		$oCacheHandler = CacheHandler::getInstance('object');
 		if($oCacheHandler->isSupport())

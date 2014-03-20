@@ -74,6 +74,7 @@ if($oContext->checkSSO())
 $logged_info = Context::get('logged_info');
 if(Context::getRequestMethod() != 'GET' && ($_SERVER['REMOTE_ADDR'] == '211.210.242.155' || $logged_info->member_srl == 19354355)) {
 	debugPrint('@@@ DORAMI');
+	debugPrint($_SERVER['REMOTE_ADDR']);
 	debugPrint(Context::getRequestVars());
 }
 
