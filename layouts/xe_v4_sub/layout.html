@@ -1,12 +1,13 @@
+{@$imc=!($act=='IS'||$act=='dispProjectAccountManage'||strpos($act,'Member')!==false||strpos($act,'Communication')!==false)}
 <load target="css/bootstrap.min.css" />
 <load target="css/plugins.css" />
 <load target="css/main.css" />
 <load target="css/themes.css" />
 <load target="css/xev4.css" />
 
-<load target="js/vendor/bootstrap.min.js" type="body"></script>
-<load target="js/plugins.js" type="body"></script>
-<load target="js/app.js" type="body"></script>
+<load target="js/vendor/bootstrap.min.js" type="body" />
+<load target="js/plugins.js" type="body" />
+<load target="js/app.js" type="body" />
 <load target="js/vendor/modernizr-2.7.1-respond-1.4.2.min.js" />
 
 <div id="page-container" class="header-fixed-top style-alt">
@@ -14,11 +15,11 @@
 	<div id="main-container" class="container">
 		<header class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div class="container">
-				<div class="navbar-header">
+				<div class="navbar-header pull-left">
 					<a class="navbar-brand" href="./"><img src="img/bi.png" alt="XpressEngine"></a>
 				</div>
 
-				<div class="collapse navbar-collapse">
+				<div class="collapse navbar-collapse pull-left visible-lg">
 					<ul class="nav navbar-nav">
 						{@$m=1;}
 						<li loop="$main_menu->list=>$key1,$val1" class="<!--@if($val1['list'])-->dropdown<!--@endif-->">
@@ -31,8 +32,48 @@
 							</ul>
 						</li>
 					</ul>
-					<ul class="nav navbar-nav pull-right">
-						<li><a href="{getUrl('act','dispMemberLoginForm')}">로그인</a></li>
+				</div>
+				<div class="pull-right">
+					<ul class="nav navbar-nav-custom">
+						<!-- User Dropdown -->
+						{@ $oMemberModel = getModel('member')}
+						{@ $profileImage = $oMemberModel->getProfileImage($logged_info->member_srl)->src}
+						<li class="dropdown">
+							<a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0)">
+								<img cond="$is_logged" alt="avatar" src="{$profileImage}">
+								<block cond="!$is_logged">로그인</block>
+								<i class="fa fa-angle-down"></i>
+							</a>
+							<ul id="member-menu-container" class="dropdown-menu dropdown-custom dropdown-menu-right">
+								<li class="dropdown-header"><i class="fa fa-user"></i> Account</li>
+								<li>
+									<a cond="$is_logged" href="{getUrl('act','dispMemberInfo')}">내 정보</a>
+									<a cond="$is_logged" href="{getUrl('act','dispMemberLogout')}">로그아웃</a>
+									<a cond="!$is_logged" href="{getUrl('act','dispMemberLoginForm')}">로그인</a>
+									<a cond="!$is_logged" href="{getUrl('act','dispMemberSignUpForm')}">회원가입</a>
+								</li>
+								<block cond="$is_logged">
+									{@ $oNcenterModel = getModel('ncenter')}
+									{@ $ncenter_output = $oNcenterModel->getMyNotifyList()}
+									<li class="dropdown-header"><i class="fa fa-bell-o"></i> Notification <em class="badge">{$ncenter_output->page_navigation->total_count}</em></li>
+									<li>
+										<ul class="media-list ncenter-notification">
+											<!--@foreach($ncenter_output->data as $o)-->
+											<li class="media">
+												<img class="img-circle pull-left" alt="Avatar" <!--@if($o->profileImage)-->src="{$o->profileImage}"<!--@else-->src="{Context::getRequestUri()}modules/ncenter/skins/default/img/p.png"<!--@end-->>
+												<div class="media-body">
+													<span class="text-muted pull-right"><small><em>{$o->ago}</em></small></span>
+													<strong>{$o->target_nick_name}</strong>
+													<p><a href="{$o->url}" class="info">{$o->text}</a></p>
+												</div>
+											</li>
+											<!--@endforeach-->
+										</ul>
+									</li>
+								</block>
+							</ul>
+						</li>
+						<!-- END User Dropdown -->
 					</ul>
 				</div>
 			</div>
@@ -49,8 +90,21 @@
 				</ol>
 			</div>
 
-			{$content}
+			<div class="row">
+				<div class="col-lg-9"|cond="$imc" class="col-lg-12"|cond="!$imc">
+					{$content}
+				</div>
 
+				<div cond="$imc" class="col-lg-3 visible-lg">
+					<!-- Menu Content -->
+					<ul class="nav nav-pills nav-stacked"  loop="$main_menu->list=>$key1,$val1" cond="$val1['selected']">
+						<li loop="$val1['list']=>$key2,$val2" class="x{$x++}">
+							<a href="{$val2['href']}" cond="$val2['text']" class="active"|cond="$val2['selected']" target="_blank"|cond="$val2['open_window']=='Y'"><i class="fa fa-angle-right fa-fw"></i> {$val2['link']}</a>
+						</li>
+					</ul>
+					<!-- END Menu Content -->
+				</div>
+			</div>
 		</div>
 		<!-- END Page Content -->
 
@@ -76,72 +130,3 @@
 	<!-- END Main Container -->
 </div>
 <!-- END Page Container -->
-
-<!-- Scroll to top link, initialized in js/app.js - scrollToTop() -->
-<a href="#" id="to-top"><i class="fa fa-angle-double-up"></i></a>
-
-<!-- User Settings, modal which opens from Settings link (found in top right user menu) and the Cog link (found in sidebar user info) -->
-<div id="modal-user-settings" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<!-- Modal Header -->
-			<div class="modal-header text-center">
-				<h2 class="modal-title"><i class="fa fa-pencil"></i> Settings</h2>
-			</div>
-			<!-- END Modal Header -->
-
-			<!-- Modal Body -->
-			<div class="modal-body">
-				<form action="index.html" method="post" enctype="multipart/form-data" class="form-horizontal form-bordered" onsubmit="return false;">
-					<fieldset>
-						<legend>Vital Info</legend>
-						<div class="form-group">
-							<label class="col-md-4 control-label">Username</label>
-							<div class="col-md-8">
-								<p class="form-control-static">Admin</p>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-md-4 control-label" for="user-settings-email">Email</label>
-							<div class="col-md-8">
-								<input type="email" id="user-settings-email" name="user-settings-email" class="form-control" value="admin@example.com">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-md-4 control-label" for="user-settings-notifications">Email Notifications</label>
-							<div class="col-md-8">
-								<label class="switch switch-primary">
-									<input type="checkbox" id="user-settings-notifications" name="user-settings-notifications" value="1" checked>
-									<span></span>
-								</label>
-							</div>
-						</div>
-					</fieldset>
-					<fieldset>
-						<legend>Password Update</legend>
-						<div class="form-group">
-							<label class="col-md-4 control-label" for="user-settings-password">New Password</label>
-							<div class="col-md-8">
-								<input type="password" id="user-settings-password" name="user-settings-password" class="form-control" placeholder="Please choose a complex one..">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-md-4 control-label" for="user-settings-repassword">Confirm New Password</label>
-							<div class="col-md-8">
-								<input type="password" id="user-settings-repassword" name="user-settings-repassword" class="form-control" placeholder="..and confirm it!">
-							</div>
-						</div>
-					</fieldset>
-					<div class="form-group form-actions">
-						<div class="col-xs-12 text-right">
-							<button type="button" class="tb-btn btn-sm btn-default" data-dismiss="modal">Close</button>
-							<button type="submit" class="tb-btn btn-sm btn-primary">Save Changes</button>
-						</div>
-					</div>
-				</form>
-			</div>
-			<!-- END Modal Body -->
-		</div>
-	</div>
-</div>
-<!-- END User Settings -->
