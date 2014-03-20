@@ -1006,6 +1006,17 @@ a.sidebar-title:focus {
     margin-bottom: 20px;
 }
 
+.block.block-fullscreen {
+    position: fixed;
+    top: 5px;
+    bottom: 5px;
+    left: 5px;
+    right: 5px;
+    z-index: 1031;
+    margin-bottom: 0;
+    overflow-y: auto;
+}
+
 /* Widgets */
 .widget {
     background-color: #ffffff;
@@ -2436,28 +2447,28 @@ li.dropdown-header {
 }
 
 /* Buttons */
-.tb-btn {
+.btn {
     margin: 1px 0;
     background-color: #ffffff;
 }
 
-.tb-btn .gi,
-.tb-btn .hi,
-.tb-btn .si,
-.tb-btn .fi {
+.btn .gi,
+.btn .hi,
+.btn .si,
+.btn .fi {
     line-height: 1;
 }
 
-.tb-btn.disabled,
-.tb-btn[disabled],
-fieldset[disabled] .tb-btn {
+.btn.disabled,
+.btn[disabled],
+fieldset[disabled] .btn {
     opacity: 0.4;
     filter: alpha(opacity=40);
 }
 
-.block-options .tb-btn,
-.input-group .tb-btn,
-.modal-content .tb-btn {
+.block-options .btn,
+.input-group .btn,
+.modal-content .btn {
     margin-top: 0;
     margin-bottom: 0;
 }
@@ -2739,7 +2750,7 @@ fieldset[disabled] .btn-info.active {
     text-decoration: none;
 }
 
-.block-options .tb-btn {
+.block-options .btn {
     border-radius: 15px;
     padding-right: 8px;
     padding-left: 8px;
@@ -2780,7 +2791,7 @@ code {
     display: inline-block;
 }
 
-.tb-btn code {
+.btn code {
     display: inline;
     margin: 0;
 }
@@ -3017,8 +3028,8 @@ p, .table, .alert, .carousel {
 .popover,
 .progress,
 .progress-bar,
-.tb-btn.active,
-.open .tb-btn.dropdown-toggle,
+.btn.active,
+.open .btn.dropdown-toggle,
 .panel {
     -webkit-box-shadow: none;
     box-shadow: none;
@@ -3062,6 +3073,10 @@ p, .table, .alert, .carousel {
 
 .remove-margin {
     margin: 0 !important;
+}
+
+.remove-margin-bottom {
+    margin-bottom: 0 !important;
 }
 
 .remove-padding {

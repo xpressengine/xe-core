@@ -32,25 +32,21 @@
 			<block cond="$grant->manager">
 				<input type="checkbox" name="title_bold" id="title_bold" class="iCheck" value="Y" checked="checked"|cond="$oDocument->get('title_bold')=='Y'" />
 				<label for="title_bold">{$lang->title_bold}</label>
+				<input type="checkbox" name="lock_comment" class="iCheck" value="Y" checked="checked"|cond="$oDocument->isLocked()" id="lock_comment" />
+				<label for="lock_comment">{$lang->lock_comment}</label>
 			</block>
 			<input cond="$module_info->secret=='Y'" type="checkbox" name="is_secret" class="iCheck" value="Y" checked="checked"|cond="$oDocument->isSecret()" id="is_secret" />
 			<label cond="$module_info->secret=='Y'" for="is_secret">{$lang->secret}</label>
-            <input type="checkbox" name="comment_status" class="iCheck" value="ALLOW" checked="checked"|cond="$oDocument->allowComment()" id="comment_status" />
-            <label for="comment_status">{$lang->allow_comment}</label>
+            <input type="checkbox" name="allow_comment" class="iCheck" value="Y" checked="checked"|cond="$oDocument->allowComment()" id="allow_comment" />
+            <label for="allow_comment">{$lang->allow_comment}</label>
             <input type="checkbox" name="allow_trackback" class="iCheck" value="Y" checked="checked"|cond="$oDocument->allowTrackback()" id="allow_trackback" />
             <label for="allow_trackback">{$lang->allow_trackback}</label>
 			<block cond="$is_logged">
 				<input type="checkbox" name="notify_message" class="iCheck" value="Y" checked="checked"|cond="$oDocument->useNotify()" id="notify_message" />
 				<label for="notify_message">{$lang->notify}</label>
 			</block>
-			<!--@if(is_array($status_list))-->
-				<!--@foreach($status_list AS $key=>$value)-->
-				<input type="radio" name="status" value="{$key}" id="{$key}" <!--@if($oDocument->get('status') == $key || ($key == 'PUBLIC' && !$document_srl))-->checked="checked"<!--@end--> /> 
-				<label for="{$key}">{$value}</label>
-				<!--@end-->
-			<!--@end-->
 		</div>
-		<div class="write_author">
+		<div class="write_author form-group">
 			<span class="item" cond="!$is_logged">
 				<label for="userName" class="iLabel">{$lang->writer}</label>
 				<input type="text" name="nick_name" id="userName" class="iText userName" style="width:80px" value="{htmlspecialchars($oDocument->get('nick_name'))}" />
@@ -64,16 +60,16 @@
 				<input type="text" name="homepage" id="homePage" class="iText homePage"  style="width:140px"value="{htmlspecialchars($oDocument->get('homepage'))}" />
 			</span>
 			<span class="item">
-				<label for="tags" class="iLabel">{$lang->tag}: {$lang->about_tag}</label>
-				<input type="text" name="tags" id="tags" value="{htmlspecialchars($oDocument->get('tags'))}" class="iText" style="width:300px" title="Tag" />
-			</span>		
+				<label for="tags" class="iLabel">{$lang->tag} : {$lang->about_tag}</label>
+				<input type="text" name="tags" id="tags" value="{htmlspecialchars($oDocument->get('tags'))}" class="form-control" title="Tag" />
+			</span>
 		</div>
-		<div class="btnArea">
-			<input type="submit" value="{$lang->cmd_registration}" class="btn" />
-			<block cond="!$oDocument->isExists() || $oDocument->get('status') == 'TEMP'">
-			<button cond="$is_logged" class="btn" type="button" onclick="doDocumentSave(this);">{$lang->cmd_temp_save}</button>
-			<button cond="$is_logged" class="btn" type="button" onclick="doDocumentLoad(this);">{$lang->cmd_load}</button>
-			</block>
+		<div class="clearfix">
+			<input type="submit" value="{$lang->cmd_registration}" class="tb-btn btn-primary btn-lg btn-block" />
+		</div>
+		<div class="clearfix text-right">
+			<button type="button" onclick="doDocumentSave(this);" cond="$is_logged" class="tb-btn btn-default">{$lang->cmd_temp_save}</button>
+			<button type="button" onclick="doDocumentLoad(this);" cond="$is_logged" class="tb-btn btn-default">{$lang->cmd_load}</button>
 		</div>
 	</div>
 </form>

@@ -1,4 +1,12 @@
-{@$imc=!($act=='IS'||$act=='dispProjectAccountManage'||strpos($act,'Member')!==false||strpos($act,'Communication')!==false)}
+{@$imc = !($act=='IS' || $act=='dispProjectAccountManage' || strpos($act,'Member') !== false || strpos($act,'Communication') !== false || $mid == 'privacy' || $mid == 'home')}
+
+{@ $subtitle = array(
+	'about' => array('XpressEngine', 'info'),
+	'authors' => array('감사감사', 'tropy'),
+	'qna' => array('물어봐', 'question-circle'),
+	'privacy' => array(null, 'lock'),
+)}
+
 <load target="css/bootstrap.min.css" />
 <load target="css/plugins.css" />
 <load target="css/main.css" />
@@ -10,71 +18,85 @@
 <load target="js/app.js" type="body" />
 <load target="js/vendor/modernizr-2.7.1-respond-1.4.2.min.js" />
 
-<div id="page-container" class="header-fixed-top style-alt">
+<div id="page-container" class="header-fixed-top">
 	<!-- Main Container -->
-	<div id="main-container" class="container">
+	<div id="main-container">
 		<header class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div class="container">
-				<div class="navbar-header pull-left">
-					<a class="navbar-brand" href="./"><img src="img/bi.png" alt="XpressEngine"></a>
-				</div>
-
-				<div class="collapse navbar-collapse pull-left visible-lg">
-					<ul class="nav navbar-nav">
-						{@$m=1;}
-						<li loop="$main_menu->list=>$key1,$val1" class="<!--@if($val1['list'])-->dropdown<!--@endif-->">
-							<a href="{$val1['href']}" class="<!--@if($val1['selected'])-->active<!--@endif--> <!--@if($val1['list'])-->dropdown-toggle<!--@endif-->" data-toggle="dropdown"|cond="$val1['list']">{$val1['link']} <b cond="$val1['list']" class="caret"></b></a>
-							<ul class="dropdown-menu" cond="$val1['list']">
-								{@$s=1;}
-								<li loop="$val1['list']=>$key2,$val2" class="s{$s++}">
-									<a href="{$val2['href']}" cond="$val2['text']" class="active"|cond="$val2['selected']">{$val2['link']}</a>
-								</li>
-							</ul>
+				<!-- GNB-HEADER -->
+				<div class="navbar-header">
+					<h1 class="navbar-brand"><a href="./"><img src="img/bi.png" alt="XpressEngine"></a></h1>
+					<ul class="nav navbar-nav-custom pull-right">
+						<li class="visible-sm visible-xs pull-right">
+							<a data-target="#horizontal-menu-collapse" data-toggle="collapse" href="javascript:void(0)">Menu</a>
 						</li>
 					</ul>
 				</div>
-				<div class="pull-right">
-					<ul class="nav navbar-nav-custom">
-						<!-- User Dropdown -->
-						{@ $oMemberModel = getModel('member')}
-						{@ $profileImage = $oMemberModel->getProfileImage($logged_info->member_srl)->src}
-						<li class="dropdown">
-							<a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0)">
-								<img cond="$is_logged" alt="avatar" src="{$profileImage}">
-								<block cond="!$is_logged">로그인</block>
-								<i class="fa fa-angle-down"></i>
-							</a>
-							<ul id="member-menu-container" class="dropdown-menu dropdown-custom dropdown-menu-right">
-								<li class="dropdown-header"><i class="fa fa-user"></i> Account</li>
-								<li>
-									<a cond="$is_logged" href="{getUrl('act','dispMemberInfo')}">내 정보</a>
-									<a cond="$is_logged" href="{getUrl('act','dispMemberLogout')}">로그아웃</a>
-									<a cond="!$is_logged" href="{getUrl('act','dispMemberLoginForm')}">로그인</a>
-									<a cond="!$is_logged" href="{getUrl('act','dispMemberSignUpForm')}">회원가입</a>
-								</li>
-								<block cond="$is_logged">
-									{@ $oNcenterModel = getModel('ncenter')}
-									{@ $ncenter_output = $oNcenterModel->getMyNotifyList()}
-									<li class="dropdown-header"><i class="fa fa-bell-o"></i> Notification <em class="badge">{$ncenter_output->page_navigation->total_count}</em></li>
-									<li>
-										<ul class="media-list ncenter-notification">
-											<!--@foreach($ncenter_output->data as $o)-->
-											<li class="media">
-												<img class="img-circle pull-left" alt="Avatar" <!--@if($o->profileImage)-->src="{$o->profileImage}"<!--@else-->src="{Context::getRequestUri()}modules/ncenter/skins/default/img/p.png"<!--@end-->>
-												<div class="media-body">
-													<span class="text-muted pull-right"><small><em>{$o->ago}</em></small></span>
-													<strong>{$o->target_nick_name}</strong>
-													<p><a href="{$o->url}" class="info">{$o->text}</a></p>
-												</div>
-											</li>
-											<!--@endforeach-->
-										</ul>
+
+				<!-- GNB -->
+				<div class="collapse navbar-collapse" id="horizontal-menu-collapse">
+					<ul class="nav navbar-nav">
+						{@$m=1;}
+						<li loop="$main_menu->list => $key1, $val1" class="<!--@if($val1['list'])-->dropdown<!--@endif-->">
+							<a href="{$val1['href']}" class="<!--@if($val1['selected'])-->active<!--@endif--> <!--@if($val1['list'])-->dropdown-toggle<!--@endif-->" data-toggle="dropdown"|cond="$val1['list']">{$val1['link']} <b cond="$val1['list']" class="caret"></b></a>
+							<ul class="dropdown-menu" cond="$val1['list']">
+								{@$s=1;}
+								<block loop="$val1['list']=>$key2,$val2">
+									<li class="<!--@if($val2['link'] == '-')-->divider<!--@elseif($val2['href'] == '#')-->dropdown-header<!--@endif-->">
+										<a href="{$val2['href']}" cond="$val2['text'] && $val2['href'] != '#' && $val2['link'] != '-'" class="active"|cond="$val2['selected']">{$val2['link']}</a>
+										<block cond="$val2['href'] == '#' && $val2['link'] != '-'">{$val2['link']}</block>
 									</li>
 								</block>
 							</ul>
 						</li>
-						<!-- END User Dropdown -->
 					</ul>
+					<div class="navbar-right">
+						<ul class="nav navbar-nav">
+							<!-- User Dropdown -->
+							{@ $oMemberModel = getModel('member')}
+							{@ $profileImage = $oMemberModel->getProfileImage($logged_info->member_srl)->src}
+							<li class="dropdown">
+								<a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0)">
+									<block cond="$is_logged">
+										<img cond="$profileImage" class="img-circle profile-image" alt="avatar" src="{$profileImage}">
+										<block cond="!$profileImage">내 정보</block>
+									</block>
+									<block cond="!$is_logged">로그인</block>
+									<i class="fa fa-angle-down"></i>
+								</a>
+								<ul id="member-menu-container" class="dropdown-menu">
+									<li class="dropdown-header"><i class="fa fa-user"></i> Account</li>
+									<li>
+										<a loop="$logged_info->menu_list => $key,$val"  href="{getUrl('', 'act',$key, 'mid', $mid, 'vid', $vid)}">{Context::getLang($val)}</a>
+										<a cond="$is_logged" href="{getUrl('act','dispMemberLogout')}">로그아웃</a>
+										<a cond="!$is_logged" href="{getUrl('act','dispMemberLoginForm')}">로그인</a>
+										<a cond="!$is_logged" href="{getUrl('act','dispMemberSignUpForm')}">회원가입</a>
+									</li>
+
+									<block cond="$is_logged">
+										{@ $oNcenterModel = getModel('ncenter')}
+										{@ $ncenter_output = $oNcenterModel->getMyNotifyList()}
+										<li class="dropdown-header"><i class="fa fa-bell-o"></i> Notification <em class="badge">{$ncenter_output->page_navigation->total_count}</em></li>
+										<li>
+											<ul class="media-list ncenter-notification">
+												<!--@foreach($ncenter_output->data as $o)-->
+												<li class="media">
+													<img class="img-circle pull-left" alt="Avatar" <!--@if($o->profileImage)-->src="{$o->profileImage}"<!--@else-->src="{Context::getRequestUri()}modules/ncenter/skins/default/img/p.png"<!--@end-->>
+													<div class="media-body">
+														<span class="text-muted pull-right"><small><em>{$o->ago}</em></small></span>
+														<strong>{$o->target_nick_name}</strong>
+														<p><a href="{$o->url}" class="info">{$o->text}</a></p>
+													</div>
+												</li>
+												<!--@endforeach-->
+											</ul>
+										</li>
+									</block>
+								</ul>
+							</li>
+							<!-- END User Dropdown -->
+						</ul>
+					</div>
 				</div>
 			</div>
 		</header>
@@ -82,27 +104,56 @@
 
 		<!-- Page content -->
 		<div id="page-content">
-			<div class="pull-right">
-				<ol class="breadcrumb">
-					<li><a href="#"><i class="fa fa-home"></i></a></li>
-					<li><a href="#">Profile</a></li>
-					<li><a href="#">Settings</a></li>
-				</ol>
+			<div class="content-header" cond="$mid != 'home'">
+				<div class="header-section container">
+					<h1>
+						<block cond="array_key_exists($mid, $subtitle)"><i class="fa fa-{$subtitle[$mid][1]}"></i></block>
+						{$current_module_info->browser_title}
+						<block cond="array_key_exists($mid, $subtitle) && $subtitle[$mid][0] !== null">
+							<br>
+							<small>{$subtitle[$mid][0]}</small>
+						</block>
+					</h1>
+				</div>
+				<!-- breadcrumb -->
+				<div class="breadcrumb-container">
+					<div class="container">
+						<ol class="breadcrumb">
+							<li><a class="text-muted" href="{getUrl('')}" title="Home"><i class="fa fa-home"></i></a></li>
+							<block loop="$main_menu->list=>$key1, $val1" cond="$val1['selected']">
+								<li><a class="text-muted" href="{$val1['href']}">{$val1['link']}</a></li>
+							</block>
+							<block cond="!$sub">
+								<li><a href="{getUrl('', 'mid',$current_module_info->mid)}" class="text-muted">{$current_module_info->browser_title}</a></li>
+							</block>
+						</ol>
+					</div>
+				</div>
+				<!-- //breadcrumb -->
 			</div>
 
-			<div class="row">
-				<div class="col-lg-9"|cond="$imc" class="col-lg-12"|cond="!$imc">
-					{$content}
-				</div>
+			<div class="container">
+				<div class="row clearfix">
+					<div class="<!--@if($imc)-->col-lg-9<!--@else-->col-lg-12<!--@endif--> text-right hidden-xs"  class="col-lg-9"|cond="$imc" class="col-lg-12"|cond="!$imc">
+					</div>
 
-				<div cond="$imc" class="col-lg-3 visible-lg">
-					<!-- Menu Content -->
-					<ul class="nav nav-pills nav-stacked"  loop="$main_menu->list=>$key1,$val1" cond="$val1['selected']">
-						<li loop="$val1['list']=>$key2,$val2" class="x{$x++}">
-							<a href="{$val2['href']}" cond="$val2['text']" class="active"|cond="$val2['selected']" target="_blank"|cond="$val2['open_window']=='Y'"><i class="fa fa-angle-right fa-fw"></i> {$val2['link']}</a>
-						</li>
-					</ul>
-					<!-- END Menu Content -->
+					<!-- content -->
+					<div class="col-lg-9"|cond="$imc" class="col-lg-12"|cond="!$imc">
+						<div id="content-container">
+							{$content}
+						</div>
+					</div>
+
+					<!-- LNB -->
+					<div cond="$imc" class="col-lg-3 visible-lg">
+						<ul class="list-group" loop="$main_menu->list=>$key1, $val1" cond="$val1['selected']">
+							<li loop="$val1['list']=>$key2, $val2" class="list-group-item <!--@if($val2['selected'])-->active<!--@endif--> <!--@if($val2['link'] == '-')-->divider<!--@elseif($val2['href'] == '#')-->dropdown-header<!--@endif-->">
+								<a href="{$val2['href']}" cond="$val2['text'] && $val2['href'] != '#' && $val2['link'] != '-'">{$val2['link']}</a>
+								<block cond="$val2['href'] == '#' && $val2['link'] != '-'">{$val2['link']}</block>
+							</li>
+						</ul>
+					</div>
+					<!-- //LNB -->
 				</div>
 			</div>
 		</div>
@@ -110,20 +161,25 @@
 
 		<!-- Footer -->
 		<footer class="clearfix">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-9">
+						<div class="pull-left">
+							<abbr><span class="sr-only">Copyright</span><span id="year-copy"></span> &copy; <a href="http://www.navercorp.com/" target="_balnk">NAVER Corp</a>. All Right Reserved.</a></abbr>
+						</div>
 
-			<div class="pull-left">
-				<span id="year-copy"></span> &copy; <a href="http://goo.gl/TDOSuC" target="_blank">ProUI 1.1</a>
+						<div class="pull-right">
+							<ul class="list-inline">
+								<li><a class="text-muted" href="{getUrl('', 'mid','notice')}">공지사항</a></li>
+								<li><a class="text-muted" href="{geturl('', 'mid','privacy')}">개인정보보호취급방침</a></li>
+								<li><a class="text-muted" href="{geturl('', 'mid','communityRule')}">커뮤니티운영규칙</a></li>
+								<li><a class="text-muted" href="{geturl('', 'mid','contact')}">Contact</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
 			</div>
-			<div>
-				<ul>
-					<li><a href="#">개인정보보호취급방침</a></li>
-					<li><a href="#">커뮤니티운영규칙</a></li>
-					<li><a href="#">공지사항</a></li>
-				</ul>
-			</div>
-			<div class="pull-right">
-				Crafted with <i class="fa fa-heart text-danger"></i> by <a href="http://goo.gl/vNS3I" target="_blank">pixelcave</a>
-			</div>
+
 		</footer>
 		<!-- END Footer -->
 	</div>

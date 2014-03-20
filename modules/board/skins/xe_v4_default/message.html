@@ -2,8 +2,8 @@
 <div class="context_message">
     <h1>{$message}</h1>
     <div class="btnArea">
-        <a cond="!$is_logged" class="btn" href="{getUrl('act','dispMemberLoginForm')}">{$lang->cmd_login}</a>
-        <button type="button" class="btn" onclick="history.back()">{$lang->cmd_back}</button>
+        <span class="btn25 blue"><a cond="!$is_logged" href="{getUrl('act','dispMemberLoginForm')}">{$lang->cmd_login}</a></span>
+        <span class="btn25"><button type="button" onclick="history.back()">{$lang->cmd_back}</button></span>
     </div>
 </div>
 <include target="_footer.html" />

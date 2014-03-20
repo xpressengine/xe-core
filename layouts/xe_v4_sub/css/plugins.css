@@ -622,7 +622,7 @@ thead th.fc-widget-header {
 
 /*
 =================================================================
-(#04djs) Dropzone.js 3.7.1
+(#04djs) Dropzone.js 3.8.4
 
 MIT License
 =================================================================
@@ -1588,7 +1588,7 @@ ul.wysihtml5-toolbar a[data-wysihtml5-command=underline] {
     text-decoration: underline;
 }
 
-ul.wysihtml5-toolbar a.tb-btn.wysihtml5-command-active {
+ul.wysihtml5-toolbar a.btn.wysihtml5-command-active {
     background-color: #eaedf1;
     border-color: #eaedf1;
 }
@@ -3593,7 +3593,7 @@ Contributors https://github.com/jdewit/bootstrap-timepicker/graphs/contributors
     position: absolute;
     top: -6px;
 }
-.bootstrap-timepicker-widget a.tb-btn,
+.bootstrap-timepicker-widget a.btn,
 .bootstrap-timepicker-widget input {
     border-radius: 4px;
 }
