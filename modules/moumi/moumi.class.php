@@ -5,6 +5,8 @@ class moumi extends ModuleObject
 		'127.0.0.1',
 		'14.52.92.207', // xehub
 		'10.3.41.241',	// web004
+		'125.209.193.160',	// moni001
+		'10.3.41.117',	// moni001 
 	);
 
 	function isAllowed()
