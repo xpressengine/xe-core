@@ -1,0 +1,6 @@
+<table name="profile">
+	<column name="member_srl" type="number" size="11" notnull="notnull" index="idx_member_srl" />
+
+	<column name="status" type="varchar" size="20" />
+	<column name="profile_type" type="varchar" size="10" />
+</table>

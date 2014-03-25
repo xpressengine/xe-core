@@ -1,0 +1,10 @@
+<query id="insertProfile" action="insert">
+	<tables>
+		<table name="profile" />
+	</tables>
+	<columns>
+		<column name="member_srl" var="member_srl" notnull="notnull" />
+		<column name="status" var="status" default="PUBLIC" />
+		<column name="profile_type" var="profile_type" default="NORMAL" notnull="notnull" />
+	</columns>
+</query>

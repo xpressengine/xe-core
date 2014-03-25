@@ -1,0 +1,19 @@
+<query id="getProfile" action="select">
+	<tables>
+		<table name="member" />
+		<table name="profile" />
+	</tables>
+
+	<columns>
+		<column name="member.nick_name" />
+		<column name="member.email_address" />
+		<column name="member.denied" />
+		<column name="member.limit_date" />
+		<column name="profile.*" />
+	</columns>
+
+	<conditions>
+		<condition operation="equal" column="profile.member_srl" var="member_srl" filter="number" notnull="notnull" />
+		<condition operation="equal" column="member.member_srl" var="profile.member_srl" filter="number" notnull="notnull" pipe="and" />
+	</conditions>
+</query>

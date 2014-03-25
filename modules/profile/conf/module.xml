@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+	<grants>
+		<grant name="list" default="guest">
+			<title xml:lang="ko">목록</title>
+		</grant>
+	</grants>
+	<permissions />
+	<actions>
+		<action name="dispProfileView" type="view" index="true" />
+		<action name="dispProfileSetting" type="view" />
+
+		<action name="procProfileSetup" type="controller" />
+		<!-- <action name="procBoardInsertDocument" type="controller" ruleset="insertDocument" standalone="false" />
+		<action name="dispBoardAdminContent" type="view" admin_index="true" menu_name="board" menu_index="true" /> -->
+	</actions>
+	<!-- <menus>
+		<menu name="profile" type="all">
+			<title xml:lang="ko">개인화 페이지</title>
+		</menu>
+	</menus> -->
+</module>

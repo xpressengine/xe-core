@@ -1,0 +1,35 @@
+<include target="_header.html" />
+
+<h2>프로필 설정</h2>
+
+<section>
+
+	<h3>공개 설정</h3>
+
+	<form method="post" class="pure-form pure-form-stacked" ruleset="profileSetup">
+		<input type="hidden" name="module" value="profile" />
+		<input type="hidden" name="act" value="procProfileSetup" />
+		<input type="hidden" name="success_return_url" value="{getUrl('act','dispProfileView')}" />
+
+		<fieldset>
+			<div class="pure-controls">
+				<label><input type="checkbox" name="is_biz" id="is_biz" value="Y" /> 법인/개인 사업자입니다</label>
+			</div>
+
+			<div class="cond-is-biz">
+				<label>사업자 번호</label>
+				<input type="text" name="biz_no" />
+			</div>
+
+			<div class="cond-is-biz">
+				<label>사업장 소재지</label>
+				<input type="text" name="biz_address" class="pure-input-1-2" />
+			</div>
+
+			<div class="pure-controls">
+				<label class="pure-checkbox" cond="!$profile->member"><input type="checkbox" name="agree" value="Y" /> 입력한 정보와 작성한 글, 댓글 목록을 공개하는데 동의합니다.</label>
+				<button type="submit" class="pure-button pure-button-primary">프로필 공개하기</button>
+			</div>
+		</fieldset>
+	</form>
+</section>

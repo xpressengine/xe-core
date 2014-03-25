@@ -1,0 +1,16 @@
+<include target="_header.html" />
+
+<h2>dispProfileView</h2>
+
+<section>
+	<h3>프로필</h3>
+	<strong>{$profile->member->nick_name} ({$profile->member->user_name})</strong>
+	<img src="{$profile->member->profile_image}" style="border:1px solid #CCC; border-radius:500px; width:80px; height:80px;">
+	<p>{$profile->member->signature}</p>
+</section>
+
+<hr>
+
+<ul>
+	<li loop="$profile->document->data => $document">{$document->getTitleText()}</li>
+</ul>

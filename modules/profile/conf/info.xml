@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="0.2">
+	<title xml:lang="ko">개인화 페이지</title>
+	<version>1.0</version>
+	<date>2014-02-20</date>
+
+	<author email_address="developers@xpressengine.com" link="http://www.xpressengine.com/">
+		<name xml:lang="ko">NAVER</name>
+	</author>
+</module>
