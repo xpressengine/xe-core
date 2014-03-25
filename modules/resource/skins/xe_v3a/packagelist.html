@@ -1,0 +1,111 @@
+<include target="include.header.html" />
+<div class="rsHeader">
+	<h2><img src="img/h2.myResource.gif" width="111" height="18" alt="{$lang->cmd_list_my_package}" /></h2>
+</div>
+
+<div class="rsForm">
+    <p class="notice">{$lang->about_my_package}</p>
+
+	{@
+		$avail_id = array(
+			'modules/resource/skins/xe_v3/deletepackage/1' => 1,
+		);
+	}
+	<div cond="$XE_VALIDATOR_MESSAGE && isset($avail_id[$XE_VALIDATOR_ID])" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+		<p>{$XE_VALIDATOR_MESSAGE}</p>
+	</div>
+	
+	
+    <form action="./" method="get" style="margin:0 0 10px 0" no-error-return-url="true">
+        <input type="hidden" name="vid" value="{$vid}" />
+        <input type="hidden" name="mid" value="{$mid}" />
+        <input type="hidden" name="page" value="{$page}" />
+        <input type="hidden" name="act" value="{$act}" />
+        <select name="category_srl">
+            <option value="">{$lang->package_category}</option>
+        {@ $_curDepth = 0; }
+        <!--@foreach($categories as $key => $val)-->
+            <!--@if($val->depth<$_curDepth)-->
+            </optgroup>
+            <!--@end-->
+            <!--@if($val->depth<1)-->
+            <!--@if($val->child_count>0)-->
+            <optgroup label="{$val->title}">
+            <!--@else-->
+            <option value="{$val->category_srl}" <!--@if($category_srl == $val->category_srl)-->selected="selected"<!--@end-->>{$val->title}</option>
+            <!--@end-->
+            <!--@end-->
+            <!--@if($val->depth>0)-->
+                <option value="{$val->category_srl}" <!--@if($category_srl == $val->category_srl)-->selected="selected"<!--@end-->>{$val->title}</option>
+            <!--@end-->
+            {@ $_curDepth = $val->depth}
+        <!--@end-->
+        <!--@for($i=0;$i<$_curDepth;$i++)--></optgroup><!--@end-->
+        </select>
+		<button type="submit" style="cursor:pointer" onclick="location.href=location.href.setQuery('category_srl',this.options[this.selectedIndex].value);">GO</button>
+    </form>
+	<div class="rsList">
+		<table border="1" cellspacing="0">
+			<thead>
+				<tr>
+					<th scope="col">{$lang->status}</th>
+					<th scope="col">{$lang->package_category}</th>
+					<th scope="col">{$lang->package_title}</th>
+					<!--@if($module_info->resource_use_path=='Y')--><th scope="col">{$lang->package_path}</th><!--@end-->
+					<th scope="col">{$lang->package_version}</th>
+					<th scope="col">{$lang->download}</th>
+					<th scope="col">{$lang->regdate}</th>
+				</tr>
+			</thead>
+			<!--@if($package_list)-->
+			<tbody>
+				<!--@foreach($package_list as $key => $val)-->
+				<tr>
+					<td>
+						<!--@if($val->status == 'accepted')-->
+							{$lang->package_accepted}
+						<!--@elseif($val->status == 'reservation')-->
+							{$lang->package_reservation}
+						<!--@else-->
+							{$lang->package_waiting}
+						<!--@end-->
+					</td>
+					<td>{$categories[$val->category_srl]->title}</td>
+					<td class="title"><a href="{getUrl('package_srl', $val->package_srl,'act','dispResourcePackage')}">{$val->title}</a></td>
+					<!--@if($module_info->resource_use_path=='Y')--><td class="title">{$val->path}</td><!--@end-->
+					<td class="no"><!--@if($val->version)-->{$val->version}<!--@else-->&nbsp;<!--@end--></td>
+					<td class="no">{number_format($val->downloaded)}</td>
+					<td class="no">{zdate($val->regdate, "Y.m.d")}</td>
+				</tr>
+				<!--@end-->
+			</tbody>
+			<!--@else-->
+			<tbody>
+				<tr>
+					<td colspan="<!--@if($module_info->resource_use_path=='Y')-->7<!--@else-->6<!--@end-->" class="center">{$lang->no_packages}</td>
+				</tr>
+			</tbody>
+			<!--@end-->
+		</table>
+	</div>
+
+    <div class="btnArea">
+        <span class="btn25 blue"><a href="{getSiteUrl($site_module_info->domain, '', 'mid',$module_info->mid,'act','dispResourceInsertPackage', 'from', 'packageList')}">{$lang->cmd_insert_package}</a></span>
+        <span class="btn25"><a href="{getSiteUrl($site_module_info->domain, '', 'mid',$module_info->mid)}">{$lang->cmd_back}</a></span>
+    </div>
+
+    <div class="pagination" cond="$page_navigation">
+        <a href="{getUrl('page','')}" class="direction prev"><span></span><span></span> {$lang->first_page}</a> 
+        <!--@while($page_no = $page_navigation->getNextPage())-->
+            <!--@if($page == $page_no)-->
+                <strong>{$page_no}</strong> 
+            <!--@else-->
+                <a href="{getUrl('page',$page_no)}">{$page_no}</a>
+            <!--@end-->
+        <!--@end-->
+        <a href="{getUrl('page',$page_navigation->last_page)}" class="direction next">{$lang->last_page} <span></span><span></span></a>
+    </div>
+
+</div>
+
+<include target="include.footer.html" />

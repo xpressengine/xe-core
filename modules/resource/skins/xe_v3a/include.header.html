@@ -1,0 +1,53 @@
+<load target="rs.css" />
+<load target="rs.js" />
+<div class="row">
+	<div class="col-md-3">
+		<div class="">
+			{@ $menus = array(); }
+			<!--@foreach($categories as $key => $val)-->
+				<!--@if(!$val->depth)-->{@ $menus[$key] = $val; $menus[$key]->children = array(); $menus[$key]->count = 0; }<!--@end-->
+			<!--@end-->
+			<!--@foreach($categories as $key => $val)-->
+				<!--@if($val->depth && $val->parent_srl && $menus[$val->parent_srl])-->
+				{@
+					$menus[$val->parent_srl]->children[] = $val;
+					$menus[$val->parent_srl]->count += (int)$package_categories[$val->category_srl]->count;
+				}
+				<!--@end-->
+			<!--@end-->
+
+			<ul class="list-group">{@$x=1;}
+				<li class="list-group-item"><a href="{getSiteUrl($site_module_info->domain, '', 'mid', $module_info->mid)}">전체 <span class="badge pull-right">{number_format($package_categories[0]->count)}</span></a></li>
+				<block loop="$menus=>$val" class="x{$x++}">
+					<!-- <li class="list-group-item divider"></li> -->
+					<li class="list-group-item dropdown-header"><a href="{getSiteUrl($site_module_info->domain, '', 'mid', $module_info->mid, 'category_srl',$val->category_srl,'childs', implode(',',$val->childs))}" class="active"|cond="$val->category_srl == $category_srl || $val->category_srl == $parent_srl">{$val->text} <em class="badge" cond="$val->count">{$val->count}</em></a></li>
+					<block cond="$val->children">
+						<li loop="$val->children=>$child" class="list-group-item <!--@if($child->category_srl == $category_srl)-->active<!--@endif-->">
+							<a href="{getSiteUrl($site_module_info->domain, '', 'mid', $module_info->mid, 'category_srl',$child->category_srl,'parent_srl',$child->parent_srl)}">{$child->text} <em class="badge pull-right" cond="$package_categories[$child->category_srl]">{$package_categories[$child->category_srl]->count}</em></a>
+						</li>
+					</block>
+				</block>
+			</ul>
+		</div>
+		<div class="rsManager" cond="$is_logged">
+			<a href="{getSiteUrl($site_module_info->domain, '', 'mid',$module_info->mid,'act','dispResourceInsertPackage')}">{$lang->cmd_insert_package}</a>
+			<a href="{getSiteUrl($site_module_info->domain, '', 'mid',$module_info->mid,'act','dispResourcePackageList')}">{$lang->cmd_list_my_package}</a>
+			<a cond="$grant->manager" href="{getSiteUrl($site_module_info->domain, '', 'mid',$module_info->mid,'act','dispResourceManage')}">{$lang->cmd_manage_package}</a>
+			<a cond="$grant->manager" href="{getSiteUrl($site_module_info->domain, '', 'mid',$module_info->mid,'act','dispResourceAdminInsert')}">{$lang->cmd_setup}</a>
+		</div>
+	</div>
+	<div class="col-md-9">
+		{@ $end = $act==('dispResourcePackage'||'dispResourceModifyPackage'||'dispResourceModifyAttach');}
+		<div class="resource block">
+			<div class="block-title" cond="!$category_srl && !$end">
+				<h2>전체</h2>
+			</div>
+			<div class="block-title" cond="$category_srl && !$end">
+				<h2 cond="$category_srl && !$end">
+					<block cond="$module_info->core_img && ($category_srl=='18322907'||$parent_srl=='18322907')">{$module_info->core_alt}</block>
+					<block cond="$module_info->program_img && ($category_srl=='18322917'||$parent_srl=='18322917')">{$module_info->program_alt}</block>
+					<block cond="$module_info->skin_img && ($category_srl=='18322919'||$parent_srl=='18322919')">{$module_info->skin_alt}</block>
+					<block cond="$module_info->mskin_img && ($category_srl=='18994168'||$parent_srl=='18994168')">{$module_info->mskin_alt}</block>
+					<block cond="$module_info->etc_img && ($category_srl=='18322921'||$parent_srl=='18322921')">{$module_info->etc_alt}</block>
+				</h2>
+			</div>

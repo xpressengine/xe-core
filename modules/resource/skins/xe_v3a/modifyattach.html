@@ -1,0 +1,123 @@
+<include target="include.header.html" />
+<div class="rsHeader">
+	<h2><img src="img/h2.fileManage.gif" width="66" height="18" alt="{$lang->cmd_manage_file}" /></h2>
+</div>
+
+<div class="rsForm">
+    <p class="notice">{$lang->about_manage_file}</p>
+    <table cellspacing="0" border="1" class="meta">
+		<tr>
+			<th scope="row">{$lang->package_title}</th>
+			<td colspan="3">{$selected_package->title}</td>
+		</tr>
+		<tr>
+			<th scope="row">{$lang->status}</th>
+			<td class="status {$selected_package->status}">
+				<!--@if($selected_package->status == 'accepted')-->
+					{$lang->package_accepted}
+				<!--@elseif($selected_package->status == 'reservation')-->
+					{$lang->package_reservation}
+				<!--@else-->
+					{$lang->package_waiting}
+				<!--@end-->
+			</td>
+			<th scope="row">{$lang->regdate}</th>
+			<td class="date">{zdate($selected_package->regdate, "Y-m-d H:i")}</td>
+		</tr>
+		<tr>
+			<th scope="row">{$lang->package_category}</th>
+			<td>{$categories[$selected_package->category_srl]->title}</td>
+			<th scope="row">{$lang->package_license}</th>
+			<td>{$selected_package->license}</td>
+		</tr>
+		<tr>
+			<th scope="row">{$lang->package_path}</th>
+			<td colspan="3">{$selected_package->path}</td>
+		</tr>
+    </table>
+
+	<div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/resource/skins/xe_v3/modifyattach/1'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+		<p>{$XE_VALIDATOR_MESSAGE}</p>
+	</div>
+	
+    <form action="./" method="post" enctype="multipart/form-data"> 
+    <input type="hidden" name="vid" value="{$vid}" />
+    <input type="hidden" name="mid" value="{$mid}" />
+    <input type="hidden" name="act" value="procResourceModifyAttachOneTime" />
+    <input type="hidden" name="package_srl" value="{$selected_package->package_srl}" />
+    <input type="hidden" name="item_srl" value="{$item->item_srl}" />
+    <input type="hidden" name="document_srl" value="{$item->document_srl}" />
+    <input type="hidden" name="dependency" value="" />
+	<!--// for backward compatibility, remain a 'attach_description'. 
+    		copy a value of 'attach_description' to 'description' when submit by 'BeforeValidateStub' -->
+    <input type="hidden" name="description" value="{$item_document->getContentText()}" />
+    <input type="hidden" name="attach_description" value="{$item_document->getContentText()}" />
+	<input type="hidden" name="xe_validator_id" value="modules/resource/skins/xe_v3/modifyattach/1" />
+    <fieldset>
+		<table border="1" cellspacing="0" class="rsTable">
+            <tr>
+                <th scope="row">{$lang->attach_file} <em>*</em></th>
+                <td>
+                    <a href="{$item->download_url}" class="file">{$item->source_filename}</a>
+					<p><input type="file" name="attach_file"/></p>
+                    <p>{$lang->about_attach_file}</p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">{$lang->attach_screenshot} <em>*</em></th>
+                <td>
+					<img class="thumb" src="{$item->screenshot_url}" width="130" height="100" alt="" />
+					<p><input type="file" name="attach_screenshot"/></p>
+                    <p>{$lang->about_attach_screenshot}</p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">{$lang->attach_version} <em>*</em></th>
+                <td>
+                    <input type="text" name="version" class="iText" value="{htmlspecialchars($item->version)}"/>
+                    <p>{$lang->about_attach_version}</p>
+                    <!--@if($latest_item)-->
+                    <p><strong>{$lang->latest_attach_version} : {$latest_item->item_version}</strong></p>
+                    <!--@end-->
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">{$lang->attach_dependency}</th>
+                <td>
+					<select name="sel_dependency" size="10" id="sel_dependency" style="width:400px">
+					<!--@foreach($dependency as $key => $val)-->
+					<option value="{$val->item_srl}">[{$categories[$val->category_srl]->title}] {$val->title} (ver. {$val->version})</option>
+					<!--@end-->
+					</select>
+                    <p>
+                        <span class="btn25"><button type="button" onclick="doSearchDependency(); return false;" class="button">{$lang->cmd_search}</button></span>
+                        <span class="btn25"><button type="button" onclick="doDeleteDependency(); return false;" class="button">{$lang->cmd_delete}</button></span>
+                    </p>
+                    <p>{$lang->about_attach_dependency}</p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">{$lang->tag}</th>
+                <td>
+					<input type="text" name="tag" class="iText" value="{htmlspecialchars($item_document->get('tags'))}" />
+                    <p>{$lang->about_tag}</p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">{$lang->attach_description} <em>*</em></th>
+                <td>
+                    <div class="editor">{$editor}</div>
+                    <p>{$lang->about_attach_description}</p>
+                </td>
+            </tr>
+		</table>
+	</fieldset>
+	<div class="btnArea">
+		<span class="btn25 blue"><input type="submit" value="{$lang->cmd_attach_file}" /></span>
+		<span class="btn25"><a href="{getUrl('act','dispResourcePackage','item_srl','')}">{$lang->cmd_back}</a></span>
+	</div>
+    </form>
+</div>
+
+
+<include target="include.footer.html" />

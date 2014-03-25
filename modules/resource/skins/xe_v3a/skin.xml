@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+    <title xml:lang="ko">XE Official v3 Resource</title>
+    <description xml:lang="ko">XE 공식 웹 사이트 2011 자료실.</description>
+    <version>0.1</version>
+    <date>2010-12-24</date>
+    <author email_address="developers@xpressengine.com" link="http://xpressengine.com/">
+        <name xml:lang="ko">NHN</name>
+    </author>
+    <license>GPL v2 or later</license>
+    <extra_vars>
+        <var name="menu_img" type="image">
+            <title xml:lang="ko">메뉴 이미지</title>
+        </var>
+        <var name="program_img" type="image">
+            <title xml:lang="ko">'XE 프로그램' 제목 이미지</title>
+        </var>
+        <var name="program_alt" type="text">
+            <title xml:lang="ko">'XE 프로그램' 제목 이미지 alt</title>
+        </var>
+        <var name="skin_img" type="image">
+            <title xml:lang="ko">'스킨' 제목 이미지</title>
+        </var>
+        <var name="skin_alt" type="text">
+            <title xml:lang="ko">'스킨' 제목 이미지 alt</title>
+        </var>
+    </extra_vars>
+</skin>

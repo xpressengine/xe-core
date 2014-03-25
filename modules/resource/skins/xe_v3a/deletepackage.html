@@ -1,0 +1,41 @@
+<include target="include.header.html" />
+<div class="rsHeader">
+	<h2><img src="img/h2.dataDelete.gif" width="67" height="18" alt="{$lang->cmd_delete_package}" /></h2>
+</div>
+<div class="rsForm">
+    <p class="notice">{$lang->about_delete_package}</p>
+	
+	<div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/resource/skins/xe_v3/deletepackage/1'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+		<p>{$XE_VALIDATOR_MESSAGE}</p>
+	</div>
+	
+    <form action="./" method="post" ruleset="deletePackage">
+	<input type="hidden" name="act" value="procResourceDeletePackage" />
+    <input type="hidden" name="vid" value="{$vid}" />
+    <input type="hidden" name="mid" value="{$mid}" />
+    <input type="hidden" name="package_srl" value="{$selected_package->package_srl}" />
+	<input type="hidden" name="xe_validator_id" value="modules/resource/skins/xe_v3/deletepackage/1" />
+    <fieldset>
+        <legend>{$lang->cmd_delete_package}</legend>
+            <table border="1" cellspacing="0" class="meta">
+				<tr>
+					<th scope="row">{$lang->package_title}</th>
+					<td>
+						<p>{$selected_package->title}</p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">{$lang->package_description}</th>
+					<td>
+						<p>{nl2br($selected_package->description)}</p>
+					</td>
+				</tr>
+            </table>
+        </fieldset>
+        <div class="btnArea">
+            <span class="btn25 black"><input type="submit" value="{$lang->cmd_delete}" /></span>
+            <span class="btn25"><a href="{getUrl('act','dispResourcePackage')}">{$lang->cmd_back}</a></span>
+        </div>
+    </form>
+</div>
+<include target="include.footer.html" />
