@@ -1,0 +1,9 @@
+<table name="profile_timeline">
+	<column name="id" type="number" primary_key="primary_key" auto_increment="auto_increment" notnull="notnull" />
+	<column name="member_srl" type="number" notnull="notnull" />
+	<column name="msg_type" type="varchar" size="40" notnull="notnull" />
+	<column name="ref_id" type="varchar" size="50" notnull="notnull" />
+	<column name="metadata" type="text" />
+	<column name="regdate" type="number" notnull="notnull" />
+	<column name="list_order" type="number" notnull="notnull" />
+</table>

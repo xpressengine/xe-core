@@ -1,16 +1,184 @@
 <include target="_header.html" />
 
-<h2>dispProfileView</h2>
+<h2 class="sr-only">dispProfileView</h2>
 
-<section>
-	<h3>프로필</h3>
-	<strong>{$profile->member->nick_name} ({$profile->member->user_name})</strong>
-	<img src="{$profile->member->profile_image}" style="border:1px solid #CCC; border-radius:500px; width:80px; height:80px;">
-	<p>{$profile->member->signature}</p>
-</section>
+<div class="row">
+	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+		<h3 class="sr-only">프로필</h3>
+		<div class="widget">
+			<div class="widget-advanced">
+				<!-- Widget Header -->
 
-<hr>
+				<div class="widget-header text-center themed-background-dark">
+					<div class="widget-options">
+						<button title="" data-toggle="tooltip" class="tb-btn btn-xs btn-default" data-original-title="Love it!"><i class="fa fa-heart text-danger"></i></button>
+					</div>
+					<h3 class="widget-content-light">
+						<a class="themed-color-fire" href="page_ready_elearning_course_lessons.html">BNU</a><br>
+						<small>홍경원</small>
+					</h3>
 
-<ul>
-	<li loop="$profile->document->data => $document">{$document->getTitleText()}</li>
-</ul>
+				</div>
+				<!-- END Widget Header -->
+				<div class="widget-main">
+					<a class="widget-image-container animation-fadeIn" href="javascript:void(0)">
+						<span class="widget-icon themed-background"><i class="fa fa-globe"></i></span>
+					</a>
+					<div>
+						<button title="" data-toggle="tooltip" class="tb-btn btn-xs btn-default" data-original-title="Love it!"><i class="fa fa-heart text-danger"></i></button>
+					</div>
+					<p>소개소개</p>
+				</div>
+				<div class="widget-extra">
+					<div class="row text-center themed-background">
+						<div class="col-md-3 col-sm-6">
+							<div class="widget-content-light">
+								503 <br><small>Likes</small>
+							</div>
+						</div>
+						<div class="col-md-3 col-sm-6">
+							<div class="widget-content-light">
+								789 <br><small>Plugins</small>
+							</div>
+						</div>
+						<div class="col-md-3 col-sm-6">
+							<div class="widget-content-light">
+								123 <br><small>Documents</small>
+							</div>
+						</div>
+						<div class="col-md-3 col-sm-6">
+							<div class="widget-content-light">
+								456 <br><small>Comments</small>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="block">
+			<!-- Timeline Style Title -->
+			<div class="block-title">
+				<h2>Timeline</h2>
+			</div>
+			<!-- END Timeline Style Title -->
+
+			<!-- Timeline Style Content -->
+			<!-- You can remove the class .block-content-full if you want the block to have its regular padding -->
+			<div class="timeline block-content-full">
+				<!-- You can remove the class .timeline-hover if you don't want each event to be highlighted on mouse hover -->
+				<ul class="timeline-list timeline-hover">
+					<li loop="$timeline->data => $item" class="active"|cond="$item->msg_type == 'xe.add-document'">
+						<div class="timeline-icon">
+							<i class="fa fa-file-text" cond="$item->msg_type == 'xe.add-document'"></i>
+							<i class="fa fa-comments" cond="$item->msg_type == 'xe.add-comment'"></i>
+						</div>
+						<div class="timeline-time timeago" title="{date('Y-m-d\TH:i:s\Z+0900', $item->regdate)}"><strong>{date('H:i', $item->regdate)}</strong> {date('m-d', $item->regdate)}</div>
+						<div class="timeline-content">
+							<p class="push-bit" cond="$item->msg_type == 'xe.add-document'"><strong>{$item->metadata->title}</strong> 게시</p>
+							<p class="push-bit" cond="$item->msg_type == 'xe.add-comment'"><strong>{$item->metadata->title}</strong>에 댓글 게시</p>
+							{$item->metadata->summary}
+						</div>
+					</li>
+				</ul>
+			</div>
+			<!-- END Timeline Style Content -->
+		</div>
+	</div>
+	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+	</div>
+
+	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+		<div class="block">
+			<!-- Single Image Title -->
+			<div class="block-title">
+				<h2><strong>Single</strong> Image</h2>
+			</div>
+			<!-- END Single Image Title -->
+
+			<div data-toggle="lightbox-gallery" class="gallery">
+				<div class="row">
+					<div class="col-md-6 col-sm-12 gallery-image">
+						<img alt="image" src="/ProUI 1.2 by pixelcave/02 - ProUI Template (HTML)/img/placeholders/photos/photo10.jpg">
+						<div class="gallery-image-options text-center">
+							<div class="btn-group btn-group-sm">
+								<a title="Image Info" class="gallery-link btn btn-sm btn-alt btn-default" href="img/placeholders/photos/photo10.jpg">View</a>
+								<a title="" data-toggle="tooltip" class="btn btn-sm btn-alt btn-default" href="javascript:void(0)" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12 gallery-image">
+						<img alt="image" src="/ProUI 1.2 by pixelcave/02 - ProUI Template (HTML)/img/placeholders/photos/photo11.jpg">
+						<div class="gallery-image-options text-center">
+							<div class="btn-group btn-group-sm">
+								<a title="Image Info" class="gallery-link btn btn-sm btn-alt btn-default" href="img/placeholders/photos/photo11.jpg">View</a>
+								<a title="" data-toggle="tooltip" class="btn btn-sm btn-alt btn-default" href="javascript:void(0)" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12 gallery-image">
+						<img alt="image" src="/ProUI 1.2 by pixelcave/02 - ProUI Template (HTML)/img/placeholders/photos/photo12.jpg">
+						<div class="gallery-image-options text-center">
+							<div class="btn-group btn-group-sm">
+								<a title="Image Info" class="gallery-link btn btn-sm btn-alt btn-default" href="img/placeholders/photos/photo12.jpg">View</a>
+								<a title="" data-toggle="tooltip" class="btn btn-sm btn-alt btn-default" href="javascript:void(0)" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12 gallery-image">
+						<img alt="image" src="/ProUI 1.2 by pixelcave/02 - ProUI Template (HTML)/img/placeholders/photos/photo13.jpg">
+						<div class="gallery-image-options text-center">
+							<div class="btn-group btn-group-sm">
+								<a title="Image Info" class="gallery-link btn btn-sm btn-alt btn-default" href="img/placeholders/photos/photo13.jpg">View</a>
+								<a title="" data-toggle="tooltip" class="btn btn-sm btn-alt btn-default" href="javascript:void(0)" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="block">
+			<!-- Single Image Title -->
+			<div class="block-title">
+				<h2><strong>Single</strong> Image</h2>
+			</div>
+			<!-- END Single Image Title -->
+
+			<!-- Single Image Content -->
+			<div class="row">
+				<div class="col-md-6 col-sm-12 col-xs-12 block-section text-center">
+					<h4 class="sub-header">Image with Options</h4>
+					<!-- Just wrap your image with a div.gallery-image and.. -->
+					<div class="gallery-image">
+						<!-- .. add your image.. -->
+						<img alt="image" src="/ProUI 1.2 by pixelcave/02 - ProUI Template (HTML)/img/placeholders/photos/photo9.jpg">
+						<!-- .. along with a div.gallery-image-options which will contain your hover links! -->
+						<div class="gallery-image-options">
+							<!-- Link to your large image with the attribute data-toggle="lightbox-image" -->
+							<a class="gallery-link tb-btn btn-sm btn-primary" title="This is some info text about the image" data-toggle="lightbox-image" href="img/placeholders/photos/photo9.jpg"><i class="fa fa-eye"></i> View</a>
+							<a title="" data-toggle="tooltip" class="tb-btn btn-sm btn-alt btn-primary" href="javascript:void(0)" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+							<a title="" data-toggle="tooltip" class="tb-btn btn-sm btn-alt btn-primary" href="javascript:void(0)" data-original-title="Remove"><i class="fa fa-times"></i></a>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12 col-xs-12 block-section text-center">
+					<h4 class="sub-header">Image with Options</h4>
+					<!-- Just wrap your image with a div.gallery-image and.. -->
+					<div class="gallery-image">
+						<!-- .. add your image.. -->
+						<img alt="image" src="/ProUI 1.2 by pixelcave/02 - ProUI Template (HTML)/img/placeholders/photos/photo9.jpg">
+						<!-- .. along with a div.gallery-image-options which will contain your hover links! -->
+						<div class="gallery-image-options">
+							<!-- Link to your large image with the attribute data-toggle="lightbox-image" -->
+							<a class="gallery-link tb-btn btn-sm btn-primary" title="This is some info text about the image" data-toggle="lightbox-image" href="img/placeholders/photos/photo9.jpg"><i class="fa fa-eye"></i> View</a>
+							<a title="" data-toggle="tooltip" class="tb-btn btn-sm btn-alt btn-primary" href="javascript:void(0)" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+							<a title="" data-toggle="tooltip" class="tb-btn btn-sm btn-alt btn-primary" href="javascript:void(0)" data-original-title="Remove"><i class="fa fa-times"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- END Single Image Content -->
+		</div>
+	</div>
+</div>

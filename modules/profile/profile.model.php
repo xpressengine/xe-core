@@ -3,8 +3,6 @@ class profileModel extends profile
 {
 	// 쇼케이스
 	// 자료실
-	// 게시물
-	// 댓글
 	// 회원
 	function _getProfile($member_srl)
 	{
@@ -32,19 +30,49 @@ class profileModel extends profile
 		return $profile;
 	}
 
-	public function _getDocument($member_srl, $cond)
+	public function getTimeline($member_srl, $args = null)
 	{
-		$oDocumentModel = getModel('document');
-		$cond->member_srl = $member_srl;
-		$output = $oDocumentModel->getDocumentList($cond, false, false);
-		debugPrint($output);
+		if(!$args) {
+			$args = new stdClass;
+			$args->member_srl = $member_srl;
+		}
+
+		$output = executeQueryArray('profile.getTimeline', $args);
+		if(!$output->data) $output->data = array();
+
+		foreach($output->data as $item) {
+			$item->metadata = json_decode($item->metadata);
+		}
+
 		return $output;
 	}
 
-	public function _getComment($member_srl, $cond)
+
+	public function insertTimeline($args)
 	{
-		$oCommentModel = &getModel('comment');
-		$output = $oCommentModel->getCommentListByMemberSrl($member_srl, array(), 1, false, 5);
+		debugPrint('### insertTimeline');
+		debugPrint($args);
+		$logged_info = Context::get('logged_info');
+
+		$args->metadata = json_encode($args->metadata);
+		$args->list_order = $args->regdate * -1;
+		$output = executeQuery('profile.insertTimeline', $args);
+		debugPrint($output);
+	}
+
+	public function updateTimeline($obj)
+	{
+		debugPrint('### updateTimeline');
+		debugPrint($obj);
+	}
+
+	public function deleteTimeline($obj)
+	{
+		debugPrint('### deleteTimeline');
+		debugPrint($obj);
+
+		$args = $obj;
+		$output = executeQuery('profile.deleteTimeline', $args);
 		debugPrint($output);
 	}
 }

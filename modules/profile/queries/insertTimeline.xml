@@ -1,0 +1,13 @@
+<query id="insertTimeline" action="insert">
+	<tables>
+		<table name="profile_timeline" />
+	</tables>
+	<columns>
+		<column name="member_srl" var="member_srl" filter="number" notnull="notnull" />
+		<column name="msg_type" var="msg_type" notnull="notnull" />
+		<column name="ref_id" var="ref_id" notnull="notnull" />
+		<column name="metadata" var="metadata" />
+		<column name="regdate" var="regdate" filter="number" notnull="notnull" />
+		<column name="list_order" var="list_order" notnull="notnull" />
+	</columns>
+</query>

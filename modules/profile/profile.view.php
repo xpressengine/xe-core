@@ -45,12 +45,6 @@ debugPrint('set');
 		} else if ($detail == 'resource') {
 			// 자료실
 			$this->_dispResource();
-		} else if ($detail == 'document') {
-			// 게시물
-			$this->_dispDocument();
-		} else if ($detail == 'comment') {
-			// 댓글
-			$this->_dispComment();
 		} else {
 			$this->_dispIndex();
 		}
@@ -63,22 +57,12 @@ debugPrint('set');
 
 	private function _dispIndex()
 	{
-
 		$oModel = getModel('profile');
 		$vars = Context::getRequestVars();
+		$member_srl = Context::get('logged_info')->member_srl;
 
-		$cond = new stdClass;
-		$cond->page = 1;
-		$cond->list_count = 5;
-		$this->profile->document = $oModel->_getDocument($this->profile->member_srl, $cond);
-		debugPrint($this->profile->document->data);
-
-		$oModel = getModel('profile');
-		$vars = Context::getRequestVars();
-
-		$cond = new stdClass;
-		$cond->page = ($vars->page) ? $vars->page : 1;
-		$this->profile->showcase = $oModel->_getComment($this->profile->member_srl, $cond);
+		$timeline = $oModel->getTimeline($member_srl);
+		Context::set('timeline', $timeline);
 	}
 
 	// 쇼케이스
@@ -101,27 +85,5 @@ debugPrint('set');
 		$cond = new stdClass;
 		$cond->page = ($vars->page) ? $vars->page : 1;
 		$this->profile->showcase = $oModel->_getResource($this->profile->member_srl, $cond);
-	}
-
-	// 게시물
-	private function _dispDocument()
-	{
-		$oModel = getModel('profile');
-		$vars = Context::getRequestVars();
-
-		$cond = new stdClass;
-		$cond->page = ($vars->page) ? $vars->page : 1;
-		$this->profile->showcase = $oModel->_getDocument($this->profile->member_srl, $cond);
-	}
-
-	// 댓글
-	private function _dispComment()
-	{
-		$oModel = getModel('profile');
-		$vars = Context::getRequestVars();
-
-		$cond = new stdClass;
-		$cond->page = ($vars->page) ? $vars->page : 1;
-		$this->profile->showcase = $oModel->_getComment($this->profile->member_srl, $cond);
 	}
 }

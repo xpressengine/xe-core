@@ -37,4 +37,88 @@ class profileController extends profile
 
 		$oMemberController->addMemberPopupMenu(getUrl('', 'mid',$mid, 'module','profile', 'act','dispProfileView', 'member_srl',$member_srl), '프로필 보기', '');
 	}
+
+	public function triggerAfterInsertDocument($obj)
+	{
+		debugPrint('@@@ triggerAfterInsertDocument');
+		debugPrint($obj);
+		if($obj->status != 'PUBLIC') return;
+		$oProfileModel = getModel('profile');
+
+		$logged_info = Context::get('logged_info');
+
+		$metadata = new stdClass;
+		$metadata->title = $obj->title;
+		$metadata->module_srl = $obj->module_srl;
+		$metadata->summary = preg_replace("/(\t|\n)/", '', $obj->content);
+		$metadata->summary = cut_str(trim(strip_tags($metadata->summary)), 200);
+
+		$data = new stdClass;
+		$data->member_srl = $logged_info->member_srl;
+		$data->msg_type = 'xe.add-document';
+		$data->ref_id = 'xe.document-' . $obj->document_srl;
+		$data->metadata = $metadata;
+		$data->regdate = time();
+		$output = $oProfileModel->insertTimeline($data);
+	}
+
+	public function triggerAfterDeleteDocument($obj)
+	{
+		debugPrint('@@@ triggerAfterDeleteDocument');
+		debugPrint($obj);
+		$oProfileModel = getModel('profile');
+
+		$cond = new stdClass;
+		$cond->member_srl = $obj->member_srl;
+		$cond->ref_id = 'xe.document-' . $obj->document_srl;
+		$output = $oProfileModel->deleteTimeline($cond);
+
+		$cond = new stdClass;
+		$cond->member_srl = $obj->member_srl;
+		$cond->ref_id = 'xe.comment-' . $obj->document_srl;
+		$output = $oProfileModel->deleteTimeline($cond);
+	}
+
+	public function triggerAfterInsertComment($obj)
+	{
+		debugPrint('@@@ triggerAfterInsertComment');
+		debugPrint($obj);
+		if($obj->is_secret == 'Y') return;
+
+		$oProfileModel = getModel('profile');
+		$oDocumentModel = getModel('document');
+
+		$logged_info = Context::get('logged_info');
+
+		$oDocument =  $oDocumentModel->getDocument($obj->document_srl);
+
+		$metadata = new stdClass;
+		$metadata->document_srl = $obj->document_srl;
+		$metadata->title = $oDocument->getTitleText();
+		$metadata->module_srl = $obj->module_srl;
+		$metadata->module = $obj->module;
+		$metadata->summary = preg_replace("/(\t|\n)/", '', $obj->content);
+		$metadata->summary = cut_str(trim(strip_tags($metadata->summary)), 200);
+
+		$data = new stdClass;
+		$data->member_srl = $logged_info->member_srl;
+		$data->msg_type = 'xe.add-comment';
+		$data->ref_id = 'xe.comment-' . $obj->comment_srl;
+		$data->metadata = $metadata;
+		$data->regdate = time();
+		debugPrint($data);
+		$output = $oProfileModel->insertTimeline($data);
+	}
+
+	public function triggerAfterDeleteComment($obj)
+	{
+		debugPrint('@@@ triggerAfterDeleteComment');
+		debugPrint($obj);
+		$oProfileModel = getModel('profile');
+
+		$cond = new stdClass;
+		$cond->ref_id = 'xe.comment-' . $obj->comment_srl;
+		$output = $oProfileModel->deleteTimeline($cond);
+	}
+
 }

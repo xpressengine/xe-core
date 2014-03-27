@@ -1,0 +1,8 @@
+<query id="deleteTimeline" action="delete">
+	<tables>
+		<table name="profile_timeline" />
+	</tables>
+	<conditions>
+		<condition operation="equal" column="ref_id" var="ref_id" notnull="notnull" />
+	</conditions>
+</query>

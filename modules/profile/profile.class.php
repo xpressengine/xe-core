@@ -2,6 +2,13 @@
 class profile extends ModuleObject
 {
 	private static $config;
+	private $triggers = array(
+		array('member.getMemberMenu',    'profile', 'controller', 'triggerMemberMenu',          'after'),
+		array('comment.insertComment',   'profile', 'controller', 'triggerAfterInsertComment',  'after'),
+		array('comment.deleteComment',   'profile', 'controller', 'triggerAfterDeleteComment',  'after'),
+		array('document.insertDocument', 'profile', 'controller', 'triggerAfterInsertDocument', 'after'),
+		array('document.deleteDocument', 'profile', 'controller', 'triggerAfterDeleteDocument', 'after'),
+	);
 
 	public function getModuleConfig()
 	{
@@ -17,7 +24,11 @@ class profile extends ModuleObject
 	function checkUpdate()
 	{
 		$oModuleModel = getModel('module');
-		if(!$oModuleModel->getTrigger('member.getMemberMenu', 'profile', 'controller', 'triggerMemberMenu', 'after')) return true;
+
+		foreach($this->triggers as $trigger)
+		{
+			if(!$oModuleModel->getTrigger($trigger[0], $trigger[1], $trigger[2], $trigger[3], $trigger[4])) return TRUE;
+		}
 
 		return false;
 	}
@@ -27,8 +38,12 @@ class profile extends ModuleObject
 		$oModuleModel = getModel('module');
 		$oModuleController = getController('module');
 
-		if(!$oModuleModel->getTrigger('member.getMemberMenu', 'profile', 'controller', 'triggerMemberMenu', 'after')) {
-			$oModuleController->insertTrigger('member.getMemberMenu', 'profile', 'controller', 'triggerMemberMenu', 'after');
+		foreach($this->triggers as $trigger)
+		{
+			if(!$oModuleModel->getTrigger($trigger[0], $trigger[1], $trigger[2], $trigger[3], $trigger[4]))
+			{
+				$oModuleController->insertTrigger($trigger[0], $trigger[1], $trigger[2], $trigger[3], $trigger[4]);
+			}
 		}
 
 		return new Object(0, 'success_updated');
