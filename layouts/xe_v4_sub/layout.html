@@ -16,6 +16,7 @@
 <load target="js/vendor/bootstrap.min.js" type="body" />
 <load target="js/plugins.js" type="body" />
 <load target="js/app.js" type="body" />
+<load target="js/vendor/jquery.timeago.js" type="body" />
 <load target="js/vendor/modernizr-2.7.1-respond-1.4.2.min.js" />
 
 <div id="page-container" class="header-fixed-top">
@@ -186,3 +187,12 @@
 	<!-- END Main Container -->
 </div>
 <!-- END Page Container -->
+
+
+<script>
+	jQuery(function($) {
+		jQuery.timeago.settings.refreshMillis = 1000;
+		jQuery('.timeago').timeago();
+	});
+</script>
+

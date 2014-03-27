@@ -82,26 +82,6 @@
 					<li class="facebook link"><a href="http://facebook.com/">Facebook</a></li>
 					<li class="delicious link"><a href="http://delicious.com/">Delicious</a></li>
 				</ul>
-				<script type="text/javascript">
-					jQuery(function($){
-						$('.twitter>a').snspost({
-							type : 'twitter',
-							content : '{$oDocument->getTitle()} {$oDocument->getPermanentUrl()}'
-						});
-						$('.me2day>a').snspost({
-							type : 'me2day',
-							content : '\"{$oDocument->getTitle()}\":{$oDocument->getPermanentUrl()}'
-						});
-						$('.facebook>a').snspost({
-							type : 'facebook',
-							content : '{$oDocument->getTitle()}'
-						});
-						$('.delicious>a').snspost({
-							type : 'delicious',
-							content : '{$oDocument->getTitle()}'
-						});
-					});
-				</script>
 			</div>
 			<div class="sign" cond="$module_info->display_sign!='N'&&($oDocument->getProfileImage()||$oDocument->getSignature())">
 				<img cond="$oDocument->getProfileImage()" src="{$oDocument->getProfileImage()}" alt="Profile" class="pf" />
