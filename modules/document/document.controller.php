@@ -233,7 +233,7 @@ class documentController extends document
 		$output = ModuleHandler::triggerCall('document.insertDocument', 'before', $obj);
 		if(!$output->toBool()) return $output;
 		// Register it if no given document_srl exists
-		if(!$obj->document_srl) $obj->document_srl = getNextSequence();
+		$obj->document_srl = getNextSequence();
 
 		$oDocumentModel = getModel('document');
 		// Set to 0 if the category_srl doesn't exist
