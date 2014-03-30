@@ -296,10 +296,8 @@ class commentController extends comment
 			return new Object(-1, 'msg_invalid_request');
 		}
 
-		if(!$obj->comment_srl)
-		{
-			$obj->comment_srl = getNextSequence();
-		}
+		$obj->comment_srl = getNextSequence();
+		
 
 		// determine the order
 		$obj->list_order = getNextSequence() * -1;
