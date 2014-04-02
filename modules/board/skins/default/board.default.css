@@ -304,11 +304,12 @@
 	background: url(bgHeader.gif) no-repeat 0 0;
 }
 .write-help-message {
-	border: 1px solid #DDD;
+	border: 1px solid #BCE8F1;
 	border-radius: 3px;
 	margin:0 0 10px;
 	padding:10px;
-	background: #FEFEFE;
+	color:#3A87AD;
+	background: #D9EDF7;
 }
 .write_header {
 	padding: 9px 10px 9px 10px;
