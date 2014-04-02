@@ -303,6 +303,13 @@
 .board_write {
 	background: url(bgHeader.gif) no-repeat 0 0;
 }
+.write-help-message {
+	border: 1px solid #DDD;
+	border-radius: 3px;
+	margin:0 0 10px;
+	padding:10px;
+	background: #FEFEFE;
+}
 .write_header {
 	padding: 9px 10px 9px 10px;
 	background: url(bgHeader.gif) no-repeat right 0;

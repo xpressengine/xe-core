@@ -13,6 +13,11 @@
 	<div class="hx h3">
 		<h3>{$lang->cmd_write}</h3>
 	</div>
+
+	<div class="write-help-message" cond="$module_info->write_help_message">
+		{$module_info->write_help_message}
+	</div>
+
 	<form action="./" method="post" class="ff" onsubmit="return procFilter(this, insert)">
 	<input type="hidden" name="mid" value="{$mid}" />
 	<input type="hidden" name="document_srl" value="{$document_srl}" />

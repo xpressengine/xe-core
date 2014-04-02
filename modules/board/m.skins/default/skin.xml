@@ -28,4 +28,11 @@
         <name xml:lang="zh-TW">NHN</name>
         <name xml:lang="tr">NHN</name>
     </author>
+
+    <extra_vars>
+        <var name="write_help_message" type="textarea">
+            <title xml:lang="ko">글쓰기 도움말</title>
+            <description xml:lang="ko">글 작성 화면 상단에 도움말 또는 안내문을 표시합니다.</description>
+        </var>
+    </extra_vars>
 </skin>

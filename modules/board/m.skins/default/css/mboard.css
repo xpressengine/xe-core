@@ -569,3 +569,8 @@ input[type=radio] {
 	border-radius: 5px;
 	cursor: pointer;
 }
+.write-help-message {
+	margin:0 0 10px;
+	padding:10px;
+	background: #E5E5E5;
+}
