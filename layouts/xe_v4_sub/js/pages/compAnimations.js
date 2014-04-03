@@ -8,8 +8,8 @@ var CompAnimations = function() {
 
     return {
         init: function() {
-            var animPageButtons = $('.animation-page-buttons .tb-btn');
-            var animButtons     = $('.animation-buttons .tb-btn');
+            var animPageButtons = $('.animation-page-buttons .btn');
+            var animButtons     = $('.animation-buttons .btn');
             var animClass       = '';
 
             /* Add/Remove Animation for page */

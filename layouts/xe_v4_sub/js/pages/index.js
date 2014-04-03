@@ -21,15 +21,34 @@ var Index = function() {
                 tooltipSuffix: ' Sales',
                 tooltipFormat: '{{prefix}}{{value}}{{suffix}}'
             };
-            jQuery('#mini-chart-sales').sparkline([8,3,1,5,4,8,9,6,5,7,10,5,8,9], miniChartBarOptions);
+            $('#mini-chart-sales').sparkline([8,3,1,5,4,8,9,6,5,7,10,5,8,9], miniChartBarOptions);
 
             miniChartBarOptions['tooltipSuffix'] = '%';
-            jQuery('#mini-chart-brand').sparkline([50,65,70,90,95,110,140,160,190,200,220,230,260], miniChartBarOptions);
+            $('#mini-chart-brand').sparkline([50,65,70,90,95,110,140,160,190,200,220,230,260], miniChartBarOptions);
 
             /*
              * With Gmaps.js, Check out examples and documentation at http://hpneo.github.io/gmaps/examples.html
              */
 
+            // Set default height to Google Maps container
+            $('.gmap').css('height', '220px');
+
+            // Initialize Timeline map
+            new GMaps({
+                div: '#gmap-timeline',
+                lat: -33.863,
+                lng: 151.202,
+                zoom: 15,
+                disableDefaultUI: true,
+                scrollwheel: false
+            }).addMarkers([
+                {
+                    lat: -33.863,
+                    lng: 151.202,
+                    animation: google.maps.Animation.DROP,
+                    infoWindow: {content: '<strong>Cafe-Bar: Example Address</strong>'}
+                }
+            ]);
 
             /*
              * Flot 0.8.2 Jquery plugin is used for charts
@@ -39,7 +58,7 @@ var Index = function() {
              */
 
             // Get the elements where we will attach the charts
-            var dashWidgetChart = jQuery('#dash-widget-chart');
+            var dashWidgetChart = $('#dash-widget-chart');
 
             // Random data for the chart
             var dataEarnings = [[1, 1560], [2, 1650], [3, 1320], [4, 1950], [5, 1800], [6, 2400], [7, 2100], [8, 2550], [9, 3300], [10, 3900], [11, 4200], [12, 4500]];
@@ -49,7 +68,7 @@ var Index = function() {
             var chartMonths = [[1, 'January'], [2, 'February'], [3, 'March'], [4, 'April'], [5, 'May'], [6, 'June'], [7, 'July'], [8, 'August'], [9, 'September'], [10, 'October'], [11, 'November'], [12, 'December']];
 
             // Initialize Dash Widget Chart
-            jQuery.plot(dashWidgetChart,
+            $.plot(dashWidgetChart,
                 [
                     {
                         data: dataEarnings,
@@ -79,7 +98,7 @@ var Index = function() {
                     if (previousPoint !== item.dataIndex) {
                         previousPoint = item.dataIndex;
 
-                        jQuery('#chart-tooltip').remove();
+                        $('#chart-tooltip').remove();
                         var x = item.datapoint[0], y = item.datapoint[1];
 
                         // Get xaxis label
@@ -91,12 +110,12 @@ var Index = function() {
                             ttlabel = '$ <strong>' + y + '</strong> in <strong>' + monthLabel + '</strong>';
                         }
 
-                        jQuery('<div id="chart-tooltip" class="chart-tooltip">' + ttlabel + '</div>')
+                        $('<div id="chart-tooltip" class="chart-tooltip">' + ttlabel + '</div>')
                             .css({top: item.pageY - 50, left: item.pageX - 50}).appendTo("body").show();
                     }
                 }
                 else {
-                    jQuery('#chart-tooltip').remove();
+                    $('#chart-tooltip').remove();
                     previousPoint = null;
                 }
             });

@@ -56,7 +56,7 @@ blockquote:before {
 #page-content,
 .table-hover > tbody > tr:hover > td,
 .table-hover > tbody > tr:hover > th,
-ul.wysihtml5-toolbar a.tb-btn.wysihtml5-command-active,
+ul.wysihtml5-toolbar a.btn.wysihtml5-command-active,
 .slider-track {
     background-color: #f2eeeb;
 }
@@ -82,7 +82,7 @@ blockquote,
 .pager > li > span,
 .pager > li.disabled > a:hover,
 .dropzone,
-ul.wysihtml5-toolbar a.tb-btn.wysihtml5-command-active {
+ul.wysihtml5-toolbar a.btn.wysihtml5-command-active {
     border-color: #f2eeeb;
 }
 

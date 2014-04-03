@@ -11,7 +11,7 @@ var Icons = function() {
             var titleAttr;
 
             // When an icon button is clicked
-            $('#page-content .tb-btn').click(function(){
+            $('#page-content .btn').click(function(){
                 // Get the icon class from the button attribute (data-original-title is created by tooltip)
                 titleAttr = $(this).attr('data-original-title');
 
