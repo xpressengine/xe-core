@@ -1,0 +1,9 @@
+<table name="profile_promotion">
+	<column name="id" type="number" primary_key="primary_key" auto_increment="auto_increment" notnull="notnull" />
+	<column name="member_srl" type="number" notnull="notnull" />
+	<column name="url" type="varchar" size="250" nothull="notnull" />
+	<column name="title" type="varchar" size="250" />
+	<column name="status" type="varchar" size="20" nothull="notnull" default="PUBLIC" />
+	<column name="regdate" type="number" notnull="notnull" />
+	<column name="list_order" type="number" notnull="notnull" />
+</table>

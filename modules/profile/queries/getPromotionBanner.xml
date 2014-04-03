@@ -1,0 +1,12 @@
+<query id="getPromotionBanner" action="select">
+	<tables>
+		<table name="profile_promotion" />
+	</tables>
+	<columns>
+		<column name="*" />
+	</columns>
+	<conditions>
+		<condition operation="equal" column="member_srl" var="member_srl" />
+		<condition operation="equal" column="status" var="status" default="PUBLIC" />
+	</conditions>
+</query>

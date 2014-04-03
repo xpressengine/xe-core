@@ -1,0 +1,105 @@
+<div id="modal-promotion-banner-edit" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Banner 편집</h4>
+			</div>
+			<div class="modal-body">
+				<form onsubmit="return false;" class="form-horizontal form-bordered" enctype="multipart/form-data" method="post" action="page_forms_general.html">
+					<div class="form-group">
+						<label for="example-text-input" class="col-md-3 control-label">제목</label>
+						<div class="col-md-9">
+							<input type="text" class="form-control" name="example-text-input" id="example-text-input">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="example-file-input" class="col-md-3 control-label">Banner</label>
+						<div class="col-md-9">
+							<input type="file" name="example-file-input" id="example-file-input">
+							<p class="help-block">image 파일만 허용. 최대 width 678px</p>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="tb-btn btn-default" data-dismiss="modal">Close</button>
+				<button class="tb-btn btn-sm btn-primary" type="submit"><i class="fa fa-pencil"></i> 저장</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<div id="modal-profile-edit" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Profile 편집</h4>
+			</div>
+			<div class="modal-body">
+				<p>이름, 닉네임 등은 회원정보에서 변경할 수 있습니다.</p>
+
+				<hr>
+
+				<form ruleset="profileSetup" class="form-horizontal form-bordered" method="post">
+					<input type="hidden" name="act" value="procProfileSetup">
+					<input type="hidden" name="module" value="profile">
+					<input type="hidden" name="success_return_url" value="{getUrl('act','dispProfileView')}">
+
+					<div class="form-group">
+						<label for="example-text-input" class="col-md-3 control-label">프로필 공개</label>
+						<div class="col-md-9">
+							<label class="switch switch-primary"><input type="checkbox" name="profile_public" value="Y" checked="checked"|cond="$profile->status == 'PUBLIC'"><span></span></label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="example-text-input" class="col-md-3 control-label">소개</label>
+						<div class="col-md-9">
+							<textarea placeholder="Content.." class="form-control" rows="5" name="description"></textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="example-text-input" class="col-md-3 control-label">사업자 설정</label>
+						<div class="col-md-9">
+							<input type="checkbox" name="is_biz" id="is_biz" value="Y" /> 법인/개인 사업자입니다
+						</div>
+					</div>
+
+					<fieldset class="only-biz">
+						<legend><i class="fa fa-angle-right"></i> 사업자 정보 입력</legend>
+						<div class="form-group">
+							<label for="example-text-input" class="col-md-3 control-label">회사명</label>
+							<div class="col-md-9">
+								<input type="text" name="biz_title" class="form-control" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="example-text-input" class="col-md-3 control-label">사업자 번호</label>
+							<div class="col-md-9">
+								<input type="text" name="biz_no" class="form-control" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="example-text-input" class="col-md-3 control-label">사업장 소재지</label>
+							<div class="col-md-9">
+								<input type="text" name="biz_address" class="form-control" />
+							</div>
+						</div>
+					</fieldset>
+					<div class="form-group form-actions">
+						<div class="pull-left">
+							<button data-dismiss="modal" class="tb-btn btn-sm btn-default" type="button">Close</button>
+						</div>
+						<div class="pull-right">
+							<button class="tb-btn btn-sm btn-primary" type="submit"><i class="fa fa-pencil"></i> 저장</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+

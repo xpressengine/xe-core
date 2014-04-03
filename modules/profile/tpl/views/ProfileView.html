@@ -3,7 +3,7 @@
 <h2 class="sr-only">dispProfileView</h2>
 
 <div class="row">
-	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+	<div class="col-md-6 col-lg-6">
 		<h3 class="sr-only">프로필</h3>
 		<div class="widget">
 			<div class="widget-advanced">
@@ -11,29 +11,26 @@
 
 				<div class="widget-header text-center themed-background-dark">
 					<div class="widget-options">
-						<button title="" data-toggle="tooltip" class="tb-btn btn-xs btn-default" data-original-title="Love it!"><i class="fa fa-heart text-danger"></i></button>
+						<button cond="$profile->is_owner" class="tb-btn btn-xs btn-default" data-toggle="modal" data-target="#modal-profile-edit"><i class="fa fa-pencil"></i> 프로필 편집</button>
+						<button cond="!$profile->is_owner" title="Love it!" data-toggle="tooltip" class="tb-btn btn-xs btn-default"><i class="fa fa-heart text-danger"></i></button>
 					</div>
 					<h3 class="widget-content-light">
-						<a class="themed-color-fire" href="page_ready_elearning_course_lessons.html">BNU</a><br>
-						<small>홍경원</small>
+						<a class="themed-color-fire" href="page_ready_elearning_course_lessons.html">{$profile->member->nick_name}</a><br>
+						<small>{$profile->member->user_name}</small>
 					</h3>
-
 				</div>
 				<!-- END Widget Header -->
 				<div class="widget-main">
-					<a class="widget-image-container animation-fadeIn" href="javascript:void(0)">
-						<span class="widget-icon themed-background"><i class="fa fa-globe"></i></span>
-					</a>
-					<div>
-						<button title="" data-toggle="tooltip" class="tb-btn btn-xs btn-default" data-original-title="Love it!"><i class="fa fa-heart text-danger"></i></button>
+					<div class="widget-image-container animation-fadeIn">
+						<img src="{$profile->member->profile_image}" class="img-circle" style="width:64px;">
 					</div>
-					<p>소개소개</p>
+					<p>{$profile->member->signature}</p>
 				</div>
 				<div class="widget-extra">
 					<div class="row text-center themed-background">
 						<div class="col-md-3 col-sm-6">
 							<div class="widget-content-light">
-								503 <br><small>Likes</small>
+								{$profile->likes} <br><small>Likes</small>
 							</div>
 						</div>
 						<div class="col-md-3 col-sm-6">
@@ -85,52 +82,50 @@
 			<!-- END Timeline Style Content -->
 		</div>
 	</div>
-	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+	<div class="col-md-6 col-lg-6">
 	</div>
 
-	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+	<div class="col-md-6 col-lg-6">
 		<div class="block">
-			<!-- Single Image Title -->
-			<div class="block-title">
-				<h2><strong>Single</strong> Image</h2>
+			<div class="block-title sr-only">
+				<h2><strong>Promotion</strong> banner</h2>
 			</div>
-			<!-- END Single Image Title -->
 
-			<div data-toggle="lightbox-gallery" class="gallery">
+			<div class="gallery">
 				<div class="row">
-					<div class="col-md-6 col-sm-12 gallery-image">
-						<img alt="image" src="/ProUI 1.2 by pixelcave/02 - ProUI Template (HTML)/img/placeholders/photos/photo10.jpg">
-						<div class="gallery-image-options text-center">
-							<div class="btn-group btn-group-sm">
-								<a title="Image Info" class="gallery-link btn btn-sm btn-alt btn-default" href="img/placeholders/photos/photo10.jpg">View</a>
-								<a title="" data-toggle="tooltip" class="btn btn-sm btn-alt btn-default" href="javascript:void(0)" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+					<div class="col-md-12 gallery-image" data-banner-id="1">
+						<img alt="image" src="./ba.png" style="">
+						<div cond="$profile->is_owner" class="gallery-image-options text-center">
+							<div class="tb-btn-group btn-group-sm">
+								<button class="tb-btn btn-primary" data-toggle="modal" data-target="#modal-promotion-banner-edit"><i class="fa fa-pencil"></i> 편집</button>
+								<button class="tb-btn btn-warning btn-delete-banner"><i class="fa fa-times"></i> 삭제</button>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6 col-sm-12 gallery-image">
-						<img alt="image" src="/ProUI 1.2 by pixelcave/02 - ProUI Template (HTML)/img/placeholders/photos/photo11.jpg">
-						<div class="gallery-image-options text-center">
-							<div class="btn-group btn-group-sm">
-								<a title="Image Info" class="gallery-link btn btn-sm btn-alt btn-default" href="img/placeholders/photos/photo11.jpg">View</a>
-								<a title="" data-toggle="tooltip" class="btn btn-sm btn-alt btn-default" href="javascript:void(0)" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+					<div class="col-md-12 gallery-image" data-banner-id="2">
+						<img alt="image" src="./ba.png" style="">
+						<div cond="$profile->is_owner" class="gallery-image-options text-center">
+							<div class="tb-btn-group btn-group-sm">
+								<button class="tb-btn btn-primary" data-toggle="modal" data-target="#modal-promotion-banner-edit"><i class="fa fa-pencil"></i> 편집</button>
+								<button class="tb-btn btn-warning btn-delete-banner"><i class="fa fa-times"></i> 삭제</button>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6 col-sm-12 gallery-image">
-						<img alt="image" src="/ProUI 1.2 by pixelcave/02 - ProUI Template (HTML)/img/placeholders/photos/photo12.jpg">
-						<div class="gallery-image-options text-center">
-							<div class="btn-group btn-group-sm">
-								<a title="Image Info" class="gallery-link btn btn-sm btn-alt btn-default" href="img/placeholders/photos/photo12.jpg">View</a>
-								<a title="" data-toggle="tooltip" class="btn btn-sm btn-alt btn-default" href="javascript:void(0)" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+					<div class="col-md-12 gallery-image" data-banner-id="3">
+						<img alt="image" src="./ba.png" style="">
+						<div cond="$profile->is_owner" class="gallery-image-options text-center">
+							<div class="tb-btn-group btn-group-sm">
+								<button class="tb-btn btn-primary" data-toggle="modal" data-target="#modal-promotion-banner-edit"><i class="fa fa-pencil"></i> 편집</button>
+								<button class="tb-btn btn-warning btn-delete-banner"><i class="fa fa-times"></i> 삭제</button>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6 col-sm-12 gallery-image">
-						<img alt="image" src="/ProUI 1.2 by pixelcave/02 - ProUI Template (HTML)/img/placeholders/photos/photo13.jpg">
-						<div class="gallery-image-options text-center">
-							<div class="btn-group btn-group-sm">
-								<a title="Image Info" class="gallery-link btn btn-sm btn-alt btn-default" href="img/placeholders/photos/photo13.jpg">View</a>
-								<a title="" data-toggle="tooltip" class="btn btn-sm btn-alt btn-default" href="javascript:void(0)" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+					<div class="col-md-12 gallery-image" data-banner-id="4">
+						<img alt="image" src="./ba.png" style="">
+						<div cond="$profile->is_owner" class="gallery-image-options text-center">
+							<div class="tb-btn-group btn-group-sm">
+								<button class="tb-btn btn-primary" data-toggle="modal" data-target="#modal-promotion-banner-edit"><i class="fa fa-pencil"></i> 편집</button>
+								<button class="tb-btn btn-warning btn-delete-banner"><i class="fa fa-times"></i> 삭제</button>
 							</div>
 						</div>
 					</div>
@@ -140,45 +135,30 @@
 
 		<div class="block">
 			<!-- Single Image Title -->
-			<div class="block-title">
-				<h2><strong>Single</strong> Image</h2>
+			<div class="block-title sr-only">
+				<h2><strong>Package</strong></h2>
 			</div>
 			<!-- END Single Image Title -->
 
 			<!-- Single Image Content -->
-			<div class="row">
-				<div class="col-md-6 col-sm-12 col-xs-12 block-section text-center">
-					<h4 class="sub-header">Image with Options</h4>
-					<!-- Just wrap your image with a div.gallery-image and.. -->
-					<div class="gallery-image">
-						<!-- .. add your image.. -->
-						<img alt="image" src="/ProUI 1.2 by pixelcave/02 - ProUI Template (HTML)/img/placeholders/photos/photo9.jpg">
-						<!-- .. along with a div.gallery-image-options which will contain your hover links! -->
-						<div class="gallery-image-options">
-							<!-- Link to your large image with the attribute data-toggle="lightbox-image" -->
-							<a class="gallery-link tb-btn btn-sm btn-primary" title="This is some info text about the image" data-toggle="lightbox-image" href="img/placeholders/photos/photo9.jpg"><i class="fa fa-eye"></i> View</a>
-							<a title="" data-toggle="tooltip" class="tb-btn btn-sm btn-alt btn-primary" href="javascript:void(0)" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
-							<a title="" data-toggle="tooltip" class="tb-btn btn-sm btn-alt btn-primary" href="javascript:void(0)" data-original-title="Remove"><i class="fa fa-times"></i></a>
-						</div>
+			<ul class="media-list package-list">
+				<li loop="$package_list => $package" cond="$package->status == 'accepted' && $package->version" class="media">
+					{@ $package->url = getUrl('', 'mid','download', 'package_srl',$package->package_srl)}
+					<a class="pull-left" href="{$package->url}">
+						<img src="{$package->screenshot_url}">
+					</a>
+					<div class="media-body">
+						<span class="text-muted pull-right"><small><em>{zdate($package->regdate, 'Y-m-d')}</em></small></span>
+						<a href="{$package->url}"><strong>{$package->title}</strong></a>
+						<p>{$package->description}</p>
 					</div>
-				</div>
-				<div class="col-md-6 col-sm-12 col-xs-12 block-section text-center">
-					<h4 class="sub-header">Image with Options</h4>
-					<!-- Just wrap your image with a div.gallery-image and.. -->
-					<div class="gallery-image">
-						<!-- .. add your image.. -->
-						<img alt="image" src="/ProUI 1.2 by pixelcave/02 - ProUI Template (HTML)/img/placeholders/photos/photo9.jpg">
-						<!-- .. along with a div.gallery-image-options which will contain your hover links! -->
-						<div class="gallery-image-options">
-							<!-- Link to your large image with the attribute data-toggle="lightbox-image" -->
-							<a class="gallery-link tb-btn btn-sm btn-primary" title="This is some info text about the image" data-toggle="lightbox-image" href="img/placeholders/photos/photo9.jpg"><i class="fa fa-eye"></i> View</a>
-							<a title="" data-toggle="tooltip" class="tb-btn btn-sm btn-alt btn-primary" href="javascript:void(0)" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
-							<a title="" data-toggle="tooltip" class="tb-btn btn-sm btn-alt btn-primary" href="javascript:void(0)" data-original-title="Remove"><i class="fa fa-times"></i></a>
-						</div>
-					</div>
-				</div>
-			</div>
+				</li>
+			</ul>
 			<!-- END Single Image Content -->
 		</div>
 	</div>
 </div>
+
+
+
+<include target="_inc.setting.html" cond="$profile->is_owner" />

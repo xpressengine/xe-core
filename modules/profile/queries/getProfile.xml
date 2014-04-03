@@ -6,6 +6,7 @@
 
 	<columns>
 		<column name="member.nick_name" />
+		<column name="member.user_name" />
 		<column name="member.email_address" />
 		<column name="member.denied" />
 		<column name="member.limit_date" />

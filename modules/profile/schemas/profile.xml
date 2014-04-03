@@ -3,4 +3,6 @@
 
 	<column name="status" type="varchar" size="20" />
 	<column name="profile_type" type="varchar" size="10" />
+	<column name="likes" type="number" notnull="notnull" default="0" />
+	<column name="config" type="text" />
 </table>

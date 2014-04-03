@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ruleset version="1.5.0">
 	<fields>
-		<field name="is_biz" />
-
+		<field name="biz_title">
+			<if test="$is_biz == 'Y'" attr="required" value="true" />
+		</field>
 		<field name="biz_no">
 			<if test="$is_biz == 'Y'" attr="required" value="true" />
 		</field>
-
 		<field name="biz_address">
 			<if test="$is_biz == 'Y'" attr="required" value="true" />
 		</field>
-
-		<field name="agree" required="true" />
 	</fields>
 </ruleset>

@@ -214,3 +214,13 @@ li.list-group-item.active a {
 .interview .question {
 	font-weight:bold;
 }
+
+
+.package-list {
+
+}
+
+.package-list img {
+	width:100px;
+	height:100px;
+}

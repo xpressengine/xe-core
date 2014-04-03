@@ -1,6 +1,5 @@
-<a href="{getUrl('act','dispProfileView')}">프로필 보기</a>
-|
-<a href="{getUrl('act','dispProfileSetting')}">프로필 설정</a>
-
-
-
+<div cond="$profile->status != 'PUBLIC'">
+	<div class="alert alert-info alert-dismissable">
+		프로필이 공개되어있지 않습니다.
+	</div>
+</div>
