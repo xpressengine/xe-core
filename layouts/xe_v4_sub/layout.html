@@ -27,11 +27,6 @@
 				<!-- GNB-HEADER -->
 				<div class="navbar-header">
 					<h1 class="navbar-brand"><a href="./"><img src="img/bi.png" alt="XpressEngine"></a></h1>
-					<ul class="nav navbar-nav-custom pull-right">
-						<li class="visible-sm visible-xs pull-right">
-							<a data-target="#horizontal-menu-collapse" data-toggle="collapse" href="javascript:void(0)">Menu</a>
-						</li>
-					</ul>
 				</div>
 
 				<!-- GNB -->
@@ -135,18 +130,15 @@
 
 			<div class="container">
 				<div class="row clearfix">
-					<div class="<!--@if($imc)-->col-lg-9<!--@else-->col-lg-12<!--@endif--> text-right hidden-xs"  class="col-lg-9"|cond="$imc" class="col-lg-12"|cond="!$imc">
-					</div>
-
 					<!-- content -->
-					<div class="col-lg-9"|cond="$imc" class="col-lg-12"|cond="!$imc">
+					<div class="col-xs-9"|cond="$imc" class="col-xs-12"|cond="!$imc">
 						<div id="content-container">
 							{$content}
 						</div>
 					</div>
 
 					<!-- LNB -->
-					<div cond="$imc" class="col-lg-3 visible-lg">
+					<div cond="$imc" class="col-xs-3">
 						<ul class="list-group" loop="$main_menu->list=>$key1, $val1" cond="$val1['selected']">
 							<li loop="$val1['list']=>$key2, $val2" class="list-group-item <!--@if($val2['selected'])-->active<!--@endif--> <!--@if($val2['link'] == '-')-->divider<!--@elseif($val2['href'] == '#')-->dropdown-header<!--@endif-->">
 								<a href="{$val2['href']}" cond="$val2['text'] && $val2['href'] != '#' && $val2['link'] != '-'">{$val2['link']}</a>
