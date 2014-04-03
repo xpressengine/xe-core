@@ -140,6 +140,22 @@ module.exports = function(grunt) {
 					'modules/board/m.skins/default/css/mboard.min.css': ['modules/board/m.skins/default/css/mboard.css'],
 					'modules/board/m.skins/simpleGray/css/mboard.min.css': ['modules/board/m.skins/simpleGray/css/mboard.css']
 				}
+			},
+			'layout-xev4': {
+				files: {
+					'layouts/xe_v4_sub/css/xev4.min.css': ['layouts/xe_v4_sub/css/xev4.css'],
+					'layouts/xe_v4_sub/css/main.min.css': ['layouts/xe_v4_sub/css/main.css'],
+					'layouts/xe_v4_sub/css/plugins.min.css': ['layouts/xe_v4_sub/css/plugins.css'],
+					'layouts/xe_v4_sub/css/themes/amethyst.min.css': ['layouts/xe_v4_sub/css/themes/amethyst.css'],
+					'layouts/xe_v4_sub/css/themes/autumn.min.css': ['layouts/xe_v4_sub/css/themes/autumn.css'],
+					'layouts/xe_v4_sub/css/themes/fancy.min.css': ['layouts/xe_v4_sub/css/themes/fancy.css'],
+					'layouts/xe_v4_sub/css/themes/fire.min.css': ['layouts/xe_v4_sub/css/themes/fire.css'],
+					'layouts/xe_v4_sub/css/themes/flatie.min.css': ['layouts/xe_v4_sub/css/themes/flatie.css'],
+					'layouts/xe_v4_sub/css/themes/modern.min.css': ['layouts/xe_v4_sub/css/themes/modern.css'],
+					'layouts/xe_v4_sub/css/themes/night.min.css': ['layouts/xe_v4_sub/css/themes/night.css'],
+					'layouts/xe_v4_sub/css/themes/spring.min.css': ['layouts/xe_v4_sub/css/themes/spring.css'],
+					'layouts/xe_v4_sub/css/themes.min.css': ['layouts/xe_v4_sub/css/themes.css'],
+				}
 			}
 		},
 		jshint: {
