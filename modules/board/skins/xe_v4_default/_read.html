@@ -45,7 +45,7 @@
 								<p><label for="cpw">{$lang->msg_is_secret} {$lang->msg_input_password}</label></p>
 								<p>
 									<input type="password" name="password" id="cpw" class="iText" />
-									<input type="submit" value="{$lang->cmd_input}" class="tb-btn btn-default" />
+									<input type="submit" value="{$lang->cmd_input}" class="btn btn-default" />
 								</p>
 							</form>
 							<!--@else-->
@@ -89,11 +89,11 @@
 			</div>
 			<div class="btnArea clearfix">
 				<span class="goList pull-right">
-					<a cond="$oDocument->isEditable()" href="{getUrl('act','dispBoardWrite','document_srl',$oDocument->document_srl,'comment_srl','')}"  class="tb-btn btn-info">{$lang->cmd_modify}</a>
-					<a href="{getUrl('document_srl','')}" class="tb-btn btn-default">{$lang->cmd_list}</a>
+					<a cond="$oDocument->isEditable()" href="{getUrl('act','dispBoardWrite','document_srl',$oDocument->document_srl,'comment_srl','')}"  class="btn btn-info">{$lang->cmd_modify}</a>
+					<a href="{getUrl('document_srl','')}" class="btn btn-default">{$lang->cmd_list}</a>
 				</span>
 				<span class="goEdit pull-left">
-					<a cond="$oDocument->isEditable()" href="{getUrl('act','dispBoardDelete','document_srl',$oDocument->document_srl,'comment_srl','')}"  class="tb-btn btn-danger btn-alt btn-sm">{$lang->cmd_delete}</a>
+					<a cond="$oDocument->isEditable()" href="{getUrl('act','dispBoardDelete','document_srl',$oDocument->document_srl,'comment_srl','')}"  class="btn btn-danger btn-alt btn-sm">{$lang->cmd_delete}</a>
 				</span>
 			</div>
 		</div>

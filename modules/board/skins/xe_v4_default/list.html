@@ -194,16 +194,16 @@
 					</span>
 					<input type="text" name="search_keyword" value="{htmlspecialchars($search_keyword)}" title="{$lang->cmd_search}" class="form-control" placeholder="{$lang->cmd_search}" />
 					<span class="input-group-btn">
-						<button type="submit" class="tb-btn btn-primary" onclick="xGetElementById('board_search').submit();return false;"><i class="fa fa-search"></i> {$lang->cmd_search}</button>
-						<a href="{getUrl('page',1,'document_srl','','division',$last_division,'last_division','')}" class="tb-btn btn-success" cond="true || $last_division">{$lang->cmd_search_next}</a>
+						<button type="submit" class="btn btn-primary" onclick="xGetElementById('board_search').submit();return false;"><i class="fa fa-search"></i> {$lang->cmd_search}</button>
+						<a href="{getUrl('page',1,'document_srl','','division',$last_division,'last_division','')}" class="btn btn-success" cond="true || $last_division">{$lang->cmd_search_next}</a>
 					</span>
 				</div>
 			</form>
 		</div>
 		<div class="col-sm-6 text-right">
-			<a href="{getUrl('act','dispBoardTagList')}" class="tb-btn btn-default" title="{$lang->tag}">{$lang->tag}</a>
-			<a  class="tb-btn btn-primary" href="{getUrl('act','dispBoardWrite','document_srl','')}">{$lang->cmd_write}</a>
-			<block cond="$grant->manager"><a class="tb-btn btn-danger" href="{getUrl('','module','document','act','dispDocumentManageDocument')}" onclick="popopen(this.href,'manageDocument'); return false;">{$lang->cmd_manage_document}</a></block>
+			<a href="{getUrl('act','dispBoardTagList')}" class="btn btn-default" title="{$lang->tag}">{$lang->tag}</a>
+			<a  class="btn btn-primary" href="{getUrl('act','dispBoardWrite','document_srl','')}">{$lang->cmd_write}</a>
+			<block cond="$grant->manager"><a class="btn btn-danger" href="{getUrl('','module','document','act','dispDocumentManageDocument')}" onclick="popopen(this.href,'manageDocument'); return false;">{$lang->cmd_manage_document}</a></block>
 		</div>
 	</div>
 	<include target="_footer.html" />

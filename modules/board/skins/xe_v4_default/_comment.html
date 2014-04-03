@@ -19,7 +19,7 @@
 				<!--@if(!$comment->isAccessible())-->
 				<form action="./" method="get" class="xe_content" onsubmit="return procFilter(this, input_password)">
 					<p><label for="cpw_{$comment->comment_srl}">{$lang->msg_is_secret} {$lang->msg_input_password}</label></p>
-					<p><input type="password" name="password" id="cpw_{$comment->comment_srl}" class="iText" /><span class="tb-btn"><input type="submit" value="{$lang->cmd_input}" /></span></p>
+					<p><input type="password" name="password" id="cpw_{$comment->comment_srl}" class="iText" /><span class="btn"><input type="submit" value="{$lang->cmd_input}" /></span></p>
 					<input type="hidden" name="mid" value="{$mid}" />
 					<input type="hidden" name="page" value="{$page}" />
 					<input type="hidden" name="document_srl" value="{$comment->get('document_srl')}" />
@@ -75,11 +75,11 @@
 				<input cond="$module_info->secret=='Y'" type="checkbox" name="is_secret" value="Y" id="is_secret" class="iCheck" />
 				<label cond="$module_info->secret=='Y'" for="is_secret">{$lang->secret}</label>
 			</div>
-			<button  class="tb-btn btn-primary btn-block" type="submit">{$lang->cmd_comment_registration}</button>
+			<button  class="btn btn-primary btn-block" type="submit">{$lang->cmd_comment_registration}</button>
 		</form>
 	</div>
 	<div class="fbFooter text-right">
-		<a href="{getUrl('document_srl','')}" class="tb-btn btn-default">{$lang->cmd_list}</a>
+		<a href="{getUrl('document_srl','')}" class="btn btn-default">{$lang->cmd_list}</a>
 	</div>
 </div>
 <!-- /COMMENT -->

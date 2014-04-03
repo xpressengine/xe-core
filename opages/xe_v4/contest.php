@@ -12,8 +12,8 @@
 					<br>
 					<small>제작자 : zirho</small>
 				</h3>
-				<a class="tb-btn btn-primary btn-lg btn-" href="http://www.xpressengine.com/18603910">작품 내려받기</a>
-				<a class="tb-btn btn-primary btn-lg btn-" href="http://www.xpressengine.com/18603910">제작자 웹 사이트</a>
+				<a class="btn btn-primary btn-lg btn-" href="http://www.xpressengine.com/18603910">작품 내려받기</a>
+				<a class="btn btn-primary btn-lg btn-" href="http://www.xpressengine.com/18603910">제작자 웹 사이트</a>
 			</div>
 			<!-- END Widget Header -->
 
@@ -34,7 +34,7 @@
 					</div>
 				</div>
 
-				<button class="tb-btn btn-info btn-alt btn-block btn-sm">제작자 인터뷰 보기</button>
+				<button class="btn btn-info btn-alt btn-block btn-sm">제작자 인터뷰 보기</button>
 
 				<dl class="interview">
 					<dt>XE 공모전 당선을 축하드립니다. 응모한 작품의 매력에 대해서 간단하게 설명해 주세요.</dt>
@@ -73,7 +73,7 @@
 					<div class="widget-main">
 						<p>카밀린넷은 여성그룹 '카라'의 팬들을 위한 사이트로, XE의 장점들을 잘 드러내고 있는 웹사이트입니다. 독창적이고 깔끔한 레이아웃과 스킨, 사이트 구성 역시 완성도가 높고, 인기검색어 위젯이나 스케줄러 모듈 등 XE의 확장기능을 적재적소에 잘 활용한 점 등이 골고루 높은 점수를 받았습니다. 축하합니다! 추천을 40표 얻어 Community 상과 함께 프로그램 부문에서 Netizen 상을 받게 되었습니다. 다시 한 번 축하합니다!</p>
 						<div class="text-center">
-							<a class="tb-btn btn-primary" href="http://www.kamilin.net/">제작자 웹 사이트</a>
+							<a class="btn btn-primary" href="http://www.kamilin.net/">제작자 웹 사이트</a>
 						</div>
 					</div>
 				</div>
@@ -96,8 +96,8 @@
 					<div class="widget-main">
 						<p>커뮤니티 회원들의 출석정보를 기록하고 관리하며 출석에 따라 포인트를 줄 수 있도록 해주는 프로그램입니다. 이미 다수의 커뮤니티 관리자 여러분들이 유용하고 만족스럽게 쓰고 계십니다. 축하합니다!</p>
 						<div class="text-center">
-							<a class="tb-btn btn-primary" href="http://www.xpressengine.com/18603857">작품 내려받기</a>
-							<a class="tb-btn btn-primary" href="http://maesiltea.linuxstudy.pe.kr/">제작자 웹 사이트</a>
+							<a class="btn btn-primary" href="http://www.xpressengine.com/18603857">작품 내려받기</a>
+							<a class="btn btn-primary" href="http://maesiltea.linuxstudy.pe.kr/">제작자 웹 사이트</a>
 						</div>
 
 						<dl class="interview">
@@ -136,7 +136,7 @@
 					<div class="widget-main">
 						<p>많은 커뮤니티 관리자 분들이 갈증을 느끼고 있던 쪽지 기능을 강화해주는 프로그램입니다. 쪽지의 전체발송, 그룹별 발송 등을 가능하게 해줍니다. 꾸준한 업데이트가 뒤따르기를 바랍니다. 축하합니다!</p>
 						<div class="text-center">
-							<a class="tb-btn btn-primary" href="http://www.xpressengine.com/18603904">작품 내려받기</a>
+							<a class="btn btn-primary" href="http://www.xpressengine.com/18603904">작품 내려받기</a>
 						</div>
 					</div>
 				</div>
@@ -160,7 +160,7 @@
 					<div class="widget-main">
 						<p>매우 세련된 디자인의 게시판 스킨입니다. 간결하면서도 개성 있는, 동시에 아름다운 스킨입니다. 축하합니다!</p>
 						<div class="text-center">
-							<a class="tb-btn btn-primary" href="http://www.xpressengine.com/18604051">작품 내려받기</a>
+							<a class="btn btn-primary" href="http://www.xpressengine.com/18604051">작품 내려받기</a>
 						</div>
 					</div>
 				</div>
@@ -185,8 +185,8 @@
 					<div class="widget-main">
 						<p>완성도가 높고 여러 사이트에 무리 없이 사용할 수 있는 범용적인 레이아웃 스킨입니다. 축하합니다!</p>
 						<div class="text-center">
-							<a class="tb-btn btn-primary" href="http://www.xpressengine.com/18603971">작품 내려받기</a>
-							<a class="tb-btn btn-primary" href="http://blooz.net/">제작자 웹 사이트</a>
+							<a class="btn btn-primary" href="http://www.xpressengine.com/18603971">작품 내려받기</a>
+							<a class="btn btn-primary" href="http://blooz.net/">제작자 웹 사이트</a>
 						</div>
 					</div>
 				</div>
@@ -209,8 +209,8 @@
 					<div class="widget-main">
 						<p>GPS를 이용해 기록한 이동경로를 구글 지도 위에 얹어서 보여주는 에디터 확장 컴포넌트입니다. 앞으로도 Open API를 이용한 매시업이 많이 나오기를 바랍니다. 축하합니다! </p>
 						<div class="text-center">
-							<a class="tb-btn btn-primary" href="http://www.xpressengine.com/18603873">작품 내려받기</a>
-							<a class="tb-btn btn-primary" href="http://www.jowrney.com/">제작자 웹 사이트</a>
+							<a class="btn btn-primary" href="http://www.xpressengine.com/18603873">작품 내려받기</a>
+							<a class="btn btn-primary" href="http://www.jowrney.com/">제작자 웹 사이트</a>
 						</div>
 					</div>
 				</div>
@@ -236,8 +236,8 @@
 					<div class="widget-main">
 						<p>종합자산관리 프로그램을 목표로 하는 가계부 프로그램입니다. 기술적인 완성도도 높고 문서화도 매우 잘 되어있습니다. 축하합니다!</p>
 						<div class="text-center">
-							<a class="tb-btn btn-primary" href="http://www.xpressengine.com/18603852">작품 내려받기</a>
-							<a class="tb-btn btn-primary" href="http://www.xgenesis.org/">제작자 웹 사이트</a>
+							<a class="btn btn-primary" href="http://www.xpressengine.com/18603852">작품 내려받기</a>
+							<a class="btn btn-primary" href="http://www.xgenesis.org/">제작자 웹 사이트</a>
 						</div>
 
 						<dl class="interview">
@@ -273,7 +273,7 @@
 					<div class="widget-main">
 						<p>마음에 드는 연예인을 선택하면 이상형을 찾아준다는, 독창적인 아이디어가 눈에 띄는 위젯입니다. 축하합니다!</p>
 						<div class="text-center">
-							<a class="tb-btn btn-primary" href="http://www.xpressengine.com/18603913">작품 내려받기</a>
+							<a class="btn btn-primary" href="http://www.xpressengine.com/18603913">작품 내려받기</a>
 						</div>
 					</div>
 				</div>
@@ -299,8 +299,8 @@
 					<div class="widget-main">
 						<p>소개문</p>
 						<div class="text-center">
-							<a class="tb-btn btn-primary" href="http://www.xpressengine.com/주소">작품 내려받기</a>
-							<a class="tb-btn btn-primary" href="주소">제작자 웹 사이트</a>
+							<a class="btn btn-primary" href="http://www.xpressengine.com/주소">작품 내려받기</a>
+							<a class="btn btn-primary" href="주소">제작자 웹 사이트</a>
 						</div>
 					</div>
 				</div>
@@ -323,8 +323,8 @@
 					<div class="widget-main">
 						<p>소개문</p>
 						<div class="text-center">
-							<a class="tb-btn btn-primary" href="http://www.xpressengine.com/주소">작품 내려받기</a>
-							<a class="tb-btn btn-primary" href="주소">제작자 웹 사이트</a>
+							<a class="btn btn-primary" href="http://www.xpressengine.com/주소">작품 내려받기</a>
+							<a class="btn btn-primary" href="주소">제작자 웹 사이트</a>
 						</div>
 					</div>
 				</div>
