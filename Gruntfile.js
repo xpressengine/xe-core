@@ -141,7 +141,7 @@ module.exports = function(grunt) {
 					'modules/board/m.skins/simpleGray/css/mboard.min.css': ['modules/board/m.skins/simpleGray/css/mboard.css']
 				}
 			},
-			'layout-xev4': {
+			'xev4': {
 				files: {
 					'layouts/xe_v4_sub/css/xev4.min.css': ['layouts/xe_v4_sub/css/xev4.css'],
 					'layouts/xe_v4_sub/css/main.min.css': ['layouts/xe_v4_sub/css/main.css'],
@@ -155,6 +155,7 @@ module.exports = function(grunt) {
 					'layouts/xe_v4_sub/css/themes/night.min.css': ['layouts/xe_v4_sub/css/themes/night.css'],
 					'layouts/xe_v4_sub/css/themes/spring.min.css': ['layouts/xe_v4_sub/css/themes/spring.css'],
 					'layouts/xe_v4_sub/css/themes.min.css': ['layouts/xe_v4_sub/css/themes.css'],
+					'modules/profile/tpl/css/profile.min.css': ['modules/profile/tpl/css/profile.css'],
 				}
 			}
 		},
