@@ -119,6 +119,7 @@
 		<div cond="!$voted && $is_logged" cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/resource/skins/xe_v3/include.package/1'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
 			<p>{$XE_VALIDATOR_MESSAGE}</p>
 		</div>
+		<p cond="!$voted && $is_logged"  style="padding:10px; text-align:center;">자료에 대한 평가를 남길 수 있으며 <strong>질문이나 문의는 제작자에게 쪽지 또는 제작자가 지정한 곳</strong>에 남겨주시기 바랍니다.<br><strong>이 평가란은 질문 또는 문의를 남길 수 없습니다.</strong></p>
 		<form cond="!$voted && $is_logged" action="./" method="post" ruleset="insertComment" class="write_comment" id="write_comment">
 			<input type="hidden" name="vid" value="{$vid}" />
 			<input type="hidden" name="mid" value="{$mid}" />
@@ -136,7 +137,7 @@
 				<li><a href="#" onclick="return false;" rel="4">4</a></li>
 				<li><a href="#" onclick="return false;" rel="5">5</a></li>
 			</ul>
-			<textarea name="content" rows="5" cols="50"></textarea>
+			<textarea name="content" rows="5" cols="50" placeholder="이 평가란은 질문 또는 문의를 남길 수 없습니다."></textarea>
 			<div class="btnArea">
 				<button type="submit" class="btn45">평가<br />등록</button>
 			</div>
