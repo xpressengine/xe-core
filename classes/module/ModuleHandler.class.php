@@ -129,7 +129,7 @@ class ModuleHandler extends Handler
 			$defaultUrlInfo = parse_url($dbInfo->default_url);
 			$defaultHost = $defaultUrlInfo['host'];
 		
-			if($host && ($host != $defaultHost && $host != $site_module_info->domain))
+			if(($host && ($host != $defaultHost && $host != $site_module_info->domain)) && Context::isInstalled())
 			{
 				throw new Exception('msg_default_url_is_null');
 			}
