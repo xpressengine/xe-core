@@ -1,11 +1,9 @@
 
-<h1>개발 매뉴얼</h1>
-
-<div class="manual">
+<div class="manual block">
 	<div class="row">
 		<div class="col-lg-6">
 			<div class="tx">
-				<h2>개발자 매뉴얼(Developer Manual)</h2>
+				<h3>개발자 매뉴얼(Developer Manual)</h3>
 				<table border="1" cellspacing="0" class="dList" summary="한글, 영문, 일문, 중문 버전의 PDF와 DOCX 포멧이 준비되어 있습니다.">
 					<col /><col width="120" />
 					<tr>
@@ -49,7 +47,7 @@
 		</div>
 		<div class="tx col-lg-6">
 			<div class="tx">
-				<h2>스킨 제작 매뉴얼(Skin Creation Manual)</h2>
+				<h3>스킨 제작 매뉴얼(Skin Creation Manual)</h3>
 				<table border="1" cellspacing="0" class="dList" summary="한글, 영문, 일문, 중문 버전의 PDF와 DOCX 포멧이 준비되어 있습니다.">
 					<col /><col width="120" />
 					<tr>

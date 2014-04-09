@@ -1,10 +1,7 @@
-
-<h1>사용 매뉴얼</h1>
-
-<div class="manual">
+<div class="manual block">
 	<div class="row">
 		<div class="tx col-lg-6">
-			<h2>사용자 매뉴얼(User Manual)</h2>
+			<h3>사용자 매뉴얼(User Manual)</h3>
 			<table border="1" cellspacing="0" class="dList" summary="한글, 영문, 일문, 중문 버전의 PDF와 DOCX 포멧이 준비되어 있습니다.">
 				<col /><col width="120" />
 				<tr>
@@ -47,7 +44,7 @@
 		</div>
 		<div class="tx col-lg-6">
 			<div class="tx">
-				<h2>기타 문서(Additional Documents)</h2>
+				<h3>기타 문서(Additional Documents)</h3>
 				<table border="1" cellspacing="0" class="dList" summary="한글, 영문, 일문, 중문 버전의 PDF와 DOCX 포멧이 준비되어 있습니다.">
 					<col /><col width="120" />
 					<tr>

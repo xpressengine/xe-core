@@ -23,7 +23,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 /* Account for fixed navbar */
 body {
 	min-width: 970px;
-	padding-top: 70px;
 	padding-bottom: 30px;
 }
 
@@ -130,9 +129,7 @@ body {
 
 /*navbar*/
 header.navbar-inverse.navbar-fixed-top {
-	box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
 	opacity: 0.95;
-	border-color: #AAAAAA;
 }
 .navbar-brand {
 	margin: 0;
@@ -156,6 +153,7 @@ header.navbar .profile-image {
 	margin-bottom:50px;
 	color: #333;
 }
+
 
 /*row*/
 .row.row-full-top {

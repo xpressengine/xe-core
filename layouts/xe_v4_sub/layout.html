@@ -1,11 +1,12 @@
 {@ Context::addHtmlHeader('<meta name="viewport" content="width=device-width, initial-scale=1.0">')}
-{@$imc = !($act=='IS' || $act=='dispProjectAccountManage' || strpos($act,'Member') !== false || strpos($act,'Communication') !== false || $mid == 'privacy' || $mid == 'home')}
+{@$imc = !($act=='IS' || $act=='dispProjectAccountManage' || strpos($act,'Member') !== false || strpos($act,'Communication') !== false || $mid == 'privacy' || $mid == 'main')}
 
 {@ $subtitle = array(
 	'about' => array('XpressEngine', 'info'),
 	'authors' => array('감사감사', 'tropy'),
 	'qna' => array('물어봐', 'question-circle'),
 	'privacy' => array(null, 'lock'),
+	'xehub' => array('XE Hub를 안내합니다', null),
 )}
 
 <load target="css/bootstrap.min.css" />
@@ -22,11 +23,11 @@
 <div id="page-container" class="header-fixed-top">
 	<!-- Main Container -->
 	<div id="main-container">
-		<header class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<header class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="container">
 				<!-- GNB-HEADER -->
 				<div class="navbar-header">
-					<h1 class="navbar-brand"><a href="./"><img src="img/bi.png" alt="XpressEngine"></a></h1>
+					<h1 class="navbar-brand"><a href="{getUrl('')}"><img src="img/bi.png" alt="XpressEngine" style="height:20px;"></a></h1>
 				</div>
 
 				<!-- GNB -->
@@ -100,7 +101,7 @@
 
 		<!-- Page content -->
 		<div id="page-content">
-			<div class="content-header" cond="$mid != 'home'">
+			<div class="content-header" cond="$mid != 'main'">
 				<div class="header-section container">
 					<h1>
 						<block cond="array_key_exists($mid, $subtitle)"><i class="fa fa-{$subtitle[$mid][1]}"></i></block>

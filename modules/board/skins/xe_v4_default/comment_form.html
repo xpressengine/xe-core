@@ -17,7 +17,7 @@
 		<div class="write_author">
 			<span class="item" cond="!$is_logged">
 				<label for="userName" class="iLabel">{$lang->writer}</label>
-				<input type="text" name="nick_name" id="userName" class="iText userName" value="{htmlspecialchars($oComment->get('nick_name'))}" />
+				<input type="text" name="nick_name" id="userName" class="iText userName" value="{$oComment->getNickName()}" />
 			</span>
 			<span class="item" cond="!$is_logged">
 				<label for="userPw" class="iLabel">{$lang->password}</label>
@@ -33,7 +33,7 @@
 			<label cond="$module_info->secret=='Y'" for="is_secret">{$lang->secret}</label>
 		</div>
 		<div class="btnArea">
-			<span class="btn25 blue"><button type="submit">{$lang->cmd_comment_registration}</button></span>
+			<button type="submit" class="btn">{$lang->cmd_comment_registration}</button>
 		</div>
 	</form>
 </div>

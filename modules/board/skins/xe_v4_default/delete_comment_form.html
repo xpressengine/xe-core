@@ -13,8 +13,8 @@
 	<input type="hidden" name="comment_srl" value="{$oComment->get('comment_srl')}" />
 	<h1>{$lang->cmd_comment_do} {$lang->confirm_delete}</h1>
 	<div class="btnArea">
-		<span class="btn25 blue"><input type="submit" value="{$lang->cmd_delete}" /></span>
-		<span class="btn25"><button type="button" onclick="history.back()">{$lang->cmd_cancel}</button></span>
+		<input type="submit" class="btn" value="{$lang->cmd_delete}" />
+		<button type="button" class="btn" onclick="history.back()">{$lang->cmd_cancel}</button>
 	</div>
 </form>
 <include target="_footer.html" />

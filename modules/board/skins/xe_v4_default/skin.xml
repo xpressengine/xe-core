@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skin version="0.2">
-	<title xml:lang="ko">XE V4 Default</title>
+	<title xml:lang="ko">xe v4</title>
 	<version>1.0</version>
 	<date>2014-03-13</date>
-	<author email_address="developers@xpressengine.com" link="http://xpressengine.com/">
+	<author email_address="developers@xpressengine.com" link="http://www.xpressengine.com/">
 		<name xml:lang="ko">NAVER</name>
 	</author>
-	<license>LGPL v2</license>
-</skin>
 
+	<extra_vars>
+		<var name="write_help_message" type="textarea">
+			<title xml:lang="ko">글쓰기 도움말</title>
+			<description xml:lang="ko">글 작성 화면 상단에 도움말 또는 안내문을 표시합니다.</description>
+		</var>
+	</extra_vars>
+</skin>
