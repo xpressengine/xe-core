@@ -73,7 +73,7 @@
             $output = executeQuery('resource.insertPackage', $args);
             if(!$output->toBool()) return $output;
 
-            if($this->module_info->resource_notify_mail) {
+            if($this->module_info->resource_notify_mail && $args->status != 'accepted') {
                 $message = '';
                 foreach($args as $key => $val) $message .= $key." : ".$val."<br/>\r\n";
                 $message.= "URL : ".getFullSiteUrl($site_module_info->domain, '', 'mid', Context::get('mid'), 'act', 'dispResourceManage');
@@ -137,12 +137,12 @@
             $output = executeQuery('resource.modifyPackage', $args);
             if(!$output->toBool()) return $output;
 
-            if($this->module_info->resource_notify_mail) {
-                $message = '';
-                foreach($args as $key => $val) $message .= $key." : ".$val."<br/>\r\n";
-                $message.= "URL : ".getFullSiteUrl($site_module_info->domain, '', 'mid', Context::get('mid'), 'package_srl', $args->package_srl);
-                $this->notify($this->module_info->resource_notify_mail, Context::getLang('resource_modify_notify_title'), $message);
-            }
+            // if($this->module_info->resource_notify_mail) {
+            //     $message = '';
+            //     foreach($args as $key => $val) $message .= $key." : ".$val."<br/>\r\n";
+            //     $message.= "URL : ".getFullSiteUrl($site_module_info->domain, '', 'mid', Context::get('mid'), 'package_srl', $args->package_srl);
+            //     $this->notify($this->module_info->resource_notify_mail, Context::getLang('resource_modify_notify_title'), $message);
+            // }
 
             $this->setMessage('success_updated');
             $this->setRedirectUrl(getNotEncodedSiteUrl($site_module_info->domain, '', 'mid', Context::get('mid'),'act','dispResourcePackage','package_srl',$args->package_srl));
@@ -169,12 +169,12 @@
             $output = executeQuery('resource.deletePackage', $args);
             if(!$output->toBool()) return $output;
 
-            if($this->module_info->resource_notify_mail) {
-                $message = '';
-                foreach($args as $key => $val) $message .= $key." : ".$val."<br/>\r\n";
-                $message.= "URL : ".getFullSiteUrl($site_module_info->domain, '', 'mid', Context::get('mid'), 'package_srl', $args->package_srl);
-                $this->notify($this->module_info->resource_notify_mail, Context::getLang('resource_delete_notify_title'), $message);
-            }
+            // if($this->module_info->resource_notify_mail) {
+            //     $message = '';
+            //     foreach($args as $key => $val) $message .= $key." : ".$val."<br/>\r\n";
+            //     $message.= "URL : ".getFullSiteUrl($site_module_info->domain, '', 'mid', Context::get('mid'), 'package_srl', $args->package_srl);
+            //     $this->notify($this->module_info->resource_notify_mail, Context::getLang('resource_delete_notify_title'), $message);
+            // }
 
 
             $this->setMessage('success_deleted');
@@ -304,12 +304,12 @@
 				return $output;
 			}
 
-            if($this->module_info->resource_notify_mail) {
-                $message = '';
-                foreach($args as $key => $val) $message .= $key." : ".$val."<br/>\r\n";
-                $message.= "URL : ".getFullSiteUrl($site_module_info->domain, '', 'mid', Context::get('mid'), 'package_srl', $args->package_srl);
-                $this->notify($this->module_info->resource_notify_mail, Context::getLang('resource_attach_notify_title'), $message);
-            }
+            // if($this->module_info->resource_notify_mail) {
+            //     $message = '';
+            //     foreach($args as $key => $val) $message .= $key." : ".$val."<br/>\r\n";
+            //     $message.= "URL : ".getFullSiteUrl($site_module_info->domain, '', 'mid', Context::get('mid'), 'package_srl', $args->package_srl);
+            //     $this->notify($this->module_info->resource_notify_mail, Context::getLang('resource_attach_notify_title'), $message);
+            // }
 
             $this->insertDependency($this->module_srl, $args->package_srl, $args->item_srl, trim(Context::get('dependency')));
 
