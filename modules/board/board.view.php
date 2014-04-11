@@ -184,8 +184,9 @@ class boardView extends board
 		// list config, columnList setting
 		$oBoardModel = getModel('board');
 		$this->listConfig = $oBoardModel->getListConfig($this->module_info->module_srl);
-		if(!$this->listConfig) $this->listConfig = array();
-		$this->_makeListColumnList();
+		if(!$this->listConfig) $this-listConfig = array();
+		if($this->module_info->use_make_column=='Y') $this->_makeListColumnList();
+		//$this->_makeListColumnList();
 
 		// display the notice list
 		$this->dispBoardNoticeList();
