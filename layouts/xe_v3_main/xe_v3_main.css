@@ -109,7 +109,7 @@ form, fieldset{border:0;margin:0;padding:0}
 
 /* Community */
 .community {position:relative;padding:25px 0 25px 0; }
-.community h2{margin:0 0 14px 0;height:0;padding:20px 0 0 0;overflow:hidden;background:url(bodySet.png) no-repeat;line-height:2}
+.community h2{margin:0 0 14px 0;color:#FFF;}
 .community a{text-decoration:none;font-size:12px;color:#aaa}
 .community a:hover,
 .community a:active,
@@ -122,13 +122,10 @@ form, fieldset{border:0;margin:0;padding:0}
 .community .forum .more span{position:absolute;width:1px;height:1px;left:0;top:0;overflow:hidden}
 /* User Forum */
 .forum.user{}
-.forum.user h2{background-position:0 -100px}
 /* Dev Forum */
 .forum.dev{}
-.forum.dev h2{background-position:-220px -100px}
 /* Q&A */
 .forum.qna{float:right;margin-right:0;}
-.forum.qna h2{background-position:-220px -150px}
 /* GNB */
 .gnb{position:absolute;z-index:3;top:35px;left:191px;height:46px}
 .gnb ul{list-style:none;margin:0;padding:0}
