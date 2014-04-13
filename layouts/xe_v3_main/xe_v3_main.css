@@ -71,7 +71,7 @@ form, fieldset{border:0;margin:0;padding:0}
 
 /* Notice */
 .notice{position:relative;margin:2px 0 0 0}
-.notice h2{margin:0;}
+.notice h2{margin:0;color:#FFF;}
 .notice ul{margin:0;padding:0;list-style:none}
 .notice li{margin:19px 0 16px 0 !important; display:block;position:relative;}
 .notice .title{display:block;margin:0 0 5px 0;color:#ddd;font-size:14px;}
