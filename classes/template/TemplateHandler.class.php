@@ -370,7 +370,11 @@ class TemplateHandler
 		else
 		{
 			$eval_str = "?>" . $buff;
-			eval($eval_str);
+			@eval($eval_str);
+			$error_info=error_get_last();
+			if ($error_info[type]==4){
+				echo "Error Pharsing Template - " . $error_info[message] . " in template file " . $this->file . '<br />';
+			}
 		}
 
 		return ob_get_clean();
