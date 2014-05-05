@@ -1916,7 +1916,7 @@ class memberController extends member
 		if(!$args->user_id) $args->user_id = 't'.$args->member_srl;
 		// Enter the user's identity changed to lowercase
 		else $args->user_id = strtolower($args->user_id);
-		if(!$args->user_name) $args->user_name = $args->member_srl;
+		$args->user_name = htmlspecialchars(Context::get('user_name'));
 		if(!$args->nick_name) $args->nick_name = $args->member_srl;
 
 		// Control of essential parameters
@@ -1977,7 +1977,7 @@ class memberController extends member
 
 
 		if(!$args->user_id) $args->user_id = 't'.$args->member_srl;
-		if(!$args->user_name) $args->user_name = $args->member_srl;
+		$args->user_name = htmlspecialchars(Context::get('user_name'));
 
 		$oDB = &DB::getInstance();
 		$oDB->begin();
