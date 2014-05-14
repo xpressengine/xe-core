@@ -417,7 +417,7 @@ class moduleController extends module
 
 		unset($output);
 
-		if($isMenuCreate == TRUE)
+		if($isMenuCreate === TRUE)
 		{
 			$menuArgs = new stdClass;
 			$menuArgs->menu_srl = $args->menu_srl;
@@ -555,7 +555,7 @@ class moduleController extends module
 			return $output;
 		}
 
-		if($isMenuCreate == TRUE)
+		if($isMenuCreate === TRUE)
 		{
 			$menuArgs = new stdClass;
 			$menuArgs->url = $module_info->mid;
