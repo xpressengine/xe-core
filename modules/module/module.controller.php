@@ -478,6 +478,16 @@ class moduleController extends module
 	 */
 	function updateModule($args)
 	{
+		
+		if(isset($args->isMenuCreate))
+		{
+			$isMenuCreate = $args->isMenuCreate;
+		}
+		else
+		{
+			$isMenuCreate = TRUE;
+		}
+		
 		$output = $this->arrangeModuleInfo($args, $extra_vars);
 		if(!$output->toBool()) return $output;
 		// begin transaction
@@ -540,22 +550,25 @@ class moduleController extends module
 			return $output;
 		}
 
-		$menuArgs = new stdClass;
-		$menuArgs->url = $module_info->mid;
-		$menuArgs->site_srl = $module_info->site_srl;
-		$menuOutput = executeQueryArray('menu.getMenuItemByUrl', $menuArgs);
-		if($menuOutput->data && count($menuOutput->data))
+		if($isMenuCreate == TRUE)
 		{
-			$oMenuAdminController = getAdminController('menu');
-			foreach($menuOutput->data as $itemInfo)
+			$menuArgs = new stdClass;
+			$menuArgs->url = $module_info->mid;
+			$menuArgs->site_srl = $module_info->site_srl;
+			$menuOutput = executeQueryArray('menu.getMenuItemByUrl', $menuArgs);
+			if($menuOutput->data && count($menuOutput->data))
 			{
-				$itemInfo->url = $args->mid;
-
-				$updateMenuItemOutput = $oMenuAdminController->updateMenuItem($itemInfo);
-				if(!$updateMenuItemOutput->toBool())
+				$oMenuAdminController = getAdminController('menu');
+				foreach($menuOutput->data as $itemInfo)
 				{
-					$oDB->rollback();
-					return $updateMenuItemOutput;
+					$itemInfo->url = $args->mid;
+	
+					$updateMenuItemOutput = $oMenuAdminController->updateMenuItem($itemInfo);
+					if(!$updateMenuItemOutput->toBool())
+					{
+						$oDB->rollback();
+						return $updateMenuItemOutput;
+					}
 				}
 			}
 		}
