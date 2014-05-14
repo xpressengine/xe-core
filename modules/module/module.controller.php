@@ -352,9 +352,12 @@ class moduleController extends module
 	 */
 	function insertModule($args)
 	{
+		
+		$isMenuCreate = TRUE;
+		
 		if(isset($args->isMenuCreate))
 		{
-			$isMenuCreate = $args->isMenuCreate;
+			$isMenuCreate = !!$args->isMenuCreate;
 		}
 		else
 		{
@@ -479,9 +482,11 @@ class moduleController extends module
 	function updateModule($args)
 	{
 		
+		$isMenuCreate = TRUE;
+		
 		if(isset($args->isMenuCreate))
 		{
-			$isMenuCreate = $args->isMenuCreate;
+			$isMenuCreate = !!$args->isMenuCreate;
 		}
 		else
 		{
@@ -556,7 +561,7 @@ class moduleController extends module
 			$menuArgs->url = $module_info->mid;
 			$menuArgs->site_srl = $module_info->site_srl;
 			$menuOutput = executeQueryArray('menu.getMenuItemByUrl', $menuArgs);
-			if($menuOutput->data && count($menuOutput->data))
+			if($menuOutput->data && count($menuOutput->data) > 0)
 			{
 				$oMenuAdminController = getAdminController('menu');
 				foreach($menuOutput->data as $itemInfo)
