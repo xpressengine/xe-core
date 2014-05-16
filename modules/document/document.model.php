@@ -232,7 +232,7 @@ class documentModel extends document
 		{
 			// document.getDocumentList query execution
 			// Query_id if you have a group by clause getDocumentListWithinTag getDocumentListWithinComment or used again to perform the query because
-			$groupByQuery = array('document.getDocumentListWithinComment' => 1, 'document.getDocumentListWithinTag' => 1);
+			$groupByQuery = array('document.getDocumentListWithinComment' => 1, 'document.getDocumentListWithinTag' => 1, 'document.getDocumentListWithinExtraVars' => 1);
 			if(isset($groupByQuery[$query_id]))
 			{
 				$group_args = clone($args);
@@ -1417,6 +1417,10 @@ class documentModel extends document
 					$args->s_tags = str_replace(' ','%',$search_keyword);
 					$query_id = 'document.getDocumentListWithinTag';
 					break;
+				case 'extra_vars':
+			                $args->var_value =str_replace(' ','%',$search_keyword);
+			                $query_id = 'document.getDocumentListWithinExtraVars';
+			                break;
 				default :
 					if(strpos($search_target,'extra_vars')!==false) {
 						$args->var_idx = substr($search_target, strlen('extra_vars'));
