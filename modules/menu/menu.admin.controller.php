@@ -259,12 +259,12 @@ class menuAdminController extends menu
 			return new Object(-1, 'msg_adminmenu_cannot_delete');
 
 		// get menu properies with child menu
-		$phpFile = sprintf("./files/cache/menu/%s.php", $menu_srl);
+		$phpFile = FileHandler::getRealPath(sprintf("./files/cache/menu/%s.php", $menu_srl));
 		$originMenu = NULL;
 
-		if(is_readable(FileHandler::getRealPath($phpFile)))
+		if(is_readable($phpFile))
 		{
-			include(FileHandler::getRealPath($phpFile));
+			include($phpFile);
 		}
 
 		// check home menu in originMenu
@@ -860,12 +860,12 @@ class menuAdminController extends menu
 		if($itemInfo->parent_srl) $parent_srl = $itemInfo->parent_srl;
 
 		// get menu properies with child menu
-		$phpFile = sprintf("./files/cache/menu/%s.php", $args->menu_srl);
+		$phpFile = FileHandler::getRealPath(sprintf("./files/cache/menu/%s.php", $args->menu_srl));
 		$originMenu = NULL;
 
-		if(is_readable(FileHandler::getRealPath($phpFile)))
+		if(is_readable($phpFile))
 		{
-			include(FileHandler::getRealPath($phpFile));
+			include($phpFile);
 
 			if(is_array($menu->list))
 			{
@@ -1012,12 +1012,12 @@ class menuAdminController extends menu
 		}
 
 		// get menu properies with child menu
-		$phpFile = sprintf(_XE_PATH_ . "files/cache/menu/%s.php", $originalItemInfo->menu_srl);
+		$phpFile = FileHandler::getRealPath(sprintf(_XE_PATH_ . "files/cache/menu/%s.php", $originalItemInfo->menu_srl));
 		$originMenu = NULL;
 
-		if(is_readable(FileHandler::getRealPath($phpFile)))
+		if(is_readable($phpFile))
 		{
-			include(FileHandler::getRealPath($phpFile));
+			include($phpFile);
 
 			if(is_array($menu->list))
 			{
