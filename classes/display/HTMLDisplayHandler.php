@@ -287,7 +287,7 @@ class HTMLDisplayHandler
 			case 'radio':
 			case 'checkbox':
 				$str = preg_replace('@\schecked(="[^"]*?")?@', ' ', $str);
-				if(@preg_match('@\s(?i:value)="' . $INPUT_ERROR[$match[3]] . '"@', $str))
+				if(preg_match('@\s(?i:value)="' . $INPUT_ERROR[$match[3]] . '"@', $str))
 				{
 					$str .= ' checked="checked"';
 				}

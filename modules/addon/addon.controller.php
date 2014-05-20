@@ -117,7 +117,7 @@ class addonController extends addon
 				unset($extra_vars);
 				$extra_vars = base64_encode($val->extra_vars);
 			}
-			$addon_include = sprintf('unset($addon_info); $addon_info = unserialize(base64_decode(\'%s\')); @include($addon_file);', $extra_vars);
+			$addon_include = sprintf('unset($addon_info); $addon_info = unserialize(base64_decode(\'%s\')); include($addon_file);', $extra_vars);
 
 			$buff[] = 'if(file_exists($addon_file)){';
 			$buff[] = 'if($rm === \'no_run_selected\'){';

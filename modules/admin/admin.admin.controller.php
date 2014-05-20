@@ -471,7 +471,7 @@ class adminAdminController extends admin
 		$file_exist = FileHandler::readFile(_XE_PATH_ . 'files/attach/xeicon/' . $iconname);
 		if($file_exist)
 		{
-			@FileHandler::removeFile(_XE_PATH_ . 'files/attach/xeicon/' . $iconname);
+			FileHandler::removeFile(_XE_PATH_ . 'files/attach/xeicon/' . $iconname);
 		}
 		else
 		{

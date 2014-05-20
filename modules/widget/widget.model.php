@@ -131,9 +131,9 @@ class widgetModel extends widget
 		// If the problem by comparing the cache file and include the return variable $widget_info
 		$cache_file = sprintf(_XE_PATH_ . 'files/cache/widget/%s.%s.cache.php', $widget, Context::getLangType());
 
-		if(file_exists($cache_file)&&filemtime($cache_file)>filemtime($xml_file))
+		if(is_readable($cache_file)&&filemtime($cache_file)>filemtime($xml_file))
 		{
-			@include($cache_file);
+			include($cache_file);
 			return $widget_info;
 		}
 		// If no cache file exists, parse the xml and then return the variable.
@@ -247,7 +247,7 @@ class widgetModel extends widget
 		$buff = '<?php if(!defined("__XE__")) exit(); '.$buff.' ?>';
 		FileHandler::writeFile($cache_file, $buff);
 
-		if(file_exists($cache_file)) @include($cache_file);
+		if(is_readable($cache_file)) include($cache_file);
 		return $widget_info;
 	}
 
@@ -264,9 +264,9 @@ class widgetModel extends widget
 		// If the problem by comparing the cache file and include the return variable $widgetStyle_info
 		$cache_file = sprintf(_XE_PATH_ . 'files/cache/widgetstyles/%s.%s.cache.php', $widgetStyle, Context::getLangType());
 
-		if(file_exists($cache_file)&&filemtime($cache_file)>filemtime($xml_file))
+		if(is_readable($cache_file)&&filemtime($cache_file)>filemtime($xml_file))
 		{
-			@include($cache_file);
+			include($cache_file);
 			return $widgetStyle_info;
 		}
 		// If no cache file exists, parse the xml and then return the variable.
@@ -352,7 +352,7 @@ class widgetModel extends widget
 		$buff = '<?php if(!defined("__XE__")) exit(); '.$buff.' ?>';
 		FileHandler::writeFile($cache_file, $buff);
 
-		if(file_exists($cache_file)) @include($cache_file);
+		if(is_readable($cache_file)) include($cache_file);
 		return $widgetStyle_info;
 	}
 }

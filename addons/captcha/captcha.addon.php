@@ -190,7 +190,7 @@ if(!class_exists('AddonCaptcha', false))
 			// Create an image for each letter
 			foreach($arr as $i => $str)
 			{
-				$im[$i + 1] = @imagecreate($w, $h);
+				$im[$i + 1] = imagecreate($w, $h);
 				$background_color = imagecolorallocate($im[$i + 1], 255, 255, 255);
 				$text_color = imagecolorallocate($im[$i + 1], 0, 0, 0);
 
