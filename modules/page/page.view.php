@@ -171,7 +171,8 @@ class pageView extends page
 	function executeFile($target_file, $caching_interval, $cache_file)
 	{
 		// Cancel if the file doesn't exist
-		if(!file_exists(FileHandler::getRealPath($target_file))) return;
+		$target_file = FileHandler::getRealPath($target_file);
+		if(!is_readable($target_file)) return;
 
 		// Get a path and filename
 		$tmp_path = explode('/',$cache_file);
@@ -186,7 +187,7 @@ class pageView extends page
 
 			// Read a target file and get content
 			ob_start();
-			include(FileHandler::getRealPath($target_file));
+			include($target_file);
 			$content = ob_get_clean();
 			// Replace relative path to the absolute path 
 			$this->path = str_replace('\\', '/', realpath(dirname($target_file))) . '/';
