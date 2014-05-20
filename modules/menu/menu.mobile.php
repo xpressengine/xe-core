@@ -50,14 +50,14 @@ class menuMobile extends moduleObject
 			$oMenuAdminController = getAdminController('menu');
 			$homeMenuCacheFile = $oMenuAdminController->getHomeMenuCacheFile();
 
-			if(file_exists($homeMenuCacheFile))
+			if(is_readable($homeMenuCacheFile))
 			{
-				@include($homeMenuCacheFile);
+				include($homeMenuCacheFile);
 			}
 			$menu_info->php_file = './files/cache/menu/'.$homeMenuSrl.'.php';
 		}
 
-		if(file_exists($menu_info->php_file)) @include($menu_info->php_file);
+		if(is_readable($menu_info->php_file)) include($menu_info->php_file);
 		if(is_array($menu->list))
 		{
 			foreach($menu->list as $menu_item)
