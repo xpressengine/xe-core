@@ -73,7 +73,7 @@ class DBMysql extends DB
 		}
 
 		// Attempt to connect
-		$result = @mysql_connect($connection["db_hostname"], $connection["db_userid"], $connection["db_password"]);
+		$result = mysql_connect($connection["db_hostname"], $connection["db_userid"], $connection["db_password"]);
 		if(!$result)
 		{
 			exit('XE cannot connect to DB.');
@@ -91,7 +91,11 @@ class DBMysql extends DB
 			return;
 		}
 		// select db
-		@mysql_select_db($connection["db_database"], $result);
+		$output = mysql_select_db($connection["db_database"], $result);
+		if(!$output)
+		{
+			exit('XE cannot select database.');
+		}
 		if(mysql_error())
 		{
 			$this->setError(mysql_errno(), mysql_error());
@@ -121,7 +125,7 @@ class DBMysql extends DB
 	 */
 	function _close($connection)
 	{
-		@mysql_close($connection);
+		mysql_close($connection);
 	}
 
 	/**
