@@ -1685,6 +1685,7 @@ class menuAdminController extends menu
 
 		$xml_info = $oModuleModel->getModuleActionXML($moduleInfo->module);
 
+		$grantList = new stdClass;
 		$grantList = $xml_info->grant;
 		if(!$grantList) $grantList = new stdClass;
 
