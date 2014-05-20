@@ -344,7 +344,7 @@ class DB
 		}
 
 		// sort
-		@usort($get_supported_list, array($this, '_sortDBMS'));
+		usort($get_supported_list, array($this, '_sortDBMS'));
 
 		$this->supported_list = $get_supported_list;
 		return $this->supported_list;
