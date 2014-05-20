@@ -79,13 +79,13 @@ class FileHandler
 			{
 				if($type == 'force')
 				{
-					@unlink($target_dir . $file);
+					unlink($target_dir . $file);
 				}
 				else
 				{
 					if(!file_exists($target_dir . $file))
 					{
-						@copy($source_dir . $file, $target_dir . $file);
+						copy($source_dir . $file, $target_dir . $file);
 					}
 				}
 			}
@@ -112,10 +112,10 @@ class FileHandler
 
 		if($force == 'Y')
 		{
-			@unlink($target_dir . DIRECTORY_SEPARATOR . $target);
+			unlink($target_dir . DIRECTORY_SEPARATOR . $target);
 		}
 
-		@copy($source, $target_dir . DIRECTORY_SEPARATOR . $target);
+		copy($source, $target_dir . DIRECTORY_SEPARATOR . $target);
 	}
 
 	/**
@@ -126,12 +126,12 @@ class FileHandler
 	 */
 	function readFile($filename)
 	{
-		if(($filename = self::exists($filename)) === FALSE || filesize($filename) < 1)
+		if(!is_readable($filename) || filesize($filename) < 1)
 		{
 			return;
 		}
 
-		return @file_get_contents($filename);
+		return file_get_contents($filename);
 	}
 
 	/**
@@ -154,8 +154,8 @@ class FileHandler
 			$flags = FILE_APPEND;
 		}
 
-		@file_put_contents($filename, $buff, $flags|LOCK_EX);
-		@chmod($filename, 0644);
+		file_put_contents($filename, $buff, $flags|LOCK_EX);
+		chmod($filename, 0644);
 	}
 
 	/**
@@ -180,7 +180,7 @@ class FileHandler
 	 */
 	function rename($source, $target)
 	{
-		return @rename(self::getRealPath($source), self::getRealPath($target));
+		return rename(self::getRealPath($source), self::getRealPath($target));
 	}
 
 	/**
@@ -286,8 +286,8 @@ class FileHandler
 
 		if(!ini_get('safe_mode'))
 		{
-			@mkdir($path_string, 0755, TRUE);
-			@chmod($path_string, 0755);
+			mkdir($path_string, 0755, TRUE);
+			chmod($path_string, 0755);
 		}
 		// if safe_mode is on, use FTP
 		else
@@ -775,27 +775,27 @@ class FileHandler
 			case 'gif' :
 				if(function_exists('imagecreatefromgif'))
 				{
-					$source = @imagecreatefromgif($source_file);
+					$source = imagecreatefromgif($source_file);
 				}
 				break;
 			case 'jpeg' :
 			case 'jpg' :
 				if(function_exists('imagecreatefromjpeg'))
 				{
-					$source = @imagecreatefromjpeg($source_file);
+					$source = imagecreatefromjpeg($source_file);
 				}
 				break;
 			case 'png' :
 				if(function_exists('imagecreatefrompng'))
 				{
-					$source = @imagecreatefrompng($source_file);
+					$source = imagecreatefrompng($source_file);
 				}
 				break;
 			case 'wbmp' :
 			case 'bmp' :
 				if(function_exists('imagecreatefromwbmp'))
 				{
-					$source = @imagecreatefromwbmp($source_file);
+					$source = imagecreatefromwbmp($source_file);
 				}
 				break;
 		}
@@ -869,7 +869,7 @@ class FileHandler
 		{
 			return FALSE;
 		}
-		@chmod($target_file, 0644);
+		chmod($target_file, 0644);
 
 		return TRUE;
 	}
