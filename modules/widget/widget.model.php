@@ -306,6 +306,7 @@ class widgetModel extends widget
 
 		for($i=0; $i < count($author_list); $i++)
 		{
+			$buff .= '$widgetStyle_info->author['.$i.'] = new stdClass;';
 			$buff .= sprintf('$widgetStyle_info->author['.$i.']->name = "%s";', $author_list[$i]->name->body);
 			$buff .= sprintf('$widgetStyle_info->author['.$i.']->email_address = "%s";', $author_list[$i]->attrs->email_address);
 			$buff .= sprintf('$widgetStyle_info->author['.$i.']->homepage = "%s";', $author_list[$i]->attrs->link);
@@ -324,7 +325,7 @@ class widgetModel extends widget
 			{
 				$extra_var_count = count($extra_vars);
 
-				$buff .= sprintf('$widgetStyle_info->extra_var_count = "%s";', $extra_var_count);
+				$buff .= sprintf('$widgetStyle_info->extra_var_count = "%s";$widgetStyle_info->extra_var = new stdClass;', $extra_var_count);
 				for($i=0;$i<$extra_var_count;$i++)
 				{
 					unset($var);
@@ -335,6 +336,7 @@ class widgetModel extends widget
 					$name = $var->name->body?$var->name->body:$var->title->body;
 					$type = $var->attrs->type?$var->attrs->type:$var->type->body;
 
+					$buff .= sprintf('$widgetStyle_info->extra_var->%s = new stdClass;', $id);
 					$buff .= sprintf('$widgetStyle_info->extra_var->%s->group = "%s";', $id, $group->title->body);
 					$buff .= sprintf('$widgetStyle_info->extra_var->%s->name = "%s";', $id, $name);
 					$buff .= sprintf('$widgetStyle_info->extra_var->%s->type = "%s";', $id, $type);
