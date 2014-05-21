@@ -201,7 +201,7 @@
 	</item>
 	<item name="about_layout_setup">
 		<value xml:lang="ko"><![CDATA[블로그의 레이아웃 코드를 직접 수정할 수 있습니다. 위젯 코드를 원하는 곳에 삽입하시거나 관리하세요]]></value>
-		<value xml:lang="en"><![CDATA[You can manually modify board layout code. Insert or manage the widget code anywhere you want]]></value>
+		<value xml:lang="en"><![CDATA[You can manually modify blog layout code. Insert or manage the widget code anywhere you want]]></value>
 		<value xml:lang="jp"><![CDATA[ブログのレイアウトのコードを直接修正します。ウィジェットコードを好きなところに入力、または管理してください。]]></value>
 		<value xml:lang="zh-CN"><![CDATA[可直接编辑博客布局代码。可以把控件代码插入到您喜欢的位置。]]></value>
 		<value xml:lang="zh-TW"><![CDATA[可直接編輯部落格版面設計原始碼。可把 Widget 原始碼插入到您喜歡的位置。]]></value>
@@ -236,7 +236,7 @@
 	</item>
 	<item name="about_use_anonymous">
 		<value xml:lang="ko"><![CDATA[글쓴이의 정보를 없애고 익명으로 게시판 사용을 할 수 있게 합니다. 스킨설정에서 글쓴이 정보등을 보이지 않도록 하시면 더욱 유용합니다. 추가설정의 문서 히스토리 사용이 꺼져있지 않으면 문서 수정시 작성자가 표시될 수 있습니다.]]></value>
-		<value xml:lang="en"><![CDATA[Make this board into an anonymous board by hiding the author's information. <strong>Please turn off history at additional setup. If not, editing document might show the author's info.</strong>]]></value>
+		<value xml:lang="en"><![CDATA[Make this board into an anonymous board by hiding the author's information. It could be more useful if you make the author's information hidden in skin setup. <strong>Please turn off history at additional setup. If not, editing document might show the author's info.</strong>]]></value>
 		<value xml:lang="jp"><![CDATA[匿名掲示板として活用できます。スキン設定で「登録者の情報を表示しない」の設定をおすすめします。追加設定でのドキュメントヒストリー使用機能がオフにされていない場合、書き込みを修正した際に作成者が表示されます。]]></value>
 		<value xml:lang="zh-CN"><![CDATA[글쓴이의 정보를 없애고 익명으로 게시판 사용을 할 수 있게 합니다. 스킨설정에서 글쓰인 정보등을 보이지 않도록 하시면 더욱 유용합니다]]></value>
 		<value xml:lang="zh-TW"><![CDATA[討論板可使用匿名功能。可在面板設定中設置隱藏作者的資料。 ]]></value>
@@ -271,7 +271,7 @@
 		<value xml:lang="vi"><![CDATA[Người không phải là Admin, thành viên họ cũng có thể xem được bài viết. Không phải là thành viên thì không thể gửi bài hay bình luận.]]></value>
 	</item>
 	<item name="about_secret">
-		<value xml:lang="ko"><![CDATA[게시판 및 댓글의 비밀글 사용할 수 있도록 합니다.]]></value>
+		<value xml:lang="ko"><![CDATA[게시물 및 댓글의 비밀글 기능을 사용할 수 있도록 합니다.]]></value>
 		<value xml:lang="en"><![CDATA[Users will be able to write secret articles or comments.]]></value>
 		<value xml:lang="jp"><![CDATA[掲示板およびコメントの非公開機能が使用できるようになります。]]></value>
 		<value xml:lang="zh-CN"><![CDATA[设置主题及评论当中使用密帖与否。]]></value>
@@ -327,7 +327,7 @@
 	</item>
 	<item name="msg_not_allow_comment">
 		<value xml:lang="ko"><![CDATA[해당 글의 댓글 쓰기가 잠겨있습니다.]]></value>
-		<value xml:lang="en"><![CDATA[This article does not allow write comment.]]></value>
+		<value xml:lang="en"><![CDATA[This article does not allow to write comments.]]></value>
 		<value xml:lang="jp"><![CDATA[この書き込みにコメントすることは禁じられています。]]></value>
 	</item>
 	<item name="no_board_instance">
