@@ -17,12 +17,12 @@
 				<td>{$receiver_info->nick_name}</td>
 			</tr>
 			<tr>
-				<th scope="row">{$lang->title}</th>
+				<th scope="row"><label for="message_title">{$lang->title}</label></th>
 				<td><input type="text" name="title" id="message_title" value="{$source_message->title}" style="width:90%" /></td>
 			</tr>
 			<tr>
 				<th scope="row">{$lang->cmd_option}</th>
-				<td><input type="checkbox" value="Y" name="send_mail" /> {$lang->cmd_send_mail}</td>
+				<td><input type="checkbox" value="Y" name="send_mail" id="send_mail" /> <label for="send_mail">{$lang->cmd_send_mail}</label></td>
 			</tr>
 		</table>
 		{$editor}
