@@ -266,10 +266,13 @@ class fileController extends file
 
 
 		// 다운로드 후 (가상)
-		// Increase download_count
-		$args = new stdClass();
-		$args->file_srl = $file_srl;
-		executeQuery('file.updateFileDownloadCount', $args);
+		if(!isCrawler())
+		{
+			// Increase download_count
+			$args = new stdClass();
+			$args->file_srl = $file_srl;
+			executeQuery('file.updateFileDownloadCount', $args);
+		}
 		// Call a trigger (after)
 		$output = ModuleHandler::triggerCall('file.downloadFile', 'after', $file_obj);
 
