@@ -912,7 +912,7 @@ class ModuleHandler extends Handler
 								$oMenuAdminController = getAdminController('menu');
 								$homeMenuCacheFile = $oMenuAdminController->getHomeMenuCacheFile();
 
-								if(FileHandler::exists($homeMenuCacheFile))
+								if(is_readable($homeMenuCacheFile))
 								{
 									include($homeMenuCacheFile);
 								}
@@ -1073,7 +1073,7 @@ class ModuleHandler extends Handler
 			if(!isset($GLOBALS['_called_constructor'][$instance_name]))
 			{
 				$GLOBALS['_called_constructor'][$instance_name] = TRUE;
-				if(@method_exists($oModule, $instance_name))
+				if(method_exists($oModule, $instance_name))
 				{
 					$oModule->{$instance_name}();
 				}
