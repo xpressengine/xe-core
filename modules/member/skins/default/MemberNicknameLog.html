@@ -12,7 +12,7 @@
 		<!--@foreach($modifynickname as $no => $val)-->
 		<tr>
 			<td>
-				{$val->regdate}
+				{zdate($val->regdate,"Y-m-d")}
 			</td>
 			<td>
 				{$val->a_nick_name}
