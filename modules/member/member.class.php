@@ -195,6 +195,11 @@ class member extends ModuleObject {
 		if(!$oDB->isColumnExists("member", "list_order")) return true;
 		if(!$oDB->isIndexExists("member","idx_list_order")) return true;
 
+		if(!$oDB->isColumnExists("member_modify_log", "member_srl")) return true;
+		if(!$oDB->isColumnExists("member_modify_log", "nick_name")) return true;
+		if(!$oDB->isColumnExists("member_modify_log", "a_nick_name")) return true;
+		if(!$oDB->isColumnExists("member_modify_log", "regdate")) return true;
+
 		$oModuleModel = getModel('module');
 		$config = $oModuleModel->getModuleConfig('member');
 		// check signup form ordering info
@@ -289,6 +294,23 @@ class member extends ModuleObject {
 		if(!$oDB->isColumnExists("member", "find_account_answer"))
 		{
 			$oDB->addColumn("member", "find_account_answer", "varchar", 250);
+		}
+
+		if(!$oDB->isColumnExists("member_modify_log", "member_srl"))
+		{
+			$oDB->addColumn("member_modify_log", "member_srl", "number", 11);
+		}
+		if(!$oDB->isColumnExists("member_modify_log", "nick_name"))
+		{
+			$oDB->addColumn("member_modify_log", "nick_name", "varchar", 40);
+		}
+		if(!$oDB->isColumnExists("member_modify_log", "a_nick_name"))
+		{
+			$oDB->addColumn("member_modify_log", "a_nick_name", "varchar", 40);
+		}
+		if(!$oDB->isColumnExists("member_modify_log", "regdate"))
+		{
+			$oDB->addColumn("member_modify_log", "regdate", "number", 11);
 		}
 
 		if(!$oDB->isColumnExists("member", "list_order"))

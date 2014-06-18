@@ -1867,6 +1867,7 @@ class memberController extends member
 		$this->addMemberMenu( 'dispMemberScrappedDocument', 'cmd_view_scrapped_document');
 		$this->addMemberMenu( 'dispMemberSavedDocument', 'cmd_view_saved_document');
 		$this->addMemberMenu( 'dispMemberOwnDocument', 'cmd_view_own_document');
+		$this->addMemberMenu( 'dispMemberModifyNicknameLog', 'cmd_Modify_Nickname_Log');
 	}
 
 	/**
@@ -2159,6 +2160,16 @@ class memberController extends member
 		if(!$args->nick_name) $args->nick_name = $orgMemberInfo->nick_name;
 		if(!$args->description) $args->description = '';
 		if(!$args->birthday) $args->birthday = '';
+
+		if($args->nick_name)
+		{
+			$arg = new stdClass;
+			$arg->a_nick_name = $orgMemberInfo->nick_name;
+			$arg->nick_name = $args->nick_name;
+			$arg->member_srl = $logged_info->member_srl;
+			$arg->regdate = date('Ymd');
+			executeQuery('member.InsertMemberModifyNickName', $arg);
+		}
 
 		$output = executeQuery('member.updateMember', $args);
 

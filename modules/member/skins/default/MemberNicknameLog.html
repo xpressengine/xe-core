@@ -1,0 +1,36 @@
+<include target="./common_header.html" />
+<h1>{$member_title = $lang->cmd_Modify_Nickname_Log}</h1>
+<table class="table table-striped table-hover">
+	<thead>
+		<tr>
+			<th>{$lang->date}</th>
+			<th>{$lang->nick_name_before_changing}</th>
+			<th class="title">{$lang->nick_name_after_changing}</th>
+		</tr>
+	</thead>
+	<tbody>
+		<!--@foreach($modifynickname as $no => $val)-->
+		<tr>
+			<td>
+				{$val->regdate}
+			</td>
+			<td>
+				{$val->a_nick_name}
+			</td>
+			<td>
+				{$val->nick_name}
+			</td>
+		</tr>
+		<!--@end-->
+	</tbody>
+</table>
+<div class="pagination pagination-centered">
+	<ul>
+		<li><a href="{getUrl('page','','module_srl','')}" class="direction">&laquo; {$lang->first_page}</a></li> 
+		<!--@while($page_no = $page_navigation->getNextPage())-->
+		<li class="active"|cond="$page == $page_no"><a href="{getUrl('page',$page_no,'module_srl','')}">{$page_no}</a></li>
+		<!--@end-->
+		<li><a href="{getUrl('page',$page_navigation->last_page,'module_srl','')}" class="direction">{$lang->last_page} &raquo;</a></li>
+	</ul>
+</div>
+<include target="./common_footer.html" />
