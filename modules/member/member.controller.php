@@ -2167,7 +2167,7 @@ class memberController extends member
 			$arg->a_nick_name = $orgMemberInfo->nick_name;
 			$arg->nick_name = $args->nick_name;
 			$arg->member_srl = $logged_info->member_srl;
-			$arg->regdate = date('Ymd');
+			$arg->regdate = date('YmdHis');
 			executeQuery('member.InsertMemberModifyNickName', $arg);
 		}
 
