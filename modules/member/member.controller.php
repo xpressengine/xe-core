@@ -2161,7 +2161,7 @@ class memberController extends member
 		if(!$args->description) $args->description = '';
 		if(!$args->birthday) $args->birthday = '';
 
-		if($args->nick_name)
+		if($args->nick_name != $orgMemberInfo->nick_name)
 		{
 			$arg = new stdClass;
 			$arg->a_nick_name = $orgMemberInfo->nick_name;
