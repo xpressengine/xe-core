@@ -1,6 +1,6 @@
 <query id="getMemberModifyNickName" action="select">
 	<tables>
-		<table name="member_modify_log" />
+		<table name="member_nick_name_modify_log" />
 	</tables>
 	<columns>
 		<column name="*" />

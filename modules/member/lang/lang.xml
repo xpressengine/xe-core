@@ -1110,7 +1110,7 @@
 		<value xml:lang="tr"><![CDATA[Yazılmış Makaleler]]></value>
 		<value xml:lang="vi"><![CDATA[Bài gửi]]></value>
 	</item>
-	<item name="cmd_Modify_Nickname_Log">
+	<item name="cmd_modify_nickname_log">
 		<value xml:lang="ko"><![CDATA[닉네임 변경 기록]]></value>
 	</item>
 	<item name="cmd_manage_member_info">

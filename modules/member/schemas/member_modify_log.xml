@@ -1,6 +1,0 @@
-<table name="member_modify_log">
-	<column name="member_srl" type="number" size="11" notnull="notnull" primary_key="primary_key" />
-	<column name="nick_name" type="varchar" size="40" notnull="notnull" unique="unique_nick_name" />
-	<column name="a_nick_name" type="varchar" size="40" notnull="notnull" unique="unique_nick_name" />
-	<column name="regdate" type="number" size="11" />
-</table>

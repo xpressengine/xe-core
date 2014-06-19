@@ -1,6 +1,6 @@
 <query id="InsertMemberModifyNickName" action="insert">
 	<tables>
-		<table name="member_modify_log" />
+		<table name="member_nick_name_modify_log" />
 	</tables>
 	<columns>
 		<column name="member_srl" var="member_srl" filter="number" notnull="notnull" />

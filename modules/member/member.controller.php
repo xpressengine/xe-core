@@ -1867,7 +1867,7 @@ class memberController extends member
 		$this->addMemberMenu( 'dispMemberScrappedDocument', 'cmd_view_scrapped_document');
 		$this->addMemberMenu( 'dispMemberSavedDocument', 'cmd_view_saved_document');
 		$this->addMemberMenu( 'dispMemberOwnDocument', 'cmd_view_own_document');
-		$this->addMemberMenu( 'dispMemberModifyNicknameLog', 'cmd_Modify_Nickname_Log');
+		$this->addMemberMenu( 'dispMemberModifyNicknameLog', 'cmd_modify_nickname_log');
 	}
 
 	/**
@@ -2339,6 +2339,8 @@ class memberController extends member
 				return $trigger_output;
 			}
 		}
+
+		$output = executeQuery('member.deleteMemberModifyNickName', $args);
 
 		$oDB->commit();
 		// Name, image, image, mark, sign, delete
