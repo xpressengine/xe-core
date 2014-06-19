@@ -1,0 +1,11 @@
+<query id="InsertMemberModifyNickName" action="insert">
+	<tables>
+		<table name="member_nick_name_modify_log" />
+	</tables>
+	<columns>
+		<column name="member_srl" var="member_srl" filter="number" notnull="notnull" />
+		<column name="nick_name" var="nick_name" notnull="notnull" minlength="1" maxlength="40" />
+		<column name="a_nick_name" var="a_nick_name" notnull="notnull" minlength="1" maxlength="40" />
+		<column name="regdate" var="regdate" />
+	</columns>
+</query>

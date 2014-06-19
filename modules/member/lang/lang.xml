@@ -1110,6 +1110,9 @@
 		<value xml:lang="tr"><![CDATA[Yazılmış Makaleler]]></value>
 		<value xml:lang="vi"><![CDATA[Bài gửi]]></value>
 	</item>
+	<item name="cmd_modify_nickname_log">
+		<value xml:lang="ko"><![CDATA[닉네임 변경 기록]]></value>
+	</item>
 	<item name="cmd_manage_member_info">
 		<value xml:lang="ko"><![CDATA[회원 정보 관리]]></value>
 		<value xml:lang="en"><![CDATA[Manage Member Info]]></value>
@@ -2748,5 +2751,11 @@
 		<value xml:lang="en"><![CDATA[Move to trash]]></value>
 		<value xml:lang="jp"><![CDATA[ゴミ箱へ移動]]></value>
 	</item>
-	
+	<item name="nick_name_before_changing">
+		<value xml:lang="ko"><![CDATA[닉네임 변경 전]]></value>
+	</item>
+	<item name="nick_name_after_changing">
+		<value xml:lang="ko"><![CDATA[닉네임 변경 후]]></value>
+	</item>
+
 </lang>

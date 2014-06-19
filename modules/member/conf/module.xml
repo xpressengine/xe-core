@@ -10,6 +10,7 @@
 		<action name="dispMemberModifyEmailAddress" type="view" standalone="true" />
 		<action name="dispMemberModifyInfo" type="view" standalone="true" />
 		<action name="dispMemberModifyPassword" type="view" standalone="true" />
+		<action name="dispMemberModifyNicknameLog" type="view" standalone="true" />
 		<action name="dispMemberLoginForm" type="view" standalone="true" />
 		<action name="dispMemberLogout" type="view" standalone="true" />
 		<action name="dispMemberLeave" type="view" standalone="true" />

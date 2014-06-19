@@ -661,7 +661,28 @@ class memberView extends member
 		$this->setTemplatePath($this->module_path.'tpl');
 		$this->setTemplateFile('spammer');
 	}
+
+	/**
+	 * Member nickname log 
+	 * @return void
+	**/
+	function dispMemberModifyNicknameLog()
+	{
+		$logged_info = Context::get('logged_info');
+
+		$args = new stdClass();
+		$args->member_srl = $logged_info->member_srl;
+		$args->page = Context::get('page');
+		$output = executeQuery('member.getMemberModifyNickName', $args);
+
+		Context::set('total_count', $output->page_navigation->total_count);
+		Context::set('total_page', $output->page_navigation->total_page);
+		Context::set('page', $output->page);
+		Context::set('modifynickname', $output->data);
+		Context::set('page_navigation', $output->page_navigation);
 	
+		$this->setTemplateFile('MemberNicknameLog');
+	}
 }
 /* End of file member.view.php */
 /* Location: ./modules/member/member.view.php */
