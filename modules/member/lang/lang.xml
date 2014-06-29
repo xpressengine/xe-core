@@ -1324,6 +1324,7 @@
 		<value xml:lang="ru"><![CDATA[Письмо для авторизации отправлено для %s. Пожалуйста, проверьте Вашу почту]]></value>
 		<value xml:lang="tr"><![CDATA[%s adresine etkinleştirme maili gönderdik. Lütfen mailinizi kontrol ediniz.]]></value>
 		<value xml:lang="vi"><![CDATA[Chúng tôi đã gửi Email xác nhận đến %s. Xin vui lòng bấm vào Link đi kèm trong Email để hoàn tất việc đăng kí!]]></value>
+	</item>
 	<item name="msg_change_mail_sent">
 		<value xml:lang="ko"><![CDATA[%s 메일로 이메일 변경 인증 메일이 발송되었습니다. 메일을 확인하세요.]]></value>
 	</item>
