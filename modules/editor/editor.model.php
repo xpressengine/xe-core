@@ -409,7 +409,7 @@ class editorModel extends editor
 		else $option->enable_default_component = true;
 		// Permisshion check for using extended components
 		$option->enable_component = false;
-		if($logged_info->is_admin=='Y') $option->enable_component_grant = true;
+		if($logged_info->is_admin=='Y') $option->enable_component = true;
 		elseif(count($config->enable_component_grant))
 		{
 			foreach($group_list as $group_srl => $group_info)
