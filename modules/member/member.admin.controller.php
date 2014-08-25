@@ -1109,12 +1109,13 @@ class memberAdminController extends member
 			if(!$output->toBool()) return $output;
 		}
 
+		if(!$args->group_srl) $args->group_srl = getNextSequence();
+		
 		if(!isset($args->list_order) || $args->list_order=='')
 		{
 			$args->list_order = $args->group_srl;
 		}
 
-		if(!$args->group_srl) $args->group_srl = getNextSequence();
 		$output = executeQuery('member.insertGroup', $args);
 		$this->_deleteMemberGroupCache($args->site_srl);
 
