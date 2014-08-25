@@ -1110,8 +1110,8 @@ class memberAdminController extends member
 		}
 
 		if(!$args->group_srl) $args->group_srl = getNextSequence();
-		
-		if(!isset($args->list_order) || $args->list_order=='')
+
+		if(!$args->list_order)
 		{
 			$args->list_order = $args->group_srl;
 		}
