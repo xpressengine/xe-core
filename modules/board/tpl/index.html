@@ -30,7 +30,7 @@
 				<block cond="$val->module_category_srl">{$module_category[$val->module_category_srl]->title}</block>
 			</td>
 			<td>{$val->mid}</td>
-			<td><a href="{getSiteUrl($val->domain,'','mid',$val->mid)}">{$val->browser_title}</a></td>
+			<td><a href="{getSiteUrl($val->domain,'','mid',$val->mid)}" target="_blank">{$val->browser_title}</a></td>
 			<td>{zdate($val->regdate,"Y-m-d")}</td>
 			<td>
 				<a href="{getUrl('act','dispBoardAdminBoardInfo','module_srl',$val->module_srl)}" class="x_icon-cog" title="{$lang->cmd_setup}">{$lang->cmd_setup}</a>
