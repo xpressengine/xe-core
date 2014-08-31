@@ -67,6 +67,13 @@ class boardController extends board
 			$is_update = true;
 		}
 
+		$oMemberModel = getModel('member');
+		$member_info = $oMemberModel->getMemberInfoByMemberSrl($oDocument->get('member_srl'));
+		if($member_info->is_admin == 'Y' && $logged_info->is_admin != 'Y')
+		{
+			return new Object(-1, 'msg_admin_document_no_modify');
+		}
+
 		// if use anonymous is true
 		if($this->module_info->use_anonymous == 'Y')
 		{
