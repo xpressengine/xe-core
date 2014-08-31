@@ -612,7 +612,10 @@ class documentController extends document
 		if(!$oDocument->isGranted()) return new Object(-1, 'msg_not_permitted');
 		$oMemberModel = getModel('member');
 		$member_info = $oMemberModel->getMemberInfoByMemberSrl($oDocument->get('member_srl'));
-		if($member_info->is_admin == 'Y' && $logged_info->is_admin != 'Y') return new Object(-1, 'msg_invalid_is_admins');
+		if($member_info->is_admin == 'Y' && $logged_info->is_admin != 'Y')
+		{
+			return new Object(-1, 'msg_admin_document_no_delete');
+		}
 
 		//if empty trash, document already deleted, therefore document not delete
 		$args = new stdClass();
