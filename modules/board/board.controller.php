@@ -68,6 +68,7 @@ class boardController extends board
 		}
 
 		$oMemberModel = getModel('member');
+		$logged_info = Context::get('logged_info');
 		$member_info = $oMemberModel->getMemberInfoByMemberSrl($oDocument->get('member_srl'));
 		if($member_info->is_admin == 'Y' && $logged_info->is_admin != 'Y')
 		{

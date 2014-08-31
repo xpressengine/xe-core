@@ -554,7 +554,7 @@ class boardView extends board
 		}
 
 		$oDocumentModel = getModel('document');
-
+		$logged_info = Context::get('logged_info');
 		/**
 		 * check if the category option is enabled not not
 		 **/
@@ -563,7 +563,6 @@ class boardView extends board
 			// get the user group information
 			if(Context::get('is_logged'))
 			{
-				$logged_info = Context::get('logged_info');
 				$group_srls = array_keys($logged_info->group_list);
 			}
 			else
@@ -608,7 +607,7 @@ class boardView extends board
 			return new Object(-1, 'msg_protect_content');
 		}
 
-		if($member_info->is_admin == 'Y' && $logged_info->is_admin != 'Y')
+		if($member_info->is_admin == 'Y' && $logged_info->is_admin == 'N')
 		{
 			return new Object(-1, 'msg_admin_document_no_modify');
 		}

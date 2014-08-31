@@ -706,6 +706,7 @@ class documentController extends document
 	 */
 	function moveDocumentToTrash($obj)
 	{
+		$logged_info = Context::get('logged_info');
 		$trash_args = new stdClass();
 		// Get trash_srl if a given trash_srl doesn't exist
 		if(!$obj->trash_srl) $trash_args->trash_srl = getNextSequence();
@@ -713,6 +714,13 @@ class documentController extends document
 		// Get its module_srl which the document belongs to
 		$oDocumentModel = getModel('document');
 		$oDocument = $oDocumentModel->getDocument($obj->document_srl);
+
+		$oMemberModel = getModel('member');
+		$member_info = $oMemberModel->getMemberInfoByMemberSrl($oDocument->get('member_srl'));
+		if($member_info->is_admin == 'Y' && $logged_info->is_admin != 'Y')
+		{
+			return new Object(-1, 'msg_admin_document_no_move_to_trash');
+		}
 
 		$trash_args->module_srl = $oDocument->get('module_srl');
 		$obj->module_srl = $oDocument->get('module_srl');
@@ -724,7 +732,6 @@ class documentController extends document
 		// Insert member's information only if the member is logged-in and not manually registered.
 		if(Context::get('is_logged')&&!$manual_inserted)
 		{
-			$logged_info = Context::get('logged_info');
 			$trash_args->member_srl = $logged_info->member_srl;
 
 			// user_id, user_name and nick_name already encoded
