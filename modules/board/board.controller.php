@@ -297,6 +297,14 @@ class boardController extends board
 			$comment = $oCommentModel->getComment($obj->comment_srl, $this->grant->manager);
 		}
 
+		$oMemberModel = getModel('member');
+		$member_info = $oMemberModel->getMemberInfoByMemberSrl($comment->member_srl);
+
+		if($member_info->is_admin == 'Y' && $logged_info->is_admin == 'N')
+		{
+			return new Object(-1, 'msg_admin_comment_no_modify');
+		}
+
 		// if comment_srl is not existed, then insert the comment
 		if($comment->comment_srl != $obj->comment_srl)
 		{

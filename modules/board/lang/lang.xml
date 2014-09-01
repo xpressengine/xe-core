@@ -378,4 +378,7 @@
 	<item name="msg_admin_document_no_modify">
 		<value xml:lang="ko"><![CDATA[최고관리자의 게시물을 수정할 권한이 없습니다.]]></value>
 	</item>
+	<item name="msg_admin_comment_no_modify">
+		<value xml:lang="ko"><![CDATA[최고관리자의 댓글을 수정할 권한이 없습니다.]]></value>
+	</item>
 </lang>

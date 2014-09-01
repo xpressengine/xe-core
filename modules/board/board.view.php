@@ -843,6 +843,7 @@ class boardView extends board
 	 **/
 	function dispBoardModifyComment()
 	{
+		$logged_info = Context::get('logged_info');
 		// check grant
 		if(!$this->grant->write_comment)
 		{
@@ -862,6 +863,15 @@ class boardView extends board
 		// get comment information
 		$oCommentModel = getModel('comment');
 		$oComment = $oCommentModel->getComment($comment_srl, $this->grant->manager);
+
+		$oMemberModel = getModel('member');
+		$member_info = $oMemberModel->getMemberInfoByMemberSrl($oComment->member_srl);
+		debugPrint($member_info);
+
+		if($member_info->is_admin == 'Y' && $logged_info->is_admin == 'N')
+		{
+			return new Object(-1, 'msg_admin_comment_no_modify');
+		}
 
 		// if the comment is not exited, alert an error message
 		if(!$oComment->isExists())
