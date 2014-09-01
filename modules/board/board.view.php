@@ -866,7 +866,6 @@ class boardView extends board
 
 		$oMemberModel = getModel('member');
 		$member_info = $oMemberModel->getMemberInfoByMemberSrl($oComment->member_srl);
-		debugPrint($member_info);
 
 		if($member_info->is_admin == 'Y' && $logged_info->is_admin == 'N')
 		{
