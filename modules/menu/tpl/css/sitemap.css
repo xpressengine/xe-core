@@ -318,3 +318,8 @@ body>.x{max-width:none !important}
 /* Help Alert */
 ._quick_help{display:none;position:fixed !important;*position:absolute !important;top:85px;left:226px;z-index:100;width:600px;box-shadow:0 0 3px #000;color:#333}
 ._quick_help>label{display:inline-block;cursor:pointer}
+/* Sitemap Extend */
+#site_map {width: 1350px;} 
+#siteMapTree>ul>li{float: left;width: 200px;display: block;}
+#site_map .mapi>ul >li{margin-top:0}
+#site_map .mapi>ul >li::before{border-top:0;top:0;}
