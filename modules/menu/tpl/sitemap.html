@@ -797,7 +797,7 @@ function onSiteMapReceived(htData){
 			// it makes sense to configure a plugin only if overriding the defaults
 		})
 		.bind("loaded.jstree", function (event, data) {
-			data.inst.open_all();
+			if(document.cookie.indexOf("jstree_open=") == -1 && document.cookie.indexOf("jstree_open=") == -1) data.inst.open_all();
 
 			var sRenameId = $._xeAdminVar.sRenameOnload;
 			$._xeAdminVar.sRenameOnload = null;
