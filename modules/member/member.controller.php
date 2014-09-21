@@ -1875,7 +1875,7 @@ class memberController extends member
 	{
 		$destory_session = false;
 
-		if($_SESSION['ipaddress'] != $_SERVER['REMOTE_ADDR']) $destory_session =  true;
+		if($_SESSION['ipaddress'] != $_SERVER['REMOTE_ADDR'] && !Mobile::isMobileCheckByAgent() ) $destory_session =  true;
 
 		if($destory_session)
 		{
