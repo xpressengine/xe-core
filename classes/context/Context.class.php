@@ -339,6 +339,9 @@ class Context
 		}
 
 		if($sess = $_POST[session_name()]) session_id($sess);
+
+		$session_params = session_get_cookie_params();
+		session_set_cookie_params($session_params['lifetime'], $session_params['path'], $session_params['domain'], $session_params['secure'], true);
 		session_start();
 
 		// set authentication information in Context and session
