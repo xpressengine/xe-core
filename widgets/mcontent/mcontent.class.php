@@ -18,7 +18,7 @@ class mcontent extends WidgetHandler
 	function proc($args)
 	{
 		// Targets to sort
-		if(!in_array($args->order_target, array('list_order','update_order'))) $args->order_target = 'list_order';
+		if(!in_array($args->order_target, array('regdate','update_order'))) $args->order_target = 'regdate';
 		// Sort order
 		if(!in_array($args->order_type, array('asc','desc'))) $args->order_type = 'asc';
 		// The number of displayed lists
@@ -223,7 +223,14 @@ class mcontent extends WidgetHandler
 		// Get a list of documents
 		$obj->module_srl = $args->module_srl;
 		$obj->sort_index = $args->order_target;
-		$obj->order_type = $args->order_type=="desc"?"asc":"desc";
+		if($args->order_target == 'list_order' || $args->order_target == 'update_order')
+		{
+			$obj->order_type = $args->order_type=="desc"?"asc":"desc";
+		}
+		else
+		{
+			$obj->order_type = $args->order_type=="desc"?"desc":"asc";
+		}
 		$obj->list_count = $args->list_count;
 		$obj->statusList = array('PUBLIC');
 		$output = executeQueryArray('widgets.content.getNewestDocuments', $obj);
