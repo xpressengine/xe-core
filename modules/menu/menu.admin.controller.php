@@ -1601,6 +1601,11 @@ class menuAdminController extends menu
 		$args->parent_srl = $requestArgs->parent_srl;
 		$args->menu_srl = $requestArgs->menu_srl;
 		$args->name = sprintf('{$lang->menu_gnb_sub[\'%s\']}', $menuName);
+		
+		if(substr($dbInfo->default_url,-1,1)!='/')
+		{
+			$dbInfo->default_url.='/';
+		}
 		//if now page is https...
 		if(strpos($url, 'https') !== false)
 		{
