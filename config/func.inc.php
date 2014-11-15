@@ -883,14 +883,28 @@ function writeSlowlog($type, $elapsed_time, $obj)
 		file_put_contents($log_file, implode(PHP_EOL, $buff), FILE_APPEND);
 	}
 
-	$trigger_args = $obj;
-	$trigger_args->_log_type = $type;
-	$trigger_args->_elapsed_time = $elapsed_time;
 	if($type != 'query')
 	{
-		ModuleHandler::triggerCall('XE.writeSlowlog', 'after', $trigger_args);
+		$trigger_arg = $obj;
+		$trigger_arg->_log_type = $type;
+		$trigger_arg->_elapsed_time = $elapsed_time;
+
+		//일단 global 변수에 저장해둔 뒤 애드온 before_display_content 시점에서 일괄 기록
+		if(!isset($GLOBALS['writeSlowlog_log'])) $GLOBALS['writeSlowlog_log'] = array();
+		$GLOBALS['writeSlowlog_log'][] = $trigger_arg;
 	}
 }
+
+/**
+ * @param void
+ */
+function flushSlowlog()
+{
+	ModuleHandler::triggerCall('XE.writeSlowlog', 'after', $GLOBALS['writeSlowlog_log']);
+	unset($GLOBALS['writeSlowlog_log']);
+}
+
+//
 
 /**
  * microtime() return
