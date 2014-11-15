@@ -132,7 +132,7 @@ class addonController extends addon
 			$buff[] = '$addon_time_log = new stdClass();';
 			$buff[] = '$addon_time_log->caller = $called_position;';
 			$buff[] = '$addon_time_log->called = "' . $addon . '";';
-            $buff[] = '$addon_time_log->called_extension = "' . $addon . '";';
+			$buff[] = '$addon_time_log->called_extension = "' . $addon . '";';
 			$buff[] = 'writeSlowlog("addon",$after_time-$before_time,$addon_time_log);';
 		}
 		$addon_path = _XE_PATH_ . 'files/cache/addons/';
