@@ -1729,7 +1729,7 @@ class Context
 
 		if($use_ssl)
 		{
-			$port = self::get('_https_port');
+			$port = $db_info->https_port;
 			if($port && $port != 443)
 			{
 				$url_info['port'] = $port;
@@ -1741,7 +1741,7 @@ class Context
 		}
 		else
 		{
-			$port = self::get('_http_port');
+			$port = $db_info->http_port;
 			if($port && $port != 80)
 			{
 				$url_info['port'] = $port;
