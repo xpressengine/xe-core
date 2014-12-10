@@ -2490,6 +2490,18 @@ class documentController extends document
 					$newDocumentArray = $oldDocument->variables;
 					$newDocumentArray['uploaded_count'] = $fileCount;
 					$newDocumentObject = (object) $newDocumentArray;
+					
+					$output = $oDocumentModel->getDocumentExtraVarsFromDB(array($documentSrl));
+					if($output->toBool() && $output->data)
+					{
+						foreach($output->data as $key => $val)
+						{
+							if(!isset($val->value)) continue;
+
+							$newDocumentObject->{'extra_vars'.$val->var_idx} = trim($val->value);
+						}
+					}
+					
 					$this->updateDocument($oldDocument, $newDocumentObject);
 				}
 			}
