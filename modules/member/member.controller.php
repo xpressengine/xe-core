@@ -1066,7 +1066,7 @@ class memberController extends member
 		$columnList = array('member_srl', 'find_account_question', 'find_account_answer');
 		$member_info = $oMemberModel->getMemberInfoByMemberSrl($member_srl, 0, $columnList);
 
-		if($find_member_info->find_account_answer)
+		if(!$find_member_info || $find_member_info->find_account_answer)
 		{
 			// Display a message if no answer is entered
 			if(!$member_info->find_account_question || !$member_info->find_account_answer) return new Object(-1, 'msg_question_not_exists');
