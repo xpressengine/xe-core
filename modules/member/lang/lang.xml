@@ -2765,5 +2765,10 @@
 		<value xml:lang="en"><![CDATA[Move to trash]]></value>
 		<value xml:lang="jp"><![CDATA[ゴミ箱へ移動]]></value>
 	</item>
-	
+	<item name="msg_member_not_find_account_answer">
+		<value xml:lang="ko"><![CDATA[비밀번호 찾기 답변이 없을 경우 위의 이메일을 기제해주세요. 계정에 찾기 비밀번호가 없을 경우에만 계정찾기가 가능합니다.]]></value>
+		<value xml:lang="en"><![CDATA[]]></value>
+		<value xml:lang="jp"><![CDATA[]]></value>
+		<value xml:lang="zh-CN"><![CDATA[]]></value>
+	</item>
 </lang>
