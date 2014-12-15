@@ -59,7 +59,10 @@ class ModuleHandler extends Handler
 		$this->mid = $mid ? $mid : Context::get('mid');
 		$this->document_srl = $document_srl ? (int) $document_srl : (int) Context::get('document_srl');
 		$this->module_srl = $module_srl ? (int) $module_srl : (int) Context::get('module_srl');
-		$this->entry = Context::convertEncodingStr(Context::get('entry'));
+        if($entry = Context::get('entry'))
+        {
+            $this->entry = Context::convertEncodingStr($entry);
+        }
 
 		// Validate variables to prevent XSS
 		$isInvalid = NULL;
@@ -548,7 +551,6 @@ class ModuleHandler extends Handler
 				}
 
 				$xml_info = $oModuleModel->getModuleActionXml($forward->module);
-				$oMemberModel = getModel('member');
 
 				if($this->module == "admin" && $type == "view")
 				{
@@ -577,7 +579,7 @@ class ModuleHandler extends Handler
 				if($kind == 'admin')
 				{
 					$grant = $oModuleModel->getGrant($this->module_info, $logged_info);
-					if(!$grant->is_admin && !$grant->manager)
+					if(!$grant->manager)
 					{
 						$this->_setInputErrorToContext();
 						$this->error = 'msg_is_not_manager';
@@ -586,6 +588,19 @@ class ModuleHandler extends Handler
 						$oMessageObject->setMessage($this->error);
 						$oMessageObject->dispMessage();
 						return $oMessageObject;
+					}
+					else
+					{
+						if(!$grant->is_admin && $this->module != $this->orig_module->module && $xml_info->permission->{$this->act} != 'manager')
+						{
+							$this->_setInputErrorToContext();
+							$this->error = 'msg_is_not_administrator';
+							$oMessageObject = ModuleHandler::getModuleInstance('message', 'view');
+							$oMessageObject->setError(-1);
+							$oMessageObject->setMessage($this->error);
+							$oMessageObject->dispMessage();
+							return $oMessageObject;
+						}
 					}
 				}
 			}
@@ -1145,6 +1160,13 @@ class ModuleHandler extends Handler
 		{
 			return new Object();
 		}
+		
+		//store before trigger call time
+		$before_trigger_time = NULL;
+		if(__LOG_SLOW_TRIGGER__> 0)
+		{
+			$before_trigger_time = microtime(true);
+		}
 
 		foreach($triggers as $item)
 		{
@@ -1159,7 +1181,19 @@ class ModuleHandler extends Handler
 				continue;
 			}
 
+			$before_each_trigger_time = microtime(true);
+
 			$output = $oModule->{$called_method}($obj);
+
+			$after_each_trigger_time = microtime(true);
+			$elapsed_time_trigger = $after_each_trigger_time - $before_each_trigger_time;
+
+			$slowlog = new stdClass;
+			$slowlog->caller = $trigger_name . '.' . $called_position;
+			$slowlog->called = $module . '.' . $called_method;
+			$slowlog->called_extension = $module;
+			if($trigger_name != 'XE.writeSlowlog') writeSlowlog('trigger', $elapsed_time_trigger, $slowlog);
+
 			if(is_object($output) && method_exists($output, 'toBool') && !$output->toBool())
 			{
 				return $output;

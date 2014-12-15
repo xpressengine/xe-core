@@ -850,6 +850,20 @@
 			<value xml:lang="tr"><![CDATA[Son Giriş Tarihi (basit)]]></value>
 			<value xml:lang="vi"><![CDATA[Đăng nhập ít nhất]]></value>
 		</item>
+		<item name="birthday">
+			<value xml:lang="ko"><![CDATA[생일]]></value>
+			<value xml:lang="en"><![CDATA[Birthday]]></value>
+			<value xml:lang="jp"><![CDATA[誕生日]]></value>
+			<value xml:lang="zh-CN"><![CDATA[生日]]></value>
+			<value xml:lang="zh-TW"><![CDATA[生日]]></value>
+			<value xml:lang="fr"><![CDATA[Anniversaire]]></value>
+			<value xml:lang="de"><![CDATA[Geburtstag]]></value>
+			<value xml:lang="ru"><![CDATA[Дата рождения]]></value>
+			<value xml:lang="es"><![CDATA[Fecha de Nacimiento]]></value>
+			<value xml:lang="tr"><![CDATA[Doğum günü]]></value>
+			<value xml:lang="vi"><![CDATA[Sinh nhật]]></value>
+			<value xml:lang="mn"><![CDATA[Төрсөн өдөр]]></value>
+		</item>
 		<item name="extra_vars">
 			<value xml:lang="ko"><![CDATA[사용자 정의]]></value>
 			<value xml:lang="en"><![CDATA[User Defined]]></value>
@@ -1324,6 +1338,9 @@
 		<value xml:lang="ru"><![CDATA[Письмо для авторизации отправлено для %s. Пожалуйста, проверьте Вашу почту]]></value>
 		<value xml:lang="tr"><![CDATA[%s adresine etkinleştirme maili gönderdik. Lütfen mailinizi kontrol ediniz.]]></value>
 		<value xml:lang="vi"><![CDATA[Chúng tôi đã gửi Email xác nhận đến %s. Xin vui lòng bấm vào Link đi kèm trong Email để hoàn tất việc đăng kí!]]></value>
+	</item>
+	<item name="msg_change_mail_sent">
+		<value xml:lang="ko"><![CDATA[%s 메일로 이메일 변경 인증 메일이 발송되었습니다. 메일을 확인하세요.]]></value>
 	</item>
 	<item name="msg_invalid_modify_email_auth_key">
 		<value xml:lang="ko"><![CDATA[잘못된 이메일 변경 요청입니다.<br />이메일 변경요청을 다시 하거나 사이트 관리자에게 문의해주세요.]]></value>

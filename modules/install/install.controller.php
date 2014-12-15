@@ -9,6 +9,7 @@ class installController extends install
 {
 	var $db_tmp_config_file = '';
 	var $etc_tmp_config_file = '';
+	var $flagLicenseAgreement = './files/env/license_agreement';
 
 	/**
 	 * @brief Initialization
@@ -225,7 +226,8 @@ class installController extends install
 		);
 		$db_info->slave_db = array($db_info->master_db);
 		$db_info->default_url = Context::getRequestUri();
-		$db_info->lang_type = Context::getLangType();
+		$db_info->lang_type = Context::get('lang_type') ? Context::get('lang_type') : Context::getLangType();
+		Context::setLangType($db_info->lang_type);
 		$db_info->use_rewrite = Context::get('use_rewrite');
 		$db_info->time_zone = Context::get('time_zone');
 
@@ -374,6 +376,33 @@ class installController extends install
 		Context::set('phpversion', PHP_VERSION);
 
 		return $install_enable;
+	}
+
+	/**
+	 * @brief License agreement
+	 */
+	function procInstallLicenseAggrement()
+	{
+		$vars = Context::getRequestVars();
+
+		$license_agreement = ($vars->license_agreement == 'Y') ? true : false;
+
+		if($license_agreement)
+		{
+			$currentTime = $_SERVER['REQUEST_TIME'];
+			FileHandler::writeFile($this->flagLicenseAgreement, $currentTime);
+		}
+		else
+		{
+			FileHandler::removeFile($this->flagLicenseAgreement);
+			return new Object(-1, 'msg_must_accept_license_agreement');
+		}
+
+		if(!in_array(Context::getRequestMethod(),array('XMLRPC','JSON')))
+		{
+			$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'module', 'admin', 'act', 'dispInstallCheckEnv');
+			$this->setRedirectUrl($returnUrl);
+		}
 	}
 
 	/**

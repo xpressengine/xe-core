@@ -714,43 +714,9 @@ function zdate($str, $format = 'Y-m-d H:i:s', $conversion = TRUE)
 		}
 	}
 
-	// If year value is less than 1970, handle it separately.
-	if((int) substr($str, 0, 4) < 1970)
-	{
-		$hour = (int) substr($str, 8, 2);
-		$min = (int) substr($str, 10, 2);
-		$sec = (int) substr($str, 12, 2);
-		$year = (int) substr($str, 0, 4);
-		$month = (int) substr($str, 4, 2);
-		$day = (int) substr($str, 6, 2);
+	$date = new DateTime($str);
+	$string = $date->format($format);
 
-		// leading zero?
-		$lz = create_function('$n', 'return ($n>9?"":"0").$n;');
-
-		$trans = array(
-			'Y' => $year,
-			'y' => $lz($year % 100),
-			'm' => $lz($month),
-			'n' => $month,
-			'd' => $lz($day),
-			'j' => $day,
-			'G' => $hour,
-			'H' => $lz($hour),
-			'g' => $hour % 12,
-			'h' => $lz($hour % 12),
-			'i' => $lz($min),
-			's' => $lz($sec),
-			'M' => getMonthName($month),
-			'F' => getMonthName($month, FALSE)
-		);
-
-		$string = strtr($format, $trans);
-	}
-	else
-	{
-		// if year value is greater than 1970, get unixtime by using ztime() for date() function's argument. 
-		$string = date($format, ztime($str));
-	}
 	// change day and am/pm for each language
 	$unit_week = Context::getLang('unit_week');
 	$unit_meridiem = Context::getLang('unit_meridiem');
@@ -870,6 +836,83 @@ function debugPrint($debug_output = NULL, $display_option = TRUE, $file = '_debu
 
 		@file_put_contents($debug_file, implode(PHP_EOL, $print), FILE_APPEND|LOCK_EX);
 	}
+}
+
+/**
+ * @param string $type query, trigger
+ * @param float $elapsed_time
+ * @param object $obj
+ */
+function writeSlowlog($type, $elapsed_time, $obj)
+{
+	if(!__LOG_SLOW_TRIGGER__ && !__LOG_SLOW_ADDON__ && !__LOG_SLOW_WIDGET__ && !__LOG_SLOW_QUERY__) return;
+
+	static $log_filename = array(
+		'query' => 'files/_slowlog_query.php',
+		'trigger' => 'files/_slowlog_trigger.php',
+		'addon' => 'files/_slowlog_addon.php',
+		'widget' => 'files/_slowlog_widget.php'
+	);
+	$write_file = true;
+
+	$log_file = _XE_PATH_ . $log_filename[$type];
+
+	$buff = array();
+	$buff[] = '<?php exit(); ?>';
+	$buff[] = date('c');
+
+	if($type == 'trigger' && __LOG_SLOW_TRIGGER__ > 0 && $elapsed_time > __LOG_SLOW_TRIGGER__)
+	{
+		$buff[] = "\tCaller : " . $obj->caller;
+		$buff[] = "\tCalled : " . $obj->called;
+	}
+	else if($type == 'addon' && __LOG_SLOW_ADDON__ > 0 && $elapsed_time > __LOG_SLOW_ADDON__)
+	{
+		$buff[] = "\tAddon : " . $obj->called;
+		$buff[] = "\tCalled position : " . $obj->caller;
+	}
+	else if($type == 'widget' && __LOG_SLOW_WIDGET__ > 0 && $elapsed_time > __LOG_SLOW_WIDGET__)
+	{
+		$buff[] = "\tWidget : " . $obj->called;
+	}
+	else if($type == 'query' && __LOG_SLOW_QUERY__ > 0 && $elapsed_time > __LOG_SLOW_QUERY__)
+	{
+
+		$buff[] = $obj->query;
+		$buff[] = "\tQuery ID   : " . $obj->query_id;
+		$buff[] = "\tCaller     : " . $obj->caller;
+		$buff[] = "\tConnection : " . $obj->connection;
+	}
+	else
+	{
+		$write_file = false;
+	}
+
+	if($write_file)
+	{
+		$buff[] = sprintf("\t%0.6f sec", $elapsed_time);
+		$buff[] = PHP_EOL . PHP_EOL;
+		file_put_contents($log_file, implode(PHP_EOL, $buff), FILE_APPEND);
+	}
+
+	if($type != 'query')
+	{
+		$trigger_args = $obj;
+		$trigger_args->_log_type = $type;
+		$trigger_args->_elapsed_time = $elapsed_time;
+		ModuleHandler::triggerCall('XE.writeSlowlog', 'after', $trigger_args);
+	}
+}
+
+/**
+ * @param void
+ */
+function flushSlowlog()
+{
+	$trigger_args = new stdClass();
+	$trigger_args->_log_type = 'flush';
+	$trigger_args->_elapsed_time = 0;
+	ModuleHandler::triggerCall('XE.writeSlowlog', 'after', $trigger_args);
 }
 
 /**

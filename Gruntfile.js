@@ -50,6 +50,15 @@ module.exports = function(grunt) {
 					'common/js/xe.min.js': ['common/js/xe.js']
 				}
 			},
+			'handlebars': {
+				options: {
+					sourceMap: true
+				},
+				files: {
+					'common/js/plugins/handlebars/handlebars.min.js': ['common/js/plugins/handlebars/handlebars.js'],
+					'common/js/plugins/handlebars.runtime/handlebars.runtime.min.js': ['common/js/plugins/handlebars.runtime/handlebars.runtime.js'],
+				}
+			},
 			'modules': {
 				files: {
 					'common/js/x.min.js' : ['common/js/x.js'],
@@ -259,9 +268,10 @@ module.exports = function(grunt) {
 			if(tasks.length === 0) {
 				grunt.util.spawn({
 					cmd: "tar",
-					args: ['cfz', 'xe.'+version+'.tar.gz', 'xe/'],
+					args: ['cfz', '../xe.'+version+'.tar.gz', './'],
 					opts: {
-						cwd: 'build'
+						cwd: 'build/xe',
+						cache: false
 					}
 				}, function (error, result, code) {
 					grunt.log.ok('Archived(full) : ' + build_dir + '/xe.'+version+'.tar.gz');
@@ -269,9 +279,10 @@ module.exports = function(grunt) {
 
 					grunt.util.spawn({
 						cmd: "zip",
-						args: ['-r', 'xe.'+version+'.zip', 'xe/'],
+						args: ['-r', '../xe.'+version+'.zip', './'],
 						opts: {
-							cwd: 'build'
+							cwd: 'build/xe',
+							cache: false
 						}
 					}, function (error, result, code) {
 						grunt.log.ok('Archived(full) : ' + build_dir + '/xe.'+version+'.zip');
@@ -313,8 +324,8 @@ module.exports = function(grunt) {
 
 					// changed
 					if(diff.length) {
-						var args_tar = ['archive', '--prefix=xe/', '-o', 'build/xe.'+version+'.changed.tar.gz', version];
-						var args_zip = ['archive', '--prefix=xe/', '-o', 'build/xe.'+version+'.changed.zip', version];
+						var args_tar = ['archive', '-o', 'build/xe.'+version+'.changed.tar.gz', version];
+						var args_zip = ['archive', '-o', 'build/xe.'+version+'.changed.zip', version];
 						args_tar = args_tar.concat(diff);
 						args_zip = args_zip.concat(diff);
 

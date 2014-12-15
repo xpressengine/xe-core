@@ -138,7 +138,7 @@ class FileHandler
 	 * Write $buff into the specified file
 	 *
 	 * @param string $filename Path of target file
-	 * @param string $buff Content to be writeen
+	 * @param string $buff Content to be written
 	 * @param string $mode a(append) / w(write)
 	 * @return void
 	 */
@@ -510,7 +510,7 @@ class FileHandler
 	 * @param int $timeout Connection timeout
 	 * @param string $method GET/POST
 	 * @param string $content_type Content type header of HTTP request
-	 * @param string[] $headers Headers key vaule array.
+	 * @param string[] $headers Headers key value array.
 	 * @param string[] $cookies Cookies key value array.
 	 * @param string $post_data Request arguments array for POST method
 	 * @return string If success, the content of the target file. Otherwise: none
@@ -612,12 +612,12 @@ class FileHandler
 	 * @param string $timeout Connection timeout
 	 * @param string $method GET/POST
 	 * @param string $content_type Content type header of HTTP request
-	 * @param string[] $headers Headers key vaule array.
+	 * @param string[] $headers Headers key value array.
 	 * @return bool TRUE: success, FALSE: failed
 	 */
-	function getRemoteFile($url, $target_filename, $body = null, $timeout = 3, $method = 'GET', $content_type = null, $headers = array())
+	function getRemoteFile($url, $target_filename, $body = null, $timeout = 3, $method = 'GET', $content_type = null, $headers = array(), $cookies = array(), $post_data = array(), $request_config = array())
 	{
-		if(!($body = self::getRemoteResource($url, $body, $timeout, $method, $content_type, $headers)))
+		if(!($body = self::getRemoteResource($url, $body, $timeout, $method, $content_type, $headers,$cookies,$post_data,$request_config)))
 		{
 			return FALSE;
 		}
@@ -1016,6 +1016,33 @@ class FileHandler
 	{
 		$path = self::getRealPath($path);
 		return is_dir($path) ? $path : FALSE;
+	}
+
+	/**
+	 * Check is writable dir
+	 *
+	 * @param string $path Target dir path
+	 * @return bool
+	 */
+	function isWritableDir($path)
+	{
+		$path = self::getRealPath($path);
+		if(is_dir($path)==FALSE)
+		{
+			return FALSE;
+		}
+
+		$checkFile = $path . '/_CheckWritableDir';
+
+		$fp = fopen($checkFile, 'w');
+		if(!is_resource($fp))
+		{
+			return FALSE;
+		}
+		fclose($fp);
+
+		self::removeFile($checkFile);
+		return TRUE;
 	}
 }
 
