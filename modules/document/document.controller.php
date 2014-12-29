@@ -2487,7 +2487,7 @@ class documentController extends document
 				$oldDocument = $oDocumentModel->getDocument($documentSrl);
 				$fileCount = $oFileModel->getFilesCount($documentSrl);
 
-				if($oldDocument != null)
+				if($oldDocument != null && ($oldDocument->get('uploaded_count')!=$fileCount) )
 				{
 					$newDocumentArray = $oldDocument->variables;
 					$newDocumentArray['uploaded_count'] = $fileCount;
