@@ -426,6 +426,8 @@ class installController extends install
 			$str_port = ':' . $port;
 		}
 
+		$tmpPath = $_SERVER['DOCUMENT_ROOT'];
+
 		//if DIRECTORY_SEPARATOR is not /(IIS)
 		if(DIRECTORY_SEPARATOR !== '/')
 		{
