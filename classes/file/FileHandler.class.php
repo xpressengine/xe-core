@@ -764,6 +764,13 @@ class FileHandler
 		if(function_exists('imagecreateTRUEcolor'))
 		{
 			$thumb = imagecreateTRUEcolor($resize_width, $resize_height);
+			if($target_type == 'png'){
+				imagesavealpha($thumb,true);
+				imagealphablending($thumb,false);
+				$transparent = imagecolorallocatealpha($thumb, 0,0,0,127);
+				imagefill($thumb,0,0,$transparent);
+			}
+
 		}
 		else if(function_exists('imagecreate'))
 		{
@@ -798,6 +805,7 @@ class FileHandler
 				if(function_exists('imagecreatefrompng'))
 				{
 					$source = @imagecreatefrompng($source_file);
+					imagealphablending($source,true);
 				}
 				break;
 			case 'wbmp' :
