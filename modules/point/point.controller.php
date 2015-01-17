@@ -423,6 +423,7 @@ class pointController extends point
 		if($config->disable_read_document == 'Y' && $point < 0 && abs($point)>$cur_point)
 		{
 			$obj->add('content', sprintf(Context::getLang('msg_disallow_by_point'), abs($point), $cur_point));
+			$_SESSION['banned_document'][$obj->document_srl] = 'true';
 			return new Object();
 		}
 		// If not logged in, pass
