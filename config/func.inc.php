@@ -714,6 +714,9 @@ function zdate($str, $format = 'Y-m-d H:i:s', $conversion = TRUE)
 		}
 	}
 
+	if(strlen($str)==4) $str.="0101";
+	if(strlen($str)==6) $str.="01";
+	
 	$date = new DateTime($str);
 	$string = $date->format($format);
 
