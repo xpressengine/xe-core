@@ -219,7 +219,7 @@ class Context
 		if($this->db_info->use_sitelock == 'Y')
 		{
 			if(is_array($this->db_info->sitelock_whitelist)) $whitelist = $this->db_info->sitelock_whitelist;
-			
+
 			if(!IpFilter::filter($whitelist))
 			{
 				$title = ($this->db_info->sitelock_title) ? $this->db_info->sitelock_title : 'Maintenance in progress...';
@@ -480,10 +480,8 @@ class Context
 			$db_info->use_ssl = 'none';
 		$this->set('_use_ssl', $db_info->use_ssl);
 
-		if($db_info->http_port)
-			$self->set('_http_port', $db_info->http_port);
-		if($db_info->https_port)
-			$self->set('_https_port', $db_info->https_port);
+		$self->set('_http_port', ($db_info->http_port) ? $db_info->http_port : NULL);
+		$self->set('_https_port', ($db_info->https_port) ? $db_info->https_port : NULL);
 
 		if(!$db_info->sitelock_whitelist) {
 			$db_info->sitelock_whitelist = '127.0.0.1';
@@ -1115,7 +1113,7 @@ class Context
 	{
 		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
 
-		$self->js_callback_func = isset($_GET['xe_js_callback']) ? $_GET['xe_js_callback'] : $_POST['xe_js_callback'];
+		$self->js_callback_func = $self->getJSCallbackFunc();
 
 		($type && $self->request_method = $type) or
 				(strpos($_SERVER['CONTENT_TYPE'], 'json') && $self->request_method = 'JSON') or
@@ -1242,21 +1240,79 @@ class Context
 			return;
 		}
 
+		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+		if(Security::detectingXEE($xml))
+		{
+			header("HTTP/1.0 400 Bad Request");
+			exit;
+		}
+
 		$oXml = new XmlParser();
-		$xml_obj = $oXml->parse();
+		$xml_obj = $oXml->parse($xml);
 
 		$params = $xml_obj->methodcall->params;
-		unset($params->node_name, $params->attrs);
+		unset($params->node_name, $params->attrs, $params->body);
 
-		if(!count($params))
+		if(!count(get_object_vars($params)))
 		{
 			return;
 		}
 
-		foreach($params as $key => $obj)
+		foreach($params as $key => $val)
 		{
-			$this->set($key, $this->_filterRequestVar($key, $obj->body, 0), TRUE);
+			$this->set($key, $this->_filterXmlVars($key, $val), TRUE);
 		}
+	}
+
+	/**
+	 * Filter xml variables
+	 *
+	 * @param string $key Variable key
+	 * @param object $val Variable value
+	 * @return mixed filtered value
+	 */
+	function _filterXmlVars($key, $val)
+	{
+		if(is_array($val))
+		{
+			$stack = array();
+			foreach($val as $k => $v)
+			{
+				$stack[$k] = $this->_filterXmlVars($k, $v);
+			}
+
+			return $stack;
+		}
+
+		$body = $val->body;
+		unset($val->node_name, $val->attrs, $val->body);
+		if(!count(get_object_vars($val)))
+		{
+			return $this->_filterRequestVar($key, $body, 0);
+		}
+
+		$stack = new stdClass();
+		foreach($val as $k => $v)
+		{
+			$output = $this->_filterXmlVars($k, $v);
+			if(is_object($v) && $v->attrs->type == 'array')
+			{
+				$output = array($output);
+			}
+			if($k == 'value' && (is_array($v) || $v->attrs->type == 'array'))
+			{
+				return $output;
+			}
+
+			$stack->{$k} = $output;
+		}
+
+		if(!count(get_object_vars($stack)))
+		{
+			return NULL;
+		}
+
+		return $stack;
 	}
 
 	/**
@@ -1404,7 +1460,16 @@ class Context
 	function getJSCallbackFunc()
 	{
 		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
-		return $self->js_callback_func;
+		$js_callback_func = isset($_GET['xe_js_callback']) ? $_GET['xe_js_callback'] : $_POST['xe_js_callback'];
+
+		if(!preg_match('/^[a-z0-9\.]+$/i', $js_callback_func))
+		{
+			unset($js_callback_func);
+			unset($_GET['xe_js_callback']);
+			unset($_POST['xe_js_callback']);
+		}
+
+		return $js_callback_func;
 	}
 
 	/**
@@ -1604,7 +1669,7 @@ class Context
 		}
 		elseif($_use_ssl == 'optional')
 		{
-			$ssl_mode = ($get_vars['act'] && $self->isExistsSSLAction($get_vars['act'])) ? ENFORCE_SSL : RELEASE_SSL;
+			$ssl_mode = (($self->get('module') === 'admin') || ($get_vars['module'] === 'admin') || (isset($get_vars['act']) && $self->isExistsSSLAction($get_vars['act']))) ? ENFORCE_SSL : RELEASE_SSL;
 			$query = $self->getRequestUri($ssl_mode, $domain) . $query;
 			// no SSL
 		}
