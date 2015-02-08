@@ -575,6 +575,8 @@ class memberController extends member
 		if(!$trigger_output->toBool()) return $trigger_output;
 
 		$this->setSessionInfo();
+		$this->refreshSessionIdentifier();
+
 		// Return result
 		$this->add('member_srl', $args->member_srl);
 		$this->setMessage('success_updated');
@@ -1829,6 +1831,7 @@ class memberController extends member
 		}
 
 		$this->setSessionInfo();
+		$this->refreshSessionIdentifier();
 
 		return $output;
 	}
@@ -1885,6 +1888,15 @@ class memberController extends member
 		$this->addMemberMenu( 'dispMemberScrappedDocument', 'cmd_view_scrapped_document');
 		$this->addMemberMenu( 'dispMemberSavedDocument', 'cmd_view_saved_document');
 		$this->addMemberMenu( 'dispMemberOwnDocument', 'cmd_view_own_document');
+	}
+
+	/**
+	 * Refresh the session identifier to prevent session fixation
+	 */
+	function refreshSessionIdentifier()
+	{
+		$_SESSION['last_refresh'] = time();
+		session_regenerate_id();
 	}
 
 	/**

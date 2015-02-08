@@ -332,6 +332,13 @@ class Context
 		if($sess = $_POST[session_name()]) session_id($sess);
 		session_start();
 
+		// refresh session cookie if it's been more than 10 minutes since last refresh
+		if(isset($_SESSION['last_refresh']) && $_SESSION['last_refresh'] < time() - 600)
+		{
+			$_SESSION['last_refresh'] = time();
+			session_regenerate_id();
+		}
+
 		// set authentication information in Context and session
 		if(self::isInstalled())
 		{
