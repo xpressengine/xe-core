@@ -37,6 +37,8 @@ class pointAdminController extends point
 		$config->download_file = (int)$args->download_file;
 		$config->voted = (int)$args->voted;
 		$config->blamed = (int)$args->blamed;
+		$config->voted_comment = (int)$args->voted_comment;
+		$config->blamed_comment = (int)$args->blamed_comment;
 		// The highest level
 		$config->max_level = $args->max_level;
 		if($config->max_level>1000) $config->max_level = 1000;
@@ -110,7 +112,7 @@ class pointAdminController extends point
 	{
 		$args = Context::getRequestVars();
 
-		$configTypeList = array('insert_document', 'insert_comment', 'upload_file', 'download_file', 'read_document', 'voted', 'blamed');
+		$configTypeList = array('insert_document', 'insert_comment', 'upload_file', 'download_file', 'read_document', 'voted', 'blamed', 'voted_comment', 'blamed_comment');
 		foreach($configTypeList AS $config)
 		{
 			if(is_array($args->{$config}))
@@ -164,6 +166,8 @@ class pointAdminController extends point
 			$config['read_document'] = (int)Context::get('read_document');
 			$config['voted'] = (int)Context::get('voted');
 			$config['blamed'] = (int)Context::get('blamed');
+			$config['voted_comment'] = (int)Context::get('voted_comment');
+			$config['blamed_comment'] = (int)Context::get('blamed_comment');
 			$oModuleController->insertModulePartConfig('point', $srl, $config);
 		}
 
