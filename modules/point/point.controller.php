@@ -510,7 +510,7 @@ class pointController extends point
 				$args->point = $point;
 				break;
 		}
-		if($config->point_can_minus != 'Y' && $args->point < 0) $args->point = 0;
+		if($config->enable_point_negative != 'Y' && $args->point < 0) $args->point = 0;
 		$point = $args->point;
 
 		// Call a trigger (before)
