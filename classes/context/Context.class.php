@@ -421,7 +421,7 @@ class Context
 	 *
 	 * @return void
 	 */
-	function loadDBInfo()setRequestMethod
+	function loadDBInfo()
 	{
 		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
 
