@@ -188,6 +188,30 @@
 		<value xml:lang="tr"><![CDATA[Kullanıcıların yeterli puanı olmadığında, makaleleri okuyamayacaklardır.]]></value>
 		<value xml:lang="vi"><![CDATA[Nếu số điểm không đủ, thành viên sẽ không thể đọc được bài viết.]]></value>
 	</item>
+	<item name="enable_point_negative">
+		<value xml:lang="ko"><![CDATA[포인트 음수 허용]]></value>
+		<value xml:lang="en"><![CDATA[Allow negative points]]></value>
+		<value xml:lang="jp"><![CDATA[포인트 음수 허용]]></value>
+		<value xml:lang="zh-CN"><![CDATA[포인트 음수 허용]]></value>
+		<value xml:lang="zh-TW"><![CDATA[포인트 음수 허용]]></value>
+		<value xml:lang="fr"><![CDATA[포인트 음수 허용]]></value>
+		<value xml:lang="ru"><![CDATA[포인트 음수 허용]]></value>
+		<value xml:lang="es"><![CDATA[포인트 음수 허용]]></value>
+		<value xml:lang="tr"><![CDATA[포인트 음수 허용]]></value>
+		<value xml:lang="vi"><![CDATA[포인트 음수 허용]]></value>
+	</item>
+	<item name="about_enable_point_negative">
+		<value xml:lang="ko"><![CDATA[포인트가 0 미만의 숫자가 되는 것을 허용합니다.]]></value>
+		<value xml:lang="en"><![CDATA[Allow the point less than zero.]]></value>
+		<value xml:lang="jp"><![CDATA[포인트가 0 미만의 숫자가 되는 것을 허용합니다.]]></value>
+		<value xml:lang="zh-CN"><![CDATA[포인트가 0 미만의 숫자가 되는 것을 허용합니다.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[포인트가 0 미만의 숫자가 되는 것을 허용합니다.]]></value>
+		<value xml:lang="fr"><![CDATA[포인트가 0 미만의 숫자가 되는 것을 허용합니다.]]></value>
+		<value xml:lang="ru"><![CDATA[포인트가 0 미만의 숫자가 되는 것을 허용합니다.]]></value>
+		<value xml:lang="es"><![CDATA[포인트가 0 미만의 숫자가 되는 것을 허용합니다.]]></value>
+		<value xml:lang="tr"><![CDATA[포인트가 0 미만의 숫자가 되는 것을 허용합니다.]]></value>
+		<value xml:lang="vi"><![CDATA[포인트가 0 미만의 숫자가 되는 것을 허용합니다.]]></value>
+	</item>
 	<item name="level_point_calc">
 		<value xml:lang="ko"><![CDATA[레벨별 포인트 계산]]></value>
 		<value xml:lang="en"><![CDATA[Point Calculation per Point]]></value>
