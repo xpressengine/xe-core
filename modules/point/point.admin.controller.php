@@ -49,6 +49,9 @@ class pointAdminController extends point
 		// Check if reading a document is not allowed
 		if($args->disable_read_document == 'Y') $config->disable_read_document = 'Y';
 		else $config->disable_read_document = 'N';
+		// Check if reading a document is not allowed
+		if($args->enable_point_negative == 'Y') $config->enable_point_negative = 'Y';
+		else $config->enable_point_negative = 'N';
 
 		$oMemberModel = getModel('member');
 		$group_list = $oMemberModel->getGroups();
