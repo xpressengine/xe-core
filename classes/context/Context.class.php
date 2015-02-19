@@ -1108,6 +1108,23 @@ class Context
 
 		return isset($methods[$method]) ? $method : 'HTML';
 	}
+	
+	/**
+	 * Determine if request value is valid XML
+	 *
+	 * @param string $xml is xml content
+	 **/
+	static public function isValidXML($xml){
+		$_parse = @simplexml_load_string($xml);
+		if($_parse)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	/**
 	 * Determine request method
@@ -1120,13 +1137,13 @@ class Context
 		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
 
 		$self->js_callback_func = $self->getJSCallbackFunc();
-		
-		// $HTTP_RAW_POST_DATA has been deprecated on PHP 5.6
+
+		// PHP 5.6 이상에서 '$HTTP_RAW_POST_DATA' Deprecated 대응
 		if(version_compare(PHP_VERSION, '5.6.0', '>='))
 		{
 			($type && $self->request_method = $type) or
 					(strpos($_SERVER['CONTENT_TYPE'], 'json') && $self->request_method = 'JSON') or
-					(file_get_contents("php://input") && $self->request_method = 'XMLRPC') or
+					($self->isValidXML(file_get_contents("php://input")) && $self->request_method = 'XMLRPC') or
 					($self->js_callback_func && $self->request_method = 'JS_CALLBACK') or
 					($self->request_method = $_SERVER['REQUEST_METHOD']);
 		}
@@ -1238,9 +1255,7 @@ class Context
 			return;
 		}
 
-		$params = array();.
-		
-		// $HTTP_RAW_POST_DATA has been deprecated on PHP 5.6
+		$params = array();
 		if(version_compare(PHP_VERSION, '5.6.0', '>='))
 		{
 			$params = array();
@@ -1269,8 +1284,7 @@ class Context
 		{
 			return;
 		}
-		
-		// $HTTP_RAW_POST_DATA has been deprecated on PHP 5.6
+
 		if(version_compare(PHP_VERSION, '5.6.0', '>='))
 		{
 			$xml = file_get_contents("php://input");
@@ -1278,12 +1292,6 @@ class Context
 		else
 		{
 			$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
-		}
-
-		if(Security::detectingXEE($xml))
-		{
-			header("HTTP/1.0 400 Bad Request");
-			exit;
 		}
 		
 		if(Security::detectingXEE($xml))
