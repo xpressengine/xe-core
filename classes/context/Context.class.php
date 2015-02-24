@@ -1108,6 +1108,23 @@ class Context
 
 		return isset($methods[$method]) ? $method : 'HTML';
 	}
+	
+	/**
+	 * Determine if request value is valid XML
+	 *
+	 * @param string $xml is xml content
+	 **/
+	static public function isValidXML($xml){
+		$_parse = @simplexml_load_string($xml);
+		if($_parse)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	/**
 	 * Determine request method
@@ -1121,11 +1138,23 @@ class Context
 
 		$self->js_callback_func = $self->getJSCallbackFunc();
 
-		($type && $self->request_method = $type) or
-				(strpos($_SERVER['CONTENT_TYPE'], 'json') && $self->request_method = 'JSON') or
-				($GLOBALS['HTTP_RAW_POST_DATA'] && $self->request_method = 'XMLRPC') or
-				($self->js_callback_func && $self->request_method = 'JS_CALLBACK') or
-				($self->request_method = $_SERVER['REQUEST_METHOD']);
+		// PHP 5.6 이상에서 '$HTTP_RAW_POST_DATA' Deprecated 대응
+		if(version_compare(PHP_VERSION, '5.6.0', '>='))
+		{
+			($type && $self->request_method = $type) or
+					(strpos($_SERVER['CONTENT_TYPE'], 'json') && $self->request_method = 'JSON') or
+					($self->isValidXML(file_get_contents("php://input")) && $self->request_method = 'XMLRPC') or
+					($self->js_callback_func && $self->request_method = 'JS_CALLBACK') or
+					($self->request_method = $_SERVER['REQUEST_METHOD']);
+		}
+		else
+		{
+			($type && $self->request_method = $type) or
+					(strpos($_SERVER['CONTENT_TYPE'], 'json') && $self->request_method = 'JSON') or
+					($GLOBALS['HTTP_RAW_POST_DATA'] && $self->request_method = 'XMLRPC') or
+					($self->js_callback_func && $self->request_method = 'JS_CALLBACK') or
+					($self->request_method = $_SERVER['REQUEST_METHOD']);
+		}
 	}
 
 	/**
@@ -1227,7 +1256,16 @@ class Context
 		}
 
 		$params = array();
-		parse_str($GLOBALS['HTTP_RAW_POST_DATA'], $params);
+		if(version_compare(PHP_VERSION, '5.6.0', '>='))
+		{
+			$params = array();
+			parse_str(file_get_contents("php://input"), $params);
+		}
+		else
+		{
+			$params = array();
+			parse_str($GLOBALS['HTTP_RAW_POST_DATA'], $params);
+		}
 
 		foreach($params as $key => $val)
 		{
@@ -1247,7 +1285,15 @@ class Context
 			return;
 		}
 
-		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+		if(version_compare(PHP_VERSION, '5.6.0', '>='))
+		{
+			$xml = file_get_contents("php://input");
+		}
+		else
+		{
+			$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+		}
+		
 		if(Security::detectingXEE($xml))
 		{
 			header("HTTP/1.0 400 Bad Request");
