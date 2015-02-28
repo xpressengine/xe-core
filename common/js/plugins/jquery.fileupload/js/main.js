@@ -57,7 +57,7 @@
 
 			// 파일 선택
 			$(this.file_list_container).on('change', function(e) {
-				var $el = $('.xe-uploader-filelist select option:selected');
+				var $el = this.file_list_container.find('option:selected');
 				self.selected_files = [];
 				$el.each(function(idx, el) {
 					self.selected_files.push(el);
