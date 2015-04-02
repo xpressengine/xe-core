@@ -4,6 +4,26 @@ jQuery(function($){
 	});
 });
 
+jQuery(document).ready( function() {
+	
+	if (jQuery('input[name=use_smtp]:checked').val() == 'N')
+	{
+		jQuery('.smtp').hide();
+	}
+		
+	jQuery('input[name=use_smtp]:radio').change( function(){
+		if (jQuery('input[name=use_smtp]:checked').val() == 'Y')
+		{
+			jQuery('.smtp').show();
+		}
+		else
+		{
+			jQuery('.smtp').hide();
+		}
+	});
+	
+});
+
 function setStartModule(){
 	var target_module = jQuery('.moduleIdList option:selected').text();
 	var index_module_srl = jQuery('.moduleIdList').val();
