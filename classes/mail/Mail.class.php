@@ -553,7 +553,7 @@ class Mail extends PHPMailer
 		if($this->Mailer == "mail")
 		{
 			$boundary = '----==' . uniqid(rand(), TRUE);
-			$this->eol = $GLOBALS['_qmail_compatibility'] == "Y" ? "\n" : "\r\n";
+			$this->eol = (preg_match('/@(daum|hanmail2?).net$/i', $this->receiptor_email) || $GLOBALS['_qmail_compatibility'] == "Y") ? "\n" : "\r\n";
 			$this->header = "Content-Type: multipart/alternative;" . $this->eol . "\tboundary=\"" . $boundary . "\"" . $this->eol . $this->eol;
 			$this->body = sprintf(
 					"--%s" . $this->eol .
