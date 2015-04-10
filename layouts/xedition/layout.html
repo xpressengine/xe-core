@@ -294,16 +294,9 @@
 	<div cond="$layout_info->layout_type === 'main' && $_enable_slide" class="visual">
 			<!-- 슬라이드 -->
 			<div class="camera_wrap">
-			<!--@if($_sample_slide)-->
+			<!--@if($_sample_slide || !$layout_info->slide_img1)-->
 				<include target="./demo/slide.html" />
 			<!--@else-->
-				<div data-src="{$layout_info->slide_img1}">
-					<div class="camera_caption fadeIn">
-						<div class="camera_caption_wrap">
-							설정되지 않음
-						</div>
-					</div>
-				</div>
 				<div cond="$layout_info->slide_img1" data-src="{$layout_info->slide_img1}">
 					<div cond="$layout_info->slide_text1" class="camera_caption fadeIn">
 						<div class="camera_caption_wrap">
