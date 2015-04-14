@@ -178,7 +178,7 @@
 			<!--// LOGO -->
 			<h1 class="logo-item">
 				{@ $_logo_img = $layout_info->logo_img}
-				<block cond="$_magazine_header && $layout_info->logo_img_magazine">
+				<block cond="$_magazine_header">
 					{@ $_logo_img = $layout_info->logo_img_magazine}
 				</block>
 				<a href="<!--@if($layout_info->logo_url)-->{$layout_info->logo_url}<!--@else-->{getUrl('')}<!--@end-->">
@@ -192,10 +192,14 @@
 							<img src="{$_logo_img}" data-logo="{$layout_info->logo_img}"|cond="$_onepage_header && $layout_info->logo_img_transparent" alt="{$layout_info->logo_text}" />
 						<!--@endif-->
 					<!--@else-->
-						{@ $_logo_img = 'logo.png'}
-						<block cond="$_magazine_header">{@ $_logo_img = 'm_logo.png'}</block>
-						<block cond="$_onepage_header">{@ $_logo_img = 's_logo.png'}</block>
-						<img src="{$layout_info->path}img/{$_logo_img}" data-logo="{$layout_info->path}img/logo.png"|cond="$_onepage_header" alt="XEDITION" />
+						<!--@if($layout_info->logo_text)-->
+							{$layout_info->logo_text}
+						<!--@else-->
+							{@ $_logo_img = 'logo.png'}
+							<block cond="$_magazine_header">{@ $_logo_img = 'm_logo.png'}</block>
+							<block cond="$_onepage_header">{@ $_logo_img = 's_logo.png'}</block>
+							<img src="{$layout_info->path}img/{$_logo_img}" data-logo="{$layout_info->path}img/logo.png"|cond="$_onepage_header" alt="XEDITION" />
+						<!--@endif-->
 					<!--@end-->
 				</a>
 			</h1>
