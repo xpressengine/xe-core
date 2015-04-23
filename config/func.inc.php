@@ -517,18 +517,29 @@ function cut_str($string, $cut_size = 0, $tail = '...')
 		$char_count++;
 		if($c < 128)
 		{
-			$char_width += (int) $chars[$c - 32];
+			$char_width += (int) $chars[$c - 31];
 			$idx++;
 		}
 		else if(191 < $c && $c < 224)
 		{
-			$char_width += $chars[4];
+			$char_width += $chars[5];
 			$idx += 2;
 		}
-		else
+		elseif($c < 240)
 		{
 			$char_width += $chars[0];
 			$idx += 3;
+		}
+		elseif($c < 244)
+		{
+			$char_width += $chars[0];
+			$idx += 4;
+		}
+		else
+		{
+			// not UTF-8 standard character, may be error
+			//$string = str_replace($c,'',$string);
+			$idx++;
 		}
 	}
 
