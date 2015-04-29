@@ -89,6 +89,9 @@
 						alert(result.message);
 					}
 				},
+				always: function() {
+					self.settings.dropZone.find('input[type="file"]').val('');
+				},
 				stop: function() {
 					self.loadFilelist();
 				},
