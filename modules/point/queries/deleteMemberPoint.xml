@@ -1,0 +1,8 @@
+<query id="deleteMemberPoint" action="delete">
+    <tables>
+        <table name="point" />
+    </tables>
+    <conditions>
+        <condition operation="equal" column="member_srl" var="member_srl" notnull="notnull" filter="number" />
+    </conditions>
+</query>

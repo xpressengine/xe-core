@@ -63,6 +63,15 @@ class pointAdminController extends point
 			if($args->disable_read_document == 'Y') $config->disable_read_document = 'Y';
 			else $config->disable_read_document = 'N';
 
+			if($args->delete_point_on_leave == 'Y')
+			{
+				$config->delete_point_on_leave = 'Y';
+			}
+			else
+			{
+				$config->delete_point_on_leave = 'N';
+			}
+
 			$oMemberModel = getModel('member');
 			$group_list = $oMemberModel->getGroups();
 

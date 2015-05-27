@@ -85,6 +85,13 @@
 				{$lang->about_disable_read_document}
 			</div>
 		</div>
+		<div class="x_control-group">
+			<label for="delete_point_on_leave" class="x_control-label">{$lang->delete_point_on_leave}</label>
+			<div class="x_controls" style="padding-top:3px">
+				<input type="checkbox" name="delete_point_on_leave" id="delete_point_on_leave" value="Y" checked="checked"|cond="$config->delete_point_on_leave=='Y'" />
+				{$lang->about_delete_point_on_leave}
+			</div>
+		</div>
 		<div class="x_clearfix btnArea">
 			<span class="x_pull-right"><input class="x_btn x_btn-primary" type="submit" value="{$lang->cmd_save}" /></span>
 		</div>

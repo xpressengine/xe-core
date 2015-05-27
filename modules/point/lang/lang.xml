@@ -676,4 +676,10 @@
 			<value xml:lang="vi"><![CDATA[Thông tin bổ xung]]></value>
 		</item>
 	</item>
+	<item name="delete_point_on_leave">
+		<value xml:lang="ko"><![CDATA[탈퇴시 포인트 데이터 삭제]]></value>
+	</item>
+	<item name="about_delete_point_on_leave">
+		<value xml:lang="ko"><![CDATA[탈퇴시 포인트 데이터를 삭제합니다. 탈퇴한 이후 포인트 복구가 불가능해집니다.]]></value>
+	</item>
 </lang>
