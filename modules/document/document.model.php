@@ -1541,7 +1541,7 @@ class documentModel extends document
 		$args->member_srl = $member_srl;
 		$args->abs_member_srl = -1*$member_srl;
 		$args->list_count = $count;
-		$args->page = $page ? $page : Context::get('page');
+		if($page) $args->page = $page ? $page : Context::get('page');
 		if($module_srl) $args->module_srl = $module_srl;
 		$output = executeQuery('document.getDocumentListByMemberSrl', $args, $columnList);
 		
