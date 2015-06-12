@@ -1535,13 +1535,60 @@ class documentModel extends document
 	 * @param int $count
 	 * @return object
 	 */
-	function getDocumentListByMemberSrl($member_srl, $columnList = array(), $page = 0, $is_admin = FALSE, $count = 0 )
+	function getDocumentListByMemberSrl($member_srl, $columnList = array(), $page = 0, $is_admin = FALSE, $count = 0, $module_srl=0, $ret_item = FALSE, $page = FALSE )
 	{
 		$args = new stdClass();
 		$args->member_srl = $member_srl;
+		$args->abs_member_srl = -1*$member_srl;
 		$args->list_count = $count;
+		$args->page = $page ? $page : Context::get('page');
+		if($module_srl) $args->module_srl = $module_srl;
 		$output = executeQuery('document.getDocumentListByMemberSrl', $args, $columnList);
+		
+		if($ret_item)
+		{
+			// Return if no result or an error occurs
+			if(!$output->toBool()||!count($output->data)) return $output;
+			$idx = 0;
+			$data = $output->data;
+			unset($output->data);
+			if(!isset($virtual_number))
+			{
+				$keys = array_keys($data);
+				$virtual_number = $keys[0];
+			}
+			foreach($data as $key => $attribute)
+			{
+				if($except_notice && $attribute->is_notice == 'Y') continue;
+				$document_srl = $attribute->document_srl;
+				if(!$GLOBALS['XE_DOCUMENT_LIST'][$document_srl])
+				{
+					$oDocument = null;
+					$oDocument = new documentItem();
+					$oDocument->setAttribute($attribute, false);
+					if($is_admin) $oDocument->setGrant();
+					$GLOBALS['XE_DOCUMENT_LIST'][$document_srl] = $oDocument;
+				}
+				$output->data[$virtual_number] = $GLOBALS['XE_DOCUMENT_LIST'][$document_srl];
+				$virtual_number--;
+			}
+			if(count($output->data))
+			{
+				foreach($output->data as $number => $document)
+				{
+					$output->data[$number] = $GLOBALS['XE_DOCUMENT_LIST'][$document->document_srl];
+				}
+			}
+		}
 		$document_list = $output->data;
+		
+		if($page)
+		{
+			Context::set('total_count', $output->total_count);
+			Context::set('total_page', $output->total_page);
+			Context::set('page', $output->page);
+			Context::set('page_navigation', $output->page_navigation);
+		}
 		
 		if(!$document_list) return array();
 		if(!is_array($document_list)) $document_list = array($document_list);
