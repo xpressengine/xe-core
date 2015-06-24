@@ -592,15 +592,17 @@ class TemplateHandler
 			}
 
 			$echo = 'echo ';
+
+			if(substr($m[1],0,7) == '@ //!//')
+			{
+				$m[1] = substr($m[1], 8);
+				return '<?php ' . $echo . $m[1] . ' ?>';
+			}
+
 			if($m[1]{0} == '@')
 			{
 				$echo = '';
 				$m[1] = substr($m[1], 1);
-			}
-			elseif(substr($m[1],0,7) == '@ //!//')
-			{
-				$m[1] = substr($m[1], 8);
-				return '<?php ' . $echo . $m[1] . ' ?>';
 			}
 			return '<?php ' . $echo . $this->_replaceVar($m[1]) . ' ?>';
 		}
