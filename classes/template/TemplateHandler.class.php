@@ -597,9 +597,9 @@ class TemplateHandler
 				$echo = '';
 				$m[1] = substr($m[1], 1);
 			}
-			elseif(substr($m[1],0,4) == '@ //!//')
+			elseif(substr($m[1],0,7) == '@ //!//')
 			{
-				$m[1] = substr($m[1], 5);
+				$m[1] = substr($m[1], 8);
 				return '<?php ' . $echo . $m[1] . ' ?>';
 			}
 			return '<?php ' . $echo . $this->_replaceVar($m[1]) . ' ?>';
