@@ -581,6 +581,9 @@ class TemplateHandler
 	private function _parseResource($m)
 	{
 		// {@ ... } or {$var} or {func(...)}
+		// or {@ //!//
+		//    ...
+		//    }
 		if($m[1])
 		{
 			if(preg_match('@^(\w+)\(@', $m[1], $mm) && !function_exists($mm[1]))
@@ -593,6 +596,11 @@ class TemplateHandler
 			{
 				$echo = '';
 				$m[1] = substr($m[1], 1);
+			}
+			elseif(substr($m[1],0,4) == '@ //!//')
+			{
+				$m[1] = substr($m[1], 5);
+				return '<?php ' . $echo . $m[1] . ' ?>';
 			}
 			return '<?php ' . $echo . $this->_replaceVar($m[1]) . ' ?>';
 		}
