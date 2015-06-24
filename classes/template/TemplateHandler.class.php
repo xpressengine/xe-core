@@ -827,9 +827,23 @@ class TemplateHandler
 		{
 			return '';
 		}
-		return preg_replace('@(?<!::|\\\\|(?<!eval\()\')\$([a-z]|_[a-z0-9])@i', '\$__Context->$1', $php);
+
+		return preg_replace_callback('@(?<!::|\\\\|(?<!eval\()\')\$([a-z!]|_[a-z0-9])@i', array($this,'_checkVar'), $php);
 	}
 
+	/**
+	 * check value name
+	 * @param string $m
+	 * @return string $__Context->varname or $varname
+	 */
+	function _checkVar($m) {
+        if(substr($m[1],0,1) === "!")
+        {
+            return '$' . substr_replace($m[1],"",0,1);
+        }
+        
+        return '$__Context->' . $m[1];
+    }
 }
 /* End of File: TemplateHandler.class.php */
 /* Location: ./classes/template/TemplateHandler.class.php */
