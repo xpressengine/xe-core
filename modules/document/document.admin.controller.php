@@ -27,10 +27,10 @@ class documentAdminController extends document
 	{
 		// error appears if no doc is selected
 		$cart = Context::get('cart');
-		if(!$cart) return $this->stop('msg_cart_is_null');
+		if(!$cart) return $this->stop('msg_cart_is_null', 400);
 		$document_srl_list= explode('|@|', $cart);
 		$document_count = count($document_srl_list);
-		if(!$document_count) return $this->stop('msg_cart_is_null');
+		if(!$document_count) return $this->stop('msg_cart_is_null', 400);
 		// Delete a doc
 		$oDocumentController = getController('document');
 		for($i=0;$i<$document_count;$i++)

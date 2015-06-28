@@ -319,7 +319,7 @@ class layoutView extends layout
 		// admin check
 		// this act is admin view but in normal view because do not load admin css/js files
 		$logged_info = Context::get('logged_info');
-		if($logged_info->is_admin != 'Y') return $this->stop('msg_invalid_request');
+		if($logged_info->is_admin != 'Y') return $this->stop('msg_invalid_request', 403);
 
 		$layout_srl = Context::get('layout_srl');
 		$code = Context::get('code');

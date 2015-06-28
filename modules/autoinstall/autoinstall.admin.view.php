@@ -408,7 +408,7 @@ class autoinstallAdminView extends autoinstall
 
 		if(!$updateDate)
 		{
-			return $this->stop('msg_connection_fail');
+			return $this->stop('msg_connection_fail', 400);
 		}
 
 		$oModel = getModel('autoinstall');
@@ -528,13 +528,13 @@ class autoinstallAdminView extends autoinstall
 
 		if(!$type || $type == "core")
 		{
-			return $this->stop("msg_invalid_request");
+			return $this->stop("msg_invalid_request", 400);
 		}
 
 		$config_file = $oModel->getConfigFilePath($type);
 		if(!$config_file)
 		{
-			return $this->stop("msg_invalid_request");
+			return $this->stop("msg_invalid_request", 400);
 		}
 
 		$output = $oAdminModel->checkUseDirectModuleInstall($installedPackage);
@@ -568,7 +568,7 @@ class autoinstallAdminView extends autoinstall
 		}
 		else
 		{
-			return $this->stop('msg_connection_fail');
+			return $this->stop('msg_connection_fail', 400);
 		}
 	}
 

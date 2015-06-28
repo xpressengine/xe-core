@@ -147,7 +147,7 @@ class boardView extends board
 		 **/
 		if(!$this->grant->access || !$this->grant->list)
 		{
-			return $this->dispBoardMessage('msg_not_permitted');
+			return $this->dispBoardMessage('msg_not_permitted', 403);
 		}
 
 		/**
@@ -261,7 +261,7 @@ class boardView extends board
 				// if the module srl is not consistent
 				if($oDocument->get('module_srl')!=$this->module_info->module_srl )
 				{
-					return $this->stop('msg_invalid_request');
+					return $this->stop('msg_invalid_request', 400);
 				}
 
 				// check the manage grant
@@ -291,7 +291,7 @@ class boardView extends board
 			{
 				// if the document is not existed, then alert a warning message
 				Context::set('document_srl','',true);
-				$this->alertMessage('msg_not_founded');
+				$this->alertMessage('msg_not_founded', 404);
 			}
 
 		/**
@@ -312,7 +312,7 @@ class boardView extends board
 			{
 				$oDocument = $oDocumentModel->getDocument(0);
 				Context::set('document_srl','',true);
-				$this->alertMessage('msg_not_permitted');
+				$this->alertMessage('msg_not_permitted', 403);
 			}
 			else
 			{
@@ -354,7 +354,7 @@ class boardView extends board
 		 **/
 		if(!$this->grant->access)
 		{
-			return $this->dispBoardMessage('msg_not_permitted');
+			return $this->dispBoardMessage('msg_not_permitted', 403);
 		}
 
 		// check document view grant
@@ -374,7 +374,7 @@ class boardView extends board
 
 		if(is_array($file_module_config->download_grant) && $downloadGrantCount>0)
 		{
-			if(!Context::get('is_logged')) return $this->stop('msg_not_permitted_download');
+			if(!Context::get('is_logged')) return $this->stop('msg_not_permitted_download', 403);
 			$logged_info = Context::get('logged_info');
 			if($logged_info->is_admin != 'Y')
 			{
@@ -397,7 +397,7 @@ class boardView extends board
 							break;
 						}
 					}
-					if(!$is_permitted) return $this->stop('msg_not_permitted_download');
+					if(!$is_permitted) return $this->stop('msg_not_permitted_download', 403);
 				}
 			}
 		}
@@ -597,7 +597,7 @@ class boardView extends board
 		// check if there is not grant fot view list, then alert an warning message
 		if(!$this->grant->list)
 		{
-			return $this->dispBoardMessage('msg_not_permitted');
+			return $this->dispBoardMessage('msg_not_permitted', 403);
 		}
 
 		// generate the tag module model object
@@ -639,7 +639,7 @@ class boardView extends board
 		// check grant
 		if(!$this->grant->write_document)
 		{
-			return $this->dispBoardMessage('msg_not_permitted');
+			return $this->dispBoardMessage('msg_not_permitted', 403);
 		}
 
 		$oDocumentModel = getModel('document');
@@ -711,7 +711,7 @@ class boardView extends board
 			{
 				if( !$logged_info )
 				{
-					return $this->dispBoardMessage('msg_not_permitted');
+					return $this->dispBoardMessage('msg_not_permitted', 403);
 				}
 				else if (($oPointModel->getPoint($logged_info->member_srl) + $pointForInsert )< 0 )
 				{
@@ -774,7 +774,7 @@ class boardView extends board
 		// check grant
 		if(!$this->grant->write_document)
 		{
-			return $this->dispBoardMessage('msg_not_permitted');
+			return $this->dispBoardMessage('msg_not_permitted', 403);
 		}
 
 		// get the document_srl from request
@@ -824,7 +824,7 @@ class boardView extends board
 		// check grant
 		if(!$this->grant->write_comment)
 		{
-			return $this->dispBoardMessage('msg_not_permitted');
+			return $this->dispBoardMessage('msg_not_permitted', 403);
 		}
 
 		// get the document information
@@ -868,7 +868,7 @@ class boardView extends board
 		// check grant
 		if(!$this->grant->write_comment)
 		{
-			return $this->dispBoardMessage('msg_not_permitted');
+			return $this->dispBoardMessage('msg_not_permitted', 403);
 		}
 
 		// get the parent comment ID
@@ -928,7 +928,7 @@ class boardView extends board
 		// check grant
 		if(!$this->grant->write_comment)
 		{
-			return $this->dispBoardMessage('msg_not_permitted');
+			return $this->dispBoardMessage('msg_not_permitted', 403);
 		}
 
 		// get the document_srl and comment_srl
@@ -977,7 +977,7 @@ class boardView extends board
 		// check grant
 		if(!$this->grant->write_comment)
 		{
-			return $this->dispBoardMessage('msg_not_permitted');
+			return $this->dispBoardMessage('msg_not_permitted', 403);
 		}
 
 		// get the comment_srl to be deleted
@@ -1050,23 +1050,37 @@ class boardView extends board
 
 	/**
 	 * @brief display board message
+	 * @param string $msg_code an error code
+	 * @param integer $http_code HTTP status codes
 	 **/
-	function dispBoardMessage($msg_code)
+	function dispBoardMessage($msg_code, $http_code = 200)
 	{
 		$msg = Context::getLang($msg_code);
 		if(!$msg) $msg = $msg_code;
 		Context::set('message', $msg);
 		$this->setTemplateFile('message');
+
+		if($http_code !== 200 && is_int($http_code))
+		{
+			$this->httpStatusCode = $http_code;
+		}
 	}
 
 	/**
 	 * @brief the method for displaying the warning messages
 	 * display an error message if it has not  a special design
+	 * @param string $msg_code an error code
+	 * @param integer $http_code HTTP status codes
 	 **/
-	function alertMessage($message)
+	function alertMessage($message, $http_code = 200)
 	{
 		$script =  sprintf('<script> jQuery(function(){ alert("%s"); } );</script>', Context::getLang($message));
 		Context::addHtmlFooter( $script );
+
+		if($http_code !== 200 && is_int($http_code))
+		{
+			$this->httpStatusCode = $http_code;
+		}
 	}
 
 }

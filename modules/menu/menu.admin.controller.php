@@ -859,7 +859,7 @@ class menuAdminController extends menu
 		$oAdmin = getClass('admin');
 		if($menu_title == $oAdmin->getAdminMenuName() && $itemInfo->parent_srl == 0)
 		{
-			return $this->stop('msg_cannot_delete_for_admin_topmenu');
+			return $this->stop('msg_cannot_delete_for_admin_topmenu', 400);
 		}
 
 		if($itemInfo->parent_srl) $parent_srl = $itemInfo->parent_srl;

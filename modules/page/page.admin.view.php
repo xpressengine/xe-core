@@ -163,7 +163,7 @@ class pageAdminView extends page
 	{
 		if($this->module_info->page_type == 'OUTSIDE')
 		{
-			return $this->stop(-1, 'msg_invalid_request');
+			return $this->stop('msg_invalid_request', 404);
 		}
 
 		if($this->module_srl)

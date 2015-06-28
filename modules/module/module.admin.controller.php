@@ -942,7 +942,7 @@ class moduleAdminController extends module
 	{
 		if(!$moduleSrl && !$mid)
 		{
-			return $this->stop(-1, 'msg_invalid_request');
+			return $this->stop('msg_invalid_request', 400);
 		}
 
 		$oModuleModel = getModel('module');
@@ -958,7 +958,7 @@ class moduleAdminController extends module
 
 		if(!$moduleInfo)
 		{
-			return $this->stop(-1, 'msg_module_not_exists');
+			return $this->stop('msg_module_not_exists', 400);
 		}
 
 		$skinTargetValue = ($skinType == 'M') ? 'mskin' : 'skin';
@@ -1007,7 +1007,7 @@ class moduleAdminController extends module
 
 		if(!$menuItemSrl)
 		{
-			return $this->stop(-1, 'msg_invalid_request');
+			return $this->stop('msg_invalid_request', 400);
 		}
 
 		$oModuleModel = getModel('module');

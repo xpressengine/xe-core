@@ -137,7 +137,7 @@ class pollAdminView extends poll
 		$args->poll_index_srl = Context::get('poll_index_srl');
 
 		$output = executeQuery('poll.getPoll', $args);
-		if(!$output->data) return $this->stop('msg_poll_not_exists');
+		if(!$output->data) return $this->stop('msg_poll_not_exists', 404);
 
 		$poll = new stdClass();
 		$poll->stop_date = $output->data->stop_date;
@@ -146,7 +146,7 @@ class pollAdminView extends poll
 		$output = executeQuery('poll.getPollTitle', $args);
 		if(!$output->data)
 		{
-			return $this->stop('msg_poll_not_exists');
+			return $this->stop('msg_poll_not_exists', 404);
 		}
 
 		$tmp = &$poll->poll[$args->poll_index_srl];

@@ -63,7 +63,7 @@ class memberView extends member
 		$oMemberModel = getModel('member');
 		$logged_info = Context::get('logged_info');
 		// Don't display member info to non-logged user
-		if(!$logged_info->member_srl) return $this->stop('msg_not_permitted');
+		if(!$logged_info->member_srl) return $this->stop('msg_not_permitted', 403);
 
 		$member_srl = Context::get('member_srl');
 		if(!$member_srl && Context::get('is_logged'))
@@ -198,12 +198,12 @@ class memberView extends member
 
 		$oMemberModel = getModel('member');
 		// Get the member information if logged-in
-		if($oMemberModel->isLogged()) return $this->stop('msg_already_logged');
+		if($oMemberModel->isLogged()) return $this->stop('msg_already_logged', 400);
 		// call a trigger (before) 
 		$trigger_output = ModuleHandler::triggerCall('member.dispMemberSignUpForm', 'before', $member_config);
 		if(!$trigger_output->toBool()) return $trigger_output;
 		// Error appears if the member is not allowed to join
-		if($member_config->enable_join != 'Y') return $this->stop('msg_signup_disabled');
+		if($member_config->enable_join != 'Y') return $this->stop('msg_signup_disabled', 403);
 
 		$oMemberAdminView = getAdminView('member');
 		$formTags = $oMemberAdminView->_getMemberInputTag($member_info);
@@ -228,7 +228,7 @@ class memberView extends member
 		$oMemberModel = getModel('member');
 		if(!$oMemberModel->isLogged() || empty($logged_info))
 		{
-			return $this->stop('msg_not_logged');
+			return $this->stop('msg_not_logged', 403);
 		}
 
 		$_SESSION['rechecked_password_step'] = 'INPUT_PASSWORD';
@@ -271,7 +271,7 @@ class memberView extends member
 
 		$oMemberModel = getModel('member');
 		// A message appears if the user is not logged-in
-		if(!$oMemberModel->isLogged()) return $this->stop('msg_not_logged');
+		if(!$oMemberModel->isLogged()) return $this->stop('msg_not_logged', 403);
 
 		$logged_info = Context::get('logged_info');
 		$member_srl = $logged_info->member_srl;
@@ -330,7 +330,7 @@ class memberView extends member
 	{
 		$oMemberModel = getModel('member');
 		// A message appears if the user is not logged-in
-		if(!$oMemberModel->isLogged()) return $this->stop('msg_not_logged');
+		if(!$oMemberModel->isLogged()) return $this->stop('msg_not_logged', 403);
 
 		$logged_info = Context::get('logged_info');
 		$member_srl = $logged_info->member_srl;
@@ -357,7 +357,7 @@ class memberView extends member
 	{
 		$oMemberModel = getModel('member');
 		// A message appears if the user is not logged-in
-		if(!$oMemberModel->isLogged()) return $this->stop('msg_not_logged');
+		if(!$oMemberModel->isLogged()) return $this->stop('msg_not_logged', 403);
 
 		$logged_info = Context::get('logged_info');
 		$args = new stdClass();
@@ -381,7 +381,7 @@ class memberView extends member
 	{
 		$oMemberModel = getModel('member');
 		// A message appears if the user is not logged-in
-		if(!$oMemberModel->isLogged()) return $this->stop('msg_not_logged');
+		if(!$oMemberModel->isLogged()) return $this->stop('msg_not_logged', 403);
 		// Get the saved document(module_srl is set to member_srl instead)
 		$logged_info = Context::get('logged_info');
 		$args = new stdClass();
@@ -439,7 +439,7 @@ class memberView extends member
 	{
 		$oMemberModel = getModel('member');
 		// A message appears if the user is not logged-in
-		if(!$oMemberModel->isLogged()) return $this->stop('msg_not_logged');
+		if(!$oMemberModel->isLogged()) return $this->stop('msg_not_logged', 403);
 
 		$memberConfig = $this->member_config;
 
@@ -471,7 +471,7 @@ class memberView extends member
 	{
 		$oMemberModel = getModel('member');
 		// A message appears if the user is not logged-in
-		if(!$oMemberModel->isLogged()) return $this->stop('msg_not_logged');
+		if(!$oMemberModel->isLogged()) return $this->stop('msg_not_logged', 403);
 
 		$memberConfig = $this->member_config;
 
@@ -524,7 +524,7 @@ class memberView extends member
 	 */
 	function dispMemberFindAccount()
 	{
-		if(Context::get('is_logged')) return $this->stop('already_logged');
+		if(Context::get('is_logged')) return $this->stop('already_logged', 403);
 
 		$config = $this->member_config;
 
@@ -538,7 +538,7 @@ class memberView extends member
 	 */
 	function dispMemberGetTempPassword()
 	{
-		if(Context::get('is_logged')) return $this->stop('already_logged');
+		if(Context::get('is_logged')) return $this->stop('already_logged', 403);
 
 		$user_id = Context::get('user_id');
 		$temp_password = $_SESSION['xe_temp_password_'.$user_id];
@@ -561,7 +561,7 @@ class memberView extends member
 
 		if(Context::get('is_logged')) 
 		{
-			return $this->stop('already_logged');
+			return $this->stop('already_logged', 403);
 		}
 
 		if($authMemberSrl)

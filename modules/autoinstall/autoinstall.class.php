@@ -76,7 +76,7 @@ class autoinstall extends ModuleObject
 		$config = $oModuleModel->getModuleConfig('autoinstall');
 		if($config->downloadServer != _XE_DOWNLOAD_SERVER_)
 		{
-			$this->stop('msg_not_match_server');
+			$this->stop('msg_not_match_server', 400);
 		}
 	}
 

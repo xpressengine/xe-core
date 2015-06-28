@@ -22,7 +22,7 @@ class adminAdminController extends admin
 		$logged_info = $oMemberModel->getLoggedInfo();
 		if($logged_info->is_admin != 'Y')
 		{
-			return $this->stop("msg_is_not_administrator");
+			return $this->stop("msg_is_not_administrator", 403);
 		}
 	}
 
@@ -35,7 +35,7 @@ class adminAdminController extends admin
 		$menuSrl = Context::get('menu_srl');
 		if(!$menuSrl)
 		{
-			return $this->stop('msg_invalid_request');
+			return $this->stop('msg_invalid_request', 400);
 		}
 
 		$oMenuAdminController = getAdminController('menu');

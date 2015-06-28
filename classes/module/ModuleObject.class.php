@@ -195,12 +195,12 @@ class ModuleObject extends Object
 			{
 				case 'root' :
 				case 'manager' :
-					$this->stop('msg_is_not_administrator');
+					$this->stop('msg_is_not_administrator', 403);
 					return;
 				case 'member' :
 					if(!$is_logged)
 					{
-						$this->stop('msg_not_permitted_act');
+						$this->stop('msg_not_permitted_act', 401);
 						return;
 					}
 					break;
@@ -222,9 +222,10 @@ class ModuleObject extends Object
 	/**
 	 * set the stop_proc and approprate message for msg_code
 	 * @param string $msg_code an error code
+	 * @param integer $http_code HTTP status codes
 	 * @return ModuleObject $this
 	 * */
-	function stop($msg_code)
+	function stop($msg_code, $http_code = 200)
 	{
 		// flag setting to stop the proc processing
 		$this->stop_proc = TRUE;
@@ -237,6 +238,10 @@ class ModuleObject extends Object
 		$oMessageObject->setError(-1);
 		$oMessageObject->setMessage($msg_code);
 		$oMessageObject->dispMessage();
+		if($http_code !== 200 && is_int($http_code))
+		{
+			$this->httpStatusCode = $http_code;
+		}
 
 		$this->setTemplatePath($oMessageObject->getTemplatePath());
 		$this->setTemplateFile($oMessageObject->getTemplateFile());
@@ -408,7 +413,7 @@ class ModuleObject extends Object
 			// Check permissions
 			if($this->module_srl && !$this->grant->access)
 			{
-				$this->stop("msg_not_permitted_act");
+				$this->stop("msg_not_permitted_act", 403);
 				return FALSE;
 			}
 

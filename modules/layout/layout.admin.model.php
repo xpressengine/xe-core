@@ -67,7 +67,7 @@ class layoutAdminModel extends layout
 		// Error appears if there is no layout information is registered
 		if(!$layout_info)
 		{
-			return $this->stop('msg_invalid_request');
+			return $this->stop('msg_invalid_request', 400);
 		}
 
 		// Get a menu list
