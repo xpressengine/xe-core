@@ -123,13 +123,13 @@ class Mobile
 					setcookie("mobile", 'true', 0, $xe_web_path);
 				}
 			}
-			elseif($this->isMobileCheckByAgent() && $_COOKIE['mobile'] != 'false')
+			elseif($_COOKIE['mobile'] != 'false')
 			{
 				$_COOKIE['mobile'] = 'false';
 				setcookie("mobile", 'false', 0, $xe_web_path);
 			}
 
-			if(isset($_COOKIE['user-agent']) && $_COOKIE['user-agent'] != md5($_SERVER['HTTP_USER_AGENT']))
+			if($_COOKIE['user-agent'] != md5($_SERVER['HTTP_USER_AGENT']))
 			{
 				setcookie("user-agent", md5($_SERVER['HTTP_USER_AGENT']), 0, $xe_web_path);
 			}
