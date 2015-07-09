@@ -199,7 +199,7 @@ class installController extends install
 		// Display a message that installation is completed
 		$this->setMessage('msg_install_completed');
 
-		unset($_SESSION['use_rewrite']);
+		SessionCookie::delete('use_rewrite');
 
 		if(!in_array(Context::getRequestMethod(),array('XMLRPC','JSON')))
 		{

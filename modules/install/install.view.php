@@ -97,7 +97,7 @@ class installView extends install
 	{
 		$oInstallController = getController('install');
 		$useRewrite = $oInstallController->checkRewriteUsable() ? 'Y' : 'N';
-		$_SESSION['use_rewrite'] = $useRewrite;
+		SessionCookie::set('use_rewrite', $useRewrite);
 		Context::set('use_rewrite', $useRewrite); 
 
 		// nginx 체크, rewrite 사용법 안내
@@ -182,7 +182,7 @@ class installView extends install
 
 		include _XE_PATH_.'files/config/tmpDB.config.php';
 
-		Context::set('use_rewrite', $_SESSION['use_rewrite']); 
+		Context::set('use_rewrite', SessionCookie::get('use_rewrite')); 
 		Context::set('time_zone', $GLOBALS['time_zone']);
 		Context::set('db_type', $db_info->db_type);
 		$this->setTemplateFile('config_form');

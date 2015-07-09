@@ -174,7 +174,7 @@ class installAdminController extends install
 	{
 		$ftp_config_file = Context::getFTPConfigFile();
 		if(file_exists($ftp_config_file)) unlink($ftp_config_file);
-		if($_SESSION['ftp_password']) unset($_SESSION['ftp_password']);
+		if(SessionCookie::get('ftp_password')) SessionCookie::delete('ftp_password');
 		$this->setMessage('success_deleted');
 	}
 
@@ -216,7 +216,7 @@ class installAdminController extends install
 		$buff .= "?>";
 		$config_file = Context::getFTPConfigFile();
 		FileHandler::WriteFile($config_file, $buff);
-		if($_SESSION['ftp_password']) unset($_SESSION['ftp_password']);
+		if(SessionCookie::get('ftp_password')) SessionCookie::delete('ftp_password');
 
 		$this->setMessage('success_updated');
 		$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'module', 'admin', 'act', 'dispAdminConfigFtp');

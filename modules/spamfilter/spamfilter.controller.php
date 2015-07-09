@@ -19,7 +19,7 @@ class spamfilterController extends spamfilter
 	 */
 	function setAvoidLog()
 	{
-		$_SESSION['avoid_log'] = true;
+		SessionCookie::set('avoid_log', true);
 	}
 
 	/**
@@ -27,7 +27,7 @@ class spamfilterController extends spamfilter
 	 */
 	function triggerInsertDocument(&$obj)
 	{
-		if($_SESSION['avoid_log']) return new Object();
+		if(SessionCookie::get('avoid_log')) return new Object();
 		// Check the login status, login information, and permission
 		$is_logged = Context::get('is_logged');
 		$logged_info = Context::get('logged_info');
@@ -72,7 +72,7 @@ class spamfilterController extends spamfilter
 	 */
 	function triggerInsertComment(&$obj)
 	{
-		if($_SESSION['avoid_log']) return new Object();
+		if(SessionCookie::get('avoid_log')) return new Object();
 		// Check the login status, login information, and permission
 		$is_logged = Context::get('is_logged');
 		$logged_info = Context::get('logged_info');
@@ -118,7 +118,7 @@ class spamfilterController extends spamfilter
 	 */
 	function triggerInsertTrackback(&$obj)
 	{
-		if($_SESSION['avoid_log']) return new Object();
+		if(SessionCookie::get('avoid_log')) return new Object();
 
 		$oFilterModel = getModel('spamfilter');
 		// Confirm if the trackbacks have been added more than once to your document
@@ -191,7 +191,7 @@ class spamfilterController extends spamfilter
 	 */
 	function triggerSendMessage(&$obj)
 	{
-		if($_SESSION['avoid_log']) return new Object();
+		if(SessionCookie::get('avoid_log')) return new Object();
 
 		$logged_info = Context::get('logged_info');
 		if($logged_info->is_admin == 'Y') return new Object();

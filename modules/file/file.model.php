@@ -29,7 +29,7 @@ class fileModel extends file
 		$mid = Context::get('mid');
 		$editor_sequence = Context::get('editor_sequence');
 		$upload_target_srl = Context::get('upload_target_srl');
-		if(!$upload_target_srl) $upload_target_srl = $_SESSION['upload_info'][$editor_sequence]->upload_target_srl;
+		if(!$upload_target_srl) $upload_target_srl = SessionCookie::get('upload_info'.'.'.$editor_sequence)->upload_target_srl;
 
 		if($upload_target_srl)
 		{
@@ -302,7 +302,7 @@ class fileModel extends file
 	{
 		if(!$file_info) return null;
 
-		if($_SESSION['__XE_UPLOADING_FILES_INFO__'][$file_info->file_srl])
+		if(SessionCookie::get('__XE_UPLOADING_FILES_INFO__'.'.'.$file_info->file_srl))
 		{
 			$file_grant->is_deletable = true;
 			return $file_grant;

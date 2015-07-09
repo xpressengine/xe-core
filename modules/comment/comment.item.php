@@ -93,7 +93,7 @@ class commentItem extends Object
 
 	function isGranted()
 	{
-		if($_SESSION['own_comment'][$this->comment_srl])
+		if(SessionCookie::get('own_comment'.'.'.$this->comment_srl))
 		{
 			return TRUE;
 		}
@@ -125,13 +125,13 @@ class commentItem extends Object
 
 	function setGrant()
 	{
-		$_SESSION['own_comment'][$this->comment_srl] = TRUE;
+		SessionCookie::set('own_comment'.'.'.$this->comment_srl, TRUE);
 		$this->is_granted = TRUE;
 	}
 
 	function setAccessible()
 	{
-		$_SESSION['accessibled_comment'][$this->comment_srl] = TRUE;
+		SessionCookie::set('accessibled_comment'.'.'.$this->comment_srl, TRUE);
 	}
 
 	function isEditable()
@@ -150,7 +150,7 @@ class commentItem extends Object
 
 	function isAccessible()
 	{
-		if($_SESSION['accessibled_comment'][$this->comment_srl])
+		if(SessionCookie::get('accessibled_comment'.'.'.$this->comment_srl))
 		{
 			return TRUE;
 		}
@@ -696,7 +696,7 @@ class commentItem extends Object
 
 	function isCarted()
 	{
-		return $_SESSION['comment_management'][$this->comment_srl];
+		return SessionCookie::get('comment_management'.'.'.$this->comment_srl);
 	}
 
 }

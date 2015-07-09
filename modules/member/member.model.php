@@ -190,7 +190,7 @@ class memberModel extends member
 	 * @brief Check if logged-in
 	 */
 	function isLogged() {
-		if($_SESSION['is_logged'])
+		if(SessionCookie::get('is_logged'))
 		{
 			if(Mobile::isFromMobilePhone())
 			{
@@ -198,14 +198,14 @@ class memberModel extends member
 			}
 			else
 			{
-				if(ip2long($_SESSION['ipaddress']) >> 8 == ip2long($_SERVER['REMOTE_ADDR']) >> 8)
+				if(ip2long(SessionCookie::get('ipaddress')) >> 8 == ip2long($_SERVER['REMOTE_ADDR']) >> 8)
 				{
 					return true;
 				}
 			}
 		}
 
-		$_SESSION['is_logged'] = false;
+		SessionCookie::set('is_logged', false);
 		return false;
 	}
 
@@ -452,7 +452,7 @@ class memberModel extends member
 	function getLoggedMemberSrl()
 	{
 		if(!$this->isLogged()) return;
-		return $_SESSION['member_srl'];
+		return SessionCookie::get('member_srl');
 	}
 
 	/**

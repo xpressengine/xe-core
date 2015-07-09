@@ -38,11 +38,11 @@ class fileController extends file
 		if(!$upload_target_srl) $upload_target_srl = intval(Context::get('upload_target_srl'));
 		$module_srl = $this->module_srl;
 		// Exit a session if there is neither upload permission nor information
-		if(!$_SESSION['upload_info'][$editor_sequence]->enabled) exit();
+		if(!SessionCookie::get('upload_info'.'.'.$editor_sequence)->enabled) exit();
 		// Extract from session information if upload_target_srl is not specified
-		if(!$upload_target_srl) $upload_target_srl = $_SESSION['upload_info'][$editor_sequence]->upload_target_srl;
+		if(!$upload_target_srl) $upload_target_srl = SessionCookie::get('upload_info'.'.'.$editor_sequence)->upload_target_srl;
 		// Create if upload_target_srl is not defined in the session information
-		if(!$upload_target_srl) $_SESSION['upload_info'][$editor_sequence]->upload_target_srl = $upload_target_srl = getNextSequence();
+		if(!$upload_target_srl) SessionCookie::get('upload_info'.'.'.$editor_sequence)->upload_target_srl = $upload_target_srl = getNextSequence();
 
 		$output = $this->insertFile($file_info, $module_srl, $upload_target_srl);
 		Context::setResponseMethod('JSON');
@@ -64,11 +64,11 @@ class fileController extends file
 		if(!$upload_target_srl) $upload_target_srl = intval(Context::get('upload_target_srl'));
 
 		// Exit a session if there is neither upload permission nor information
-		if(!$_SESSION['upload_info'][$editor_sequence]->enabled) exit();
+		if(!SessionCookie::get('upload_info'.'.'.$editor_sequence)->enabled) exit();
 		// Extract from session information if upload_target_srl is not specified
-		if(!$upload_target_srl) $upload_target_srl = $_SESSION['upload_info'][$editor_sequence]->upload_target_srl;
+		if(!$upload_target_srl) $upload_target_srl = SessionCookie::get('upload_info'.'.'.$editor_sequence)->upload_target_srl;
 		// Create if upload_target_srl is not defined in the session information
-		if(!$upload_target_srl) $_SESSION['upload_info'][$editor_sequence]->upload_target_srl = $upload_target_srl = getNextSequence();
+		if(!$upload_target_srl) SessionCookie::get('upload_info'.'.'.$editor_sequence)->upload_target_srl = $upload_target_srl = getNextSequence();
 		// Delete and then attempt to re-upload if file_srl is requested
 		$file_srl = Context::get('file_srl');
 		if($file_srl) $this->deleteFile($file_srl);
@@ -277,7 +277,7 @@ class fileController extends file
 		$output = ModuleHandler::triggerCall('file.downloadFile', 'after', $file_obj);
 
 		$random = new Password();
-		$file_key = $_SESSION['__XE_FILE_KEY__'][$file_srl] = $random->createSecureSalt(32, 'hex');
+		$file_key = SessionCookie::set('__XE_FILE_KEY__'.'.'.$file_srl, $random->createSecureSalt(32, 'hex'));
 		header('Location: '.getNotEncodedUrl('', 'act', 'procFileOutput','file_srl',$file_srl,'file_key',$file_key));
 		Context::close();
 		exit();
@@ -291,7 +291,7 @@ class fileController extends file
 		$file_key = Context::get('file_key');
 		if(strstr($_SERVER['HTTP_USER_AGENT'], "Android")) $is_android = true;
 
-		if($is_android && $_SESSION['__XE_FILE_KEY_AND__'][$file_srl]) $session_key = '__XE_FILE_KEY_AND__';
+		if($is_android && SessionCookie::get('__XE_FILE_KEY_AND__'.'.'.$file_srl)) $session_key = '__XE_FILE_KEY_AND__';
 		else $session_key = '__XE_FILE_KEY__';
 		$columnList = array('source_filename', 'uploaded_filename', 'file_size');
 		$file_obj = $oFileModel->getFile($file_srl, $columnList);
@@ -300,9 +300,9 @@ class fileController extends file
 
 		if(!file_exists($uploaded_filename)) return $this->stop('msg_file_not_found');
 
-		if(!$file_key || $_SESSION[$session_key][$file_srl] != $file_key)
+		if(!$file_key || SessionCookie::get($session_key.'.'.$file_srl) != $file_key)
 		{
-			unset($_SESSION[$session_key][$file_srl]);
+			SessionCookie::delete($session_key.'.'.$file_srl);
 			return $this->stop('msg_invalid_request');
 		}
 
@@ -316,10 +316,10 @@ class fileController extends file
 
 		if($is_android)
 		{
-			if($_SESSION['__XE_FILE_KEY__'][$file_srl]) $_SESSION['__XE_FILE_KEY_AND__'][$file_srl] = $file_key;
+			if(SessionCookie::get('__XE_FILE_KEY__'.'.'.$file_srl)) SessionCookie::set('__XE_FILE_KEY_AND__'.'.'.$file_srl, $file_key);
 		}
 
-		unset($_SESSION[$session_key][$file_srl]);
+		SessionCookie::delete($session_key.'.'.$file_srl);
 
 		Context::close();
 
@@ -362,9 +362,9 @@ class fileController extends file
 		$file_srls = Context::get('file_srls');
 		if($file_srls) $file_srl = $file_srls;
 		// Exit a session if there is neither upload permission nor information
-		if(!$_SESSION['upload_info'][$editor_sequence]->enabled) exit();
+		if(!SessionCookie::get('upload_info'.'.'.$editor_sequence)->enabled) exit();
 
-		$upload_target_srl = $_SESSION['upload_info'][$editor_sequence]->upload_target_srl;
+		$upload_target_srl = SessionCookie::get('upload_info'.'.'.$editor_sequence)->upload_target_srl;
 
 		$logged_info = Context::get('logged_info');
 		$oFileModel = getModel('file');
@@ -554,12 +554,12 @@ class fileController extends file
 	 */
 	function setUploadInfo($editor_sequence, $upload_target_srl=0)
 	{
-		if(!isset($_SESSION['upload_info'][$editor_sequence]))
+		if(!SessionCookie::has('upload_info'.'.'.$editor_sequence))
 		{
-			$_SESSION['upload_info'][$editor_sequence] = new stdClass();
+			SessionCookie::set('upload_info'.'.'.$editor_sequence, new stdClass());
 		}
-		$_SESSION['upload_info'][$editor_sequence]->enabled = true;
-		$_SESSION['upload_info'][$editor_sequence]->upload_target_srl = $upload_target_srl;
+		SessionCookie::get('upload_info'.'.'.$editor_sequence)->enabled = true;
+		SessionCookie::get('upload_info'.'.'.$editor_sequence)->upload_target_srl = $upload_target_srl;
 	}
 
 	/**
@@ -744,7 +744,7 @@ class fileController extends file
 		$trigger_output = ModuleHandler::triggerCall('file.insertFile', 'after', $args);
 		if(!$trigger_output->toBool()) return $trigger_output;
 
-		$_SESSION['__XE_UPLOADING_FILES_INFO__'][$args->file_srl] = true;
+		SessionCookie::set('__XE_UPLOADING_FILES_INFO__'.'.'.$args->file_srl, true);
 
 		$output->add('file_srl', $args->file_srl);
 		$output->add('file_size', $args->file_size);
@@ -942,7 +942,7 @@ class fileController extends file
 
 		if(!$vars->editor_sequence) return new Object(-1, 'msg_invalid_request');
 
-		$upload_target_srl = $_SESSION['upload_info'][$vars->editor_sequence]->upload_target_srl;
+		$upload_target_srl = SessionCookie::get('upload_info'.'.'.$vars->editor_sequence)->upload_target_srl;
 
 		$oFileModel = getModel('file');
 		$file_info = $oFileModel->getFile($vars->file_srl);

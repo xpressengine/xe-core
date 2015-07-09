@@ -548,9 +548,9 @@ class adminAdminView extends admin
 
 			FileHandler::writeFile($path . $mainVersion, '1');
 		}
-		else if(isset($_SESSION['enviroment_gather']) && !file_exists(FileHandler::getRealPath($path . $mainVersion)))
+		else if(SessionCookie::has('enviroment_gather') && !file_exists(FileHandler::getRealPath($path . $mainVersion)))
 		{
-			if($_SESSION['enviroment_gather'] == 'Y')
+			if(SessionCookie::get('enviroment_gather') == 'Y')
 			{
 				$oAdminAdminModel = getAdminModel('admin');
 				$params = $oAdminAdminModel->getEnv();
@@ -559,7 +559,7 @@ class adminAdminView extends admin
 			}
 
 			FileHandler::writeFile($path . $mainVersion, '1');
-			unset($_SESSION['enviroment_gather']);
+			SessionCookie::delete('enviroment_gather');
 		}
 	}
 

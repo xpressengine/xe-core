@@ -241,7 +241,7 @@ class editorController extends editor
 	 */
 	function doSaveDoc($args)
 	{
-		if(!$args->document_srl) $args->document_srl = $_SESSION['upload_info'][$editor_sequence]->upload_target_srl;
+		if(!$args->document_srl) $args->document_srl = SessionCookie::get('upload_info'.'.'.$editor_sequence)->upload_target_srl;
 		if(Context::get('is_logged'))
 		{
 			$logged_info = Context::get('logged_info');

@@ -173,7 +173,7 @@ class autoinstallAdminModel extends autoinstall
 		}
 		else
 		{
-			$is_authed = (int) isset($_SESSION['ftp_password']);
+			$is_authed = (int) SessionCookie::has('ftp_password');
 		}
 
 		$this->add('is_authed', $is_authed);

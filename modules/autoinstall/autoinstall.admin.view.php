@@ -363,7 +363,7 @@ class autoinstallAdminView extends autoinstall
 		Context::set("package", $package);
 		Context::set('contain_core', $package->contain_core);
 
-		if(!$_SESSION['ftp_password'])
+		if(!SessionCookie::get('ftp_password'))
 		{
 			Context::set('need_password', TRUE);
 		}
@@ -418,14 +418,14 @@ class autoinstallAdminView extends autoinstall
 			$oController = getAdminController('autoinstall');
 			$oController->_updateinfo();
 
-			if(!$_SESSION['__XE_EASYINSTALL_REDIRECT__'])
+			if(!SessionCookie::get('__XE_EASYINSTALL_REDIRECT__'))
 			{
 				header('location: ' . getNotEncodedUrl('', 'module', 'admin', 'act', 'dispAutoinstallAdminIndex'));
-				$_SESSION['__XE_EASYINSTALL_REDIRECT__'] = TRUE;
+				SessionCookie::set('__XE_EASYINSTALL_REDIRECT__', TRUE);
 				return;
 			}
 		}
-		unset($_SESSION['__XE_EASYINSTALL_REDIRECT__']);
+		SessionCookie::delete('__XE_EASYINSTALL_REDIRECT__');
 
 		$page = Context::get('page');
 		if(!$page)
@@ -517,7 +517,7 @@ class autoinstallAdminView extends autoinstall
 			return $this->dispAutoinstallAdminInstalledPackages();
 		}
 
-		if(!$_SESSION['ftp_password'])
+		if(!SessionCookie::get('ftp_password'))
 		{
 			Context::set('need_password', TRUE);
 		}

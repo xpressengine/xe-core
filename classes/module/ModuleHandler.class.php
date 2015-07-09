@@ -412,7 +412,7 @@ class ModuleHandler extends Handler
 
 		// Admin ip
 		$logged_info = Context::get('logged_info');
-		if($kind == 'admin' && $_SESSION['denied_admin'] == 'Y')
+		if($kind == 'admin' && SessionCookie::get('denied_admin') == 'Y')
 		{
 			$this->_setInputErrorToContext();
 			$this->error = "msg_not_permitted_act";
@@ -624,14 +624,14 @@ class ModuleHandler extends Handler
 			$rulesetFile = $oModuleModel->getValidatorFilePath($rulesetModule, $ruleset, $this->mid);
 			if(!empty($rulesetFile))
 			{
-				if($_SESSION['XE_VALIDATOR_ERROR_LANG'])
+				if(SessionCookie::get('XE_VALIDATOR_ERROR_LANG'))
 				{
-					$errorLang = $_SESSION['XE_VALIDATOR_ERROR_LANG'];
+					$errorLang = SessionCookie::get('XE_VALIDATOR_ERROR_LANG');
 					foreach($errorLang as $key => $val)
 					{
 						Context::setLang($key, $val);
 					}
-					unset($_SESSION['XE_VALIDATOR_ERROR_LANG']);
+					SessionCookie::delete('XE_VALIDATOR_ERROR_LANG');
 				}
 
 				$Validator = new Validator($rulesetFile);
@@ -647,11 +647,11 @@ class ModuleHandler extends Handler
 					$oModule->setMessage($errorMsg);
 					//for html redirect
 					$this->error = $errorMsg;
-					$_SESSION['XE_VALIDATOR_ERROR'] = -1;
-					$_SESSION['XE_VALIDATOR_MESSAGE'] = $this->error;
-					$_SESSION['XE_VALIDATOR_MESSAGE_TYPE'] = 'error';
-					$_SESSION['XE_VALIDATOR_RETURN_URL'] = $returnUrl;
-					$_SESSION['XE_VALIDATOR_ID'] = Context::get('xe_validator_id');
+					SessionCookie::set('XE_VALIDATOR_ERROR', -1);
+					SessionCookie::set('XE_VALIDATOR_MESSAGE', $this->error);
+					SessionCookie::set('XE_VALIDATOR_MESSAGE_TYPE', 'error');
+					SessionCookie::set('XE_VALIDATOR_RETURN_URL', $returnUrl);
+					SessionCookie::set('XE_VALIDATOR_ID', Context::get('xe_validator_id'));
 					$this->_setInputValueToSession();
 					return $oModule;
 				}
@@ -722,17 +722,17 @@ class ModuleHandler extends Handler
 
 			}
 
-			$_SESSION['XE_VALIDATOR_ERROR'] = $error;
-			$_SESSION['XE_VALIDATOR_ID'] = Context::get('xe_validator_id');
+			SessionCookie::set('XE_VALIDATOR_ERROR', $error);
+			SessionCookie::set('XE_VALIDATOR_ID', Context::get('xe_validator_id'));
 			if($message != 'success')
 			{
-				$_SESSION['XE_VALIDATOR_MESSAGE'] = $message;
+				SessionCookie::set('XE_VALIDATOR_MESSAGE', $message);
 			}
-			$_SESSION['XE_VALIDATOR_MESSAGE_TYPE'] = $messageType;
+			SessionCookie::set('XE_VALIDATOR_MESSAGE_TYPE', $messageType);
 
 			if(Context::get('xeVirtualRequestMethod') != 'xml')
 			{
-				$_SESSION['XE_VALIDATOR_RETURN_URL'] = $redirectUrl;
+				SessionCookie::set('XE_VALIDATOR_RETURN_URL', $redirectUrl);
 			}
 		}
 
@@ -746,29 +746,29 @@ class ModuleHandler extends Handler
 	 * */
 	function _setInputErrorToContext()
 	{
-		if($_SESSION['XE_VALIDATOR_ERROR'] && !Context::get('XE_VALIDATOR_ERROR'))
+		if(SessionCookie::get('XE_VALIDATOR_ERROR') && !Context::get('XE_VALIDATOR_ERROR'))
 		{
-			Context::set('XE_VALIDATOR_ERROR', $_SESSION['XE_VALIDATOR_ERROR']);
+			Context::set('XE_VALIDATOR_ERROR', SessionCookie::get('XE_VALIDATOR_ERROR'));
 		}
-		if($_SESSION['XE_VALIDATOR_MESSAGE'] && !Context::get('XE_VALIDATOR_MESSAGE'))
+		if(SessionCookie::get('XE_VALIDATOR_MESSAGE') && !Context::get('XE_VALIDATOR_MESSAGE'))
 		{
-			Context::set('XE_VALIDATOR_MESSAGE', $_SESSION['XE_VALIDATOR_MESSAGE']);
+			Context::set('XE_VALIDATOR_MESSAGE', SessionCookie::get('XE_VALIDATOR_MESSAGE'));
 		}
-		if($_SESSION['XE_VALIDATOR_MESSAGE_TYPE'] && !Context::get('XE_VALIDATOR_MESSAGE_TYPE'))
+		if(SessionCookie::get('XE_VALIDATOR_MESSAGE_TYPE') && !Context::get('XE_VALIDATOR_MESSAGE_TYPE'))
 		{
-			Context::set('XE_VALIDATOR_MESSAGE_TYPE', $_SESSION['XE_VALIDATOR_MESSAGE_TYPE']);
+			Context::set('XE_VALIDATOR_MESSAGE_TYPE', SessionCookie::get('XE_VALIDATOR_MESSAGE_TYPE'));
 		}
-		if($_SESSION['XE_VALIDATOR_RETURN_URL'] && !Context::get('XE_VALIDATOR_RETURN_URL'))
+		if(SessionCookie::get('XE_VALIDATOR_RETURN_URL') && !Context::get('XE_VALIDATOR_RETURN_URL'))
 		{
-			Context::set('XE_VALIDATOR_RETURN_URL', $_SESSION['XE_VALIDATOR_RETURN_URL']);
+			Context::set('XE_VALIDATOR_RETURN_URL', SessionCookie::get('XE_VALIDATOR_RETURN_URL'));
 		}
-		if($_SESSION['XE_VALIDATOR_ID'] && !Context::get('XE_VALIDATOR_ID'))
+		if(SessionCookie::get('XE_VALIDATOR_ID') && !Context::get('XE_VALIDATOR_ID'))
 		{
-			Context::set('XE_VALIDATOR_ID', $_SESSION['XE_VALIDATOR_ID']);
+			Context::set('XE_VALIDATOR_ID', SessionCookie::get('XE_VALIDATOR_ID'));
 		}
-		if(count($_SESSION['INPUT_ERROR']))
+		if(count(SessionCookie::get('INPUT_ERROR')))
 		{
-			Context::set('INPUT_ERROR', $_SESSION['INPUT_ERROR']);
+			Context::set('INPUT_ERROR', SessionCookie::get('INPUT_ERROR'));
 		}
 
 		$this->_clearErrorSession();
@@ -780,12 +780,12 @@ class ModuleHandler extends Handler
 	 * */
 	function _clearErrorSession()
 	{
-		$_SESSION['XE_VALIDATOR_ERROR'] = '';
-		$_SESSION['XE_VALIDATOR_MESSAGE'] = '';
-		$_SESSION['XE_VALIDATOR_MESSAGE_TYPE'] = '';
-		$_SESSION['XE_VALIDATOR_RETURN_URL'] = '';
-		$_SESSION['XE_VALIDATOR_ID'] = '';
-		$_SESSION['INPUT_ERROR'] = '';
+		SessionCookie::set('XE_VALIDATOR_ERROR', '');
+		SessionCookie::set('XE_VALIDATOR_MESSAGE', '');
+		SessionCookie::set('XE_VALIDATOR_MESSAGE_TYPE', '');
+		SessionCookie::set('XE_VALIDATOR_RETURN_URL', '');
+		SessionCookie::set('XE_VALIDATOR_ID', '');
+		SessionCookie::set('INPUT_ERROR', '');
 	}
 
 	/**
@@ -798,7 +798,7 @@ class ModuleHandler extends Handler
 		unset($requestVars->act, $requestVars->mid, $requestVars->vid, $requestVars->success_return_url, $requestVars->error_return_url);
 		foreach($requestVars AS $key => $value)
 		{
-			$_SESSION['INPUT_ERROR'][$key] = $value;
+			SessionCookie::set('INPUT_ERROR'.'.'.$key, $value);
 		}
 	}
 
@@ -834,12 +834,12 @@ class ModuleHandler extends Handler
 		if(!isset($methodList[Context::getRequestMethod()]))
 		{
 
-			if($_SESSION['XE_VALIDATOR_RETURN_URL'])
+			if(SessionCookie::get('XE_VALIDATOR_RETURN_URL'))
 			{
 				$display_handler = new DisplayHandler();
 				$display_handler->_debugOutput();
 
-				header('location:' . $_SESSION['XE_VALIDATOR_RETURN_URL']);
+				header('location:' . SessionCookie::get('XE_VALIDATOR_RETURN_URL'));
 				return;
 			}
 

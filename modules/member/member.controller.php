@@ -424,7 +424,7 @@ class memberController extends member
 
 	function procMemberModifyInfoBefore()
 	{
-		if($_SESSION['rechecked_password_step'] != 'INPUT_PASSWORD')
+		if(SessionCookie::get('rechecked_password_step') != 'INPUT_PASSWORD')
 		{
 			return $this->stop('msg_invalid_request');
 		}
@@ -459,7 +459,7 @@ class memberController extends member
 			return new Object(-1, 'invalid_password');
 		}
 
-		$_SESSION['rechecked_password_step'] = 'VALIDATE_PASSWORD';
+		SessionCookie::set('rechecked_password_step', 'VALIDATE_PASSWORD');
 
 		if(Context::get('success_return_url'))
 		{
@@ -484,11 +484,11 @@ class memberController extends member
 			return $this->stop('msg_not_logged');
 		}
 
-		if($_SESSION['rechecked_password_step'] != 'INPUT_DATA')
+		if(SessionCookie::get('rechecked_password_step') != 'INPUT_DATA')
 		{
 			return $this->stop('msg_invalid_request');
 		}
-		unset($_SESSION['rechecked_password_step']);
+		SessionCookie::delete('rechecked_password_step');
 
 		// Extract the necessary information in advance
 		$oMemberModel = &getModel ('member');
@@ -1088,7 +1088,7 @@ class memberController extends member
 		$output = $this->updateMemberPassword($args);
 		if(!$output->toBool()) return $output;
 
-		$_SESSION['xe_temp_password_' . $user_id] = $temp_password;
+		SessionCookie::set('xe_temp_password_' . $user_id, $temp_password);
 
 		$this->add('user_id',$user_id);
 
@@ -1263,8 +1263,8 @@ class memberController extends member
 
 	function procMemberResetAuthMail()
 	{
-		$memberInfo = $_SESSION['auth_member_info'];
-		unset($_SESSION['auth_member_info']);
+		$memberInfo = SessionCookie::get('auth_member_info');
+		SessionCookie::delete('auth_member_info');
 
 		if(!$memberInfo)
 		{
@@ -1722,7 +1722,7 @@ class memberController extends member
 			$output = executeQuery('member.chkAuthMail', $args);
 			if ($output->toBool() && $output->data->count != '0')
 			{
-				$_SESSION['auth_member_srl'] = $this->memberInfo->member_srl;
+				SessionCookie::set('auth_member_srl', $this->memberInfo->member_srl);
 				$redirectUrl = getUrl('', 'act', 'dispMemberResendAuthMail');
 				return $this->setRedirectUrl($redirectUrl, new Object(-1,'msg_user_not_confirmed'));
 			}
@@ -1799,7 +1799,7 @@ class memberController extends member
 			$oMemberAdminModel = getAdminModel('member');
 			if(!$oMemberAdminModel->getMemberAdminIPCheck())
 			{
-				$_SESSION['denied_admin'] = 'Y';
+				SessionCookie::set('denied_admin', 'Y');
 			}
 		}
 
@@ -1815,11 +1815,11 @@ class memberController extends member
 	{
 		$oMemberModel = getModel('member');
 		// If your information came through the current session information to extract information from the users
-		if(!$this->memberInfo && $_SESSION['member_srl'] && $oMemberModel->isLogged() )
+		if(!$this->memberInfo && SessionCookie::get('member_srl') && $oMemberModel->isLogged() )
 		{
-			$this->memberInfo = $oMemberModel->getMemberInfoByMemberSrl($_SESSION['member_srl']);
+			$this->memberInfo = $oMemberModel->getMemberInfoByMemberSrl(SessionCookie::get('member_srl'));
 			// If you do not destroy the session Profile
-			if($this->memberInfo->member_srl != $_SESSION['member_srl'])
+			if($this->memberInfo->member_srl != SessionCookie::get('member_srl'))
 			{
 				$this->destroySessionInfo();
 				return;
@@ -1832,10 +1832,10 @@ class memberController extends member
 			return;
 		}
 		// Log in for treatment sessions set
-		$_SESSION['is_logged'] = true;
-		$_SESSION['ipaddress'] = $_SERVER['REMOTE_ADDR'];
-		$_SESSION['member_srl'] = $this->memberInfo->member_srl;
-		$_SESSION['is_admin'] = '';
+		SessionCookie::set('is_logged', true);
+		SessionCookie::set('ipaddress', $_SERVER['REMOTE_ADDR']);
+		SessionCookie::set('member_srl', $this->memberInfo->member_srl);
+		SessionCookie::set('is_admin', '');
 		setcookie('xe_logged', 'true', 0, '/');
 		// Do not save your password in the session jiwojum;;
 		//unset($this->memberInfo->password);
@@ -1843,11 +1843,11 @@ class memberController extends member
 		/*
 		   if($this->memberInfo->group_list) {
 		   $group_srl_list = array_keys($this->memberInfo->group_list);
-		   $_SESSION['group_srls'] = $group_srl_list;
+		   SessionCookie::set('group_srls', $group_srl_list);
 		// If the group is designated as an administrator administrator
 		$oMemberModel = getModel('member');
 		$admin_group = $oMemberModel->getAdminGroup();
-		if($admin_group->group_srl && in_array($admin_group->group_srl, $group_srl_list)) $_SESSION['is_admin'] = 'Y';
+		if($admin_group->group_srl && in_array($admin_group->group_srl, $group_srl_list)) SessionCookie::set('is_admin', 'Y');
 		}
 		 */
 
@@ -2390,17 +2390,12 @@ class memberController extends member
 	 */
 	function destroySessionInfo()
 	{
-		if(!$_SESSION || !is_array($_SESSION)) return;
-
 		$memberInfo = Context::get('logged_info');
 		$memberSrl = $memberInfo->member_srl;
 
-		foreach($_SESSION as $key => $val)
-		{
-			$_SESSION[$key] = '';
-		}
+		SessionCookie::truncate();
 
-		session_destroy();
+		SessionCookie::destroy();
 		setcookie(session_name(), '', $_SERVER['REQUEST_TIME']-42000, '/');
 		setcookie('sso','',$_SERVER['REQUEST_TIME']-42000, '/');
 		setcookie('xeak','',$_SERVER['REQUEST_TIME']-42000, '/');
@@ -2458,11 +2453,11 @@ class memberController extends member
 		$member_srl = $oMemberModel->getMemberSrlByEmailAddress($newEmail);
 		if($member_srl) return new Object(-1,'msg_exists_email_address');
 
-		if($_SESSION['rechecked_password_step'] != 'INPUT_DATA')
+		if(SessionCookie::get('rechecked_password_step') != 'INPUT_DATA')
 		{
 			return $this->stop('msg_invalid_request');
 		}
-		unset($_SESSION['rechecked_password_step']);
+		SessionCookie::delete('rechecked_password_step');
 
 		$oPassword = new Password();
 		$auth_args = new stdClass();

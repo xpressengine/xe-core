@@ -154,7 +154,7 @@ class documentItem extends Object
 
 	function isGranted()
 	{
-		if($_SESSION['own_document'][$this->document_srl]) return true;
+		if(SessionCookie::get('own_document'.'.'.$this->document_srl)) return true;
 
 		if(!Context::get('is_logged')) return false;
 
@@ -172,12 +172,12 @@ class documentItem extends Object
 
 	function setGrant()
 	{
-		$_SESSION['own_document'][$this->document_srl] = true;
+		SessionCookie::set('own_document'.'.'.$this->document_srl, true);
 	}
 
 	function isAccessible()
 	{
-		return $_SESSION['accessible'][$this->document_srl]==true?true:false;
+		return SessionCookie::get('accessible'.'.'.$this->document_srl)==true?true:false;
 	}
 
 	function allowComment()
@@ -263,17 +263,17 @@ class documentItem extends Object
 
 	function addCart()
 	{
-		$_SESSION['document_management'][$this->document_srl] = true;
+		SessionCookie::set('document_management'.'.'.$this->document_srl, true);
 	}
 
 	function removeCart()
 	{
-		unset($_SESSION['document_management'][$this->document_srl]);
+		SessionCookie::delete('document_management'.'.'.$this->document_srl);
 	}
 
 	function isCarted()
 	{
-		return $_SESSION['document_management'][$this->document_srl];
+		return SessionCookie::get('document_management'.'.'.$this->document_srl);
 	}
 
 	/**
@@ -391,7 +391,7 @@ class documentItem extends Object
 		if($this->isSecret() && !$this->isGranted() && !$this->isAccessible()) return Context::getLang('msg_is_secret');
 
 		$result = $this->_checkAccessibleFromStatus();
-		if($result) $_SESSION['accessible'][$this->document_srl] = true;
+		if($result) SessionCookie::set('accessible'.'.'.$this->document_srl, true);
 
 		$content = $this->get('content');
 		$content = preg_replace_callback('/<(object|param|embed)[^>]*/is', array($this, '_checkAllowScriptAccess'), $content);
@@ -452,7 +452,7 @@ class documentItem extends Object
 		if($this->isSecret() && !$this->isGranted() && !$this->isAccessible()) return Context::getLang('msg_is_secret');
 
 		$result = $this->_checkAccessibleFromStatus();
-		if($result) $_SESSION['accessible'][$this->document_srl] = true;
+		if($result) SessionCookie::set('accessible'.'.'.$this->document_srl, true);
 
 		$content = $this->get('content');
 		if(!$stripEmbedTagException) stripEmbedTagForAdmin($content, $this->get('member_srl'));

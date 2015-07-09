@@ -184,13 +184,13 @@ class autoinstallAdminController extends autoinstall
 		$oAdminModel = getAdminModel('autoinstall');
 		$packages = explode(',', $package_srls);
 		$ftp_info = Context::getFTPInfo();
-		if(!$_SESSION['ftp_password'])
+		if(!SessionCookie::get('ftp_password'))
 		{
 			$ftp_password = Context::get('ftp_password');
 		}
 		else
 		{
-			$ftp_password = $_SESSION['ftp_password'];
+			$ftp_password = SessionCookie::get('ftp_password');
 		}
 
 		$isSftpSupported = function_exists(ssh2_sftp);
@@ -359,13 +359,13 @@ class autoinstallAdminController extends autoinstall
 
 		$oAdminModel = getAdminModel('autoinstall');
 
-		if(!$_SESSION['ftp_password'])
+		if(!SessionCookie::get('ftp_password'))
 		{
 			$ftp_password = Context::get('ftp_password');
 		}
 		else
 		{
-			$ftp_password = $_SESSION['ftp_password'];
+			$ftp_password = SessionCookie::get('ftp_password');
 		}
 		$ftp_info = Context::getFTPInfo();
 

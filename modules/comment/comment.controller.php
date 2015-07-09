@@ -155,7 +155,7 @@ class commentController extends comment
 	 */
 	function addGrant($comment_srl)
 	{
-		$_SESSION['own_comment'][$comment_srl] = TRUE;
+		SessionCookie::set('own_comment'.'.'.$comment_srl, TRUE);
 	}
 
 	/**
@@ -1043,7 +1043,7 @@ class commentController extends comment
 		}
 
 		// invalid vote if vote info exists in the session info.
-		if($_SESSION['voted_comment'][$comment_srl])
+		if(SessionCookie::get('voted_comment'.'.'.$comment_srl))
 		{
 			return new Object(-1, $failed_voted);
 		}
@@ -1054,7 +1054,7 @@ class commentController extends comment
 		// invalid vote if both ip addresses between author's and the current user are same.
 		if($oComment->get('ipaddress') == $_SERVER['REMOTE_ADDR'])
 		{
-			$_SESSION['voted_comment'][$comment_srl] = TRUE;
+			SessionCookie::set('voted_comment'.'.'.$comment_srl, TRUE);
 			return new Object(-1, $failed_voted);
 		}
 
@@ -1068,7 +1068,7 @@ class commentController extends comment
 			// session registered if the author information matches to the current logged-in user's.
 			if($member_srl && $member_srl == $oComment->get('member_srl'))
 			{
-				$_SESSION['voted_comment'][$comment_srl] = TRUE;
+				SessionCookie::set('voted_comment'.'.'.$comment_srl, TRUE);
 				return new Object(-1, $failed_voted);
 			}
 		}
@@ -1091,7 +1091,7 @@ class commentController extends comment
 		// session registered if log info contains recommendation vote log.
 		if($output->data->count)
 		{
-			$_SESSION['voted_comment'][$comment_srl] = TRUE;
+			SessionCookie::set('voted_comment'.'.'.$comment_srl, TRUE);
 			return new Object(-1, $failed_voted);
 		}
 
@@ -1133,7 +1133,7 @@ class commentController extends comment
 		$oDB->commit();
 
 		// leave into session information
-		$_SESSION['voted_comment'][$comment_srl] = TRUE;
+		SessionCookie::set('voted_comment'.'.'.$comment_srl, TRUE);
 
 		// Return the result
 		$output = new Object(0, $success_message);
@@ -1157,7 +1157,7 @@ class commentController extends comment
 	function declaredComment($comment_srl)
 	{
 		// Fail if session information already has a reported document
-		if($_SESSION['declared_comment'][$comment_srl])
+		if(SessionCookie::get('declared_comment'.'.'.$comment_srl))
 		{
 			return new Object(-1, 'failed_declared');
 		}
@@ -1190,7 +1190,7 @@ class commentController extends comment
 		// failed if both ip addresses between author's and the current user are same.
 		if($oComment->get('ipaddress') == $_SERVER['REMOTE_ADDR'])
 		{
-			$_SESSION['declared_comment'][$comment_srl] = TRUE;
+			SessionCookie::set('declared_comment'.'.'.$comment_srl, TRUE);
 			return new Object(-1, 'failed_declared');
 		}
 
@@ -1204,7 +1204,7 @@ class commentController extends comment
 			// session registered if the author information matches to the current logged-in user's.
 			if($member_srl && $member_srl == $oComment->get('member_srl'))
 			{
-				$_SESSION['declared_comment'][$comment_srl] = TRUE;
+				SessionCookie::set('declared_comment'.'.'.$comment_srl, TRUE);
 				return new Object(-1, 'failed_declared');
 			}
 		}
@@ -1224,7 +1224,7 @@ class commentController extends comment
 		// session registered if log info contains report log.
 		if($log_output->data->count)
 		{
-			$_SESSION['declared_comment'][$comment_srl] = TRUE;
+			SessionCookie::set('declared_comment'.'.'.$comment_srl, TRUE);
 			return new Object(-1, 'failed_declared');
 		}
 
@@ -1263,7 +1263,7 @@ class commentController extends comment
 		$oDB->commit();
 
 		// leave into the session information
-		$_SESSION['declared_comment'][$comment_srl] = TRUE;
+		SessionCookie::set('declared_comment'.'.'.$comment_srl, TRUE);
 
 		$this->setMessage('success_declared');
 	}
