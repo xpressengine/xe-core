@@ -332,15 +332,11 @@ class Context
 					array(&$oSessionController, 'open'), array(&$oSessionController, 'close'), array(&$oSessionModel, 'read'), array(&$oSessionController, 'write'), array(&$oSessionController, 'destroy'), array(&$oSessionController, 'gc')
 			);
 		}
+		// open session
+		SessionCookie::open();
 
-		$sessid = session_name();
-		if($sess = $_POST[$sessid]) session_id($sess);
-		else $sess = $_COOKIE[$sessid];
-
-		session_cache_limiter(''); // to control the cache-control header manually
-		session_start();
-
-		if(!empty($sess))
+		// check session status
+		if(SessionCookie::status() == PHP_SESSION_ACTIVE)
 		{
 			Context::setCacheControl('private', true);
 		}
