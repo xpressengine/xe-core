@@ -722,15 +722,18 @@ class ModuleHandler extends Handler
 
 			}
 
-			$_SESSION['XE_VALIDATOR_ERROR'] = $error;
-			$_SESSION['XE_VALIDATOR_ID'] = Context::get('xe_validator_id');
+			if($error != 0)
+			{
+				$_SESSION['XE_VALIDATOR_ERROR'] = $error;
+				$_SESSION['XE_VALIDATOR_ID'] = Context::get('xe_validator_id');
+			}
 			if($message != 'success')
 			{
 				$_SESSION['XE_VALIDATOR_MESSAGE'] = $message;
+				$_SESSION['XE_VALIDATOR_MESSAGE_TYPE'] = $messageType;
 			}
-			$_SESSION['XE_VALIDATOR_MESSAGE_TYPE'] = $messageType;
 
-			if(Context::get('xeVirtualRequestMethod') != 'xml')
+			if(Context::get('xeVirtualRequestMethod') != 'xml' && !empty($redirectUrl))
 			{
 				$_SESSION['XE_VALIDATOR_RETURN_URL'] = $redirectUrl;
 			}

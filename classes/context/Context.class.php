@@ -325,7 +325,6 @@ class Context
 		}
 
 		$this->set('lang_supported', $lang_supported);
-		$this->setLangType($this->lang_type);
 
 		// load module module's language file according to language setting
 		$this->loadLang(_XE_PATH_ . 'modules/module/lang');
@@ -349,6 +348,8 @@ class Context
 		{
 			Context::setCacheControl();
 		}
+
+		$this->setLangType($this->lang_type);
 
 		// set authentication information in Context and session
 		if(self::isInstalled())
