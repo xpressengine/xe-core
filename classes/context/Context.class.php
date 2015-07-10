@@ -155,6 +155,13 @@ class Context
 	public $isSuccessInit = TRUE;
 
 	/**
+	 * Session Status
+	 */
+	const SESSION_NONE = 0;
+	const SESSION_OPENED = 1;
+	const SESSION_ACTIVE = 2;
+
+	/**
 	 * returns static context object (Singleton). It's to use Context without declaration of an object
 	 *
 	 * @return object Instance
@@ -333,15 +340,10 @@ class Context
 			);
 		}
 
-		$sessid = session_name();
-		if($sess = $_POST[$sessid]) session_id($sess);
-		else $sess = $_COOKIE[$sessid];
-
-		session_cache_limiter(''); // to control the cache-control header manually
-		if(!empty($sess))
+		self::openSession();
+		if(self::startSession() != self::SESSION_NONE)
 		{
 			Context::setCacheControl('private', true);
-			session_start();
 		}
 		else
 		{
@@ -440,6 +442,63 @@ class Context
 	function close()
 	{
 		session_write_close();
+	}
+
+	/**
+	 * open Session
+	 *
+	 * @return void
+	 */
+	function openSession()
+	{
+		$session_name = session_name();
+		if($sessid = $_POST[$session_name])
+		{
+			session_id($sessid);
+		}
+
+		session_cache_limiter(''); // to control the cache-control header manually
+	}
+
+	/**
+	 * get Session status
+	 *
+	 * @return void
+	 */
+	function getSessionStatus()
+	{
+		if(session_id() != '')
+		{
+			return self::SESSION_ACTIVE;
+		}
+
+		// get session name. ie) PHPSESSID
+		$session_name = session_name();
+		if(!empty($_COOKIE[$session_name]))
+		{
+			return self::SESSION_OPENED;
+		}
+
+		return self::SESSION_NONE;
+	}
+
+	/**
+	 * start Session conditionally
+	 * @return session status
+	 */
+	function startSession($force = FALSE)
+	{
+		$status = self::getSessionStatus();
+		if($status == self::SESSION_ACTIVE)
+		{
+			return $status;
+		}
+		if($status == self::SESSION_OPENED || $force)
+		{
+			session_start();
+			return self::SESSION_ACTIVE;
+		}
+		return $status;
 	}
 
 	/**
