@@ -18,6 +18,57 @@ class addonController extends addon
 	}
 
 	/**
+	 * Check if the $_SESSION variables are used or not
+	 *
+	 * @param string $addon_file
+	 * @return bool Return true or false
+	 */
+	function checkSessionUsed($addon_path)
+	{
+		$addon = basename($addon_path);
+		$fp = opendir($addon_path);
+		if(!is_resource($fp))
+		{
+			return false;
+		}
+
+		while(($addon_file = readdir($fp)) !== false)
+		{
+			// ignore . and .. dir
+			if($addon_file[0] == '.')
+			{
+				continue;
+			}
+			if(is_dir($addon_path.'/'.$addon_file))
+			{
+				// recursively check old style file
+				$ret = $this->checkSessionUsed($addon_path.'/'.$addon_file);
+				if($ret)
+				{
+					closedir($fp);
+					return true;
+				}
+				continue;
+			}
+			if(!preg_match('@\.(?:php)$@', $addon_file))
+			{
+				continue;
+			}
+			$lines = file($addon_path.'/'.$addon_file);
+			foreach($lines as $line)
+			{
+				if(preg_match('@\$_SESSION\[(?:[^\]]+)\]@', $line))
+				{
+					closedir($fp);
+					return true;
+				}
+			}
+		}
+		closedir($fp);
+		return false;
+	}
+
+	/**
 	 * Returns a cache file path
 	 *
 	 * @param $type pc or mobile
@@ -100,6 +151,9 @@ class addonController extends addon
 				$mid_list = NULL;
 			}
 
+			$addon_root = _XE_PATH_ . 'addons/' . $addon;
+			$session_used = $this->checkSessionUsed($addon_root, true);
+
 			$buff[] = '$before_time = microtime(true);';
 			$buff[] = '$rm = \'' . $extra_vars->xe_run_method . "';";
 			$buff[] = '$ml = array(';
@@ -123,9 +177,17 @@ class addonController extends addon
 			$buff[] = 'if(file_exists($addon_file)){';
 			$buff[] = 'if($rm === \'no_run_selected\'){';
 			$buff[] = 'if(!isset($ml[$_m])){';
+			if($session_used)
+			{
+				$buff[] = 'if(session_id()=="")session_start(); # force to start session';
+			}
 			$buff[] = $addon_include;
 			$buff[] = '}}else{';
 			$buff[] = 'if(isset($ml[$_m]) || count($ml) === 0){';
+			if($session_used)
+			{
+				$buff[] = 'if(session_id()=="")session_start(); # force to start session';
+			}
 			$buff[] = $addon_include;
 			$buff[] = '}}}';
 			$buff[] = '$after_time = microtime(true);';
