@@ -18,6 +18,115 @@ class addonController extends addon
 	}
 
 	/**
+	 * Check if the $_SESSION variables are used or not
+	 *
+	 * @param string $addon_file
+	 * @return bool Return true or false
+	 */
+	function getCompatSession($addon_path, $convert = false)
+	{
+		$addon = basename($addon_path);
+		$fp = opendir($addon_path);
+		if(!is_resource($fp))
+		{
+			return false;
+		}
+
+		$files = array();
+		while(($addon_file = readdir($fp)) !== false)
+		{
+			// ignore . and .. dir
+			if($addon_file[0] == '.')
+			{
+				continue;
+			}
+			if(is_dir($addon_path.'/'.$addon_file))
+			{
+				// recursively check old style file
+				$ret = $this->getCompatSession($addon_path.'/'.$addon_file, $convert);
+				if($ret)
+				{
+					if(!$convert)
+					{
+						closedir($fp);
+						return true;
+					}
+				}
+				continue;
+			}
+			if(!preg_match('@\.(?:php)$@', $addon_file))
+			{
+				continue;
+			}
+			$lines = file($addon_path.'/'.$addon_file);
+			foreach($lines as $line)
+			{
+				if(preg_match('@\$_SESSION\[(?:[^\]]+)\]@', $line))
+				{
+					$files[] = $addon.'/'.$addon_file;
+					if(!$convert)
+					{
+						closedir($fp);
+						return true;
+					}
+					break;
+				}
+			}
+		}
+		closedir($fp);
+
+		if($convert)
+		{
+			foreach($files as $k=>$file)
+			{
+				$this->autoFixupSession($file);
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Convert old style $_SESSION used file to use SessionCookie::method()
+	 *
+	 * @param string $file
+	 * @param string $destdir	converted file will be saved at.
+	 */
+	function autoFixupSession($file, $destdir = 'files/cache/addons/converted')
+	{
+		$filename = _XE_PATH_ . 'addons/'.$file;
+		$lines = file($filename);
+		$dir = dirname($file);
+
+		umask('000');
+		@mkdir(_XE_PATH_. $destdir.'/'.$dir, 0777, true);
+		$destfile = _XE_PATH_ . $destdir.'/'.$file;
+
+		$out = '';
+		foreach ($lines as $line) {
+			// simple conversion regex from old style to use SessionCookie::method() call
+			// FIXME only less than two dimensional _SESSION variables are converted
+			$line = preg_replace('@\$_SESSION\[([^\]]+)\]\s*=\s*([^;]+);@',
+					'SessionCookie::set(\\1, \\2);', $line);
+			$line = preg_replace('@\$_SESSION\[([^\]]+)\]\[([^\]]+)\]\s*=(?!=)\s*([^;]+);@',
+					'SessionCookie::set(\\1.\'.\'.\\2, \\3);', $line);
+			$line = preg_replace('@\$_SESSION\s*=\s*array\(\)\s*;@', 'SessionCookie::truncate();', $line);
+			$line = preg_replace('@\$_SESSION\s*=\s*array\(\)\s*;@', 'SessionCookie::truncate();', $line);
+			$line = preg_replace('@session_destroy\(\)\s*;@', 'SessionCookie::destroy();', $line);
+			$line = preg_replace('@unset\(\$_SESSION\[([^\]]+)\]\[([^\]]+)\]\)@',
+					'SessionCookie::delete(\\1.\'.\'.\\2)', $line);
+			$line = preg_replace('@unset\(\$_SESSION\[([^\]]+)\]\)@',
+					'SessionCookie::delete(\\1)', $line);
+			$line = preg_replace('@isset\(\$_SESSION\[([^\]]+)\]\[([^\]]+)\]\)@',
+					'SessionCookie::has(\\1.\'.\'.\\2)', $line);
+			$line = preg_replace('@isset\(\$_SESSION\[([^\]]+)\]\)@', 'SessionCookie::has(\\1)', $line);
+			$line = preg_replace('@\$_SESSION\[([^\]]+)\]\[([^\]]+)\]@',
+					'SessionCookie::get(\\1.\'.\'.\\2)', $line);
+			$out.= preg_replace('@\$_SESSION\[([^\]]+)\]@', 'SessionCookie::get(\\1)', $line);
+		}
+		file_put_contents($destfile, $out);
+	}
+
+	/**
 	 * Returns a cache file path
 	 *
 	 * @param $type pc or mobile
@@ -100,6 +209,9 @@ class addonController extends addon
 				$mid_list = NULL;
 			}
 
+			$addon_root = _XE_PATH_ . 'addons/' . $addon;
+			$compat_session = $this->getCompatSession($addon_root, true);
+
 			$buff[] = '$before_time = microtime(true);';
 			$buff[] = '$rm = \'' . $extra_vars->xe_run_method . "';";
 			$buff[] = '$ml = array(';
@@ -123,9 +235,17 @@ class addonController extends addon
 			$buff[] = 'if(file_exists($addon_file)){';
 			$buff[] = 'if($rm === \'no_run_selected\'){';
 			$buff[] = 'if(!isset($ml[$_m])){';
+			if($compat_session)
+			{
+				$buff[] = 'SessionCookie::set($_m); # force to start session';
+			}
 			$buff[] = $addon_include;
 			$buff[] = '}}else{';
 			$buff[] = 'if(isset($ml[$_m]) || count($ml) === 0){';
+			if($compat_session)
+			{
+				$buff[] = 'SessionCookie::set($_m); # force to start session';
+			}
 			$buff[] = $addon_include;
 			$buff[] = '}}}';
 			$buff[] = '$after_time = microtime(true);';
