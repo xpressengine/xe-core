@@ -154,8 +154,18 @@ class FileHandler
 			$flags = FILE_APPEND;
 		}
 
+		$info = Context::getDBInfo();
+		// set umask()
+		if(isset($info->umask))
+		{
+			$omask = umask($info->umask);
+		}
+		else
+		{
+			$omask = umask(0002);
+		}
 		@file_put_contents($filename, $buff, $flags|LOCK_EX);
-		@chmod($filename, 0644);
+		umask($omask);
 	}
 
 	/**
@@ -286,8 +296,18 @@ class FileHandler
 
 		if(!ini_get('safe_mode'))
 		{
-			@mkdir($path_string, 0755, TRUE);
-			@chmod($path_string, 0755);
+			$info = Context::getDBInfo();
+			// set umask()
+			if(isset($info->umask))
+			{
+				$omask = umask($info->umask & ~0111);
+			}
+			else
+			{
+				$omask = umask(0000);
+			}
+			@mkdir($path_string, 0775, TRUE);
+			umask($omask);
 		}
 		// if safe_mode is on, use FTP
 		else
@@ -841,6 +861,17 @@ class FileHandler
 		// create directory
 		self::makeDir(dirname($target_file));
 
+		$info = Context::getDBInfo();
+		// set umask()
+		if(isset($info->umask))
+		{
+			$omask = umask($info->umask);
+		}
+		else
+		{
+			$omask = umask(0002);
+		}
+
 		// write into the file
 		$output = NULL;
 		switch($target_type)
@@ -872,6 +903,7 @@ class FileHandler
 				}
 				break;
 		}
+		umask($omask);
 
 		imagedestroy($thumb);
 		imagedestroy($source);
@@ -880,7 +912,6 @@ class FileHandler
 		{
 			return FALSE;
 		}
-		@chmod($target_file, 0644);
 
 		return TRUE;
 	}
