@@ -203,9 +203,8 @@ class memberModel extends member
 					return true;
 				}
 			}
+			SessionCookie::set('is_logged', false);
 		}
-
-		SessionCookie::set('is_logged', false);
 		return false;
 	}
 

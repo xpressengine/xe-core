@@ -971,7 +971,10 @@ class Context
 		$self->lang_type = $lang_type;
 		$self->set('lang_type', $lang_type);
 
-		SessionCookie::set('lang_type', $lang_type);
+		if(SessionCookie::status() == PHP_SESSION_ACTIVE)
+		{
+			SessionCookie::set('lang_type', $lang_type);
+		}
 	}
 
 	/**

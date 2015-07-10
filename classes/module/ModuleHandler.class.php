@@ -722,15 +722,18 @@ class ModuleHandler extends Handler
 
 			}
 
-			SessionCookie::set('XE_VALIDATOR_ERROR', $error);
-			SessionCookie::set('XE_VALIDATOR_ID', Context::get('xe_validator_id'));
+			if($error != 0)
+			{
+				SessionCookie::set('XE_VALIDATOR_ERROR', $error);
+				SessionCookie::set('XE_VALIDATOR_ID', Context::get('xe_validator_id'));
+			}
 			if($message != 'success')
 			{
 				SessionCookie::set('XE_VALIDATOR_MESSAGE', $message);
+				SessionCookie::set('XE_VALIDATOR_MESSAGE_TYPE', $messageType);
 			}
-			SessionCookie::set('XE_VALIDATOR_MESSAGE_TYPE', $messageType);
 
-			if(Context::get('xeVirtualRequestMethod') != 'xml')
+			if(Context::get('xeVirtualRequestMethod') != 'xml' && !empty($redirectUrl))
 			{
 				SessionCookie::set('XE_VALIDATOR_RETURN_URL', $redirectUrl);
 			}
@@ -780,12 +783,15 @@ class ModuleHandler extends Handler
 	 * */
 	function _clearErrorSession()
 	{
-		SessionCookie::set('XE_VALIDATOR_ERROR', '');
-		SessionCookie::set('XE_VALIDATOR_MESSAGE', '');
-		SessionCookie::set('XE_VALIDATOR_MESSAGE_TYPE', '');
-		SessionCookie::set('XE_VALIDATOR_RETURN_URL', '');
-		SessionCookie::set('XE_VALIDATOR_ID', '');
-		SessionCookie::set('INPUT_ERROR', '');
+		if(SessionCookie::status() == PHP_SESSION_ACTIVE)
+		{
+			SessionCookie::delete('XE_VALIDATOR_ERROR');
+			SessionCookie::delete('XE_VALIDATOR_MESSAGE');
+			SessionCookie::delete('XE_VALIDATOR_MESSAGE_TYPE');
+			SessionCookie::delete('XE_VALIDATOR_RETURN_URL');
+			SessionCookie::delete('XE_VALIDATOR_ID');
+			SessionCookie::delete('INPUT_ERROR');
+		}
 	}
 
 	/**
