@@ -459,6 +459,7 @@ class Context
 		}
 
 		session_cache_limiter(''); // to control the cache-control header manually
+		register_shutdown_function(array(&$this, 'lazyStartSession'));
 	}
 
 	/**
@@ -500,6 +501,48 @@ class Context
 			return self::SESSION_ACTIVE;
 		}
 		return $status;
+	}
+
+	/**
+	 * Lazy Session check. session_start() conditionally
+	 */
+	function lazyStartSession()
+	{
+		// get status
+		$status = self::getSessionStatus();
+		if(empty($_SESSION) || $status == self::SESSION_ACTIVE)
+		{
+			return;
+		}
+		// copy $_SESSION
+		$array = $_SESSION;
+
+		// check not empty variables
+		$not_empty = 0;
+		foreach($array as $key => $val)
+		{
+			if(!empty($val))
+			{
+				$not_empty ++;
+			}
+			else if(is_numeric($val) || is_bool($val))
+			{
+				$not_empty ++;
+			}
+		}
+
+		// no session opened. ignore it.
+		if($not_empty == 0 && $status == self::SESSION_NONE)
+		{
+			return;
+		}
+
+		// lazy start session
+		session_start();
+		foreach($array as $key => $val)
+		{
+			$_SESSION[$key] = $val;
+		}
 	}
 
 	/**
