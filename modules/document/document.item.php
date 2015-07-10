@@ -177,7 +177,7 @@ class documentItem extends Object
 
 	function isAccessible()
 	{
-		return $_SESSION['accessible'][$this->document_srl]==true?true:false;
+		return $this->_checkAccessibleFromStatus();
 	}
 
 	function allowComment()
@@ -390,9 +390,6 @@ class documentItem extends Object
 
 		if($this->isSecret() && !$this->isGranted() && !$this->isAccessible()) return Context::getLang('msg_is_secret');
 
-		$result = $this->_checkAccessibleFromStatus();
-		if($result) $_SESSION['accessible'][$this->document_srl] = true;
-
 		$content = $this->get('content');
 		$content = preg_replace_callback('/<(object|param|embed)[^>]*/is', array($this, '_checkAllowScriptAccess'), $content);
 		$content = preg_replace_callback('/<object[^>]*>/is', array($this, '_addAllowScriptAccess'), $content);
@@ -450,9 +447,6 @@ class documentItem extends Object
 		if(!$this->document_srl) return;
 
 		if($this->isSecret() && !$this->isGranted() && !$this->isAccessible()) return Context::getLang('msg_is_secret');
-
-		$result = $this->_checkAccessibleFromStatus();
-		if($result) $_SESSION['accessible'][$this->document_srl] = true;
 
 		$content = $this->get('content');
 		if(!$stripEmbedTagException) stripEmbedTagForAdmin($content, $this->get('member_srl'));
