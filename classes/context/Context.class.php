@@ -1076,8 +1076,6 @@ class Context
 
 		$self->lang_type = $lang_type;
 		$self->set('lang_type', $lang_type);
-
-		$_SESSION['lang_type'] = $lang_type;
 	}
 
 	/**
