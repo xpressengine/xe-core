@@ -30,7 +30,15 @@ class CacheHandler extends Handler
 	 */
 	function &getInstance($target = 'object', $info = null, $always_use_file = false)
 	{
-		$cache_handler_key = $target . ($always_use_file ? '_file' : '');
+		if(in_array($target, array('object', 'template')))
+		{
+			$cache_handler_key = $target . ($always_use_file ? '_file' : '');
+		}
+		else
+		{
+			$cache_handler_key = $target;
+		}
+
 		if(!$GLOBALS['__XE_CACHE_HANDLER__'][$cache_handler_key])
 		{
 			$GLOBALS['__XE_CACHE_HANDLER__'][$cache_handler_key] = new CacheHandler($target, $info, $always_use_file);
@@ -98,12 +106,21 @@ class CacheHandler extends Handler
 					$type = 'wincache';
 				}
 			}
+			else
+			{
+				$type = 'file';
+			}
 
 			if($type)
 			{
 				$class = 'Cache' . ucfirst($type);
 				include_once sprintf('%sclasses/cache/%s.class.php', _XE_PATH_, $class);
-				$this->handler = call_user_func(array($class, 'getInstance'), $url);
+				$this->handler = call_user_func(array($class, 'getInstance'), $target, $url);
+				if(!in_array($target, array('object')))
+				{
+					return;
+				}
+
 				$this->keyGroupVersions = $this->handler->get('key_group_versions', 0);
 				if(!$this->keyGroupVersions)
 				{
@@ -130,6 +147,21 @@ class CacheHandler extends Handler
 	}
 
 	/**
+	 * Return cache type
+	 *
+	 * @return string
+	 */
+	function getType()
+	{
+		if($this->handler)
+		{
+			return $this->handler->getType();
+		}
+
+		return null;
+	}
+
+	/**
 	 * Get cache name by key
 	 *
 	 * @param string $key The key that will be associated with the item.
@@ -139,7 +171,7 @@ class CacheHandler extends Handler
 	{
 		$key = str_replace('/', ':', $key);
 
-		return __XE_VERSION__ . ':' . $key;
+		return $key;
 	}
 
 	/**
@@ -148,9 +180,10 @@ class CacheHandler extends Handler
 	 * @param string $key Cache key
 	 * @param int $modified_time 	Unix time of data modified.
 	 * 								If stored time is older then modified time, return false.
+	 * @param bool $raw_key get raw filename for the CacheFile class
 	 * @return false|mixed Return false on failure or older then modified time. Return the string associated with the $key on success.
 	 */
-	function get($key, $modified_time = 0)
+	function get($key, $modified_time = 0, $raw_key = FALSE)
 	{
 		if(!$this->handler)
 		{
@@ -159,7 +192,7 @@ class CacheHandler extends Handler
 
 		$key = $this->getCacheKey($key);
 
-		return $this->handler->get($key, $modified_time);
+		return $this->handler->get($key, $modified_time, $raw_key);
 	}
 
 	/**
@@ -340,6 +373,16 @@ class CacheBase
 	function isSupport()
 	{
 		return false;
+	}
+
+	/**
+	 * Return cache type
+	 *
+	 * @return string
+	 */
+	function getType()
+	{
+		return null;
 	}
 
 	/**

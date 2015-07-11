@@ -15,19 +15,24 @@ class CacheFile extends CacheBase
 	 * @var string
 	 */
 	var $cache_dir = 'files/cache/store/';
+	/**
+	 * default target name
+	 * @var string
+	 */
+	var $target = 'default';
 
 	/**
 	 * Get instance of CacheFile
 	 *
 	 * @return CacheFile instance of CacheFile
 	 */
-	function getInstance()
+	function getInstance($target = 'default')
 	{
-		if(!$GLOBALS['__CacheFile__'])
+		if(!$GLOBALS['__CacheFile__'][$target])
 		{
-			$GLOBALS['__CacheFile__'] = new CacheFile();
+			$GLOBALS['__CacheFile__'][$target] = new CacheFile($target);
 		}
-		return $GLOBALS['__CacheFile__'];
+		return $GLOBALS['__CacheFile__'][$target];
 	}
 
 	/**
@@ -35,8 +40,9 @@ class CacheFile extends CacheBase
 	 *
 	 * @return void
 	 */
-	function CacheFile()
+	function CacheFile($target = 'default')
 	{
+		$this->target = $target;
 		$this->cache_dir = _XE_PATH_ . $this->cache_dir;
 		FileHandler::makeDir($this->cache_dir);
 	}
@@ -49,7 +55,17 @@ class CacheFile extends CacheBase
 	 */
 	function getCacheFileName($key)
 	{
-		return $this->cache_dir . str_replace(':', DIRECTORY_SEPARATOR, $key) . '.php';
+		if(in_array($this->target, array('object', 'template')))
+		{
+			$type = '.php';
+			$key = __XE_VERSION__ . ':' . $this->target . ':' . $key;
+		}
+		else
+		{
+			$type = '';
+			$key = $this->target . ':' . $key;
+		}
+		return $this->cache_dir . str_replace(':', DIRECTORY_SEPARATOR, $key) . $type;
 	}
 
 	/**
@@ -63,6 +79,16 @@ class CacheFile extends CacheBase
 	}
 
 	/**
+	 * Return cache type
+	 *
+	 * @return string file
+	 */
+	function getType()
+	{
+		return 'file';
+	}
+
+	/**
 	 * Cache a variable in the data store
 	 *
 	 * @param string $key Store the variable using this name.
@@ -72,15 +98,23 @@ class CacheFile extends CacheBase
 	 */
 	function put($key, $obj, $valid_time = 0)
 	{
-		$cache_file = $this->getCacheFileName($key);
-		$content = array();
-		$content[] = '<?php';
-		$content[] = 'if(!defined(\'__XE__\')) { exit(); }';
-		$content[] = 'return \'' . addslashes(serialize($obj)) . '\';';
-		FileHandler::writeFile($cache_file, implode(PHP_EOL, $content));
-		if(function_exists('opcache_invalidate'))
+		if(in_array($this->target, array('object')) || is_array($obj) || is_object($obj))
 		{
-			@opcache_invalidate($cache_file, true);
+			$cache_file = $this->getCacheFileName($key);
+			$content = array();
+			$content[] = '<?php';
+			$content[] = 'if(!defined(\'__XE__\')) { exit(); }';
+			$content[] = 'return \'' . addslashes(serialize($obj)) . '\';';
+			FileHandler::writeFile($cache_file, implode(PHP_EOL, $content));
+			if(function_exists('opcache_invalidate'))
+			{
+				@opcache_invalidate($cache_file, true);
+			}
+		}
+		else
+		{
+			$cache_file = $this->getCacheFileName($key);
+			FileHandler::writeFile($cache_file, $obj);
 		}
 	}
 
@@ -116,7 +150,7 @@ class CacheFile extends CacheBase
 	 * @param int $modified_time Not used
 	 * @return false|mixed Return false on failure. Return the string associated with the $key on success.
 	 */
-	function get($key, $modified_time = 0)
+	function get($key, $modified_time = 0, $raw_key = FALSE)
 	{
 		if(!$cache_file = FileHandler::exists($this->getCacheFileName($key)))
 		{
@@ -128,10 +162,32 @@ class CacheFile extends CacheBase
 			FileHandler::removeFile($cache_file);
 			return false;
 		}
+		if($raw_key)
+		{
+			return $cache_file;
+		}
 
-		$content = include($cache_file);
+		if(in_array($this->target, array('object')))
+		{
+			$content = include($cache_file);
+			return unserialize(stripslashes($content));
+		}
 
-		return unserialize(stripslashes($content));
+		$fp = fopen($cache_file, 'r');
+		if(!is_resource($fp))
+		{
+			return false;
+		}
+		$line = fgets($fp, 4096);
+		fclose($fp);
+		if($line[0] == '<' && $line[1] == '?' && strpos($line, 'php') == 2)
+		{
+			$content = include($cache_file);
+			return unserialize(stripslashes($content));
+		}
+
+		$content = file_get_contents($cache_file);
+		return $content;
 	}
 
 	/**

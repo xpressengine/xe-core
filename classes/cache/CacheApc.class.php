@@ -16,13 +16,13 @@ class CacheApc extends CacheBase
 	 * @param void $opt Not used
 	 * @return CacheApc instance of CacheApc
 	 */
-	function getInstance($opt = null)
+	function getInstance($target = 'default')
 	{
-		if(!$GLOBALS['__CacheApc__'])
+		if(!$GLOBALS['__CacheApc__'][$target])
 		{
-			$GLOBALS['__CacheApc__'] = new CacheApc();
+			$GLOBALS['__CacheApc__'][$target] = new CacheApc($target);
 		}
-		return $GLOBALS['__CacheApc__'];
+		return $GLOBALS['__CacheApc__'][$target];
 	}
 
 	/**
@@ -30,8 +30,9 @@ class CacheApc extends CacheBase
 	 *
 	 * @return void
 	 */
-	function CacheApc()
+	function CacheApc($target = 'default')
 	{
+		$this->target = 'default';
 	}
 
 	/**
@@ -42,6 +43,16 @@ class CacheApc extends CacheBase
 	function isSupport()
 	{
 		return self::$isSupport;
+	}
+
+	/**
+	 * Return cache type
+	 *
+	 * @return string apc
+	 */
+	function getType()
+	{
+		return 'apc';
 	}
 
 	/**
