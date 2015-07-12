@@ -12,15 +12,11 @@
 class TemplateHandler
 {
 
-	private $compiled_path = 'files/cache/template_compiled/'; ///< path of compiled caches files
 	private $path = NULL; ///< target directory
-	private $filename = NULL; ///< target filename
 	private $file = NULL; ///< target file (fullpath)
 	private $xe_path = NULL;  ///< XpressEngine base path
 	private $web_path = NULL; ///< tpl file web path
-	private $compiled_file = NULL; ///< tpl file web path
 	private $skipTags = NULL;
-	private $handler_mtime = 0;
 	static private $rootTpl = NULL;
 
 	/**
@@ -30,7 +26,6 @@ class TemplateHandler
 	public function __construct()
 	{
 		$this->xe_path = rtrim(preg_replace('/([^\.^\/]+)\.php$/i', '', $_SERVER['SCRIPT_NAME']), '/');
-		$this->compiled_path = _XE_PATH_ . $this->compiled_path;
 	}
 
 	/**
@@ -92,17 +87,9 @@ class TemplateHandler
 
 		// set template file infos.
 		$this->path = $tpl_path;
-		$this->filename = $tpl_filename;
 		$this->file = $tpl_file;
 
 		$this->web_path = $this->xe_path . '/' . ltrim(preg_replace('@^' . preg_quote(_XE_PATH_, '@') . '|\./@', '', $this->path), '/');
-
-		// get compiled file name
-		$hash = md5($this->file . __XE_VERSION__);
-		$this->compiled_file = "{$this->compiled_path}{$hash}.compiled.php";
-
-		// compare various file's modified time for check changed
-		$this->handler_mtime = filemtime(__FILE__);
 
 		$skip = array('');
 	}
@@ -140,39 +127,29 @@ class TemplateHandler
 		}
 
 		$source_template_mtime = filemtime($this->file);
-		$latest_mtime = $source_template_mtime > $this->handler_mtime ? $source_template_mtime : $this->handler_mtime;
+		// compare various file's modified time for check changed
+		$handler_mtime = filemtime(__FILE__);
+		$latest_mtime = $source_template_mtime > $handler_mtime ? $source_template_mtime : $handler_mtime;
 
 		// cache control
 		$oCacheHandler = CacheHandler::getInstance('template');
 
 		// get cached buff
-		if($oCacheHandler->isSupport())
+		if($oCacheHandler->isValid($this->file, $latest_mtime))
 		{
-			$cache_key = 'template:' . $this->file;
-			$buff = $oCacheHandler->get($cache_key, $latest_mtime);
+			$buff = NULL;
+			if($oCacheHandler->getType() != 'file')
+			{
+				$buff = $oCacheHandler->get($this->file);
+			}
+			$output = $this->_fetch($buff, $this->file);
 		}
 		else
 		{
-			if(is_readable($this->compiled_file) && filemtime($this->compiled_file) > $latest_mtime && filesize($this->compiled_file))
-			{
-				$buff = 'file://' . $this->compiled_file;
-			}
-		}
-
-		if($buff === FALSE)
-		{
 			$buff = $this->parse();
-			if($oCacheHandler->isSupport())
-			{
-				$oCacheHandler->put($cache_key, $buff);
-			}
-			else
-			{
-				FileHandler::writeFile($this->compiled_file, $buff);
-			}
+			$oCacheHandler->put($this->file, $buff);
+			$output = $this->_fetch($buff);
 		}
-
-		$output = $this->_fetch($buff);
 
 		if($__templatehandler_root_tpl == $this->file)
 		{
@@ -344,12 +321,13 @@ class TemplateHandler
 
 	/**
 	 * fetch using ob_* function
+	 * @param string $cache_key if cache_key is not null, include it.
 	 * @param string $buff if buff is not null, eval it instead of including compiled template file
 	 * @return string
 	 */
-	private function _fetch($buff)
+	private function _fetch($buff, $cache_key = NULL)
 	{
-		if(!$buff)
+		if(!$buff && $cache_key == NULL)
 		{
 			return;
 		}
@@ -364,12 +342,15 @@ class TemplateHandler
 
 		$level = ob_get_level();
 		ob_start();
-		if(substr($buff, 0, 7) == 'file://')
+		if(!$buff)
 		{
+			$oCacheHandler = CacheHandler::getInstance('template');
+			$compiled_file = $oCacheHandler->get($cache_key, 0, TRUE); // get compiled filename
+
 			if(__DEBUG__)
 			{
 				//load cache file from disk
-				$eval_str = FileHandler::readFile(substr($buff, 7));
+				$eval_str = FileHandler::readFile($compiled_file);
 				$eval_str_buffed = "?>" . $eval_str;
 				@eval($eval_str_buffed);
 				$error_info = error_get_last();
@@ -381,7 +362,7 @@ class TemplateHandler
 			}
 			else
 			{
-				include(substr($buff, 7));
+				include $compiled_file;
 			}
 		}
 		else
