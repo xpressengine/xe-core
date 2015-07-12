@@ -205,9 +205,13 @@ class ExtraItem
 		switch($type)
 		{
 			case 'homepage' :
-				if($value && !preg_match('/^([a-z]+):\/\//i', $value))
+				if($value)
 				{
-					$value = 'http://' . $value;
+					$value = removeHackTag($value);
+					if(!preg_match('/^([a-z]+):\/\//i', $value))
+					{
+						$value = 'http://' . $value;
+					}
 				}
 				return htmlspecialchars($value, ENT_COMPAT | ENT_HTML401, 'UTF-8', false);
 
