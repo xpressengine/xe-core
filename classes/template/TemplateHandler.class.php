@@ -266,12 +266,12 @@ class TemplateHandler
 		}
 
 		// prevent from calling directly before writing into file
-		$header = '<'.'?php if(!defined("__XE__"))exit;' . "\n";
+		$header = '<'.'?php if(!defined("__XE__"))exit;';
 		if(count($this->deps))
 		{
-			$header .= '$depends = '.var_export($this->deps, TRUE).';';
+			$header .= "\n".'$depends = '.var_export($this->deps, TRUE).";\n";
 		}
-		$buff = $header . '?' . ">\n" . $buff;
+		$buff = $header . '?' . '>' . $buff;
 
 		// remove php script reopening
 		$buff = preg_replace(array('/(\n|\r\n)+/', '/(;)?( )*\?\>\<\?php([\n\t ]+)?/'), array("\n", ";\n"), $buff);
