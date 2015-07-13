@@ -207,7 +207,7 @@ class CacheHandler extends Handler
 	 */
 	function put($key, $obj, $valid_time = 0)
 	{
-		if(!$this->handler && !$key)
+		if(!$this->handler || !$key)
 		{
 			return false;
 		}
