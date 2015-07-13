@@ -98,12 +98,12 @@ class TemplateHandlerTest extends \Codeception\TestCase\Test
             // #include
             array(
                 '<dummy /><!--#include("sample.html")--><div>This is another dummy</div>',
-                '?><dummy /><?php $__tpl=TemplateHandler::getInstance();echo $__tpl->compile(\'tests/unit/classes/template\',\'sample.html\') ?><div>This is another dummy</div>'
+                PHP_EOL.'$depends = array ('.PHP_EOL.'  0 => \'tests/unit/classes/template/sample.html\','.PHP_EOL.');'.PHP_EOL.'?><dummy />'.PHP_EOL.'<?php if($__Context->has_blog){ ?><a href="http://mygony.com">Taggon\'s blog</a><?php } ?>'.PHP_EOL.'<!--#Meta://external.host/js.js--><?php $__tmp=array(\'//external.host/js.js\',\'\',\'\',\'\');Context::loadFile($__tmp);unset($__tmp); ?>'.PHP_EOL.'<div>This is another dummy</div>'
             ),
             // <include target="file">
             array(
                 '<dummy /><include target="../sample.html" /><div>This is another dummy</div>',
-                '?><dummy /><?php $__tpl=TemplateHandler::getInstance();echo $__tpl->compile(\'tests/unit/classes\',\'sample.html\') ?><div>This is another dummy</div>'
+                PHP_EOL.'$depends = array ('.PHP_EOL.'  0 => \'tests/unit/classes/sample.html\','.PHP_EOL.');'.PHP_EOL.'?><dummy />'.PHP_EOL.'<div>This is another dummy</div>'
             ),
             // <load target="../../modules/page/lang/lang.xml">
             array(
