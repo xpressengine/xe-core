@@ -340,14 +340,7 @@ class Context
 		}
 
 		self::openSession();
-		if(self::startSession() != self::SESSION_NONE)
-		{
-			Context::setCacheControl('private', true);
-		}
-		else
-		{
-			Context::setCacheControl();
-		}
+		self::startSession();
 
 		$this->setLangType($this->lang_type);
 
@@ -542,26 +535,6 @@ class Context
 		foreach($array as $key => $val)
 		{
 			$_SESSION[$key] = $val;
-		}
-	}
-
-	/**
-	 * set Cache-Control header
-	 *
-	 * @return void
-	 */
-	function setCacheControl($public = 'public', $nocache = false)
-	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
-
-		$public = !empty($public) ? $public.', ' : '';
-		header("Cache-Control: ".$public."must-revalidate, post-check=0, pre-check=0");
-		if ($nocache)
-		{
-			header("Cache-Control: no-store, no-cache, must-revalidate", false);
-			header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-			header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-			header("Pragma: no-cache");
 		}
 	}
 

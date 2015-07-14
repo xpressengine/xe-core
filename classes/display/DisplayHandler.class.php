@@ -112,6 +112,15 @@ class DisplayHandler extends Handler
 			$this->gz_enabled = FALSE;
 		}
 
+		if(Context::getSessionStatus() != Context::SESSION_NONE)
+		{
+			$this->setCacheControl('private', true);
+		}
+		else
+		{
+			$this->setCacheControl();
+		}
+
 		// results directly output
 		if($this->gz_enabled)
 		{
@@ -311,6 +320,24 @@ class DisplayHandler extends Handler
 					return;
 				}
 			}
+		}
+	}
+
+	/**
+	 * set Cache-Control header
+	 *
+	 * @return void
+	 */
+	function setCacheControl($public = 'public', $nocache = false)
+	{
+		$public = !empty($public) ? $public.', ' : '';
+		header("Cache-Control: ".$public."must-revalidate, post-check=0, pre-check=0");
+		if ($nocache)
+		{
+			header("Cache-Control: no-store, no-cache, must-revalidate", false);
+			header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+			header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+			header("Pragma: no-cache");
 		}
 	}
 
