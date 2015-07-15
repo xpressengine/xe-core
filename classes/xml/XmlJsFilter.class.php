@@ -56,21 +56,10 @@ class XmlJsFilter extends XmlParser
 	var $version = '0.2.5';
 
 	/**
-	 * compiled javascript cache path
-	 * @var string
-	 */
-	var $compiled_path = './files/cache/js_filter_compiled/'; // / directory path for compiled cache file
-	/**
 	 * Target xml file
 	 * @var string
 	 */
 	var $xml_file = NULL;
-
-	/**
-	 * Compiled js file
-	 * @var string
-	 */
-	var $js_file = NULL; // / 
 
 	/**
 	 * constructor
@@ -86,7 +75,6 @@ class XmlJsFilter extends XmlParser
 			$path .= '/';
 		}
 		$this->xml_file = sprintf("%s%s", $path, $xml_file);
-		$this->js_file = $this->_getCompiledFileName($this->xml_file);
 	}
 
 	/**
@@ -99,30 +87,67 @@ class XmlJsFilter extends XmlParser
 		{
 			return;
 		}
-		if(!file_exists($this->js_file))
+		$filemtime = filemtime($this->xml_file);
+		// get a xml object
+		$xml = $this->_getXmlObject($this->xml_file);
+		// get the cache key
+		$key = $this->_getKeyName($xml);
+
+		if($xml->extend_filter)
 		{
-			$this->_compile();
+			// If extend_filter exists, cache it separately.
+			$jscache = CacheHandler::getInstance('xml_js_filter_nocache');
+			$mtime_or_ttl = 10; // default ttl 10s
 		}
-		else if(filemtime($this->xml_file) > filemtime($this->js_file))
+		else
 		{
-			$this->_compile();
+			$jscache = CacheHandler::getInstance('xml_js_filter');
+			$mtime_or_ttl = $filemtime;
+
+			// check the mtime of this class
+			if(filemtime(__FILE__) > $filemtime)
+			{
+				$mtime_or_ttl = filemtime(__FILE__);
+			}
 		}
-		Context::loadFile(array($this->js_file, 'body', '', null));
+		if(!$jscache->isValid($key, $mtime_or_ttl))
+		{
+			$jscompiled = $this->_compile($xml);
+			// save it
+			$jscache->put($key, $jscompiled);
+		}
+		// get the compiled js filename
+		$jsfile = $jscache->get($key, 0, true);
+		Context::loadFile(array($jsfile, 'body', '', null));
 	}
 
 	/**
-	 * compile a xml_file into js_file
-	 * @return void
+	 * Parse a xml file or a xml string into a xml object
+	 * @return object return a parsed xml object
 	 */
-	function _compile()
+	function _getXmlObject($xml)
+	{
+		// read xml file
+		if(file_exists($xml))
+		{
+			$buff = FileHandler::readFile($xml);
+		}
+		else
+		{
+			$buff = $xml;
+		}
+
+		// parse a given xml and return a xml object
+		return parent::parse($buff);
+	}
+
+	/**
+	 * compile a xml object
+	 * @return string return a compiled js
+	 */
+	function _compile($xml_obj)
 	{
 		global $lang;
-
-		// read xml file
-		$buff = FileHandler::readFile($this->xml_file);
-
-		// xml parsing
-		$xml_obj = parent::parse($buff);
 
 		$attrs = $xml_obj->filter->attrs;
 		$rules = $xml_obj->filter->rules;
@@ -156,9 +181,6 @@ class XmlJsFilter extends XmlParser
 		// If extend_filter exists, result returned by calling the method
 		if($extend_filter)
 		{
-			// If extend_filter exists, it changes the name of cache not to use cache
-			$this->js_file .= '.nocache.js';
-
 			// Separate the extend_filter
 			list($module_name, $method) = explode('.', $extend_filter);
 
@@ -414,7 +436,7 @@ class XmlJsFilter extends XmlParser
 		$jsdoc = implode("\n", $jsdoc);
 
 		// generates the js file
-		FileHandler::writeFile($this->js_file, $jsdoc);
+		return $jsdoc;
 	}
 
 	/**
@@ -422,9 +444,9 @@ class XmlJsFilter extends XmlParser
 	 * @param string $xml_file
 	 * @return string
 	 */
-	function _getCompiledFileName($xml_file)
+	function _getKeyName($xml_obj)
 	{
-		return sprintf('%s%s.%s.compiled.js', $this->compiled_path, md5($this->version . $xml_file), Context::getLangType());
+		return sprintf('%s%s.%s.compiled.js', $this->compiled_path, md5($this->version . serialize($xml_obj)), Context::getLangType());
 	}
 
 }
