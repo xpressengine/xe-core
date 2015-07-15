@@ -150,7 +150,12 @@ class TemplateHandler
 		else
 		{
 			$buff = $this->parse();
-			$oCacheHandler->put($this->file, $buff);
+			$params = array();
+			if(!empty($this->deps))
+			{
+				$params['depends'] = $this->deps;
+			}
+			$oCacheHandler->put($this->file, $buff, 0, $params);
 			$output = $this->_fetch($buff);
 		}
 
@@ -266,12 +271,7 @@ class TemplateHandler
 		}
 
 		// prevent from calling directly before writing into file
-		$header = '<'.'?php if(!defined("__XE__"))exit;';
-		if(count($this->deps))
-		{
-			$header .= "\n".'$depends = '.var_export($this->deps, TRUE).";\n";
-		}
-		$buff = $header . '?' . '>' . $buff;
+		$buff = '<?php if(!defined("__XE__"))exit;?>' . $buff;
 
 		// remove php script reopening
 		$buff = preg_replace(array('/(\n|\r\n)+/', '/(;)?( )*\?\>\<\?php([\n\t ]+)?/'), array("\n", ";\n"), $buff);
