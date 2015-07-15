@@ -142,7 +142,7 @@ class boardController extends board
 				$oMail = new Mail();
 				$oMail->setTitle($obj->title);
 				$oMail->setContent( sprintf("From : <a href=\"%s\">%s</a><br/>\r\n%s", getFullUrl('','document_srl',$obj->document_srl), getFullUrl('','document_srl',$obj->document_srl), $obj->content));
-				$oMail->setSender($obj->user_name, $obj->email_address);
+				$oMail->setSender($obj->nick_name, $obj->email_address);
 
 				$target_mail = explode(',',$this->module_info->admin_mail);
 				for($i=0;$i<count($target_mail);$i++)
