@@ -105,6 +105,11 @@ class CacheHandler extends Handler
 				{
 					$type = 'wincache';
 				}
+				else
+				{
+					// always use file type for template
+					$type = 'file';
+				}
 			}
 			else
 			{
