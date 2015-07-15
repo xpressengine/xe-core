@@ -22,6 +22,18 @@ class CacheFile extends CacheBase
 	var $target = 'default';
 
 	/**
+	 * cache name
+	 * @var string	$name
+	 */
+	var $name = __CLASS__;
+
+	/**
+	 * cache version
+	 * @var string	$version
+	 */
+	var $version = '0.7';
+
+	/**
 	 * absolute cache_dir
 	 * @var string
 	 */
@@ -107,13 +119,41 @@ class CacheFile extends CacheBase
 	 * @param int $valid_time Not used
 	 * @return void
 	 */
-	function put($key, $obj, $valid_time = 0)
+	function put($key, $obj, $valid_time = 0, $params = null)
 	{
+		// set mtime or ttl
+		if($valid_time > 0)
+		{
+			$mtime_or_ttl = $valid_time;
+		}
+		else
+		{
+			$mtime_or_ttl = time();
+		}
+
+		$depends = '';
+		if(!empty($params['depends']))
+		{
+			$depend = array();
+			$depend[] = '/**';
+			foreach($params['depends'] as $dep)
+			{
+				$depend[] = ' * @depends '.$dep;
+			}
+			$depend[] = ' */';
+
+			$depends = implode(PHP_EOL, $depend);
+		}
+
 		if(in_array($this->target, array('object')) || is_array($obj) || is_object($obj))
 		{
 			$cache_file = $this->getCacheFileName($key);
 			$content = array();
-			$content[] = '<?php';
+			$content[] = '<' . '?php /* ' . $this->name . ' ' . $this->version . ' ' . $mtime_or_ttl . ' ' . $key . ' */';
+			if(!empty($depends))
+			{
+				$content[] = $depends;
+			}
 			$content[] = 'if(!defined(\'__XE__\')) { exit(); }';
 			$content[] = 'return \'' . addslashes(serialize($obj)) . '\';';
 			FileHandler::writeFile($cache_file, implode(PHP_EOL, $content));
@@ -125,7 +165,19 @@ class CacheFile extends CacheBase
 		else
 		{
 			$cache_file = $this->getCacheFileName($key);
-			FileHandler::writeFile($cache_file, $obj);
+
+			$header = '';
+			if($obj[1] == '?' && $obj[0] == '<' && strpos($obj, 'php ') == 2)
+			{
+				$header = '<' . '?php /* ' . $this->name . ' ' . $this->version . ' ' .
+						$mtime_or_ttl . ' ' . $key . ' */';
+				if(!empty($depends))
+				{
+					$header .= PHP_EOL . $depends;
+				}
+				$header .= ' ?' . '>' . PHP_EOL;
+			}
+			FileHandler::writeFile($cache_file, $header . $obj);
 		}
 	}
 
@@ -142,10 +194,77 @@ class CacheFile extends CacheBase
 
 		if(file_exists($cache_file))
 		{
+			$cache_mtime = filemtime($cache_file);
+			if(filemtime(__FILE__) > $cache_mtime)
+			{
+				return false;
+			}
+
+			// check cache header
+			$fp = fopen($cache_file, 'r');
+			if(!is_resource($fp))
+			{
+				return false;
+			}
+			$header = fgets($fp, 4096);
+
+			// get some params
+			while(($line = fgets($fp, 4096)) !== false)
+			{
+				if($line[1] == '*')
+				{
+					if($line[2] != ' ' || $line[3] != '@')
+					{
+						continue;
+					}
+					$line = rtrim($line);
+					if(($pos = strpos($line, ' ', 4)) !== false)
+					{
+						$key = substr($line, 4, $pos - 4);
+						$val = substr($line, $pos + 1);
+
+						// check depends mtime
+						if($key == 'depends')
+						{
+							if(!file_exists($val) || filemtime($val) > $cache_mtime)
+							{
+								fclose($fp);
+								return false;
+							}
+						}
+					}
+					continue;
+				}
+				break;
+			}
+			fclose($fp);
+
+			if($header[1] == '?' && $header[0] == '<' && strpos($header, 'php ') == 2)
+			{
+				// <?php /* CacheFile 0.x 1234 xyz */
+				$chunks = explode(' ', $header);
+
+				// mtime or ttl metadata ?
+				if(isset($chunks[4]) && is_numeric($chunks[4]))
+				{
+					// mtime > cache_mtime case (always true)
+					// ttl > cache_ttl case
+					if($mtime_or_ttl > 0 && $mtime_or_ttl > $chunks[4])
+					{
+						if($mtime_or_ttl <= 31536000)
+						{
+							$mtime_or_ttl = $chunks[4];
+						}
+					}
+					else if($chunks[4] <= 31536000)
+					{
+						$mtime_or_ttl = $chunks[4];
+					}
+				}
+			}
+
 			if($mtime_or_ttl > 0)
 			{
-				$cache_mtime = filemtime($cache_file);
-
 				// less than 60*60*24*365(1 year) means TTL
 				if($mtime_or_ttl <= 31536000)
 				{
@@ -162,7 +281,7 @@ class CacheFile extends CacheBase
 				}
 			}
 
-			return true;
+			return $cache_file;
 		}
 
 		return false;
@@ -172,19 +291,13 @@ class CacheFile extends CacheBase
 	 * Fetch a stored variable from the cache
 	 *
 	 * @param string $key The $key used to store the value.
-	 * @param int $modified_time Not used
+	 * @param int $mtime_or_ttl
 	 * @return false|mixed Return false on failure. Return the string associated with the $key on success.
 	 */
-	function get($key, $modified_time = 0, $raw_key = FALSE)
+	function get($key, $mtime_or_ttl = 0, $raw_key = FALSE)
 	{
-		if(!$cache_file = FileHandler::exists($this->getCacheFileName($key)))
+		if(($cache_file = $this->isValid($key, $mtime_or_ttl)) === false)
 		{
-			return false;
-		}
-
-		if($modified_time > 0 && filemtime($cache_file) < $modified_timed)
-		{
-			FileHandler::removeFile($cache_file);
 			return false;
 		}
 		if($raw_key)
@@ -192,12 +305,7 @@ class CacheFile extends CacheBase
 			return $this->getCacheFileName($key, FALSE);
 		}
 
-		if(in_array($this->target, array('object')))
-		{
-			$content = include($cache_file);
-			return unserialize(stripslashes($content));
-		}
-
+		// check header
 		$fp = fopen($cache_file, 'r');
 		if(!is_resource($fp))
 		{
@@ -205,7 +313,7 @@ class CacheFile extends CacheBase
 		}
 		$line = fgets($fp, 4096);
 		fclose($fp);
-		if($line[0] == '<' && $line[1] == '?' && strpos($line, 'php') == 2)
+		if($line[1] == '?' && $line[0] == '<' && strpos($line, 'php ') == 2)
 		{
 			$content = include($cache_file);
 			return unserialize(stripslashes($content));
