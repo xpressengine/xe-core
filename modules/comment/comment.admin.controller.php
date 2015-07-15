@@ -127,7 +127,7 @@ class commentAdminController extends comment
 						<br />
 						";
 					$oMail->setContent($mail_content);
-					$oMail->setSender($logged_info->user_name, $logged_info->email_address);
+					$oMail->setSender($logged_info->nick_name, $logged_info->email_address);
 
 					$document_author_email = $oDocument->variables['email_address'];
 
