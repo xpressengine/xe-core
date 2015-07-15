@@ -22,6 +22,12 @@ class CacheFile extends CacheBase
 	var $target = 'default';
 
 	/**
+	 * absolute cache_dir
+	 * @var string
+	 */
+	var $cache_path;
+
+	/**
 	 * Get instance of CacheFile
 	 *
 	 * @return CacheFile instance of CacheFile
@@ -43,8 +49,8 @@ class CacheFile extends CacheBase
 	function CacheFile($target = 'default')
 	{
 		$this->target = $target;
-		$this->cache_dir = _XE_PATH_ . $this->cache_dir;
-		FileHandler::makeDir($this->cache_dir);
+		$this->cache_path = _XE_PATH_ . $this->cache_dir;
+		FileHandler::makeDir($this->cache_path);
 	}
 
 	/**
@@ -53,17 +59,22 @@ class CacheFile extends CacheBase
 	 * @param string $key The key that will be associated with the item.
 	 * @return string Returns cache file path
 	 */
-	function getCacheFileName($key)
+	function getCacheFileName($key, $absolute = TRUE)
 	{
 		if(in_array($this->target, array('object', 'template')))
 		{
 			$type = '.php';
-			$key = __XE_VERSION__ . ':' . $this->target . ':' . $key;
+			$prefix = __XE_VERSION__ . ':' . $this->target;
 		}
 		else
 		{
 			$type = '';
-			$key = $this->target . ':' . $key;
+			$prefix = $this->target;
+		}
+		$key = $prefix . ':' . $key;
+		if($absolute)
+		{
+			return $this->cache_path . str_replace(':', DIRECTORY_SEPARATOR, $key) . $type;
 		}
 		return $this->cache_dir . str_replace(':', DIRECTORY_SEPARATOR, $key) . $type;
 	}
@@ -122,19 +133,33 @@ class CacheFile extends CacheBase
 	 * Return whether cache is valid or invalid
 	 *
 	 * @param string $key Cache key
-	 * @param int $modified_time Not used
+	 * @param int $mtime or ttl
 	 * @return bool Return true on valid or false on invalid.
 	 */
-	function isValid($key, $modified_time = 0)
+	function isValid($key, $mtime_or_ttl = 0)
 	{
 		$cache_file = $this->getCacheFileName($key);
 
 		if(file_exists($cache_file))
 		{
-			if($modified_time > 0 && filemtime($cache_file) < $modified_time)
+			if($mtime_or_ttl > 0)
 			{
-				FileHandler::removeFile($cache_file);
-				return false;
+				$cache_mtime = filemtime($cache_file);
+
+				// less than 60*60*24*365(1 year) means TTL
+				if($mtime_or_ttl <= 31536000)
+				{
+					$modified = (time() - $cache_mtime) > $mtime_or_ttl;
+				}
+				else
+				{
+					$modified = $cache_mtime < $mtime_or_ttl;
+				}
+				if($modified)
+				{
+					FileHandler::removeFile($cache_file);
+					return false;
+				}
 			}
 
 			return true;
@@ -164,7 +189,7 @@ class CacheFile extends CacheBase
 		}
 		if($raw_key)
 		{
-			return $cache_file;
+			return $this->getCacheFileName($key, FALSE);
 		}
 
 		if(in_array($this->target, array('object')))
@@ -224,7 +249,15 @@ class CacheFile extends CacheBase
 	 */
 	function truncate()
 	{
-		FileHandler::removeFilesInDir($this->cache_dir);
+		if(in_array($this->target, array('object', 'template')))
+		{
+			$prefix = __XE_VERSION__ . ':' . $this->target;
+		}
+		else
+		{
+			$prefix = $this->target;
+		}
+		FileHandler::removeFilesInDir($this->cache_path . $prefix);
 	}
 
 }
