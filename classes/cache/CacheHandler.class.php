@@ -205,7 +205,7 @@ class CacheHandler extends Handler
 	 * 							If no ttl is supplied, use the default valid time.
 	 * @return bool|void Returns true on success or false on failure. If use CacheFile, returns void.
 	 */
-	function put($key, $obj, $valid_time = 0)
+	function put($key, $obj, $valid_time = 0, $params = null)
 	{
 		if(!$this->handler || !$key)
 		{
@@ -214,7 +214,7 @@ class CacheHandler extends Handler
 
 		$key = $this->getCacheKey($key);
 
-		return $this->handler->put($key, $obj, $valid_time);
+		return $this->handler->put($key, $obj, $valid_time, $params);
 	}
 
 	/**
