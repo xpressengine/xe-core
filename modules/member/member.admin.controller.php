@@ -537,7 +537,6 @@ class memberAdminController extends member
 		unset($xml_buff);
 
 		$validator   = new Validator($xml_file);
-		$validator->setCacheDir('files/cache');
 		$validator->getJsPath();
 	}
 
@@ -565,7 +564,6 @@ class memberAdminController extends member
 		Filehandler::writeFile($xml_file, $xml_buff);
 
 		$validator   = new Validator($xml_file);
-		$validator->setCacheDir('files/cache');
 		$validator->getJsPath();
 	}
 
@@ -596,7 +594,6 @@ class memberAdminController extends member
 		Filehandler::writeFile($xml_file, $xml_buff);
 
 		$validator   = new Validator($xml_file);
-		$validator->setCacheDir('files/cache');
 		$validator->getJsPath();
 	}
 
