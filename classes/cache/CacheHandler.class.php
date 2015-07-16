@@ -54,10 +54,9 @@ class CacheHandler extends Handler
 	 * @see CacheHandler::getInstance
 	 * @param string $target type of cache (object|template)
 	 * @param object $info info. of DB
-	 * @param boolean $always_use_file If set true, use a file cache always
 	 * @return CacheHandler
 	 */
-	function CacheHandler($target, $info = null, $always_use_file = false)
+	function CacheHandler($target, $info = null)
 	{
 		if(!$info)
 		{
@@ -81,14 +80,6 @@ class CacheHandler extends Handler
 				{
 					$type = 'wincache';
 				}
-				else if($info->use_object_cache == 'file')
-				{
-					$type = 'file';
-				}
-				else if($always_use_file)
-				{
-					$type = 'file';
-				}
 			}
 			else if($target == 'template')
 			{
@@ -105,33 +96,33 @@ class CacheHandler extends Handler
 				{
 					$type = 'wincache';
 				}
-				else
-				{
-					// always use file type for template
-					$type = 'file';
-				}
 			}
-			else
-			{
-				$type = 'file';
-			}
+		}
 
-			if($type)
-			{
-				$class = 'Cache' . ucfirst($type);
-				include_once sprintf('%sclasses/cache/%s.class.php', _XE_PATH_, $class);
-				$this->handler = call_user_func(array($class, 'getInstance'), $target, $url);
-				if(!in_array($target, array('object')))
-				{
-					return;
-				}
+		if(!$type)
+		{
+			$type = 'file';
+		}
 
-				$this->keyGroupVersions = $this->handler->get('key_group_versions', 0);
-				if(!$this->keyGroupVersions)
-				{
-					$this->keyGroupVersions = array();
-					$this->handler->put('key_group_versions', $this->keyGroupVersions, 0);
-				}
+		$class = 'Cache' . ucfirst($type);
+		include_once sprintf('%sclasses/cache/%s.class.php', _XE_PATH_, $class);
+		$this->handler = call_user_func(array($class, 'getInstance'), $target, $url);
+
+		if(!$this->handler || !$this->handler->isSupport())
+		{
+			// fallback
+			$class = 'CacheFile';
+			include_once sprintf('%sclasses/cache/%s.class.php', _XE_PATH_, $class);
+			$this->handler = call_user_func(array($class, 'getInstance'), $target, $url);
+		}
+
+		if($target == 'object')
+		{
+			$this->keyGroupVersions = $this->handler->get('key_group_versions', 0);
+			if(!$this->keyGroupVersions)
+			{
+				$this->keyGroupVersions = array();
+				$this->handler->put('key_group_versions', $this->keyGroupVersions, 0);
 			}
 		}
 	}
