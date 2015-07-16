@@ -12,9 +12,6 @@ class widgetController extends widget
 	var $javascript_mode = false;
 	var $layout_javascript_mode = false;
 
-	// Where the cache files are created widget
-	var $cache_path = './files/cache/widget_cache/';
-
 	/**
 	 * @brief Initialization
 	 */
@@ -319,6 +316,9 @@ class widgetController extends widget
 		// Bringing widget cache sequence
 		preg_match_all('!<img([^\>]*)widget=([^\>]*?)\>!is', $content, $matches);
 
+		// cache instance
+		$oCacheHandler = CacheHandler::getInstance('widget_cache');
+
 		$oXmlParser = new XmlParser();
 
 		$cnt = count($matches[1]);
@@ -329,7 +329,7 @@ class widgetController extends widget
 
 			$args = $xml_doc->img->attrs;
 			if(!$args) continue;
-			// If you are not caching path
+			// check cache is enabled
 			$widget = $args->widget;
 			$sequence = $args->widget_sequence;
 			$cache = $args->widget_cache;
@@ -339,11 +339,11 @@ class widgetController extends widget
 			{
 				foreach($args as $k => $v) $args->{$k} = urldecode($v);
 			}
-			// If the cache file for each language widget regeneration
+			// check the validity of cache and update it again
 			foreach($lang_list as $lang_type => $val)
 			{
-				$cache_file = sprintf('%s%d.%s.cache', $this->cache_path, $sequence, $lang_type);
-				if(!file_exists($cache_file)) continue;
+				$cache_key = sprintf('%d.%s', $sequence, $lang_type);
+				if(!$oCacheHandler->isValid($cache_key)) continue;
 				$this->getCache($widget, $args, $lang_type, true);
 			}
 		}
@@ -374,60 +374,29 @@ class widgetController extends widget
 			return $widget_content;
 		}
 
-		$oCacheHandler = CacheHandler::getInstance('template');
-		if($oCacheHandler->isSupport())
-		{
-			$key = 'widget_cache:' . $widget_sequence;
+		$oCacheHandler = CacheHandler::getInstance('widget_cache');
+		// get the cache key
+		$cache_key = sprintf('%d.%s', $widget_sequence, $lang_type);
 
-			$cache_body = $oCacheHandler->get($key);
+		// chech the validity of the cache ($widget_cache * 60 TTL)
+		if(!$ignore_cache && $oCacheHandler->isValid($cache_key, $widget_cache * 60))
+		{
+			$cache_body = $oCacheHandler->get($cache_key);
 			$cache_body = preg_replace('@<\!--#Meta:@', '<!--Meta:', $cache_body);
-		}
-
-		if($cache_body)
-		{
 			return $cache_body;
 		}
 		else
 		{
 			/**
-			 * Cache number and cache values are set so that the cache file should call
-			 */
-			FileHandler::makeDir($this->cache_path);
-			// Wanted cache file
-			$cache_file = sprintf('%s%d.%s.cache', $this->cache_path, $widget_sequence, $lang_type);
-			// If the file exists in the cache, the file validation
-			if(!$ignore_cache && file_exists($cache_file))
-			{
-				$filemtime = filemtime($cache_file);
-				// Should be modified compared to the time of the cache or in the future if creating more than widget.controller.php file a return value of the cache
-				if($filemtime + $widget_cache * 60 > $_SERVER['REQUEST_TIME'] && $filemtime > filemtime(_XE_PATH_.'modules/widget/widget.controller.php'))
-				{
-					$cache_body = FileHandler::readFile($cache_file);
-					$cache_body = preg_replace('@<\!--#Meta:@', '<!--Meta:', $cache_body);
-
-					return $cache_body;
-				}
-			}
-			// cache update and cache renewal of the file mtime
-			if(!$oCacheHandler->isSupport())
-			{
-			touch($cache_file);
-			}
-
+			 * real job. make a cache file and save it.
+			 **/
 			$oWidget = $this->getWidgetObject($widget);
 			if(!$oWidget || !method_exists($oWidget,'proc')) return;
 
 			$widget_content = $oWidget->proc($args);
 			$oModuleController = getController('module');
 			$oModuleController->replaceDefinedLangCode($widget_content);
-			if($oCacheHandler->isSupport())
-			{
-				$oCacheHandler->put($key, $widget_content, $widget_cache * 60);
-			}
-			else
-			{
-				FileHandler::writeFile($cache_file, $widget_content);
-			}
+			$oCacheHandler->put($cache_key, $widget_content);
 		}
 
 		return $widget_content;
@@ -787,8 +756,11 @@ class widgetController extends widget
 
 		if($vars->widget_sequence)
 		{
-			$cache_file = sprintf('%s%d.%s.cache', $this->cache_path, $vars->widget_sequence, Context::getLangType());
-			FileHandler::removeFile($cache_file);
+			$cache_key = sprintf('%d.%s', $vars->widget_sequence, Context::getLangType());
+
+			// remove cache
+			$oCacheHandler = CacheHandler::getInstance('widget_cache');
+			$oCacheHandler->delete($cache_key);
 		}
 
 		if($vars->widget_cache>0) $vars->widget_sequence = getNextSequence();
