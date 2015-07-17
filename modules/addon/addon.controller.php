@@ -177,18 +177,18 @@ class addonController extends addon
 			$buff[] = 'if(file_exists($addon_file)){';
 			$buff[] = 'if($rm === \'no_run_selected\'){';
 			$buff[] = 'if(!isset($ml[$_m])){';
-			$buff[] = $addon_include;
 			if($session_used)
 			{
-				$buff[] = 'Context::lazyStartSession(); # lazy check _SESSION';
+				$buff[] = 'if(session_id()=="")session_start(); # force to start session';
 			}
+			$buff[] = $addon_include;
 			$buff[] = '}}else{';
 			$buff[] = 'if(isset($ml[$_m]) || count($ml) === 0){';
-			$buff[] = $addon_include;
 			if($session_used)
 			{
-				$buff[] = 'Context::lazyStartSession(); # lazy check _SESSION';
+				$buff[] = 'if(session_id()=="")session_start(); # force to start session';
 			}
+			$buff[] = $addon_include;
 			$buff[] = '}}}';
 			$buff[] = '$after_time = microtime(true);';
 			$buff[] = '$addon_time_log = new stdClass();';
