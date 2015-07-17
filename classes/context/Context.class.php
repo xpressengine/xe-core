@@ -503,39 +503,18 @@ class Context
 	{
 		// get status
 		$status = self::getSessionStatus();
-		if(empty($_SESSION) || $status == self::SESSION_ACTIVE)
+		// no session opened or empty $_SESSION. ignore it.
+		if($status == self::SESSION_ACTIVE || count($_SESSION) == 0)
 		{
 			return;
 		}
+
 		// copy $_SESSION
-		$array = $_SESSION;
-
-		// check not empty variables
-		$not_empty = 0;
-		foreach($array as $key => $val)
-		{
-			if(!empty($val))
-			{
-				$not_empty ++;
-			}
-			else if(is_numeric($val) || is_bool($val))
-			{
-				$not_empty ++;
-			}
-		}
-
-		// no session opened. ignore it.
-		if($not_empty == 0 && $status == self::SESSION_NONE)
-		{
-			return;
-		}
-
+		$temp = $_SESSION;
 		// lazy start session
 		session_start();
-		foreach($array as $key => $val)
-		{
-			$_SESSION[$key] = $val;
-		}
+		// restore $_SESSION
+		$_SESSION = $temp;
 	}
 
 	/**
