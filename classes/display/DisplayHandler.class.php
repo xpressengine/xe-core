@@ -99,6 +99,15 @@ class DisplayHandler extends Handler
 			{
 				$this->_printHTMLHeader();
 			}
+
+			if(Context::getSessionStatus() != Context::SESSION_NONE)
+			{
+				$this->setCacheControl('private', true);
+			}
+			else
+			{
+				$this->setCacheControl();
+			}
 		}
 
 		// debugOutput output
@@ -110,15 +119,6 @@ class DisplayHandler extends Handler
 		if(headers_sent())
 		{
 			$this->gz_enabled = FALSE;
-		}
-
-		if(Context::getSessionStatus() != Context::SESSION_NONE)
-		{
-			$this->setCacheControl('private', true);
-		}
-		else
-		{
-			$this->setCacheControl();
 		}
 
 		// results directly output
