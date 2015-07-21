@@ -296,7 +296,7 @@ class ExtraItem
 	 */
 	function getValue()
 	{	
-		return $this->_getTypeValue($this->type, $this->value);
+		return htmlspecialchars($this->value, ENT_COMPAT | ENT_HTML401, 'UTF-8', false);
 	}
 
 	/**
