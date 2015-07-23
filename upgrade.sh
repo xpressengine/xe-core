@@ -83,7 +83,14 @@ TMP=.tmp$$
 # get file extension
 ext=${T#*.}
 $MESSAGE
-[ "$ext" != "zip" ] && [ "$ext" != "tgz" ] && [ "$ext" != "tar.gz" ] && [ "$ext" != "7z" ] && echo "*** FATAL: unrecognized extension ***" && exit
+if [  "$ext" != "zip" ] && [ "$ext" != "tgz" ] && [ "$ext" != "tar.gz" ] && [ "$ext" != "7z" ]; then
+	# busybox does not support ${FOO#*.}
+	ext=$(echo $T | sed 's@^.*\.\(7z\|zip\|tgz\|tar.gz\)$@\1@')
+	if [ "$ext" != "zip" ] && [ "$ext" != "tgz" ] && [ "$ext" != "tar.gz" ] && [ "$ext" != "7z" ]; then
+		echo "*** FATAL: unrecognized extension ***"
+		exit
+	fi
+fi
 [ "$ext" = "zip" ] && echo "*** Extract Zip ***"
 [ "$ext" = "tgz" -o "$ext" = "tar.gz" ] && echo "*** Extract tarball ***"
 [ "$ext" = "7z" ] && echo "*** Extract 7z ***"
@@ -164,8 +171,8 @@ if [ ! -f "$CHECKSUM" ];then
 	CHECKSUM=checksum-current
 fi
 
-UPGRADE=`diff checksum-current checksum-new |grep '^<'|cut -d' ' -f4`
-NEW=`diff checksum-current checksum-new |grep '^\(<\|>\)' | cut -d' ' -f4|sort |uniq`
+UPGRADE=`diff -U0 checksum-current checksum-new |grep '^-'|cut -d' ' -f3`
+NEW=`diff -U0 checksum-current checksum-new |grep '^\(-\|+\)' | cut -d' ' -f3|sort |uniq`
 
 if [ -z "$UPGRADE" ] && [ -z "$NEW" ] ; then
 	rm -r $TMP
@@ -179,7 +186,7 @@ fi
 if [ $SRC != '.' ]; then
 	$MESSAGE
 	echo "*** Make $PACKAGE-changes.tgz file... ***"
-	CHANGES=$(diff checksum-current checksum-new |grep '^\(<\|>\)' | cut -d' ' -f4| sed "s@^@$PACKAGE/@" | sort |uniq)
+	CHANGES=$(diff -U0 checksum-current checksum-new |grep '^\(-\|+\)' | cut -d' ' -f3| sed "s@^@$PACKAGE/@" | sort |uniq)
 	if [ -z "$CHANGES" ]; then
 		$FAILURE
 		echo "No difference found!!"
