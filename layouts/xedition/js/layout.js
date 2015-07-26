@@ -7,6 +7,12 @@
         var $hoverEl = $('.hover');
         var $searchEl = $('.click > a');
         var $searchForm = $('.search_area');
+        var $oldcode = $('.camera_wrap');
+        
+        if($oldcode.length)
+        {
+        	$('body').append('<div style="position: fixed;bottom: 0;left: 0;width: 100%;background-color: white;z-index: 99999;border-top:solid 1px #000"><h1>XEDITION 레이아웃이 업그레이드 되었습니다.</h1><p>XEDITION 레이아웃이 업그레이드 되어 수동 업그레이드 작업이 필요합니다. 레이아웃 HTML/CSS 편집 화면에서 초기화 버튼을 눌러 레이아웃을 초기화함으로 수동 업그레이드를 하실 수 있습니다.<br />주의! 모든 기존 수정사항이 사라지므로 수정사항은 백업해 두셔야 합니다.</div>');
+        }
 
         // Fixed header
         if($fixedHeader.length)
