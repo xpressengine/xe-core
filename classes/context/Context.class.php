@@ -201,7 +201,10 @@ class Context
 	function init()
 	{
 		if(!isset($GLOBALS['HTTP_RAW_POST_DATA']) && version_compare(PHP_VERSION, '5.6.0', '>=') === true) {
-			if(simplexml_load_string(file_get_contents("php://input")) !== false) $GLOBALS['HTTP_RAW_POST_DATA'] = file_get_contents("php://input");
+			if(file_get_contents("php://input") && (simplexml_load_string(file_get_contents("php://input")) !== false || strpos($_SERVER['CONTENT_TYPE'], 'json') || strpos($_SERVER['HTTP_CONTENT_TYPE'], 'json')))
+			{
+				$GLOBALS['HTTP_RAW_POST_DATA'] = file_get_contents("php://input");
+			}
 		}
 
 		// set context variables in $GLOBALS (to use in display handler)
@@ -211,7 +214,7 @@ class Context
 
 		// 20140429 editor/image_link
 		$this->_checkGlobalVars();
-
+		
 		$this->setRequestMethod('');
 
 		$this->_setXmlRpcArgument();
