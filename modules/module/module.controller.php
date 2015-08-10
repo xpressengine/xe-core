@@ -394,6 +394,10 @@ class moduleController extends module
 		if(!$args->site_srl) $args->site_srl = 0;
 		$oModuleModel = getModel('module');
 		if($oModuleModel->isIDExists($args->mid, $args->site_srl)) return new Object(-1, 'msg_module_name_exists');
+		if($oModuleModel->isDirExists($args->mid))
+		{
+			return new Object(-1, 'msg_exists_dir');
+		}
 
 		// begin transaction
 		$oDB = &DB::getInstance();

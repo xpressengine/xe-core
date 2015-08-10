@@ -20,12 +20,6 @@ class moduleModel extends module
 	function isIDExists($id, $site_srl = 0)
 	{
 		if(!preg_match('/^[a-z]{1}([a-z0-9_]+)$/i',$id)) return true;
-		// directory and rss/atom/api reserved checking, etc.
-		$dirs = FileHandler::readDir(_XE_PATH_);
-		$dirs[] = 'rss';
-		$dirs[] = 'atom';
-		$dirs[] = 'api';
-		if(in_array($id, $dirs)) return true;
 		// mid test
 		$args = new stdClass();
 		$args->mid = $id;
@@ -39,6 +33,24 @@ class moduleModel extends module
 			$site_args->domain = $id;
 			$output = executeQuery('module.isExistsSiteDomain', $site_args);
 			if($output->data->count) return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @brief Check if Dir, vid are available
+	 */
+	function isDirExists($id)
+	{
+		// directory and rss/atom/api reserved checking, etc.
+		$dirs = FileHandler::readDir(_XE_PATH_);
+		$dirs[] = 'rss';
+		$dirs[] = 'atom';
+		$dirs[] = 'api';
+		if(in_array($id, $dirs))
+		{
+			return true;
 		}
 
 		return false;
