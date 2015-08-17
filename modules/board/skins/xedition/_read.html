@@ -26,7 +26,8 @@
 	<!-- Extra Output -->
 	<div class="exOut" cond="$oDocument->isExtraVarsExists() && (!$oDocument->isSecret() || $oDocument->isGranted())">
 		<table border="1" cellspacing="0" summary="Extra Form Output">
-			<tr loop="$oDocument->getExtraVars() => $key,$val">
+			{@ $oDocumentExtraVars = $oDocument->getExtraVars()}
+			<tr loop="$oDocumentExtraVars => $key,$val">
 				<th scope="row">{$val->name}</th>
 				<td>{$val->getValueHTML()}&nbsp;</td>
 			</tr>
@@ -84,7 +85,8 @@
 		<div cond="$oDocument->hasUploadedFiles()" class="fileList">
 			<button type="button" class="toggleFile" onclick="jQuery(this).next('ul.files').toggle();"><i class="xi-diskette"></i> {$lang->uploaded_file} [<strong>{$oDocument->get('uploaded_count')}</strong>]</button>
 			<ul class="files">
-				<li loop="$oDocument->getUploadedFiles()=>$key,$file"><a href="{getUrl('')}{$file->download_url}">{$file->source_filename} <span class="fileSize">[File Size:{FileHandler::filesize($file->file_size)}/Download:{number_format($file->download_count)}]</span></a></li>
+				{@ $oDocumentUploadedFiles = $oDocument->getUploadedFiles()}
+				<li loop="$oDocumentUploadedFiles=>$key,$file"><a href="{getUrl('')}{$file->download_url}">{$file->source_filename} <span class="fileSize">[File Size:{FileHandler::filesize($file->file_size)}/Download:{number_format($file->download_count)}]</span></a></li>
 			</ul>
 		</div>
 		<div class="tns">
