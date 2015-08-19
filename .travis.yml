@@ -24,4 +24,3 @@ script:
 - grunt minify
 - if [ $(phpenv version-name) != "5.3" && $(phpenv version-name) != "7" && $(phpenv version-name) != "hhvm" ]; then ./vendor/bin/codecept build; fi
 - if [ $(phpenv version-name) != "5.3" && $(phpenv version-name) != "7" && $(phpenv version-name) != "hhvm" ]; then ./vendor/bin/codecept run -d --fail-fast --env travis; fi
-- phpunit; fi
