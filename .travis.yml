@@ -23,8 +23,5 @@ before_script:
 script:
 - grunt lint
 - grunt minify
-- if [ $(phpenv version-name) != "5.3" ]; then ./vendor/bin/codecept build; fi
-- if [ $(phpenv version-name) != "5.3" ]; then ./vendor/bin/codecept run -d --fail-fast --env travis; fi
-notifications:
-  slack:
-    secure: 0HhwktIb65zfge56E4yMfYj0Xj4GeYIaxvh/Obb13BK1/C8RdWBy6u213N5MQ2UHsxYk8wXXzynaCh4psegi2iPy9dbKmkdAdEQMzYoKE2xYVSqZveeVQm0sqFVXAlzggpgs/j5vtvKYjRkQKtTrz0C+p0uJ0bkLcyWGezWTpGc=
+- if [ $(phpenv version-name) != "5.3" && $(phpenv version-name) != "7" && $(phpenv version-name) != "hhvm" ]; then ./vendor/bin/codecept build; fi
+- if [ $(phpenv version-name) != "5.3" && $(phpenv version-name) != "7" && $(phpenv version-name) != "hhvm" ]; then ./vendor/bin/codecept run -d --fail-fast --env travis; fi
