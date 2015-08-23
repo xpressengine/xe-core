@@ -675,6 +675,33 @@ class fileController extends file
 		{
 			$path = sprintf("./files/attach/images/%s/%s", $module_srl,getNumberingPath($upload_target_srl,3));
 
+			if(preg_match("/\.(jpe?g)$/i", $file_info['name']))
+			{
+				@ini_set('memory_limit', '512M');
+				$filename = $file_info['tmp_name'];
+				$exif = exif_read_data($filename);
+
+				@$image = imagecreatefromjpeg($filename);
+				 
+				$exif = exif_read_data($filename);
+				 
+				if(!empty($exif['Orientation'])) {
+					switch($exif['Orientation']) {
+						case 8:
+							$image = imagerotate($image,90,0);
+							break;
+						case 3:
+							$image = imagerotate($image,180,0);
+							break;
+						case 6:
+							$image = imagerotate($image,-90,0);
+							break;
+					}
+				}
+				imagejpeg($image,$filename);
+				imagedestroy($image);
+			}
+
 			// special character to '_'
 			// change to random file name. because window php bug. window php is not recognize unicode character file name - by cherryfilter
 			$ext = substr(strrchr($file_info['name'],'.'),1);
