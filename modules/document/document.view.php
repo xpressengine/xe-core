@@ -71,7 +71,7 @@ class documentView extends document
 	{
 		if(!Context::get('is_logged')) return new Object(-1,'msg_not_permitted');
 		// Taken from a list of selected sessions
-		$flag_list = $_SESSION['document_management'];
+		$flag_list = SessionCookie::get('document_management');
 		if(count($flag_list))
 		{
 			foreach($flag_list as $key => $val)

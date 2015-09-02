@@ -250,12 +250,12 @@ function getNextSequence()
 function setUserSequence($seq)
 {
 	$arr_seq = array();
-	if(isset($_SESSION['seq']))
+	if(SessionCookie::has('seq'))
 	{
-		$arr_seq = $_SESSION['seq'];
+		$arr_seq = SessionCookie::get('seq');
 	}
 	$arr_seq[] = $seq;
-	$_SESSION['seq'] = $arr_seq;
+	SessionCookie::set('seq', $arr_seq);
 }
 
 /**
@@ -266,11 +266,11 @@ function setUserSequence($seq)
  */
 function checkUserSequence($seq)
 {
-	if(!isset($_SESSION['seq']))
+	if(!SessionCookie::has('seq'))
 	{
 		return false;
 	}
-	if(!in_array($seq, $_SESSION['seq']))
+	if(!in_array($seq, SessionCookie::get('seq')))
 	{
 		return false;
 	}

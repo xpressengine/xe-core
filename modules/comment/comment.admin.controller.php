@@ -407,13 +407,13 @@ class commentAdminController extends comment
 		{
 			foreach($output AS $key => $value)
 			{
-				if($_SESSION['comment_management'][$key])
+				if(SessionCookie::get('comment_management'.'.'.$key))
 				{
-					unset($_SESSION['comment_management'][$key]);
+					SessionCookie::delete('comment_management'.'.'.$key);
 				}
 				else
 				{
-					$_SESSION['comment_management'][$key] = TRUE;
+					SessionCookie::set('comment_management'.'.'.$key, TRUE);
 				}
 			}
 		}

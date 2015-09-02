@@ -174,8 +174,8 @@ class fileAdminController extends file
 
 		if($output->file_srl)
 		{
-			if($_SESSION['file_management'][$output->file_srl]) unset($_SESSION['file_management'][$output->file_srl]);
-			else $_SESSION['file_management'][$output->file_srl] = true;
+			if(SessionCookie::get('file_management'.'.'.$output->file_srl)) SessionCookie::delete('file_management'.'.'.$output->file_srl);
+			else SessionCookie::set('file_management'.'.'.$output->file_srl, true);
 		}
 	}
 }

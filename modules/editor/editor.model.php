@@ -261,8 +261,9 @@ class editorModel extends editor
 		if($option->editor_sequence) $editor_sequence = $option->editor_sequence;
 		else
 		{
-			if(!$_SESSION['_editor_sequence_']) $_SESSION['_editor_sequence_'] = 1;
-			$editor_sequence = $_SESSION['_editor_sequence_'] ++;
+			if(!SessionCookie::get('_editor_sequence_')) SessionCookie::set('_editor_sequence_', 1);
+			$editor_sequence = SessionCookie::get('_editor_sequence_');
+			$editor_sequence ++;
 		}
 
 		/**

@@ -77,8 +77,8 @@ class pollAdminController extends poll
 		{
 			foreach($output->data AS $key=>$value)
 			{
-				if($_SESSION['poll_management'][$value->poll_index_srl]) unset($_SESSION['poll_management'][$value->poll_index_srl]);
-				else $_SESSION['poll_management'][$value->poll_index_srl] = true;
+				if(SessionCookie::get('poll_management'.'.'.$value->poll_index_srl)) SessionCookie::delete('poll_management'.'.'.$value->poll_index_srl);
+				else SessionCookie::set('poll_management'.'.'.$value->poll_index_srl, true);
 			}
 		}
 	}

@@ -31,9 +31,9 @@ if(!class_exists('AddonCaptcha', false))
 
 		function before_module_proc()
 		{
-			if($this->addon_info->act_type == 'everytime' && $_SESSION['captcha_authed'])
+			if($this->addon_info->act_type == 'everytime' && SessionCookie::get('captcha_authed'))
 			{
-				unset($_SESSION['captcha_authed']);
+				SessionCookie::delete('captcha_authed');
 			}
 		}
 
@@ -48,11 +48,11 @@ if(!class_exists('AddonCaptcha', false))
 			{
 				return false;
 			}
-			if($_SESSION['XE_VALIDATOR_ERROR'] == -1)
+			if(SessionCookie::get('XE_VALIDATOR_ERROR') == -1)
 			{
-				$_SESSION['captcha_authed'] = false;
+				SessionCookie::set('captcha_authed', false);
 			}
-			if($_SESSION['captcha_authed'])
+			if(SessionCookie::get('captcha_authed'))
 			{
 				return false;
 			}
@@ -68,10 +68,10 @@ if(!class_exists('AddonCaptcha', false))
 					if(!$this->compareCaptcha())
 					{
 						Context::loadLang(_XE_PATH_ . 'addons/captcha/lang');
-						$_SESSION['XE_VALIDATOR_ERROR'] = -1;
-						$_SESSION['XE_VALIDATOR_MESSAGE'] = Context::getLang('captcha_denied');
-						$_SESSION['XE_VALIDATOR_MESSAGE_TYPE'] = 'error';
-						$_SESSION['XE_VALIDATOR_RETURN_URL'] = Context::get('error_return_url');
+						SessionCookie::set('XE_VALIDATOR_ERROR', -1);
+						SessionCookie::set('XE_VALIDATOR_MESSAGE', Context::getLang('captcha_denied'));
+						SessionCookie::set('XE_VALIDATOR_MESSAGE_TYPE', 'error');
+						SessionCookie::set('XE_VALIDATOR_RETURN_URL', Context::get('error_return_url'));
 						$ModuleHandler->_setInputValueToSession();
 					}
 				}
@@ -86,7 +86,7 @@ if(!class_exists('AddonCaptcha', false))
 			}
 
 			// compare session when calling actions such as writing a post or a comment on the board/issue tracker module
-			if(!$_SESSION['captcha_authed'] && in_array(Context::get('act'), $this->target_acts))
+			if(!SessionCookie::get('captcha_authed') && in_array(Context::get('act'), $this->target_acts))
 			{
 				Context::loadLang(_XE_PATH_ . 'addons/captcha/lang');
 				$ModuleHandler->error = "captcha_denied";
@@ -98,7 +98,7 @@ if(!class_exists('AddonCaptcha', false))
 		function createKeyword()
 		{
 			$type = Context::get('captchaType');
-			if($type == 'inline' && $_SESSION['captcha_keyword'])
+			if($type == 'inline' && SessionCookie::get('captcha_keyword'))
 			{
 				return;
 			}
@@ -106,12 +106,12 @@ if(!class_exists('AddonCaptcha', false))
 			$arr = range('A', 'Y');
 			shuffle($arr);
 			$arr = array_slice($arr, 0, 6);
-			$_SESSION['captcha_keyword'] = join('', $arr);
+			SessionCookie::set('captcha_keyword', join('', $arr));
 		}
 
 		function before_module_init_setCaptchaSession()
 		{
-			if($_SESSION['captcha_authed'])
+			if(SessionCookie::get('captcha_authed'))
 			{
 				return false;
 			}
@@ -140,7 +140,7 @@ if(!class_exists('AddonCaptcha', false))
 
 		function before_module_init_captchaImage()
 		{
-			if($_SESSION['captcha_authed'])
+			if(SessionCookie::get('captcha_authed'))
 			{
 				return false;
 			}
@@ -149,7 +149,7 @@ if(!class_exists('AddonCaptcha', false))
 				$this->createKeyword();
 			}
 
-			$keyword = $_SESSION['captcha_keyword'];
+			$keyword = SessionCookie::get('captcha_keyword');
 			$im = $this->createCaptchaImage($keyword);
 
 			header("Cache-Control: ");
@@ -255,12 +255,12 @@ if(!class_exists('AddonCaptcha', false))
 
 		function before_module_init_captchaAudio()
 		{
-			if($_SESSION['captcha_authed'])
+			if(SessionCookie::get('captcha_authed'))
 			{
 				return false;
 			}
 
-			$keyword = strtoupper($_SESSION['captcha_keyword']);
+			$keyword = strtoupper(SessionCookie::get('captcha_keyword'));
 			$data = $this->createCaptchaAudio($keyword);
 
 			header('Content-type: audio/mpeg');
@@ -306,18 +306,18 @@ if(!class_exists('AddonCaptcha', false))
 		{
 			if(!in_array(Context::get('act'), $this->target_acts)) return true;
 
-			if($_SESSION['captcha_authed'])
+			if(SessionCookie::get('captcha_authed'))
 			{
 				return true;
 			}
 
-			if(strtoupper($_SESSION['captcha_keyword']) == strtoupper(Context::get('secret_text')))
+			if(strtoupper(SessionCookie::get('captcha_keyword')) == strtoupper(Context::get('secret_text')))
 			{
-				$_SESSION['captcha_authed'] = true;
+				SessionCookie::set('captcha_authed', true);
 				return true;
 			}
 
-			unset($_SESSION['captcha_authed']);
+			SessionCookie::delete('captcha_authed');
 
 			return false;
 		}
@@ -343,7 +343,7 @@ if(!class_exists('AddonCaptcha', false))
 
 		function inlineDisplay()
 		{
-			unset($_SESSION['captcha_authed']);
+			SessionCookie::delete('captcha_authed');
 			$this->createKeyword();
 
 			$swfURL = getUrl() . 'addons/captcha/swf/play.swf';

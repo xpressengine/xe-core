@@ -332,9 +332,18 @@ class Context
 					array(&$oSessionController, 'open'), array(&$oSessionController, 'close'), array(&$oSessionModel, 'read'), array(&$oSessionController, 'write'), array(&$oSessionController, 'destroy'), array(&$oSessionController, 'gc')
 			);
 		}
+		// open session
+		SessionCookie::open();
 
-		if($sess = $_POST[session_name()]) session_id($sess);
-		session_start();
+		// check session status
+		if(SessionCookie::status() == PHP_SESSION_ACTIVE)
+		{
+			Context::setCacheControl('private', true);
+		}
+		else
+		{
+			Context::setCacheControl();
+		}
 
 		// set authentication information in Context and session
 		if(self::isInstalled())
@@ -428,6 +437,26 @@ class Context
 	function close()
 	{
 		session_write_close();
+	}
+
+	/**
+	 * set Cache-Control header
+	 *
+	 * @return void
+	 */
+	function setCacheControl($public = 'public', $nocache = false)
+	{
+		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+
+		$public = !empty($public) ? $public.', ' : '';
+		header("Cache-Control: ".$public."must-revalidate, post-check=0, pre-check=0");
+		if ($nocache)
+		{
+			header("Cache-Control: no-store, no-cache, must-revalidate", false);
+			header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+			header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+			header("Pragma: no-cache");
+		}
 	}
 
 	/**
@@ -942,7 +971,10 @@ class Context
 		$self->lang_type = $lang_type;
 		$self->set('lang_type', $lang_type);
 
-		$_SESSION['lang_type'] = $lang_type;
+		if(SessionCookie::status() == PHP_SESSION_ACTIVE)
+		{
+			SessionCookie::set('lang_type', $lang_type);
+		}
 	}
 
 	/**

@@ -336,11 +336,11 @@ class adminAdminController extends admin
 		$isAgree = Context::get('is_agree');
 		if($isAgree == 'true')
 		{
-			$_SESSION['enviroment_gather'] = 'Y';
+			SessionCookie::set('enviroment_gather', 'Y');
 		}
 		else
 		{
-			$_SESSION['enviroment_gather'] = 'N';
+			SessionCookie::set('enviroment_gather', 'N');
 		}
 
 		$redirectUrl = getNotEncodedUrl('', 'module', 'admin');

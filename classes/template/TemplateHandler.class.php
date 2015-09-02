@@ -357,7 +357,7 @@ class TemplateHandler
 		$__Context = &$GLOBALS['__Context__'];
 		$__Context->tpl_path = $this->path;
 
-		if($_SESSION['is_logged'])
+		if(SessionCookie::get('is_logged'))
 		{
 			$__Context->logged_info = Context::get('logged_info');
 		}

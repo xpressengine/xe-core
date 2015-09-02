@@ -380,7 +380,7 @@ class SFTPModuleInstaller extends ModuleInstaller
 		{
 			return new Object(-1, 'msg_ftp_invalid_auth_info');
 		}
-		$_SESSION['ftp_password'] = $this->ftp_password;
+		SessionCookie::set('ftp_password', $this->ftp_password);
 		$this->sftp = ssh2_sftp($this->connection);
 		return new Object();
 	}
@@ -542,7 +542,7 @@ class PHPFTPModuleInstaller extends ModuleInstaller
 			return new Object(-1, 'msg_ftp_invalid_auth_info');
 		}
 
-		$_SESSION['ftp_password'] = $this->ftp_password;
+		SessionCookie::set('ftp_password', $this->ftp_password);
 		if($this->ftp_info->ftp_pasv != "N")
 		{
 			ftp_pasv($this->connection, TRUE);
@@ -752,7 +752,7 @@ class FTPModuleInstaller extends ModuleInstaller
 			$this->_close();
 			return new Object(-1, 'msg_ftp_invalid_auth_info');
 		}
-		$_SESSION['ftp_password'] = $this->ftp_password;
+		SessionCookie::set('ftp_password', $this->ftp_password);
 		return new Object();
 	}
 

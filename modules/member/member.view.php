@@ -231,7 +231,7 @@ class memberView extends member
 			return $this->stop('msg_not_logged');
 		}
 
-		$_SESSION['rechecked_password_step'] = 'INPUT_PASSWORD';
+		SessionCookie::set('rechecked_password_step', 'INPUT_PASSWORD');
 
 		$templateFile = $this->getTemplatePath().'rechecked_password.html';
 		if(!is_readable($templateFile))
@@ -259,13 +259,13 @@ class memberView extends member
 	 */
 	function dispMemberModifyInfo() 
 	{
-		if($_SESSION['rechecked_password_step'] != 'VALIDATE_PASSWORD' && $_SESSION['rechecked_password_step'] != 'INPUT_DATA')
+		if(SessionCookie::get('rechecked_password_step') != 'VALIDATE_PASSWORD' && SessionCookie::get('rechecked_password_step') != 'INPUT_DATA')
 		{
 			$this->dispMemberModifyInfoBefore();
 			return;
 		}
 
-		$_SESSION['rechecked_password_step'] = 'INPUT_DATA';
+		SessionCookie::set('rechecked_password_step', 'INPUT_DATA');
 
 		$member_config = $this->member_config;
 
@@ -541,8 +541,8 @@ class memberView extends member
 		if(Context::get('is_logged')) return $this->stop('already_logged');
 
 		$user_id = Context::get('user_id');
-		$temp_password = $_SESSION['xe_temp_password_'.$user_id];
-		unset($_SESSION['xe_temp_password_'.$user_id]);
+		$temp_password = SessionCookie::get('xe_temp_password_'.$user_id);
+		SessionCookie::delete('xe_temp_password_'.$user_id);
 
 		if(!$user_id||!$temp_password) return new Object(-1,'msg_invaild_request');
 
@@ -556,8 +556,8 @@ class memberView extends member
 	 */
 	function dispMemberResendAuthMail() 
 	{
-		$authMemberSrl = $_SESSION['auth_member_srl'];
-		unset($_SESSION['auth_member_srl']);
+		$authMemberSrl = SessionCookie::get('auth_member_srl');
+		SessionCookie::delete('auth_member_srl');
 
 		if(Context::get('is_logged')) 
 		{
@@ -569,7 +569,7 @@ class memberView extends member
 			$oMemberModel = getModel('member');
 			$memberInfo = $oMemberModel->getMemberInfoByMemberSrl($authMemberSrl);
 
-			$_SESSION['auth_member_info'] = $memberInfo;
+			SessionCookie::set('auth_member_info', $memberInfo);
 			Context::set('memberInfo', $memberInfo);
 			$this->setTemplateFile('reset_mail');
 		}
@@ -581,14 +581,14 @@ class memberView extends member
 
 	function dispMemberModifyEmailAddress()
 	{
-		if($_SESSION['rechecked_password_step'] != 'VALIDATE_PASSWORD' && $_SESSION['rechecked_password_step'] != 'INPUT_DATA')
+		if(SessionCookie::get('rechecked_password_step') != 'VALIDATE_PASSWORD' && SessionCookie::get('rechecked_password_step') != 'INPUT_DATA')
 		{
 			Context::set('success_return_url', getUrl('', 'mid', Context::get('mid'), 'act', 'dispMemberModifyEmailAddress'));
 			$this->dispMemberModifyInfoBefore();
 			return;
 		}
 
-		$_SESSION['rechecked_password_step'] = 'INPUT_DATA';
+		SessionCookie::set('rechecked_password_step', 'INPUT_DATA');
 
 		$this->setTemplateFile('modify_email_address');
 	}
@@ -622,7 +622,7 @@ class memberView extends member
 			}
 			$errorLang[$val->column_name] = $val->column_title;
 		}
-		$_SESSION['XE_VALIDATOR_ERROR_LANG'] = $errorLang;
+		SessionCookie::set('XE_VALIDATOR_ERROR_LANG', $errorLang);
 
 		$js_code[] = '})(jQuery);';
 		$js_code[] = '//]]></script>';

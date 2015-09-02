@@ -181,7 +181,7 @@ class documentController extends document
 	 */
 	function addGrant($document_srl)
 	{
-		$_SESSION['own_document'][$document_srl] = true;
+		SessionCookie::set('own_document'.'.'.$document_srl, true);
 	}
 
 	/**
@@ -844,18 +844,18 @@ class documentController extends document
 		if(!$trigger_output->toBool()) return $trigger_output;
 
 		// Pass if read count is increaded on the session information
-		if($_SESSION['readed_document'][$document_srl]) return false;
+		if(SessionCookie::get('readed_document'.'.'.$document_srl)) return false;
 
 		// Pass if the author's IP address is as same as visitor's.
 		if($oDocument->get('ipaddress') == $_SERVER['REMOTE_ADDR'])
 		{
-			$_SESSION['readed_document'][$document_srl] = true;
+			SessionCookie::set('readed_document'.'.'.$document_srl, true);
 			return false;
 		}
 		// Pass ater registering sesscion if the author is a member and has same information as the currently logged-in user.
 		if($member_srl && $logged_info->member_srl == $member_srl)
 		{
-			$_SESSION['readed_document'][$document_srl] = true;
+			SessionCookie::set('readed_document'.'.'.$document_srl, true);
 			return false;
 		}
 
@@ -886,9 +886,9 @@ class documentController extends document
 		}
 
 		// Register session
-		if(!$_SESSION['banned_document'][$document_srl]) 
+		if(!SessionCookie::get('banned_document'.'.'.$document_srl)) 
 		{
-			$_SESSION['readed_document'][$document_srl] = true;
+			SessionCookie::set('readed_document'.'.'.$document_srl, true);
 		}
 
 		return TRUE;
@@ -1067,7 +1067,7 @@ class documentController extends document
 		if($point > 0) $failed_voted = 'failed_voted';
 		else $failed_voted = 'failed_blamed';
 		// Return fail if session already has information about votes
-		if($_SESSION['voted_document'][$document_srl])
+		if(SessionCookie::get('voted_document'.'.'.$document_srl))
 		{
 			return new Object(-1, $failed_voted);
 		}
@@ -1077,7 +1077,7 @@ class documentController extends document
 		// Pass if the author's IP address is as same as visitor's.
 		if($oDocument->get('ipaddress') == $_SERVER['REMOTE_ADDR'])
 		{
-			$_SESSION['voted_document'][$document_srl] = true;
+			SessionCookie::set('voted_document'.'.'.$document_srl, true);
 			return new Object(-1, $failed_voted);
 		}
 
@@ -1091,7 +1091,7 @@ class documentController extends document
 			// Pass after registering a session if author's information is same as the currently logged-in user's.
 			if($member_srl && $member_srl == $oDocument->get('member_srl'))
 			{
-				$_SESSION['voted_document'][$document_srl] = true;
+				SessionCookie::set('voted_document'.'.'.$document_srl, true);
 				return new Object(-1, $failed_voted);
 			}
 		}
@@ -1111,7 +1111,7 @@ class documentController extends document
 		// Pass after registering a session if log information has vote-up logs
 		if($output->data->count)
 		{
-			$_SESSION['voted_document'][$document_srl] = true;
+			SessionCookie::set('voted_document'.'.'.$document_srl, true);
 			return new Object(-1, $failed_voted);
 		}
 
@@ -1162,7 +1162,7 @@ class documentController extends document
 		}
 
 		// Leave in the session information
-		$_SESSION['voted_document'][$document_srl] = true;
+		SessionCookie::set('voted_document'.'.'.$document_srl, true);
 
 		// Return result
 		$output = new Object();
@@ -1188,7 +1188,7 @@ class documentController extends document
 	function declaredDocument($document_srl)
 	{
 		// Fail if session information already has a reported document
-		if($_SESSION['declared_document'][$document_srl]) return new Object(-1, 'failed_declared');
+		if(SessionCookie::get('declared_document'.'.'.$document_srl)) return new Object(-1, 'failed_declared');
 
 		// Check if previously reported
 		$args = new stdClass();
@@ -1215,7 +1215,7 @@ class documentController extends document
 
 		// Pass if the author's IP address is as same as visitor's.
 		if($oDocument->get('ipaddress') == $_SERVER['REMOTE_ADDR']) {
-			$_SESSION['declared_document'][$document_srl] = true;
+			SessionCookie::set('declared_document'.'.'.$document_srl, true);
 			return new Object(-1, 'failed_declared');
 		}
 
@@ -1228,7 +1228,7 @@ class documentController extends document
 			// Pass after registering a session if author's information is same as the currently logged-in user's.
 			if($member_srl && $member_srl == $oDocument->get('member_srl'))
 			{
-				$_SESSION['declared_document'][$document_srl] = true;
+				SessionCookie::set('declared_document'.'.'.$document_srl, true);
 				return new Object(-1, 'failed_declared');
 			}
 		}
@@ -1250,7 +1250,7 @@ class documentController extends document
 		// Pass after registering a sesson if reported/declared documents are in the logs.
 		if($output->data->count)
 		{
-			$_SESSION['declared_document'][$document_srl] = true;
+			SessionCookie::set('declared_document'.'.'.$document_srl, true);
 			return new Object(-1, 'failed_declared');
 		}
 
@@ -1285,7 +1285,7 @@ class documentController extends document
 		$oDB->commit();
 
 		// Leave in the session information
-		$_SESSION['declared_document'][$document_srl] = true;
+		SessionCookie::set('declared_document'.'.'.$document_srl, true);
 
 		$this->setMessage('success_declared');
 	}
@@ -2203,8 +2203,8 @@ class documentController extends document
 			{
 				$document_srl = (int)trim($documents[$i]);
 				if(!$document_srls) continue;
-				if($_SESSION['document_management'][$document_srl]) unset($_SESSION['document_management'][$document_srl]);
-				else $_SESSION['document_management'][$document_srl] = true;
+				if(SessionCookie::get('document_management'.'.'.$document_srl)) SessionCookie::delete('document_management'.'.'.$document_srl);
+				else SessionCookie::set('document_management'.'.'.$document_srl, true);
 			}
 		}
 	}
@@ -2327,7 +2327,7 @@ class documentController extends document
 			$msg_code = 'success_declare_canceled';
 		}
 
-		$_SESSION['document_management'] = array();
+		SessionCookie::set('document_management', array());
 
 		$this->setMessage($msg_code);
 
