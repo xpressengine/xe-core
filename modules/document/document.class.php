@@ -118,11 +118,17 @@ class document extends ModuleObject
 		// 2011. 10. 25 status index check
 		if(!$oDB->isIndexExists("documents", "idx_module_status")) return true;
 
+		// 2015 rate
+		if(!$oDB->isColumnExists("documents", "ratecalc")) return true;
+		if(!$oDB->isColumnExists("documents", "rateval")) return true;
+		if(!$oDB->isColumnExists("documents", "ratecnt")) return true;
+		
 		// 2012. 02. 27 Add a trigger to copy extra keys when the module is copied 
 		if(!$oModuleModel->getTrigger('module.procModuleAdminCopyModule', 'document', 'controller', 'triggerCopyModuleExtraKeys', 'after')) return true;
 
 		// 2012. 08. 29 Add a trigger to copy additional setting when the module is copied 
 		if(!$oModuleModel->getTrigger('module.procModuleAdminCopyModule', 'document', 'controller', 'triggerCopyModule', 'after')) return true;
+
 
 		return false;
 	}
@@ -308,6 +314,25 @@ class document extends ModuleObject
 		if(!$oDB->isIndexExists("documents", "idx_module_status"))
 			$oDB->addIndex("documents", "idx_module_status", array("module_srl","status"));
 
+		// 2015 rate column
+		if(!$oDB->isColumnExists("documents", "ratecalc"))
+		{
+			$oDB->addColumn('documents', 'ratecalc', 'number', 11, 0, true);
+			$oDB->addIndex('documents', 'idx_ratecalc', array('ratecalc'));
+		}
+		
+		if(!$oDB->isColumnExists("documents", "ratecnt"))
+		{
+			$oDB->addColumn('documents', 'ratecnt', 'number', 11, 0, true);
+			$oDB->addIndex('documents', 'idx_ratecnt', array('ratecnt'));
+		}
+		
+		if(!$oDB->isColumnExists("documents", "rateval"))
+		{
+			$oDB->addColumn('documents', 'rateval', 'number', 11, 0, true);
+			$oDB->addIndex('documents', 'idx_ratecnt', array('rateval'));
+		}
+		
 		// 2012. 02. 27 Add a trigger to copy extra keys when the module is copied 
 		if(!$oModuleModel->getTrigger('module.procModuleAdminCopyModule', 'document', 'controller', 'triggerCopyModuleExtraKeys', 'after'))
 		{
