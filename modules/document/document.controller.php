@@ -18,6 +18,170 @@ class documentController extends document
 	{
 	}
 
+
+	function procDocumentRate()
+	{
+		$columnList = array('module_srl', 'module');
+		$oModuleModel = getModel('module');
+		$module_info = $oModuleModel->getModuleInfoByModuleSrl(Context::get('module_srl'), $columnList);
+		$grant = $oModuleModel->getGrant($module_info, Context::get('logged_info'));
+		if(!$grant->manager) return new Object(-1,'msg_not_permitted');
+		
+		if(!Context::get('is_logged'))
+			return new Object(-1, 'msg_invalid_request');
+		
+		$document_srl = Context::get('documentsrl');
+
+		$point = Context::get('point');
+		
+		if(!$document_srl) return;
+		
+		if($point > 10)
+			return;
+		if($point > 0)
+			$failed_voted = 'failed_voted';
+		else
+			return;
+		
+		// Return fail if session already has information about votes
+		if($_SESSION['rate_document'][$document_srl])
+			return new Object(-1, $failed_voted);
+		
+		// Get the original document
+		$oDocumentModel = getModel('document');
+		$oDocument = $oDocumentModel->getDocument($document_srl, false, false);
+		// Pass if the author's IP address is as same as visitor's.
+		if($oDocument->get('ipaddress') == $_SERVER['REMOTE_ADDR'])
+		{
+			$_SESSION['rate_document'][$document_srl] = true;
+			return new Object(-1, $failed_voted);
+		}
+
+		// Create a member model object
+		$oMemberModel = getModel('member');
+		$member_srl = $oMemberModel->getLoggedMemberSrl();
+
+		// Check if document's author is a member.
+		if($oDocument->get('member_srl'))
+		{
+			// Pass after registering a session if author's information is same as the currently logged-in user's.
+			if($member_srl && $member_srl == $oDocument->get('member_srl'))
+			{
+				$_SESSION['rate_document'][$document_srl] = true;
+				return new Object(-1, $failed_voted);
+			}
+		}
+
+		// Use member_srl for logged-in members and IP address for non-members.
+		$args = new stdClass;
+		if($member_srl)
+		{
+			$args->member_srl = $member_srl;
+		}
+		else
+		{
+			$args->ipaddress = $_SERVER['REMOTE_ADDR'];
+		}
+		$args->document_srl = $document_srl;
+		$output = executeQuery('document.getDocumentRateLogInfo', $args);
+		// Pass after registering a session if log information has vote-up logs
+		if($output->data->count)
+		{
+			$_SESSION['rate_document'][$document_srl] = true;
+			return new Object(-1, $failed_voted);
+		}
+
+		// begin transaction
+		$oDB = DB::getInstance();
+		$oDB->begin();
+
+		// Update the voted count
+		if($point < 0)
+		{
+			return $point;
+		}
+		else
+		{
+			$args->rateval = $oDocument->get('rateval') + $point;
+			$output = executeQuery('document.updateRateCount', $args);
+		}
+		if(!$output->toBool()) return $output;
+		// Leave logs
+		$args->point = $point;
+		$output = executeQuery('document.insertDocumentRateLog', $args);
+		//if(!$output->toBool()) return $output;
+
+		$obj = new stdClass;
+		$obj->member_srl = $oDocument->get('member_srl');
+		$obj->module_srl = $oDocument->get('module_srl');
+		$obj->document_srl = $oDocument->get('document_srl');
+		$obj->update_target = 'rateval';
+		$obj->point = $point;
+		$obj->before_point = $oDocument->get('rateval');
+		$obj->after_point = $args->rateval;
+		$trigger_output = ModuleHandler::triggerCall('document.updateRateCount', 'after', $obj);
+		if(!$trigger_output->toBool())
+		{
+			$oDB->rollback();
+			return $trigger_output;
+		}
+
+		$oDB->commit();
+
+		$oCacheHandler = CacheHandler::getInstance('object');
+		if($oCacheHandler->isSupport())
+		{
+			//remove document item from cache
+			$cache_key = 'document_item:'. getNumberingPath($document_srl) . $document_srl;
+			$oCacheHandler->delete($cache_key);
+		}
+
+		// Leave in the session information
+		$_SESSION['rate_document'][$document_srl] = true;
+
+		// Return result
+		$output = new Object();
+		if($point > 0)
+		{
+			$output->setMessage('success_voted');
+			$output->add('rateval', $obj->after_point);
+		}
+		else
+		{
+			return $point;
+		}
+		
+		
+		// Update the voted count
+		if($point < 0)
+		{
+			return $point;
+		}
+		else
+		{
+			$args->ratecnt = $oDocument->get('ratecnt') + 1;
+			$output = executeQuery('document.updateRatecntCount', $args);
+		}
+		
+		$output->add('ratecnt', $oDocument->get('ratecnt') + 1);
+		
+		// Update the voted count
+		if($point < 0)
+		{
+			return $point;
+		}
+		else
+		{
+			$args->ratecalc = ($oDocument->get('rateval') + $point)/($oDocument->get('ratecnt') + 1);
+			$output = executeQuery('document.updateRatecalcCount', $args);
+		}
+		
+		$output->add('ratecalc', ($oDocument->get('rateval')+$point)/($oDocument->get('ratecnt') + 1));
+		
+		return $output;
+	}
+	
+
 	/**
 	 * Action to handle vote-up of the post (Up)
 	 * @return Object
