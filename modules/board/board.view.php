@@ -138,6 +138,33 @@ class boardView extends board
 	}
 
 	/**
+	 * @brief display eid list
+	 **/
+	function dispBoardEidList()
+	{
+		// check if there is not grant fot view list, then alert an warning message
+		if(!$this->grant->list)
+		{
+			return $this->dispBoardMessage('msg_not_permitted');
+		}
+
+		$mid = Context::get('mid');
+		$eid_number = Context::get('eid_number');
+		$oModuleModel = getModel('module');
+		
+		$args = new StdClass();
+		if($eid_number>0)
+			$args->idx = $eid_number;
+		$args->module_srl = $oModuleModel->getModuleSrlByMid($mid);
+		$output = executeQueryArray('document.inEV2', $args);
+		Context::set('eid_list',$output->data);
+		$oSecurity = new Security();
+		$oSecurity->encodeHTML('eid_list.');
+
+		$this->setTemplateFile('eid_list');
+	}
+
+	/**
 	 * @brief display board contents
 	 **/
 	function dispBoardContent()
