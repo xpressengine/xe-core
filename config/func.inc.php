@@ -472,6 +472,18 @@ function getFullSiteUrl()
 }
 
 /**
+ * Return the exact url of the current page
+ *
+ * @return string
+ */
+function getCurrentPageUrl()
+{
+	$protocol = $_SERVER['HTTPS'] == 'on' ? 'https://' : 'http://';
+	$url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+	return htmlspecialchars($url, ENT_COMPAT, 'UTF-8', FALSE);
+}
+
+/**
  * Return if domain of the virtual site is url type or id type
  *
  * @param string $domain
@@ -1197,6 +1209,24 @@ function removeSrcHack($match)
 			}
 
 			$attrs[$name] = $val;
+		}
+	}
+
+	$filter_arrts = array('style', 'src', 'href');
+
+	if($tag === 'object') array_push($filter_arrts, 'data');
+	if($tag === 'param') array_push($filter_arrts, 'value');
+
+	foreach($filter_arrts as $attr)
+	{
+		if(!isset($attrs[$attr])) continue;
+
+		$attr_value = rawurldecode($attrs[$attr]);
+		$attr_value = htmlspecialchars_decode($attr_value, ENT_COMPAT);
+		$attr_value = preg_replace('/\s+|[\t\n\r]+/', '', $attr_value);
+		if(preg_match('@(\?|&|;)(act=)@i', $attr_value))
+		{
+			unset($attrs[$attr]);
 		}
 	}
 
