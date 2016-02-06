@@ -331,19 +331,40 @@ class fileController extends file
 		header("Content-Type: application/octet-stream");
 		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 
-		header("Content-Length: " .(string)($file_size));
 		header('Content-Disposition: attachment; filename="'.$filename.'"');
 		header("Content-Transfer-Encoding: binary\n");
-
-		// if file size is lager than 10MB, use fread function (#18675748)
-		if(filesize($uploaded_filename) > 1024 * 1024)
+		header("Content-Length: " .(string)($file_size));
+		
+		if(isset($_SERVER['HTTP_RANGE']))
 		{
-			while(!feof($fp)) echo fread($fp, 1024);
-			fclose($fp);
+			preg_match('/bytes=(\d+)-(\d+)?/', $_SERVER['HTTP_RANGE'], $matches);
+			$start = intval($matches[1]);
+			$length = intval($matches[2]) - $start;
+			fseek($fp, $start);
+			header('HTTP/1.1 206 Partial Content');
+			header('Content-Range: bytes '.$start.'-'.($start+$length).'/'.$file_size);
+			if($length > 1024 * 1024)
+			{
+				while(!feof($fp)) echo fread($fp, 1024);
+				fclose($fp);
+			}
+			else
+			{
+				fpassthru($fp);
+			}
 		}
 		else
 		{
-			fpassthru($fp);
+			// if file size is lager than 10MB, use fread function (#18675748)
+			if($file_size > 1024 * 1024)
+			{
+				while(!feof($fp)) echo fread($fp, 1024);
+				fclose($fp);
+			}
+			else
+			{
+				fpassthru($fp);
+			}
 		}
 
 		exit();
