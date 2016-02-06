@@ -1103,7 +1103,7 @@ class importerAdminController extends importer
 						$file_obj->file_size = filesize($filename);
 						$file_obj->comment = NULL;
 						$file_obj->member_srl = 0;
-						$file_obj->sid = md5(rand(1111111,9999999) . rand(1111111,9999999));
+						$file_obj->sid = md5((string)rand(1111111,9999999).(string)rand(1111111,9999999));
 						$file_obj->isvalid = 'Y';
 						$output = executeQuery('file.insertFile', $file_obj);
 
