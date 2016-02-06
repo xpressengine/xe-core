@@ -726,7 +726,7 @@ class fileController extends file
 		$args->file_size = @filesize($filename);
 		$args->comment = NULL;
 		$args->member_srl = $member_srl;
-		$args->sid = md5((string)rand(0000000,9999999) . (string)rand(0000000,9999999)));
+		$args->sid = md5((string)rand(1111111,9999999) . (string)rand(1111111,9999999)));
 
 		$output = executeQuery('file.insertFile', $args);
 		if(!$output->toBool()) return $output;
