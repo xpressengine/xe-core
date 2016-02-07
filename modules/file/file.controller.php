@@ -333,7 +333,6 @@ class fileController extends file
 
 		header('Content-Disposition: attachment; filename="'.$filename.'"');
 		header("Content-Transfer-Encoding: binary\n");
-		header("Content-Length: " .(string)($file_size));
 		
 		if(isset($_SERVER['HTTP_RANGE']))
 		{
@@ -363,6 +362,7 @@ class fileController extends file
 		}
 		else
 		{
+			header("Content-Length: " .(string)($file_size));
 			// if file size is lager than 10MB, use fread function (#18675748)
 			if($file_size > 1024 * 1024)
 			{
