@@ -102,7 +102,17 @@ class ModuleHandler extends Handler
 
 		// call a trigger before moduleHandler init
 		ModuleHandler::triggerCall('moduleHandler.init', 'before', $this);
-		set_error_handler(array($this, 'xeErrorLog'), E_WARNING);
+		if(__DEBUG__ == 1 && __DEBUG_OUTPUT__ == 0)
+		{
+			if(__DEBUG_PROTECT__ === 1 && __DEBUG_PROTECT_IP__ == $_SERVER['REMOTE_ADDR'])
+			{
+				set_error_handler(array($this, 'xeErrorLog'), E_WARNING);
+			}
+			else if(__DEBUG_PROTECT__ === 0)
+			{
+				set_error_handler(array($this, 'xeErrorLog'), E_WARNING);
+			}
+		}
 
 		// execute addon (before module initialization)
 		$called_position = 'before_module_init';
