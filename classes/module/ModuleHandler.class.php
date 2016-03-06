@@ -131,20 +131,12 @@ class ModuleHandler extends Handler
 		{
 			$errorname = 'Warrning!';
 		}
-		$debug_file = _XE_PATH_ . 'files/_debug_message.php';
-		$buff = $errorname . " : ";
+		$buff = "\n".$errorname . " : ";
 		$buff .= $errormassage . "\n";
 		$buff .= "file : " . $errorfile . " line : ";
 		$buff .= $errorline . "\n";
-		$buff = "\n<?php\n" . $buff . "?>\n";
-		$buff = sprintf("[%s]\n%s", date('Y-m-d H:i:s'), print_r($buff, true));
-
-		if(!@file_put_contents($debug_file, $buff, FILE_APPEND | LOCK_EX))
-		{
-			return;
-		}
+		debugPrint($buff);
 		restore_error_handler();
-
 		return true;
 	}
 
