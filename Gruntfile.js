@@ -246,7 +246,7 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('build', '', function(A, B) {
 		var _only_export = false;
-		var tasks = ['krzip', 'syndication'];
+		var tasks = ['krzip', 'syndication', 'seo'];
 
 		if(!A) {
 			grunt.fail.warn('Undefined build target.');
@@ -392,6 +392,15 @@ module.exports = function(grunt) {
 					grunt.file.delete('build/xe/modules/syndication/.git');
 					taskDone();
 				});
+
+        // seo
+        grunt.util.spawn({
+          cmd: "git",
+          args: ['clone', '-b', 'master', 'git@github.com:xpressengine/xe-module-seo.git', 'build/xe/modules/seo']
+        }, function (error, result, code) {
+          grunt.file.delete('build/xe/modules/seo/.git');
+          taskDone();
+        });
 			});
 		});
 	});
