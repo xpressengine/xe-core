@@ -107,6 +107,11 @@ class boardController extends board
 				return new Object(-1,'msg_not_permitted');
 			}
 
+			if($this->module_info->use_anonymous == 'Y') {
+				$obj->member_srl = $oDocument->get('member_srl') * -1;
+				$oDocument->add('member_srl', $obj->member_srl);
+			}
+
 			if($this->module_info->protect_content=="Y" && $oDocument->get('comment_count')>0 && $this->grant->manager==false)
 			{
 				return new Object(-1,'msg_protect_content');
@@ -127,7 +132,7 @@ class boardController extends board
 				$obj->update_order = $obj->list_order = (getNextSequence() * -1);
 			}
 
-			$output = $oDocumentController->updateDocument($oDocument, $obj);
+			$output = $oDocumentController->updateDocument($oDocument, $obj, true);
 			$msg_code = 'success_updated';
 
 		// insert a new document otherwise
