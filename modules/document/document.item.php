@@ -804,8 +804,6 @@ class documentItem extends Object
 
 		// If not specify its height, create a square
 		if(!$height) $height = $width;
-		// Return false if neither attachement nor image files in the document
-		if(!$this->get('uploaded_count') && !preg_match("!<img!is", $this->get('content'))) return;
 		// Get thumbnai_type information from document module's configuration
 		if(!in_array($thumbnail_type, array('crop','ratio')))
 		{
