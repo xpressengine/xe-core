@@ -308,10 +308,23 @@ class fileController extends file
 
 		$file_size = $file_obj->file_size;
 		$filename = $file_obj->source_filename;
-		if(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== FALSE || strpos($_SERVER['HTTP_USER_AGENT'], 'Edge') !== FALSE || (strpos($_SERVER['HTTP_USER_AGENT'], 'Windows') !== FALSE && strpos($_SERVER['HTTP_USER_AGENT'], 'Trident') !== FALSE && strpos($_SERVER['HTTP_USER_AGENT'], 'rv:') !== FALSE))
+				if(preg_match('#(?:Chrome|Edge)/(\d+)\.#', $_SERVER['HTTP_USER_AGENT'], $matches) && $matches[1] >= 11)
+		{
+			$filename_param = "filename*=UTF-8''" . rawurlencode($filename) . '; filename="' . rawurlencode($filename) . '"';
+		}
+		elseif(preg_match('#(?:Firefox|Safari|Trident)/(\d+)\.#', $_SERVER['HTTP_USER_AGENT'], $matches) && $matches[1] >= 6)
+		{
+			$filename_param = "filename*=UTF-8''" . rawurlencode($filename) . '; filename="' . rawurlencode($filename) . '"';
+		}
+		// Filename encoding for browsers that do not support RFC 5987
+		elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== FALSE)
 		{
 			$filename = rawurlencode($filename);
-			$filename = preg_replace('/\./', '%2e', $filename, substr_count($filename, '.') - 1);
+			$filename_param = 'filename="' . preg_replace('/\./', '%2e', $filename, substr_count($filename, '.') - 1) . '"';
+		}
+		else
+		{
+			$filename_param = 'filename="' . $filename . '"';
 		}
 
 		if($is_android)
@@ -332,7 +345,7 @@ class fileController extends file
 		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 
 		header("Content-Length: " .(string)($file_size));
-		header('Content-Disposition: attachment; filename="'.$filename.'"');
+		header('Content-Disposition: attachment; ' . $filename_param);
 		header("Content-Transfer-Encoding: binary\n");
 
 		// if file size is lager than 10MB, use fread function (#18675748)
