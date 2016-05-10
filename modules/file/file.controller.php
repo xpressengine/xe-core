@@ -331,19 +331,48 @@ class fileController extends file
 		header("Content-Type: application/octet-stream");
 		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 
-		header("Content-Length: " .(string)($file_size));
 		header('Content-Disposition: attachment; filename="'.$filename.'"');
 		header("Content-Transfer-Encoding: binary\n");
-
-		// if file size is lager than 10MB, use fread function (#18675748)
-		if(filesize($uploaded_filename) > 1024 * 1024)
+		
+		if(isset($_SERVER['HTTP_RANGE']))
 		{
-			while(!feof($fp)) echo fread($fp, 1024);
-			fclose($fp);
+			$ranges = array_map('intval', explode('-', substr($_SERVER['HTTP_RANGE'], 6)));
+
+			if(!$ranges[1])
+			{
+				$ranges[1] = $size - 1;
+			}
+
+			header('HTTP/1.1 206 Partial Content');
+			header('Accept-Ranges: bytes');
+			header('Content-Length: ' . ($ranges[1] - $ranges[0]+1));
+
+			header(sprintf('Content-Range: bytes %d-%d/%d', $ranges[0], $ranges[1], $size));
+			$chunkSize = 8192;
+
+			fseek($fp, $ranges[0]);
+			while(true) {
+				if(ftell($fp) >= $ranges[1]) {
+					break;
+				}
+				echo fread($fp, $chunkSize);
+				@ob_flush();
+				flush();
+			}
 		}
 		else
 		{
-			fpassthru($fp);
+			header("Content-Length: " .(string)($file_size));
+			// if file size is lager than 10MB, use fread function (#18675748)
+			if($file_size > 1024 * 1024)
+			{
+				while(!feof($fp)) echo fread($fp, 1024);
+				fclose($fp);
+			}
+			else
+			{
+				fpassthru($fp);
+			}
 		}
 
 		exit();
