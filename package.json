@@ -1,7 +1,8 @@
 {
+  "private": true
   "name": "XpressEngine",
   "author": "NAVER",
-  "license": "GNU LGPL",
+  "license": "LGPL-2.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/xpressengine/xe-core.git"
