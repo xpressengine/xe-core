@@ -873,29 +873,34 @@ class documentItem extends Object
 			$target_src = null;
 			preg_match_all("!src=(\"|')([^\"' ]*?)(\"|')!is", $content, $matches, PREG_SET_ORDER);
 			$cnt = count($matches);
+
 			for($i=0;$i<$cnt;$i++)
 			{
 				$target_src = trim($matches[$i][2]);
 				if(!preg_match("/\.(jpg|png|jpeg|gif|bmp)$/i",$target_src)) continue;
 				if(preg_match('/\/(common|modules|widgets|addons|layouts)\//i', $target_src)) continue;
-				else
+
+				if(!preg_match('/^(http|https):\/\//i',$target_src))
 				{
-					if(!preg_match('/^(http|https):\/\//i',$target_src)) $target_src = Context::getRequestUri().$target_src;
-
-					$tmp_file = sprintf('./files/cache/tmp/%d', md5(rand(111111,999999).$this->document_srl));
-					if(!is_dir('./files/cache/tmp')) FileHandler::makeDir('./files/cache/tmp');
-					FileHandler::getRemoteFile($target_src, $tmp_file);
-					if(!file_exists($tmp_file)) continue;
-					else
-					{
-						list($_w, $_h, $_t, $_a) = @getimagesize($tmp_file);
-						if($_w<$width || $_h<$height) continue;
-
-						$source_file = $tmp_file;
-						$is_tmp_file = true;
-						break;
-					}
+					$target_src = Context::getRequestUri().$target_src;
 				}
+
+
+				if(!is_dir('./files/cache/tmp'))
+				{
+					FileHandler::makeDir('./files/cache/tmp');
+				}
+
+				$tmp_file = sprintf('./files/cache/tmp/%d', md5(rand(111111,999999).$this->document_srl));
+				FileHandler::getRemoteFile($target_src, $tmp_file);
+				if(!file_exists($tmp_file)) continue;
+
+				list($_w, $_h, $_t, $_a) = getimagesize($tmp_file);
+				if($_w < ($width * 0.3) && $_h < ($height * 0.3)) continue;
+
+				$source_file = $tmp_file;
+				$is_tmp_file = true;
+				break;
 			}
 		}
 
