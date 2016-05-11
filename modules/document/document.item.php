@@ -878,17 +878,11 @@ class documentItem extends Object
 			{
 				$target_src = trim($matches[$i][2]);
 				if(!preg_match("/\.(jpg|png|jpeg|gif|bmp)$/i",$target_src)) continue;
-				if(preg_match('/\/(common|modules|widgets|addons|layouts)\//i', $target_src)) continue;
+				if(preg_match('/\/(common|modules|widgets|addons|layouts|m\.layouts)\//i', $target_src)) continue;
 
 				if(!preg_match('/^(http|https):\/\//i',$target_src))
 				{
 					$target_src = Context::getRequestUri().$target_src;
-				}
-
-
-				if(!is_dir('./files/cache/tmp'))
-				{
-					FileHandler::makeDir('./files/cache/tmp');
 				}
 
 				$tmp_file = sprintf('./files/cache/tmp/%d', md5(rand(111111,999999).$this->document_srl));
