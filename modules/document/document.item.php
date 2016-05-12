@@ -867,17 +867,17 @@ class documentItem extends Object
 		}
 
 		// If not exists, file an image file from the content
+		$is_tmp_file = false;
 		if(!$source_file)
 		{
+			$random = new Password();
 			$content = $this->get('content');
-			$target_src = null;
-			preg_match_all("!src=(\"|')([^\"' ]*?)(\"|')!is", $content, $matches, PREG_SET_ORDER);
-			$cnt = count($matches);
 
-			for($i=0;$i<$cnt;$i++)
+			preg_match_all("!<img[^>]*src=(?:\"|\')([^\"\']*?)(?:\"|\')!is", $content, $matches, PREG_SET_ORDER);
+
+			foreach($matches as $target_image)
 			{
-				$target_src = trim($matches[$i][2]);
-				if(!preg_match("/\.(jpg|png|jpeg|gif|bmp)$/i",$target_src)) continue;
+				$target_src = trim($target_image[1]);
 				if(preg_match('/\/(common|modules|widgets|addons|layouts|m\.layouts)\//i', $target_src)) continue;
 
 				if(!preg_match('/^(http|https):\/\//i',$target_src))
@@ -885,12 +885,18 @@ class documentItem extends Object
 					$target_src = Context::getRequestUri().$target_src;
 				}
 
-				$tmp_file = sprintf('./files/cache/tmp/%d', md5(rand(111111,999999).$this->document_srl));
+				$target_src = htmlspecialchars_decode($target_src);
+
+				$tmp_file = _XE_PATH_ . 'files/cache/tmp/' . $random->createSecureSalt(32, 'hex');
 				FileHandler::getRemoteFile($target_src, $tmp_file);
 				if(!file_exists($tmp_file)) continue;
 
-				list($_w, $_h, $_t, $_a) = getimagesize($tmp_file);
-				if($_w < ($width * 0.3) && $_h < ($height * 0.3)) continue;
+				$imageinfo = getimagesize($tmp_file);
+				list($_w, $_h) = $imageinfo;
+				if($imageinfo === false || ($_w < ($width * 0.3) && $_h < ($height * 0.3))) {
+					FileHandler::removeFile($tmp_file);
+					continue;
+				}
 
 				$source_file = $tmp_file;
 				$is_tmp_file = true;
