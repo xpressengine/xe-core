@@ -554,10 +554,22 @@ class commentItem extends Object
 			$height = $width;
 		}
 
-		// return false if neigher attached file nor image;
-		if(!$this->hasUploadedFiles() && !preg_match("!<img!is", $this->get('content')))
+		$content = $this->get('content');
+		if(!$this->hasUploadedFiles())
 		{
-			return;
+			if(!$content)
+			{
+				$args = new stdClass();
+				$args->comment_srl = $this->comment_srl;
+				$output = executeQuery('document.getComment', $args, array('content'));
+				if($output->toBool() && $output->data)
+				{
+					$content = $output->data->content;
+					$this->add('content', $content);
+				}
+			}
+
+			if(!preg_match("!<img!is", $content)) return;
 		}
 
 		// get thumbail generation info on the doc module configuration.
@@ -626,7 +638,6 @@ class commentItem extends Object
 		if(!$source_file)
 		{
 			$random = new Password();
-			$content = $this->get('content');
 
 			preg_match_all("!<img[^>]*src=(?:\"|\')([^\"\']*?)(?:\"|\')!is", $content, $matches, PREG_SET_ORDER);
 
