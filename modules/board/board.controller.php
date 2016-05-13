@@ -332,7 +332,10 @@ class boardController extends board
 			return $output;
 		}
 
-		$this->setMessage('success_registed');
+		if(Context::get('xeVirtualRequestMethod') !== 'xml')
+		{
+			$this->setMessage('success_registed');
+		}
 		$this->add('mid', Context::get('mid'));
 		$this->add('document_srl', $obj->document_srl);
 		$this->add('comment_srl', $obj->comment_srl);
