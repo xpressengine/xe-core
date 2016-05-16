@@ -360,6 +360,8 @@ class documentController extends document
 	 */
 	function updateDocument($source_obj, $obj, $manual_updated = FALSE)
 	{
+		$logged_info = Context::get('logged_info');
+
 		if(!$manual_updated && !checkCSRF())
 		{
 			return new Object(-1, 'msg_invalid_request');
@@ -454,7 +456,6 @@ class documentController extends document
 		// If an author is identical to the modifier or history is used, use the logged-in user's information.
 		if(Context::get('is_logged') && !$manual_updated)
 		{
-			$logged_info = Context::get('logged_info');
 			if($source_obj->get('member_srl')==$logged_info->member_srl)
 			{
 				$obj->member_srl = $logged_info->member_srl;

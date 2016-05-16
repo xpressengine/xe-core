@@ -804,8 +804,25 @@ class documentItem extends Object
 
 		// If not specify its height, create a square
 		if(!$height) $height = $width;
+
 		// Return false if neither attachement nor image files in the document
-		if(!$this->get('uploaded_count') && !preg_match("!<img!is", $this->get('content'))) return;
+		$content = $this->get('content');
+		if(!$this->get('uploaded_count'))
+		{
+			if(!$content)
+			{
+				$args = new stdClass();
+				$args->document_srl = $this->document_srl;
+				$output = executeQuery('document.getDocument', $args, array('content'));
+				if($output->toBool() && $output->data)
+				{
+					$content = $output->data->content;
+					$this->add('content', $content);
+				}
+			}
+
+			if(!preg_match("!<img!is", $content)) return;
+		}
 		// Get thumbnai_type information from document module's configuration
 		if(!in_array($thumbnail_type, array('crop','ratio')))
 		{
@@ -865,37 +882,40 @@ class documentItem extends Object
 				$source_file = $first_image;
 			}
 		}
-
 		// If not exists, file an image file from the content
+		$is_tmp_file = false;
 		if(!$source_file)
 		{
-			$content = $this->get('content');
-			$target_src = null;
-			preg_match_all("!src=(\"|')([^\"' ]*?)(\"|')!is", $content, $matches, PREG_SET_ORDER);
-			$cnt = count($matches);
-			for($i=0;$i<$cnt;$i++)
+			$random = new Password();
+
+			preg_match_all("!<img[^>]*src=(?:\"|\')([^\"\']*?)(?:\"|\')!is", $content, $matches, PREG_SET_ORDER);
+
+			foreach($matches as $target_image)
 			{
-				$target_src = trim($matches[$i][2]);
-				if(!preg_match("/\.(jpg|png|jpeg|gif|bmp)$/i",$target_src)) continue;
-				if(preg_match('/\/(common|modules|widgets|addons|layouts)\//i', $target_src)) continue;
-				else
+				$target_src = trim($target_image[1]);
+				if(preg_match('/\/(common|modules|widgets|addons|layouts|m\.layouts)\//i', $target_src)) continue;
+
+				if(!preg_match('/^(http|https):\/\//i',$target_src))
 				{
-					if(!preg_match('/^(http|https):\/\//i',$target_src)) $target_src = Context::getRequestUri().$target_src;
-
-					$tmp_file = sprintf('./files/cache/tmp/%d', md5(rand(111111,999999).$this->document_srl));
-					if(!is_dir('./files/cache/tmp')) FileHandler::makeDir('./files/cache/tmp');
-					FileHandler::getRemoteFile($target_src, $tmp_file);
-					if(!file_exists($tmp_file)) continue;
-					else
-					{
-						list($_w, $_h, $_t, $_a) = @getimagesize($tmp_file);
-						if($_w<$width || $_h<$height) continue;
-
-						$source_file = $tmp_file;
-						$is_tmp_file = true;
-						break;
-					}
+					$target_src = Context::getRequestUri().$target_src;
 				}
+
+				$target_src = htmlspecialchars_decode($target_src);
+
+				$tmp_file = _XE_PATH_ . 'files/cache/tmp/' . $random->createSecureSalt(32, 'hex');
+				FileHandler::getRemoteFile($target_src, $tmp_file);
+				if(!file_exists($tmp_file)) continue;
+
+				$imageinfo = getimagesize($tmp_file);
+				list($_w, $_h) = $imageinfo;
+				if($imageinfo === false || ($_w < ($width * 0.3) && $_h < ($height * 0.3))) {
+					FileHandler::removeFile($tmp_file);
+					continue;
+				}
+
+				$source_file = $tmp_file;
+				$is_tmp_file = true;
+				break;
 			}
 		}
 

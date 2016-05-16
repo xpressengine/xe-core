@@ -1224,7 +1224,7 @@ function removeSrcHack($match)
 		$attr_value = rawurldecode($attrs[$attr]);
 		$attr_value = htmlspecialchars_decode($attr_value, ENT_COMPAT);
 		$attr_value = preg_replace('/\s+|[\t\n\r]+/', '', $attr_value);
-		if(preg_match('@(\?|&|;)(act=)@i', $attr_value))
+		if(preg_match('@(\?|&|;)(act=(\w+))@i', $attr_value, $m) && $m[3] !== 'procFileDownload')
 		{
 			unset($attrs[$attr]);
 		}
@@ -1443,7 +1443,7 @@ function detectUTF8($string, $return_convert = FALSE, $urldecode = TRUE)
 	}
 
 	$sample = iconv('utf-8', 'utf-8', $string);
-	$is_utf8 = (md5($sample) == md5($string));
+	$is_utf8 = (md5($sample) === md5($string));
 
 	if(!$urldecode)
 	{

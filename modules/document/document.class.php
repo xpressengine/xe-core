@@ -49,6 +49,11 @@ class document extends ModuleObject
 		// 2009. 01. 29 Added a trigger for additional setup
 		$oModuleController->insertTrigger('module.dispAdditionSetup', 'document', 'view', 'triggerDispDocumentAdditionSetup', 'before');
 
+		if(!is_dir('./files/cache/tmp'))
+		{
+			FileHandler::makeDir('./files/cache/tmp');
+		}
+
 		return new Object();
 	}
 
@@ -329,6 +334,10 @@ class document extends ModuleObject
 	 */
 	function recompileCache()
 	{
+		if(!is_dir('./files/cache/tmp'))
+		{
+			FileHandler::makeDir('./files/cache/tmp');
+		}
 	}
 
 	/**

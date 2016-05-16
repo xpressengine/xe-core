@@ -108,7 +108,7 @@ class boardController extends board
 			}
 
 			if($this->module_info->use_anonymous == 'Y') {
-				$obj->member_srl = $oDocument->get('member_srl') * -1;
+				$obj->member_srl = abs($oDocument->get('member_srl')) * -1;
 				$oDocument->add('member_srl', $obj->member_srl);
 			}
 
@@ -171,7 +171,10 @@ class boardController extends board
 		$this->add('document_srl', $output->get('document_srl'));
 
 		// alert a message
-		$this->setMessage($msg_code);
+		if(Context::get('xeVirtualRequestMethod') !== 'xml')
+		{
+			$this->setMessage($msg_code);
+		}
 	}
 
 	/**
@@ -210,7 +213,10 @@ class boardController extends board
 		$this->setRedirectUrl(getNotEncodedUrl('', 'mid', Context::get('mid'), 'act', '', 'page', Context::get('page'), 'document_srl', ''));
 		$this->add('mid', Context::get('mid'));
 		$this->add('page', Context::get('page'));
-		$this->setMessage('success_deleted');
+		if(Context::get('xeVirtualRequestMethod') !== 'xml')
+		{
+			$this->setMessage('success_deleted');
+		}
 	}
 
 	/**
@@ -332,7 +338,10 @@ class boardController extends board
 			return $output;
 		}
 
-		$this->setMessage('success_registed');
+		if(Context::get('xeVirtualRequestMethod') !== 'xml')
+		{
+			$this->setMessage('success_registed');
+		}
 		$this->add('mid', Context::get('mid'));
 		$this->add('document_srl', $obj->document_srl);
 		$this->add('comment_srl', $obj->comment_srl);
@@ -362,7 +371,10 @@ class boardController extends board
 		$this->add('mid', Context::get('mid'));
 		$this->add('page', Context::get('page'));
 		$this->add('document_srl', $output->get('document_srl'));
-		$this->setMessage('success_deleted');
+		if(Context::get('xeVirtualRequestMethod') !== 'xml')
+		{
+			$this->setMessage('success_deleted');
+		}
 	}
 
 	/**
@@ -386,7 +398,10 @@ class boardController extends board
 		$this->add('mid', Context::get('mid'));
 		$this->add('page', Context::get('page'));
 		$this->add('document_srl', $output->get('document_srl'));
-		$this->setMessage('success_deleted');
+		if(Context::get('xeVirtualRequestMethod') !== 'xml')
+		{
+			$this->setMessage('success_deleted');
+		}
 	}
 
 	/**

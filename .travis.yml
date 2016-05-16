@@ -15,6 +15,7 @@ before_script:
 - travis_retry composer self-update
 - npm install -g grunt-cli
 - npm install
+- phpenv config-rm xdebug.ini
 - if [ $(phpenv version-name) != "5.3" ]; then composer install; fi
 - if [ $(phpenv version-name) != "5.3" ]; then mysql -e 'create database xe_test;'; fi
 - if [ $(phpenv version-name) != "5.3" ]; then echo "USE mysql;\nUPDATE user SET password=PASSWORD('travis')
