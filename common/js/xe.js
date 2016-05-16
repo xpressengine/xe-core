@@ -1089,13 +1089,6 @@ jQuery(function($) {
 			}
 		}
 
-		re = /^https:\/\/([^:\/]+)(:\d+|)/i;
-		if (re.test(uri)) {
-			toReplace = 'http://'+RegExp.$1;
-			if (window.http_port && http_port != 80) toReplace += ':' + http_port;
-			uri = uri.replace(re, toReplace);
-		}
-
 		var bUseSSL = !!window.enforce_ssl;
 		if (!bUseSSL && isArray(window.ssl_actions) && (act=uri.getQuery('act'))) {
 			for (var i=0,c=ssl_actions.length; i < c; i++) {
