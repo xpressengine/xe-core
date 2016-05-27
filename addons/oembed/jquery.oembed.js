@@ -287,21 +287,22 @@
 			 * - works on youtubes and vimeo
 			 */
 			if(settings.maxWidth) {
-				var post_width = oembedContainer.parent().width();
+				var $iframe = $('iframe', oembedContainer);
+				var post_width = oembedContainer.parents(':visible').eq(0).width();
+				var iframe_width_orig = parseInt($iframe.css('width'), 10);
+				var iframe_height_orig = parseInt($iframe.css('height'), 10);
+				var ratio = 1;
+
 				if(post_width < settings.maxWidth) {
-					var iframe_width_orig = $('iframe', oembedContainer).width();
-					var iframe_height_orig = $('iframe', oembedContainer).height();
-					var ratio = iframe_width_orig / post_width;
-					$('iframe', oembedContainer).width(iframe_width_orig / ratio);
-					$('iframe', oembedContainer).height(iframe_height_orig / ratio);
-				} else {
-					if(settings.maxWidth) {
-						$('iframe', oembedContainer).width(settings.maxWidth);
-					}
-					if(settings.maxHeight) {
-						$('iframe', oembedContainer).height(settings.maxHeight);
-					}
+					ratio = iframe_width_orig / post_width;
+				} else if(settings.maxWidth < iframe_width_orig) {
+					ratio = iframe_width_orig / settings.maxWidth;
 				}
+
+				$iframe.css({
+					'width': iframe_width_orig / ratio,
+					'height': iframe_height_orig / ratio
+				});
 			}
 			break;
 		}
