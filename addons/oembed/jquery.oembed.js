@@ -299,7 +299,7 @@
 					ratio = iframe_width_orig / settings.maxWidth;
 				}
 
-				$iframe.css({
+				$iframe.attr({
 					'width': iframe_width_orig / ratio,
 					'height': iframe_height_orig / ratio
 				});
@@ -362,7 +362,7 @@
 					from: 'xml',
 					apiendpoint: this.apiendpoint,
 					url: function (externalurl) {
-						return this.apiendpoint + '?format=xml&url=' + externalurl
+						return this.apiendpoint + '?format=xml&url=' + externalurl + '&maxwidth=' + settings.maxWidth
 					},
 					datareturn: function (results) {
 						return results.html.replace(/.*\[CDATA\[(.*)\]\]>$/, '$1') || ''
@@ -373,7 +373,7 @@
 					from: 'json',
 					apiendpoint: this.apiendpoint,
 					url: function (externalurl) {
-						return this.apiendpoint + '?format=json&url=' + externalurl
+						return this.apiendpoint + '?format=json&url=' + externalurl + '&maxwidth=' + settings.maxWidth
 					},
 					datareturn: function (results) {
 						if(results.json.type != 'video' && (results.json.url || results.json.thumbnail_url)) {
