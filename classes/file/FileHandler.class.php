@@ -563,6 +563,7 @@ class FileHandler
 						$oRequest->addHeader($key, $val);
 					}
 				}
+				$host = parse_url($url, PHP_URL_HOST);
 				if($cookies[$host])
 				{
 					foreach($cookies[$host] as $key => $val)
