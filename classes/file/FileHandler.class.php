@@ -541,7 +541,17 @@ class FileHandler
 				{
 					foreach($request_config as $key=>$val)
 					{
-						$oRequest->setConfig($key, $val);
+						if($key === 'observers')
+						{
+							foreach($val as $observer)
+							{
+								$oRequest->attach($observer);
+							}
+						}
+						else
+						{
+							$oRequest->setConfig($key, $val);
+						}
 					}
 				}
 
@@ -603,9 +613,18 @@ class FileHandler
 			}
 
 			if($code != 200)
+			{
 				return;
+			}
 
-			return $response;
+			if(isset($request_config['store_body']) && !$request_config['store_body'])
+			{
+				return TRUE;
+			}
+			else
+			{
+				return $response;
+			}
 		}
 		catch(Exception $e)
 		{
@@ -627,13 +646,23 @@ class FileHandler
 	 */
 	function getRemoteFile($url, $target_filename, $body = null, $timeout = 3, $method = 'GET', $content_type = null, $headers = array(), $cookies = array(), $post_data = array(), $request_config = array())
 	{
-		if(!($body = self::getRemoteResource($url, $body, $timeout, $method, $content_type, $headers,$cookies,$post_data,$request_config)))
+		$target_filename = self::getRealPath($target_filename);
+		self::writeFile($target_filename, '');
+		
+		requirePear();
+		require_once('HTTP/Request2/Observer/Download.php');
+		
+		$request_config['store_body'] = false;
+		$request_config['observers'][] = new HTTP_Request2_Observer_Download($target_filename);
+		try
+		{
+			$result = self::getRemoteResource($url, $body, $timeout, $method, $content_type, $headers, $cookies, $post_data, $request_config);
+		}
+		catch(Exception $e)
 		{
 			return FALSE;
 		}
-
-		self::writeFile($target_filename, $body);
-		return TRUE;
+		return $result ? TRUE : FALSE;
 	}
 
 	/**
