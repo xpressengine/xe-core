@@ -19,10 +19,10 @@ env:
             config:
                 Db:
                     dsn: 'mysql:host=127.0.0.1;dbname=xe_test'
-                    user: 'travis'
-                    password: 'travis'
+                    user: 'root'
+                    password: 'root'
                     cleanup: true
                 DbDropTablesHelper:
                     dsn: 'mysql:host=127.0.0.1;dbname=xe_test'
-                    user: 'travis'
-                    password: 'travis'
+                    user: 'root'
+                    password: 'root'
