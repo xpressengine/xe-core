@@ -18,8 +18,8 @@ before_script:
 - phpenv config-rm xdebug.ini
 - if [ $(phpenv version-name) != "5.3" ]; then composer install; fi
 - if [ $(phpenv version-name) != "5.3" ]; then mysql -e 'create database xe_test;'; fi
-- if [ $(phpenv version-name) != "5.3" ]; then echo "USE mysql;\nUPDATE user SET password=PASSWORD('travis')
-  WHERE user='travis';\nFLUSH PRIVILEGES;\n" | mysql -u root; fi
+- if [ $(phpenv version-name) != "5.3" ]; then echo "USE mysql;\nUPDATE user SET password=PASSWORD('root')
+  WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root; fi
 - if [ $(phpenv version-name) != "5.3" ]; then php -S localhost:8000 & fi
 script:
 - grunt lint
