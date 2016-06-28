@@ -1,7 +1,6 @@
 <?php
 require_once _XE_PATH_.'classes/file/FileHandler.class.php';
 require_once _XE_PATH_.'classes/template/TemplateHandler.class.php';
-$_SERVER['SCRIPT_NAME'] = '/xe/tests/unit/classes/template/index.php';
 
 class TemplateHandlerTest extends \Codeception\TestCase\Test
 {
