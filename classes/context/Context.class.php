@@ -968,12 +968,36 @@ class Context
 	/**
 	 * Get lang_type
 	 *
+	 * @param string $code_type Language Code type (ISO639 | XE | NULL).
 	 * @return string Language type
 	 */
-	function getLangType()
+	function getLangType($code_type = 'XE')
 	{
 		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
-		return $self->lang_type;
+		if($code_type == 'ISO639')
+		{
+			$lang_code = array(
+				/*
+				XE Lang Tyoe to ISO639 Lang Code by misol.kr@gmail.com
+				XE Lang Type => ISO639 Lang Code
+				*/
+				'en' => 'en',
+				'ko' => 'ko',
+				'jp' => 'ja',
+				'zh-CN' => 'zh-CN', //Macrolanguage
+				'zh-TW' => 'zh-TW', //Macrolanguage
+				'fr' => 'fr',
+				'de' => 'de',
+				'ru' => 'ru',
+				'es' => 'es',
+				'tr' => 'tr',
+				'vi' => 'vi',
+				'mn' => 'mn'
+				);
+			if($lang_code[$self->lang_type]) return $lang_code[$self->lang_type];
+			else return $self->lang_type;
+		}
+		else return $self->lang_type;
 	}
 
 	/**
