@@ -1792,7 +1792,8 @@ class memberController extends member
 			$autologin_args->member_srl = $this->memberInfo->member_srl;
 			executeQuery('member.deleteAutologin', $autologin_args);
 			$autologin_output = executeQuery('member.insertAutologin', $autologin_args);
-			if($autologin_output->toBool()) setCookie('xeak',$autologin_args->autologin_key, $_SERVER['REQUEST_TIME']+31536000, '/');
+			$session_params = session_get_cookie_params();
+			if($autologin_output->toBool()) setCookie('xeak',$autologin_args->autologin_key, $_SERVER['REQUEST_TIME']+31536000, '/', $session_params['domain'] ,false, true);
 		}
 		if($this->memberInfo->is_admin == 'Y')
 		{
