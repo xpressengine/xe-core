@@ -2202,6 +2202,7 @@
 	<item name="about_reset_auth_mail">
 		<value xml:lang="ko"><![CDATA[현재등록된 이메일 주소는 %s입니다. 이메일 주소를 변경하고자 하는 경우 새로운 이메일 주소로 회원정보 갱신 후 인증메일을 재발송할 수 있습니다.]]></value>
 		<value xml:lang="jp"><![CDATA[現在登録されたEメールアドレスは %sです。Eメールアドレスを変更したい場合は、新しいEメールアドレスに会員情報の更新後認証メールを再送できます。]]></value>
+		<value xml:lang="zh-TW"><![CDATA[目前註冊的電子郵件地址為 %s 。如果你想改變你的e-mail>地址，你可以註冊更新，新的E-mail地址認證信息後重新發送郵件]]></value>
 	</item>
 	<item name="about_resend_auth_mail">
 		<value xml:lang="ko"><![CDATA[인증 메일을 받지 못한 경우 다시 받을 수 있습니다.]]></value>
