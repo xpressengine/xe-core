@@ -527,8 +527,9 @@ class FileHandler
 			require_once('HTTP/Request.php');
 
 			$parsed_url = parse_url(__PROXY_SERVER__);
-			if($parsed_url["host"])
+			if($parsed_url["host"] && $parsed_url["path"])
 			{
+				// Old style proxy server support (POST payload to proxy script)
 				$oRequest = new HTTP_Request(__PROXY_SERVER__);
 				$oRequest->setMethod('POST');
 				$oRequest->addPostData('arg', serialize(array('Destination' => $url, 'method' => $method, 'body' => $body, 'content_type' => $content_type, "headers" => $headers, "post_data" => $post_data)));
@@ -536,6 +537,16 @@ class FileHandler
 			else
 			{
 				$oRequest = new HTTP_Request($url);
+
+				// New style proxy server support (Use HTTP_Request2 native config format)
+				if($parsed_url['host'])
+				{
+					$request_config['proxy_host'] = $parsed_url['host'];
+					$request_config['proxy_port'] = $parsed_url['port'] ? $parsed_url['port'] : '';
+					$request_config['proxy_user'] = rawurldecode($parsed_url['user'] ? $parsed_url['user'] : '');
+					$request_config['proxy_password'] = rawurldecode($parsed_url['pass'] ? $parsed_url['pass'] : '');
+					$request_config['proxy_type'] = $parsed_url['scheme'] ? $parsed_url['scheme'] : 'http';
+				}
 
 				if(count($request_config) && method_exists($oRequest, 'setConfig'))
 				{
@@ -577,6 +588,7 @@ class FileHandler
 						$oRequest->addHeader($key, $val);
 					}
 				}
+				$host = parse_url($url, PHP_URL_HOST);
 				if($cookies[$host])
 				{
 					foreach($cookies[$host] as $key => $val)
