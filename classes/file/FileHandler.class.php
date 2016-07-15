@@ -554,6 +554,21 @@ class FileHandler
 						}
 					}
 				}
+				if(method_exists($oRequest, 'setConfig'))
+				{
+					if(extension_loaded('curl'))
+					{
+						$oRequest->setConfig('adapter', 'curl');
+					}
+					elseif(version_compare(PHP_VERSION, '5.6', '<'))
+					{
+						$oRequest->setConfig('ssl_verify_host', false);
+					}
+					if(file_exists(_XE_PATH_ . 'libs/cacert/cacert.pem'))
+					{
+						$oRequest->setConfig('ssl_cafile', _XE_PATH_ . 'libs/cacert/cacert.pem');
+					}
+				}
 
 				if(count($headers) > 0)
 				{
