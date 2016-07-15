@@ -788,7 +788,7 @@ class boardView extends board
 		}
 
 		// if the document is not existed, then back to the board content page
-		if(!$oDocument->isExists())
+		if(!$oDocument || !$oDocument->isExists())
 		{
 			return $this->dispBoardContent();
 		}
