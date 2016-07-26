@@ -308,15 +308,22 @@ class fileController extends file
 
 		$file_size = $file_obj->file_size;
 		$filename = $file_obj->source_filename;
-				if(preg_match('#(?:Chrome|Edge)/(\d+)\.#', $_SERVER['HTTP_USER_AGENT'], $matches) && $matches[1] >= 11)
+		
+		if(preg_match('#(?:Chrome|Edge)/(\d+)\.#', $_SERVER['HTTP_USER_AGENT'], $matches) && $matches[1] >= 11)
 		{
-			$filename_param = "filename*=UTF-8''" . rawurlencode($filename) . '; filename="' . rawurlencode($filename) . '"';
+			if($is_android && preg_match('#\bwv\b|(?:Version|Browser)/\d+#', $_SERVER['HTTP_USER_AGENT']))
+			{
+				$filename_param = 'filename="' . $filename . '"';
+			}
+			else
+			{
+				$filename_param = "filename*=UTF-8''" . rawurlencode($filename) . '; filename="' . rawurlencode($filename) . '"';
+			}
 		}
 		elseif(preg_match('#(?:Firefox|Safari|Trident)/(\d+)\.#', $_SERVER['HTTP_USER_AGENT'], $matches) && $matches[1] >= 6)
 		{
 			$filename_param = "filename*=UTF-8''" . rawurlencode($filename) . '; filename="' . rawurlencode($filename) . '"';
 		}
-		// Filename encoding for browsers that do not support RFC 5987
 		elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== FALSE)
 		{
 			$filename = rawurlencode($filename);
