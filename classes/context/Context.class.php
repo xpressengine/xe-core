@@ -670,22 +670,17 @@ class Context
 		// for sites recieving SSO valdiation
 		if($default_url == self::getRequestUri())
 		{
-			if(self::get('default_url'))
+			if(self::get('url'))
 			{
-				$url = base64_decode(self::get('default_url'));
+				$url = base64_decode(self::get('url'));
 				$url_info = parse_url($url);
-
-				$oModuleModel = getModel('module');
-				$target_domain = (stripos($url, $default_url) !== 0) ? $url_info['host'] : $default_url;
-				$site_info = $oModuleModel->getSiteInfoByDomain($target_domain);
-				if(!$site_info->site_srl) {
-					$oModuleObject = new ModuleObject();
-					$oModuleObject->stop('msg_invalid_request');
-
+				if(!Password::checkSignature($url, self::get('sig')))
+				{
+					echo self::get('lang')->msg_invalid_request;
 					return false;
 				}
 
-				$url_info['query'].= ($url_info['query'] ? '&' : '') . 'SSOID=' . session_id();
+				$url_info['query'].= ($url_info['query'] ? '&' : '') . 'SSOID=' . urlencode(session_id()) . '&sig=' . urlencode(Password::createSignature(session_id()));
 				$redirect_url = sprintf('%s://%s%s%s?%s', $url_info['scheme'], $url_info['host'], $url_info['port'] ? ':' . $url_info['port'] : '', $url_info['path'], $url_info['query']);
 				header('location:' . $redirect_url);
 
@@ -698,9 +693,15 @@ class Context
 			// result handling : set session_name()
 			if($session_name = self::get('SSOID'))
 			{
+				if(!Password::checkSignature($session_name, self::get('sig')))
+				{
+					echo self::get('lang')->msg_invalid_request;
+					return false;
+				}
+				
 				setcookie(session_name(), $session_name);
 
-				$url = preg_replace('/([\?\&])$/', '', str_replace('SSOID=' . $session_name, '', self::getRequestUrl()));
+				$url = preg_replace('/[\?\&]SSOID=.+$/', '', self::getRequestUrl());
 				header('location:' . $url);
 				return FALSE;
 				// send SSO request
@@ -708,7 +709,9 @@ class Context
 			else if(!self::get('SSOID') && $_COOKIE['sso'] != md5(self::getRequestUri()))
 			{
 				setcookie('sso', md5(self::getRequestUri()), 0, '/');
-				$url = sprintf("%s?default_url=%s", $default_url, base64_encode(self::getRequestUrl()));
+				$origin_url = self::getRequestUrl();
+				$origin_sig = Password::createSignature($origin_url);
+				$url = sprintf("%s?url=%s&sig=%s", $default_url, urlencode(base64_encode($origin_url)), urlencode($origin_sig));
 				header('location:' . $url);
 				return FALSE;
 			}

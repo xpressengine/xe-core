@@ -1574,6 +1574,12 @@ function stripEmbedTagForAdmin(&$content, $writer_member_srl)
  */
 function requirePear()
 {
+	static $required = false;
+	if($required)
+	{
+		return;
+	}
+
 	if(version_compare(PHP_VERSION, "5.3.0") < 0)
 	{
 		set_include_path(_XE_PATH_ . "libs/PEAR" . PATH_SEPARATOR . get_include_path());
@@ -1582,6 +1588,8 @@ function requirePear()
 	{
 		set_include_path(_XE_PATH_ . "libs/PEAR.1.9.5" . PATH_SEPARATOR . get_include_path());
 	}
+
+	$required = true;
 }
 
 function checkCSRF()
