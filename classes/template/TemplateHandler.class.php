@@ -12,15 +12,11 @@
 class TemplateHandler
 {
 
-	private $compiled_path = 'files/cache/template_compiled/'; ///< path of compiled caches files
 	private $path = NULL; ///< target directory
-	private $filename = NULL; ///< target filename
 	private $file = NULL; ///< target file (fullpath)
 	private $xe_path = NULL;  ///< XpressEngine base path
 	private $web_path = NULL; ///< tpl file web path
-	private $compiled_file = NULL; ///< tpl file web path
 	private $skipTags = NULL;
-	private $handler_mtime = 0;
 	static private $rootTpl = NULL;
 
 	/**
@@ -30,7 +26,6 @@ class TemplateHandler
 	public function __construct()
 	{
 		$this->xe_path = rtrim(preg_replace('/([^\.^\/]+)\.php$/i', '', $_SERVER['SCRIPT_NAME']), '/');
-		$this->compiled_path = _XE_PATH_ . $this->compiled_path;
 	}
 
 	/**
@@ -92,17 +87,12 @@ class TemplateHandler
 
 		// set template file infos.
 		$this->path = $tpl_path;
-		$this->filename = $tpl_filename;
 		$this->file = $tpl_file;
 
+		// list of all included files
+		$this->deps = array();
+
 		$this->web_path = $this->xe_path . '/' . ltrim(preg_replace('@^' . preg_quote(_XE_PATH_, '@') . '|\./@', '', $this->path), '/');
-
-		// get compiled file name
-		$hash = md5($this->file . __XE_VERSION__);
-		$this->compiled_file = "{$this->compiled_path}{$hash}.compiled.php";
-
-		// compare various file's modified time for check changed
-		$this->handler_mtime = filemtime(__FILE__);
 
 		$skip = array('');
 	}
@@ -140,39 +130,34 @@ class TemplateHandler
 		}
 
 		$source_template_mtime = filemtime($this->file);
-		$latest_mtime = $source_template_mtime > $this->handler_mtime ? $source_template_mtime : $this->handler_mtime;
+		// compare various file's modified time for check changed
+		$handler_mtime = filemtime(__FILE__);
+		$latest_mtime = $source_template_mtime > $handler_mtime ? $source_template_mtime : $handler_mtime;
 
 		// cache control
 		$oCacheHandler = CacheHandler::getInstance('template');
 
 		// get cached buff
-		if($oCacheHandler->isSupport())
+		if($oCacheHandler->isValid($this->file, $latest_mtime))
 		{
-			$cache_key = 'template:' . $this->file;
-			$buff = $oCacheHandler->get($cache_key, $latest_mtime);
+			$buff = NULL;
+			if($oCacheHandler->getType() != 'file')
+			{
+				$buff = $oCacheHandler->get($this->file);
+			}
+			$output = $this->_fetch($buff, $this->file);
 		}
 		else
 		{
-			if(is_readable($this->compiled_file) && filemtime($this->compiled_file) > $latest_mtime && filesize($this->compiled_file))
-			{
-				$buff = 'file://' . $this->compiled_file;
-			}
-		}
-
-		if($buff === FALSE)
-		{
 			$buff = $this->parse();
-			if($oCacheHandler->isSupport())
+			$params = array();
+			if(!empty($this->deps))
 			{
-				$oCacheHandler->put($cache_key, $buff);
+				$params['depends'] = $this->deps;
 			}
-			else
-			{
-				FileHandler::writeFile($this->compiled_file, $buff);
-			}
+			$oCacheHandler->put($this->file, $buff, 0, $params);
+			$output = $this->_fetch($buff);
 		}
-
-		$output = $this->_fetch($buff);
 
 		if($__templatehandler_root_tpl == $this->file)
 		{
@@ -209,6 +194,34 @@ class TemplateHandler
 	}
 
 	/**
+	 * preprocessor
+	 * @param string $buff template file
+	 * @param int $allowed_depth allowed recursion depth to include
+	 * @return string compiled result in case of success or NULL in case of error
+	 */
+	protected function preprocess($buff = null, $allowed_depth = 3)
+	{
+		if(is_null($buff))
+		{
+			if(!is_readable($this->file))
+			{
+				return '';
+			}
+
+			// read tpl file
+			$buff = FileHandler::readFile($this->file);
+		}
+
+		// include
+		while($allowed_depth > 0 && preg_match('/<(!--[#%])?(?:include)(?(1)\(["\']([^"\']+)["\'])(.*?)(?(1)\)--|\/)>/', $buff))
+		{
+			$buff = preg_replace_callback('/<(!--[#%])?(?:include)(?(1)\(["\']([^"\']+)["\'])(.*?)(?(1)\)--|\/)>/', array($this, '_includeTemplate'), $buff);
+			$allowed_depth--;
+		}
+		return $buff;
+	}
+
+	/**
 	 * parse syntax.
 	 * @param string $buff template file
 	 * @return string compiled result in case of success or NULL in case of error
@@ -231,6 +244,9 @@ class TemplateHandler
 		{
 			$this->skipTags = array('marquee');
 		}
+
+		// preprocess
+		$buff = $this->preprocess($buff);
 
 		// replace comments
 		$buff = preg_replace('@<!--//.*?-->@s', '', $buff);
@@ -344,12 +360,13 @@ class TemplateHandler
 
 	/**
 	 * fetch using ob_* function
+	 * @param string $cache_key if cache_key is not null, include it.
 	 * @param string $buff if buff is not null, eval it instead of including compiled template file
 	 * @return string
 	 */
-	private function _fetch($buff)
+	private function _fetch($buff, $cache_key = NULL)
 	{
-		if(!$buff)
+		if(!$buff && $cache_key == NULL)
 		{
 			return;
 		}
@@ -364,12 +381,15 @@ class TemplateHandler
 
 		$level = ob_get_level();
 		ob_start();
-		if(substr($buff, 0, 7) == 'file://')
+		if(!$buff)
 		{
+			$oCacheHandler = CacheHandler::getInstance('template');
+			$compiled_file = $oCacheHandler->get($cache_key, 0, TRUE); // get compiled filename
+
 			if(__DEBUG__)
 			{
 				//load cache file from disk
-				$eval_str = FileHandler::readFile(substr($buff, 7));
+				$eval_str = FileHandler::readFile($compiled_file);
 				$eval_str_buffed = "?>" . $eval_str;
 				@eval($eval_str_buffed);
 				$error_info = error_get_last();
@@ -381,7 +401,7 @@ class TemplateHandler
 			}
 			else
 			{
-				include(substr($buff, 7));
+				include $compiled_file;
 			}
 		}
 		else
@@ -570,6 +590,80 @@ class TemplateHandler
 		$buff = implode('', $nodes);
 
 		return $buff;
+	}
+
+	/**
+	 * preg_replace_callback handler
+	 * include a template file
+	 * @param array $m
+	 * @return string changed result
+	 */
+	private function _includeTemplate($m)
+	{
+		// <!--#include--> or <include ..>
+		$attr = array();
+		if($m[2])
+		{
+			if(preg_match_all('@,(\w+)="([^"]+)"@', $m[2], $mm))
+			{
+				foreach($mm[1] as $idx => $name)
+				{
+					$attr[$name] = $mm[2][$idx];
+				}
+			}
+			$attr['target'] = $m[2];
+		}
+		else
+		{
+			if(!preg_match_all('@\s+(\w+)="([^"]+)"@', $m[3], $mm))
+			{
+				return $m[0];
+			}
+			foreach($mm[1] as $idx => $name)
+			{
+				$attr[$name] = $mm[2][$idx];
+			}
+		}
+
+		if(!$this->file || !$attr['target'])
+		{
+			return '';
+		}
+
+		$pathinfo = pathinfo($attr['target']);
+		$fileDir = $this->_getRelativeDir($pathinfo['dirname']);
+
+		if(!$fileDir)
+		{
+			return '';
+		}
+
+		$fileDir .= '/';
+		$filename = $fileDir . $pathinfo['basename'];
+
+		// add to dependency list
+		$this->deps[] = $filename;
+
+		// read file
+		$content = FileHandler::readFile($filename);
+
+		// fix path
+		$save_path = $this->web_path;
+		$this->web_path = $this->xe_path . '/' . ltrim(preg_replace('@^' . preg_quote(_XE_PATH_, '@') . '|\./@', '', $fileDir), '/');
+
+		// replace value of src in img/input/script tag
+		$content = preg_replace_callback('/<(?:img|input|script)(?:[^<>]*?)(?(?=cond=")(?:cond="[^"]+"[^<>]*)+|)[^<>]* src="(?!(?:https?|file):\/\/|[\/\{])([^"]+)"/is', array($this, '_replacePath'), $content);
+		// restore path
+		$this->web_path = $save_path;
+
+		if($attr['cond'])
+		{
+			return "\n<block cond=\"{$attr['cond']}\">\n".
+				$content.
+				"</block>\n";
+		}
+
+		return "\n".$content;
 	}
 
 	/**

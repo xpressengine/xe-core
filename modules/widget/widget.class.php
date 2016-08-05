@@ -14,7 +14,6 @@ class widget extends ModuleObject
 	{
 		// Create cache directory used by widget
 		FileHandler::makeDir('./files/cache/widget');
-		FileHandler::makeDir('./files/cache/widget_cache');
 		// Add this widget compile the trigger for the display.after
 		$oModuleController = getController('module');
 		$oModuleController->insertTrigger('display', 'widget', 'controller', 'triggerWidgetCompile', 'before');

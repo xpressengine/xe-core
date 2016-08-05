@@ -11,12 +11,6 @@ class Validator
 {
 
 	/**
-	 * cache directory
-	 * @var string
-	 */
-	var $_cache_dir = '';
-
-	/**
 	 * last error
 	 * @var array
 	 */
@@ -96,7 +90,6 @@ class Validator
 		));
 
 		$this->_has_mb_func = is_callable('mb_strlen');
-		$this->setCacheDir(_XE_PATH_ . 'files/cache');
 	}
 
 	/**
@@ -227,15 +220,12 @@ class Validator
 
 	/**
 	 * Set root cache directory
+	 * @deprecated
 	 * @param string $cache_dir Root cache directory
 	 * @return void
 	 */
 	function setCacheDir($cache_dir)
 	{
-		if(is_dir($cache_dir))
-		{
-			$this->_cache_dir = preg_replace('@/$@', '', $cache_dir);
-		}
 	}
 
 	/**
@@ -652,16 +642,6 @@ class Validator
 	 */
 	function getJsPath()
 	{
-		if(!$this->_cache_dir)
-		{
-			return FALSE;
-		}
-
-		$dir = $this->_cache_dir . '/ruleset';
-		if(!is_dir($dir) && !mkdir($dir))
-		{
-			return FALSE;
-		}
 		if(!$this->_xml_path)
 		{
 			return FALSE;
@@ -670,11 +650,14 @@ class Validator
 		// current language
 		$lang_type = class_exists('Context', false) ? Context::getLangType() : 'en';
 
+		// cache handler
+		$ruleset = CacheHandler::getInstance('ruleset');
+
 		// check the file
-		$filepath = $dir . '/' . md5($this->_version . ' ' . $this->_xml_path) . ".{$lang_type}.js";
-		if(is_readable($filepath) && filemtime($filepath) > filemtime($this->_xml_path))
+		$key = md5($this->_version . ' ' . $this->_xml_path) . ".{$lang_type}.js";
+		if($ruleset->isValid($key, filemtime($this->_xml_path)) !== FALSE)
 		{
-			return $filepath;
+			return $ruleset->get($key, 0, TRUE);
 		}
 
 		$content = $this->_compile2js();
@@ -683,9 +666,8 @@ class Validator
 			return FALSE;
 		}
 
-		@file_put_contents($filepath, $content, LOCK_EX);
-
-		return $filepath;
+		$ruleset->put($key, $content);
+		return $ruleset->get($key, 0, TRUE);
 	}
 
 	/**

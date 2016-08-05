@@ -2180,7 +2180,6 @@ class Context
 				}
 			}
 			$validator = new Validator($file);
-			$validator->setCacheDir('files/cache');
 			$file = $validator->getJsPath();
 		}
 
