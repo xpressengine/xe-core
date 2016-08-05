@@ -102,12 +102,42 @@ class ModuleHandler extends Handler
 
 		// call a trigger before moduleHandler init
 		ModuleHandler::triggerCall('moduleHandler.init', 'before', $this);
+		if(__DEBUG__ == 1 && __DEBUG_OUTPUT__ == 0)
+		{
+			if(__DEBUG_PROTECT__ === 1 && __DEBUG_PROTECT_IP__ == $_SERVER['REMOTE_ADDR'])
+			{
+				set_error_handler(array($this, 'xeErrorLog'), E_WARNING);
+			}
+			else if(__DEBUG_PROTECT__ === 0)
+			{
+				set_error_handler(array($this, 'xeErrorLog'), E_WARNING);
+			}
+		}
 
 		// execute addon (before module initialization)
 		$called_position = 'before_module_init';
 		$oAddonController = getController('addon');
 		$addon_file = $oAddonController->getCacheFilePath(Mobile::isFromMobilePhone() ? 'mobile' : 'pc');
 		if(file_exists($addon_file)) include($addon_file);
+	}
+
+	function xeErrorLog($errnumber, $errormassage, $errorfile, $errorline, $errorcontext)
+	{
+		if($errnumber != E_WARNING)
+		{
+			return false;
+		}
+		else
+		{
+			$errorname = 'Warrning!';
+		}
+		$buff = "\n".$errorname . " : ";
+		$buff .= $errormassage . "\n";
+		$buff .= "file : " . $errorfile . " line : ";
+		$buff .= $errorline . "\n";
+		debugPrint($buff);
+		restore_error_handler();
+		return true;
 	}
 
 	/**
