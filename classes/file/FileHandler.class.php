@@ -751,6 +751,12 @@ class FileHandler
 	 */
 	function createImageFile($source_file, $target_file, $resize_width = 0, $resize_height = 0, $target_type = '', $thumbnail_type = 'crop')
 	{
+		// check if library is loaded
+		if(!extension_loaded('gd'))
+		{
+			error_log("In function 'createImageFile', error occured during image processing : Library php-gd has not loaded properly. Check whether php-gd is installed and make sure to include extension, php_gd in php.ini");
+		}
+
 		// check params
 		if (($source_file = self::exists($source_file)) === FALSE)
 		{
