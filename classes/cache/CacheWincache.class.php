@@ -18,13 +18,13 @@ class CacheWincache extends CacheBase
 	 * @param void $opt Not used
 	 * @return CacheWincache instance of CacheWincache
 	 */
-	function getInstance($opt = null)
+	function getInstance($target = 'default')
 	{
-		if(!$GLOBALS['__CacheWincache__'])
+		if(!$GLOBALS['__CacheWincache__'][$target])
 		{
-			$GLOBALS['__CacheWincache__'] = new CacheWincache();
+			$GLOBALS['__CacheWincache__'][$target] = new CacheWincache($target);
 		}
-		return $GLOBALS['__CacheWincache__'];
+		return $GLOBALS['__CacheWincache__'][$target];
 	}
 
 	/**
@@ -32,8 +32,9 @@ class CacheWincache extends CacheBase
 	 *
 	 * @return void
 	 */
-	function CacheWincache()
+	function CacheWincache($target = 'default')
 	{
+		$this->target = $target;
 	}
 
 	/**
@@ -44,6 +45,16 @@ class CacheWincache extends CacheBase
 	function isSupport()
 	{
 		return self::$isSupport;
+	}
+
+	/**
+	 * Return cache type
+	 *
+	 * @return string wincache
+	 */
+	function getType()
+	{
+		return 'wincache';
 	}
 
 	/**

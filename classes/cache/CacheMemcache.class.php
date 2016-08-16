@@ -20,13 +20,13 @@ class CacheMemcache extends CacheBase
 	 * @param string $url url of memcache
 	 * @return CacheMemcache instance of CacheMemcache
 	 */
-	function getInstance($url)
+	function getInstance($target, $url)
 	{
-		if(!$GLOBALS['__CacheMemcache__'])
+		if(!$GLOBALS['__CacheMemcache__'][$target])
 		{
-			$GLOBALS['__CacheMemcache__'] = new CacheMemcache($url);
+			$GLOBALS['__CacheMemcache__'][$target] = new CacheMemcache($target, $url);
 		}
-		return $GLOBALS['__CacheMemcache__'];
+		return $GLOBALS['__CacheMemcache__'][$target];
 	}
 
 	/**
@@ -36,11 +36,12 @@ class CacheMemcache extends CacheBase
 	 * @param string $url url of memcache
 	 * @return void
 	 */
-	function CacheMemcache($url)
+	function CacheMemcache($target, $url)
 	{
 		//$config['url'] = array('memcache://localhost:11211');
 		$config['url'] = is_array($url) ? $url : array($url);
 		$this->Memcache = new Memcache;
+		$this->target = $target;
 
 		foreach($config['url'] as $url)
 		{
@@ -71,6 +72,16 @@ class CacheMemcache extends CacheBase
 		}
 
 		return $GLOBALS['XE_MEMCACHE_SUPPORT'];
+	}
+
+	/**
+	 * Return cache type
+	 *
+	 * @return string memcache
+	 */
+	function getType()
+	{
+		return 'memcache';
 	}
 
 	/**
