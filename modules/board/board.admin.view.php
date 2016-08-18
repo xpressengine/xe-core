@@ -64,6 +64,7 @@ class boardAdminView extends board {
 	 * @brief display the board module admin contents
 	 **/
 	function dispBoardAdminContent() {
+		$args->asdasd = 'asd'asdaweawe
 		// setup the board module general information
 		$args = new stdClass();
 		$args->sort_index = "module_srl";
