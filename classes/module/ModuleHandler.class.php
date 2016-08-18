@@ -102,12 +102,101 @@ class ModuleHandler extends Handler
 
 		// call a trigger before moduleHandler init
 		ModuleHandler::triggerCall('moduleHandler.init', 'before', $this);
+		if(__ERROR_LOG__ == 1 && __DEBUG_OUTPUT__ == 0)
+		{
+			if(__DEBUG_PROTECT__ === 1 && __DEBUG_PROTECT_IP__ == $_SERVER['REMOTE_ADDR'])
+			{
+				set_error_handler(array($this, 'xeErrorLog'), 3);
+				if(3 & E_ERROR)
+				{
+					register_shutdown_function(array($this, 'shutdownHandler'));
+				}
+			}
+			else if(__DEBUG_PROTECT__ === 0)
+			{
+				set_error_handler(array($this, 'xeErrorLog'), 3);
+				if(3 & E_ERROR)
+				{
+					register_shutdown_function(array($this, 'shutdownHandler'));
+				}
+			}
+		}
 
 		// execute addon (before module initialization)
 		$called_position = 'before_module_init';
 		$oAddonController = getController('addon');
 		$addon_file = $oAddonController->getCacheFilePath(Mobile::isFromMobilePhone() ? 'mobile' : 'pc');
 		if(file_exists($addon_file)) include($addon_file);
+	}
+
+	function xeErrorLog($errnumber, $errormassage, $errorfile, $errorline, $errorcontext)
+	{
+
+		if(($errnumber & 3) == 0 || error_reporting() == 0)
+		{
+			return false;
+		}
+		$errorname = self::getErrorType($errnumber);;
+
+		set_error_handler(array($this, 'dummyHandler'), ~0);
+		$buff = "\n" . $errorname . " : ";
+		$buff .= $errormassage . "\n";
+		$buff .= "file : " . $errorfile . " line : ";
+		$buff .= $errorline . "\n";
+		debugPrint($buff);
+		restore_error_handler();
+
+		return true;
+	}
+
+	function shutdownHandler()
+	{
+		$errinfo = error_get_last();
+		if ($errinfo === null || ($errinfo['type'] != 1 && $errinfo['type'] != 4))
+		{
+			return false;
+		}
+		$errorname = self::getErrorType($errinfo['type']);;
+
+		set_error_handler(array($this, 'dummyHandler'), ~0);
+		$buff = "\n" . $errorname . " : ";
+		$buff .= $errinfo['message'] . "\n";
+		$buff .= "file : " . $errinfo['file'] . " line : ";
+		$buff .= $errinfo['line'] . "\n";
+		debugPrint($buff);
+		set_error_handler(array($this, 'dummyHandler'), ~0);
+	}
+
+
+
+	/**
+	 * 더미 에러 핸들러.
+	 */
+	public function dummyHandler($errnumber, $errormassage, $errorfile, $errorline, $errorcontext)
+	{
+	}
+
+	public static function getErrorType($errno)
+	{
+		switch ($errno)
+		{
+			case E_ERROR: return 'Fatal Error';
+			case E_WARNING: return 'Warning';
+			case E_NOTICE: return 'Notice';
+			case E_CORE_ERROR: return 'Core Error';
+			case E_CORE_WARNING: return 'Core Warning';
+			case E_COMPILE_ERROR: return 'Compile Error';
+			case E_COMPILE_WARNING: return 'Compile Warning';
+			case E_USER_ERROR: return 'User Error';
+			case E_USER_WARNING: return 'User Warning';
+			case E_USER_NOTICE: return 'User Notice';
+			case E_STRICT: return 'Strict Standards';
+			case E_PARSE: return 'Parse Error';
+			case E_DEPRECATED: return 'Deprecated';
+			case E_USER_DEPRECATED: return 'User Deprecated';
+			case E_RECOVERABLE_ERROR: return 'Catchable Fatal Error';
+			default: return 'Error';
+		}
 	}
 
 	/**
