@@ -107,18 +107,12 @@ class ModuleHandler extends Handler
 			if(__DEBUG_PROTECT__ === 1 && __DEBUG_PROTECT_IP__ == $_SERVER['REMOTE_ADDR'])
 			{
 				set_error_handler(array($this, 'xeErrorLog'), 3);
-				if(3 & E_ERROR)
-				{
-					register_shutdown_function(array($this, 'shutdownHandler'));
-				}
+				register_shutdown_function(array($this, 'shutdownHandler'));
 			}
 			else if(__DEBUG_PROTECT__ === 0)
 			{
 				set_error_handler(array($this, 'xeErrorLog'), 3);
-				if(3 & E_ERROR)
-				{
-					register_shutdown_function(array($this, 'shutdownHandler'));
-				}
+				register_shutdown_function(array($this, 'shutdownHandler'));
 			}
 		}
 
