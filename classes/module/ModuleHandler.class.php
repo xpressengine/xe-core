@@ -106,12 +106,12 @@ class ModuleHandler extends Handler
 		{
 			if(__DEBUG_PROTECT__ === 1 && __DEBUG_PROTECT_IP__ == $_SERVER['REMOTE_ADDR'])
 			{
-				set_error_handler(array($this, 'xeErrorLog'), 3);
+				set_error_handler(array($this, 'xeErrorLog'), E_WARNING);
 				register_shutdown_function(array($this, 'shutdownHandler'));
 			}
 			else if(__DEBUG_PROTECT__ === 0)
 			{
-				set_error_handler(array($this, 'xeErrorLog'), 3);
+				set_error_handler(array($this, 'xeErrorLog'), E_WARNING);
 				register_shutdown_function(array($this, 'shutdownHandler'));
 			}
 		}
@@ -123,14 +123,14 @@ class ModuleHandler extends Handler
 		if(file_exists($addon_file)) include($addon_file);
 	}
 
-	function xeErrorLog($errnumber, $errormassage, $errorfile, $errorline, $errorcontext)
+	public static function xeErrorLog($errnumber, $errormassage, $errorfile, $errorline, $errorcontext)
 	{
 		if(($errnumber & 3) == 0 || error_reporting() == 0)
 		{
 			return false;
 		}
 
-		set_error_handler(array($this, 'dummyHandler'), ~0);
+		set_error_handler(function() { }, ~0);
 
 		$debug_file = _XE_PATH_ . 'files/_debug_message.php';
 		$debug_file_exist = file_exists($debug_file);
@@ -140,8 +140,7 @@ class ModuleHandler extends Handler
 		}
 
 		$errorname = self::getErrorType($errnumber);
-		$print[] = '['.date('Y-m-d H:i:s').']';
-		$print[] = $errorname . ' : ' . $errormassage;
+		$print[] = '['.date('Y-m-d H:i:s').'] ' . $errorname . ' : ' . $errormassage;
 		$backtrace_args = defined('DEBUG_BACKTRACE_IGNORE_ARGS') ? \DEBUG_BACKTRACE_IGNORE_ARGS : 0;
 		$backtrace = debug_backtrace($backtrace_args);
 		if(count($backtrace) > 1 && $backtrace[1]['function'] === 'xeErrorLog' && !$backtrace[1]['class'])
@@ -169,7 +168,7 @@ class ModuleHandler extends Handler
 			return false;
 		}
 
-		set_error_handler(array($this, 'dummyHandler'), ~0);
+		set_error_handler(function() { }, ~0);
 
 		$debug_file = _XE_PATH_ . 'files/_debug_message.php';
 		$debug_file_exist = file_exists($debug_file);
@@ -188,13 +187,6 @@ class ModuleHandler extends Handler
 		$print[] = PHP_EOL;
 		@file_put_contents($debug_file, implode(PHP_EOL, $print), FILE_APPEND|LOCK_EX);
 		set_error_handler(array($this, 'dummyHandler'), ~0);
-	}
-
-	/**
-	 * 더미 에러 핸들러.
-	 */
-	public function dummyHandler($errnumber, $errormassage, $errorfile, $errorline, $errorcontext)
-	{
 	}
 
 	public static function getErrorType($errno)
