@@ -131,19 +131,37 @@ class ModuleHandler extends Handler
 
 	function xeErrorLog($errnumber, $errormassage, $errorfile, $errorline, $errorcontext)
 	{
-
 		if(($errnumber & 3) == 0 || error_reporting() == 0)
 		{
 			return false;
 		}
-		$errorname = self::getErrorType($errnumber);;
 
 		set_error_handler(array($this, 'dummyHandler'), ~0);
-		$buff = "\n" . $errorname . " : ";
-		$buff .= $errormassage . "\n";
-		$buff .= "file : " . $errorfile . " line : ";
-		$buff .= $errorline . "\n";
-		debugPrint($buff);
+
+		$debug_file = _XE_PATH_ . 'files/_debug_message.php';
+		$debug_file_exist = file_exists($debug_file);
+		if(!$debug_file_exist)
+		{
+			$print[] = '<?php exit() ?>';
+		}
+
+		$errorname = self::getErrorType($errnumber);
+		$print[] = '['.date('Y-m-d H:i:s').']';
+		$print[] = $errorname . ' : ' . $errormassage;
+		$backtrace_args = defined('DEBUG_BACKTRACE_IGNORE_ARGS') ? \DEBUG_BACKTRACE_IGNORE_ARGS : 0;
+		$backtrace = debug_backtrace($backtrace_args);
+		if(count($backtrace) > 1 && $backtrace[1]['function'] === 'xeErrorLog' && !$backtrace[1]['class'])
+		{
+			array_shift($backtrace);
+		}
+
+		foreach($backtrace as $key => $value)
+		{
+			$message = '    - ' . $value['file'] . ' : ' . $value['line'];
+			$print[] = $message;
+		}
+		$print[] = PHP_EOL;
+		@file_put_contents($debug_file, implode(PHP_EOL, $print), FILE_APPEND|LOCK_EX);
 		restore_error_handler();
 
 		return true;
@@ -156,18 +174,27 @@ class ModuleHandler extends Handler
 		{
 			return false;
 		}
-		$errorname = self::getErrorType($errinfo['type']);;
 
 		set_error_handler(array($this, 'dummyHandler'), ~0);
-		$buff = "\n" . $errorname . " : ";
-		$buff .= $errinfo['message'] . "\n";
-		$buff .= "file : " . $errinfo['file'] . " line : ";
-		$buff .= $errinfo['line'] . "\n";
-		debugPrint($buff);
+
+		$debug_file = _XE_PATH_ . 'files/_debug_message.php';
+		$debug_file_exist = file_exists($debug_file);
+		if(!$debug_file_exist)
+		{
+			$print[] = '<?php exit() ?>';
+		}
+
+		$errorname = self::getErrorType($errinfo['type']);
+		$print[] = '['.date('Y-m-d H:i:s').']';
+		$print[] = $errorname . ' : ' . $errinfo['message'];
+
+		$message = '    - ' . $errinfo['file'] . ' : ' . $errinfo['line'];
+		$print[] = $message;
+
+		$print[] = PHP_EOL;
+		@file_put_contents($debug_file, implode(PHP_EOL, $print), FILE_APPEND|LOCK_EX);
 		set_error_handler(array($this, 'dummyHandler'), ~0);
 	}
-
-
 
 	/**
 	 * 더미 에러 핸들러.
