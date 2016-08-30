@@ -270,6 +270,17 @@ if(!defined('__PROXY_SERVER__'))
 	define('__PROXY_SERVER__', NULL);
 }
 
+if(!defined('__ERROR_LOG__'))
+{
+	/**
+	 * __ERROR_LOG__ 는 PHP의 에러로그를 출력하는 기능입니다. 개발시 워닝에러이상의 에러부터 잡기 시작합니다.
+	 *
+	 * 0: 사용하지 않음
+	 * 1: 사용함
+	 */
+	define('__ERROR_LOG__', 0);
+}
+
 // Require specific files when using Firebug console output
 if((__DEBUG_OUTPUT__ == 2) && version_compare(PHP_VERSION, '6.0.0') === -1)
 {

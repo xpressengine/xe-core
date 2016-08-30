@@ -102,12 +102,114 @@ class ModuleHandler extends Handler
 
 		// call a trigger before moduleHandler init
 		ModuleHandler::triggerCall('moduleHandler.init', 'before', $this);
+		if(__ERROR_LOG__ == 1 && __DEBUG_OUTPUT__ == 0)
+		{
+			if(__DEBUG_PROTECT__ === 1 && __DEBUG_PROTECT_IP__ == $_SERVER['REMOTE_ADDR'])
+			{
+				set_error_handler(array($this, 'xeErrorLog'), E_WARNING);
+				register_shutdown_function(array($this, 'shutdownHandler'));
+			}
+			else if(__DEBUG_PROTECT__ === 0)
+			{
+				set_error_handler(array($this, 'xeErrorLog'), E_WARNING);
+				register_shutdown_function(array($this, 'shutdownHandler'));
+			}
+		}
 
 		// execute addon (before module initialization)
 		$called_position = 'before_module_init';
 		$oAddonController = getController('addon');
 		$addon_file = $oAddonController->getCacheFilePath(Mobile::isFromMobilePhone() ? 'mobile' : 'pc');
 		if(file_exists($addon_file)) include($addon_file);
+	}
+
+	public static function xeErrorLog($errnumber, $errormassage, $errorfile, $errorline, $errorcontext)
+	{
+		if(($errnumber & 3) == 0 || error_reporting() == 0)
+		{
+			return false;
+		}
+
+		set_error_handler(function() { }, ~0);
+
+		$debug_file = _XE_PATH_ . 'files/_debug_message.php';
+		$debug_file_exist = file_exists($debug_file);
+		if(!$debug_file_exist)
+		{
+			$print[] = '<?php exit() ?>';
+		}
+
+		$errorname = self::getErrorType($errnumber);
+		$print[] = '['.date('Y-m-d H:i:s').'] ' . $errorname . ' : ' . $errormassage;
+		$backtrace_args = defined('DEBUG_BACKTRACE_IGNORE_ARGS') ? \DEBUG_BACKTRACE_IGNORE_ARGS : 0;
+		$backtrace = debug_backtrace($backtrace_args);
+		if(count($backtrace) > 1 && $backtrace[1]['function'] === 'xeErrorLog' && !$backtrace[1]['class'])
+		{
+			array_shift($backtrace);
+		}
+
+		foreach($backtrace as $key => $value)
+		{
+			$message = '    - ' . $value['file'] . ' : ' . $value['line'];
+			$print[] = $message;
+		}
+		$print[] = PHP_EOL;
+		@file_put_contents($debug_file, implode(PHP_EOL, $print), FILE_APPEND|LOCK_EX);
+		restore_error_handler();
+
+		return true;
+	}
+
+	function shutdownHandler()
+	{
+		$errinfo = error_get_last();
+		if ($errinfo === null || ($errinfo['type'] != 1 && $errinfo['type'] != 4))
+		{
+			return false;
+		}
+
+		set_error_handler(function() { }, ~0);
+
+		$debug_file = _XE_PATH_ . 'files/_debug_message.php';
+		$debug_file_exist = file_exists($debug_file);
+		if(!$debug_file_exist)
+		{
+			$print[] = '<?php exit() ?>';
+		}
+
+		$errorname = self::getErrorType($errinfo['type']);
+		$print[] = '['.date('Y-m-d H:i:s').']';
+		$print[] = $errorname . ' : ' . $errinfo['message'];
+
+		$message = '    - ' . $errinfo['file'] . ' : ' . $errinfo['line'];
+		$print[] = $message;
+
+		$print[] = PHP_EOL;
+		@file_put_contents($debug_file, implode(PHP_EOL, $print), FILE_APPEND|LOCK_EX);
+		set_error_handler(array($this, 'dummyHandler'), ~0);
+	}
+
+	public static function getErrorType($errno)
+	{
+		switch ($errno)
+		{
+			case E_ERROR: return 'Fatal Error';
+			case E_WARNING: return 'Warning';
+			case E_NOTICE: return 'Notice';
+			case E_CORE_ERROR: return 'Core Error';
+			case E_CORE_WARNING: return 'Core Warning';
+			case E_COMPILE_ERROR: return 'Compile Error';
+			case E_COMPILE_WARNING: return 'Compile Warning';
+			case E_USER_ERROR: return 'User Error';
+			case E_USER_WARNING: return 'User Warning';
+			case E_USER_NOTICE: return 'User Notice';
+			case E_STRICT: return 'Strict Standards';
+			case E_PARSE: return 'Parse Error';
+			case E_DEPRECATED: return 'Deprecated';
+			case E_USER_DEPRECATED: return 'User Deprecated';
+			case E_RECOVERABLE_ERROR: return 'Catchable Fatal Error';
+			default: return 'Error';
+		}
 	}
 
 	/**
