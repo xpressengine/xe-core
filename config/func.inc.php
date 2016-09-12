@@ -851,19 +851,28 @@ function debugPrint($debug_output = NULL, $display_option = TRUE, $file = '_debu
 		}
 
 		$print = array();
-		if(!$debug_file) $debug_file =  _XE_PATH_ . 'files/' . $file;
-		$debug_file_exist = file_exists($debug_file);
-		if(!$debug_file_exist) $print[] = '<?php exit() ?>';
+		if(!$debug_file)
+		{
+			$debug_file = _XE_PATH_ . 'files/' . $file;
+		}
+		if(!file_exists($debug_file)) $print[] = '<?php exit() ?>';
 
 		if($display_option === TRUE || $display_option === 'ERROR')
 		{
-			$print[] = '['.date('Y-m-d H:i:s').']';
+			$print[] = sprintf("[%s %s:%d] %s() - mem(%s)", date('Y-m-d H:i:s'), $file_name, $line_num, $function, FileHandler::filesize(memory_get_usage()));;
 			$print[] = str_repeat('=', 80);
 		}
 		$type = gettype($debug_output);
 		if(!in_array($type, array('array', 'object', 'resource')))
 		{
-			$print[] = 'DEBUG : ' . var_export($debug_output, TRUE);
+			if($display_option === 'ERROR')
+			{
+				$print[] = 'ERROR : ' . var_export($debug_output, TRUE);
+			}
+			else
+			{
+				$print[] = 'DEBUG : ' . $type . '(' . var_export($debug_output, TRUE) . ')';
+			}
 		}
 		else
 		{
@@ -878,7 +887,7 @@ function debugPrint($debug_output = NULL, $display_option = TRUE, $file = '_debu
 		}
 		foreach($backtrace as $val)
 		{
-			$print[] = '        - ' . $val['file'] . ' line ' . $val['line'];
+			$print[] = '        - ' . $val['file'] . ' : ' . $val['line'];
 		}
 		$print[] = PHP_EOL;
 		@file_put_contents($debug_file, implode(PHP_EOL, $print), FILE_APPEND|LOCK_EX);
