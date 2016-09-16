@@ -293,7 +293,7 @@ class DB
 
 			unset($oDB);
 			require_once($class_file);
-			$oDB = new $class_name();
+			$oDB = new $class_name(FALSE);
 
 			if(!$oDB)
 			{
