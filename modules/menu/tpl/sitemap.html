@@ -352,8 +352,6 @@
 		</fieldset>
 		<button type="button" class="x_close" data-admin-hide="#imgbtn">&times;</button>
 	</div>
-
-	
 	<!--@end-->
 
 	<!--@if($act == 'dispMenuAdminSiteMap')-->
@@ -435,7 +433,7 @@
 						<li data-admin-show="#downloadLayout">
 							<label><i class="x_icon-plus-sign"></i> {$lang->install_other_layouts}</label>
 							<button type="button" class="item _btnScreenshot">
-								<img src="./modules/layout/tpl/img/download.png" class="_thumbnail" alt="{$lang->install_other_layouts}">
+								<img src="../../../modules/layout/tpl/img/download.png" class="_thumbnail" alt="{$lang->install_other_layouts}">
 							</button>
 						</li>
 						</script>
@@ -558,7 +556,7 @@
 						<li data-admin-show="#downloadSkin">
 							<label><i class="x_icon-plus-sign"></i> {$lang->install_other_skins}</label>
 							<button type="button" class="item _btnScreenshot">
-								<img src="./modules/layout/tpl/img/download.png" class="_thumbnail" alt="{$lang->install_other_skins}">
+								<img src="../../../modules/layout/tpl/img/download.png" class="_thumbnail" alt="{$lang->install_other_skins}">
 							</button>
 						</li>
 						</script>
@@ -3799,7 +3797,9 @@ jQuery(function($){
 	function installPackage(sPackageSrl, sPackageType, $item){
 
 		//act=getAutoinstallAdminIsAuthed
-		$.exec_json("admin.getAutoinstallAdminIsAuthed", {}, function(htData){
+		var params = {};
+		params.package_srl = sPackageSrl;
+		$.exec_json("admin.getAutoinstallAdminIsAuthed", params, function(htData){
 			// FTP 비밀번호 뿐만 아니라 정보가 전혀 없을 경우?
 			switch(htData.is_authed){
 				case -1:
@@ -4122,6 +4122,3 @@ jQuery.extend({
 });
 //]]>
 </script>
-
-<div cond="$act === 'dispMenuAdminSiteMap'" class="admin-forum-container" data-chak-categories="XE설정:사이트 메뉴 편집"></div>
-<div cond="$act === 'dispMenuAdminSiteDesign'" class="admin-forum-container" data-chak-categories="XE설정:사이트 디자인 설정"></div>

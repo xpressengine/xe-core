@@ -200,9 +200,16 @@ class Context
 	 */
 	function init()
 	{
-		if(!isset($GLOBALS['HTTP_RAW_POST_DATA']) && version_compare(PHP_VERSION, '5.6.0', '>=') === true) {
-			if(simplexml_load_string(file_get_contents("php://input")) !== false) $GLOBALS['HTTP_RAW_POST_DATA'] = file_get_contents("php://input");
-			if(strpos($_SERVER['CONTENT_TYPE'], 'json') || strpos($_SERVER['HTTP_CONTENT_TYPE'], 'json')) $GLOBALS['HTTP_RAW_POST_DATA'] = file_get_contents("php://input");
+		// fix missing HTTP_RAW_POST_DATA in PHP 5.6 and above
+		if(!isset($GLOBALS['HTTP_RAW_POST_DATA']) && version_compare(PHP_VERSION, '5.6.0', '>=') === TRUE)
+		{
+			$GLOBALS['HTTP_RAW_POST_DATA'] = file_get_contents("php://input");
+			
+			// If content is not XML JSON, unset
+			if(!preg_match('/^[\<\{\[]/', $GLOBALS['HTTP_RAW_POST_DATA']) && strpos($_SERVER['CONTENT_TYPE'], 'json') === FALSE && strpos($_SERVER['HTTP_CONTENT_TYPE'], 'json') === FALSE)
+			{
+				unset($GLOBALS['HTTP_RAW_POST_DATA']);
+			}
 		}
 
 		// set context variables in $GLOBALS (to use in display handler)
@@ -438,7 +445,7 @@ class Context
 	 */
 	function loadDBInfo()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 
 		if(!$self->isInstalled())
 		{
@@ -522,7 +529,7 @@ class Context
 	 */
 	function getDBType()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		return $self->db_info->master_db["db_type"];
 	}
 
@@ -534,7 +541,7 @@ class Context
 	 */
 	function setDBInfo($db_info)
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		$self->db_info = $db_info;
 	}
 
@@ -545,7 +552,7 @@ class Context
 	 */
 	function getDBInfo()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		return $self->db_info;
 	}
 
@@ -663,22 +670,17 @@ class Context
 		// for sites recieving SSO valdiation
 		if($default_url == self::getRequestUri())
 		{
-			if(self::get('default_url'))
+			if(self::get('url'))
 			{
-				$url = base64_decode(self::get('default_url'));
+				$url = base64_decode(self::get('url'));
 				$url_info = parse_url($url);
-
-				$oModuleModel = getModel('module');
-				$target_domain = (stripos($url, $default_url) !== 0) ? $url_info['host'] : $default_url;
-				$site_info = $oModuleModel->getSiteInfoByDomain($target_domain);
-				if(!$site_info->site_srl) {
-					$oModuleObject = new ModuleObject();
-					$oModuleObject->stop('msg_invalid_request');
-
+				if(!Password::checkSignature($url, self::get('sig')))
+				{
+					echo self::get('lang')->msg_invalid_request;
 					return false;
 				}
 
-				$url_info['query'].= ($url_info['query'] ? '&' : '') . 'SSOID=' . session_id();
+				$url_info['query'].= ($url_info['query'] ? '&' : '') . 'SSOID=' . urlencode(session_id()) . '&sig=' . urlencode(Password::createSignature(session_id()));
 				$redirect_url = sprintf('%s://%s%s%s?%s', $url_info['scheme'], $url_info['host'], $url_info['port'] ? ':' . $url_info['port'] : '', $url_info['path'], $url_info['query']);
 				header('location:' . $redirect_url);
 
@@ -691,9 +693,15 @@ class Context
 			// result handling : set session_name()
 			if($session_name = self::get('SSOID'))
 			{
+				if(!Password::checkSignature($session_name, self::get('sig')))
+				{
+					echo self::get('lang')->msg_invalid_request;
+					return false;
+				}
+				
 				setcookie(session_name(), $session_name);
 
-				$url = preg_replace('/([\?\&])$/', '', str_replace('SSOID=' . $session_name, '', self::getRequestUrl()));
+				$url = preg_replace('/[\?\&]SSOID=.+$/', '', self::getRequestUrl());
 				header('location:' . $url);
 				return FALSE;
 				// send SSO request
@@ -701,7 +709,9 @@ class Context
 			else if(!self::get('SSOID') && $_COOKIE['sso'] != md5(self::getRequestUri()))
 			{
 				setcookie('sso', md5(self::getRequestUri()), 0, '/');
-				$url = sprintf("%s?default_url=%s", $default_url, base64_encode(self::getRequestUrl()));
+				$origin_url = self::getRequestUrl();
+				$origin_sig = Password::createSignature($origin_url);
+				$url = sprintf("%s?url=%s&sig=%s", $default_url, urlencode(base64_encode($origin_url)), urlencode($origin_sig));
 				header('location:' . $url);
 				return FALSE;
 			}
@@ -727,7 +737,7 @@ class Context
 	 */
 	function getFTPInfo()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 
 		if(!$self->isFTPRegisted())
 		{
@@ -751,7 +761,7 @@ class Context
 		{
 			return;
 		}
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 
 		if($self->site_title)
 		{
@@ -775,7 +785,7 @@ class Context
 		{
 			return;
 		}
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		$self->site_title = $site_title;
 	}
 
@@ -786,7 +796,7 @@ class Context
 	 */
 	function getBrowserTitle()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 
 		$oModuleController = getController('module');
 		$oModuleController->replaceDefinedLangCode($self->site_title);
@@ -829,7 +839,7 @@ class Context
 	{
 		global $lang;
 
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		if(!$self->lang_type)
 		{
 			return;
@@ -950,7 +960,7 @@ class Context
 	 */
 	function setLangType($lang_type = 'ko')
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 
 		$self->lang_type = $lang_type;
 		$self->set('lang_type', $lang_type);
@@ -965,7 +975,7 @@ class Context
 	 */
 	function getLangType()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		return $self->lang_type;
 	}
 
@@ -1122,7 +1132,7 @@ class Context
 	 */
 	function setResponseMethod($method = 'HTML')
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 
 		$methods = array('HTML' => 1, 'XMLRPC' => 1, 'JSON' => 1, 'JS_CALLBACK' => 1);
 		$self->response_method = isset($methods[$method]) ? $method : 'HTML';
@@ -1135,7 +1145,7 @@ class Context
 	 */
 	function getResponseMethod()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 
 		if($self->response_method)
 		{
@@ -1156,7 +1166,7 @@ class Context
 	 */
 	function setRequestMethod($type = '')
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 
 		$self->js_callback_func = $self->getJSCallbackFunc();
 
@@ -1419,7 +1429,7 @@ class Context
 	 */
 	function isUploaded()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		return $self->is_uploaded;
 	}
 
@@ -1473,7 +1483,7 @@ class Context
 	 */
 	function getRequestMethod()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		return $self->request_method;
 	}
 
@@ -1505,7 +1515,7 @@ class Context
 	 */
 	function getJSCallbackFunc()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		$js_callback_func = isset($_GET['xe_js_callback']) ? $_GET['xe_js_callback'] : $_POST['xe_js_callback'];
 
 		if(!preg_match('/^[a-z0-9\.]+$/i', $js_callback_func))
@@ -1533,7 +1543,7 @@ class Context
 		static $site_module_info = null;
 		static $current_info = null;
 
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 
 		// retrieve virtual site information
 		if(is_null($site_module_info))
@@ -1871,7 +1881,7 @@ class Context
 	 */
 	function set($key, $val, $set_to_get_vars = 0)
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		$self->context->{$key} = $val;
 		if($set_to_get_vars === FALSE)
 		{
@@ -1896,7 +1906,7 @@ class Context
 	 */
 	function get($key)
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 
 		if(!isset($self->context->{$key}))
 		{
@@ -1917,7 +1927,7 @@ class Context
 		{
 			return;
 		}
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 
 		$args_list = func_get_args();
 		$output = new stdClass();
@@ -1935,7 +1945,7 @@ class Context
 	 */
 	function getAll()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		return $self->context;
 	}
 
@@ -1946,7 +1956,7 @@ class Context
 	 */
 	function getRequestVars()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		if($self->get_vars)
 		{
 			return clone($self->get_vars);
@@ -1962,7 +1972,7 @@ class Context
 	 */
 	function addSSLAction($action)
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 
 		if(!is_readable($self->sslActionCacheFile))
 		{
@@ -1986,7 +1996,7 @@ class Context
 	 */
 	function addSSLActions($action_array)
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 
 		if(!is_readable($self->sslActionCacheFile))
 		{
@@ -2014,7 +2024,7 @@ class Context
 	 */
 	function subtractSSLAction($action)
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 
 		if($self->isExistsSSLAction($action))
 		{
@@ -2032,7 +2042,7 @@ class Context
 	 */
 	function getSSLActions()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		if($self->getSslStatus() == 'optional')
 		{
 			return $self->ssl_actions;
@@ -2047,7 +2057,7 @@ class Context
 	 */
 	function isExistsSSLAction($action)
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		return isset($self->ssl_actions[$action]);
 	}
 
@@ -2113,7 +2123,7 @@ class Context
 	 */
 	function loadFile($args)
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 
 		$self->oFrontEndFileHandler->loadFile($args);
 	}
@@ -2128,7 +2138,7 @@ class Context
 	 */
 	function unloadFile($file, $targetIe = '', $media = 'all')
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		$self->oFrontEndFileHandler->unloadFile($file, $targetIe, $media);
 	}
 
@@ -2140,7 +2150,7 @@ class Context
 	 */
 	function unloadAllFiles($type = 'all')
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		$self->oFrontEndFileHandler->unloadAllFiles($type);
 	}
 
@@ -2174,7 +2184,7 @@ class Context
 			$file = $validator->getJsPath();
 		}
 
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		$self->oFrontEndFileHandler->loadFile(array($file, $type, $targetie, $index));
 	}
 
@@ -2189,7 +2199,7 @@ class Context
 	 */
 	function unloadJsFile($file, $optimized = FALSE, $targetie = '')
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		$self->oFrontEndFileHandler->unloadFile($file, $targetie);
 	}
 
@@ -2200,7 +2210,7 @@ class Context
 	 */
 	function unloadAllJsFiles()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		$self->oFrontEndFileHandler->unloadAllFiles('js');
 	}
 
@@ -2249,7 +2259,7 @@ class Context
 	 */
 	function getJsFile($type = 'head')
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		return $self->oFrontEndFileHandler->getJsFileList($type);
 	}
 
@@ -2267,7 +2277,7 @@ class Context
 	 */
 	function addCSSFile($file, $optimized = FALSE, $media = 'all', $targetie = '', $index = 0)
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		$self->oFrontEndFileHandler->loadFile(array($file, $media, $targetie, $index));
 	}
 
@@ -2283,7 +2293,7 @@ class Context
 	 */
 	function unloadCSSFile($file, $optimized = FALSE, $media = 'all', $targetie = '')
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		$self->oFrontEndFileHandler->unloadFile($file, $targetie, $media);
 	}
 
@@ -2294,7 +2304,7 @@ class Context
 	 */
 	function unloadAllCSSFiles()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		$self->oFrontEndFileHandler->unloadAllFiles('css');
 	}
 
@@ -2305,7 +2315,7 @@ class Context
 	 */
 	function getCSSFile()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		return $self->oFrontEndFileHandler->getCssFileList();
 	}
 
@@ -2373,7 +2383,7 @@ class Context
 	{
 		static $loaded_plugins = array();
 
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		if($plugin_name == 'ui.datepicker')
 		{
 			$plugin_name = 'ui';
@@ -2429,13 +2439,13 @@ class Context
 	 */
 	function addHtmlHeader($header)
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		$self->html_header .= "\n" . $header;
 	}
 
 	function clearHtmlHeader()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		$self->html_header = '';
 	}
 
@@ -2446,7 +2456,7 @@ class Context
 	 */
 	function getHtmlHeader()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		return $self->html_header;
 	}
 
@@ -2457,7 +2467,7 @@ class Context
 	 */
 	function addBodyClass($class_name)
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		$self->body_class[] = $class_name;
 	}
 
@@ -2468,7 +2478,7 @@ class Context
 	 */
 	function getBodyClass()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		$self->body_class = array_unique($self->body_class);
 
 		return (count($self->body_class) > 0) ? sprintf(' class="%s"', join(' ', $self->body_class)) : '';
@@ -2481,7 +2491,7 @@ class Context
 	 */
 	function addBodyHeader($header)
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		$self->body_header .= "\n" . $header;
 	}
 
@@ -2492,7 +2502,7 @@ class Context
 	 */
 	function getBodyHeader()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		return $self->body_header;
 	}
 
@@ -2503,7 +2513,7 @@ class Context
 	 */
 	function addHtmlFooter($footer)
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		$self->html_footer .= ($self->Htmlfooter ? "\n" : '') . $footer;
 	}
 
@@ -2514,7 +2524,7 @@ class Context
 	 */
 	function getHtmlFooter()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		return $self->html_footer;
 	}
 
@@ -2633,7 +2643,7 @@ class Context
 	 */
 	function getMetaTag()
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 
 		if(!is_array($self->meta_tags))
 		{
@@ -2660,7 +2670,7 @@ class Context
 	 */
 	function addMetaTag($name, $content, $is_http_equiv = FALSE)
 	{
-		is_a($this, 'Context') ? $self = $this : $self = self::getInstance();
+		$self = self::getInstance();
 		$self->meta_tags[$name . "\t" . ($is_http_equiv ? '1' : '0')] = $content;
 	}
 
