@@ -3734,6 +3734,19 @@
 			<value xml:lang="vi"><![CDATA[Định dạng của %s không hợp lệ. Chỉ sử dụng các chữ số]]></value>
 			<value xml:lang="mn"><![CDATA[%s-ын хэлбэр буруу байна. Зөвхөн тоогоор оруулах ёстой.]]></value>
 		</item>
+		<item name="invalid_float">
+			<value xml:lang="ko"><![CDATA[%s의 형식이 잘못되었습니다. 실수로만 입력해야 합니다.]]></value>
+			<value xml:lang="en"><![CDATA[The format of %s is invalid. Please enter real numbers only.]]></value>
+			<value xml:lang="jp"><![CDATA[%sの形式が正しくありません。半角数字で入力してください。]]></value>
+			<value xml:lang="zh-CN"><![CDATA[%s只能输入数字]]></value>
+			<value xml:lang="zh-TW"><![CDATA[%s只能輸入數字]]></value>
+			<value xml:lang="fr"><![CDATA[La format de %s n'est pas convenable. Entrez seulement des chiffres.]]></value>
+			<value xml:lang="de"><![CDATA[Das Format von% s ist ungültig. Bitte nur Zahlen eingeben.]]></value>
+			<value xml:lang="es"><![CDATA[Sólo puede introducir los dígitos numéricos en el %s]]></value>
+			<value xml:lang="tr"><![CDATA[%s bicimi geçersizdir . Lütfen sadece numaraları kullanın.]]></value>
+			<value xml:lang="vi"><![CDATA[Định dạng của %s không hợp lệ. Chỉ sử dụng các chữ số]]></value>
+			<value xml:lang="mn"><![CDATA[%s-ын хэлбэр буруу байна. Зөвхөн тоогоор оруулах ёстой.]]></value>
+		</item>
 	</item>
 	<item name="security_invalid_session">
 			<value xml:lang="ko"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>

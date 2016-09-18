@@ -11,8 +11,6 @@
         "php": ">=5.4.0"
     },
     "require-dev": {
-        "codeception/codeception": "~2.0",
-        "codeception/verify": "0.2.*",
-        "codeception/specify": "0.4.*"
+        "codeception/codeception": "~2.0"
     }
 }

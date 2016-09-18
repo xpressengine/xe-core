@@ -29,7 +29,7 @@ define('__ZBXE__', __XE__);
 /**
  * Display XE's full version.
  */
-define('__XE_VERSION__', '1.8.8');
+define('__XE_VERSION__', '1.8.24');
 define('__XE_VERSION_ALPHA__', (stripos(__XE_VERSION__, 'alpha') !== false));
 define('__XE_VERSION_BETA__', (stripos(__XE_VERSION__, 'beta') !== false));
 define('__XE_VERSION_RC__', (stripos(__XE_VERSION__, 'rc') !== false));
@@ -270,6 +270,17 @@ if(!defined('__PROXY_SERVER__'))
 	define('__PROXY_SERVER__', NULL);
 }
 
+if(!defined('__ERROR_LOG__'))
+{
+	/**
+	 * __ERROR_LOG__ 는 PHP의 에러로그를 출력하는 기능입니다. 개발시 워닝에러이상의 에러부터 잡기 시작합니다.
+	 *
+	 * 0: 사용하지 않음
+	 * 1: 사용함
+	 */
+	define('__ERROR_LOG__', 0);
+}
+
 // Require specific files when using Firebug console output
 if((__DEBUG_OUTPUT__ == 2) && version_compare(PHP_VERSION, '6.0.0') === -1)
 {
@@ -351,7 +362,7 @@ $GLOBALS['__xe_autoload_file_map'] = array_change_key_case(array(
 	'TemplateHandler' => 'classes/template/TemplateHandler.class.php',
 	'Validator' => 'classes/validator/Validator.class.php',
 	'WidgetHandler' => 'classes/widget/WidgetHandler.class.php',
-	'GeneralXmlParser' => 'classes/widget/GeneralXmlParser.class.php',
+	'GeneralXmlParser' => 'classes/xml/GeneralXmlParser.class.php',
 	'Xml_Node_' => 'classes/xml/XmlParser.class.php',
 	'XmlGenerator' => 'classes/xml/XmlGenerator.class.php',
 	'XmlJsFilter' => 'classes/xml/XmlJsFilter.class.php',

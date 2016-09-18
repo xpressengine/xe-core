@@ -107,6 +107,11 @@ class boardController extends board
 				return new Object(-1,'msg_not_permitted');
 			}
 
+			if($this->module_info->use_anonymous == 'Y') {
+				$obj->member_srl = abs($oDocument->get('member_srl')) * -1;
+				$oDocument->add('member_srl', $obj->member_srl);
+			}
+
 			if($this->module_info->protect_content=="Y" && $oDocument->get('comment_count')>0 && $this->grant->manager==false)
 			{
 				return new Object(-1,'msg_protect_content');
@@ -127,7 +132,7 @@ class boardController extends board
 				$obj->update_order = $obj->list_order = (getNextSequence() * -1);
 			}
 
-			$output = $oDocumentController->updateDocument($oDocument, $obj);
+			$output = $oDocumentController->updateDocument($oDocument, $obj, true);
 			$msg_code = 'success_updated';
 
 		// insert a new document otherwise
@@ -139,10 +144,13 @@ class boardController extends board
 			// send an email to admin user
 			if($output->toBool() && $this->module_info->admin_mail)
 			{
+				$oModuleModel = getModel('module');
+				$member_config = $oModuleModel->getModuleConfig('member');
+				
 				$oMail = new Mail();
 				$oMail->setTitle($obj->title);
 				$oMail->setContent( sprintf("From : <a href=\"%s\">%s</a><br/>\r\n%s", getFullUrl('','document_srl',$obj->document_srl), getFullUrl('','document_srl',$obj->document_srl), $obj->content));
-				$oMail->setSender($obj->user_name, $obj->email_address);
+				$oMail->setSender($obj->user_name ? $obj->user_name : 'anonymous', $obj->email_address ? $obj->email_address : $member_config->webmaster_email);
 
 				$target_mail = explode(',',$this->module_info->admin_mail);
 				for($i=0;$i<count($target_mail);$i++)
@@ -166,7 +174,10 @@ class boardController extends board
 		$this->add('document_srl', $output->get('document_srl'));
 
 		// alert a message
-		$this->setMessage($msg_code);
+		if(Context::get('xeVirtualRequestMethod') !== 'xml')
+		{
+			$this->setMessage($msg_code);
+		}
 	}
 
 	/**
@@ -202,9 +213,13 @@ class boardController extends board
 		}
 
 		// alert an message
+		$this->setRedirectUrl(getNotEncodedUrl('', 'mid', Context::get('mid'), 'act', '', 'page', Context::get('page'), 'document_srl', ''));
 		$this->add('mid', Context::get('mid'));
-		$this->add('page', $output->get('page'));
-		$this->setMessage('success_deleted');
+		$this->add('page', Context::get('page'));
+		if(Context::get('xeVirtualRequestMethod') !== 'xml')
+		{
+			$this->setMessage('success_deleted');
+		}
 	}
 
 	/**
@@ -326,7 +341,10 @@ class boardController extends board
 			return $output;
 		}
 
-		$this->setMessage('success_registed');
+		if(Context::get('xeVirtualRequestMethod') !== 'xml')
+		{
+			$this->setMessage('success_registed');
+		}
 		$this->add('mid', Context::get('mid'));
 		$this->add('document_srl', $obj->document_srl);
 		$this->add('comment_srl', $obj->comment_srl);
@@ -356,7 +374,10 @@ class boardController extends board
 		$this->add('mid', Context::get('mid'));
 		$this->add('page', Context::get('page'));
 		$this->add('document_srl', $output->get('document_srl'));
-		$this->setMessage('success_deleted');
+		if(Context::get('xeVirtualRequestMethod') !== 'xml')
+		{
+			$this->setMessage('success_deleted');
+		}
 	}
 
 	/**
@@ -380,7 +401,10 @@ class boardController extends board
 		$this->add('mid', Context::get('mid'));
 		$this->add('page', Context::get('page'));
 		$this->add('document_srl', $output->get('document_srl'));
-		$this->setMessage('success_deleted');
+		if(Context::get('xeVirtualRequestMethod') !== 'xml')
+		{
+			$this->setMessage('success_deleted');
+		}
 	}
 
 	/**
