@@ -29,7 +29,7 @@ class TemplateHandler
 	 */
 	public function __construct()
 	{
-		$this->xe_path = rtrim(preg_replace('/([^\.^\/]+)\.php$/i', '', $_SERVER['SCRIPT_NAME']), '/');
+		$this->xe_path = rtrim(getScriptPath(), '/');
 		$this->compiled_path = _XE_PATH_ . $this->compiled_path;
 	}
 

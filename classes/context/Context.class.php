@@ -2093,13 +2093,14 @@ class Context
 	function getAbsFileUrl($file)
 	{
 		$file = self::normalizeFilePath($file);
+		$script_path = getScriptPath();
 		if(strpos($file, './') === 0)
 		{
-			$file = dirname($_SERVER['SCRIPT_NAME']) . '/' . substr($file, 2);
+			$file = $script_path . substr($file, 2);
 		}
 		elseif(strpos($file, '../') === 0)
 		{
-			$file = self::normalizeFilePath(dirname($_SERVER['SCRIPT_NAME']) . "/{$file}");
+			$file = self::normalizeFilePath($script_path . $file);
 		}
 
 		return $file;

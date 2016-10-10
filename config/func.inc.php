@@ -1352,7 +1352,8 @@ function getScriptPath()
 	static $url = NULL;
 	if($url == NULL)
 	{
-		$url = str_ireplace('/tools/', '/', preg_replace('/index.php$/i', '', str_replace('\\', '/', $_SERVER['SCRIPT_NAME'])));
+		$script_path = filter_var($_SERVER['SCRIPT_NAME'], FILTER_SANITIZE_STRING);
+		$url = str_ireplace('/tools/', '/', preg_replace('/index.php.*/i', '', str_replace('\\', '/', $script_path)));
 	}
 	return $url;
 }
