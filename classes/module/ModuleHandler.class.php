@@ -104,12 +104,7 @@ class ModuleHandler extends Handler
 		ModuleHandler::triggerCall('moduleHandler.init', 'before', $this);
 		if(__ERROR_LOG__ == 1 && __DEBUG_OUTPUT__ == 0)
 		{
-			if(__DEBUG_PROTECT__ === 1 && __DEBUG_PROTECT_IP__ == $_SERVER['REMOTE_ADDR'])
-			{
-				set_error_handler(array($this, 'xeErrorLog'), E_WARNING);
-				register_shutdown_function(array($this, 'shutdownHandler'));
-			}
-			else if(__DEBUG_PROTECT__ === 0)
+			if(__DEBUG_PROTECT__ === 0 || __DEBUG_PROTECT__ === 1 && __DEBUG_PROTECT_IP__ == $_SERVER['REMOTE_ADDR'])
 			{
 				set_error_handler(array($this, 'xeErrorLog'), E_WARNING);
 				register_shutdown_function(array($this, 'shutdownHandler'));
@@ -133,8 +128,7 @@ class ModuleHandler extends Handler
 		set_error_handler(function() { }, ~0);
 
 		$debug_file = _XE_PATH_ . 'files/_debug_message.php';
-		$debug_file_exist = file_exists($debug_file);
-		if(!$debug_file_exist)
+		if(!file_exists($debug_file))
 		{
 			$print[] = '<?php exit() ?>';
 		}
@@ -171,8 +165,7 @@ class ModuleHandler extends Handler
 		set_error_handler(function() { }, ~0);
 
 		$debug_file = _XE_PATH_ . 'files/_debug_message.php';
-		$debug_file_exist = file_exists($debug_file);
-		if(!$debug_file_exist)
+		if(!file_exists($debug_file))
 		{
 			$print[] = '<?php exit() ?>';
 		}
@@ -187,6 +180,8 @@ class ModuleHandler extends Handler
 		$print[] = PHP_EOL;
 		@file_put_contents($debug_file, implode(PHP_EOL, $print), FILE_APPEND|LOCK_EX);
 		set_error_handler(array($this, 'dummyHandler'), ~0);
+
+		return true;
 	}
 
 	public static function getErrorType($errno)
