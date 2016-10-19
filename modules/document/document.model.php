@@ -288,6 +288,10 @@ class documentModel extends document
 			}
 			else
 			{
+				if(Context::get('act')=='dispMemberOwnDocument' && $args->s_member_srl) 
+				{
+					$query_id = 'document.getDocumentListWithAnonymous';
+				}				
 				$output = executeQueryArray($query_id, $args, $columnList);
 			}
 		}
