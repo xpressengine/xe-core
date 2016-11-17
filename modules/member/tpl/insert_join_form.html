@@ -15,7 +15,7 @@
 		<div class="x_control-group">
 			<label for="column_title" class="x_control-label"><em style="color:red">*</em> {$lang->column_title}</label>
 			<div class="x_controls">
-				<input type="text" id="column_title" name="column_title" value="{$formInfo->column_title}" />
+				<input type="text" name="column_title" value="{htmlspecialchars($formInfo->column_title, ENT_COMPAT | ENT_HTML401, 'UTF-8', false)}" class="lang_code" title="{$lang->column_title}" />
 			</div>
 		</div>
 		<div class="x_control-group">
@@ -36,7 +36,7 @@
 		<div class="x_control-group">
 			<label for="desc" class="x_control-label">{$lang->description}</label>
 			<div class="x_controls">
-				<textarea rows="4" cols="42" id="desc" name="description">{$formInfo->description}</textarea>
+				<textarea rows="4" cols="42" id="desc" name="description" class="lang_code" title="{$lang->description}">{htmlspecialchars($formInfo->description, ENT_COMPAT | ENT_HTML401, 'UTF-8', false)}</textarea>
 			</div>
 		</div>
 		<div class="x_control-group">
