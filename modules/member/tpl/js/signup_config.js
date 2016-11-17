@@ -82,8 +82,8 @@ jQuery(function($){
 			{member_join_form_srl:memberFormSrl},
 			function(ret){
 				var tpl = ret.tpl.replace(/<enter>/g, '\n');
-				$('#extendForm').html(tpl);
-
+				$('#extendForm').html(tpl).find('.lang_code').xeApplyMultilingualUI();
+				
 				if (checked)$('#extendForm #radio_'+checked).attr('checked', 'checked');
 			},
 			['error','message','tpl']
