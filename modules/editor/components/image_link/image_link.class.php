@@ -58,14 +58,22 @@ class image_link extends EditorHandler
 		$src = str_replace(array('&','"'), array('&amp;','&qout;'), $src);
 		$src = str_replace('&amp;amp;', '&amp;', $src);
 
+		$sslPort = Context::get('_https_port');
+		$sslPort = $sslPort != '443' ? ':'.$sslPort : '';
+
 		// Image containing the address to the address conversion request uri (rss output, etc. purposes)
 		$temp_src = explode('/', $src);
 		if(substr($src, 0,2)=='./') $src = Context::getRequestUri().substr($src, 2);
 		else if(substr($src , 0, 1)=='/')
 		{
-			if($_SERVER['HTTPS']=='on') $http_src = 'https://';
-			else $http_src = 'http://';
-			$src = $http_src.$_SERVER['HTTP_HOST'].$src;
+			if($_SERVER['HTTPS']=='on') {
+				$http_src = 'https://';
+				$src = $http_src.$_SERVER['HTTP_HOST'].$sslPort.$src;
+			} else {
+				$http_src = 'http://';
+				$src = $http_src.$_SERVER['HTTP_HOST'].$src;
+			}
+
 		}
 		else if(!strpos($temp_src[0],':') && $src) $src = Context::getRequestUri().$src;
 
