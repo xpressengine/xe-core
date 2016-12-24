@@ -66,7 +66,7 @@ class DisplayHandler extends Handler
 
 		// call a trigger before display
 		ModuleHandler::triggerCall('display', 'before', $output);
-		
+
 		// execute add-on
 		$called_position = 'before_display_content';
 		$oAddonController = getController('addon');
@@ -348,7 +348,7 @@ class DisplayHandler extends Handler
 	 */
 	function _printJSONHeader()
 	{
-		header("Content-Type: text/html; charset=UTF-8");
+		header("Content-Type: application/json; charset=UTF-8");
 		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 		header("Cache-Control: no-store, no-cache, must-revalidate");
