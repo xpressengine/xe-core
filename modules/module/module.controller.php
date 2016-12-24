@@ -120,6 +120,31 @@ class moduleController extends module
 	}
 
 	/**
+	 * @brief Delete module trigger
+	 *
+	 */
+	function deleteModuleTriggers($module)
+	{
+		$args = new stdClass();
+		$args->module = $module;
+
+		$output = executeQuery('module.deleteModuleTriggers', $args);
+		if($output->toBool())
+		{
+			//remove from cache
+			$GLOBALS['__triggers__'] = NULL;
+			$oCacheHandler = CacheHandler::getInstance('object', NULL, TRUE);
+			if($oCacheHandler->isSupport())
+			{
+				$cache_key = 'triggers';
+				$oCacheHandler->delete($cache_key);
+			}
+		}
+
+		return $output;
+	}
+
+	/**
 	 * @brief Add module extend
 	 *
 	 */
@@ -416,6 +441,8 @@ class moduleController extends module
 
 		unset($output);
 
+		$args->browser_title = strip_tags($args->browser_title);
+
 		if($isMenuCreate == TRUE)
 		{
 			$menuArgs = new stdClass;
@@ -451,8 +478,8 @@ class moduleController extends module
 			}
 		}
 
-		$args->menu_srl = $menuArgs->menu_srl;
 		// Insert a module
+		$args->menu_srl = $menuArgs->menu_srl;
 		$output = executeQuery('module.insertModule', $args);
 		if(!$output->toBool())
 		{
@@ -495,6 +522,8 @@ class moduleController extends module
 			if(!$args->site_srl) $args->site_srl = (int)$module_info->site_srl;
 			if(!$args->browser_title) $args->browser_title = $module_info->browser_title;
 		}
+
+		$args->browser_title = strip_tags($args->browser_title);
 
 		$output = executeQuery('module.isExistsModuleName', $args);
 		if(!$output->toBool() || $output->data->count)
@@ -952,7 +981,7 @@ class moduleController extends module
 			}
 		}
 
-		$oDB->commit;
+		$oDB->commit();
 
 		return new Object();
 	}

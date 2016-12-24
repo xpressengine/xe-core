@@ -49,6 +49,7 @@ class fileModel extends file
 				if($file_info->direct_download=='N') $obj->download_url = $this->getDownloadUrl($file_info->file_srl, $file_info->sid, $file_info->module_srl);
 				else $obj->download_url = str_replace('./', '', $file_info->uploaded_filename);
 				$obj->direct_download = $file_info->direct_download;
+				$obj->cover_image = ($file_info->cover_image === 'Y') ? true : false;
 				$files[] = $obj;
 				$attached_size += $file_info->file_size;
 			}
@@ -67,11 +68,19 @@ class fileModel extends file
 		$file_config = $this->getUploadConfig();
 		$left_size = $file_config->allowed_attach_size*1024*1024 - $attached_size;
 		// Settings of required information
+		$attached_size = FileHandler::filesize($attached_size);
+		$allowed_attach_size = FileHandler::filesize($file_config->allowed_attach_size*1024*1024);
+		$allowed_filesize = FileHandler::filesize($file_config->allowed_filesize*1024*1024);
+		$allowed_filetypes = $file_config->allowed_filetypes;
 		$this->add("files",$files);
 		$this->add("editor_sequence",$editor_sequence);
 		$this->add("upload_target_srl",$upload_target_srl);
 		$this->add("upload_status",$upload_status);
 		$this->add("left_size",$left_size);
+		$this->add('attached_size', $attached_size);
+		$this->add('allowed_attach_size', $allowed_attach_size);
+		$this->add('allowed_filesize', $allowed_filesize);
+		$this->add('allowed_filetypes', $allowed_filetypes);
 	}
 
 	/**
@@ -143,6 +152,21 @@ class fileModel extends file
 		if(!$config->allow_outlink) $config->allow_outlink = 'Y';
 		if(!$config->download_grant) $config->download_grant = array();
 
+		$size = ini_get('upload_max_filesize');
+		$unit = strtolower($size[strlen($size) - 1]);
+		$size = (float)$size;
+		if($unit == 'g') $size *= 1024;
+		if($unit == 'k') $size /= 1024;
+
+		if($config->allowed_filesize > $size) 
+		{	
+			$config->allowed_filesize = $size;
+		}
+		if($config->allowed_attach_size > $size) 
+		{
+			$config->allowed_attach_size = $size;
+		}
+		
 		return $config;
 	}
 
@@ -211,6 +235,7 @@ class fileModel extends file
 		{
 			$file = $file_list[$i];
 			$file->source_filename = stripslashes($file->source_filename);
+			$file->source_filename = htmlspecialchars($file->source_filename);
 			$file->download_url = $this->getDownloadUrl($file->file_srl, $file->sid, $file->module_srl);
 			$file_list[$i] = $file;
 		}

@@ -36,6 +36,11 @@ class comment extends ModuleObject
 		// 2008. 02. 22 add comment setting when a new module added
 		$oModuleController->insertTrigger('module.dispAdditionSetup', 'comment', 'view', 'triggerDispCommentAdditionSetup', 'before');
 
+		if(!is_dir('./files/cache/tmp'))
+		{
+			FileHandler::makeDir('./files/cache/tmp');
+		}
+
 		return new Object();
 	}
 
@@ -184,7 +189,10 @@ class comment extends ModuleObject
 	 */
 	function recompileCache()
 	{
-		
+		if(!is_dir('./files/cache/tmp'))
+		{
+			FileHandler::makeDir('./files/cache/tmp');
+		}
 	}
 
 }

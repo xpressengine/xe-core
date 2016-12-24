@@ -131,8 +131,8 @@ class communicationController extends communication
 			$view_url = Context::getRequestUri();
 			$content = sprintf("%s<br /><br />From : <a href=\"%s\" target=\"_blank\">%s</a>", $content, $view_url, $view_url);
 			$oMail = new Mail();
-			$oMail->setTitle($title);
-			$oMail->setContent($content);
+			$oMail->setTitle(htmlspecialchars($title, ENT_COMPAT | ENT_HTML401, 'UTF-8', false));
+			$oMail->setContent(removeHackTag($content));
 			$oMail->setSender($logged_info->nick_name, $logged_info->email_address);
 			$oMail->setReceiptor($receiver_member_info->nick_name, $receiver_member_info->email_address);
 			$oMail->send();
@@ -153,7 +153,7 @@ class communicationController extends communication
 			else
 			{
 				$this->setMessage('success_sended');
-				$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('act', 'dispCommunicationMessages', 'message_type', 'S', 'receiver_srl', $receiver_srl, 'message_srl', '');
+				$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('','act', 'dispCommunicationMessages', 'message_type', 'S', 'receiver_srl', $receiver_srl, 'message_srl', '');
 				$this->setRedirectUrl($returnUrl);
 			}
 		}

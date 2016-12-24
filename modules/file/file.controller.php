@@ -25,7 +25,8 @@ class fileController extends file
 	 */
 	function procFileUpload()
 	{
-		$file_info = Context::get('Filedata');
+		Context::setRequestMethod('JSON');
+		$file_info = $_FILES['Filedata'];
 
 		// An error appears if not a normally uploaded file
 		if(!is_uploaded_file($file_info['tmp_name'])) exit();
@@ -43,7 +44,9 @@ class fileController extends file
 		// Create if upload_target_srl is not defined in the session information
 		if(!$upload_target_srl) $_SESSION['upload_info'][$editor_sequence]->upload_target_srl = $upload_target_srl = getNextSequence();
 
-		return $this->insertFile($file_info, $module_srl, $upload_target_srl);
+		$output = $this->insertFile($file_info, $module_srl, $upload_target_srl);
+		Context::setResponseMethod('JSON');
+		if($output->error != '0') $this->stop($output->message);
 	}
 
 	/**
@@ -109,11 +112,11 @@ class fileController extends file
 		$source_src = $fileInfo->uploaded_filename;
 		$output_src = $source_src . '.resized' . strrchr($source_src,'.');
 
-		$type = 'ratio';
 		if(!$height) $height = $width-1;
 
 		if(FileHandler::createImageFile($source_src,$output_src,$width,$height,'','ratio'))
 		{
+			$output = new stdClass();
 			$output->info = getimagesize($output_src);
 			$output->src = $output_src;
 		}
@@ -273,7 +276,8 @@ class fileController extends file
 		// Call a trigger (after)
 		$output = ModuleHandler::triggerCall('file.downloadFile', 'after', $file_obj);
 
-		$file_key = $_SESSION['__XE_FILE_KEY__'][$file_srl] = hash('md5',rand());
+		$random = new Password();
+		$file_key = $_SESSION['__XE_FILE_KEY__'][$file_srl] = $random->createSecureSalt(32, 'hex');
 		header('Location: '.getNotEncodedUrl('', 'act', 'procFileOutput','file_srl',$file_srl,'file_key',$file_key));
 		Context::close();
 		exit();
@@ -304,10 +308,30 @@ class fileController extends file
 
 		$file_size = $file_obj->file_size;
 		$filename = $file_obj->source_filename;
-		if(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== FALSE || (strpos($_SERVER['HTTP_USER_AGENT'], 'Windows') !== FALSE && strpos($_SERVER['HTTP_USER_AGENT'], 'Trident') !== FALSE && strpos($_SERVER['HTTP_USER_AGENT'], 'rv:') !== FALSE))
+		
+		if(preg_match('#(?:Chrome|Edge)/(\d+)\.#', $_SERVER['HTTP_USER_AGENT'], $matches) && $matches[1] >= 11)
+		{
+			if($is_android && preg_match('#\bwv\b|(?:Version|Browser)/\d+#', $_SERVER['HTTP_USER_AGENT']))
+			{
+				$filename_param = 'filename="' . $filename . '"';
+			}
+			else
+			{
+				$filename_param = "filename*=UTF-8''" . rawurlencode($filename) . '; filename="' . rawurlencode($filename) . '"';
+			}
+		}
+		elseif(preg_match('#(?:Firefox|Safari|Trident)/(\d+)\.#', $_SERVER['HTTP_USER_AGENT'], $matches) && $matches[1] >= 6)
+		{
+			$filename_param = "filename*=UTF-8''" . rawurlencode($filename) . '; filename="' . rawurlencode($filename) . '"';
+		}
+		elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== FALSE)
 		{
 			$filename = rawurlencode($filename);
-			$filename = preg_replace('/\./', '%2e', $filename, substr_count($filename, '.') - 1);
+			$filename_param = 'filename="' . preg_replace('/\./', '%2e', $filename, substr_count($filename, '.') - 1) . '"';
+		}
+		else
+		{
+			$filename_param = 'filename="' . $filename . '"';
 		}
 
 		if($is_android)
@@ -328,7 +352,7 @@ class fileController extends file
 		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 
 		header("Content-Length: " .(string)($file_size));
-		header('Content-Disposition: attachment; filename="'.$filename.'"');
+		header('Content-Disposition: attachment; ' . $filename_param);
 		header("Content-Transfer-Encoding: binary\n");
 
 		// if file size is lager than 10MB, use fread function (#18675748)
@@ -658,20 +682,24 @@ class fileController extends file
 			}
 		}
 
+		// https://github.com/xpressengine/xe-core/issues/1713
+		$file_info['name'] = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|jsp|asp|inc)/i', '$0-x',$file_info['name']);
+		$file_info['name'] = removeHackTag($file_info['name']);
+		$file_info['name'] = str_replace(array('<','>'),array('%3C','%3E'),$file_info['name']);
+
+		// Get random number generator
+		$random = new Password();
+
 		// Set upload path by checking if the attachement is an image or other kinds of file
 		if(preg_match("/\.(jpe?g|gif|png|wm[va]|mpe?g|avi|swf|flv|mp[1-4]|as[fx]|wav|midi?|moo?v|qt|r[am]{1,2}|m4v)$/i", $file_info['name']))
 		{
-			// Immediately remove the direct file if it has any kind of extensions for hacking
-			$file_info['name'] = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|jsp|asp|inc)/i', '$0-x',$file_info['name']);
-			$file_info['name'] = str_replace(array('<','>'),array('%3C','%3E'),$file_info['name']);
-
 			$path = sprintf("./files/attach/images/%s/%s", $module_srl,getNumberingPath($upload_target_srl,3));
 
 			// special character to '_'
-			// change to md5 file name. because window php bug. window php is not recognize unicode character file name - by cherryfilter
+			// change to random file name. because window php bug. window php is not recognize unicode character file name - by cherryfilter
 			$ext = substr(strrchr($file_info['name'],'.'),1);
 			//$_filename = preg_replace('/[#$&*?+%"\']/', '_', $file_info['name']);
-			$_filename = md5(crypt(rand(1000000,900000), rand(0,100))).'.'.$ext;
+			$_filename = $random->createSecureSalt(32, 'hex').'.'.$ext;
 			$filename  = $path.$_filename;
 			$idx = 1;
 			while(file_exists($filename))
@@ -684,7 +712,7 @@ class fileController extends file
 		else
 		{
 			$path = sprintf("./files/attach/binaries/%s/%s", $module_srl, getNumberingPath($upload_target_srl,3));
-			$filename = $path.md5(crypt(rand(1000000,900000), rand(0,100)));
+			$filename = $path.$random->createSecureSalt(32, 'hex');
 			$direct_download = 'N';
 		}
 		// Create a directory
@@ -693,13 +721,16 @@ class fileController extends file
 		// Check uploaded file
 		if(!checkUploadedFile($file_info['tmp_name']))  return new Object(-1,'msg_file_upload_error');
 
+		// Get random number generator
+		$random = new Password();
+		
 		// Move the file
 		if($manual_insert)
 		{
 			@copy($file_info['tmp_name'], $filename);
 			if(!file_exists($filename))
 			{
-				$filename = $path. md5(crypt(rand(1000000,900000).$file_info['name'])).'.'.$ext;
+				$filename = $path.$random->createSecureSalt(32, 'hex').'.'.$ext;
 				@copy($file_info['tmp_name'], $filename);
 			}
 		}
@@ -707,7 +738,7 @@ class fileController extends file
 		{
 			if(!@move_uploaded_file($file_info['tmp_name'], $filename))
 			{
-				$filename = $path. md5(crypt(rand(1000000,900000).$file_info['name'])).'.'.$ext;
+				$filename = $path.$random->createSecureSalt(32, 'hex').'.'.$ext;
 				if(!@move_uploaded_file($file_info['tmp_name'], $filename))  return new Object(-1,'msg_file_upload_error');
 			}
 		}
@@ -726,7 +757,7 @@ class fileController extends file
 		$args->file_size = @filesize($filename);
 		$args->comment = NULL;
 		$args->member_srl = $member_srl;
-		$args->sid = md5(rand(rand(1111111,4444444),rand(4444445,9999999)));
+		$args->sid = $random->createSecureSalt(32, 'hex');
 
 		$output = executeQuery('file.insertFile', $args);
 		if(!$output->toBool()) return $output;
@@ -906,7 +937,8 @@ class fileController extends file
 			else
 			{
 				$path = sprintf("./files/attach/binaries/%s/%s/", $target_module_srl, $target_srl);
-				$new_file = $path.md5(crypt(rand(1000000,900000), rand(0,100)));
+				$random = new Password();
+				$new_file = $path.$random->createSecureSalt(32, 'hex');
 			}
 			// Pass if a target document to move is same
 			if($old_file == $new_file) continue;
@@ -922,6 +954,52 @@ class fileController extends file
 			$args->upload_target_srl = $target_srl;
 			executeQuery('file.updateFile', $args);
 		}
+	}
+
+	public function procFileSetCoverImage()
+	{
+		$vars = Context::getRequestVars();
+		$logged_info = Context::get('logged_info');
+
+		if(!$vars->editor_sequence) return new Object(-1, 'msg_invalid_request');
+
+		$upload_target_srl = $_SESSION['upload_info'][$vars->editor_sequence]->upload_target_srl;
+
+		$oFileModel = getModel('file');
+		$file_info = $oFileModel->getFile($vars->file_srl);
+
+		if(!$file_info) return new Object(-1, 'msg_not_founded');
+
+		if(!$this->manager && !$file_info->member_srl === $logged_info->member_srl) return new Object(-1, 'msg_not_permitted');
+
+		$args =  new stdClass();
+		$args->file_srl = $vars->file_srl;
+		$args->upload_target_srl = $upload_target_srl;
+
+		$oDB = &DB::getInstance();
+		$oDB->begin();
+
+		$args->cover_image = 'N';
+		$output = executeQuery('file.updateClearCoverImage', $args);
+		if(!$output->toBool())
+		{
+			$oDB->rollback();
+			return $output;
+		}
+
+		$args->cover_image = 'Y';
+		$output = executeQuery('file.updateCoverImage', $args);
+		if(!$output->toBool())
+		{
+			$oDB->rollback();
+			return $output;
+		}
+
+		$oDB->commit();
+
+		// 썸네일 삭제
+		$thumbnail_path = sprintf('files/thumbnails/%s', getNumberingPath($upload_target_srl, 3));
+		Filehandler::removeFilesInDir($thumbnail_path);
 	}
 
 	/**
@@ -954,3 +1032,4 @@ class fileController extends file
 }
 /* End of file file.controller.php */
 /* Location: ./modules/file/file.controller.php */
+

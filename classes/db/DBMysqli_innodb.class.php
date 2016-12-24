@@ -85,7 +85,7 @@ class DBMysqli_innodb extends DBMysql
 	 * this method is private
 	 * @return boolean
 	 */
-	function _begin($transactionLevel)
+	function _begin($transactionLevel = 0)
 	{
 		$connection = $this->_getConnection('master');
 
@@ -105,7 +105,7 @@ class DBMysqli_innodb extends DBMysql
 	 * this method is private
 	 * @return boolean
 	 */
-	function _rollback($transactionLevel)
+	function _rollback($transactionLevel = 0)
 	{
 		$connection = $this->_getConnection('master');
 
@@ -145,7 +145,7 @@ class DBMysqli_innodb extends DBMysql
 	 */
 	function addQuotes($string)
 	{
-		if(version_compare(PHP_VERSION, "5.9.0", "<") && get_magic_quotes_gpc())
+		if(version_compare(PHP_VERSION, "5.4.0", "<") && get_magic_quotes_gpc())
 		{
 			$string = stripslashes(str_replace("\\", "\\\\", $string));
 		}

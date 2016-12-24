@@ -13,7 +13,7 @@ class boardMobile extends boardView
 		if($this->module_info->list_count) $this->list_count = $this->module_info->list_count;
 		if($this->module_info->mobile_list_count) $this->list_count = $this->module_info->mobile_list_count;
 		if($this->module_info->search_list_count) $this->search_list_count = $this->module_info->search_list_count;
-		if($this->module_info->mobile_search_list_count) $this->list_count = $this->module_info->mobile_search_list_count;
+		if($this->module_info->mobile_search_list_count) $this->search_list_count = $this->module_info->mobile_search_list_count;
 		if($this->module_info->page_count) $this->page_count = $this->module_info->page_count;
 		if($this->module_info->mobile_page_count) $this->page_count = $this->module_info->mobile_page_count;
 		$this->except_notice = $this->module_info->except_notice == 'N' ? false : true;
@@ -55,7 +55,7 @@ class boardMobile extends boardView
 		 * check the consultation function, if the user is admin then swich off consultation function
 		 * if the user is not logged, then disppear write document/write comment./ view document
 		 **/
-		if($this->module_info->consultation == 'Y' && !$this->grant->manager)
+		if($this->module_info->consultation == 'Y' && !$this->grant->manager && !$this->grant->consultation_read)
 		{
 			$this->consultation = true;
 			if(!Context::get('is_logged')) $this->grant->list = $this->grant->write_document = $this->grant->write_comment = $this->grant->view = false;

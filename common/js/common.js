@@ -240,12 +240,13 @@ jQuery(function($) {
 		var loc = isSameUrl(this, window.location.href) ? current_url : this;
 		var idx = loc.indexOf('?');
 		var uri = loc.replace(/#$/, '');
-		var act, re, v, toReplace;
+		var act, re, v, toReplace, query_string;
 
 		if (typeof(val)=='undefined') val = '';
 
 		if (idx != -1) {
-			var query_string = uri.substr(idx+1, loc.length), args = {}, q_list = [];
+			var args = {}, q_list = [];
+			query_string = uri.substr(idx + 1, loc.length);
 			uri = loc.substr(0, idx);
 			query_string.replace(/([^=]+)=([^&]*)(&|$)/g, function(all,key,val) { args[key] = val; });
 
@@ -258,16 +259,12 @@ jQuery(function($) {
 			}
 
 			query_string = q_list.join('&');
-			uri = uri+(query_string?'?'+query_string:'');
+			uri = uri + (query_string ? '?' + encodeURI(query_string) : '');
 		} else {
-			if (String(val).trim()) uri = uri+'?'+key+'='+val;
-		}
-
-		re = /^https:\/\/([^:\/]+)(:\d+|)/i;
-		if (re.test(uri)) {
-			toReplace = 'http://'+RegExp.$1;
-			if (window.http_port && http_port != 80) toReplace += ':' + http_port;
-			uri = uri.replace(re, toReplace);
+			if (String(val).trim()) {
+				query_string = '?' + key + '=' + val;
+				uri = uri + encodeURI(query_string);
+			}
 		}
 
 		var bUseSSL = !!window.enforce_ssl;
@@ -280,17 +277,22 @@ jQuery(function($) {
 			}
 		}
 
-		re = /http:\/\/([^:\/]+)(:\d+|)/i;
+		re = /https?:\/\/([^:\/]+)(:\d+|)/i;
 		if (bUseSSL && re.test(uri)) {
 			toReplace = 'https://'+RegExp.$1;
 			if (window.https_port && https_port != 443) toReplace += ':' + https_port;
+			uri = uri.replace(re, toReplace);
+		}
+		if (!bUseSSL && re.test(uri)) {
+			toReplace = 'http://'+RegExp.$1;
+			if (window.http_port && http_port != 80) toReplace += ':' + http_port;
 			uri = uri.replace(re, toReplace);
 		}
 
 		// insert index.php if it isn't included
 		uri = uri.replace(/\/(index\.php)?\?/, '/index.php?');
 
-		return encodeURI(uri);
+		return uri;
 	};
 
 	/**

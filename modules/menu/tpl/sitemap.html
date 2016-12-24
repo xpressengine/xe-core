@@ -22,6 +22,11 @@
 <!--@if($act == 'dispMenuAdminSiteMap')-->
 	<div class="col map" id="site_map">
 		<h1>{$lang->menu_gnb_sub['siteMap']} <a class="x_icon-question-sign" href="./admin/help/index.html#UMAN_site_menu" target="_blank">{$lang->help}</a></h1>
+		<form id="menu_find">
+			<input name="keyword" type="text"></input>
+			<button class="x_btn x_btn-inverse btn-find">{$lang->cmd_find}</button>
+			<button class="x_btn x_btn-inverse btn-next" type="button">{$lang->cmd_next}</button>
+		</form>
 		<div class="cnt">
 			<section class="mapi" id="siteMapTree">
 				<script id="tmpl_menuTree" type="text/x-jquery-tmpl">
@@ -161,6 +166,12 @@
 							<input id="menuName2" class="_menuName lang_code" type="text" required>
 						</div>
 					</li>
+					<li>
+						<div class="multilingual x_input-append">
+							<label for="lang_menuDesc2">{$lang->menu_desc}</label>
+							<input id="menuDesc2" class="_menuDesc lang_code" type="text" required>
+						</div>
+					</li>
 					<li class="typePage">
 						<label for="mid1">{$lang->menu_id} <a href="#help_menuId" class="x_icon-question-sign" data-admin-toggle="#mid1_help">{$lang->help}</a></label>
 						<div id="mid1_help" class="x_alert x_alert-info" style="display:none;width:169px">
@@ -216,6 +227,12 @@
 						<div class="multilingual x_input-append">
 							<label for="lang_menuName">{$lang->menu_name}</label>
 							<input id="menuName" class="_menuName lang_code" type="text" required>
+						</div>
+					</li>
+					<li>
+						<div class="multilingual x_input-append">
+							<label for="lang_menuDesc">{$lang->menu_desc}</label>
+							<input id="menuDesc" class="_menuDesc lang_code" type="text" required>
 						</div>
 					</li>
 					<li style="padding:6px 0 0 0">
@@ -416,7 +433,7 @@
 						<li data-admin-show="#downloadLayout">
 							<label><i class="x_icon-plus-sign"></i> {$lang->install_other_layouts}</label>
 							<button type="button" class="item _btnScreenshot">
-								<img src="./modules/layout/tpl/img/download.png" class="_thumbnail" alt="{$lang->install_other_layouts}">
+								<img src="../../../modules/layout/tpl/img/download.png" class="_thumbnail" alt="{$lang->install_other_layouts}">
 							</button>
 						</li>
 						</script>
@@ -539,7 +556,7 @@
 						<li data-admin-show="#downloadSkin">
 							<label><i class="x_icon-plus-sign"></i> {$lang->install_other_skins}</label>
 							<button type="button" class="item _btnScreenshot">
-								<img src="./modules/layout/tpl/img/download.png" class="_thumbnail" alt="{$lang->install_other_skins}">
+								<img src="../../../modules/layout/tpl/img/download.png" class="_thumbnail" alt="{$lang->install_other_skins}">
 							</button>
 						</li>
 						</script>
@@ -798,7 +815,12 @@ function onSiteMapReceived(htData){
 			// it makes sense to configure a plugin only if overriding the defaults
 		})
 		.bind("loaded.jstree", function (event, data) {
-			data.inst.open_all();
+			//data.inst.open_all();
+			data.inst.get_container_ul().find("li.jstree-closed").each(function () {
+				if(issetJSTreeOpenIds(this.id) == true){
+					$(this).removeClass("jstree-closed").addClass("jstree-open");
+				}
+			});
 
 			var sRenameId = $._xeAdminVar.sRenameOnload;
 			$._xeAdminVar.sRenameOnload = null;
@@ -823,6 +845,12 @@ function onSiteMapReceived(htData){
 			}
 
 		})
+		.bind("open_node.jstree", function(event, data){
+			setJSTreeOpenIds();
+		})
+		.bind("close_node.jstree", function(event, data){
+			setJSTreeOpenIds();
+		})
 		.bind("rename.jstree", function(event, data){
 			$("#siteMapTree").removeClass("_node_renaming");
 		})
@@ -839,6 +867,12 @@ function onSiteMapReceived(htData){
 
 		})
 		.bind("select_node.jstree", function(event, data){
+			// move scroll
+			var ul = $($("#siteMapTree").jstree("get_container")[0]);
+			ul.parent("div.cnt").stop().animate({
+				scrollTop: data.rslt.obj.offset().top - ul.offset().top
+			}, 800);
+
 			$("#siteMapTree input").blur();
 			//console.log($("#siteMapTree input"));
 
@@ -846,6 +880,8 @@ function onSiteMapReceived(htData){
 			$._xeAdminVar.sSelectedMenuSrl = sSelectedMenuSrl;
 
 			showProp(sSelectedMenuSrl);
+
+			data.inst.open_node(data.rslt.obj);
 		})
 		.bind("move_node.jstree", function(event, data){
 			//console.log(event, data);
@@ -963,6 +999,24 @@ console.log(htNodeInfo);
 		});
 
 	$('#site_map').nextAll().hide();
+}
+
+function setJSTreeOpenIds(){
+	var jstree_open_srls = [];
+	jQuery("#siteMapTree").find("li.jstree-open").each(function() {
+		jstree_open_srls.push(this.id);
+	});
+	setCookie("__xe_admin_jstree_open_srls", jstree_open_srls.join(","));
+}
+
+function issetJSTreeOpenIds(id) {
+	var jstree_open_srls = getCookie("__xe_admin_jstree_open_srls").split(",");
+	for (var i=0; i< jstree_open_srls.length; i++) {
+		if(jstree_open_srls[i] == id) {
+			return true;
+		}
+	}
+	return false;
 }
 
 var htNodeInfo = {};
@@ -1200,6 +1254,37 @@ jQuery(function($){
 	$.exec_json("menu.getMenuAdminInstalledMenuType", {}, function(htData){
 		setItemTypes(htData.menu_types);
 		setAllModules(htData.all_modules);
+	});
+
+	var find_ids = [];
+	var find_index = 0;
+	$("#menu_find").submit(function(){
+		find_ids = [];
+		find_index = 0;
+		$('#menu_find').find('[type="button"]').css("visibility", "hidden");
+
+		var keyword = $('[name="keyword"]').val();
+		$("#siteMapTree").find("li").each(function(){
+			var pattern = new RegExp(keyword);
+			if(pattern.test($(this).find("a:first").text())){
+				find_ids.push(this.id);
+			}
+		});
+
+		if (find_ids.length>1) {
+			$('#menu_find').find('[type="button"]').css("visibility", "visible");
+		}
+
+		$("#siteMapTree").jstree("deselect_all").jstree("select_node", "#"+find_ids[find_index]);
+		return false;
+	});
+	$("#menu_find").find('[type="button"]').click(function(){
+		find_index++;
+		if (find_ids.length <= find_index){
+			find_index = 0;
+		}
+
+		$("#siteMapTree").jstree("deselect_all").jstree("select_node", "#"+find_ids[find_index]);
 	});
 	<!--@end-->
 
@@ -1774,6 +1859,7 @@ jQuery(function($){
 	});
 	$('#add_menu ._save').bind("click", function(){
 		var sMenuName = $('#add_menu ._menuName').val();
+		var sMenuDesc = $('#add_menu ._menuDesc').val();
 		var sUrl = $('#add_menu ._mid').val();
 		var sTargetKey = "module_id";
 
@@ -1822,21 +1908,14 @@ jQuery(function($){
 		params['act'] = "procMenuAdminInsertItem";
 		params['menu_name_key'] = "";
 		params['menu_name'] = sMenuName;
+		params['menu_desc'] = sMenuDesc;
 		params['module_type'] = sSelectedModuleName;
 		params['menu_open_window'] = "N";
 		params['menu_expand'] = "N";
 		params['is_shortcut'] = isShortCut;
 		params['parent_srl'] = sSelectedMenuSrl;
 		params[sTargetKey] = sUrl;
-
-		/*
-		Array
-		(
-			[error] => "0"
-			[message] => "등록했습니다."
-			[menu_item_srl] => "2"
-		)
-		*/
+		
 		$.exec_json("menu.procMenuAdminInsertItem", params, function(htData){
 			// select the newly created menu
 			//$._xeAdminVar.sSelectOnload = htData.menu_item_srl;
@@ -1864,6 +1943,7 @@ jQuery(function($){
 
 		//$(this).find('#menuName').val(htInfo.sText);
 		$(this).find('#menuName').val(htInfo.sMenuNameKey);
+		$(this).find('#menuDesc').val(htInfo.desc);
 		//menu_name_key
 
 		$(this).find('#mid2').val(htInfo.url);
@@ -1879,9 +1959,9 @@ jQuery(function($){
 				showMenuSelector($(this).find('._menuSelector_menuTreeContainer'), htInfo.url);
 			}else{
 				// URL shortcut
-					var htInfo_url = htInfo.url;
-					htInfo_url = htInfo_url.replace(/&amp;/g, '&');
-					htInfo.url = htInfo_url;
+				var htInfo_url = htInfo.url;
+				htInfo_url = htInfo_url.replace(/&amp;/g, '&');
+				htInfo.url = htInfo_url;
 				$(this).find('a[href="#fix_linkUrl"]').click();
 				$(this).find('._url_link').val($('<div />').text(htInfo.url).text());
 
@@ -1917,6 +1997,7 @@ jQuery(function($){
 		var htInfo = htNodeInfo[$._xeAdminVar.sSelectedMenuSrl];
 
 		var sMenuName = $('#default ._menuName').val();
+		var sMenuDesc = $('#default ._menuDesc').val();
 		var sMID;
 
 		var sNewWindow = $('#default ._newWindow').attr("checked")?"Y":"N";
@@ -1942,6 +2023,7 @@ jQuery(function($){
 		}
 		params['menu_item_srl'] = sSelectedMenuSrl;
 		params['menu_name'] = sMenuName;
+		params['menu_desc'] = sMenuDesc;
 		params['menu_open_window'] = sNewWindow;
 		params['menu_expand'] = sLeaveUnfolded;
 		params['browser_title'] = sBrowserTitle;
@@ -3715,7 +3797,9 @@ jQuery(function($){
 	function installPackage(sPackageSrl, sPackageType, $item){
 
 		//act=getAutoinstallAdminIsAuthed
-		$.exec_json("admin.getAutoinstallAdminIsAuthed", {}, function(htData){
+		var params = {};
+		params.package_srl = sPackageSrl;
+		$.exec_json("admin.getAutoinstallAdminIsAuthed", params, function(htData){
 			// FTP 비밀번호 뿐만 아니라 정보가 전혀 없을 경우?
 			switch(htData.is_authed){
 				case -1:
@@ -3918,15 +4002,17 @@ jQuery(function($){
 	<!--@else-->
 		$(window).resize(function(){
 			var wHeigh = $(window).height();
-
 			$('#site').height(wHeigh - 147).find('>.col').height(wHeigh - 185).find('.cnt').height(wHeigh - 252);
 			$('#properties, #propertiesRoot, #imgbtn, #layoutSetup, #layoutMarkupSetup, #skinSetup').find('.cnt').height(wHeigh - 222);
 
 			<!--@if($act == 'dispMenuAdminSiteMap')-->
+			// minus height 40px for find-form display
+			$('#site').find('.cnt:first').height(wHeigh - 252 - 40);
 			$('#design').find('.cnt').height(wHeigh - 222);
 			<!--@end-->
 
 			<!--@if($act == 'dispMenuAdminSiteDesign')-->
+
 			$('#layout, #skin').find('.cnt').height(wHeigh - 222);
 			<!--@end-->
 		}).resize();

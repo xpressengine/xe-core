@@ -60,6 +60,10 @@ class HTMLDisplayHandler
 
 		$output = $oTemplate->compile($template_path, $tpl_file);
 
+		// SECISSUE https://github.com/xpressengine/xe-core/issues/1583
+		$oSecurity = new Security();
+		$oSecurity->encodeHTML('is_keyword');
+
 		// add .x div for adminitration pages
 		if(Context::getResponseMethod() == 'HTML')
 		{
@@ -125,13 +129,6 @@ class HTMLDisplayHandler
 
 				$pathInfo = pathinfo($layout_file);
 				$onlyLayoutFile = $pathInfo['filename'];
-
-				if($realLayoutPath === _XE_PATH_ . 'common/tpl/' && $onlyLayoutFile === 'popup_layout')
-				{
-					Context::set('admin_bar', 'false');
-				}
-				// DISABLE ADMIN BAR
-				Context::set('admin_bar', 'false');
 
 				if(__DEBUG__ == 3)
 				{

@@ -79,6 +79,29 @@
 			<include target="./_dashboard_default.html" />
 		</block>
 	</div>
+
+	<div class="message error" cond="version_compare(PHP_VERSION, __XE_MIN_PHP_VERSION__, '<')">
+		<h2>{$lang->msg_php_warning_title}</h2>
+		<p>{$lang->msg_php_warning_notice}</p>
+		<p>{$lang->msg_php_warning_now_version} : <strong>{phpversion()}</strong></p>
+		<p><a href="http://php.net/downloads.php" target="_blank">{$lang->msg_php_warning_latest_version_check}</a></p>
+		<ul>{$lang->msg_php_warning_notice_explain}</ul>
+	</div>
 </div>
+
+<script>
+jQuery(function($)
+{
+	// check browser version
+	if($.browser.msie == true ) {
+		var arrBrowserVersion = $.browser.version.split('.');
+		if(parseInt(arrBrowserVersion[0], 10) <= 8) {
+			$('#checkBrowserMessage').show();
+		}
+	}
+});
+</script>
+
+
 <include target="./_footer.html" />
 
