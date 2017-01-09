@@ -44,7 +44,7 @@ class communicationModel extends communication
 
 		if(!$communication_config->editor_skin)
 		{
-			$communication_config->editor_skin = 'default';
+			$communication_config->editor_skin = 'ckeditor';
 		}
 
 		if(!$communication_config->mskin)
@@ -184,10 +184,13 @@ class communicationModel extends communication
 		{
 			foreach($member_info as $key => $val)
 			{
-				if($key != 'regdate')
-				{
-					$message->{$key} = $val;
-				}
+				if($key === 'title') continue;
+				if($key === 'content') continue;
+				if($key === 'sender_srl') continue;
+				if($key === 'password') continue;
+				if($key === 'regdate') continue;
+
+				$message->{$key} = $val;
 			}
 		}
 

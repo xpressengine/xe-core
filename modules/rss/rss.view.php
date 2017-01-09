@@ -34,7 +34,7 @@ class rssView extends rss
 		{
 			$site_module_info = Context::get('site_module_info');
 			$site_srl = $site_module_info->site_srl;
-			$mid = Context::get('mid'); // The target module id, if absent, then all
+			$mid = Context::getRequestVars()->mid; // The target module id, if absent, then all
 			$start_date = (int)Context::get('start_date');
 			$end_date = (int)Context::get('end_date');
 
@@ -172,7 +172,7 @@ class rssView extends rss
 			$info->id = $proctcl.$_SERVER['HTTP_HOST'].$info->id;
 		}
 
-		$info->language = Context::getLangType();
+		$info->language = str_replace('jp','ja',Context::getLangType());
 		// Set the variables used in the RSS output
 		Context::set('info', $info);
 		Context::set('feed_config', $config);

@@ -80,13 +80,12 @@ class memberAdminController extends member
 		}
 
 		// remove whitespace
-		$checkInfos = array('user_id', 'nick_name', 'email_address');
-		$replaceStr = array("\r\n", "\r", "\n", " ", "\t", "\xC2\xAD");
+		$checkInfos = array('user_id', 'user_name', 'nick_name', 'email_address');
 		foreach($checkInfos as $val)
 		{
 			if(isset($args->{$val}))
 			{
-				$args->{$val} = str_replace($replaceStr, '', $args->{$val});
+				$args->{$val} = preg_replace('/[\pZ\pC]+/u', '', $args->{$val});
 			}
 		}
 
@@ -498,7 +497,7 @@ class memberAdminController extends member
 				}
 				else if($formInfo->name == 'password')
 				{
-					$fields[] = '<field name="password"><if test="$act == \'procMemberInsert\'" attr="required" value="true" /><if test="$act == \'procMemberInsert\'" attr="length" value="4:20" /></field>';
+					$fields[] = '<field name="password"><if test="$act == \'procMemberInsert\'" attr="required" value="true" /><if test="$act == \'procMemberInsert\'" attr="length" value="4:60" /></field>';
 					$fields[] = '<field name="password2"><if test="$act == \'procMemberInsert\'" attr="required" value="true" /><if test="$act == \'procMemberInsert\'" attr="equalto" value="password" /></field>';
 				}
 				else if($formInfo->name == 'find_account_question')

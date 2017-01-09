@@ -472,6 +472,18 @@ function getFullSiteUrl()
 }
 
 /**
+ * Return the exact url of the current page
+ *
+ * @return string
+ */
+function getCurrentPageUrl()
+{
+	$protocol = $_SERVER['HTTPS'] == 'on' ? 'https://' : 'http://';
+	$url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+	return htmlspecialchars($url, ENT_COMPAT, 'UTF-8', FALSE);
+}
+
+/**
  * Return if domain of the virtual site is url type or id type
  *
  * @param string $domain
@@ -724,22 +736,19 @@ function zdate($str, $format = 'Y-m-d H:i:s', $conversion = TRUE)
 		$month = (int) substr($str, 4, 2);
 		$day = (int) substr($str, 6, 2);
 
-		// leading zero?
-		$lz = create_function('$n', 'return ($n>9?"":"0").$n;');
-
 		$trans = array(
 			'Y' => $year,
-			'y' => $lz($year % 100),
-			'm' => $lz($month),
+			'y' => sprintf('%02d', $year % 100),
+			'm' => sprintf('%02d', $month),
 			'n' => $month,
-			'd' => $lz($day),
+			'd' => sprintf('%02d', $day),
 			'j' => $day,
 			'G' => $hour,
-			'H' => $lz($hour),
+			'H' => sprintf('%02d', $hour),
 			'g' => $hour % 12,
-			'h' => $lz($hour % 12),
-			'i' => $lz($min),
-			's' => $lz($sec),
+			'h' => sprintf('%02d', $hour % 12),
+			'i' => sprintf('%02d', $min),
+			's' => sprintf('%02d', $sec),
 			'M' => getMonthName($month),
 			'F' => getMonthName($month, FALSE)
 		);
@@ -789,7 +798,6 @@ function getEncodeEmailAddress($email)
 function debugPrint($debug_output = NULL, $display_option = TRUE, $file = '_debug_message.php')
 {
 	static $debug_file;
-	static $debug_file_exist;
 
 	if(!(__DEBUG__ & 1))
 	{
@@ -843,31 +851,45 @@ function debugPrint($debug_output = NULL, $display_option = TRUE, $file = '_debu
 		}
 
 		$print = array();
-		if($debug_file_exist === NULL) $print[] = '<?php exit() ?>';
-
-		if(!$debug_file) $debug_file =  _XE_PATH_ . 'files/' . $file;
-		if(!$debug_file_exist) $debug_file_exist = file_exists($debug_file);
+		if(!$debug_file)
+		{
+			$debug_file = _XE_PATH_ . 'files/' . $file;
+		}
+		if(!file_exists($debug_file)) $print[] = '<?php exit() ?>';
 
 		if($display_option === TRUE || $display_option === 'ERROR')
 		{
+			$print[] = sprintf("[%s %s:%d] %s() - mem(%s)", date('Y-m-d H:i:s'), $file_name, $line_num, $function, FileHandler::filesize(memory_get_usage()));;
 			$print[] = str_repeat('=', 80);
 		}
-
-		$print[] = sprintf("[%s %s:%d] %s() - mem(%s)", date('Y-m-d H:i:s'), $file_name, $line_num, $function, FileHandler::filesize(memory_get_usage()));
-
 		$type = gettype($debug_output);
 		if(!in_array($type, array('array', 'object', 'resource')))
 		{
-			if($display_option === 'ERROR') $print[] = 'ERROR : ' . var_export($debug_output, TRUE);
-			else $print[] = $type . '(' . var_export($debug_output, TRUE) . ')';
-			$print[] = PHP_EOL.PHP_EOL;
+			if($display_option === 'ERROR')
+			{
+				$print[] = 'ERROR : ' . var_export($debug_output, TRUE);
+			}
+			else
+			{
+				$print[] = 'DEBUG : ' . $type . '(' . var_export($debug_output, TRUE) . ')';
+			}
 		}
 		else
 		{
-			$print[] = print_r($debug_output, TRUE);
-			$print[] = PHP_EOL;
+			$print[] = 'DEBUG : ' . trim(preg_replace('/\r?\n/', "\n" . '        ', print_r($debug_output, true)));
 		}
+		$backtrace_args = defined('\DEBUG_BACKTRACE_IGNORE_ARGS') ? \DEBUG_BACKTRACE_IGNORE_ARGS : 0;
+		$backtrace = debug_backtrace($backtrace_args);
 
+		if(count($backtrace) > 1 && $backtrace[1]['function'] === 'debugPrint' && !$backtrace[1]['class'])
+		{
+			array_shift($backtrace);
+		}
+		foreach($backtrace as $val)
+		{
+			$print[] = '        - ' . $val['file'] . ' : ' . $val['line'];
+		}
+		$print[] = PHP_EOL;
 		@file_put_contents($debug_file, implode(PHP_EOL, $print), FILE_APPEND|LOCK_EX);
 	}
 }
@@ -1191,7 +1213,7 @@ function removeSrcHack($match)
 				continue;
 			}
 
-			$val = preg_replace('/&#(?:x([a-fA-F0-9]+)|0*(\d+));/e', 'chr("\\1"?0x00\\1:\\2+0)', $m[3][$idx] . $m[4][$idx]);
+			$val = preg_replace_callback('/&#(?:x([a-fA-F0-9]+)|0*(\d+));/', function($n) {return chr($n[1] ? ('0x00' . $n[1]) : ($n[2] + 0)); }, $m[3][$idx] . $m[4][$idx]);
 			$val = preg_replace('/^\s+|[\t\n\r]+/', '', $val);
 
 			if(preg_match('/^[a-z]+script:/i', $val))
@@ -1200,6 +1222,24 @@ function removeSrcHack($match)
 			}
 
 			$attrs[$name] = $val;
+		}
+	}
+
+	$filter_arrts = array('style', 'src', 'href');
+
+	if($tag === 'object') array_push($filter_arrts, 'data');
+	if($tag === 'param') array_push($filter_arrts, 'value');
+
+	foreach($filter_arrts as $attr)
+	{
+		if(!isset($attrs[$attr])) continue;
+
+		$attr_value = rawurldecode($attrs[$attr]);
+		$attr_value = htmlspecialchars_decode($attr_value, ENT_COMPAT);
+		$attr_value = preg_replace('/\s+|[\t\n\r]+/', '', $attr_value);
+		if(preg_match('@(\?|&|;)(act=(\w+))@i', $attr_value, $m) && $m[3] !== 'procFileDownload')
+		{
+			unset($attrs[$attr]);
 		}
 	}
 
@@ -1312,7 +1352,8 @@ function getScriptPath()
 	static $url = NULL;
 	if($url == NULL)
 	{
-		$url = str_ireplace('/tools/', '/', preg_replace('/index.php$/i', '', str_replace('\\', '/', $_SERVER['SCRIPT_NAME'])));
+		$script_path = filter_var($_SERVER['SCRIPT_NAME'], FILTER_SANITIZE_STRING);
+		$url = str_ireplace('/tools/', '/', preg_replace('/index.php.*/i', '', str_replace('\\', '/', $script_path)));
 	}
 	return $url;
 }
@@ -1416,7 +1457,7 @@ function detectUTF8($string, $return_convert = FALSE, $urldecode = TRUE)
 	}
 
 	$sample = iconv('utf-8', 'utf-8', $string);
-	$is_utf8 = (md5($sample) == md5($string));
+	$is_utf8 = (md5($sample) === md5($string));
 
 	if(!$urldecode)
 	{
@@ -1547,14 +1588,22 @@ function stripEmbedTagForAdmin(&$content, $writer_member_srl)
  */
 function requirePear()
 {
+	static $required = false;
+	if($required)
+	{
+		return;
+	}
+
 	if(version_compare(PHP_VERSION, "5.3.0") < 0)
 	{
-		set_include_path(_XE_PATH_ . "libs/PEAR");
+		set_include_path(_XE_PATH_ . "libs/PEAR" . PATH_SEPARATOR . get_include_path());
 	}
 	else
 	{
-		set_include_path(_XE_PATH_ . "libs/PEAR.1.9.5");
+		set_include_path(_XE_PATH_ . "libs/PEAR.1.9.5" . PATH_SEPARATOR . get_include_path());
 	}
+
+	$required = true;
 }
 
 function checkCSRF()

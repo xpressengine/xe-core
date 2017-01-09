@@ -13,12 +13,13 @@
         <action name="procFileImageResize" type="controller" ruleset="imageResize" />
         <action name="procFileDelete" type="controller" />
         <action name="procFileDownload" type="controller" method="GET|POST" />
-        <action name="procFileOutput" type="controller" />
+        <action name="procFileOutput" type="controller" method="GET|POST" />
         <action name="procFileAdminDeleteChecked" type="controller" ruleset="deleteChecked" />
         <action name="procFileAdminInsertConfig" type="controller" ruleset="insertConfig" />
         <action name="procFileAdminInsertModuleConfig" type="controller" ruleset="fileModuleConfig" />
         <action name="procFileAdminAddCart" type="controller" />
         <action name="procFileGetList" type="controller" />
+        <action name="procFileSetCoverImage" type="controller" />
     </actions>
 	<menus>
 		<menu name="file">

@@ -205,7 +205,7 @@ class installController extends install
 		{
 			$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('');
 			header('location:'.$returnUrl);
-			return;
+			return new Object();
 		}
 	}
 
@@ -403,7 +403,7 @@ class installController extends install
 
 		if(!in_array(Context::getRequestMethod(),array('XMLRPC','JSON')))
 		{
-			$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'module', 'admin', 'act', 'dispInstallCheckEnv');
+			$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'act', 'dispInstallCheckEnv');
 			$this->setRedirectUrl($returnUrl);
 		}
 	}
@@ -447,7 +447,7 @@ class installController extends install
 		$requestUrl = sprintf('%s://%s%s%s', $scheme, $hostname, $str_port, $query);
 		$requestConfig = array();
 		$requestConfig['ssl_verify_peer'] = false;
-		$buff = FileHandler::getRemoteResource($requestUrl, null, 10, 'GET', null, array(), array(), array(), $requestConfig);
+		$buff = FileHandler::getRemoteResource($requestUrl, null, 3, 'GET', null, array(), array(), array(), $requestConfig);
 
 		FileHandler::removeFile(_XE_PATH_.$checkFilePath);
 
@@ -600,7 +600,7 @@ class installController extends install
 	{
 		$db_tmp_config_file = $this->db_tmp_config_file;
 
-		$db_info = Context::getDbInfo();
+		$db_info = Context::getDBInfo();
 		if(!$db_info) return;
 
 		$buff = $this->_getDBConfigFileContents($db_info);
@@ -641,7 +641,7 @@ class installController extends install
 			$config_file = Context::getConfigFile();
 			//if(file_exists($config_file)) return;
 
-			$db_info = Context::getDbInfo();
+			$db_info = Context::getDBInfo();
 			if(!$db_info) return;
 
 			$buff = $this->_getDBConfigFileContents($db_info);

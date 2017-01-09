@@ -91,6 +91,7 @@ module.exports = function(grunt) {
 					'modules/board/skins/default/board.default.min.js': ['modules/board/skins/default/board.default.js'],
 					'modules/board/m.skins/default/js/mboard.min.js': ['modules/board/m.skins/default/js/mboard.js'],
 					'modules/board/m.skins/simpleGray/js/mboard.min.js': ['modules/board/m.skins/simpleGray/js/mboard.js'],
+					'modules/board/skins/xedition/board.default.min.js': ['modules/board/skins/xedition/board.default.js'],
 					// editor-component-image-gallery
 					'modules/editor/components/image_gallery/tpl/gallery.min.js' : ['modules/editor/components/image_gallery/tpl/gallery.js'],
 					'modules/editor/components/image_gallery/tpl/list_gallery.min.js' : ['modules/editor/components/image_gallery/tpl/list_gallery.js'],
@@ -107,6 +108,12 @@ module.exports = function(grunt) {
 					'modules/poll/tpl/js/poll.min.js': ['modules/poll/tpl/js/poll.js'],
 					'addons/oembed/jquery.oembed.min.js': ['addons/oembed/jquery.oembed.js'],
 					'addons/oembed/oembed.min.js': ['addons/oembed/oembed.js'],
+				}
+			},
+			'layout': {
+				files: {
+					'layouts/xedition/js/layout.min.js': ['layouts/xedition/js/layout.js'],
+					'layouts/xedition/js/welcome.min.js': ['layouts/xedition/js/welcome.js'],
 				}
 			},
 		},
@@ -129,12 +136,22 @@ module.exports = function(grunt) {
 					'modules/editor/skins/xpresseditor/css/default.min.css': ['modules/editor/skins/xpresseditor/css/default.css'],
 					'modules/board/skins/default/board.default.min.css': ['modules/board/skins/default/board.default.css'],
 					'modules/board/m.skins/default/css/mboard.min.css': ['modules/board/m.skins/default/css/mboard.css'],
-					'modules/board/m.skins/simpleGray/css/mboard.min.css': ['modules/board/m.skins/simpleGray/css/mboard.css']
+					'modules/board/m.skins/simpleGray/css/mboard.min.css': ['modules/board/m.skins/simpleGray/css/mboard.css'],
+					'modules/board/skins/xedition/board.default.min.css': ['modules/board/skins/xedition/board.default.css'],
 				}
 			},
 			'addons': {
 				files: {
 					'addons/oembed/jquery.oembed.min.css': ['addons/oembed/jquery.oembed.css'],
+				}
+			},
+			'layout': {
+				files: {
+					'layouts/xedition/css/layout.min.css': ['layouts/xedition/css/layout.css'],
+					'layouts/xedition/css/webfont.min.css': ['layouts/xedition/css/webfont.css'],
+					'layouts/xedition/css/welcome.min.css': ['layouts/xedition/css/welcome.css'],
+					'layouts/xedition/css/widget.login.min.css': ['layouts/xedition/css/widget.login.css'],
+					'layouts/xedition/css/xeicon.min.css': ['layouts/xedition/css/xeicon.css'],
 				}
 			},
 		},
@@ -144,6 +161,7 @@ module.exports = function(grunt) {
 				'common/js/*.js',
 				'modules/admin/tpl/js/*.js',
 				'modules/board/tpl/js/*.js',
+				'modules/board/skins/*/*.js',
 				'modules/editor/tpl/js/*.js',
 				'modules/menu/tpl/js/*.js',
 				'modules/widget/tpl/js/*.js',
@@ -161,6 +179,8 @@ module.exports = function(grunt) {
 					'common/js/x.js',
 					'common/js/xe.js',
 					'common/js/modernizr.js',
+					'vendor/**',
+					'tests/**',
 				]
 			}
 		},
@@ -183,6 +203,8 @@ module.exports = function(grunt) {
 					'!common/css/bootstrap.css',
 					'!common/css/bootstrap-responsive.css',
 					'!**/*.min.css',
+					'!vendor/**',
+					'!tests/**',
 				]
 			}
 		},
@@ -198,7 +220,9 @@ module.exports = function(grunt) {
 					"!tests/**",
 					"!tools/**",
 					"!node_modules/**",
-					"!libs/**"
+					"!libs/**",
+					"!vendor/**",
+					"!tests/_output/**"
 				],
 			},
 		}
@@ -222,7 +246,7 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('build', '', function(A, B) {
 		var _only_export = false;
-		var tasks = ['krzip', 'syndication'];
+		var tasks = ['krzip', 'syndication', 'seo'];
 
 		if(!A) {
 			grunt.fail.warn('Undefined build target.');
@@ -275,7 +299,17 @@ module.exports = function(grunt) {
 						grunt.file.delete('build/xe');
 						grunt.file.delete('build/temp.full.tar');
 
-						grunt.log.ok('Done!');
+						grunt.util.spawn({
+							cmd: "git",
+							args: ['diff', '--name-status', target]
+						}, function (error, result, code) {
+							var fs = require('fs');
+							result = 'Added (A), Copied (C), Deleted (D), Modified (M), Renamed (R).' + grunt.util.linefeed + result;
+							grunt.file.write(build_dir + '/CHANGED.' + version + '.txt', result);
+
+							grunt.log.ok('Done!');
+						});
+
 					});
 				});
 			}
@@ -358,6 +392,15 @@ module.exports = function(grunt) {
 					grunt.file.delete('build/xe/modules/syndication/.git');
 					taskDone();
 				});
+
+        // seo
+        grunt.util.spawn({
+          cmd: "git",
+          args: ['clone', '-b', 'master', 'git@github.com:xpressengine/xe-module-seo.git', 'build/xe/modules/seo']
+        }, function (error, result, code) {
+          grunt.file.delete('build/xe/modules/seo/.git');
+          taskDone();
+        });
 			});
 		});
 	});

@@ -102,6 +102,14 @@ class ModuleHandler extends Handler
 
 		// call a trigger before moduleHandler init
 		ModuleHandler::triggerCall('moduleHandler.init', 'before', $this);
+		if(__ERROR_LOG__ == 1 && __DEBUG_OUTPUT__ == 0)
+		{
+			if(__DEBUG_PROTECT__ === 0 || __DEBUG_PROTECT__ === 1 && __DEBUG_PROTECT_IP__ == $_SERVER['REMOTE_ADDR'])
+			{
+				set_error_handler(array($this, 'xeErrorLog'), E_WARNING);
+				register_shutdown_function(array($this, 'shutdownHandler'));
+			}
+		}
 
 		// execute addon (before module initialization)
 		$called_position = 'before_module_init';
@@ -110,13 +118,101 @@ class ModuleHandler extends Handler
 		if(file_exists($addon_file)) include($addon_file);
 	}
 
+	public static function xeErrorLog($errnumber, $errormassage, $errorfile, $errorline, $errorcontext)
+	{
+		if(($errnumber & 3) == 0 || error_reporting() == 0)
+		{
+			return false;
+		}
+
+		set_error_handler(function() { }, ~0);
+
+		$debug_file = _XE_PATH_ . 'files/_debug_message.php';
+		if(!file_exists($debug_file))
+		{
+			$print[] = '<?php exit() ?>';
+		}
+
+		$errorname = self::getErrorType($errnumber);
+		$print[] = '['.date('Y-m-d H:i:s').'] ' . $errorname . ' : ' . $errormassage;
+		$backtrace_args = defined('DEBUG_BACKTRACE_IGNORE_ARGS') ? \DEBUG_BACKTRACE_IGNORE_ARGS : 0;
+		$backtrace = debug_backtrace($backtrace_args);
+		if(count($backtrace) > 1 && $backtrace[1]['function'] === 'xeErrorLog' && !$backtrace[1]['class'])
+		{
+			array_shift($backtrace);
+		}
+
+		foreach($backtrace as $key => $value)
+		{
+			$message = '    - ' . $value['file'] . ' : ' . $value['line'];
+			$print[] = $message;
+		}
+		$print[] = PHP_EOL;
+		@file_put_contents($debug_file, implode(PHP_EOL, $print), FILE_APPEND|LOCK_EX);
+		restore_error_handler();
+
+		return true;
+	}
+
+	function shutdownHandler()
+	{
+		$errinfo = error_get_last();
+		if ($errinfo === null || ($errinfo['type'] != 1 && $errinfo['type'] != 4))
+		{
+			return false;
+		}
+
+		set_error_handler(function() { }, ~0);
+
+		$debug_file = _XE_PATH_ . 'files/_debug_message.php';
+		if(!file_exists($debug_file))
+		{
+			$print[] = '<?php exit() ?>';
+		}
+
+		$errorname = self::getErrorType($errinfo['type']);
+		$print[] = '['.date('Y-m-d H:i:s').']';
+		$print[] = $errorname . ' : ' . $errinfo['message'];
+
+		$message = '    - ' . $errinfo['file'] . ' : ' . $errinfo['line'];
+		$print[] = $message;
+
+		$print[] = PHP_EOL;
+		@file_put_contents($debug_file, implode(PHP_EOL, $print), FILE_APPEND|LOCK_EX);
+		set_error_handler(array($this, 'dummyHandler'), ~0);
+
+		return true;
+	}
+
+	public static function getErrorType($errno)
+	{
+		switch ($errno)
+		{
+			case E_ERROR: return 'Fatal Error';
+			case E_WARNING: return 'Warning';
+			case E_NOTICE: return 'Notice';
+			case E_CORE_ERROR: return 'Core Error';
+			case E_CORE_WARNING: return 'Core Warning';
+			case E_COMPILE_ERROR: return 'Compile Error';
+			case E_COMPILE_WARNING: return 'Compile Warning';
+			case E_USER_ERROR: return 'User Error';
+			case E_USER_WARNING: return 'User Warning';
+			case E_USER_NOTICE: return 'User Notice';
+			case E_STRICT: return 'Strict Standards';
+			case E_PARSE: return 'Parse Error';
+			case E_DEPRECATED: return 'Deprecated';
+			case E_USER_DEPRECATED: return 'User Deprecated';
+			case E_RECOVERABLE_ERROR: return 'Catchable Fatal Error';
+			default: return 'Error';
+		}
+	}
+
 	/**
 	 * Initialization. It finds the target module based on module, mid, document_srl, and prepares to execute an action
 	 * @return boolean true: OK, false: redirected
 	 * */
 	function init()
 	{
-		
 		$oModuleModel = getModel('module');
 		$site_module_info = Context::get('site_module_info');
 
@@ -317,13 +413,13 @@ class ModuleHandler extends Handler
 	function procModule()
 	{
 		$oModuleModel = getModel('module');
+		$display_mode = Mobile::isFromMobilePhone() ? 'mobile' : 'view';
 
 		// If error occurred while preparation, return a message instance
 		if($this->error)
 		{
 			$this->_setInputErrorToContext();
-			$type = Mobile::isFromMobilePhone() ? 'mobile' : 'view';
-			$oMessageObject = ModuleHandler::getModuleInstance('message', $type);
+			$oMessageObject = ModuleHandler::getModuleInstance('message', $display_mode);
 			$oMessageObject->setError(-1);
 			$oMessageObject->setMessage($this->error);
 			$oMessageObject->dispMessage();
@@ -359,8 +455,7 @@ class ModuleHandler extends Handler
 			$this->httpStatusCode = '404';
 
 			$this->_setInputErrorToContext();
-			$type = Mobile::isFromMobilePhone() ? 'mobile' : 'view';
-			$oMessageObject = ModuleHandler::getModuleInstance('message', $type);
+			$oMessageObject = ModuleHandler::getModuleInstance('message', $display_mode);
 			$oMessageObject->setError(-1);
 			$oMessageObject->setMessage($this->error);
 			$oMessageObject->dispMessage();
@@ -397,7 +492,7 @@ class ModuleHandler extends Handler
 			if(!in_array(strtoupper($_SERVER['REQUEST_METHOD']), $allowedMethodList))
 			{
 				$this->error = "msg_invalid_request";
-				$oMessageObject = ModuleHandler::getModuleInstance('message', 'view');
+				$oMessageObject = ModuleHandler::getModuleInstance('message', $display_mode);
 				$oMessageObject->setError(-1);
 				$oMessageObject->setMessage($this->error);
 				$oMessageObject->dispMessage();
@@ -410,13 +505,24 @@ class ModuleHandler extends Handler
 			Mobile::setMobile(FALSE);
 		}
 
-		// Admin ip
 		$logged_info = Context::get('logged_info');
+
+		// check CSRF for POST actions
+		if($_SERVER['REQUEST_METHOD'] !== 'GET' && Context::isInstalled() && $this->act !== 'procFileUpload' && !checkCSRF()) {
+			$this->error = 'msg_invalid_request';
+			$oMessageObject = ModuleHandler::getModuleInstance('message', $display_mode);
+			$oMessageObject->setError(-1);
+			$oMessageObject->setMessage($this->error);
+			$oMessageObject->dispMessage();
+			return $oMessageObject;
+		}
+
+		// Admin ip
 		if($kind == 'admin' && $_SESSION['denied_admin'] == 'Y')
 		{
 			$this->_setInputErrorToContext();
 			$this->error = "msg_not_permitted_act";
-			$oMessageObject = ModuleHandler::getModuleInstance('message', $type);
+			$oMessageObject = ModuleHandler::getModuleInstance('message', $display_mode);
 			$oMessageObject->setError(-1);
 			$oMessageObject->setMessage($this->error);
 			$oMessageObject->dispMessage();
@@ -446,8 +552,7 @@ class ModuleHandler extends Handler
 		if(!is_object($oModule))
 		{
 			$this->_setInputErrorToContext();
-			$type = Mobile::isFromMobilePhone() ? 'mobile' : 'view';
-			$oMessageObject = ModuleHandler::getModuleInstance('message', $type);
+			$oMessageObject = ModuleHandler::getModuleInstance('message', $display_mode);
 			$oMessageObject->setError(-1);
 			$oMessageObject->setMessage($this->error);
 			$oMessageObject->dispMessage();
@@ -466,7 +571,7 @@ class ModuleHandler extends Handler
 			{
 				$this->_setInputErrorToContext();
 				$this->error = 'msg_invalid_request';
-				$oMessageObject = ModuleHandler::getModuleInstance('message', $type);
+				$oMessageObject = ModuleHandler::getModuleInstance('message', $display_mode);
 				$oMessageObject->setError(-1);
 				$oMessageObject->setMessage($this->error);
 				$oMessageObject->dispMessage();
@@ -495,7 +600,7 @@ class ModuleHandler extends Handler
 				else
 				{
 					$this->error = 'msg_invalid_request';
-					$oMessageObject = ModuleHandler::getModuleInstance('message', 'view');
+					$oMessageObject = ModuleHandler::getModuleInstance('message', $display_mode);
 					$oMessageObject->setError(-1);
 					$oMessageObject->setMessage($this->error);
 					$oMessageObject->dispMessage();
@@ -517,6 +622,34 @@ class ModuleHandler extends Handler
 				$tpl_path = $oModule->getTemplatePath();
 				$orig_module = $oModule;
 
+				$xml_info = $oModuleModel->getModuleActionXml($forward->module);
+
+				// SECISSUE also check foward act method
+				// check REQUEST_METHOD in controller
+				if($type == 'controller')
+				{
+					$allowedMethod = $xml_info->action->{$forward->act}->method;
+
+					if(!$allowedMethod)
+					{
+						$allowedMethodList[0] = 'POST';
+					}
+					else
+					{
+						$allowedMethodList = explode('|', strtoupper($allowedMethod));
+					}
+
+					if(!in_array(strtoupper($_SERVER['REQUEST_METHOD']), $allowedMethodList))
+					{
+						$this->error = "msg_invalid_request";
+						$oMessageObject = ModuleHandler::getModuleInstance('message', $display_mode);
+						$oMessageObject->setError(-1);
+						$oMessageObject->setMessage($this->error);
+						$oMessageObject->dispMessage();
+						return $oMessageObject;
+					}
+				}
+
 				if($type == "view" && Mobile::isFromMobilePhone())
 				{
 					$orig_type = "view";
@@ -537,9 +670,8 @@ class ModuleHandler extends Handler
 
 				if(!is_object($oModule))
 				{
-					$type = Mobile::isFromMobilePhone() ? 'mobile' : 'view';
 					$this->_setInputErrorToContext();
-					$oMessageObject = ModuleHandler::getModuleInstance('message', $type);
+					$oMessageObject = ModuleHandler::getModuleInstance('message', $display_mode);
 					$oMessageObject->setError(-1);
 					$oMessageObject->setMessage('msg_module_is_not_exists');
 					$oMessageObject->dispMessage();
@@ -549,8 +681,6 @@ class ModuleHandler extends Handler
 					}
 					return $oMessageObject;
 				}
-
-				$xml_info = $oModuleModel->getModuleActionXml($forward->module);
 
 				if($this->module == "admin" && $type == "view")
 				{
@@ -569,7 +699,7 @@ class ModuleHandler extends Handler
 						$this->_setInputErrorToContext();
 
 						$this->error = 'msg_is_not_administrator';
-						$oMessageObject = ModuleHandler::getModuleInstance('message', $type);
+						$oMessageObject = ModuleHandler::getModuleInstance('message', $display_mode);
 						$oMessageObject->setError(-1);
 						$oMessageObject->setMessage($this->error);
 						$oMessageObject->dispMessage();
@@ -583,7 +713,7 @@ class ModuleHandler extends Handler
 					{
 						$this->_setInputErrorToContext();
 						$this->error = 'msg_is_not_manager';
-						$oMessageObject = ModuleHandler::getModuleInstance('message', 'view');
+						$oMessageObject = ModuleHandler::getModuleInstance('message', $display_mode);
 						$oMessageObject->setError(-1);
 						$oMessageObject->setMessage($this->error);
 						$oMessageObject->dispMessage();
@@ -595,7 +725,7 @@ class ModuleHandler extends Handler
 						{
 							$this->_setInputErrorToContext();
 							$this->error = 'msg_is_not_administrator';
-							$oMessageObject = ModuleHandler::getModuleInstance('message', 'view');
+							$oMessageObject = ModuleHandler::getModuleInstance('message', $display_mode);
 							$oMessageObject->setError(-1);
 							$oMessageObject->setMessage($this->error);
 							$oMessageObject->dispMessage();
@@ -667,7 +797,8 @@ class ModuleHandler extends Handler
 				'dispEditorConfigPreview' => 1,
 				'dispLayoutPreviewWithModule' => 1
 		);
-		if($type == "view" && $this->module_info->use_mobile == "Y" && Mobile::isMobileCheckByAgent() && !isset($skipAct[Context::get('act')]))
+		$db_use_mobile = Mobile::isMobileEnabled();
+		if($type == "view" && $this->module_info->use_mobile == "Y" && Mobile::isMobileCheckByAgent() && !isset($skipAct[Context::get('act')]) && $db_use_mobile === true)
 		{
 			global $lang;
 			$header = '<style>div.xe_mobile{opacity:0.7;margin:1em 0;padding:.5em;background:#333;border:1px solid #666;border-left:0;border-right:0}p.xe_mobile{text-align:center;margin:1em 0}a.xe_mobile{color:#ff0;font-weight:bold;font-size:24px}@media only screen and (min-width:500px){a.xe_mobile{font-size:15px}}</style>';
@@ -1043,31 +1174,18 @@ class ModuleHandler extends Handler
 				ModuleHandler::_getModuleFilePath($module, $type, $kind, $class_path, $high_class_file, $class_file, $instance_name);
 			}
 
-			// Get base class name and load the file contains it
-			if(!class_exists($module, false))
+			// Check if the base class and instance class exist
+			if(!class_exists($module, true))
 			{
-				$high_class_file = sprintf('%s%s%s.class.php', _XE_PATH_, $class_path, $module);
-				if(!file_exists($high_class_file))
-				{
-					return NULL;
-				}
-				require_once($high_class_file);
+				return NULL;
 			}
-
-			// Get the name of the class file
-			if(!is_readable($class_file))
+			if(!class_exists($instance_name, true))
 			{
 				return NULL;
 			}
 
-			// Create an instance with eval function
-			require_once($class_file);
-			if(!class_exists($instance_name, false))
-			{
-				return NULL;
-			}
-			$tmp_fn = create_function('', "return new {$instance_name}();");
-			$oModule = $tmp_fn();
+			// Create an instance
+			$oModule = new $instance_name();
 			if(!is_object($oModule))
 			{
 				return NULL;
@@ -1212,15 +1330,22 @@ class ModuleHandler extends Handler
 	function _setHttpStatusMessage($code)
 	{
 		$statusMessageList = array(
+			// 1×× Informational
 			'100' => 'Continue',
 			'101' => 'Switching Protocols',
-			'201' => 'OK', // todo check array key '201'
+			'102' => 'Processing',
+			// 2×× Success
+			'200' => 'OK',
 			'201' => 'Created',
 			'202' => 'Accepted',
-			'203' => 'Non-Authoritative Information',
+			'203' => 'Non-authoritative Information',
 			'204' => 'No Content',
 			'205' => 'Reset Content',
 			'206' => 'Partial Content',
+			'207' => 'Multi-Status',
+			'208' => 'Already Reported',
+			'226' => 'IM Used',
+			// 3×× Redirection
 			'300' => 'Multiple Choices',
 			'301' => 'Moved Permanently',
 			'302' => 'Found',
@@ -1228,6 +1353,8 @@ class ModuleHandler extends Handler
 			'304' => 'Not Modified',
 			'305' => 'Use Proxy',
 			'307' => 'Temporary Redirect',
+			'308' => 'Permanent Redirect',
+			// 4×× Client Error
 			'400' => 'Bad Request',
 			'401' => 'Unauthorized',
 			'402' => 'Payment Required',
@@ -1241,22 +1368,38 @@ class ModuleHandler extends Handler
 			'410' => 'Gone',
 			'411' => 'Length Required',
 			'412' => 'Precondition Failed',
-			'413' => 'Request Entity Too Large',
+			'413' => 'Payload Too Large',
 			'414' => 'Request-URI Too Long',
 			'415' => 'Unsupported Media Type',
 			'416' => 'Requested Range Not Satisfiable',
 			'417' => 'Expectation Failed',
+			'418' => 'I\'m a teapot',
+			'421' => 'Misdirected Request',
+			'422' => 'Unprocessable Entity',
+			'423' => 'Locked',
+			'424' => 'Failed Dependency',
+			'426' => 'Upgrade Required',
+			'428' => 'Precondition Required',
+			'429' => 'Too Many Requests',
+			'431' => 'Request Header Fields Too Large',
+			'451' => 'Unavailable For Legal Reasons',
+			// 5×× Server Error
 			'500' => 'Internal Server Error',
 			'501' => 'Not Implemented',
 			'502' => 'Bad Gateway',
 			'503' => 'Service Unavailable',
 			'504' => 'Gateway Timeout',
 			'505' => 'HTTP Version Not Supported',
+			'506' => 'Variant Also Negotiates',
+			'507' => 'Insufficient Storage',
+			'508' => 'Loop Detected',
+			'510' => 'Not Extended',
+			'511' => 'Network Authentication Required',
 		);
 		$statusMessage = $statusMessageList[$code];
 		if(!$statusMessage)
 		{
-			$statusMessage = 'OK';
+			$statusMessage = 'HTTP ' . $code;
 		}
 
 		Context::set('http_status_code', $code);

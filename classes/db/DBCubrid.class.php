@@ -116,7 +116,7 @@ class DBCubrid extends DB
 	 */
 	function addQuotes($string)
 	{
-		if(version_compare(PHP_VERSION, "5.9.0", "<") &&
+		if(version_compare(PHP_VERSION, "5.4.0", "<") &&
 				get_magic_quotes_gpc())
 		{
 			$string = stripslashes(str_replace("\\", "\\\\", $string));
@@ -144,7 +144,7 @@ class DBCubrid extends DB
 	 * this method is private
 	 * @return boolean
 	 */
-	function _begin($transactionLevel)
+	function _begin($transactionLevel = 0)
 	{
 		if(__CUBRID_VERSION__ >= '8.4.0')
 		{
@@ -167,7 +167,7 @@ class DBCubrid extends DB
 	 * this method is private
 	 * @return boolean
 	 */
-	function _rollback($transactionLevel)
+	function _rollback($transactionLevel = 0)
 	{
 		$connection = $this->_getConnection('master');
 

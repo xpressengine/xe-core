@@ -543,16 +543,33 @@ class commentItem extends Object
 			return;
 		}
 
+		if($this->isSecret() && !$this->isGranted())
+		{
+			return;
+		}
+
 		// If signiture height setting is omitted, create a square
 		if(!$height)
 		{
 			$height = $width;
 		}
 
-		// return false if neigher attached file nor image;
-		if(!$this->hasUploadedFiles() && !preg_match("!<img!is", $this->get('content')))
+		$content = $this->get('content');
+		if(!$this->hasUploadedFiles())
 		{
-			return;
+			if(!$content)
+			{
+				$args = new stdClass();
+				$args->comment_srl = $this->comment_srl;
+				$output = executeQuery('document.getComment', $args, array('content'));
+				if($output->toBool() && $output->data)
+				{
+					$content = $output->data->content;
+					$this->add('content', $content);
+				}
+			}
+
+			if(!preg_match("!<img!is", $content)) return;
 		}
 
 		// get thumbail generation info on the doc module configuration.
@@ -564,10 +581,11 @@ class commentItem extends Object
 		// Define thumbnail information
 		$thumbnail_path = sprintf('files/thumbnails/%s', getNumberingPath($this->comment_srl, 3));
 		$thumbnail_file = sprintf('%s%dx%d.%s.jpg', $thumbnail_path, $width, $height, $thumbnail_type);
+		$thumbnail_lockfile = sprintf('%s%dx%d.%s.lock', $thumbnail_path, $width, $height, $thumbnail_type);
 		$thumbnail_url = Context::getRequestUri() . $thumbnail_file;
 
 		// return false if a size of existing thumbnail file is 0. otherwise return the file path
-		if(file_exists($thumbnail_file))
+		if(file_exists($thumbnail_file) || file_exists($thumbnail_lockfile))
 		{
 			if(filesize($thumbnail_file) < 1)
 			{
@@ -579,6 +597,9 @@ class commentItem extends Object
 			}
 		}
 
+		// Create lockfile to prevent race condition
+		FileHandler::writeFile($thumbnail_lockfile, '', 'w');
+
 		// Target file
 		$source_file = NULL;
 		$is_tmp_file = FALSE;
@@ -587,100 +608,92 @@ class commentItem extends Object
 		if($this->hasUploadedFiles())
 		{
 			$file_list = $this->getUploadedFiles();
-			if(count($file_list))
-			{
-				foreach($file_list as $file)
-				{
-					if($file->direct_download != 'Y')
-					{
-						continue;
-					}
-					if(!preg_match("/\.(jpg|png|jpeg|gif|bmp)$/i", $file->source_filename))
-					{
-						continue;
-					}
 
+			$first_image = null;
+			foreach($file_list as $file)
+			{
+				if($file->direct_download !== 'Y') continue;
+
+				if($file->cover_image === 'Y' && file_exists($file->uploaded_filename))
+				{
 					$source_file = $file->uploaded_filename;
-					if(!file_exists($source_file))
+					break;
+				}
+
+				if($first_image) continue;
+
+				if(preg_match("/\.(jpe?g|png|gif|bmp)$/i", $file->source_filename))
+				{
+					if(file_exists($file->uploaded_filename))
 					{
-						$source_file = NULL;
-					}
-					else
-					{
-						break;
+						$first_image = $file->uploaded_filename;
 					}
 				}
+			}
+
+			if(!$source_file && $first_image)
+			{
+				$source_file = $first_image;
 			}
 		}
 
 		// get an image file from the doc content if no file attached. 
+		$is_tmp_file = false;
 		if(!$source_file)
 		{
-			$content = $this->get('content');
-			$target_src = NULL;
+			$random = new Password();
 
-			preg_match_all("!src=(\"|')([^\"' ]*?)(\"|')!is", $content, $matches, PREG_SET_ORDER);
+			preg_match_all("!<img[^>]*src=(?:\"|\')([^\"\']*?)(?:\"|\')!is", $content, $matches, PREG_SET_ORDER);
 
-			$cnt = count($matches);
-
-			for($i = 0; $i < $cnt; $i++)
+			foreach($matches as $target_image)
 			{
-				$target_src = $matches[$i][2];
-				if(preg_match('/\/(common|modules|widgets|addons|layouts)\//i', $target_src))
+				$target_src = trim($target_image[1]);
+				if(preg_match('/\/(common|modules|widgets|addons|layouts|m\.layouts)\//i', $target_src)) continue;
+
+				if(!preg_match('/^(http|https):\/\//i',$target_src))
 				{
+					$target_src = Context::getRequestUri().$target_src;
+				}
+
+				$target_src = htmlspecialchars_decode($target_src);
+
+				$tmp_file = _XE_PATH_ . 'files/cache/tmp/' . $random->createSecureSalt(32, 'hex');
+				FileHandler::getRemoteFile($target_src, $tmp_file);
+				if(!file_exists($tmp_file)) continue;
+
+				$imageinfo = getimagesize($tmp_file);
+				list($_w, $_h) = $imageinfo;
+				if($imageinfo === false || ($_w < ($width * 0.3) && $_h < ($height * 0.3))) {
+					FileHandler::removeFile($tmp_file);
 					continue;
 				}
-				else
-				{
-					if(!preg_match('/^(http|https):\/\//i', $target_src))
-					{
-						$target_src = Context::getRequestUri() . $target_src;
-					}
 
-					$tmp_file = sprintf('./files/cache/tmp/%d', md5(rand(111111, 999999) . $this->comment_srl));
-
-					FileHandler::makeDir('./files/cache/tmp');
-
-					FileHandler::getRemoteFile($target_src, $tmp_file);
-
-					if(!file_exists($tmp_file))
-					{
-						continue;
-					}
-					else
-					{
-						list($_w, $_h, $_t, $_a) = @getimagesize($tmp_file);
-
-						if($_w < $width || $_h < $height)
-						{
-							continue;
-						}
-
-						$source_file = $tmp_file;
-						$is_tmp_file = TRUE;
-						break;
-					}
-				}
+				$source_file = $tmp_file;
+				$is_tmp_file = true;
+				break;
 			}
 		}
 
 		$output = FileHandler::createImageFile($source_file, $thumbnail_file, $width, $height, 'jpg', $thumbnail_type);
 
+		// Remove source file if it was temporary
 		if($is_tmp_file)
 		{
 			FileHandler::removeFile($source_file);
 		}
 
-		// return the thumbnail path if successfully generated.
+		// Remove lockfile
+		FileHandler::removeFile($thumbnail_lockfile);
+
+		// Return the thumbnail path if it was successfully generated
 		if($output)
 		{
 			return $thumbnail_url;
 		}
-
-		// create an empty file not to attempt to generate the thumbnail afterwards
+		// Create an empty file if thumbnail generation failed
 		else
 		{
-			FileHandler::writeFile($thumbnail_file, '', 'w');
+			FileHandler::writeFile($thumbnail_file, '','w');
 		}
 
 		return;

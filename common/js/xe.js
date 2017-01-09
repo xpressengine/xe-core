@@ -1089,13 +1089,6 @@ jQuery(function($) {
 			}
 		}
 
-		re = /^https:\/\/([^:\/]+)(:\d+|)/i;
-		if (re.test(uri)) {
-			toReplace = 'http://'+RegExp.$1;
-			if (window.http_port && http_port != 80) toReplace += ':' + http_port;
-			uri = uri.replace(re, toReplace);
-		}
-
 		var bUseSSL = !!window.enforce_ssl;
 		if (!bUseSSL && isArray(window.ssl_actions) && (act=uri.getQuery('act'))) {
 			for (var i=0,c=ssl_actions.length; i < c; i++) {
@@ -1106,10 +1099,15 @@ jQuery(function($) {
 			}
 		}
 
-		re = /http:\/\/([^:\/]+)(:\d+|)/i;
+		re = /https?:\/\/([^:\/]+)(:\d+|)/i;
 		if (bUseSSL && re.test(uri)) {
 			toReplace = 'https://'+RegExp.$1;
 			if (window.https_port && https_port != 443) toReplace += ':' + https_port;
+			uri = uri.replace(re, toReplace);
+		}
+		if (!bUseSSL && re.test(uri)) {
+			toReplace = 'http://'+RegExp.$1;
+			if (window.http_port && http_port != 80) toReplace += ':' + http_port;
 			uri = uri.replace(re, toReplace);
 		}
 
@@ -2685,6 +2683,10 @@ function xml2json(xml, tab, ignoreAttrib) {
 			// number
 			var regNum = /^[0-9]*$/;
 			this.cast('ADD_RULE', ['number', regNum]);
+
+			// float
+			var regFloat = /^\d+(\.\d+)?$/;
+			this.cast('ADD_RULE', ['float', regFloat]);
 			// }}} add filters
 		},
 		// run validator

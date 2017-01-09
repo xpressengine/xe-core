@@ -111,7 +111,7 @@ class Password
 
 			case 'pbkdf2':
 				$iterations = pow(2, $this->getWorkFactor() + 5);
-				$salt = $this->createSecureSalt(12);
+				$salt = $this->createSecureSalt(12, 'alnum');
 				$hash = base64_encode($this->pbkdf2($password, $salt, 'sha256', $iterations, 24));
 				return 'sha256:'.sprintf('%07d', $iterations).':'.$salt.':'.$hash;
 
@@ -327,6 +327,55 @@ class Password
 		}
 	}
 
+	/**
+	 * @brief Create a digital signature to verify the authenticity of a string
+	 * @param string $string
+	 * @return string
+	 */
+	public static function createSignature($string)
+	{
+		$key = self::getSecretKey();
+		$salt = self::createSecureSalt(8, 'alnum');
+		$hash = substr(base64_encode(hash_hmac('sha256', hash_hmac('sha256', $string, $salt), $key, true)), 0, 32);
+		return $salt . strtr($hash, '+/', '-_');
+	}
+	
+	/**
+	 * @brief Check whether a signature is valid
+	 * @param string $string
+	 * @param string $signature
+	 * @return bool
+	 */
+	public static function checkSignature($string, $signature)
+	{
+		if(strlen($signature) !== 40)
+		{
+			return false;
+		}
+		
+		$key = self::getSecretKey();
+		$salt = substr($signature, 0, 8);
+		$hash = substr(base64_encode(hash_hmac('sha256', hash_hmac('sha256', $string, $salt), $key, true)), 0, 32);
+		return self::strcmpConstantTime(substr($signature, 8), strtr($hash, '+/', '-_'));
+	}
+	
+	/**
+	 * @brief Get the secret key for this site
+	 * @return bool
+	 */
+	public static function getSecretKey()
+	{
+		// If the secret key does not exist, the config file needs to be updated
+		$db_info = Context::getDbInfo();
+		if(!isset($db_info->secret_key))
+		{
+			$db_info->secret_key = self::createSecureSalt(48, 'alnum');
+			Context::setDBInfo($db_info);
+			getController('install')->makeConfigFile();
+		}
+		return $db_info->secret_key;
+	}
+	
 	/**
 	 * @brief Generate the PBKDF2 hash of a string using a salt
 	 * @param string $password The password

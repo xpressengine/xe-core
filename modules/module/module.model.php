@@ -77,7 +77,7 @@ class moduleModel extends module
 	}
 
 	/**
-	 * @brief Get the defaul mid according to the domain
+	 * @brief Get the default mid according to the domain
 	 */
 	function getDefaultMid()
 	{
@@ -944,7 +944,7 @@ class moduleModel extends module
 					$info->action->{$name} = new stdClass();
 					$info->action->{$name}->type = $type;
 					$info->action->{$name}->grant = $grant;
-					$info->action->{$name}->standalone = ($standalone == 'true') ? TRUE : FALSE;
+					$info->action->{$name}->standalone = $standalone;
 					$info->action->{$name}->ruleset = $ruleset;
 					$info->action->{$name}->method = $method;
 					if($action->attrs->menu_name)

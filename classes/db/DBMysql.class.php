@@ -131,7 +131,7 @@ class DBMysql extends DB
 	 */
 	function addQuotes($string)
 	{
-		if(version_compare(PHP_VERSION, "5.9.0", "<") && get_magic_quotes_gpc())
+		if(version_compare(PHP_VERSION, "5.4.0", "<") && get_magic_quotes_gpc())
 		{
 			$string = stripslashes(str_replace("\\", "\\\\", $string));
 		}
@@ -147,7 +147,7 @@ class DBMysql extends DB
 	 * this method is private
 	 * @return boolean
 	 */
-	function _begin()
+	function _begin($transactionLevel = 0)
 	{
 		return true;
 	}
@@ -157,7 +157,7 @@ class DBMysql extends DB
 	 * this method is private
 	 * @return boolean
 	 */
-	function _rollback()
+	function _rollback($transactionLevel = 0)
 	{
 		return true;
 	}
@@ -265,7 +265,7 @@ class DBMysql extends DB
 		$query = sprintf("select password('%s') as password, old_password('%s') as old_password", $this->addQuotes($password), $this->addQuotes($password));
 		$result = $this->_query($query);
 		$tmp = $this->_fetch($result);
-		if($tmp->password == $saved_password || $tmp->old_password == $saved_password)
+		if($tmp->password === $saved_password || $tmp->old_password === $saved_password)
 		{
 			return true;
 		}

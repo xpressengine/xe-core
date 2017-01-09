@@ -274,6 +274,7 @@ class documentController extends document
 			$obj->homepage = $logged_info->homepage;
 		}
 		// If the tile is empty, extract string from the contents.
+		$obj->title = htmlspecialchars($obj->title, ENT_COMPAT | ENT_HTML401, 'UTF-8', false);
 		settype($obj->title, "string");
 		if($obj->title == '') $obj->title = cut_str(trim(strip_tags(nl2br($obj->content))),20,'...');
 		// If no tile extracted from the contents, leave it untitled.
@@ -359,6 +360,8 @@ class documentController extends document
 	 */
 	function updateDocument($source_obj, $obj, $manual_updated = FALSE)
 	{
+		$logged_info = Context::get('logged_info');
+
 		if(!$manual_updated && !checkCSRF())
 		{
 			return new Object(-1, 'msg_invalid_request');
@@ -449,10 +452,10 @@ class documentController extends document
 		{
 			$obj->password = getModel('member')->hashPassword($obj->password);
 		}
+
 		// If an author is identical to the modifier or history is used, use the logged-in user's information.
-		if(Context::get('is_logged'))
+		if(Context::get('is_logged') && !$manual_updated)
 		{
-			$logged_info = Context::get('logged_info');
 			if($source_obj->get('member_srl')==$logged_info->member_srl)
 			{
 				$obj->member_srl = $logged_info->member_srl;
@@ -462,6 +465,7 @@ class documentController extends document
 				$obj->homepage = $logged_info->homepage;
 			}
 		}
+
 		// For the document written by logged-in user however no nick_name exists
 		if($source_obj->get('member_srl')&& !$obj->nick_name)
 		{
@@ -472,6 +476,7 @@ class documentController extends document
 			$obj->homepage = $source_obj->get('homepage');
 		}
 		// If the tile is empty, extract string from the contents.
+		$obj->title = htmlspecialchars($obj->title, ENT_COMPAT | ENT_HTML401, 'UTF-8', false);
 		settype($obj->title, "string");
 		if($obj->title == '') $obj->title = cut_str(strip_tags($obj->content),20,'...');
 		// If no tile extracted from the contents, leave it untitled.
@@ -868,7 +873,7 @@ class documentController extends document
 		$output = executeQuery('document.updateReadedCount', $args);
 
 		// Call a trigger when the read count is updated (after)
-		$outptrigger_outputut = ModuleHandler::triggerCall('document.updateReadedCount', 'after', $oDocument);
+		$trigger_output = ModuleHandler::triggerCall('document.updateReadedCount', 'after', $oDocument);
 		if(!$trigger_output->toBool())
 		{
 			$oDB->rollback();
@@ -1089,7 +1094,7 @@ class documentController extends document
 		if($oDocument->get('member_srl'))
 		{
 			// Pass after registering a session if author's information is same as the currently logged-in user's.
-			if($member_srl && $member_srl == $oDocument->get('member_srl'))
+			if($member_srl && $member_srl == abs($oDocument->get('member_srl')))
 			{
 				$_SESSION['voted_document'][$document_srl] = true;
 				return new Object(-1, $failed_voted);
@@ -1226,7 +1231,7 @@ class documentController extends document
 			$oMemberModel = getModel('member');
 			$member_srl = $oMemberModel->getLoggedMemberSrl();
 			// Pass after registering a session if author's information is same as the currently logged-in user's.
-			if($member_srl && $member_srl == $oDocument->get('member_srl'))
+			if($member_srl && $member_srl == abs($oDocument->get('member_srl')))
 			{
 				$_SESSION['declared_document'][$document_srl] = true;
 				return new Object(-1, 'failed_declared');

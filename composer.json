@@ -1,0 +1,16 @@
+{
+    "name": "xpressengine/xe-core",
+    "license": "GNU LGPL",
+    "authors": [
+        {
+            "name": "NAVER",
+            "email": "developers@xpressengine.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "require-dev": {
+        "codeception/codeception": "~2.0"
+    }
+}
