@@ -448,7 +448,7 @@ class memberController extends member
 			// Get information of logged-in user
 			$logged_info = Context::get('logged_info');
 			$member_srl = $logged_info->member_srl;
-			
+
 			$columnList = array('member_srl', 'password');
 			$memberInfo = $oMemberModel->getMemberInfoByMemberSrl($member_srl, 0, $columnList);
 			$this->memberInfo->password = $memberInfo->password;
@@ -491,7 +491,7 @@ class memberController extends member
 		unset($_SESSION['rechecked_password_step']);
 
 		// Extract the necessary information in advance
-		$oMemberModel = &getModel ('member');
+		$oMemberModel = getModel('member');
 		$config = $oMemberModel->getMemberConfig ();
 		$getVars = array('find_account_answer','allow_mailing','allow_message');
 		if($config->signupForm)
@@ -1211,7 +1211,7 @@ class memberController extends member
 		$renewal_args = new stdClass;
 		$renewal_args->member_srl = $member_info->member_srl;
 		$renewal_args->auth_key = $auth_info->auth_key;
-		$output = executeQuery('member.updateAuthMail', $renewal_args);		
+		$output = executeQuery('member.updateAuthMail', $renewal_args);
 
 		$memberInfo = array();
 		global $lang;
@@ -2206,11 +2206,11 @@ class memberController extends member
 		{
 			$args->password = $orgMemberInfo->password;
 		}
-		
+
 		if(!$args->user_name) $args->user_name = $orgMemberInfo->user_name;
 		if(!$args->user_id) $args->user_id = $orgMemberInfo->user_id;
 		if(!$args->nick_name) $args->nick_name = $orgMemberInfo->nick_name;
-		if(!$args->description) $args->description = '';
+		if(!$args->description) $args->description = $orgMemberInfo->description;
 		if(!$args->birthday) $args->birthday = '';
 
 		$output = executeQuery('member.updateMember', $args);
