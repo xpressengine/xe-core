@@ -482,6 +482,7 @@ class autoinstallAdminView extends autoinstall
 
 		$security = new Security();
 		$security->encodeHTML('package.', 'package.depends..', 'item_list..');
+		$security->encodeHTML('search_target', 'search_keyword');
 	}
 
 	/**
