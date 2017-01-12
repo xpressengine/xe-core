@@ -1985,7 +1985,14 @@ class menuAdminController extends menu
 			unset($name_arr_str);
 			foreach($names as $key => $val)
 			{
-				$name_arr_str .= sprintf('"%s"=>\'%s\',', $key, str_replace(array('\\','\''), array('\\\\','\\\''), strip_tags($val)));
+				if(preg_match('/\{\$lang->menu_gnb(?:_sub)?\[\'([a-zA-Z_]+)\'\]\}/', $val) === 1)
+				{
+					$name_arr_str .= sprintf('"%s"=>"%s",', $key, $val);
+				}
+				else
+				{
+					$name_arr_str .= sprintf('"%s"=>\'%s\',', $key, str_replace(array('\\','\''), array('\\\\','\\\''), strip_tags($val)));
+				}
 			}
 			$name_str = sprintf('$_menu_names[%d] = array(%s); %s', $node->menu_item_srl, $name_arr_str, $child_output['name']);
 
