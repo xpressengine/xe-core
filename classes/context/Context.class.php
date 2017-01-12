@@ -1403,6 +1403,10 @@ class Context
 			{
 				$result[$k] = urlencode($v);
 			}
+			elseif(stripos($key, 'XE_VALIDATOR', 0) === 0)
+			{
+				unset($result[$k]);
+			}
 			else
 			{
 				$result[$k] = $v;

@@ -96,6 +96,9 @@ class documentAdminView extends document
 		}
 		Context::set('module_list', $module_list);
 
+		$security = new Security();
+		$security->encodeHTML('search_target', 'search_keyword');
+
 		// Specify a template
 		$this->setTemplatePath($this->module_path.'tpl');
 		$this->setTemplateFile('document_list');
