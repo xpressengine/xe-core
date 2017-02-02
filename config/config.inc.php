@@ -318,6 +318,7 @@ $GLOBALS['__xe_autoload_file_map'] = array_change_key_case(array(
 	'ConditionWithoutArgument' => 'classes/db/queryparts/condition/ConditionWithoutArgument.class.php',
 	'ClickCountExpression' => 'classes/db/queryparts/expression/ClickCountExpression.class.php',
 	'documentItem' => 'modules/document/document.item.php',
+	'commentItem' => 'modules/comment/comment.item.php',
 	'DeleteExpression' => 'classes/db/queryparts/expression/DeleteExpression.class.php',
 	'Expression' => 'classes/db/queryparts/expression/Expression.class.php',
 	'InsertExpression' => 'classes/db/queryparts/expression/InsertExpression.class.php',
