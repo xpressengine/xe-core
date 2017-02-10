@@ -448,7 +448,7 @@ class memberController extends member
 			// Get information of logged-in user
 			$logged_info = Context::get('logged_info');
 			$member_srl = $logged_info->member_srl;
-			
+
 			$columnList = array('member_srl', 'password');
 			$memberInfo = $oMemberModel->getMemberInfoByMemberSrl($member_srl, 0, $columnList);
 			$this->memberInfo->password = $memberInfo->password;
@@ -491,7 +491,7 @@ class memberController extends member
 		unset($_SESSION['rechecked_password_step']);
 
 		// Extract the necessary information in advance
-		$oMemberModel = &getModel ('member');
+		$oMemberModel = getModel('member');
 		$config = $oMemberModel->getMemberConfig ();
 		$getVars = array('find_account_answer','allow_mailing','allow_message');
 		if($config->signupForm)
@@ -1211,7 +1211,7 @@ class memberController extends member
 		$renewal_args = new stdClass;
 		$renewal_args->member_srl = $member_info->member_srl;
 		$renewal_args->auth_key = $auth_info->auth_key;
-		$output = executeQuery('member.updateAuthMail', $renewal_args);		
+		$output = executeQuery('member.updateAuthMail', $renewal_args);
 
 		$memberInfo = array();
 		global $lang;
@@ -1469,9 +1469,8 @@ class memberController extends member
 	{
 		$signature = trim(removeHackTag($signature));
 		$signature = preg_replace('/<(\/?)(embed|object|param)/is', '&lt;$1$2', $signature);
-		$signature = removeHackTag($signature);
 
-		$check_signature = trim(str_replace(array('&nbsp;',"\n","\r"),'',strip_tags($signature,'<img><object>')));
+		$check_signature = trim(str_replace(array('&nbsp;',"\n","\r"), '', strip_tags($signature, '<img><object>')));
 		$path = sprintf('files/member_extra_info/signature/%s/', getNumberingPath($member_srl));
 		$filename = sprintf('%s%d.signature.php', $path, $member_srl);
 
@@ -1923,7 +1922,7 @@ class memberController extends member
 		// Control of essential parameters
 		if($args->allow_mailing!='Y') $args->allow_mailing = 'N';
 		if($args->denied!='Y') $args->denied = 'N';
-		$args->allow_message= 'Y';
+		if(!$args->allow_message || ($args->allow_message && !in_array($args->allow_message, array('Y','N','F')))) $args->allow_message = 'Y';
 
 		if($logged_info->is_admin == 'Y')
 		{
@@ -2206,11 +2205,11 @@ class memberController extends member
 		{
 			$args->password = $orgMemberInfo->password;
 		}
-		
+
 		if(!$args->user_name) $args->user_name = $orgMemberInfo->user_name;
 		if(!$args->user_id) $args->user_id = $orgMemberInfo->user_id;
 		if(!$args->nick_name) $args->nick_name = $orgMemberInfo->nick_name;
-		if(!$args->description) $args->description = '';
+		if(!$args->description) $args->description = $orgMemberInfo->description;
 		if(!$args->birthday) $args->birthday = '';
 
 		$output = executeQuery('member.updateMember', $args);
