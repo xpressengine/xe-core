@@ -91,6 +91,9 @@ class commentAdminView extends comment
 		}
 		Context::set('module_list', $module_list);
 
+		$security = new Security();
+		$security->encodeHTML('search_target', 'search_keyword');
+
 		// set the template 
 		$this->setTemplatePath($this->module_path . 'tpl');
 		$this->setTemplateFile('comment_list');
