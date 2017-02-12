@@ -455,7 +455,9 @@ class Context
 		$config_file = $self->getConfigFile();
 		if(is_readable($config_file))
 		{
+			ob_start(); // trash BOM
 			include($config_file);
+			ob_end_clean();
 		}
 
 		// If master_db information does not exist, the config file needs to be updated
