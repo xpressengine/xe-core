@@ -929,7 +929,7 @@ class fileController extends file
 			$file_info = $file_list[$i];
 			$old_file = $file_info->uploaded_filename;
 			// Determine the file path by checking if the file is an image or other kinds
-			if(preg_match("/\.(jpg|jpeg|gif|png|wmv|wma|mpg|mpeg|avi|swf|flv|mp1|mp2|mp3|mp4|asf|wav|asx|mid|midi|asf|mov|moov|qt|rm|ram|ra|rmm|m4v)$/i", $file_info->source_filename))
+			if(preg_match("/\.(asf|asf|asx|avi|flv|gif|jpeg|jpg|m4a|m4v|mid|midi|moov|mov|mp1|mp2|mp3|mp4|mpeg|mpg|ogg|png|qt|ra|ram|rm|rmm|swf|wav|webm|webp|wma|wmv)$/i", $file_info->source_filename))
 			{
 				$path = sprintf("./files/attach/images/%s/%s/", $target_module_srl,$target_srl);
 				$new_file = $path.$file_info->source_filename;
