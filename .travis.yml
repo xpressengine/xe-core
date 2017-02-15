@@ -9,6 +9,8 @@ php:
 - hhvm
 matrix:
   allow_failures:
+  - php: 7.0
+  - php: 7.1
   - php: hhvm
 sudo: false
 before_script:
@@ -16,7 +18,6 @@ before_script:
 - npm install -g grunt-cli
 - npm install
 - phpenv config-rm xdebug.ini
-- if [ $(phpenv version-name) != "5.3" ]; then phpenv config-add .travis/travis.php.ini; fi
 - if [ $(phpenv version-name) != "5.3" ]; then composer install; fi
 - if [ $(phpenv version-name) != "5.3" ]; then mysql -e 'create database xe_test;'; fi
 - if [ $(phpenv version-name) != "5.3" ]; then echo "USE mysql;\nUPDATE user SET password=PASSWORD('root')
