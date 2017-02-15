@@ -10,6 +10,15 @@ $db_config = $config['modules']['config']['Db'];
 $dsn = $db_config['dsn'];
 $dsn = preg_split('/[;:]/', $dsn);
 $db_type = array_shift($dsn);
+
+if($db_type === 'mysql' || $db_type === 'mysql_innodb')
+{
+	if(!function_exists('mysql_connect') && function_exists('mysqli_connect'))
+	{
+		$db_type = ($db_type === 'mysql') ? 'mysqli' : 'mysql_innodb';
+	}
+}
+
 $dbinfo = [
     'type' => $db_type,
     'user' => $db_config['user'],
