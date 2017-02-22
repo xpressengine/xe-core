@@ -49,10 +49,10 @@ class DBCubrid extends DB
 	 * constructor
 	 * @return void
 	 */
-	function DBCubrid()
+	function DBCubrid($auto_connect = TRUE)
 	{
 		$this->_setDBInfo();
-		$this->_connect();
+		if($auto_connect) $this->_connect();
 	}
 
 	/**

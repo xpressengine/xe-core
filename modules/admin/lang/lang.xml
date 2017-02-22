@@ -1627,4 +1627,16 @@
 	<item name="about_sitelock_in_use">
 		<value xml:lang="ko"><![CDATA[관리자 페이지에서 허용한 IP를 제외한 사용자는 접속할 수 없습니다.]]></value>
 	</item>
+	<item name="admin_check_env">
+		<value xml:lang="ko"><![CDATA[서버 환경 확인]]></value>
+		<value xml:lang="en"><![CDATA[Server Environment Check]]></value>
+	</item>
+	<item name="admin_use_condition_enable">
+		<value xml:lang="ko"><![CDATA[사용이 가능합니다.]]></value>
+		<value xml:lang="en"><![CDATA[You can use.]]></value>
+	</item>
+	<item name="admin_use_condition_disable">
+		<value xml:lang="ko"><![CDATA[사용이 불가능합니다. 위 사항을 수정하신 후 사용해 주십시오.]]></value>
+		<value xml:lang="en"><![CDATA[You cannot use.]]></value>
+	</item>
 </lang>
