@@ -108,7 +108,7 @@ class DB
 	 * will be written by classes/DB/DB***.class.php
 	 * @var array
 	 */
-	var $supported_list = array();
+	static $supported_list = array();
 
 	/**
 	 * location of query cache
@@ -139,7 +139,7 @@ class DB
 	 * @param string $db_type type of db
 	 * @return DB return DB object instance
 	 */
-	function &getInstance($db_type = NULL)
+	function getInstance($db_type = NULL)
 	{
 		if(!$db_type)
 		{
@@ -208,20 +208,18 @@ class DB
 	 * this list return by child class
 	 * @return array return enable DBMS list in supported dbms list
 	 */
-	function getEnableList()
+	public static function getEnableList()
 	{
-		is_a($this, 'DB') ? $self = $this : $self = self::getInstance();
-		
-		if(!$self->supported_list)
+		if(!self::$supported_list)
 		{
 			$oDB = new DB();
-			$self->supported_list = $oDB->_getSupportedList();
+			self::$supported_list = $oDB->_getSupportedList();
 		}
 
 		$enableList = array();
-		if(is_array($self->supported_list))
+		if(is_array(self::$supported_list))
 		{
-			foreach($self->supported_list AS $key => $value)
+			foreach(self::$supported_list AS $key => $value)
 			{
 				if($value->enable)
 				{
@@ -237,20 +235,18 @@ class DB
 	 * this list return by child class
 	 * @return array return disable DBMS list in supported dbms list
 	 */
-	function getDisableList()
+	public static function getDisableList()
 	{
-		is_a($this, 'DB') ? $self = $this : $self = self::getInstance();
-		
-		if(!$self->supported_list)
+		if(!self::$supported_list)
 		{
 			$oDB = new DB();
-			$self->supported_list = $oDB->_getSupportedList();
+			self::$supported_list = $oDB->_getSupportedList();
 		}
 
 		$disableList = array();
-		if(is_array($self->supported_list))
+		if(is_array(self::$supported_list))
 		{
-			foreach($self->supported_list AS $key => $value)
+			foreach(self::$supported_list AS $key => $value)
 			{
 				if(!$value->enable)
 				{
@@ -271,8 +267,8 @@ class DB
 		static $get_supported_list = '';
 		if(is_array($get_supported_list))
 		{
-			$this->supported_list = $get_supported_list;
-			return $this->supported_list;
+			self::$supported_list = $get_supported_list;
+			return self::$supported_list;
 		}
 		$get_supported_list = array();
 		$db_classes_path = _XE_PATH_ . "classes/db/";
@@ -293,7 +289,7 @@ class DB
 
 			unset($oDB);
 			require_once($class_file);
-			$oDB = new $class_name();
+			$oDB = new $class_name(FALSE);
 
 			if(!$oDB)
 			{
@@ -310,8 +306,8 @@ class DB
 		// sort
 		@usort($get_supported_list, array($this, '_sortDBMS'));
 
-		$this->supported_list = $get_supported_list;
-		return $this->supported_list;
+		self::$supported_list = $get_supported_list;
+		return self::$supported_list;
 	}
 
 	/**
@@ -1346,7 +1342,7 @@ class DB
 	 * @param boolean $force force load DBParser instance
 	 * @return DBParser
 	 */
-	function &getParser($force = FALSE)
+	function getParser($force = FALSE)
 	{
 		static $dbParser = NULL;
 		if(!$dbParser || $force)

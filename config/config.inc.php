@@ -29,7 +29,7 @@ define('__ZBXE__', __XE__);
 /**
  * Display XE's full version.
  */
-define('__XE_VERSION__', '1.8.29');
+define('__XE_VERSION__', '1.8.30');
 define('__XE_VERSION_ALPHA__', (stripos(__XE_VERSION__, 'alpha') !== false));
 define('__XE_VERSION_BETA__', (stripos(__XE_VERSION__, 'beta') !== false));
 define('__XE_VERSION_RC__', (stripos(__XE_VERSION__, 'rc') !== false));
@@ -318,6 +318,7 @@ $GLOBALS['__xe_autoload_file_map'] = array_change_key_case(array(
 	'ConditionWithoutArgument' => 'classes/db/queryparts/condition/ConditionWithoutArgument.class.php',
 	'ClickCountExpression' => 'classes/db/queryparts/expression/ClickCountExpression.class.php',
 	'documentItem' => 'modules/document/document.item.php',
+	'commentItem' => 'modules/comment/comment.item.php',
 	'DeleteExpression' => 'classes/db/queryparts/expression/DeleteExpression.class.php',
 	'Expression' => 'classes/db/queryparts/expression/Expression.class.php',
 	'InsertExpression' => 'classes/db/queryparts/expression/InsertExpression.class.php',

@@ -43,10 +43,10 @@ class DBMysql extends DB
 	 * Constructor
 	 * @return void
 	 */
-	function DBMysql()
+	function DBMysql($auto_connect = TRUE)
 	{
 		$this->_setDBInfo();
-		$this->_connect();
+		if($auto_connect) $this->_connect();
 	}
 
 	/**

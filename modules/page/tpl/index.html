@@ -14,27 +14,16 @@
 	<select name="search_target" id="search_target" style="margin-right:4px">
 		<option value="s_mid" selected="selected"|cond="$search_target=='s_mid'">{$lang->mid}</option>
 		<option value="s_browser_title" selected="selected"|cond="$search_target=='s_browser_title'">{$lang->browser_title}</option>
-		<option cond="$module_category">{$lang->module_category}</option>
 	</select>
 	<select name="module_category_srl" title="{$lang->module_category}" cond="$module_category" style="margin-right:4px">
+		<option value="" selected="selected"|cond="!$module_category_srl">{$lang->module_category} ({$lang->all})</option>
+		<option value="0" selected="selected"|cond="$module_category_srl==='0'">{$lang->not_exists}</option>
 		<option loop="$module_category => $key,$val" value="{$key}" selected="selected"|cond="$module_category_srl==$key">{$val->title}</option>
 	</select>
-	<input type="search" name="search_keyword" title="Search" value="{htmlspecialchars($search_keyword, ENT_COMPAT | ENT_HTML401, 'UTF-8', false)}" required style="width:150px" />
+	<input type="search" name="search_keyword" title="Search" value="{htmlspecialchars($search_keyword, ENT_COMPAT | ENT_HTML401, 'UTF-8', false)}" style="width:150px" />
 	<button class="x_btn x_btn-inverse" type="submit">{$lang->cmd_search}</button>
 	<a href="{getUrl('','module',$module,'act',$act)}" class="x_btn">{$lang->cmd_cancel}</a>
 </form>
-<script>
-jQuery(function($){
-	$('#search_target').change(function(){
-		var $this = $(this);
-		if($this.find('>option:last-child').is(':selected')){
-			$this.next('select').show().removeAttr('disabled').next('input[type="search"]').hide().attr('disabled','disabled');
-		} else {
-			$this.next('select').hide().attr('disabled','disabled').next('input[type="search"]').show().removeAttr('disabled');
-		}
-	}).change();
-});
-</script>
 
 <!-- 목록 -->
 <form action="./" method="get" id="fo_list">

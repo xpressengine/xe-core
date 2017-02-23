@@ -42,10 +42,10 @@ class DBMssql extends DB
 	 * Constructor
 	 * @return void
 	 */
-	function DBMssql()
+	function DBMssql($auto_connect = TRUE)
 	{
 		$this->_setDBInfo();
-		$this->_connect();
+		if($auto_connect) $this->_connect();
 	}
 
 	/**

@@ -1,0 +1,49 @@
+<load target="./js/menu_setup.js" />
+<div class="x_page-header">
+	<h1>{$lang->admin_check_env}</h1>
+</div>
+<section class="section">
+	<div id="content">
+		<ul>
+			<li loop="$checklist => $key,$val" cond="!$val">
+				{@ $isDisable = TRUE}
+				<strong>{$lang->install_checklist_title[$key]}<block cond="$key == 'php_version'">(Ver. {$phpversion})</block></strong>
+				:
+				<em><i class="x_icon-ban-circle"></i> {$lang->disable}</em>
+				<p>{sprintf($lang->install_checklist_desc[$key], __XE_MIN_PHP_VERSION__)}</p>
+				<p cond="$key == 'php_version' && $phpversion_warning === true">
+					{sprintf($lang->install_checklist_desc['php_version_warning'], __XE_RECOMMEND_PHP_VERSION__)} <a href="http://php.net/supported-versions.php" target="_blank">[{$lang->more}]</a>
+				</p>
+			</li>
+		</ul>
+		<div cond="!$useable">
+			<p>
+				<i class="x_icon-ok-sign x_icon-white"></i>
+				<strong>XE {__XE_VERSION__}</strong> {$lang->admin_use_condition_disable}
+			</p><br />
+		</div>
+		<div cond="!$isDisable">
+			<ul id="details">
+				<li loop="$checklist => $key,$val">
+					<strong>{$lang->install_checklist_title[$key]}<block cond="$key == 'php_version'">(Ver. {$phpversion})</block></strong>
+					:
+					<em>{$lang->enable}</em>
+					<p cond="$key == 'php_version' && $phpversion_warning === true">
+						{sprintf($lang->install_checklist_desc['php_version_warning'], __XE_RECOMMEND_PHP_VERSION__)} <a href="http://php.net/supported-versions.php" target="_blank">[{$lang->more}]</a>
+					</p>
+				</li>
+			</ul>
+			<p>
+				<i class="x_icon-ok-sign x_icon-white"></i>
+				<strong>XE {__XE_VERSION__}</strong> {$lang->admin_use_condition_enable}
+			</p><br />
+		</div>
+		<div cond="$use_rewrite == 'N' && $checklist['permission'] == true">
+			<p>
+				<i class="x_icon-ok-sign x_icon-white"></i>
+				{$lang->disable_rewrite}
+				<block cond="$use_nginx == 'Y'"><br> {$lang->about_nginx_rewrite}</block>
+			</p>
+		</div>
+	</div>
+</section>
