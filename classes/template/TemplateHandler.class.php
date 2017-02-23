@@ -602,7 +602,7 @@ class TemplateHandler
 			else
 			{
 				$escape_option = $this->config->autoescape !== null ? 'auto' : 'noescape';
-				if(preg_match('@^(.+)\\|((?:no)?escape)$@', $m[1], $mm))
+				if(preg_match('@^(.+)\\|((?:auto|no)?escape)$@', $m[1], $mm))
 				{
 					$m[1] = $mm[1];
 					$escape_option = $mm[2];
@@ -616,6 +616,8 @@ class TemplateHandler
 				{
 					case 'auto':
 						return "<?php echo (\$this->config->autoescape === 'on' ? htmlspecialchars({$m[1]}, ENT_COMPAT, 'UTF-8', false) : {$m[1]}) ?>";
+					case 'autoescape':
+						return "<?php echo htmlspecialchars({$m[1]}, ENT_COMPAT, 'UTF-8', false) ?>";
 					case 'escape':
 						return "<?php echo htmlspecialchars({$m[1]}, ENT_COMPAT, 'UTF-8', true) ?>";
 					case 'noescape':
