@@ -197,9 +197,9 @@ class memberController extends member
 
 		$document_srl = (int)Context::get('document_srl');
 		if(!$document_srl) return new Object(-1,'msg_invalid_request');
-		// Variables
+
 		$oDocumentController = getController('document');
-		$oDocumentController->deleteDocument($document_srl, true);
+		$oDocumentController->deleteDocument($document_srl);
 	}
 
 	/**
