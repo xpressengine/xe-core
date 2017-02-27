@@ -252,7 +252,7 @@ function xml2json(xml, tab, ignoreAttrib) {
 					});
 				}
 				else if (!$.isFunction(params)) {
-					stack.push('<![CDATA[' + params + ']]>');
+					stack.push(params.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'));
 				}
 
 				return stack.join('\n');
