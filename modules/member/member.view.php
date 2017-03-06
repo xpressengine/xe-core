@@ -371,6 +371,9 @@ class memberView extends member
 		Context::set('document_list', $output->data);
 		Context::set('page_navigation', $output->page_navigation);
 
+		$security = new Security($output->data);
+		$security->encodeHTML('..nick_name');
+
 		$this->setTemplateFile('scrapped_list');
 	}
 
