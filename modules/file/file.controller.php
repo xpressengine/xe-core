@@ -421,6 +421,15 @@ class fileController extends file
 	function procFileGetList()
 	{
 		if(!Context::get('is_logged')) return new Object(-1,'msg_not_permitted');
+
+		$oModuleModel = getModel('module');
+
+		$logged_info = Context::get('logged_info');
+		if($logged_info->is_admin !== 'Y' && !$oModuleModel->isSiteAdmin($logged_info))
+		{
+			return new Object(-1, 'msg_not_permitted');
+		}
+
 		$fileSrls = Context::get('file_srls');
 		if($fileSrls) $fileSrlList = explode(',', $fileSrls);
 
