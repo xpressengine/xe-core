@@ -1849,7 +1849,10 @@ class memberController extends member
 		$_SESSION['ipaddress'] = $_SERVER['REMOTE_ADDR'];
 		$_SESSION['member_srl'] = $this->memberInfo->member_srl;
 		$_SESSION['is_admin'] = '';
-		setcookie('xe_logged', 'true', 0, '/');
+		if(empty($_COOKIE['xe_logged']) || $_COOKIE['xe_logged'] != 'true')
+		{
+			setcookie('xe_logged', 'true', 0, '/');
+		}
 		// Do not save your password in the session jiwojum;;
 		//unset($this->memberInfo->password);
 		// User Group Settings
