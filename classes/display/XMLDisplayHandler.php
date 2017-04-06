@@ -15,7 +15,7 @@ class XMLDisplayHandler
 
 		$xmlDoc = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<response>\n";
 		$xmlDoc .= sprintf("<error>%s</error>\n", $oModule->getError());
-		$xmlDoc .= sprintf("<message>%s</message>\n", str_replace(array('<', '>', '&'), array('&lt;', '&gt;', '&amp;'), $oModule->getMessage()));
+		$xmlDoc .= sprintf("<message>%s</message>\n", htmlspecialchars($oModule->getMessage(), ENT_COMPAT, 'UTF-8', true));
 
 		$xmlDoc .= $this->_makeXmlDoc($variables);
 
@@ -47,7 +47,7 @@ class XMLDisplayHandler
 
 			if(is_string($val))
 			{
-				$xmlDoc .= sprintf('<%s><![CDATA[%s]]></%s>%s', $key, $val, $key, "\n");
+				$xmlDoc .= sprintf('<%s>%s</%s>%s', $key, htmlspecialchars($val, ENT_COMPAT, 'UTF-8', true), $key, "\n");
 			}
 			else if(!is_array($val) && !is_object($val))
 			{
