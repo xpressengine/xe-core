@@ -258,7 +258,7 @@ function xml2json(xml, tab, ignoreAttrib) {
 						stack.push('<' + key + '>' + xmlHelper(val) + '</' + key + '>');
 					});
 				}
-				else if (!$.isFunction(params)) {
+				else if (!$.isFunction(params) && typeof params == "string" && params.hasOwnProperty('replace')) {
 					stack.push(params.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'));
 				}
 
