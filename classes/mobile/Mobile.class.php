@@ -90,8 +90,8 @@ class Mobile
 			else
 			{
 				$this->ismobile = FALSE;
-				setcookie("mobile", FALSE, 0, $xe_web_path);
-				setcookie("user-agent", FALSE, 0, $xe_web_path);
+				setcookie("mobile", FALSE);
+				setcookie("user-agent", FALSE);
 				if(!$this->isMobilePadCheckByAgent() && $this->isMobileCheckByAgent())
 				{
 					$this->ismobile = TRUE;
@@ -120,18 +120,18 @@ class Mobile
 				if($_COOKIE['mobile'] != 'true')
 				{
 					$_COOKIE['mobile'] = 'true';
-					setcookie("mobile", 'true', 0, $xe_web_path);
+					setcookie("mobile", 'true');
 				}
 			}
 			elseif($_COOKIE['mobile'] != 'false')
 			{
 				$_COOKIE['mobile'] = 'false';
-				setcookie("mobile", 'false', 0, $xe_web_path);
+				setcookie("mobile", 'false');
 			}
 
 			if($_COOKIE['user-agent'] != md5($_SERVER['HTTP_USER_AGENT']))
 			{
-				setcookie("user-agent", md5($_SERVER['HTTP_USER_AGENT']), 0, $xe_web_path);
+				setcookie("user-agent", md5($_SERVER['HTTP_USER_AGENT']));
 			}
 		}
 

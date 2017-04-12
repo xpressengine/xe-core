@@ -97,12 +97,12 @@ class moduleModel extends module
 		$site_info = NULL;
 		if($default_url && $default_url_parse['host'] != $request_url_parse['host'])
 		{
-			$url_info = parse_url($request_url);
-			$hostname = $url_info['host'];
-			$path = $url_info['path'];
+			$hostname = $request_url_parse['host'];
+			$path = $request_url_parse['path'];
+			$port = $request_url_parse['port'];
 			if(strlen($path) >= 1 && substr_compare($path, '/', -1) === 0) $path = substr($path, 0, -1);
 
-			$domain = sprintf('%s%s%s', $hostname, $url_info['port']&&$url_info['port']!=80?':'.$url_info['port']:'',$path);
+			$domain = sprintf('%s%s%s', $hostname, $port && ($port != 80 )? ':'.$port  : '', $path);
 		}
 
 		if($domain === '')
