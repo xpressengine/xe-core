@@ -320,6 +320,11 @@ class documentModel extends document
 				$oDocument = null;
 				$oDocument = new documentItem();
 				$oDocument->setAttribute($attribute, false);
+				if($oDocument->isSecret())
+				{
+					$attribute->content = Context::getLang('msg_is_secret');
+					$oDocument->setAttribute($attribute, false);
+				}
 				if($is_admin) $oDocument->setGrant();
 				$GLOBALS['XE_DOCUMENT_LIST'][$document_srl] = $oDocument;
 			}
