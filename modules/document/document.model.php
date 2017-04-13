@@ -320,7 +320,7 @@ class documentModel extends document
 				$oDocument = null;
 				$oDocument = new documentItem();
 				$oDocument->setAttribute($attribute, false);
-				if($oDocument->isSecret())
+				if($oDocument->isSecret() && !$oDocument->isGranted() && !$oDocument->isAccessible())
 				{
 					$attribute->content = Context::getLang('msg_is_secret');
 					$oDocument->setAttribute($attribute, false);
