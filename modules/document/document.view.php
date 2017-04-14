@@ -56,11 +56,20 @@ class documentView extends document
 	 */
 	function dispDocumentPreview()
 	{
-		Context::set('layout','none');
+		if(!checkCSRF())
+		{
+			return new Object(-1, 'msg_invalid_request');
+		} 
 
-		$content = Context::get('content');
+		if(Context::get('logged_info')->is_admin != 'Y')
+		{
+			Context::set('content', removeHackTag(Context::get('content')));
+		}
+
 		$this->setTemplatePath($this->module_path.'tpl');
 		$this->setTemplateFile('preview_page');
+
+		Context::set('layout', 'none');
 	}
 
 	/**

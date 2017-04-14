@@ -15,9 +15,6 @@
 		<permission action="procDocumentMoveCategory" target="manager" />
 		<permission action="procDocumentMakeXmlFile" target="manager" />
 
-		<permission action="procDocumentAddCart" target="manager" />
-		<permission action="dispDocumentManageDocument" target="manager" />
-		<permission action="procDocumentManageCheckedDocument" target="manager" />
 		<permission action="procDocumentAdminMoveToTrash" target="manager" />
 
 		<permission action="dispDocumentAdminList" target="manager" />

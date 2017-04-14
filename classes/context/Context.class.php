@@ -301,7 +301,7 @@ class Context
 		{
 			if($_COOKIE['lang_type'] != $this->lang_type)
 			{
-				setcookie('lang_type', $this->lang_type, $_SERVER['REQUEST_TIME'] + 3600 * 24 * 1000, '/');
+				setcookie('lang_type', $this->lang_type, $_SERVER['REQUEST_TIME'] + 3600 * 24 * 1000);
 			}
 		}
 		elseif($_COOKIE['lang_type'])
@@ -452,11 +452,7 @@ class Context
 			return;
 		}
 
-		$config_file = $self->getConfigFile();
-		if(is_readable($config_file))
-		{
-			include($config_file);
-		}
+		include($self::getConfigFile());
 
 		// If master_db information does not exist, the config file needs to be updated
 		if(!isset($db_info->master_db))
@@ -680,8 +676,20 @@ class Context
 					return false;
 				}
 
+				$oModuleModel = getModel('module');
+				$domain = $url_info['host'] . $url_info['path'];
+				if(substr_compare($domain, '/', -1) === 0) $domain = substr($domain, 0, -1);
+				$site_info = $oModuleModel->getSiteInfoByDomain($domain);
+
+				if($site_info->site_srl)
+				{
 				$url_info['query'].= ($url_info['query'] ? '&' : '') . 'SSOID=' . urlencode(session_id()) . '&sig=' . urlencode(Password::createSignature(session_id()));
 				$redirect_url = sprintf('%s://%s%s%s?%s', $url_info['scheme'], $url_info['host'], $url_info['port'] ? ':' . $url_info['port'] : '', $url_info['path'], $url_info['query']);
+				}
+				else
+				{
+					$redirect_url = $url;
+				}
 				header('location:' . $redirect_url);
 
 				return FALSE;
@@ -708,7 +716,7 @@ class Context
 			}
 			else if(!self::get('SSOID') && $_COOKIE['sso'] != md5(self::getRequestUri()))
 			{
-				setcookie('sso', md5(self::getRequestUri()), 0, '/');
+				setcookie('sso', md5(self::getRequestUri()));
 				$origin_url = self::getRequestUrl();
 				$origin_sig = Password::createSignature($origin_url);
 				$url = sprintf("%s?url=%s&sig=%s", $default_url, urlencode(base64_encode($origin_url)), urlencode($origin_sig));
