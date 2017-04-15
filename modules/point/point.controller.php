@@ -713,6 +713,13 @@ class pointController extends point
 			}
 		}
 	}
+	
+	function deletePoint($member_srl)
+	{
+		$args = new stdClass();
+		$args->member_srl = $member_srl;
+		return executeQuery('point.deletePoint', $args);
+	}
 }
 /* End of file point.controller.php */
 /* Location: ./modules/point/point.controller.php */
