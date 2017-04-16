@@ -175,7 +175,7 @@ class Object
 		$output = new stdClass();
 		foreach($args as $arg)
 		{
-			$output->{$arg} = $this->get($arg);
+			$output->{$arg} = $this->variables[$arg];
 		}
 		return $output;
 	}
