@@ -43,6 +43,8 @@
 	</div>
 	<div class="login-footer" cond="!$is_logged">
 		<div class="pull-right">
+			<a href="{getFullUrl('')}">{$lang->homepage}</a>
+			|
 			<a href="{getUrl('','act','dispMemberFindAccount')}">{$lang->cmd_find_member_account}</a>
 			|
 			<a href="{getUrl('','act','dispMemberSignUpForm')}"><span>{$lang->cmd_signup}</span></a>
