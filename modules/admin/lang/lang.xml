@@ -760,6 +760,130 @@
 		<value xml:lang="zh-CN"><![CDATA[启用Qmail]]></value>
 		<value xml:lang="tr"><![CDATA[Qmail etkinleştirin]]></value>
 	</item>
+	<item name="use_smtp">
+		<value xml:lang="ko"><![CDATA[SMTP 사용]]></value>
+		<value xml:lang="en"><![CDATA[Enable SMTP]]></value>
+		<value xml:lang="jp"><![CDATA[SMTP使用]]></value>
+		<value xml:lang="zh-CN"><![CDATA[启用SMTP]]></value>
+		<value xml:lang="tr"><![CDATA[SMTP etkinleştirin]]></value>
+	</item>
+	<item name="smtp_provider">
+		<value xml:lang="ko"><![CDATA[SMTP 제공자]]></value>
+		<value xml:lang="en"><![CDATA[SMTP]]></value>
+		<value xml:lang="jp"><![CDATA[SMTP使用]]></value>
+		<value xml:lang="zh-CN"><![CDATA[启用SMTP]]></value>
+		<value xml:lang="tr"><![CDATA[SMTP etkinleştirin]]></value>
+	</item>
+	<item name="smtp_provider_list" type="array">
+		<item name="custom">
+			 <value xml:lang="ko"><![CDATA[사용자 정의]]></value>
+			 <value xml:lang="en"><![CDATA[custom]]></value>
+			 <value xml:lang="jp"><![CDATA[カスタム]]></value>
+			 <value xml:lang="zh-CN"><![CDATA[习惯]]></value>
+			 <value xml:lang="zh-TW"><![CDATA[习惯]]></value>
+			 <value xml:lang="tr"><![CDATA[görenek]]></value>
+		</item>
+		<item name="gmail">
+			 <value xml:lang="ko"><![CDATA[Gmail]]></value>
+			 <value xml:lang="en"><![CDATA[Gmail]]></value>
+			 <value xml:lang="jp"><![CDATA[Gmail]]></value>
+			 <value xml:lang="zh-CN"><![CDATA[Gmail]]></value>
+			 <value xml:lang="zh-TW"><![CDATA[Gmail]]></value>
+			 <value xml:lang="tr"><![CDATA[Gmail]]></value>
+		</item>
+		<item name="naver">
+			 <value xml:lang="ko"><![CDATA[네이버]]></value>
+			 <value xml:lang="en"><![CDATA[Naver]]></value>
+			 <value xml:lang="jp"><![CDATA[Naver]]></value>
+			 <value xml:lang="zh-CN"><![CDATA[Naver]]></value>
+			 <value xml:lang="zh-TW"><![CDATA[Naver]]></value>
+			 <value xml:lang="tr"><![CDATA[Naver]]></value>
+		</item>
+		<item name="daum">
+			 <value xml:lang="ko"><![CDATA[다음]]></value>
+			 <value xml:lang="en"><![CDATA[Daum]]></value>
+			 <value xml:lang="jp"><![CDATA[Daum]]></value>
+			 <value xml:lang="zh-CN"><![CDATA[Daum]]></value>
+			 <value xml:lang="zh-TW"><![CDATA[Daum]]></value>
+			 <value xml:lang="tr"><![CDATA[Daum]]></value>
+		</item>
+	</item>
+	<item name="smtp_host">
+		<value xml:lang="ko"><![CDATA[SMTP 서버 주소]]></value>
+		<value xml:lang="en"><![CDATA[SMTP hostname]]></value>
+		<value xml:lang="jp"><![CDATA[SMTPサーバーアドレス]]></value>
+		<value xml:lang="zh-CN"><![CDATA[SMTP服务器名]]></value>
+		<value xml:lang="zh-TW"><![CDATA[SMTP 主機名稱]]></value>
+		<value xml:lang="de"><![CDATA[SMTP-Server hostname]]></value>
+		<value xml:lang="tr"><![CDATA[SMTP Sunucu Adı]]></value>
+		<value xml:lang="vi"><![CDATA[Tên Host SMTP]]></value>
+	</item>
+	<item name="smtp_port">
+		<value xml:lang="ko"><![CDATA[SMTP 포트]]></value>
+		<value xml:lang="en"><![CDATA[SMTP Port]]></value>
+		<value xml:lang="jp"><![CDATA[SMTPポート]]></value>
+		<value xml:lang="zh-CN"><![CDATA[SMTP端口]]></value>
+		<value xml:lang="zh-TW"><![CDATA[SMTP埠口]]></value>
+		<value xml:lang="fr"><![CDATA[le port SMTP]]></value>
+		<value xml:lang="es"><![CDATA[puerto SMTP]]></value>
+		<value xml:lang="tr"><![CDATA[SMTP Bağlantı Noktası]]></value>
+		<value xml:lang="vi"><![CDATA[cổng SMTP]]></value>
+	</item>
+	<item name="smtp_secure">
+		<value xml:lang="ko"><![CDATA[SMTP 보안 설정 사용]]></value>
+		<value xml:lang="en"><![CDATA[SMTP Secure Setting]]></value>
+		<value xml:lang="jp"><![CDATA[SMTPのセキュリティ設定]]></value>
+		<value xml:lang="zh-CN"><![CDATA[SMTP安全设置]]></value>
+		<value xml:lang="zh-TW"><![CDATA[SMTP安全设置]]></value>
+		<value xml:lang="fr"><![CDATA[Paramètres de sécurité SMTP]]></value>
+		<value xml:lang="es"><![CDATA[Configuración de seguridad SMTP]]></value>
+		<value xml:lang="tr"><![CDATA[SMTP Güvenlik Ayarları]]></value>
+		<value xml:lang="vi"><![CDATA[Cài đặt SMTP an]]></value>
+	</item>
+	<item name="smtp_secure_ssl">
+		<value xml:lang="ko"><![CDATA[SSL]]></value>
+		<value xml:lang="en"><![CDATA[SSL]]></value>
+		<value xml:lang="jp"><![CDATA[SSL]]></value>
+		<value xml:lang="zh-CN"><![CDATA[SSL]]></value>
+		<value xml:lang="zh-TW"><![CDATA[SSL]]></value>
+		<value xml:lang="fr"><![CDATA[SSL]]></value>
+		<value xml:lang="es"><![CDATA[SSL]]></value>
+		<value xml:lang="tr"><![CDATA[SSL]]></value>
+		<value xml:lang="vi"><![CDATA[SSL]]></value>
+	</item>
+	<item name="smtp_secure_tls">
+		<value xml:lang="ko"><![CDATA[TLS]]></value>
+		<value xml:lang="en"><![CDATA[TLS]]></value>
+		<value xml:lang="jp"><![CDATA[TLS]]></value>
+		<value xml:lang="zh-CN"><![CDATA[TLS]]></value>
+		<value xml:lang="zh-TW"><![CDATA[TLS]]></value>
+		<value xml:lang="fr"><![CDATA[TLS]]></value>
+		<value xml:lang="es"><![CDATA[TLS]]></value>
+		<value xml:lang="tr"><![CDATA[TLS]]></value>
+		<value xml:lang="vi"><![CDATA[TLS]]></value>
+	</item>
+	<item name="smtp_username">
+		<value xml:lang="ko"><![CDATA[SMTP 사용자명]]></value>
+		<value xml:lang="en"><![CDATA[SMTP User Name]]></value>
+		<value xml:lang="jp"><![CDATA[SMTP 名前]]></value>
+		<value xml:lang="zh-CN"><![CDATA[SMTP 姓名]]></value>
+		<value xml:lang="zh-TW"><![CDATA[SMTP 姓名]]></value>
+		<value xml:lang="fr"><![CDATA[Nom d'utilisateur SMTP]]></value>
+		<value xml:lang="es"><![CDATA[Nombre de usuario SMTP]]></value>
+		<value xml:lang="tr"><![CDATA[SMTP kullanıcı adı]]></value>
+		<value xml:lang="vi"><![CDATA[Tên người dùng SMTP]]></value>
+	</item>
+	<item name="smtp_password">
+	<value xml:lang="ko"><![CDATA[SMTP 비밀번호]]></value>
+	<value xml:lang="en"><![CDATA[SMTP Password]]></value>
+	<value xml:lang="jp"><![CDATA[SMTP パスワード]]></value>
+	<value xml:lang="zh-CN"><![CDATA[SMTP 密码]]></value>
+	<value xml:lang="zh-TW"><![CDATA[SMTP 密碼]]></value>
+	<value xml:lang="fr"><![CDATA[Mot de Passe SMTP ]]></value>
+	<value xml:lang="es"><![CDATA[Contraseña SMTP]]></value>
+	<value xml:lang="tr"><![CDATA[SMTP Şifre]]></value>
+	<value xml:lang="vi"><![CDATA[Mật khẩu SMTP]]></value>
+	</item>
 	<item name="sftp">
 		<value xml:lang="ko"><![CDATA[SFTP 사용]]></value>
 		<value xml:lang="en"><![CDATA[Use SFTP]]></value>

@@ -99,6 +99,14 @@ class installAdminController extends install
 		$use_html5 = Context::get('use_html5');
 		if(!$use_html5) $use_html5 = 'N';
 
+		$use_smtp = Context::get('use_smtp');
+		if($use_smtp!='Y') $use_smtp = 'N';
+		$smtp_host = Context::get('smtp_host');
+		$smtp_port = Context::get('smtp_port');
+		$smtp_secure = Context::get('smtp_secure');
+		$smtp_username = Context::get('smtp_username');
+		$smtp_password = Context::get('smtp_password');
+		
 		$db_info->default_url = $default_url;
 		$db_info->qmail_compatibility = $qmail_compatibility;
 		$db_info->use_db_session = $use_db_session;
@@ -107,6 +115,13 @@ class installAdminController extends install
 		$db_info->use_ssl = $use_ssl;
 		$db_info->use_html5 = $use_html5;
 		$db_info->admin_ip_list = $admin_ip_list;
+		$db_info->use_smtp = $use_smtp;
+		$db_info->smtp_provider = $smtp_provider;
+		$db_info->smtp_host = $smtp_host;
+		$db_info->smtp_port = $smtp_port;
+		$db_info->smtp_secure = $smtp_secure;
+		$db_info->smtp_username = $smtp_username;
+		$db_info->smtp_password = $smtp_password;
 
 		if($http_port) $db_info->http_port = (int) $http_port;
 		else if($db_info->http_port) unset($db_info->http_port);

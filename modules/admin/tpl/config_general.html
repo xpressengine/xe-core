@@ -225,6 +225,45 @@
 				<label for="qmail_compatibility_n" class="x_inline"><input type="radio" name="qmail_compatibility" id="qmail_compatibility_n" value="N" checked="checked"|cond="$qmail_compatibility!='Y'" /> {$lang->cmd_no}</label>
 			</div>
 		</div>
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->use_smtp} <a class="x_icon-question-sign" href="./admin/help/index.html#UMAN_config_general_smtp" target="_blank">{$lang->help}</a></label>
+			<div class="x_controls">
+				<label for="use_smtp_y" class="x_inline"><input type="radio" name="use_smtp" id="use_smtp_y" value="Y" checked="checked"|cond="$use_smtp=='Y'" /> {$lang->cmd_yes}</label>
+				<label for="use_smtp_n" class="x_inline"><input type="radio" name="use_smtp" id="use_smtp_n" value="N" checked="checked"|cond="$use_smtp!='Y'" /> {$lang->cmd_no}</label>
+			</div>
+		</div>
+		<div class="x_control-group smtp">			
+			<label class="x_control-label">{$lang->smtp_host}</label>
+			<div class="x_controls">
+				<input type="text" name="smtp_host" id="smtp_host" value="{$smtp_host}"/>
+			</div>
+		</div>
+		<div class="x_control-group smtp">
+			<label class="x_control-label">{$lang->smtp_port}</label>
+			<div class="x_controls">
+				<input type="number" name="smtp_port" id="smtp_port" size="5" value="{$smtp_port}" /></label>
+			</div>
+		</div>
+		<div class="x_control-group smtp">
+			<label class="x_control-label">{$lang->smtp_secure}</label>
+			<div class="x_controls">
+				<label for="smtp_secure_n" class="x_inline"><input type="radio" name="smtp_secure" id="smtp_secure_n" value="N" checked="checked"|cond="$smtp_secure=='N'" /> {$lang->cmd_no}</label>
+				<label for="smtp_secure_ssl" class="x_inline"><input type="radio" name="smtp_secure" id="smtp_secure_ssl" value="ssl" checked="checked"|cond="$smtp_secure=='ssl'" /> {$lang->smtp_secure_ssl}</label>
+				<label for="smtp_secure_tls" class="x_inline"><input type="radio" name="smtp_secure" id="smtp_secure_tls" value="tls" checked="checked"|cond="$smtp_secure=='tls'" /> {$lang->smtp_secure_tls}</label>
+			</div>
+		</div>
+		<div class="x_control-group smtp">			
+			<label class="x_control-label">{$lang->smtp_username}</label>
+			<div class="x_controls">
+				<input type="text" name="smtp_username" id="smtp_username" value="{$smtp_username}"/>
+			</div>
+		</div>
+		<div class="x_control-group smtp">			
+			<label class="x_control-label">{$lang->smtp_password}</label>
+			<div class="x_controls">
+				<input type="password" name="smtp_password" id="smtp_password" value="{$smtp_password}" autocomplete="off" />
+			</div>
+		</div>
 		<div class="x_clearfix btnArea">
 			<div class="x_pull-right">
 				<button type="submit" class="x_btn x_btn-primary">{$lang->cmd_save}</button>

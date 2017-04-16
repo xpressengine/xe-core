@@ -132,7 +132,11 @@ class Mail extends PHPMailer
 	 */
 	function Mail()
 	{
-
+		$db_info = Context::getDBInfo();
+		if($db_info->use_smtp == 'Y' && $db_info->smtp_host != NULL && $db_info->smtp_port != NULL && $db_info->smtp_secure != NULL && $db_info->smtp_username != NULL && $db_info->smtp_password != NULL)
+		{
+			$this->useSMTP(TRUE, $db_info->smtp_host, $db_info->smtp_username, $db_info->smtp_password, $db_info->smtp_secure, $db_info->smtp_port);
+		}
 	}
 
 	/**
