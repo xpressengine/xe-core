@@ -520,6 +520,18 @@ class commentItem extends Object
 		return $signature;
 	}
 
+	function getVotedCommentList($document_srl, $voted_count, $list_count)
+	{
+		$args = new stdClass();
+		$args->list_count = $list_count;
+		$args->document_srl = $document_srl;
+		$args->voted_count = $voted_count;
+		$output = executeQuery('comment.getCommentVotedList',$args);
+		if(count($output->data)==1)
+			$output->data = array(0=>$output->data);
+		return ($output->data);
+	}
+	
 	function thumbnailExists($width = 80, $height = 0, $type = '')
 	{
 		if(!$this->comment_srl)
