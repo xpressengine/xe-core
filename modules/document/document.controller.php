@@ -17,6 +17,82 @@ class documentController extends document
 	function init()
 	{
 	}
+	
+	function _chkVoteAccess($kind='voted',$document_srl)
+	{
+		if(!Context::get('is_logged')) return new Object(-1, 'msg_invalid_request');
+
+		if(!$document_srl) return new Object(-1, 'msg_invalid_request');
+
+		$oDocumentModel = getModel('document');
+		$oDocument = $oDocumentModel->getDocument($document_srl, false, false);
+		
+		$module_srl = $oDocument->get('module_srl');
+		if(!$module_srl) return new Object(-1, 'msg_invalid_request');
+		
+		$oModuleModel = getModel('module');
+		$document_config = $oModuleModel->getModulePartConfig('document',$module_srl);
+		
+		if($kind=='voted')
+		{
+			if($document_config->use_vote_up=='N') return new Object(-1, 'msg_invalid_request');
+		}
+		elseif($kind=='blamed')
+		{
+			if($document_config->use_vote_down=='N') return new Object(-1, 'msg_invalid_request');
+		}
+			
+		return TRUE;
+
+	}
+	/**
+	 * insert Tag
+	 * @param int $module_srl
+	 * @param int $document_srl
+	 * @param string $tag
+	 */
+	function procDocumentInsertTag($module_srl, $document_srl, $tag, $isPublic)
+	{
+		$logged_info = Context::get('logged_info');
+		$oDocumentModel = &getModel('document');
+		$oDocument = $oDocumentModel->getDocument($document_srl, false, false);
+		
+		$args = new stdClass();
+		$args->document_srl = Context::get('document_srl');
+		$tags = $oDocument->get('tag_list');
+
+		foreach($tags as $key)
+		{
+			if($tag_list==NULL)
+			{
+				$tag_list = $tag_list.$key;
+			}
+			else
+			{
+				$tag_list = $tag_list.','.$key;
+			}
+		}
+		
+		$args->tags = $tag_list.','.$tag;
+		$tag_ext = $tag_list.','.$tag;
+		$output = executeQuery('tag.updateExvar',$args);
+		if(!$output->toBool()) return $output;
+		
+		$args = new stdClass();
+		$args->module_srl = $this->module_srl;
+		$args->document_srl = $document_srl;
+
+		$tag_list = explode(',',$tag);
+		$tag_count = count($tag_list);
+		for($i=0;$i<$tag_count;$i++)
+		{
+			unset($args->tag);
+			$args->tag = trim($tag_list[$i]);
+			if(!$args->tag) continue;
+			$output = executeQuery('tag.insertTag', $args);
+			if(!$output->toBool()) return $output;
+		}
+	}
 
 	/**
 	 * Action to handle vote-up of the post (Up)
@@ -24,24 +100,14 @@ class documentController extends document
 	 */
 	function procDocumentVoteUp()
 	{
-		if(!Context::get('is_logged')) return new Object(-1, 'msg_invalid_request');
-
 		$document_srl = Context::get('target_srl');
-		if(!$document_srl) return new Object(-1, 'msg_invalid_request');
-
-		$oDocumentModel = getModel('document');
-		$oDocument = $oDocumentModel->getDocument($document_srl, false, false);
-		$module_srl = $oDocument->get('module_srl');
-		if(!$module_srl) return new Object(-1, 'msg_invalid_request');
-
-		$oModuleModel = getModel('module');
-		$document_config = $oModuleModel->getModulePartConfig('document',$module_srl);
-		if($document_config->use_vote_up=='N') return new Object(-1, 'msg_invalid_request');
-
-		$point = 1;
-		$output = $this->updateVotedCount($document_srl, $point);
-		$this->add('voted_count', $output->get('voted_count'));
-		return $output;
+		if($this->_chkVoteAccess('voted',$document_srl)==TRUE)
+		{
+			$point = 1;
+			$output = $this->updateVotedCount($document_srl, $point);
+			$this->add('voted_count', $output->get('voted_count'));
+			return $output;
+		}
 	}
 
 	/**
@@ -69,24 +135,14 @@ class documentController extends document
 	 */
 	function procDocumentVoteDown()
 	{
-		if(!Context::get('is_logged')) return new Object(-1, 'msg_invalid_request');
-
-		$document_srl = Context::get('target_srl');
-		if(!$document_srl) return new Object(-1, 'msg_invalid_request');
-
-		$oDocumentModel = getModel('document');
-		$oDocument = $oDocumentModel->getDocument($document_srl, false, false);
-		$module_srl = $oDocument->get('module_srl');
-		if(!$module_srl) return new Object(-1, 'msg_invalid_request');
-
-		$oModuleModel = getModel('module');
-		$document_config = $oModuleModel->getModulePartConfig('document',$module_srl);
-		if($document_config->use_vote_down=='N') return new Object(-1, 'msg_invalid_request');
-
-		$point = -1;
-		$output = $this->updateVotedCount($document_srl, $point);
-		$this->add('blamed_count', $output->get('blamed_count'));
-		return $output;
+		$document_srl = Context::get('target_srl');		
+		if($this->_chkVoteAccess('blamed',$document_srl)==TRUE)
+		{
+			$point = -1;
+			$output = $this->updateVotedCount($document_srl, $point);
+			$this->add('blamed_count', $output->get('blamed_count'));
+			return $output;
+		}
 	}
 
 	/**
