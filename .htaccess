@@ -1,9 +1,8 @@
 RewriteEngine On
 
-RewriteRule ^(.*/)?\.(.+)$ - [L,F]
-RewriteRule ^codeception(.*?).yml$ - [L,F]
-RewriteRule ^composer(.*?).(json|lock)$ - [L,F]
-RewriteRule ^files/.+\.php$ - [L,F]
+# deny access to files that may contain sensitive information
+RewriteRule ^(.*/)?\.(editor|git|ht|jshint|travis) - [L,F]
+RewriteRule ^(codeception(.*)\.yml|composer(.*)\.(json|lock)|package\.json)$ - [L,F]
 RewriteRule ^files/(attach|config|cache/store)/.+\.php$ - [L,F]
 RewriteRule ^files/(env|member_extra_info/(new_message_flags|point))/ - [L,F]
 
