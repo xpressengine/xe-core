@@ -106,6 +106,11 @@ class comment extends ModuleObject
 			return TRUE;
 		}
 
+		if(!$oDB->isIndexExists("comments", "idx_parent_srl"))
+		{
+			return TRUE;
+		}
+
 		return FALSE;
 	}
 
@@ -178,6 +183,11 @@ class comment extends ModuleObject
 		if(!$oModuleModel->getTrigger('module.procModuleAdminCopyModule', 'comment', 'controller', 'triggerCopyModule', 'after'))
 		{
 			$oModuleController->insertTrigger('module.procModuleAdminCopyModule', 'comment', 'controller', 'triggerCopyModule', 'after');
+		}
+
+		if(!$oDB->isIndexExists("comments", "idx_parent_srl"))
+		{
+			$oDB->addIndex('comments', 'idx_parent_srl', array('parent_srl'));
 		}
 
 		return new Object(0, 'success_updated');
