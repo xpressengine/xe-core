@@ -23,7 +23,7 @@ class layoutAdminController extends layout
 	 */
 	function procLayoutAdminInsert()
 	{
-		if(Context::get('layout') == 'faceoff') return $this->stop('not supported');
+		if(Context::get('layout') == 'faceoff') return $this->stop('not supported', 400);
 
 		// Get information to create a layout
 		$site_module_info = Context::get('site_module_info');
@@ -686,7 +686,7 @@ class layoutAdminController extends layout
 	 */
 	function procLayoutAdminUserLayoutImport()
 	{
-		return $this->stop('not supported');
+		return $this->stop('not supported', 400);
 
 		// check upload
 		if(!Context::isUploaded()) exit();
@@ -716,12 +716,12 @@ class layoutAdminController extends layout
 		$sourceArgs = Context::getRequestVars();
 		if($sourceArgs->layout == 'faceoff')
 		{
-			return $this->stop('not supported');
+			return $this->stop('not supported', 400);
 		}
 
 		if(!$sourceArgs->layout_srl)
 		{
-			return $this->stop('msg_empty_origin_layout');
+			return $this->stop('msg_empty_origin_layout', 400);
 		}
 
 		$oLayoutModel = getModel('layout');
@@ -734,7 +734,7 @@ class layoutAdminController extends layout
 
 		if(!is_array($sourceArgs->title) || count($sourceArgs->title) == 0)
 		{
-			return $this->stop('msg_empty_target_layout');
+			return $this->stop('msg_empty_target_layout', 400);
 		}
 
 		$output = $oLayoutModel->getLayoutRawData($sourceArgs->layout_srl, array('extra_vars'));

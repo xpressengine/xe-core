@@ -19,7 +19,7 @@ class installView extends install
 		// Specify the template path
 		$this->setTemplatePath($this->module_path.'tpl');
 		// Error occurs if already installed
-		if(Context::isInstalled()) return $this->stop('msg_already_installed');
+		if(Context::isInstalled()) return $this->stop('msg_already_installed', 400);
 		// Install a controller
 		$oInstallController = getController('install');
 		$this->install_enable = $oInstallController->checkInstallEnv();

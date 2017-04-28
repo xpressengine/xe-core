@@ -46,7 +46,7 @@ class fileController extends file
 
 		$output = $this->insertFile($file_info, $module_srl, $upload_target_srl);
 		Context::setResponseMethod('JSON');
-		if($output->error != '0') $this->stop($output->message);
+		if($output->error != '0') $this->stop($output->message, 400);
 	}
 
 	/**
@@ -183,9 +183,9 @@ class fileController extends file
 		$columnList = array('file_srl', 'sid', 'isvalid', 'source_filename', 'module_srl', 'uploaded_filename', 'file_size', 'member_srl', 'upload_target_srl', 'upload_target_type');
 		$file_obj = $oFileModel->getFile($file_srl, $columnList);
 		// If the requested file information is incorrect, an error that file cannot be found appears
-		if($file_obj->file_srl!=$file_srl || $file_obj->sid!=$sid) return $this->stop('msg_file_not_found');
+		if($file_obj->file_srl!=$file_srl || $file_obj->sid!=$sid) return $this->stop('msg_file_not_found', 404);
 		// Notify that file download is not allowed when standing-by(Only a top-administrator is permitted)
-		if($logged_info->is_admin != 'Y' && $file_obj->isvalid!='Y') return $this->stop('msg_not_permitted_download');
+		if($logged_info->is_admin != 'Y' && $file_obj->isvalid!='Y') return $this->stop('msg_not_permitted_download', 403);
 		// File name
 		$filename = $file_obj->source_filename;
 		$file_module_config = $oFileModel->getFileModuleConfig($file_obj->module_srl);
@@ -234,7 +234,7 @@ class fileController extends file
 				}
 				else $file_module_config->allow_outlink = 'Y';
 			}
-			if($file_module_config->allow_outlink != 'Y') return $this->stop('msg_not_allowed_outlink');
+			if($file_module_config->allow_outlink != 'Y') return $this->stop('msg_not_allowed_outlink', 403);
 		}
 
 		// Check if a permission for file download is granted
@@ -247,7 +247,7 @@ class fileController extends file
 
 		if(is_array($file_module_config->download_grant) && $downloadGrantCount>0)
 		{
-			if(!Context::get('is_logged')) return $this->stop('msg_not_permitted_download');
+			if(!Context::get('is_logged')) return $this->stop('msg_not_permitted_download', 403);
 			$logged_info = Context::get('logged_info');
 			if($logged_info->is_admin != 'Y')
 			{
@@ -276,7 +276,7 @@ class fileController extends file
 		}
 		// Call a trigger (before)
 		$output = ModuleHandler::triggerCall('file.downloadFile', 'before', $file_obj);
-		if(!$output->toBool()) return $this->stop(($output->message)?$output->message:'msg_not_permitted_download');
+		if(!$output->toBool()) return $this->stop(($output->message)?$output->message:'msg_not_permitted_download', 400);
 
 
 		// 다운로드 후 (가상)
@@ -309,12 +309,12 @@ class fileController extends file
 
 		$uploaded_filename = $file_obj->uploaded_filename;
 
-		if(!file_exists($uploaded_filename)) return $this->stop('msg_file_not_found');
+		if(!file_exists($uploaded_filename)) return $this->stop('msg_file_not_found', 404);
 
 		if(!$file_key || $_SESSION[$session_key][$file_srl] != $file_key)
 		{
 			unset($_SESSION[$session_key][$file_srl]);
-			return $this->stop('msg_invalid_request');
+			return $this->stop('msg_invalid_request', 400);
 		}
 
 		$file_size = $file_obj->file_size;
@@ -355,7 +355,7 @@ class fileController extends file
 		Context::close();
 
 		$fp = fopen($uploaded_filename, 'rb');
-		if(!$fp) return $this->stop('msg_file_not_found');
+		if(!$fp) return $this->stop('msg_file_not_found', 404);
 
 		header("Cache-Control: ");
 		header("Pragma: ");
@@ -685,7 +685,7 @@ class fileController extends file
 
 					if(!in_array($uploaded_ext, $ext))
 					{
-						return $this->stop('msg_not_allowed_filetype');
+						return $this->stop('msg_not_allowed_filetype', 400);
 					}
 				}
 

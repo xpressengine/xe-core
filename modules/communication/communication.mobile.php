@@ -41,13 +41,13 @@ class communicationMobile extends communicationView
 		// Error appears if not logged-in
 		if(!Context::get('is_logged'))
 		{
-			return $this->stop('msg_not_logged');
+			return $this->stop('msg_not_logged', 403);
 		}
 
 		$logged_info = Context::get('logged_info');
 		if(!array_key_exists('dispCommunicationMessages', $logged_info->menu_list))
 		{
-			return $this->stop('msg_invalid_request');
+			return $this->stop('msg_invalid_request', 400);
 		}
 
 		// Set the variables
@@ -72,21 +72,21 @@ class communicationMobile extends communicationView
 				case 'R':
 					if($message->receiver_srl != $logged_info->member_srl)
 					{
-						return $this->stop('msg_invalid_request');
+						return $this->stop('msg_invalid_request', 400);
 					}
 					break;
 
 				case 'S':
 					if($message->sender_srl != $logged_info->member_srl)
 					{
-						return $this->stop('msg_invalid_request');
+						return $this->stop('msg_invalid_request', 400);
 					}
 					break;
 
 				case 'T':
 					if($message->receiver_srl != $logged_info->member_srl && $message->sender_srl != $logged_info->member_srl)
 					{
-						return $this->stop('msg_invalid_request');
+						return $this->stop('msg_invalid_request', 400);
 					}
 					break;
 			}
@@ -140,7 +140,7 @@ class communicationMobile extends communicationView
 		// Error appears if not logged-in
 		if(!Context::get('is_logged'))
 		{
-			return $this->stop('msg_not_logged');
+			return $this->stop('msg_not_logged', 403);
 		}
 
 		$logged_info = Context::get('logged_info');
@@ -150,13 +150,13 @@ class communicationMobile extends communicationView
 		$receiver_srl = Context::get('receiver_srl');
 		if(!$receiver_srl)
 		{
-			return $this->stop('msg_invalid_request');
+			return $this->stop('msg_invalid_request', 400);
 		}
 
 		// check receiver and sender are same
 		if($logged_info->member_srl == $receiver_srl)
 		{
-			return $this->stop('msg_cannot_send_to_yourself');
+			return $this->stop('msg_cannot_send_to_yourself', 400);
 		}
 
 		// get message_srl of the original message if it is a reply
@@ -175,7 +175,7 @@ class communicationMobile extends communicationView
 		$receiver_info = $oMemberModel->getMemberInfoByMemberSrl($receiver_srl);
 		if(!$receiver_info)
 		{
-			return $this->stop('msg_invalid_request');
+			return $this->stop('msg_invalid_request', 400);
 		}
 
 		Context::set('receiver_info', $receiver_info);

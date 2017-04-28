@@ -266,7 +266,7 @@ class moduleModel extends module
 
 		if(!$menuItemSrl)
 		{
-			$this->stop(-1, 'msg_invalid_request');
+			$this->stop('msg_invalid_request', 400);
 			return;
 		}
 

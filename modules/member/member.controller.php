@@ -276,7 +276,7 @@ class memberController extends member
 		// Check if an administrator allows a membership
 		if($config->enable_join != 'Y') return $this->stop ('msg_signup_disabled');
 		// Check if the user accept the license terms (only if terms exist)
-		if($config->agreement && Context::get('accept_agreement')!='Y') return $this->stop('msg_accept_agreement');
+		if($config->agreement && Context::get('accept_agreement')!='Y') return $this->stop('msg_accept_agreement', 403);
 
 		// Extract the necessary information in advance
 		$getVars = array();
@@ -439,19 +439,19 @@ class memberController extends member
 	{
 		if($_SESSION['rechecked_password_step'] != 'INPUT_PASSWORD')
 		{
-			return $this->stop('msg_invalid_request');
+			return $this->stop('msg_invalid_request', 403);
 		}
 
 		if(!Context::get('is_logged'))
 		{
-			return $this->stop('msg_not_logged');
+			return $this->stop('msg_not_logged', 403);
 		}
 
 		$password = Context::get('password');
 
 		if(!$password)
 		{
-			return $this->stop('msg_invalid_request');
+			return $this->stop('msg_invalid_request', 403);
 		}
 
 		$oMemberModel = getModel('member');
@@ -494,12 +494,12 @@ class memberController extends member
 	{
 		if(!Context::get('is_logged'))
 		{
-			return $this->stop('msg_not_logged');
+			return $this->stop('msg_not_logged', 403);
 		}
 
 		if($_SESSION['rechecked_password_step'] != 'INPUT_DATA')
 		{
-			return $this->stop('msg_invalid_request');
+			return $this->stop('msg_invalid_request', 403);
 		}
 		unset($_SESSION['rechecked_password_step']);
 
@@ -613,7 +613,7 @@ class memberController extends member
 	 */
 	function procMemberModifyPassword()
 	{
-		if(!Context::get('is_logged')) return $this->stop('msg_not_logged');
+		if(!Context::get('is_logged')) return $this->stop('msg_not_logged', 403);
 		// Extract the necessary information in advance
 		$current_password = trim(Context::get('current_password'));
 		$password = trim(Context::get('password1'));
@@ -653,7 +653,7 @@ class memberController extends member
 	 */
 	function procMemberLeave()
 	{
-		if(!Context::get('is_logged')) return $this->stop('msg_not_logged');
+		if(!Context::get('is_logged')) return $this->stop('msg_not_logged', 403);
 		// Extract the necessary information in advance
 		$password = trim(Context::get('password'));
 		// Get information of logged-in user
@@ -691,17 +691,17 @@ class memberController extends member
 	{
 		// Check if the file is successfully uploaded
 		$file = $_FILES['profile_image'];
-		if(!is_uploaded_file($file['tmp_name'])) return $this->stop('msg_not_uploaded_profile_image');
+		if(!is_uploaded_file($file['tmp_name'])) return $this->stop('msg_not_uploaded_profile_image', 400);
 		// Ignore if member_srl is invalid or doesn't exist.
 		$member_srl = Context::get('member_srl');
-		if(!$member_srl) return $this->stop('msg_not_uploaded_profile_image');
+		if(!$member_srl) return $this->stop('msg_not_uploaded_profile_image', 403);
 
 		$logged_info = Context::get('logged_info');
-		if($logged_info->is_admin != 'Y' && $logged_info->member_srl != $member_srl) return $this->stop('msg_not_uploaded_profile_image');
+		if($logged_info->is_admin != 'Y' && $logged_info->member_srl != $member_srl) return $this->stop('msg_not_uploaded_profile_image', 403);
 		// Return if member module is set not to use an image name or the user is not an administrator ;
 		$oModuleModel = getModel('module');
 		$config = $oModuleModel->getModuleConfig('member');
-		if($logged_info->is_admin != 'Y' && $config->profile_image != 'Y') return $this->stop('msg_not_uploaded_profile_image');
+		if($logged_info->is_admin != 'Y' && $config->profile_image != 'Y') return $this->stop('msg_not_uploaded_profile_image', 403);
 
 		$this->insertProfileImage($member_srl, $file['tmp_name']);
 		// Page refresh
@@ -770,17 +770,17 @@ class memberController extends member
 	{
 		// Check if the file is successfully uploaded
 		$file = $_FILES['image_name'];
-		if(!is_uploaded_file($file['tmp_name'])) return $this->stop('msg_not_uploaded_image_name');
+		if(!is_uploaded_file($file['tmp_name'])) return $this->stop('msg_not_uploaded_image_name', 400);
 		// Ignore if member_srl is invalid or doesn't exist.
 		$member_srl = Context::get('member_srl');
-		if(!$member_srl) return $this->stop('msg_not_uploaded_image_name');
+		if(!$member_srl) return $this->stop('msg_not_uploaded_image_name', 400);
 
 		$logged_info = Context::get('logged_info');
-		if($logged_info->is_admin != 'Y' && $logged_info->member_srl != $member_srl) return $this->stop('msg_not_uploaded_image_name');
+		if($logged_info->is_admin != 'Y' && $logged_info->member_srl != $member_srl) return $this->stop('msg_not_uploaded_image_name', 403);
 		// Return if member module is set not to use an image name or the user is not an administrator ;
 		$oModuleModel = getModel('module');
 		$config = $oModuleModel->getModuleConfig('member');
-		if($logged_info->is_admin != 'Y' && $config->image_name != 'Y') return $this->stop('msg_not_uploaded_image_name');
+		if($logged_info->is_admin != 'Y' && $config->image_name != 'Y') return $this->stop('msg_not_uploaded_image_name',403);
 
 		$this->insertImageName($member_srl, $file['tmp_name']);
 		// Page refresh
@@ -879,17 +879,17 @@ class memberController extends member
 	{
 		// Check if the file is successfully uploaded
 		$file = $_FILES['image_mark'];
-		if(!is_uploaded_file($file['tmp_name'])) return $this->stop('msg_not_uploaded_image_mark');
+		if(!is_uploaded_file($file['tmp_name'])) return $this->stop('msg_not_uploaded_image_mark', 400);
 		// Ignore if member_srl is invalid or doesn't exist.
 		$member_srl = Context::get('member_srl');
-		if(!$member_srl) return $this->stop('msg_not_uploaded_image_mark');
+		if(!$member_srl) return $this->stop('msg_not_uploaded_image_mark', 403);
 
 		$logged_info = Context::get('logged_info');
-		if($logged_info->is_admin != 'Y' && $logged_info->member_srl != $member_srl) return $this->stop('msg_not_uploaded_image_mark');
+		if($logged_info->is_admin != 'Y' && $logged_info->member_srl != $member_srl) return $this->stop('msg_not_uploaded_image_mark', 403);
 		// Membership in the images mark the module using the ban was set by an administrator or return;
 		$oModuleModel = getModel('module');
 		$config = $oModuleModel->getModuleConfig('member');
-		if($logged_info->is_admin != 'Y' && $config->image_mark != 'Y') return $this->stop('msg_not_uploaded_image_mark');
+		if($logged_info->is_admin != 'Y' && $config->image_mark != 'Y') return $this->stop('msg_not_uploaded_image_mark', 403);
 
 		$this->insertImageMark($member_srl, $file['tmp_name']);
 		// Page refresh
@@ -1125,7 +1125,7 @@ class memberController extends member
 
 		if(!$member_srl || !$auth_key)
 		{
-			return $this->stop('msg_invalid_request');
+			return $this->stop('msg_invalid_request', 403);
 		}
 
 		// Test logs for finding password by user_id and authkey
@@ -1141,7 +1141,7 @@ class memberController extends member
 				executeQuery('member.deleteAuthMail', $args);
 			}
 
-			return $this->stop('msg_invalid_auth_key');
+			return $this->stop('msg_invalid_auth_key', 403);
 		}
 
 		if(ztime($output->data->regdate) < $_SERVER['REQUEST_TIME'] + zgap() - 86400)
@@ -1281,14 +1281,14 @@ class memberController extends member
 
 		if(!$memberInfo)
 		{
-			return $this->stop('msg_invalid_request');
+			return $this->stop('msg_invalid_request', 400);
 		}
 
 		$newEmail = Context::get('email_address');
 
 		if(!$newEmail)
 		{
-			return $this->stop('msg_invalid_request');
+			return $this->stop('msg_invalid_request', 400);
 		}
 
 		$oMemberModel = getModel('member');
@@ -2127,7 +2127,7 @@ class memberController extends member
 				unset($args->denied);
 			if($logged_info->member_srl != $args->member_srl && $is_admin == false)
 			{
-				return $this->stop('msg_invalid_request');
+				return $this->stop('msg_invalid_request', 403);
 			}
 		}
 
@@ -2463,12 +2463,12 @@ class memberController extends member
 
 	function procMemberModifyEmailAddress()
 	{
-		if(!Context::get('is_logged')) return $this->stop('msg_not_logged');
+		if(!Context::get('is_logged')) return $this->stop('msg_not_logged', 403);
 
 		$member_info = Context::get('logged_info');
 		$newEmail = Context::get('email_address');
 
-		if(!$newEmail) return $this->stop('msg_invalid_request');
+		if(!$newEmail) return $this->stop('msg_invalid_request', 400);
 
 		$oMemberModel = getModel('member');
 		$member_srl = $oMemberModel->getMemberSrlByEmailAddress($newEmail);
@@ -2476,7 +2476,7 @@ class memberController extends member
 
 		if($_SESSION['rechecked_password_step'] != 'INPUT_DATA')
 		{
-			return $this->stop('msg_invalid_request');
+			return $this->stop('msg_invalid_request', 403);
 		}
 		unset($_SESSION['rechecked_password_step']);
 
@@ -2536,7 +2536,7 @@ class memberController extends member
 	{
 		$member_srl = Context::get('member_srl');
 		$auth_key = Context::get('auth_key');
-		if(!$member_srl || !$auth_key) return $this->stop('msg_invalid_request');
+		if(!$member_srl || !$auth_key) return $this->stop('msg_invalid_request', 403);
 
 		// Test logs for finding password by user_id and authkey
 		$args = new stdClass;
@@ -2546,7 +2546,7 @@ class memberController extends member
 		if(!$output->toBool() || $output->data->auth_key != $auth_key)
 		{
 			if(strlen($output->data->auth_key) !== strlen($auth_key)) executeQuery('member.deleteAuthChangeEmailAddress', $args);
-			return $this->stop('msg_invalid_modify_email_auth_key');
+			return $this->stop('msg_invalid_modify_email_auth_key', 403);
 		}
 
 		$newEmail = $output->data->user_id;

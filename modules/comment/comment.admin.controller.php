@@ -56,7 +56,7 @@ class commentAdminController extends comment
 		$cart = Context::get('cart');
 		if(!$cart)
 		{
-			return $this->stop('msg_cart_is_null');
+			return $this->stop('msg_cart_is_null', 400);
 		}
 		if(!is_array($cart))
 		{
@@ -197,7 +197,7 @@ class commentAdminController extends comment
 		$cart = Context::get('cart');
 		if(!$cart)
 		{
-			return $this->stop('msg_cart_is_null');
+			return $this->stop('msg_cart_is_null', 400);
 		}
 		if(!is_array($cart))
 		{
@@ -210,7 +210,7 @@ class commentAdminController extends comment
 		$comment_count = count($comment_srl_list);
 		if(!$comment_count)
 		{
-			return $this->stop('msg_cart_is_null');
+			return $this->stop('msg_cart_is_null', 400);
 		}
 
 		$oCommentController = getController('comment');
@@ -355,7 +355,7 @@ class commentAdminController extends comment
 		$oCommentController = getController('comment');
 		$oComment = $oCommentModel->getComment($comment_srl, false);
 
-		if(!$oComment->isGranted()) return $this->stop('msg_not_permitted');
+		if(!$oComment->isGranted()) return $this->stop('msg_not_permitted', 403);
 
 		$message_content = "";
 		$this->_moveCommentToTrash(array($comment_srl), $oCommentController, $oDB, $message_content);
