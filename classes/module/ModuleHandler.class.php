@@ -507,8 +507,10 @@ class ModuleHandler extends Handler
 
 		$logged_info = Context::get('logged_info');
 
-		// check CSRF for POST actions
-		if($_SERVER['REQUEST_METHOD'] !== 'GET' && Context::isInstalled() && $this->act !== 'procFileUpload' && !checkCSRF()) {
+		// check CSRF for non-GET actions
+		$use_check_csrf = !isset($xml_info->action->{$this->act}) || $xml_info->action->{$this->act}->check_csrf !== 'false';
+		if($use_check_csrf && $_SERVER['REQUEST_METHOD'] !== 'GET' && Context::isInstalled() && !checkCSRF())
+		{
 			$this->error = 'msg_invalid_request';
 			$oMessageObject = ModuleHandler::getModuleInstance('message', $display_mode);
 			$oMessageObject->setError(-1);
