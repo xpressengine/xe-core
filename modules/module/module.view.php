@@ -98,6 +98,11 @@ class moduleView extends module
 				$module = trim($val->module);
 				if(!$module) continue;
 
+				if(!$oModuleModel->getGrant($val, Context::get('logged_info'))->access)
+				{
+					continue;
+				}
+
 				$category = $val->category;
 				$obj = new stdClass();
 				$obj->module_srl = $val->module_srl;
@@ -116,7 +121,7 @@ class moduleView extends module
 				$mid_list[$module]->title = $xml_info->title;
 			}
 		}
-		
+
 		// not show admin bar
 		Context::set('mid_list', $mid_list);
 		Context::set('selected_module', $selected_module);
