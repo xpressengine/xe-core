@@ -157,8 +157,8 @@ function xml2json(xml, tab, ignoreAttrib) {
 				.replace(/[\r]/g, '\\r');
 		},
 		unescape: function(txt) {
-			if (!navigator.userAgent.match(/Trident\/7.0/)) {
-				return txt.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+			if (!navigator.userAgent.match(/Trident/)) {
+				return txt.replace(/&amp;/g, '&');
 			} else {
 				return txt;
 			}
