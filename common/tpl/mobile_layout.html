@@ -1,4 +1,5 @@
 {@
+	$db_info   = Context::getDBInfo();
 	$lang_type = Context::getLangType();
 	$ssl_actions = Context::getSSLActions();
 	$css_files=Context::getCssFile();
@@ -47,8 +48,8 @@ var current_mid = "{$mid}";
 var waiting_message = "{$lang->msg_call_server}";
 var ssl_actions = new Array(<!--@if(count($ssl_actions))-->"{implode('","',array_keys($ssl_actions))}"<!--@end-->);
 var default_url = "{Context::getDefaultUrl()}";
-<block cond="Context::get('_http_port')">var http_port = {Context::get("_http_port")};</block>
-<block cond="Context::get('_https_port')">var https_port = {Context::get("_https_port")};</block>
+<block cond="$db_info->http_port">var http_port = {$db_info->http_port};</block>
+<block cond="$db_info->https_port">var https_port = {$db_info->https_port};</block>
 <block cond="Context::get('_use_ssl') && Context::get('_use_ssl') == 'always'">var enforce_ssl = true;</block>
 //]]>
 </script>
