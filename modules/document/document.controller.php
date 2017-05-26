@@ -847,6 +847,9 @@ class documentController extends document
 		// Call a trigger when the read count is updated (before)
 		$trigger_output = ModuleHandler::triggerCall('document.updateReadedCount', 'before', $oDocument);
 		if(!$trigger_output->toBool()) return $trigger_output;
+		
+		// Pass if Crawler access
+		if(isCrawler()) return false;
 
 		// Pass if read count is increaded on the session information
 		if($_SESSION['readed_document'][$document_srl]) return false;
