@@ -844,6 +844,9 @@ class documentController extends document
 		$member_srl = $oDocument->get('member_srl');
 		$logged_info = Context::get('logged_info');
 
+		// Pass if Crawler access 
+		if(isCrawler()) return false; 
+
 		// Call a trigger when the read count is updated (before)
 		$trigger_output = ModuleHandler::triggerCall('document.updateReadedCount', 'before', $oDocument);
 		if(!$trigger_output->toBool()) return $trigger_output;
