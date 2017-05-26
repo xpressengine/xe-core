@@ -581,6 +581,9 @@ class TemplateHandler
 	private function _parseResource($m)
 	{
 		// {@ ... } or {$var} or {func(...)}
+		// or {@ //!//
+		//    ...
+		//    }
 		if($m[1])
 		{
 			if(preg_match('@^(\w+)\(@', $m[1], $mm) && !function_exists($mm[1]))
@@ -589,6 +592,13 @@ class TemplateHandler
 			}
 
 			$echo = 'echo ';
+
+			if(substr($m[1],0,7) == '@ //!//')
+			{
+				$m[1] = substr($m[1], 8);
+				return '<?php ' . $echo . $m[1] . ' ?>';
+			}
+
 			if($m[1]{0} == '@')
 			{
 				$echo = '';
