@@ -336,12 +336,10 @@ class memberView extends member
 		$member_srl = $logged_info->member_srl;
 
 		$module_srl = Context::get('module_srl');
-		Context::set('module_srl',Context::get('selected_module_srl'));
-		Context::set('search_target','member_srl');
-		Context::set('search_keyword',$member_srl);
-
-		$oDocumentAdminView = getAdminView('document');
-		$oDocumentAdminView->dispDocumentAdminList();
+		
+		$module_list = implode(',', Context::get('selected_module_srl'));
+		$oDocumentModel = getModel('document');
+		Context::set('document_list',$oDocumentModel->getDocumentListByMemberSrl($member_srl,array(),0,FALSE,0,$module_list,TRUE,TRUE));
 
 		$oSecurity = new Security();
 		$oSecurity->encodeHTML('document_list...title', 'search_target', 'search_keyword');

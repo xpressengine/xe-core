@@ -7,6 +7,8 @@
 	</columns>
 	<conditions>
 		<condition operation="equal" column="member_srl" var="member_srl" filter="number" notnull="notnull" />
+		<condition operation="equal" column="member_srl" var="abs_member_srl" filter="number" notnull="notnull" pipe="or" />
+		<condition operation="in" column="module_srl" var="module_srl" filter="number" pipe="or" />
 	</conditions>
 	<navigation>
 		<index var="list_order" default="list_order" order="asc" />
