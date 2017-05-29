@@ -46,89 +46,70 @@ class moduleView extends module
 		if(!Context::get('is_logged')) return new Object(-1, 'msg_not_permitted');
 
 		$oModuleModel = getModel('module');
-		// Extract the number of virtual sites
+		$logged_info = Context::get('logged_info');
+		$selected_module = Context::get('selected_module');
+		$site_module_info = Context::get('site_module_info');
+		$site_keyword = Context::get('site_keyword');
+
 		$output = executeQuery('module.getSiteCount');
 		$site_count = $output->data->count;
 		Context::set('site_count', $site_count);
-		// Variable setting for site keyword
-		$site_keyword = Context::get('site_keyword');
-		// If there is no site keyword, use as information of the current virtual site
+
 		$args = new stdClass();
-		$logged_info = Context::get('logged_info');
-		if($logged_info->is_admin == 'Y')
+		$module_category_exists = false;
+		if($logged_info->is_admin == 'Y' && $site_keyword)
 		{
-			$query_id = 'module.getSiteModules';
-			$module_category_exists = false;
-			if(!$site_keyword)
-			{
-				$site_module_info = Context::get('site_module_info');
-				if($site_module_info && $logged_info->is_admin != 'Y')
-				{
-					$site_keyword = $site_module_info->domain;
-					$args->site_srl = (int)$site_module_info->site_srl;
-					Context::set('site_keyword', $site_keyword);
-				}
-				else
-				{
-					$query_id = 'module.getDefaultModules';
-					$args->site_srl = 0;
-					$module_category_exists = true;
-				}
-				// If site keyword exists, extract information from the sites
-			}
-			else
-			{
-				$args->site_keyword = $site_keyword;
-			}
+			$args->site_keyword = $site_keyword;
 		}
 		else
 		{
-			$query_id = 'module.getSiteModules';
-			$site_module_info = Context::get('site_module_info');
 			$args->site_srl = (int)$site_module_info->site_srl;
+			Context::set('site_keyword', null);
 		}
-		//if(is_null($args->site_srl)) $query_id = 'module.getDefaultModules';
+
+		if($logged_info->is_admin == 'Y')
+		{
+			$module_category_exists = true;
+		}
+
 		// Get a list of modules at the site
-		$output = executeQueryArray($query_id, $args);
-		$category_list = $mid_list = array();
-		if(count($output->data))
-		{
-			foreach($output->data as $key => $val)
-			{
-				$module = trim($val->module);
-				if(!$module) continue;
+		$mid_list = array();
+		$output = executeQueryArray('module.getSiteModules', $args);
+		if(!$output->data) $output->data = array();
 
-				$category = $val->category;
-				$obj = new stdClass();
-				$obj->module_srl = $val->module_srl;
-				$obj->browser_title = $val->browser_title;
-				$mid_list[$module]->list[$category][$val->mid] = $obj;
+		foreach($output->data as $key => $val)
+		{
+			$module = trim($val->module);
+			if(!$module) continue;
+
+			if(!$oModuleModel->getGrant($val, $logged_info)->access)
+			{
+				continue;
 			}
-		}
 
-		$selected_module = Context::get('selected_module');
-		if(count($mid_list))
-		{
-			foreach($mid_list as $module => $val)
+			$category = $val->category;
+			$obj = new stdClass();
+			$obj->module_srl = $val->module_srl;
+			$obj->browser_title = $val->browser_title;
+			$mid_list[$module]->list[$category][$val->mid] = $obj;
+
+			if(!$selected_module) $selected_module = $module;
+			if(!$mid_list[$module]->title)
 			{
-				if(!$selected_module) $selected_module = $module;
 				$xml_info = $oModuleModel->getModuleInfoXml($module);
 				$mid_list[$module]->title = $xml_info->title;
 			}
 		}
-		
-		// not show admin bar
+
 		Context::set('mid_list', $mid_list);
 		Context::set('selected_module', $selected_module);
 		Context::set('selected_mids', $mid_list[$selected_module]->list);
 		Context::set('module_category_exists', $module_category_exists);
 
 		$security = new Security();
-		$security->encodeHTML('id', 'type');
+		$security->encodeHTML('id', 'type', 'site_keyword');
 
-		// Set the layout to be pop-up
 		$this->setLayoutFile('popup_layout');
-		// Set a template file
 		$this->setTemplateFile('module_selector');
 	}
 
