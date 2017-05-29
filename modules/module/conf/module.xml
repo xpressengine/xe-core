@@ -4,13 +4,14 @@
 	<permissions>
 		<permission action="dispModuleSelectList" target="member" />
 
-
 		<permission action="getLangListByLangcodeForAutoComplete" target="manager" />
 		<permission action="getLangByLangcode" target="manager" />
 		<permission action="getModuleAdminMultilingualHtml" target="manager" />
 
 		<permission action="getModuleAdminGrant" target="manager" />
 		<permission action="procModuleAdminInsertGrant" target="manager" />
+
+		<permission action="getModuleSkinInfoList" target="manager" />
 
 		<permission action="getModuleAdminLangCode" target="manager" />
 		<permission action="getModuleAdminLangListHtml" target="manager" />
