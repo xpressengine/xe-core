@@ -260,7 +260,7 @@ class installController extends install
 
 			require_once(_XE_PATH_.'libs/ftp.class.php');
 			$oFtp = new ftp();
-			if(!$oFtp->ftp_connect($ftp_info->ftp_host, $ftp_info->ftp_port)) return new Object(-1, sprintf(Context::getLang('msg_ftp_not_connected'), $ftp_info->ftp_host));
+			if(!$oFtp->ftp_connect($ftp_info->ftp_host, $ftp_info->ftp_port)) return new Object(-1, sprintf(Context::getLang('msg_ftp_not_connected'), 'host'));
 
 			if(!$oFtp->ftp_login($ftp_info->ftp_user, $ftp_info->ftp_password))
 			{
