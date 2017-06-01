@@ -1,0 +1,23 @@
+@charset "utf-8";
+/* NHN > UIT Center > Open UI Technology Team > Jeong Chan Myeong(dece24@nhncorp.com) */
+
+html, body { height:100%; background-color:transparent; padding:0; margin:0;}
+.xe_content{ color:#fff; font-size:12px; line-height:1.5;}
+
+.xe_content blockquote.q1,
+.xe_content blockquote.q2,
+.xe_content blockquote.q3,
+.xe_content blockquote.q4,
+.xe_content blockquote.q5,
+.xe_content blockquote.q6,
+.xe_content blockquote.q7{ padding:10px; margin:0 15px; }
+
+.xe_content blockquote.q1{ padding:0 10px; border-left:2px solid #303030;}
+.xe_content blockquote.q2{ padding:0 10px; background:url(./img/bg_qmark.gif) no-repeat left top;}
+.xe_content blockquote.q3{ border:1px solid #888888;}
+.xe_content blockquote.q4{ border:1px solid #888888; background:#101010;}
+.xe_content blockquote.q5{ border:2px solid #c0c0c0;}
+.xe_content blockquote.q6{ border:1px dashed #c0c0c0;}
+.xe_content blockquote.q7{ border:1px dashed #c0c0c0; background:#101010;}
+
+.xe_content p { margin:0; padding:0; }
