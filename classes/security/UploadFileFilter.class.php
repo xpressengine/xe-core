@@ -26,7 +26,7 @@ class UploadFileFilter
 			if (FALSE === $has_php_tag) $has_php_tag = strpos ( $content, '<?' );
 			foreach ( self::$_block_list as $v )
 			{
-				if (FALSE !== $has_php_tag && FALSE !== strpos ( $content, $v ))
+				if (FALSE !== $has_php_tag && FALSE !== strpos ( strtolower($content), $v ))
 				{
 					fclose ( $fp );
 					return FALSE;
