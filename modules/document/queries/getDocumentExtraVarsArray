@@ -1,0 +1,22 @@
+<query id="getDocumentExtraVarsArray" action="select">
+    <tables>
+        <table name="document_extra_vars" alias="extra_vars" />
+    </tables>
+    <columns>
+        <column name="value" />
+        <column name="var_idx" />
+        <column name="count(*)" alias="count" />
+    </columns>
+    <conditions>
+        <condition operation="in" column="extra_vars.module_srl" var="module_srl" notnull="notnull" pipe="and" />
+        <condition operation="equal" column="extra_vars.var_idx" var="idx" pipe="and" />
+    </conditions>
+	
+    <navigation>
+        <index var="sort_index" default="extra_vars.value" order="order_type" />
+    </navigation>
+    <groups>
+        <group column="value" />
+        <group column="var_idx" />
+    </groups>
+</query>
