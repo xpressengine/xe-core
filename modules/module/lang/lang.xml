@@ -744,6 +744,12 @@
 		<value xml:lang="tr"><![CDATA[Önceden kayıtlı değişken isim. Lütfen başka bir tane giriniz.]]></value>
 		<value xml:lang="vi"><![CDATA[Tên biến đã được sử dụng. Xin hãy chọn tên khác.]]></value>
 	</item>
+	<item name="msg_exists_dir">
+		<value xml:lang="ko"><![CDATA[이미 존재하는 디렉토리명으로는 모듈명으로 생성할 수 없습니다. 다른 이름을 입력해주세요.]]></value>
+		<value xml:lang="en"><![CDATA[A directory name that already exists can not be produced by the module name. Please enter a different name.]]></value>
+		<value xml:lang="zh-CN"><![CDATA[已存在的目录名不能由模块名称来制造。请输入一个不同的名称。]]></value>
+		<value xml:lang="zh-TW"><![CDATA[已存在的目錄名不能由模塊名稱來製造。請輸入一個不同的名稱。]]></value>
+	</item>
 	<item name="about_browser_title">
 		<value xml:lang="ko"><![CDATA[브라우저 제목에 나타나는 값입니다. RSS/Trackback에서도 사용됩니다.]]></value>
 		<value xml:lang="en"><![CDATA[It will be shown in the browser title. It will be also used in a RSS/Trackback.]]></value>
