@@ -319,8 +319,8 @@ class boardView extends board
 				// add the document title to the browser
 				Context::addBrowserTitle($oDocument->getTitleText());
 
-				// update the document view count (if the document is not secret)
-				if(!$oDocument->isSecret() || $oDocument->isGranted())
+				// update the document view count (if the document is not secret), Crawler would not update ReadedCount
+				if((!$oDocument->isSecret() || $oDocument->isGranted()) && !isCrawler())
 				{
 					$oDocument->updateReadedCount();
 				}
