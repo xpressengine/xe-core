@@ -210,6 +210,14 @@
 		<value xml:lang="tr"><![CDATA[Kullanıcıların yeterli puanı olmadığında, makaleleri okuyamayacaklardır.]]></value>
 		<value xml:lang="vi"><![CDATA[Nếu số điểm không đủ, thành viên sẽ không thể đọc được bài viết.]]></value>
 	</item>
+	<item name="enable_negative">
+		<value xml:lang="ko"><![CDATA[포인트 음수 허용]]></value>
+		<value xml:lang="en"><![CDATA[Allow negative points.]]></value>
+	</item>
+	<item name="about_enable_negative">
+		<value xml:lang="ko"><![CDATA[포인트가 0미만이 되는것을 허용합니다.]]></value>
+		<value xml:lang="en"><![CDATA[Allow the point less than zero.]]></value>
+	</item>
 	<item name="level_point_calc">
 		<value xml:lang="ko"><![CDATA[레벨별 포인트 계산]]></value>
 		<value xml:lang="en"><![CDATA[Point Calculation per Point]]></value>
