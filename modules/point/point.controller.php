@@ -546,7 +546,6 @@ class pointController extends point
 				$args->point = $point;
 				break;
 		}
-		if($args->point < 0) $args->point = 0;
 		$point = $args->point;
 
 		// Call a trigger (before)
