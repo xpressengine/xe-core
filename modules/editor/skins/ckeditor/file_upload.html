@@ -10,7 +10,11 @@
 			<input id="xe-fileupload" type="file" class="fileupload-processing " value="{$lang->edit->upload_file}" name="Filedata" data-auto-upload="true" data-editor-sequence="{$editor_sequence}" multiple />
 		</span>
 
+		<!--@if(Mobile::isMobileCheckByAgent())-->
+		<p class="xefu-dropzone-message">{$lang->allowed_filesize} : <span class="allowed_filesize">0MB</span> <span>({$lang->allowed_filetypes} : <span class="allowed_filetypes">*.*</span>)</span></p>
+		<!--@else-->
 		<p class="xefu-dropzone-message">{$lang->ckeditor_about_file_drop_area}</p>
+		<!--@end-->
 
 		<p class="upload_info">{$lang->allowed_filesize} : <span class="allowed_filesize">0MB</span> <span>({$lang->allowed_filetypes} : <span class="allowed_filetypes">*.*</span>)</span></p>
 
