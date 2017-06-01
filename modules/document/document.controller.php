@@ -520,7 +520,20 @@ class documentController extends document
 			$obj->content = removeHackTag($obj->content);
 		}
 		// if temporary document, regdate is now setting
-		if($source_obj->get('status') == $this->getConfigStatus('temp')) $obj->regdate = date('YmdHis');
+		if($source_obj->get('status') == $this->getConfigStatus('temp')) 
+		{
+			$obj->regdate = date('YmdHis');
+			
+			$module_info = $oModuleModel->getModuleInfoByModuleSrl($obj->module_srl);
+			if($module_info->use_anonymous == 'Y')
+			{
+				$logged_info = Context::get('logged_info');
+				$obj->notify_message = 'N';
+				$obj->member_srl = -1*$logged_info->member_srl;
+				$obj->email_address = $obj->homepage = $obj->user_id = '';
+				$obj->user_name = $obj->nick_name = 'anonymous';
+			}
+		}
 
 		// Insert data into the DB
 		$output = executeQuery('document.updateDocument', $obj);
