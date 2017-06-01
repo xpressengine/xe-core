@@ -36,7 +36,7 @@ class menuAdminView extends menu
 
 		if(!$site_srl)
 		{
-			if($logged_info->is_admin == 'Y' && !$site_keyword) $site_srl = 0;
+			if(!$site_keyword) $site_srl = 0;
 			else $site_srl = (int)$site_module_info->site_srl;
 		}
 
