@@ -105,6 +105,14 @@
 						alert(result.message);
 					}
 				},
+				always: function() {
+					self.settings.dropZone.find('input[type="file"]').each(function(idx, i){
+						jQuery(i).val('');
+						if(jQuery(i).val() !== '') {
+							jQuery(i).replaceWith(jQuery(i).val('').clone(true));
+						}
+					});
+				},
 				stop: function() {
 					self.loadFilelist($container);
 				},
