@@ -341,8 +341,17 @@ class Context
 			);
 		}
 
-		if($sess = $_POST[session_name()]) session_id($sess);
+		if($this->get('act') === 'procFileUpload')
+		{
+			if($sess = $_POST[session_name()]) session_id($sess);
+		}
 		session_start();
+
+		if( empty($_SESSION['xe_xss_protect'])  || $_SESSION['xe_old_session'] !== session_id() )
+		{
+			$this->setHttpOnlyCookie();
+		}
+		$this->checkHttpOnlyCookie();
 
 		// set authentication information in Context and session
 		if(self::isInstalled())
@@ -2700,6 +2709,53 @@ class Context
 	{
 		$self = self::getInstance();
 		$self->meta_tags[$name . "\t" . ($is_http_equiv ? '1' : '0')] = $content;
+	}
+
+
+	/**
+	 * set Http only Cookie
+	 */
+	function setHttpOnlyCookie()
+	{
+		$is_win = ( defined('PHP_OS') &&  (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'));
+		if( function_exists('openssl_random_pseudo_bytes') && (!$is_win || version_compare(PHP_VERSION, '5.4', '>=')) )
+		{
+			$seed = base64_encode(openssl_random_pseudo_bytes(20));
+		}
+		else
+		{
+			$seed = '';
+			for($i=0; $i<100; $i++)
+			{
+				$seed = sha1($seed.mt_rand(), true);
+			}
+			$seed = base64_encode($seed);
+		}
+		$seed = str_replace(array('+', '/', '='), array('-', '_', ''), $seed);
+
+		$session_vars = session_get_cookie_params();
+		setcookie('xe_xss_protect', $seed, 0 , $session_vars['path'], $session_vars['domain'],  $session_vars['secure'] , true);
+
+		$_COOKIE['xe_xss_protect'] = $seed;
+		$_SESSION['xe_xss_protect'] = $seed;
+		$_SESSION['xe_old_session'] = session_id();
+	}
+
+
+	/**
+	 * check if he has httpOnlyCookie
+	 */
+	function checkHttpOnlyCookie()
+	{
+		if($this->get('act') !== 'procFileUpload')
+		{
+			if($_COOKIE['xe_xss_protect'] !== $_SESSION['xe_xss_protect'])
+			{
+				session_unset();
+				session_regenerate_id(true);
+				$this->setHttpOnlyCookie();
+			}
+		}
 	}
 
 }
