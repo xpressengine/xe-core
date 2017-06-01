@@ -22,7 +22,7 @@ class Context
 
 	/**
 	 * Request method
-	 * @var string GET|POST|XMLRPC
+	 * @var string GET|POST|XMLRPC|JSON
 	 */
 	public $request_method = 'GET';
 
