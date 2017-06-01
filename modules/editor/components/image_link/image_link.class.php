@@ -63,13 +63,28 @@ class image_link extends EditorHandler
 		if(substr($src, 0,2)=='./') $src = Context::getRequestUri().substr($src, 2);
 		else if(substr($src , 0, 1)=='/')
 		{
-			if($_SERVER['HTTPS']=='on') $http_src = 'https://';
-			else $http_src = 'http://';
-			$src = $http_src.$_SERVER['HTTP_HOST'].$src;
+			$dbInfo = Context::getInstance()->db_info;
+			if($_SERVER['HTTPS']=='on') {
+				$http_src = 'https://';
+
+
+				$port = ':'.trim($dbInfo->https_port);
+				if($port == 443 || $port == ':')
+					$port = '';
+			}
+			else {
+				$parsedDefaultUrl = parse_url($dbInfo->default_url);
+				$port = ':'.trim($parsedDefaultUrl['port']);
+
+				if($port == ':80' || $port == ':')
+					$port = '';
+
+				$http_src = 'http://';
+			}
+			$src = $http_src.$_SERVER['HTTP_HOST'].$port.$src;
 		}
 		else if(!strpos($temp_src[0],':') && $src) $src = Context::getRequestUri().$src;
 
-		$attr_output = array();
 		$attr_output = array("src=\"".$src."\"");
 		$attr_output[] = "alt=\"".$alt."\"";
 
