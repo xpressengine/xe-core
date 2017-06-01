@@ -23,7 +23,12 @@ class UploadFileFilter
 		while ( ! feof ( $fp ) )
 		{
 			$content = fread ( $fp, 8192 );
-			if (FALSE === $has_php_tag) $has_php_tag = strpos ( $content, '<?' );
+			if (FALSE === $has_php_tag)
+			{
+				$has_php_tag = strpos ( $content, '<?' );
+				$has_php_tag |= strpos ( $content, '<%' );
+				$has_php_tag |= preg_match ( '/<script.*language=.?php.?.*>/', $content );
+			}
 			foreach ( self::$_block_list as $v )
 			{
 				if (FALSE !== $has_php_tag && FALSE !== strpos ( $content, $v ))
