@@ -33,4 +33,8 @@
     <column name="notify_message" type="char" size="1" default="N" notnull="notnull" />
     <column name="status" type="varchar" size="20" default="PUBLIC" />
     <column name="comment_status" type="varchar" size="20" default="ALLOW" />
+    
+    <column name="ratecalc" type="number" size="11" default="0" notnull="notnull" index="idx_ratecalc" />
+    <column name="ratecnt" type="number" size="11" default="0" notnull="notnull" index="idx_ratecnt" />
+    <column name="rateval" type="number" size="11" default="0" notnull="notnull" index="idx_rateval" />
 </table>
