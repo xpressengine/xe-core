@@ -602,6 +602,7 @@ class documentController extends document
 	 */
 	function deleteDocument($document_srl, $is_admin = false, $isEmptyTrash = false, $oDocument = null)
 	{
+		$logged_info = Context::get('logged_info');
 		// Call a trigger (before)
 		$trigger_obj = new stdClass();
 		$trigger_obj->document_srl = $document_srl;
@@ -624,6 +625,12 @@ class documentController extends document
 		if(!$oDocument->isExists() || $oDocument->document_srl != $document_srl) return new Object(-1, 'msg_invalid_document');
 		// Check if a permossion is granted
 		if(!$oDocument->isGranted()) return new Object(-1, 'msg_not_permitted');
+		$oMemberModel = getModel('member');
+		$member_info = $oMemberModel->getMemberInfoByMemberSrl($oDocument->get('member_srl'));
+		if($member_info->is_admin == 'Y' && $logged_info->is_admin != 'Y')
+		{
+			return new Object(-1, 'msg_admin_document_no_delete');
+		}
 
 		//if empty trash, document already deleted, therefore document not delete
 		$args = new stdClass();

@@ -874,4 +874,7 @@
 		<value xml:lang="jp"><![CDATA[タイトルがないドキュメントです。]]></value>
 		<value xml:lang="zh-TW"><![CDATA[此文章無標題。]]></value>
 	</item>
+	<item name="msg_admin_document_no_delete">
+		<value xml:lang="ko"><![CDATA[최고관리자의 게시물을 삭제할 권한이 없습니다.]]></value>
+	</item>
 </lang>
