@@ -821,13 +821,28 @@ class TemplateHandler
 	 * @param string $php
 	 * @return string $__Context->varname
 	 */
-	function _replaceVar($php)
+	private function _replaceVar($php)
 	{
 		if(!strlen($php))
 		{
 			return '';
 		}
-		return preg_replace('@(?<!::|\\\\|(?<!eval\()\')\$([a-z]|_[a-z0-9])@i', '\$__Context->$1', $php);
+		return preg_replace_callback('@(?<!::|\\\\|(?<!eval\()\')\$([a-z]|_[a-z0-9])+@i', array($this, '_replaceVarCallback'), $php);
+	}
+
+	private function _replaceVarCallback($matches)
+	{
+		if($matches[0] == '$lang')
+		{
+			return '$GLOBALS[\'lang\']';
+		}
+
+		if($matches[0] == '$_COOKIE')
+		{
+			return $matches[0];
+		}
+
+		return '$__Context->' . substr($matches[0], 1);
 	}
 
 }

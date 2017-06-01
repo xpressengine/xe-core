@@ -214,8 +214,6 @@ class Context
 
 		// set context variables in $GLOBALS (to use in display handler)
 		$this->context = &$GLOBALS['__Context__'];
-		$this->context->lang = &$GLOBALS['lang'];
-		$this->context->_COOKIE = $_COOKIE;
 
 		// 20140429 editor/image_link
 		$this->_checkGlobalVars();
