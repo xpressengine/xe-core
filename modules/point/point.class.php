@@ -107,6 +107,12 @@ class point extends ModuleObject
 
 			// 2012. 08. 29 Add a trigger to copy additional setting when the module is copied 
 			if(!$oModuleModel->getTrigger('module.procModuleAdminCopyModule', 'point', 'controller', 'triggerCopyModule', 'after')) return true;
+
+			// 2015. 05. 27 Add a trigger for delete member
+			if(!$oModuleModel->getTrigger('member.deleteMember', 'point', 'controller', 'triggerDeleteMember', 'after'))
+			{
+				return true;
+			}
 		}
 
 		return false;
@@ -157,6 +163,12 @@ class point extends ModuleObject
 		if(!$oModuleModel->getTrigger('module.procModuleAdminCopyModule', 'point', 'controller', 'triggerCopyModule', 'after'))
 		{
 			$oModuleController->insertTrigger('module.procModuleAdminCopyModule', 'point', 'controller', 'triggerCopyModule', 'after');
+		}
+
+		// 2015. 05. 27 Add a trigger for delete member
+		if(!$oModuleModel->getTrigger('member.deleteMember', 'point', 'controller', 'triggerDeleteMember', 'after'))
+		{
+			$oModuleController->insertTrigger('member.deleteMember', 'point', 'controller', 'triggerDeleteMember', 'after');
 		}
 
 		return new Object(0, 'success_updated');

@@ -37,6 +37,25 @@ class pointController extends point
 	}
 
 	/**
+	 * @brief Delete point of member when delete member
+	 */
+	function triggerDeleteMember($obj)
+	{
+		$oModuleModel = getModel('module');
+		$config = $oModuleModel->getModuleConfig('point');
+		if($config->delete_point_on_leave=="Y")
+		{
+			$output = executeQuery('point.deleteMemberPoint', $obj);
+			if(!$output->toBool())
+			{
+				return $output;
+			}
+		}
+
+		return new Object();
+	}
+
+	/**
 	 * @brief A trigger to add points to the member for login
 	 */
 	function triggerAfterLogin(&$obj)
