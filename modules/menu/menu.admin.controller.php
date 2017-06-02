@@ -1615,7 +1615,11 @@ class menuAdminController extends menu
 		//if now page is https...
 		if(strpos($url, 'https') !== false)
 		{
-			$args->url = str_replace('https'.substr($dbInfo->default_url, 4), '', $url);
+			$parsedRequestUrl = parse_url($url);
+			$parsedRequestUrl['scheme'];
+
+			$parsedDefaultUrl = parse_url($dbInfo->default_url);
+			$args->url = str_replace('https://'.$parsedDefaultUrl['host'].':'.$parsedRequestUrl['port'].$parsedDefaultUrl['path'], '', $url);
 		}
 		else
 		{
