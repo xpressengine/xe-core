@@ -2736,7 +2736,11 @@ var show_waiting_message = true;
 
 		// 전송 성공시
 		function onsuccess(data, textStatus, xhr) {
-			var resp_xml = $(data).find('response')[0], resp_obj, txt='', ret=[], tags={}, json_str='';
+			var resp_xml = $(data).find('response')[0];
+			var resp_obj;
+			var txt = '';
+			var ret = {};
+			var tags = {};
 
 			waiting_obj.css('display', 'none').trigger('cancel_confirm');
 
@@ -2759,10 +2763,14 @@ var show_waiting_message = true;
 				return ret;
 			}
 
-			$.each(response_tags, function(key, val){ tags[val] = true; });
+			$.each(response_tags, function(key, val){
+				tags[val] = true;
+			});
 			tags.redirect_url = true;
 			tags.act = true;
-			$.each(resp_obj, function(key, val){ if(tags[key]) ret[key] = val; });
+			$.each(resp_obj, function(key, val){ 
+				if(tags[key]) ret[key] = val;
+			});
 
 			if(ret.error != '0') {
 				if ($.isFunction($.exec_xml.onerror)) {
