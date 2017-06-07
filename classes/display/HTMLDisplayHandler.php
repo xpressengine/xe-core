@@ -227,13 +227,13 @@ class HTMLDisplayHandler
 		if(Mobile::isFromMobilePhone())
 		{
 			$this->_loadMobileJSCSS();
-			$output = $oTemplate->compile('./common/tpl', 'mobile_layout');
+			Context::addMetaTag('viewport', 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no', FALSE);
 		}
 		else
 		{
 			$this->_loadJSCSS();
-			$output = $oTemplate->compile('./common/tpl', 'common_layout');
 		}
+		$output = $oTemplate->compile('./common/tpl', 'common_layout');
 
 		// replace the user-defined-language
 		$oModuleController = getController('module');
