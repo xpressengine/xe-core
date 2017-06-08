@@ -212,9 +212,8 @@ class memberModel extends member
 					return true;
 				}
 			}
+			$_SESSION['is_logged'] = false;
 		}
-
-		$_SESSION['is_logged'] = false;
 		return false;
 	}
 

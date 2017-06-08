@@ -155,6 +155,13 @@ class Context
 	public $isSuccessInit = TRUE;
 
 	/**
+	 * Session Status
+	 */
+	const SESSION_NONE = 0;
+	const SESSION_OPENED = 1;
+	const SESSION_ACTIVE = 2;
+
+	/**
 	 * returns static context object (Singleton). It's to use Context without declaration of an object
 	 *
 	 * @return object Instance
@@ -326,7 +333,6 @@ class Context
 		}
 
 		$this->set('lang_supported', $lang_supported);
-		$this->setLangType($this->lang_type);
 
 		// load module module's language file according to language setting
 		$this->loadLang(_XE_PATH_ . 'modules/module/lang');
@@ -341,8 +347,10 @@ class Context
 			);
 		}
 
-		if($sess = $_POST[session_name()]) session_id($sess);
-		session_start();
+		self::openSession();
+		self::startSession();
+
+		$this->setLangType($this->lang_type);
 
 		// set authentication information in Context and session
 		if(self::isInstalled())
@@ -436,6 +444,85 @@ class Context
 	function close()
 	{
 		session_write_close();
+	}
+
+	/**
+	 * open Session
+	 *
+	 * @return void
+	 */
+	function openSession()
+	{
+		$session_name = session_name();
+		if($sessid = $_POST[$session_name])
+		{
+			session_id($sessid);
+		}
+
+		session_cache_limiter(''); // to control the cache-control header manually
+		register_shutdown_function(array(&$this, 'lazyStartSession'));
+	}
+
+	/**
+	 * get Session status
+	 *
+	 * @return void
+	 */
+	function getSessionStatus()
+	{
+		if(session_id() != '')
+		{
+			return self::SESSION_ACTIVE;
+		}
+
+		// get session name. ie) PHPSESSID
+		$session_name = session_name();
+		if(!empty($_COOKIE[$session_name]))
+		{
+			return self::SESSION_OPENED;
+		}
+
+		return self::SESSION_NONE;
+	}
+
+	/**
+	 * start Session conditionally
+	 * @return session status
+	 */
+	function startSession($force = FALSE)
+	{
+		$status = self::getSessionStatus();
+		if($status == self::SESSION_ACTIVE)
+		{
+			return $status;
+		}
+		if($status == self::SESSION_OPENED || $force)
+		{
+			session_start();
+			return self::SESSION_ACTIVE;
+		}
+		return $status;
+	}
+
+	/**
+	 * Lazy Session check. session_start() conditionally
+	 */
+	function lazyStartSession()
+	{
+		// get status
+		$status = self::getSessionStatus();
+		// no session opened or empty $_SESSION. ignore it.
+		if($status == self::SESSION_ACTIVE || count($_SESSION) == 0)
+		{
+			return;
+		}
+
+		// copy $_SESSION
+		$temp = $_SESSION;
+		// lazy start session
+		session_start();
+		// restore $_SESSION
+		$_SESSION = $temp;
 	}
 
 	/**
@@ -972,8 +1059,6 @@ class Context
 
 		$self->lang_type = $lang_type;
 		$self->set('lang_type', $lang_type);
-
-		$_SESSION['lang_type'] = $lang_type;
 	}
 
 	/**
