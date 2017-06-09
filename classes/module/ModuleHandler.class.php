@@ -508,7 +508,7 @@ class ModuleHandler extends Handler
 		$logged_info = Context::get('logged_info');
 
 		// check CSRF for non-GET actions
-		$use_check_csrf = !isset($xml_info->action->{$this->act}) || $xml_info->action->{$this->act}->check_csrf !== 'false';
+		$use_check_csrf = isset($xml_info->action->{$this->act}) && $xml_info->action->{$this->act}->check_csrf !== 'false';
 		if($use_check_csrf && $_SERVER['REQUEST_METHOD'] !== 'GET' && Context::isInstalled() && !checkCSRF())
 		{
 			$this->error = 'msg_invalid_request';
@@ -625,6 +625,18 @@ class ModuleHandler extends Handler
 				$orig_module = $oModule;
 
 				$xml_info = $oModuleModel->getModuleActionXml($forward->module);
+
+				// check CSRF for non-GET actions
+				$use_check_csrf = isset($xml_info->action->{$this->act}) && $xml_info->action->{$this->act}->check_csrf !== 'false';
+				if($use_check_csrf && $_SERVER['REQUEST_METHOD'] !== 'GET' && Context::isInstalled() && !checkCSRF())
+				{
+					$this->error = 'msg_invalid_request';
+					$oMessageObject = ModuleHandler::getModuleInstance('message', $display_mode);
+					$oMessageObject->setError(-1);
+					$oMessageObject->setMessage($this->error);
+					$oMessageObject->dispMessage();
+					return $oMessageObject;
+				}
 
 				// SECISSUE also check foward act method
 				// check REQUEST_METHOD in controller
