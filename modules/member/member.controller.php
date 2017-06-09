@@ -124,6 +124,8 @@ class memberController extends member
 	 */
 	function procMemberScrapDocument()
 	{
+		$oModuleModel = &getModel('module');
+
 		// Check login information
 		if(!Context::get('is_logged')) return new Object(-1, 'msg_not_logged');
 		$logged_info = Context::get('logged_info');
@@ -139,6 +141,13 @@ class memberController extends member
 		if($oDocument->isSecret() && !$oDocument->isGranted())
 		{
 			return new Object(-1, 'msg_is_secret');
+		}
+
+		// 모듈 권한 확인
+		$grant = $oModuleModel->getGrant($oModuleModel->getModuleInfoByModuleSrl($oDocument->get('module_srl')), $logged_info);
+		if(!$grant->access)
+		{
+			return new Object(-1, 'msg_not_permitted');
 		}
 
 		// Variables
