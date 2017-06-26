@@ -116,6 +116,12 @@
 			</div>
 		</div>
 		<div class="x_control-group">
+			<label class="x_control-label" for="mobile_use_editor">{$lang->editor}</label>
+			<div class="x_controls">
+				<label><input type="checkbox" name="mobile_use_editor" id="mobile_use_editor" value="Y" checked="checked"|cond="$module_info->mobile_use_editor === 'Y'" /> {$lang->mobile_use_editor}</label>
+			</div>
+		</div>
+		<div class="x_control-group">
 			<label class="x_control-label" for="mobile_list_count">{$lang->list_count}</label>
 			<div class="x_controls">
 				<input type="text" name="mobile_list_count" id="mobile_list_count" value="{$module_info->mobile_list_count?$module_info->mobile_list_count:20}" style="width:30px" />

@@ -39,6 +39,19 @@ class boardController extends board
 		if($obj->is_notice!='Y'||!$this->grant->manager) $obj->is_notice = 'N';
 		$obj->commentStatus = $obj->comment_status;
 
+		$oModuleModel = getModel('module');
+		$module_config = $oModuleModel->getModuleInfoByModuleSrl($obj->module_srl);
+		if($module_config->mobile_use_editor === 'Y')
+		{
+			if(!isset($obj->use_editor)) $obj->use_editor = 'Y';
+			if(!isset($obj->use_html)) $obj->use_html = 'Y';
+		}
+		else
+		{
+			if(!isset($obj->use_editor)) $obj->use_editor = 'N';
+			if(!isset($obj->use_html)) $obj->use_html = 'N';
+		}
+
 		settype($obj->title, "string");
 		if($obj->title == '') $obj->title = cut_str(trim(strip_tags(nl2br($obj->content))),20,'...');
 		//setup dpcument title tp 'Untitled'
@@ -264,6 +277,19 @@ class boardController extends board
 		{
 			unset($obj->is_secret);
 			$this->module_info->secret = 'N';
+		}
+
+		$oModuleModel = getModel('module');
+		$module_config = $oModuleModel->getModuleInfoByModuleSrl($obj->module_srl);
+		if($module_config->mobile_use_editor === 'Y')
+		{
+			if(!isset($obj->use_editor)) $obj->use_editor = 'Y';
+			if(!isset($obj->use_html)) $obj->use_html = 'Y';
+		}
+		else
+		{
+			if(!isset($obj->use_editor)) $obj->use_editor = 'N';
+			if(!isset($obj->use_html)) $obj->use_html = 'N';
 		}
 
 		// check if the doument is existed
