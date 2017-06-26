@@ -1487,10 +1487,14 @@ class Context
 			}
 			else
 			{
-				for($i = 0, $c = count($tmp_name); $i < $c; $i++)
+				$files = array();
+				$count_files = count($tmp_name);
+
+				for($i = 0; $i < $count_files; $i++)
 				{
 					if($val['size'][$i] > 0)
 					{
+						$file = array();
 						$file['name'] = $val['name'][$i];
 						$file['type'] = $val['type'][$i];
 						$file['tmp_name'] = $val['tmp_name'][$i];
@@ -1499,7 +1503,7 @@ class Context
 						$files[] = $file;
 					}
 				}
-				$this->set($key, $files, TRUE);
+				if($files) $this->set($key, $files, TRUE);
 			}
 		}
 	}
