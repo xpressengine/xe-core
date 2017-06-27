@@ -14,7 +14,12 @@
 		<ul>
 			<li>
 				<label for="rText" class="db fb">{$lang->comment}</label>
-				<textarea name="content" rows="8" cols="42" id="rText" class="itxx"></textarea>
+				<!--@if($module_info->mobile_use_editor === 'Y')-->
+					<input type="hidden" name="content" value="{$oComment->getContentText()}">
+					{$oComment->getEditor()}
+				<!--@else-->
+					<textarea name="content" rows="8" cols="42" id="rText" class="itxx">{$oComment->getContentText()}</textarea>
+				<!--@endif-->
 			</li>
 			<!--@if(!$is_logged)-->
 			<li>

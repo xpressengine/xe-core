@@ -231,6 +231,19 @@ class installController extends install
 		$db_info->use_rewrite = Context::get('use_rewrite');
 		$db_info->time_zone = Context::get('time_zone');
 
+		if($_SERVER['HTTPS'] == 'on')
+		{
+			$https_port = (Context::get('https_port')) ? Context::get('https_port') : $_SERVER['SERVER_PORT'];
+			$https_port = (!$https_port != 443) ? $https_port : null;
+		}
+		else
+		{
+			$http_port = (Context::get('http_port')) ? Context::get('http_port') : $_SERVER['SERVER_PORT'];
+			$http_port = (!$http_port != 80) ? $http_port : null;
+		}
+		if($http_port) $db_info->http_port = $http_port;
+		if($https_port) $db_info->https_port = $https_port;
+
 		return $db_info;
 	}
 

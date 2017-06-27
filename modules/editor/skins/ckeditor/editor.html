@@ -49,6 +49,9 @@
 			content_field: jQuery('[name={$editor_content_key_name}]')
 		};
 
+		CKEDITOR.dtd.$removeEmpty.ins = 0;
+		CKEDITOR.dtd.$removeEmpty.i = 0;
+
 		<!--@if($enable_component)-->
 			{@ $xe_component = array(); }
 			<!--@foreach($component_list as $component_name => $component)-->
@@ -79,7 +82,6 @@
 		<!--@if($css_content)-->CKEDITOR.addCss('{$css_content}');<!--@end-->
 
 		var ckeApp = $('#ckeditor_instance_{$editor_sequence}').XeCkEditor(settings);
-
 	});
 })(jQuery);
 </script>

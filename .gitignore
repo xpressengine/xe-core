@@ -10,6 +10,7 @@ codeception.yml
 /tests/_support/*Tester.php
 /tests/_support/_generated/
 /tests/*.suite.yml
+/doxygen/dist
 
 /node_modules/
 /bower_components/

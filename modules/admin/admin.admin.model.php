@@ -962,7 +962,8 @@ class adminAdminModel extends admin
         elseif($file_exsit)
 		{
 			$default_url = Context::getDefaultUrl();
-			$icon_url = $default_url . 'files/attach/xeicon/' . $virtual_site . $iconname;
+			if($default_url && substr_compare($default_url, '/', -1) === 0) $default_url = substr($default_url, 0, -1);
+			$icon_url = $default_url . '/files/attach/xeicon/' . $virtual_site . $iconname;
 		}
 		return $icon_url;
 	}

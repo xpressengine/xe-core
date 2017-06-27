@@ -35,11 +35,18 @@
 				{$val->getFormHTML()}
 			</li>
 			<!--@endforeach-->
-			<!--@end-->
+			<!--@endif-->
+
 			<li>
 				<label for="nText">{$lang->content}</label>
-				<textarea name="content" rows="8" cols="42" id="nText"></textarea>
+				<!--@if($module_info->mobile_use_editor === 'Y')-->
+					<input type="hidden" name="content" value="{$oDocument->getContentText()}" />
+					{$oDocument->getEditor()}
+				<!--@else-->
+					<textarea name="content" rows="8" cols="42" id="nText"></textarea>
+				<!--@endif-->
 			</li>
+
 			<!--@if(!$is_logged)-->
 			<li>
 				<label for="uName">{$lang->writer}</label>
