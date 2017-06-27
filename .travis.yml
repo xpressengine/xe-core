@@ -15,6 +15,7 @@ matrix:
 sudo: false
 before_script:
 - travis_retry composer self-update
+- npm cache clear
 - npm install -g grunt-cli
 - npm install
 - if [ $(phpenv version-name) != "5.3" ]; then composer install; fi
