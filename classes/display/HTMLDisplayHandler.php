@@ -179,8 +179,8 @@ class HTMLDisplayHandler
 			$url = parse_url(Context::getRequestUri());
 			$real_path = $url['path'];
 
-			$pattern = '/src=("|\'){1}(\.\/)?(files\/attach|files\/cache|files\/faceOff|files\/member_extra_info|modules|common|widgets|widgetstyle|layouts|addons)\/([^"\']+)\.(jpg|jpeg|png|gif)("|\'){1}/s';
-			$output = preg_replace($pattern, 'src=$1' . $real_path . '$3/$4.$5$6', $output);
+			$pattern = '/src=("|\'){1}(?:\.\/)?((?:files\/(?:attach|cache|faceOff|member_extra_info|thumbnails)|addons|common|(?:m\.)?layouts|modules|widgets|widgetstyle)\/[^"\']+)("|\'){1}/s';
+			$output = preg_replace($pattern, 'src=$1' . $real_path . '$2$3', $output);
 
 			$pattern = '/href=("|\'){1}(\?[^"\']+)/s';
 			$output = preg_replace($pattern, 'href=$1' . $real_path . '$2', $output);
