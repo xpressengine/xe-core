@@ -2074,6 +2074,11 @@ class moduleModel extends module
 							}
 							// All of non-logged members
 						}
+						elseif($val->group_srl == -3)
+						{
+							$granted[$val->name] = true;
+							$grant->{$val->name} = ($grant->is_admin || $grant->is_site_admin);
+						}
 						elseif($val->group_srl == 0)
 						{
 							$granted[$val->name] = true;
