@@ -84,9 +84,7 @@
 			<label for="rText">{$lang->comment}</label>
 			<!--@if($module_info->mobile_use_editor === 'Y')-->
 				<input type="hidden" name="content" value="">
-				{@ $oCommentModel = getModel('comment')}
-				{@ $oComment = $oCommentModel->getComment()}
-				{$oComment->getEditor()}
+				{$oDocument->getCommentEditor()}
 			<!--@else-->
 				<textarea name="content" rows="8" cols="42" id="rText"></textarea>
 			<!--@endif-->
