@@ -35,14 +35,22 @@ class counter extends ModuleObject
 	{
 		// Add site_srl to the counter
 		$oDB = DB::getInstance();
-		if(!$oDB->isColumnExists('counter_log', 'site_srl'))
+		$oModuleModel = getModel('module');
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
 		{
-			return TRUE;
-		}
+			if(!$oDB->isColumnExists('counter_log', 'site_srl'))
+			{
+				return TRUE;
+			}
 
-		if(!$oDB->isIndexExists('counter_log', 'idx_site_counter_log'))
-		{
-			return TRUE;
+			if(!$oDB->isIndexExists('counter_log', 'idx_site_counter_log'))
+			{
+				return TRUE;
+			}
+
+			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
 		return FALSE;
@@ -58,14 +66,22 @@ class counter extends ModuleObject
 		// Add site_srl to the counter
 		$oDB = DB::getInstance();
 
-		if(!$oDB->isColumnExists('counter_log', 'site_srl'))
+		$oModuleModel = getModel('module');
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
 		{
-			$oDB->addColumn('counter_log', 'site_srl', 'number', 11, 0, TRUE);
-		}
+			if(!$oDB->isColumnExists('counter_log', 'site_srl'))
+			{
+				$oDB->addColumn('counter_log', 'site_srl', 'number', 11, 0, TRUE);
+			}
 
-		if(!$oDB->isIndexExists('counter_log', 'idx_site_counter_log'))
-		{
-			$oDB->addIndex('counter_log', 'idx_site_counter_log', array('site_srl', 'ipaddress'), FALSE);
+			if(!$oDB->isIndexExists('counter_log', 'idx_site_counter_log'))
+			{
+				$oDB->addIndex('counter_log', 'idx_site_counter_log', array('site_srl', 'ipaddress'), FALSE);
+			}
+
+			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
 		return new Object(0, 'success_updated');

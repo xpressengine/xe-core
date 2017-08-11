@@ -35,9 +35,18 @@ class session extends ModuleObject
 	function checkUpdate()
 	{
 		$oDB = &DB::getInstance();
-		if(!$oDB->isTableExists('session')) return true;
-		if(!$oDB->isColumnExists("session","cur_mid")) return true;
-		if(!$oDB->isIndexExists("session","idx_session_update_mid")) return true;
+		$oModuleModel = getModel('module');
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
+		{
+			if(!$oDB->isTableExists('session')) return true;
+			if(!$oDB->isColumnExists("session","cur_mid")) return true;
+			if(!$oDB->isIndexExists("session","idx_session_update_mid")) return true;
+
+			$oModuleController->insertUpdatedLog($version_update_id);
+		}
+
 		return false;
 	}
 
@@ -48,12 +57,27 @@ class session extends ModuleObject
 	{
 		$oDB = &DB::getInstance();
 		$oModuleModel = getModel('module');
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
+		{
+			if(!$oDB->isTableExists('session'))
+			{
+				$oDB->createTableByXmlFile($this->module_path.'schemas/session.xml');
+			}
+			if(!$oDB->isColumnExists("session","cur_mid"))
+			{
+				$oDB->addColumn('session',"cur_mid","varchar",128);
+			}
+			if(!$oDB->isIndexExists("session","idx_session_update_mid"))
+			{
+				$oDB->addIndex("session","idx_session_update_mid", array("member_srl","last_update","cur_mid"));
+			}
 
-		if(!$oDB->isTableExists('session')) $oDB->createTableByXmlFile($this->module_path.'schemas/session.xml');
+			$oModuleController->insertUpdatedLog($version_update_id);
+		}
 
-		if(!$oDB->isColumnExists("session","cur_mid")) $oDB->addColumn('session',"cur_mid","varchar",128);
-
-		if(!$oDB->isIndexExists("session","idx_session_update_mid")) $oDB->addIndex("session","idx_session_update_mid", array("member_srl","last_update","cur_mid"));
+		return new Object(0, 'success_updated');
 	}
 
 	/**

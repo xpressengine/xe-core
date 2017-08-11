@@ -33,18 +33,25 @@ class tag extends ModuleObject
 	 */
 	function checkUpdate()
 	{
-		$oModuleModel = getModel('module');
 		$oDB = &DB::getInstance();
-		// 2007. 10. 17 trigger registration, if registered upset
-		if(!$oModuleModel->getTrigger('document.insertDocument', 'tag', 'controller', 'triggerArrangeTag', 'before')) return true;
-		if(!$oModuleModel->getTrigger('document.insertDocument', 'tag', 'controller', 'triggerInsertTag', 'after')) return true;
-		if(!$oModuleModel->getTrigger('document.updateDocument', 'tag', 'controller', 'triggerArrangeTag', 'before')) return true;
-		if(!$oModuleModel->getTrigger('document.updateDocument', 'tag', 'controller', 'triggerInsertTag', 'after')) return true;
-		if(!$oModuleModel->getTrigger('document.deleteDocument', 'tag', 'controller', 'triggerDeleteTag', 'after')) return true;
-		// 2007. 10. 17 modules are deleted when you delete all registered triggers that add tag
-		if(!$oModuleModel->getTrigger('module.deleteModule', 'tag', 'controller', 'triggerDeleteModuleTags', 'after')) return true;
-		// tag in the index column of the table tag
-		if(!$oDB->isIndexExists("tags","idx_tag")) return true;
+		$oModuleModel = getModel('module');
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
+		{
+			// 2007. 10. 17 trigger registration, if registered upset
+			if(!$oModuleModel->getTrigger('document.insertDocument', 'tag', 'controller', 'triggerArrangeTag', 'before')) return true;
+			if(!$oModuleModel->getTrigger('document.insertDocument', 'tag', 'controller', 'triggerInsertTag', 'after')) return true;
+			if(!$oModuleModel->getTrigger('document.updateDocument', 'tag', 'controller', 'triggerArrangeTag', 'before')) return true;
+			if(!$oModuleModel->getTrigger('document.updateDocument', 'tag', 'controller', 'triggerInsertTag', 'after')) return true;
+			if(!$oModuleModel->getTrigger('document.deleteDocument', 'tag', 'controller', 'triggerDeleteTag', 'after')) return true;
+			// 2007. 10. 17 modules are deleted when you delete all registered triggers that add tag
+			if(!$oModuleModel->getTrigger('module.deleteModule', 'tag', 'controller', 'triggerDeleteModuleTags', 'after')) return true;
+			// tag in the index column of the table tag
+			if(!$oDB->isIndexExists("tags","idx_tag")) return true;
+
+			$oModuleController->insertUpdatedLog($version_update_id);
+		}
 
 		return false;
 	}
@@ -54,30 +61,36 @@ class tag extends ModuleObject
 	 */
 	function moduleUpdate()
 	{
+		$oDB = &DB::getInstance();
 		$oModuleModel = getModel('module');
 		$oModuleController = getController('module');
-		$oDB = &DB::getInstance();
-		// 2007. 10. 17 document.insertDocument, updateDocument, deleteDocument trigger property for
-		if(!$oModuleModel->getTrigger('document.insertDocument', 'tag', 'controller', 'triggerArrangeTag', 'before')) 
-			$oModuleController->insertTrigger('document.insertDocument', 'tag', 'controller', 'triggerArrangeTag', 'before');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
+		{
+			// 2007. 10. 17 document.insertDocument, updateDocument, deleteDocument trigger property for
+			if(!$oModuleModel->getTrigger('document.insertDocument', 'tag', 'controller', 'triggerArrangeTag', 'before'))
+				$oModuleController->insertTrigger('document.insertDocument', 'tag', 'controller', 'triggerArrangeTag', 'before');
 
-		if(!$oModuleModel->getTrigger('document.insertDocument', 'tag', 'controller', 'triggerInsertTag', 'after')) 
-			$oModuleController->insertTrigger('document.insertDocument', 'tag', 'controller', 'triggerInsertTag', 'after');
+			if(!$oModuleModel->getTrigger('document.insertDocument', 'tag', 'controller', 'triggerInsertTag', 'after'))
+				$oModuleController->insertTrigger('document.insertDocument', 'tag', 'controller', 'triggerInsertTag', 'after');
 
-		if(!$oModuleModel->getTrigger('document.updateDocument', 'tag', 'controller', 'triggerArrangeTag', 'before')) 
-			$oModuleController->insertTrigger('document.updateDocument', 'tag', 'controller', 'triggerArrangeTag', 'before');
+			if(!$oModuleModel->getTrigger('document.updateDocument', 'tag', 'controller', 'triggerArrangeTag', 'before'))
+				$oModuleController->insertTrigger('document.updateDocument', 'tag', 'controller', 'triggerArrangeTag', 'before');
 
-		if(!$oModuleModel->getTrigger('document.updateDocument', 'tag', 'controller', 'triggerInsertTag', 'after')) 
-			$oModuleController->insertTrigger('document.updateDocument', 'tag', 'controller', 'triggerInsertTag', 'after');
+			if(!$oModuleModel->getTrigger('document.updateDocument', 'tag', 'controller', 'triggerInsertTag', 'after'))
+				$oModuleController->insertTrigger('document.updateDocument', 'tag', 'controller', 'triggerInsertTag', 'after');
 
-		if(!$oModuleModel->getTrigger('document.deleteDocument', 'tag', 'controller', 'triggerDeleteTag', 'after')) 
-			$oModuleController->insertTrigger('document.deleteDocument', 'tag', 'controller', 'triggerDeleteTag', 'after');
-		// 2007. 10. 17 modules are deleted when you delete all registered triggers that add tag
-		if(!$oModuleModel->getTrigger('module.deleteModule', 'tag', 'controller', 'triggerDeleteModuleTags', 'after'))
-			$oModuleController->insertTrigger('module.deleteModule', 'tag', 'controller', 'triggerDeleteModuleTags', 'after');
-		// tag in the index column of the table tag
-		if(!$oDB->isIndexExists("tags","idx_tag")) 
-			$oDB->addIndex("tags","idx_tag", array("document_srl","tag"));
+			if(!$oModuleModel->getTrigger('document.deleteDocument', 'tag', 'controller', 'triggerDeleteTag', 'after'))
+				$oModuleController->insertTrigger('document.deleteDocument', 'tag', 'controller', 'triggerDeleteTag', 'after');
+			// 2007. 10. 17 modules are deleted when you delete all registered triggers that add tag
+			if(!$oModuleModel->getTrigger('module.deleteModule', 'tag', 'controller', 'triggerDeleteModuleTags', 'after'))
+				$oModuleController->insertTrigger('module.deleteModule', 'tag', 'controller', 'triggerDeleteModuleTags', 'after');
+			// tag in the index column of the table tag
+			if(!$oDB->isIndexExists("tags","idx_tag"))
+				$oDB->addIndex("tags","idx_tag", array("document_srl","tag"));
+
+			$oModuleController->insertUpdatedLog($version_update_id);
+		}
 
 		return new Object(0, 'success_updated');
 	}

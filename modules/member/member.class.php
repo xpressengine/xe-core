@@ -182,61 +182,70 @@ class member extends ModuleObject {
 	{
 		$oDB = &DB::getInstance();
 		$oModuleModel = getModel('module');
-		// check member directory (11/08/2007 added)
-		if(!is_dir("./files/member_extra_info")) return true;
-		// check member directory (22/10/2007 added)
-		if(!is_dir("./files/member_extra_info/profile_image")) return true;
-		// Add a column(is_register) to "member_auth_mail" table (22/04/2008)
-		$act = $oDB->isColumnExists("member_auth_mail", "is_register");
-		if(!$act) return true;
-		// Add a column(site_srl) to "member_group_member" table (11/15/2008)
-		if(!$oDB->isColumnExists("member_group_member", "site_srl")) return true;
-		if(!$oDB->isColumnExists("member_group", "site_srl")) return true;
-		if($oDB->isIndexExists("member_group","uni_member_group_title")) return true;
-
-		// Add a column for list_order (05/18/2011)
-		if(!$oDB->isColumnExists("member_group", "list_order")) return true;
-
-		// image_mark 추가 (2009. 02. 14)
-		if(!$oDB->isColumnExists("member_group", "image_mark")) return true;
-		// Add c column for password expiration date
-		if(!$oDB->isColumnExists("member", "change_password_date")) return true;
-
-		// Add columns of question and answer to verify a password
-		if(!$oDB->isColumnExists("member", "find_account_question")) return true;
-		if(!$oDB->isColumnExists("member", "find_account_answer")) return true;
-
-		if(!$oDB->isColumnExists("member", "list_order")) return true;
-		if(!$oDB->isIndexExists("member","idx_list_order")) return true;
-
-		$oModuleModel = getModel('module');
-		$config = $oModuleModel->getModuleConfig('member');
-		// check signup form ordering info
-		if(!$config->signupForm) return true;
-
-		// check agreement field exist
-		if($config->agreement) return true;
-
-		if($config->skin)
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
 		{
-			$config_parse = explode('.', $config->skin);
-			if(count($config_parse) > 1)
-			{
-				$template_path = sprintf('./themes/%s/modules/member/', $config_parse[0]);
-				if(is_dir($template_path)) return true;
-			}
-		}
+			// check member directory (11/08/2007 added)
+			if(!is_dir("./files/member_extra_info")) return true;
+			// check member directory (22/10/2007 added)
+			if(!is_dir("./files/member_extra_info/profile_image")) return true;
+			// Add a column(is_register) to "member_auth_mail" table (22/04/2008)
+			$act = $oDB->isColumnExists("member_auth_mail", "is_register");
+			if(!$act) return true;
+			// Add a column(site_srl) to "member_group_member" table (11/15/2008)
+			if(!$oDB->isColumnExists("member_group_member", "site_srl")) return true;
+			if(!$oDB->isColumnExists("member_group", "site_srl")) return true;
+			if($oDB->isIndexExists("member_group","uni_member_group_title")) return true;
 
-		// supprot multilanguage agreement.
-		if(is_readable('./files/member_extra_info/agreement.txt')) return true;
+			// Add a column for list_order (05/18/2011)
+			if(!$oDB->isColumnExists("member_group", "list_order")) return true;
+
+			// image_mark 추가 (2009. 02. 14)
+			if(!$oDB->isColumnExists("member_group", "image_mark")) return true;
+			// Add c column for password expiration date
+			if(!$oDB->isColumnExists("member", "change_password_date")) return true;
+
+			// Add columns of question and answer to verify a password
+			if(!$oDB->isColumnExists("member", "find_account_question")) return true;
+			if(!$oDB->isColumnExists("member", "find_account_answer")) return true;
+
+			if(!$oDB->isColumnExists("member", "list_order")) return true;
+			if(!$oDB->isIndexExists("member","idx_list_order")) return true;
+
+			$oModuleModel = getModel('module');
+			$config = $oModuleModel->getModuleConfig('member');
+			// check signup form ordering info
+			if(!$config->signupForm) return true;
+
+			// check agreement field exist
+			if($config->agreement) return true;
+
+			if($config->skin)
+			{
+				$config_parse = explode('.', $config->skin);
+				if(count($config_parse) > 1)
+				{
+					$template_path = sprintf('./themes/%s/modules/member/', $config_parse[0]);
+					if(is_dir($template_path)) return true;
+				}
+			}
+
+			// supprot multilanguage agreement.
+			if(is_readable('./files/member_extra_info/agreement.txt')) return true;
+
+			// 2013. 11. 22 add menu when popup document menu called
+			if(!$oModuleModel->getTrigger('document.getDocumentMenu', 'member', 'controller', 'triggerGetDocumentMenu', 'after')) return true;
+			if(!$oModuleModel->getTrigger('comment.getCommentMenu', 'member', 'controller', 'triggerGetCommentMenu', 'after')) return true;
+
+			$oModuleController->insertUpdatedLog($version_update_id);
+		}
 
 		if(!is_readable('./files/ruleset/insertMember.xml')) return true;
 		if(!is_readable('./files/ruleset/login.xml')) return true;
 		if(!is_readable('./files/ruleset/find_member_account_by_question.xml')) return true;
 
-		// 2013. 11. 22 add menu when popup document menu called
-		if(!$oModuleModel->getTrigger('document.getDocumentMenu', 'member', 'controller', 'triggerGetDocumentMenu', 'after')) return true;
-		if(!$oModuleModel->getTrigger('comment.getCommentMenu', 'member', 'controller', 'triggerGetCommentMenu', 'after')) return true;
+		if($oModuleModel->needUpdate('member.1.8.43.recreate_signup_ruleset')) return true;
 
 		return false;
 	}
@@ -249,122 +258,134 @@ class member extends ModuleObject {
 	function moduleUpdate()
 	{
 		$oDB = &DB::getInstance();
-		$oModuleController = getController('module');
-		// Check member directory
-		FileHandler::makeDir('./files/member_extra_info/image_name');
-		FileHandler::makeDir('./files/member_extra_info/image_mark');
-		FileHandler::makeDir('./files/member_extra_info/signature');
-		FileHandler::makeDir('./files/member_extra_info/profile_image');
-		// Add a column
-		if(!$oDB->isColumnExists("member_auth_mail", "is_register"))
-		{
-			$oDB->addColumn("member_auth_mail", "is_register", "char", 1, "N", true);
-		}
-		// Add a column(site_srl) to "member_group_member" table (11/15/2008)
-		if(!$oDB->isColumnExists("member_group_member", "site_srl"))
-		{
-			$oDB->addColumn("member_group_member", "site_srl", "number", 11, 0, true);
-			$oDB->addIndex("member_group_member", "idx_site_srl", "site_srl", false);
-		}
-		if(!$oDB->isColumnExists("member_group", "site_srl"))
-		{
-			$oDB->addColumn("member_group", "site_srl", "number", 11, 0, true);
-			$oDB->addIndex("member_group","idx_site_title", array("site_srl","title"),true);
-		}
-		if($oDB->isIndexExists("member_group","uni_member_group_title"))
-		{
-			$oDB->dropIndex("member_group","uni_member_group_title",true);
-		}
-
-		// Add a column(list_order) to "member_group" table (05/18/2011)
-		if(!$oDB->isColumnExists("member_group", "list_order"))
-		{
-			$oDB->addColumn("member_group", "list_order", "number", 11, '', true);
-			$oDB->addIndex("member_group","idx_list_order", "list_order",false);
-			$output = executeQuery('member.updateAllMemberGroupListOrder');
-		}
-		// Add a column for image_mark (02/14/2009)
-		if(!$oDB->isColumnExists("member_group", "image_mark"))
-		{
-			$oDB->addColumn("member_group", "image_mark", "text");
-		}
-		// Add a column for password expiration date
-		if(!$oDB->isColumnExists("member", "change_password_date"))
-		{
-			$oDB->addColumn("member", "change_password_date", "date");
-			executeQuery('member.updateAllChangePasswordDate');
-		}
-
-		// Add columns of question and answer to verify a password
-		if(!$oDB->isColumnExists("member", "find_account_question"))
-		{
-			$oDB->addColumn("member", "find_account_question", "number", 11);
-		}
-		if(!$oDB->isColumnExists("member", "find_account_answer"))
-		{
-			$oDB->addColumn("member", "find_account_answer", "varchar", 250);
-		}
-
-		if(!$oDB->isColumnExists("member", "list_order"))
-		{
-			$oDB->addColumn("member", "list_order", "number", 11);
-			@set_time_limit(0);
-			$args->list_order = 'member_srl';
-			executeQuery('member.updateMemberListOrderAll',$args);
-			executeQuery('member.updateMemberListOrderAll');
-		}
-		if(!$oDB->isIndexExists("member","idx_list_order"))
-		{
-			$oDB->addIndex("member","idx_list_order", array("list_order"));
-		}
-
 		$oModuleModel = getModel('module');
-		$config = $oModuleModel->getModuleConfig('member');
 		$oModuleController = getController('module');
-
-		// check agreement value exist
-		if($config->agreement)
-		{
-			$agreement_file = _XE_PATH_.'files/member_extra_info/agreement_' . Context::get('lang_type') . '.txt';
-			$output = FileHandler::writeFile($agreement_file, $config->agreement);
-
-			$config->agreement = NULL;
-			$output = $oModuleController->updateModuleConfig('member', $config);
-		}
-
 		$oMemberAdminController = getAdminController('member');
-		// check signup form ordering info
-		if(!$config->signupForm || !is_array($config->signupForm))
+		$config = $oModuleModel->getModuleConfig('member');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
 		{
-			$identifier = 'user_id';
-
-			$config->signupForm = $oMemberAdminController->createSignupForm($identifier);
-			$config->identifier = $identifier;
-			unset($config->agreement);
-			$output = $oModuleController->updateModuleConfig('member', $config);
-		}
-
-		if($config->skin)
-		{
-			$config_parse = explode('.', $config->skin);
-			if (count($config_parse) > 1)
+			// Check member directory
+			FileHandler::makeDir('./files/member_extra_info/image_name');
+			FileHandler::makeDir('./files/member_extra_info/image_mark');
+			FileHandler::makeDir('./files/member_extra_info/signature');
+			FileHandler::makeDir('./files/member_extra_info/profile_image');
+			// Add a column
+			if(!$oDB->isColumnExists("member_auth_mail", "is_register"))
 			{
-				$template_path = sprintf('./themes/%s/modules/member/', $config_parse[0]);
-				if(is_dir($template_path))
+				$oDB->addColumn("member_auth_mail", "is_register", "char", 1, "N", true);
+			}
+			// Add a column(site_srl) to "member_group_member" table (11/15/2008)
+			if(!$oDB->isColumnExists("member_group_member", "site_srl"))
+			{
+				$oDB->addColumn("member_group_member", "site_srl", "number", 11, 0, true);
+				$oDB->addIndex("member_group_member", "idx_site_srl", "site_srl", false);
+			}
+			if(!$oDB->isColumnExists("member_group", "site_srl"))
+			{
+				$oDB->addColumn("member_group", "site_srl", "number", 11, 0, true);
+				$oDB->addIndex("member_group","idx_site_title", array("site_srl","title"),true);
+			}
+			if($oDB->isIndexExists("member_group","uni_member_group_title"))
+			{
+				$oDB->dropIndex("member_group","uni_member_group_title",true);
+			}
+
+			// Add a column(list_order) to "member_group" table (05/18/2011)
+			if(!$oDB->isColumnExists("member_group", "list_order"))
+			{
+				$oDB->addColumn("member_group", "list_order", "number", 11, '', true);
+				$oDB->addIndex("member_group","idx_list_order", "list_order",false);
+				$output = executeQuery('member.updateAllMemberGroupListOrder');
+			}
+			// Add a column for image_mark (02/14/2009)
+			if(!$oDB->isColumnExists("member_group", "image_mark"))
+			{
+				$oDB->addColumn("member_group", "image_mark", "text");
+			}
+			// Add a column for password expiration date
+			if(!$oDB->isColumnExists("member", "change_password_date"))
+			{
+				$oDB->addColumn("member", "change_password_date", "date");
+				executeQuery('member.updateAllChangePasswordDate');
+			}
+
+			// Add columns of question and answer to verify a password
+			if(!$oDB->isColumnExists("member", "find_account_question"))
+			{
+				$oDB->addColumn("member", "find_account_question", "number", 11);
+			}
+			if(!$oDB->isColumnExists("member", "find_account_answer"))
+			{
+				$oDB->addColumn("member", "find_account_answer", "varchar", 250);
+			}
+
+			if(!$oDB->isColumnExists("member", "list_order"))
+			{
+				$oDB->addColumn("member", "list_order", "number", 11);
+				@set_time_limit(0);
+				$args->list_order = 'member_srl';
+				executeQuery('member.updateMemberListOrderAll',$args);
+				executeQuery('member.updateMemberListOrderAll');
+			}
+			if(!$oDB->isIndexExists("member","idx_list_order"))
+			{
+				$oDB->addIndex("member","idx_list_order", array("list_order"));
+			}
+
+			$config = $oModuleModel->getModuleConfig('member');
+
+			// check agreement value exist
+			if($config->agreement)
+			{
+				$agreement_file = _XE_PATH_.'files/member_extra_info/agreement_' . Context::get('lang_type') . '.txt';
+				$output = FileHandler::writeFile($agreement_file, $config->agreement);
+
+				$config->agreement = NULL;
+				$output = $oModuleController->updateModuleConfig('member', $config);
+			}
+
+			// check signup form ordering info
+			if(!$config->signupForm || !is_array($config->signupForm))
+			{
+				$identifier = 'user_id';
+
+				$config->signupForm = $oMemberAdminController->createSignupForm($identifier);
+				$config->identifier = $identifier;
+				unset($config->agreement);
+				$output = $oModuleController->updateModuleConfig('member', $config);
+			}
+
+			if($config->skin)
+			{
+				$config_parse = explode('.', $config->skin);
+				if (count($config_parse) > 1)
 				{
-					$config->skin = implode('|@|', $config_parse);
-					$oModuleController = getController('module');
-					$oModuleController->updateModuleConfig('member', $config);
+					$template_path = sprintf('./themes/%s/modules/member/', $config_parse[0]);
+					if(is_dir($template_path))
+					{
+						$config->skin = implode('|@|', $config_parse);
+						$oModuleController = getController('module');
+						$oModuleController->updateModuleConfig('member', $config);
+					}
 				}
 			}
-		}
+			
+			// 2013. 11. 22 add menu when popup document menu called
+			if(!$oModuleModel->getTrigger('document.getDocumentMenu', 'member', 'controller', 'triggerGetDocumentMenu', 'after'))
+				$oModuleController->insertTrigger('document.getDocumentMenu', 'member', 'controller', 'triggerGetDocumentMenu', 'after');
+			if(!$oModuleModel->getTrigger('comment.getCommentMenu', 'member', 'controller', 'triggerGetCommentMenu', 'after'))
+				$oModuleController->insertTrigger('comment.getCommentMenu', 'member', 'controller', 'triggerGetCommentMenu', 'after');
 
-		if(is_readable('./files/member_extra_info/agreement.txt'))
-		{
-			$source_file = _XE_PATH_.'files/member_extra_info/agreement.txt';
-			$target_file = _XE_PATH_.'files/member_extra_info/agreement_' . Context::get('lang_type') . '.txt';
+			if(is_readable('./files/member_extra_info/agreement.txt'))
+			{
+				$source_file = _XE_PATH_.'files/member_extra_info/agreement.txt';
+				$target_file = _XE_PATH_.'files/member_extra_info/agreement_' . Context::get('lang_type') . '.txt';
 
-			FileHandler::rename($source_file, $target_file);
+				FileHandler::rename($source_file, $target_file);
+			}
+
+			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
 		FileHandler::makeDir('./files/ruleset');
@@ -375,11 +396,11 @@ class member extends ModuleObject {
 		if(!is_readable('./files/ruleset/find_member_account_by_question.xml'))
 			$oMemberAdminController->_createFindAccountByQuestion($config->identifier);
 
-		// 2013. 11. 22 add menu when popup document menu called
-		if(!$oModuleModel->getTrigger('document.getDocumentMenu', 'member', 'controller', 'triggerGetDocumentMenu', 'after'))
-			$oModuleController->insertTrigger('document.getDocumentMenu', 'member', 'controller', 'triggerGetDocumentMenu', 'after');
-		if(!$oModuleModel->getTrigger('comment.getCommentMenu', 'member', 'controller', 'triggerGetCommentMenu', 'after'))
-			$oModuleController->insertTrigger('comment.getCommentMenu', 'member', 'controller', 'triggerGetCommentMenu', 'after');
+		if($oModuleModel->needUpdate('member.1.8.43.recreate_signup_ruleset'))
+		{
+			$oMemberAdminController->_createSignupRuleset($config->signupForm);
+			$oModuleController->insertUpdatedLog('member.1.8.43.recreate_signup_ruleset');
+		}
 
 		return new Object(0, 'success_updated');
 	}
