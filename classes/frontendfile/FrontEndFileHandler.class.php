@@ -149,6 +149,7 @@ class FrontEndFileHandler extends Handler
 			return $existsInfo[$existsKey];
 		}
 
+		$fileName = preg_replace('/(?:[\/]{3,})(.*)/', '//$1', $fileName);
 		$url_info = parse_url($fileName);
 		$pathInfo = pathinfo(str_replace('?' . $url_info['query'], '', $fileName));
 
