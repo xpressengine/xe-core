@@ -144,7 +144,7 @@ class installController extends install
 		if(Context::isInstalled()) return new Object(-1, 'msg_already_installed');
 
 		Context::loadLang('modules/member/lang');
-		$oMemberModel = getModel('Member');
+		$oMemberModel = getModel('member');
 		$vars = Context::getRequestVars();
 
 		if(!$oMemberModel->checkPasswordStrength($vars->password, 'high'))
