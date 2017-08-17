@@ -37,12 +37,12 @@ $install_config = array(
     'db_userid' => $dbinfo['user'],
     'db_password' => $dbinfo['password'],
     'db_database' => $dbinfo['dbname'],
-    'db_table_prefix' =>'xe_',
+    'db_table_prefix' =>'xe',
     'use_rewrite' =>'N',
     'time_zone' =>'0900',
     'email_address' =>'admin@admin.net',
-    'password' =>'admin',
-    'password2' =>'admin',
+    'password' =>'admin1@3',
+    'password2' =>'admin1@3',
     'nick_name' =>'admin',
     'user_id' =>'admin',
     'lang_type' => 'ko',
@@ -61,7 +61,7 @@ $I->fillField('user_id', 'admin@admin.net');
 $I->submitForm('.login-body form', [
     'act' => 'procMemberLogin',
     'user_id' => 'admin@admin.net',
-    'password' => 'admin',
+    'password' => 'admin1@3',
     'success_return_url' => '/index.php?module=admin'
 ]);
 

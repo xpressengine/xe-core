@@ -148,18 +148,23 @@ class FrontEndFileHandler extends Handler
 		{
 			return $existsInfo[$existsKey];
 		}
-		
-		$pathInfo = pathinfo($fileName);
+
+		$fileName = preg_replace('/(?:[\/]{3,})(.*)/', '//$1', $fileName);
+		$url_info = parse_url($fileName);
+		$pathInfo = pathinfo(str_replace('?' . $url_info['query'], '', $fileName));
+
 		$file = new stdClass();
-		$file->fileName = $pathInfo['basename'];
+		$file->fileName = basename($url_info['path']);
 		$file->filePath = $this->_getAbsFileUrl($pathInfo['dirname']);
 		$file->fileRealPath = FileHandler::getRealPath($pathInfo['dirname']);
 		$file->fileExtension = strtolower($pathInfo['extension']);
 		$file->fileNameNoExt = preg_replace('/\.min$/', '', $pathInfo['filename']);
+		$file->query = $url_info['query'];
+		$file->external = !!$url_info['host'];
 		$file->keyName = implode('.', array($file->fileNameNoExt, $file->fileExtension));
 		$file->cdnPath = $this->_normalizeFilePath($pathInfo['dirname']);
 
-		if(strpos($file->filePath, '://') === FALSE)
+		if(!$file->external)
 		{
 			if(!__DEBUG__ && __XE_VERSION_STABLE__)
 			{
@@ -275,10 +280,24 @@ class FrontEndFileHandler extends Handler
 		{
 			foreach($indexedMap as $file)
 			{
-				$noneCache = (is_readable($file->cdnPath . '/' . $file->fileName)) ? '?' . date('YmdHis', filemtime($file->cdnPath . '/' . $file->fileName)) : '';
-				$fullFilePath = $file->filePath . '/' . $file->fileName . $noneCache;
-				
-				$result[] = array('file' => $fullFilePath, 'media' => $file->media, 'targetie' => $file->targetIe);
+				$query = '';
+				if(!$file->external && is_readable($file->cdnPath . '/' . $file->fileName))
+				{
+					$query = date('YmdHis', filemtime($file->cdnPath . '/' . $file->fileName));
+				}
+				if($file->query)
+				{
+					if($query) $query .= '&';
+					$query .= $file->query;
+				}
+				$query = ($query) ? '?' . $query : '';
+
+				$fullFilePath = $file->filePath . '/' . $file->fileName . $query;
+				$result[] = array(
+					'file' => $fullFilePath,
+					'media' => $file->media,
+					'targetie' => $file->targetIe
+				);
 			}
 		}
 
@@ -311,10 +330,23 @@ class FrontEndFileHandler extends Handler
 		{
 			foreach($indexedMap as $file)
 			{
-				$noneCache = (is_readable($file->cdnPath . '/' . $file->fileName)) ? '?' . date('YmdHis', filemtime($file->cdnPath . '/' . $file->fileName)) : '';
-				$fullFilePath = $file->filePath . '/' . $file->fileName . $noneCache;
-				
-				$result[] = array('file' => $fullFilePath, 'targetie' => $file->targetIe);
+				$query = '';
+				if(!$file->external && is_readable($file->cdnPath . '/' . $file->fileName))
+				{
+					$query = date('YmdHis', filemtime($file->cdnPath . '/' . $file->fileName));
+				}
+				if($file->query)
+				{
+					if($query) $query .= '&';
+					$query .= $file->query;
+				}
+				$query = ($query) ? '?' . $query : '';
+
+				$fullFilePath = $file->filePath . '/' . $file->fileName . $query;
+				$result[] = array(
+					'file' => $fullFilePath,
+					'targetie' => $file->targetIe
+				);
 			}
 		}
 

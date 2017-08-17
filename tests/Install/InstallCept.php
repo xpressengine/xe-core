@@ -91,8 +91,8 @@ $I->submitForm('#content form', [
     'act' => 'procInstall',
     'db_type' => 'mysqli',
     'email_address' => 'admin@admin.net',
-    'password' => 'admin',
-    'password2' => 'admin',
+    'password' => 'admin1@3',
+    'password2' => 'admin1@3',
     'nick_name' => 'admin',
     'user_id' => 'admin'
 ]);
@@ -105,7 +105,7 @@ $I->fillField('user_id', 'admin@admin.net');
 $I->submitForm('.login-body form', [
     'act' => 'procMemberLogin',
     'user_id' => 'admin@admin.net',
-    'password' => 'admin',
+    'password' => 'admin1@3',
     'success_return_url' => '/index.php?module=admin'
 ]);
 

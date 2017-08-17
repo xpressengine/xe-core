@@ -144,8 +144,26 @@ class memberController extends member
 		}
 
 		// 모듈 권한 확인
-		$grant = $oModuleModel->getGrant($oModuleModel->getModuleInfoByModuleSrl($oDocument->get('module_srl')), $logged_info);
+		$module_info = $oModuleModel->getModuleInfoByModuleSrl($oDocument->get('module_srl'));
+		$grant = $oModuleModel->getGrant($module_info, $logged_info);
+
 		if(!$grant->access)
+		{
+			return new Object(-1, 'msg_not_permitted');
+		}
+
+		// 게시판 모듈에서 글 목록 보기 권한이 없으면 스크랩 제한
+		if($module_info->module === 'board' && isset($grant->list) && !$grant->list)
+		{
+			return new Object(-1, 'msg_not_permitted');
+		}
+
+		// 게시판 모듈에서 상담 기능 사용 시 권한이 없는 게시물(타인의 게시물) 스크랩 제한
+		if($module_info->module === 'board' &&
+			$module_info->consultation === 'Y' &&
+			isset($grant->consultation_read) &&
+			!$grant->consultation_read && !$oDocument->isGranted()
+		)
 		{
 			return new Object(-1, 'msg_not_permitted');
 		}
@@ -541,12 +559,17 @@ class memberController extends member
 		{
 			$args->{$val} = Context::get($val);
 			if($val == 'birthday') $args->birthday_ui = Context::get('birthday_ui');
+			if($val == 'find_account_answer' && !Context::get($val)) {
+				unset($args->{$val});
+			}
 		}
+
 		// Login Information
 		$logged_info = Context::get('logged_info');
 		$args->member_srl = $logged_info->member_srl;
 		$args->birthday = intval(strtr($args->birthday, array('-'=>'', '/'=>'', '.'=>'', ' '=>'')));
 		if(!$args->birthday && $args->birthday_ui) $args->birthday = intval(strtr($args->birthday_ui, array('-'=>'', '/'=>'', '.'=>'', ' '=>'')));
+
 		// Remove some unnecessary variables from all the vars
 		$all_args = Context::getRequestVars();
 		unset($all_args->module);
@@ -1081,6 +1104,7 @@ class memberController extends member
 	function procMemberFindAccountByQuestion()
 	{
 		$oMemberModel = getModel('member');
+		$oPassword =  new Password();
 		$config = $oMemberModel->getMemberConfig();
 
 		$email_address = Context::get('email_address');
@@ -1094,6 +1118,7 @@ class memberController extends member
 		// Check if a member having the same email address exists
 		$member_srl = $oMemberModel->getMemberSrlByEmailAddress($email_address);
 		if(!$member_srl) return new Object(-1, 'msg_email_not_exists');
+
 		// Get information of the member
 		$columnList = array('member_srl', 'find_account_question', 'find_account_answer');
 		$member_info = $oMemberModel->getMemberInfoByMemberSrl($member_srl, 0, $columnList);
@@ -1101,7 +1126,33 @@ class memberController extends member
 		// Display a message if no answer is entered
 		if(!$member_info->find_account_question || !$member_info->find_account_answer) return new Object(-1, 'msg_question_not_exists');
 
-		if(trim($member_info->find_account_question) != $find_account_question || trim($member_info->find_account_answer) != $find_account_answer) return new Object(-1, 'msg_answer_not_matches');
+		// 답변 확인
+		$hashed = $oPassword->checkAlgorithm($member_info->find_account_answer);
+		$authed = true;
+		$member_info->find_account_question = trim($member_info->find_account_question);
+		if($member_info->find_account_question != $find_account_question)
+		{
+			$authed = false;
+		}
+		else if($hashed && !$oPassword->checkPassword($find_account_answer, $member_info->find_account_answer))
+		{
+			$authed = false;
+		}
+		else if(!$hashed && $find_account_answer != $member_info->find_account_answer)
+		{
+			$authed = false;
+		}
+
+		if(!$authed)
+		{
+			return new Object(-1, 'msg_answer_not_matches');
+		}
+
+		// answer가 동일하고 hash 되지 않았으면 hash 값으로 저장
+		if($authed && !$hashed)
+		{
+			$this->updateFindAccountAnswer($member_srl, $find_account_answer);
+		}
 
 		if($config->identifier == 'email_address')
 		{
@@ -1109,7 +1160,6 @@ class memberController extends member
 		}
 
 		// Update to a temporary password and set change_password_date to 1
-		$oPassword =  new Password();
 		$temp_password = $oPassword->createTemporaryPassword(8);
 
 		$args = new stdClass();
@@ -1993,6 +2043,15 @@ class memberController extends member
 			unset($args->password);
 		}
 
+		if($args->find_account_answer && !$password_is_hashed)
+		{
+			$args->find_account_answer = $oMemberModel->hashPassword($args->find_account_answer);
+		}
+		elseif(!$args->find_account_answer)
+		{
+			unset($args->find_account_answer);
+		}
+
 		// Check if ID is prohibited
 		if($oMemberModel->isDeniedID($args->user_id))
 		{
@@ -2237,6 +2296,21 @@ class memberController extends member
 			$args->password = $orgMemberInfo->password;
 		}
 
+		if($args->find_account_answer) {
+			$args->find_account_answer = $oMemberModel->hashPassword($args->find_account_answer);
+		}
+		else
+		{
+			$oPassword =  new Password();
+			$hashed = $oPassword->checkAlgorithm($orgMemberInfo->find_account_answer);
+
+			if($hashed) {
+				$args->find_account_answer = $orgMemberInfo->find_account_answer;
+			} else {
+				$args->find_account_answer = $oPassword->createHash($orgMemberInfo->find_account_answer);
+			}
+		}
+
 		if(!$args->user_name) $args->user_name = $orgMemberInfo->user_name;
 		if(!$args->user_id) $args->user_id = $orgMemberInfo->user_id;
 		if(!$args->nick_name) $args->nick_name = $orgMemberInfo->nick_name;
@@ -2338,6 +2412,16 @@ class memberController extends member
 		$this->_clearMemberCache($args->member_srl);
 
 		return $output;
+	}
+
+	function updateFindAccountAnswer($member_srl, $answer)
+	{
+		$oPassword =  new Password();
+
+		$args = new stdClass();
+		$args->member_srl = $member_srl;
+		$args->find_account_answer = $oPassword->createHash($answer);
+		$output = executeQuery('member.updateFindAccountAnswer', $args);
 	}
 
 	/**
