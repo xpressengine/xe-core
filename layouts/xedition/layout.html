@@ -208,7 +208,7 @@
 				<ul>
 					<!-- search -->
 					<li cond="$layout_info->enable_intergration_search === 'Y'" class="click">
-						<a href="#" title="{$lang->cmd_search}"><i class="xi-magnifier"></i><span class="blind">{$lang->cmd_search}</span></a>
+						<a href="#" title="{$lang->cmd_search}"><i class="xi-search"></i><span class="blind">{$lang->cmd_search}</span></a>
 					</li>
 					<!-- admin -->
 					<li cond="$logged_info->is_admin == 'Y'">
@@ -235,7 +235,7 @@
 							<!-- /after_login -->
 						<!--@else-->
 							<!-- before_login -->
-							<a href="{getUrl('act', 'dispMemberLoginForm')}" id="ly_btn"><i class="xi-user-add"></i><span class="blind">{$lang->cmd_login}/{$lang->cmd_signup}</span></a>
+							<a href="{getUrl('act', 'dispMemberLoginForm')}" id="ly_btn"><i class="xi-user-plus"></i><span class="blind">{$lang->cmd_login}/{$lang->cmd_signup}</span></a>
 							<div class="ly ly_login">
 								<ul>
 									<li><a id="ly_login_btn" href="{getUrl('act', 'dispMemberLoginForm')}">{$lang->cmd_login}</a></li>
