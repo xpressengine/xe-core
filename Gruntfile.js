@@ -23,6 +23,7 @@ module.exports = function(grunt) {
 				},
 				src: [
 					'common/js/modernizr.js',
+					'common/js/URI.js',
 					'common/js/common.js',
 					'common/js/js_app.js',
 					'common/js/xml2json.js',

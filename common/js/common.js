@@ -137,9 +137,9 @@ if(jQuery) jQuery.noConflict();
 			}
 		}
 	};
+
+	$.extend(window.XE, URI.noConflict(true));
 }) (jQuery);
-
-
 
 /* jQuery(document).ready() */
 jQuery(function($) {

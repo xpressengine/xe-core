@@ -393,6 +393,7 @@ class HTMLDisplayHandler
 			$oContext->loadFile(array('./common/js/jquery.js', 'head', 'gte IE 9', -110000), true);
 			$oContext->loadFile(array('./common/js/modernizr.js', 'head', '', -100000), true);
 			$oContext->loadFile(array('./common/js/x.js', 'head', '', -100000), true);
+			$oContext->loadFile(array('./common/js/URI.js', 'head', '', -100000), true);
 			$oContext->loadFile(array('./common/js/common.js', 'head', '', -100000), true);
 			$oContext->loadFile(array('./common/js/js_app.js', 'head', '', -100000), true);
 			$oContext->loadFile(array('./common/js/xml2json.js', 'head', '', -100000), true);
