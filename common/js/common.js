@@ -146,8 +146,8 @@ if(jQuery) jQuery.noConflict();
 				target_url = target_url.absoluteTo(window.request_uri);
 			}
 
-			base_url = base_url.hostname() + base_url.port() + (include_path) ? base_url.directory() : null;
-			target_url = target_url.hostname() + target_url.port() + (include_path) ? target_url.directory() : null;
+			base_url = base_url.hostname() + base_url.port() + ((include_path) ? base_url.directory() : '');
+			target_url = target_url.hostname() + target_url.port() + ((include_path) ? target_url.directory() : '');
 
 			return base_url === target_url;
 		}
@@ -158,9 +158,15 @@ if(jQuery) jQuery.noConflict();
 
 /* jQuery(document).ready() */
 jQuery(function($) {
-	$('a[target]').each(function(event) {
+	$('a[target]').each(function() {
 		var $this = $(this);
 		var href = $this.attr('href');
+		var target = $this.attr('target');
+
+		if(target === '_top' || target === '_self' || target === '_parent') {
+			$this.data('noopener', false);
+			return;
+		}
 
 		if(!window.XE.isSameOrigin(href, true)) {
 			$this.data('noopener', true);
@@ -168,13 +174,13 @@ jQuery(function($) {
 		}
 	});
 
-	$('body').on('click', 'a[target]', function(event) {
+	$('body').on('click', 'a[target]', function(e) {
 		var $this = $(this);
 		var href = $this.attr('href');
 
-		if($this.data('noopener') || !window.XE.isSameOrigin(href, true)) {
+		if($this.data('noopener') !== false && !window.XE.isSameOrigin(href, true)) {
 			blankshield.open(href);
-			event.preventDefault();
+			e.preventDefault();
 		}
 	});
 
