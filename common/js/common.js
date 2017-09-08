@@ -159,12 +159,12 @@ if(jQuery) jQuery.noConflict();
 /* jQuery(document).ready() */
 jQuery(function($) {
 	$('a[target]').each(function(event) {
-		var href = $(this).attr('href');
+		var $this = $(this);
+		var href = $this.attr('href');
 
 		if(!window.XE.isSameOrigin(href, true)) {
-			$(this).data('noopener', true);
-			$(this).attr('rel', 'noopener');
-			$(this).css('color', 'red');
+			$this.data('noopener', true);
+			$this.attr('rel', 'noopener');
 		}
 	});
 
@@ -172,7 +172,7 @@ jQuery(function($) {
 		var $this = $(this);
 		var href = $this.attr('href');
 
-		if($(this).data('noopener') || !window.XE.isSameOrigin(href, true)) {
+		if($this.data('noopener') || !window.XE.isSameOrigin(href, true)) {
 			blankshield.open(href);
 			event.preventDefault();
 		}
