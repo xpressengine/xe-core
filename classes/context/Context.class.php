@@ -1635,7 +1635,7 @@ class Context
 				array_shift($args_list);
 			}
 		}
-		else
+		elseif($_SERVER['REQUEST_METHOD'] == 'GET')
 		{
 			// Otherwise, make GET variables into array
 			$get_vars = get_object_vars($self->get_vars);
