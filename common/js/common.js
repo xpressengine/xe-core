@@ -169,8 +169,15 @@ jQuery(function($) {
 		}
 
 		if(!window.XE.isSameOrigin(href, true)) {
+			var rel = $this.attr('rel');
+
 			$this.data('noopener', true);
-			$this.attr('rel', 'noopener');
+
+			if(typeof rel == 'string') {
+				$this.attr('rel', rel + ' noopener');
+			} else {
+				$this.attr('rel', 'noopener');
+			}
 		}
 	});
 
@@ -179,6 +186,14 @@ jQuery(function($) {
 		var href = $this.attr('href');
 
 		if($this.data('noopener') !== false && !window.XE.isSameOrigin(href, true)) {
+			var rel = $this.attr('rel');
+
+			if(typeof rel == 'string') {
+				$this.attr('rel', rel + ' noopener');
+			} else {
+				$this.attr('rel', 'noopener');
+			}
+
 			blankshield.open(href);
 			e.preventDefault();
 		}
