@@ -137,8 +137,7 @@ if(jQuery) jQuery.noConflict();
 			}
 		},
 
-		isSameOrigin: function(url, include_path) {
-			var include_path = (typeof include_path !== 'undefined') ? include_path : false;
+		isSameHost: function(url) {
 			var base_url = window.XE.URI(window.request_uri).normalizePort();
 			var target_url = window.XE.URI(url).normalizePort();
 
@@ -146,8 +145,8 @@ if(jQuery) jQuery.noConflict();
 				target_url = target_url.absoluteTo(window.request_uri);
 			}
 
-			base_url = base_url.hostname() + base_url.port() + ((include_path) ? base_url.directory() : '');
-			target_url = target_url.hostname() + target_url.port() + ((include_path) ? target_url.directory() : '');
+			base_url = base_url.hostname() + base_url.port() + base_url.directory();
+			target_url = target_url.hostname() + target_url.port() + target_url.directory();
 
 			return base_url === target_url;
 		}
@@ -168,7 +167,7 @@ jQuery(function($) {
 			return;
 		}
 
-		if(!window.XE.isSameOrigin(href, true)) {
+		if(!window.XE.isSameHost(href)) {
 			var rel = $this.attr('rel');
 
 			$this.data('noopener', true);
@@ -185,7 +184,7 @@ jQuery(function($) {
 		var $this = $(this);
 		var href = $this.attr('href');
 
-		if($this.data('noopener') !== false && !window.XE.isSameOrigin(href, true)) {
+		if($this.data('noopener') !== false && !window.XE.isSameHost(href)) {
 			var rel = $this.attr('rel');
 
 			if(typeof rel == 'string') {
@@ -402,7 +401,7 @@ function winopen(url, target, attribute) {
 	if(typeof target == 'undefined') target = '_blank';
 	if(typeof attribute == 'undefined') attribute = '';
 
-	if(!window.XE.isSameOrigin(url, true)) {
+	if(!window.XE.isSameHost(url)) {
 		window.blankshield.open(url, target, attribute);
 	} else {
 		var win = window.open(url, target, attribute);
@@ -1046,7 +1045,7 @@ jQuery(function($){
 
 		var features = 'left=10,top=10,width=10,height=10,resizable=no,scrollbars=no,toolbars=no';
 
-		if(window.XE.isSameOrigin(href, true)) {
+		if(window.XE.isSameHost(href)) {
 			win = window.open(href, name, features);
 			if(win) win.focus();
 		} else {
