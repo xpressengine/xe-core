@@ -9,13 +9,13 @@
 		<th scope="row"><div>{$lang->component_author}</div></th>
 		<td>
 			<!--@foreach($component->author as $author)-->
-			{$author->name} <!--@if($author->homepage || $author->email_address)-->(<!--@if($author->homepage)--><a href="{$author->homepage}" onclick="window.open(this.href);return false;">{$author->homepage}</a><!--@end--><!--@if($author->homepage && $author->email_address)-->, <!--@end--><!--@if($author->email_address)--><a href="mailto:{$author->email_address}">{$author->email_address}</a><!--@end-->)<!--@end--><br />
+			{$author->name} <!--@if($author->homepage || $author->email_address)-->(<!--@if($author->homepage)--><a href="{$author->homepage}" target="_blank" rel="noopener">{$author->homepage}</a><!--@end--><!--@if($author->homepage && $author->email_address)-->, <!--@end--><!--@if($author->email_address)--><a href="mailto:{$author->email_address}">{$author->email_address}</a><!--@end-->)<!--@end--><br />
 			<!--@end-->
 	</tr>
 	<!--@if($component->homepage)-->
 	<tr>
 		<th scope="row"><div>{$lang->homepage}</div></th>
-		<td class="blue"><a href="{$component->homepage}" onclick="window.open(this.href);return false;">{$component->homepage}</a></td>
+		<td class="blue"><a href="{$component->homepage}" target="_blank" rel="noopener">{$component->homepage}</a></td>
 	</tr><!--@end-->
 	<tr>
 		<th scope="row"><div>{$lang->regdate}</div></th>

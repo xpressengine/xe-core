@@ -135,6 +135,20 @@ if(jQuery) jQuery.noConflict();
 
 				area.css({ top:areaOffset.top, left:areaOffset.left }).show().focus();
 			}
+		},
+
+		isSameHost: function(url) {
+			var base_url = window.XE.URI(window.request_uri).normalizePort();
+			var target_url = window.XE.URI(url).normalizePort();
+
+			if(!target_url.hostname()) {
+				target_url = target_url.absoluteTo(window.request_uri);
+			}
+
+			base_url = base_url.hostname() + base_url.port() + base_url.directory();
+			target_url = target_url.hostname() + target_url.port() + target_url.directory();
+
+			return base_url === target_url;
 		}
 	};
 
@@ -143,6 +157,46 @@ if(jQuery) jQuery.noConflict();
 
 /* jQuery(document).ready() */
 jQuery(function($) {
+	$('a[target]').each(function() {
+		var $this = $(this);
+		var href = $this.attr('href');
+		var target = $this.attr('target');
+
+		if(target === '_top' || target === '_self' || target === '_parent') {
+			$this.data('noopener', false);
+			return;
+		}
+
+		if(!window.XE.isSameHost(href)) {
+			var rel = $this.attr('rel');
+
+			$this.data('noopener', true);
+
+			if(typeof rel == 'string') {
+				$this.attr('rel', rel + ' noopener');
+			} else {
+				$this.attr('rel', 'noopener');
+			}
+		}
+	});
+
+	$('body').on('click', 'a[target]', function(e) {
+		var $this = $(this);
+		var href = $this.attr('href');
+
+		if($this.data('noopener') !== false && !window.XE.isSameHost(href)) {
+			var rel = $this.attr('rel');
+
+			if(typeof rel == 'string') {
+				$this.attr('rel', rel + ' noopener');
+			} else {
+				$this.attr('rel', 'noopener');
+			}
+
+			blankshield.open(href);
+			e.preventDefault();
+		}
+	});
 
 	/* select - option의 disabled=disabled 속성을 IE에서도 체크하기 위한 함수 */
 	if($.browser.msie) {
@@ -332,20 +386,29 @@ function isDef() {
  **/
 var winopen_list = [];
 function winopen(url, target, attribute) {
-	if(typeof(xeVid)!='undefined' && url.indexOf(request_uri)>-1 && !url.getQuery('vid')) url = url.setQuery('vid',xeVid);
+	if(typeof xeVid != 'undefined' && url.indexOf(request_uri) >- 1 && !url.getQuery('vid')) {
+		url = url.setQuery('vid',xeVid);
+	}
+
 	try {
-		if(target != "_blank" && winopen_list[target]) {
+		if(target != '_blank' && winopen_list[target]) {
 			winopen_list[target].close();
 			winopen_list[target] = null;
 		}
 	} catch(e) {
 	}
 
-	if(typeof(target) == 'undefined') target = '_blank';
-	if(typeof(attribute) == 'undefined') attribute = '';
-	var win = window.open(url, target, attribute);
-	win.focus();
-	if(target != "_blank") winopen_list[target] = win;
+	if(typeof target == 'undefined') target = '_blank';
+	if(typeof attribute == 'undefined') attribute = '';
+
+	if(!window.XE.isSameHost(url)) {
+		window.blankshield.open(url, target, attribute);
+	} else {
+		var win = window.open(url, target, attribute);
+		win.focus();
+		if(target != '_blank') winopen_list[target] = win;
+	}
+
 }
 
 /**
@@ -353,8 +416,6 @@ function winopen(url, target, attribute) {
  * common/tpl/popup_layout.html이 요청되는 XE내의 팝업일 경우에 사용
  **/
 function popopen(url, target) {
-	if(typeof(target) == "undefined") target = "_blank";
-	if(typeof(xeVid)!='undefined' && url.indexOf(request_uri)>-1 && !url.getQuery('vid')) url = url.setQuery('vid',xeVid);
 	winopen(url, target, "width=800,height=600,scrollbars=yes,resizable=yes,toolbars=no");
 }
 
@@ -370,19 +431,13 @@ function sendMailTo(to) {
  **/
 function move_url(url, open_window) {
 	if(!url) return false;
-	if(typeof(open_window) == 'undefined') open_window = 'N';
-	if(open_window=='N') {
-		open_window = false;
+
+	if(/^\./.test(url)) url = window.request_uri + url;
+
+	if(typeof open_window == 'undefined' || open_window == 'N') {
+		location.href = url;
 	} else {
-		open_window = true;
-	}
-
-	if(/^\./.test(url)) url = request_uri+url;
-
-	if(open_window) {
 		winopen(url);
-	} else {
-		location.href=url;
 	}
 
 	return false;
@@ -980,15 +1035,24 @@ jQuery(function($){
 	 * Create popup windows automatically.
 	 * Find anchors that have the '_xe_popup' class, then add popup script to them.
 	 */
-	$('a._xe_popup').click(function(){
-		var $this = $(this), name = $this.attr('name'), href = $this.attr('href'), win;
+	$('body').on('click', 'a._xe_popup', function(event) {
+		var $this = $(this);
+		var name = $this.attr('name');
+		var href = $this.attr('href');
+		var win;
 
-		if(!name) name = '_xe_popup_'+Math.floor(Math.random()*1000);
+		if(!name) name = '_xe_popup_' + Math.floor(Math.random() * 1000);
 
-		win = window.open(href, name, 'left=10,top=10,width=10,height=10,resizable=no,scrollbars=no,toolbars=no');
-		if(win) win.focus();
+		var features = 'left=10,top=10,width=10,height=10,resizable=no,scrollbars=no,toolbars=no';
 
-		// cancel default action
+		if(window.XE.isSameHost(href)) {
+			win = window.open(href, name, features);
+			if(win) win.focus();
+		} else {
+			window.blankshield.open(href, name, features);
+		}
+
+		event.preventDefault();
 		return false;
 	});
 
