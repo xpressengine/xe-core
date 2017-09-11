@@ -138,8 +138,8 @@ if(jQuery) jQuery.noConflict();
 		},
 
 		isSameHost: function(url) {
-			var base_url = window.XE.URI(window.request_uri).normalizePort();
-			var target_url = window.XE.URI(url).normalizePort();
+			var base_url = window.XE.URI(window.request_uri).normalizePort().normalizePathname();
+			var target_url = window.XE.URI(url).normalizePort().normalizePathname();
 
 			if(!target_url.hostname()) {
 				target_url = target_url.absoluteTo(window.request_uri);
@@ -148,7 +148,7 @@ if(jQuery) jQuery.noConflict();
 			base_url = base_url.hostname() + base_url.port() + base_url.directory();
 			target_url = target_url.hostname() + target_url.port() + target_url.directory();
 
-			return base_url === target_url;
+			return target_url.indexOf(base_url) !== -1;
 		}
 	};
 
