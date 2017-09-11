@@ -1640,6 +1640,19 @@ class Context
 			// Otherwise, make GET variables into array
 			$get_vars = get_object_vars($self->get_vars);
 		}
+		else
+		{
+			if(!!$self->get_vars->module) $get_vars['module'] = $self->get_vars->module;
+			if(!!$self->get_vars->mid) $get_vars['mid'] = $self->get_vars->mid;
+			if(!!$self->get_vars->act) $get_vars['act'] = $self->get_vars->act;
+			if(!!$self->get_vars->page) $get_vars['page'] = $self->get_vars->page;
+			if(!!$self->get_vars->search_target) $get_vars['search_target'] = $self->get_vars->search_target;
+			if(!!$self->get_vars->search_keyword) $get_vars['search_keyword'] = $self->get_vars->search_keyword;
+			if($get_vars['act'] == 'IS')
+			{
+				if(!!$self->get_vars->is_keyword) $get_vars['is_keyword'] = $self->get_vars->is_keyword;
+			}
+		}
 
 		// arrange args_list
 		for($i = 0, $c = count($args_list); $i < $c; $i += 2)
