@@ -148,7 +148,7 @@ if(jQuery) jQuery.noConflict();
 			base_url = base_url.hostname() + base_url.port() + base_url.directory();
 			target_url = target_url.hostname() + target_url.port() + target_url.directory();
 
-			return target_url.indexOf(base_url) !== -1;
+			return target_url.indexOf(base_url) === 0;
 		}
 	};
 
