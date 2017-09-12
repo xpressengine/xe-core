@@ -23,6 +23,8 @@ module.exports = function(grunt) {
 				},
 				src: [
 					'common/js/modernizr.js',
+					'common/js/URI.js',
+					'common/js/blankshield.min.js',
 					'common/js/common.js',
 					'common/js/js_app.js',
 					'common/js/xml2json.js',
@@ -181,6 +183,8 @@ module.exports = function(grunt) {
 					'common/js/xe.js',
 					'common/js/xml2json.js',
 					'common/js/modernizr.js',
+					'common/js/blankshield.min.js',
+					'common/js/URI.js',
 					'vendor/**',
 					'tests/**',
 				]

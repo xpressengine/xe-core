@@ -2266,7 +2266,7 @@ class documentController extends document
 			{
 				if(!$oDocument->get('member_srl') || $oDocument->get('member_srl')==$sender_member_srl) continue;
 
-				if($type=='move') $purl = sprintf("<a href=\"%s\" onclick=\"window.open(this.href);return false;\">%s</a>", $oDocument->getPermanentUrl(), $oDocument->getPermanentUrl());
+				if($type=='move') $purl = sprintf("<a href=\"%s\" target=\"_blank\">%s</a>", $oDocument->getPermanentUrl(), $oDocument->getPermanentUrl());
 				else $purl = "";
 				$content = sprintf("<div>%s</div><hr />%s<div style=\"font-weight:bold\">%s</div>%s",$message_content, $purl, $oDocument->getTitleText(), $oDocument->getContent(false, false, false));
 
