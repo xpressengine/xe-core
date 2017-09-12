@@ -312,6 +312,9 @@ class FrontEndFileHandler extends Handler
 	 */
 	function getJsFileList($type = 'head')
 	{
+
+		$ignore = array('modernizr.js', 'common.js', 'js_app.js', 'xml2json.js', 'xml_handler.js', 'xml_js_filter.js');
+
 		if($type == 'head')
 		{
 			$map = &$this->jsHeadMap;
@@ -330,6 +333,14 @@ class FrontEndFileHandler extends Handler
 		{
 			foreach($indexedMap as $file)
 			{
+				if((!__DEBUG__ && __XE_VERSION_STABLE__) && $file->filePath === '/common/js')
+				{
+					if(in_array($file->fileName, $ignore))
+					{
+						continue;
+					}
+				}
+
 				$query = '';
 				if(!$file->external && is_readable($file->cdnPath . '/' . $file->fileName))
 				{
