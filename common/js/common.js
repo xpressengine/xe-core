@@ -8,6 +8,7 @@
 if(jQuery) jQuery.noConflict();
 
 if(typeof window.XE == "undefined") {
+	/*jshint -W082 */
 	(function($) {
 		/* OS check */
 		var UA = navigator.userAgent.toLowerCase();
