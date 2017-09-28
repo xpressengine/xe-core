@@ -27,7 +27,7 @@ if(typeof window.XE == "undefined") {
 		 * @brief XE 공용 유틸리티 함수
 		 * @namespace XE
 		 */
-		window.XE = {
+		global.XE = {
 			loaded_popup_menus : [],
 			addedDocument : [],
 			/**
@@ -140,22 +140,32 @@ if(typeof window.XE == "undefined") {
 			},
 
 			isSameHost: function(url) {
-				var base_url = window.XE.URI(window.request_uri).normalizePort().normalizePathname();
-				var target_url = window.XE.URI(url).normalizePort().normalizePathname();
+				var base_url = global.XE.URI(global.request_uri).normalizePathname();
+				var target_url = global.XE.URI(url).normalizePathname();
+				var port = [Number(global.http_port) || 80, Number(global.https_port) || 443];
 
 				if(!target_url.hostname()) {
-					target_url = target_url.absoluteTo(window.request_uri);
+					target_url = target_url.absoluteTo(global.request_uri);
 				}
 
-				base_url = base_url.hostname() + base_url.port() + base_url.directory();
-				target_url = target_url.hostname() + target_url.port() + target_url.directory();
+				var target_port = target_url.port();
+				if(!target_port) {
+					target_port = (target_url.protocol() == 'http') ? 80 : 443;
+				}
+
+				if(jQuery.inArray(Number(target_port), port) === -1) {
+					return false;
+				}
+
+				base_url = base_url.hostname() + base_url.directory();
+				target_url = target_url.hostname() + target_url.directory();
 
 				return target_url.indexOf(base_url) === 0;
 			}
 		};
 
 		$.extend(window.XE, URI.noConflict(true));
-	}) (jQuery);
+	}) (jQuery, window || this || global);
 
 	/* jQuery(document).ready() */
 	jQuery(function($) {
