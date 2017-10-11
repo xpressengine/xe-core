@@ -903,7 +903,7 @@ class moduleAdminController extends module
 			$buff = array("<?php if(!defined('__XE__')) exit();");
 			foreach($langMap[$langCode] as $code => $value)
 			{
-				$buff[] = sprintf('$lang[\'%s\'] = \'%s\';', $code, addcslashes($value, "'"));
+				$buff[] = sprintf('$lang[\'%s\'] = \'%s\';', $code, addcslashes(stripcslashes($value), "'"));
 			}
 			if (!@file_put_contents(sprintf('%s/%d.%s.php', $cache_path, $args->site_srl, $langCode), join(PHP_EOL, $buff), LOCK_EX))
 			{
