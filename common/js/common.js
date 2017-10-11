@@ -164,6 +164,8 @@ if(typeof window.XE == "undefined") {
 			var href = $this.attr('href');
 			var target = $this.attr('target');
 
+			if(!target || !href) return;
+
 			if(target === '_top' || target === '_self' || target === '_parent') {
 				$this.data('noopener', false);
 				return;
@@ -185,6 +187,8 @@ if(typeof window.XE == "undefined") {
 		$('body').on('click', 'a[target]', function(e) {
 			var $this = $(this);
 			var href = $this.attr('href');
+
+			if(!href) return;
 
 			if($this.data('noopener') !== false && !window.XE.isSameHost(href)) {
 				var rel = $this.attr('rel');
