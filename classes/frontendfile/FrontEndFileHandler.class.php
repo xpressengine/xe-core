@@ -312,8 +312,8 @@ class FrontEndFileHandler extends Handler
 	 */
 	function getJsFileList($type = 'head')
 	{
-
 		$ignore = array('modernizr.js', 'common.js', 'js_app.js', 'xml2json.js', 'xml_handler.js', 'xml_js_filter.js');
+		$pathCommonJs = getScriptPath() . 'common/js';
 
 		if($type == 'head')
 		{
@@ -333,7 +333,7 @@ class FrontEndFileHandler extends Handler
 		{
 			foreach($indexedMap as $file)
 			{
-				if((!__DEBUG__ && __XE_VERSION_STABLE__) && $file->filePath === '/common/js')
+				if((!__DEBUG__ && __XE_VERSION_STABLE__) && $file->filePath === $pathCommonJs)
 				{
 					if(in_array($file->fileName, $ignore))
 					{
