@@ -293,6 +293,10 @@ if(typeof window.XE == "undefined") {
 			var url = global.XE.URI(this);
 			var queries = url.search(true);
 
+			if(typeof queries[key] == 'undefined') {
+				return '';
+			}
+
 			return queries[key];
 		};
 
@@ -317,7 +321,7 @@ if(typeof window.XE == "undefined") {
 		 * @brief string prototype으로 trim 함수 추가
 		 **/
 		if(!String.prototype.trim) {
-			String.prototype.trim1 = function() {
+			String.prototype.trim = function() {
 				return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
 			};
 		}
