@@ -46,7 +46,7 @@ class rssAdminController extends rss
 			// Ignore if the file is not the one which has been successfully uploaded
 			if($image_obj['tmp_name'] && is_uploaded_file($image_obj['tmp_name']) && checkUploadedFile($image_obj['tmp_name']))
 			{
-				// Ignore if the file is not an image (swf is accepted ~)
+				// Ignore if the file is not an image
 				$image_obj['name'] = Context::convertEncodingStr($image_obj['name']);
 
 				if(!preg_match("/\.(jpg|jpeg|gif|png)$/i", $image_obj['name'])) $alt_message = 'msg_rss_invalid_image_format';
