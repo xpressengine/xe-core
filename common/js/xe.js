@@ -984,7 +984,8 @@ this._string),this._dom_element[this._dom_attribute]=this._string;else if(!0===b
 if(jQuery) jQuery.noConflict();
 
 if(typeof window.XE == "undefined") {
-	(function($) {
+	/*jshint -W082 */
+	(function($, global) {
 		/* OS check */
 		var UA = navigator.userAgent.toLowerCase();
 		$.os = {
@@ -1002,9 +1003,13 @@ if(typeof window.XE == "undefined") {
 		 * @brief XE 공용 유틸리티 함수
 		 * @namespace XE
 		 */
-		window.XE = {
+		global.XE = {
 			loaded_popup_menus : [],
 			addedDocument : [],
+			URI: global.URI,
+			URITemplate : global.URITemplate,
+			IPv6: global.IPv6,
+			SecondLevelDomains: global.SecondLevelDomains,
 			/**
 			 * @brief 특정 name을 가진 체크박스들의 checked 속성 변경
 			 * @param [itemName='cart',][options={}]
@@ -1115,36 +1120,47 @@ if(typeof window.XE == "undefined") {
 			},
 
 			isSameHost: function(url) {
-				var base_url = window.XE.URI(window.request_uri).normalizePort().normalizePathname();
-				var target_url = window.XE.URI(url).normalizePort().normalizePathname();
+				var base_url = global.XE.URI(global.request_uri).normalizePathname();
+				var target_url = global.XE.URI(url).normalizePathname();
+				var port = [Number(global.http_port) || 80, Number(global.https_port) || 443];
 
 				if(!target_url.hostname()) {
-					target_url = target_url.absoluteTo(window.request_uri);
+					target_url = target_url.absoluteTo(global.request_uri);
 				}
 
-				base_url = base_url.hostname() + base_url.port() + base_url.directory();
-				target_url = target_url.hostname() + target_url.port() + target_url.directory();
+				var target_port = target_url.port();
+				if(!target_port) {
+					target_port = (target_url.protocol() == 'http') ? 80 : 443;
+				}
+
+				if(jQuery.inArray(Number(target_port), port) === -1) {
+					return false;
+				}
+
+				base_url = base_url.hostname() + base_url.directory();
+				target_url = target_url.hostname() + target_url.directory();
 
 				return target_url.indexOf(base_url) === 0;
 			}
 		};
-
-		$.extend(window.XE, URI.noConflict(true));
-	}) (jQuery);
+	}) (jQuery, window || global);
 
 	/* jQuery(document).ready() */
-	jQuery(function($) {
+	(function($, global){
+		$(function() {
 		$('a[target]').each(function() {
 			var $this = $(this);
 			var href = $this.attr('href');
 			var target = $this.attr('target');
+
+			if(!target || !href) return;
 
 			if(target === '_top' || target === '_self' || target === '_parent') {
 				$this.data('noopener', false);
 				return;
 			}
 
-			if(!window.XE.isSameHost(href)) {
+			if(!global.XE.isSameHost(href)) {
 				var rel = $this.attr('rel');
 
 				$this.data('noopener', true);
@@ -1160,6 +1176,8 @@ if(typeof window.XE == "undefined") {
 		$('body').on('click', 'a[target]', function(e) {
 			var $this = $(this);
 			var href = $this.attr('href');
+
+			if(!href) return;
 
 			if($this.data('noopener') !== false && !window.XE.isSameHost(href)) {
 				var rel = $this.attr('rel');
@@ -1241,99 +1259,71 @@ if(typeof window.XE == "undefined") {
 			}(), 3000);
 		});
 	});
+	})(jQuery, window || global);
 
-	(function(){ // String extension methods
-		function isSameUrl(a,b) {
-			return (a.replace(/#.*$/, '') === b.replace(/#.*$/, ''));
-		}
-		var isArray = Array.isArray || function(obj){ return Object.prototype.toString.call(obj)=='[object Array]'; };
-
+	(function(global){ // String extension methods
 		/**
 		 * @brief location.href에서 특정 key의 값을 return
 		 **/
 		String.prototype.getQuery = function(key) {
-			var loc = isSameUrl(this, window.location.href) ? current_url : this;
-			var idx = loc.indexOf('?');
-			if(idx == -1) return null;
-			var query_string = loc.substr(idx+1, this.length), args = {};
-			query_string.replace(/([^=]+)=([^&]*)(&|$)/g, function() { args[arguments[1]] = arguments[2]; });
+			var url = global.XE.URI(this);
+			var queries = url.search(true);
 
-			var q = args[key];
-			if(typeof(q)=='undefined') q = '';
+			if(typeof queries[key] == 'undefined') {
+				return '';
+			}
 
-			return q;
+			return queries[key];
 		};
 
 		/**
 		 * @brief location.href에서 특정 key의 값을 return
 		 **/
 		String.prototype.setQuery = function(key, val) {
-			var loc = isSameUrl(this, window.location.href) ? current_url : this;
-			var idx = loc.indexOf('?');
-			var uri = loc.replace(/#$/, '');
-			var act, re, v, toReplace, query_string;
+			var uri = global.XE.URI(this);
 
-			if (typeof(val)=='undefined') val = '';
-
-			if (idx != -1) {
-				var args = {}, q_list = [];
-				query_string = uri.substr(idx + 1, loc.length);
-				uri = loc.substr(0, idx);
-				query_string.replace(/([^=]+)=([^&]*)(&|$)/g, function(all,key,val) { args[key] = val; });
-
-				args[key] = val;
-
-				for (var prop in args) {
-					if (!args.hasOwnProperty(prop)) continue;
-					if (!(v = String(args[prop]).trim())) continue;
-					q_list.push(prop+'='+decodeURI(v));
-				}
-
-				query_string = q_list.join('&');
-				uri = uri + (query_string ? '?' + encodeURI(query_string) : '');
-			} else {
-				if (String(val).trim()) {
-					query_string = '?' + key + '=' + val;
-					uri = uri + encodeURI(query_string);
+			if(typeof key != 'undefined') {
+				if(typeof val == "undefined" || val === '' || val === null) {
+					uri.removeSearch(key);
+				} else {
+					uri.setSearch(key, String(val));
 				}
 			}
 
-			var bUseSSL = !!window.enforce_ssl;
-			if (!bUseSSL && isArray(window.ssl_actions) && (act=uri.getQuery('act'))) {
-				for (var i=0,c=ssl_actions.length; i < c; i++) {
-					if (ssl_actions[i] === act) {
-						bUseSSL = true;
-						break;
-					}
-				}
-			}
-
-			re = /https?:\/\/([^:\/]+)(:\d+|)/i;
-			if (bUseSSL && re.test(uri)) {
-				toReplace = 'https://'+RegExp.$1;
-				if (window.https_port && https_port != 443) toReplace += ':' + https_port;
-				uri = uri.replace(re, toReplace);
-			}
-			if (!bUseSSL && re.test(uri)) {
-				toReplace = 'http://'+RegExp.$1;
-				if (window.http_port && http_port != 80) toReplace += ':' + http_port;
-				uri = uri.replace(re, toReplace);
-			}
-
-			// insert index.php if it isn't included
-			uri = uri.replace(/\/(index\.php)?\?/, '/index.php?');
-
-			return uri;
+			return normailzeUri(uri).toString();
 		};
 
 		/**
 		 * @brief string prototype으로 trim 함수 추가
 		 **/
-		String.prototype.trim = function() {
-			return this.replace(/(^\s*)|(\s*$)/g, "");
-		};
+		if(!String.prototype.trim) {
+			String.prototype.trim = function() {
+				return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+			};
+		}
 
-	})();
+		function normailzeUri(uri) {
+			var query = uri.search(true);
+			var filename = uri.filename() || 'index.php';
+			var protocol = (global.enforce_ssl === true) ? 'https' : 'http';
+			var port = 80;
+
+			if(global.XE.isSameHost(uri.toString())) {
+				if(jQuery.isEmptyObject(query)) filename = '';
+			}
+
+			if(protocol !== 'https' && query.act && jQuery.inArray(query.act, global.ssl_actions) !== -1) {
+				protocol = 'https';
+			}
+
+			port = (protocol === 'http') ? global.http_port : global.https_port;
+
+			return uri.protocol(protocol)
+				.port(port || null)
+				.filename(filename)
+				.normalizePort();
+		}
+	})(window || global);
 
 	/**
 	 * @brief xSleep(micro time)

@@ -717,7 +717,7 @@ class fileController extends file
 		$random = new Password();
 
 		// Set upload path by checking if the attachement is an image or other kinds of file
-		if(preg_match("/\.(jpe?g|gif|png|wm[va]|mpe?g|avi|swf|flv|mp[1-4]|as[fx]|wav|midi?|moo?v|qt|r[am]{1,2}|m4v)$/i", $file_info['name']))
+		if(preg_match("/\.(jpe?g|gif|png|wm[va]|mpe?g|avi|flv|mp[1-4]|as[fx]|wav|midi?|moo?v|qt|r[am]{1,2}|m4v)$/i", $file_info['name']))
 		{
 			$path = sprintf("./files/attach/images/%s/%s", $module_srl,getNumberingPath($upload_target_srl,3));
 
@@ -948,14 +948,14 @@ class fileController extends file
 		if(!$file_list) return;
 
 		$file_count = count($file_list);
-
+ 
 		for($i=0;$i<$file_count;$i++)
 		{
 			unset($file_info);
 			$file_info = $file_list[$i];
 			$old_file = $file_info->uploaded_filename;
 			// Determine the file path by checking if the file is an image or other kinds
-			if(preg_match("/\.(asf|asf|asx|avi|flv|gif|jpeg|jpg|m4a|m4v|mid|midi|moov|mov|mp1|mp2|mp3|mp4|mpeg|mpg|ogg|png|qt|ra|ram|rm|rmm|swf|wav|webm|webp|wma|wmv)$/i", $file_info->source_filename))
+			if(preg_match("/\.(asf|asf|asx|avi|flv|gif|jpeg|jpg|m4a|m4v|mid|midi|moov|mov|mp1|mp2|mp3|mp4|mpeg|mpg|ogg|png|qt|ra|ram|rm|rmm|wav|webm|webp|wma|wmv)$/i", $file_info->source_filename))
 			{
 				$path = sprintf("./files/attach/images/%s/%s/", $target_module_srl,$target_srl);
 				$new_file = $path.$file_info->source_filename;
