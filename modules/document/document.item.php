@@ -617,7 +617,7 @@ class documentItem extends Object
 
 	function getPermanentUrl()
 	{
-		return getFullUrl('','document_srl',$this->get('document_srl'));
+		return getFullUrl('','mid', $this->getDocumentMid('document_srl'), 'document_srl', $this->get('document_srl'));
 	}
 
 	function getTrackbackUrl()
