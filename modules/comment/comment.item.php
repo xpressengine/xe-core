@@ -3,13 +3,13 @@
 
 /**
  * commentItem class
- * comment Object
+ * comment BaseObject
  *
  * @author NAVER (developers@xpressengine.com)
  * @package /modules/comment
  * @version 0.1
  */
-class commentItem extends Object
+class commentItem extends BaseObject
 {
 
 	/**
@@ -62,7 +62,7 @@ class commentItem extends Object
 	}
 
 	/**
-	 * Comment attribute set to Object object
+	 * Comment attribute set to BaseObject object
 	 * @return void
 	 */
 	function setAttribute($attribute)

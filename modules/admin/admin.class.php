@@ -20,11 +20,11 @@ class admin extends ModuleObject
 
 	/**
 	 * Install admin module
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moduleInstall()
 	{
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -52,7 +52,7 @@ class admin extends ModuleObject
 
 	/**
 	 * Update module
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moduleUpdate()
 	{
@@ -84,7 +84,7 @@ class admin extends ModuleObject
 			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**

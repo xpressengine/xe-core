@@ -23,7 +23,7 @@ class addonAdminController extends addonController
 	/**
 	 * Set addon activate
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function procAddonAdminSaveActivate()
 	{
@@ -157,7 +157,7 @@ class addonAdminController extends addonController
 	/**
 	 * Add active/inactive change
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function procAddonAdminToggleActivate()
 	{
@@ -191,7 +191,7 @@ class addonAdminController extends addonController
 	/**
 	 * Add the configuration information input
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function procAddonAdminSetupAddon()
 	{
@@ -225,7 +225,7 @@ class addonAdminController extends addonController
 	 * @param int $site_srl Site srl
 	 * @param string $gtype site or global
 	 * @param string $isUsed Whether to use
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function doInsert($addon, $site_srl = 0, $gtype = 'site', $isUsed = 'N')
 	{
@@ -247,7 +247,7 @@ class addonAdminController extends addonController
 	 * @param int $site_srl Site srl
 	 * @param string $type pc or modile
 	 * @param string $gtype site or global
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function doActivate($addon, $site_srl = 0, $type = "pc", $gtype = 'site')
 	{

@@ -100,7 +100,7 @@ class adminAdminController extends admin
 
 		if(count($truncated) && in_array(FALSE, $truncated))
 		{
-			return new Object(-1, 'msg_self_restart_cache_engine');
+			return new BaseObject(-1, 'msg_self_restart_cache_engine');
 		}
 
 		// remove cache dir
@@ -204,7 +204,7 @@ class adminAdminController extends admin
 
 		$this->makeDefaultDesignFile($designInfo, $vars->site_srl);
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	function makeDefaultDesignFile($designInfo, $site_srl = 0)
@@ -281,7 +281,7 @@ class adminAdminController extends admin
 
 	/**
 	 * Cleanning favorite
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function cleanFavorite()
 	{
@@ -295,7 +295,7 @@ class adminAdminController extends admin
 		$favoriteList = $output->get('favoriteList');
 		if(!$favoriteList)
 		{
-			return new Object();
+			return new BaseObject();
 		}
 
 		$deleteTargets = array();
@@ -313,7 +313,7 @@ class adminAdminController extends admin
 
 		if(!count($deleteTargets))
 		{
-			return new Object();
+			return new BaseObject();
 		}
 
 		$args = new stdClass();
@@ -324,7 +324,7 @@ class adminAdminController extends admin
 			return $output;
 		}
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -491,7 +491,7 @@ class adminAdminController extends admin
 		}
 		else
 		{
-			return new Object(-1, 'fail_to_delete');
+			return new BaseObject(-1, 'fail_to_delete');
 		}
 		$this->setMessage('success_deleted');
 	}
@@ -519,7 +519,7 @@ class adminAdminController extends admin
 		$whitelist = array_unique($whitelist);
 
 		if(!IpFilter::validate($whitelist)) {
-			return new Object(-1, 'msg_invalid_ip');
+			return new BaseObject(-1, 'msg_invalid_ip');
 		}
 
 		$db_info->sitelock_whitelist = $whitelist;
@@ -527,7 +527,7 @@ class adminAdminController extends admin
 		$oInstallController = getController('install');
 		if(!$oInstallController->makeConfigFile())
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		if(!in_array(Context::getRequestMethod(), array('XMLRPC','JSON')))
@@ -567,7 +567,7 @@ class adminAdminController extends admin
 		$oInstallController = getController('install');
 		if(!$oInstallController->makeConfigFile())
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		require_once(_XE_PATH_ . 'classes/security/EmbedFilter.class.php');

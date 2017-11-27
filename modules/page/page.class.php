@@ -15,7 +15,7 @@ class page extends ModuleObject
 		// page generated from the cache directory to use
 		FileHandler::makeDir('./files/cache/page');
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -93,7 +93,7 @@ class page extends ModuleObject
 			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
-		return new Object(0,'success_updated');
+		return new BaseObject(0,'success_updated');
 	}
 
 	/**

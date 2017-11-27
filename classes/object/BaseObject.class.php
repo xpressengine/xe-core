@@ -2,13 +2,18 @@
 /* Copyright (C) NAVER <http://www.navercorp.com> */
 
 /**
- * Every modules inherits from Object class. It includes error, message, and other variables for communicatin purpose.
+ * Every modules inherits from BaseObject class. It includes error, message, and other variables for communicatin purpose.
  *
  * @author NAVER (developers@xpressengine.com)
  */
-class Object
-{
 
+if(version_compare(PHP_VERSION, '7.2', '<'))
+{
+	class_alias('BaseObject', 'Object');
+}
+
+class BaseObject
+{
 	/**
 	 * Error code. If `0`, it is not an error.
 	 * @var int
@@ -40,7 +45,7 @@ class Object
 	 * @param string $message Error message
 	 * @return void
 	 */
-	function Object($error = 0, $message = 'success')
+	function __construct($error = 0, $message = 'success')
 	{
 		$this->setError($error);
 		$this->setMessage($message);
@@ -134,7 +139,7 @@ class Object
 	/**
 	 * Method to set multiple key/value pairs as an additional variables
 	 *
-	 * @param Object|array $object Either object or array containg key/value pairs to be added
+	 * @param BaseObject|array $object Either object or array containg key/value pairs to be added
 	 * @return void
 	 */
 	function adds($object)
@@ -167,7 +172,7 @@ class Object
 	/**
 	 * Method to retrieve an object containing a key/value pairs
 	 *
-	 * @return Object Returns an object containing key/value pairs
+	 * @return BaseObject Returns an object containing key/value pairs
 	 */
 	function gets()
 	{
@@ -193,7 +198,7 @@ class Object
 	/**
 	 * Method to retrieve an object of key/value pairs
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function getObjectVars()
 	{
@@ -227,5 +232,5 @@ class Object
 	}
 
 }
-/* End of file Object.class.php */
-/* Location: ./classes/object/Object.class.php */
+/* End of file BaseObject.class.php */
+/* Location: ./classes/object/BaseObject.class.php */

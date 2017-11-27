@@ -44,7 +44,7 @@ class module extends ModuleObject
 			if(!$output->toBool()) return $output;
 		}
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -435,7 +435,7 @@ class module extends ModuleObject
 
 		if(!is_dir('./files/ruleset')) FileHandler::makeDir('./files/ruleset');
 
-		return new Object(0, 'success_updated');
+		return new BaseObject(0, 'success_updated');
 	}
 
 	function updateForUniqueSiteDomain()

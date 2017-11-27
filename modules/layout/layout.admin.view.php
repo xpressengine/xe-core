@@ -70,7 +70,7 @@ class layoutAdminView extends layout
 
 	/**
 	 * Display list of pc layout all instance
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function dispLayoutAdminAllInstanceList()
 	{
@@ -132,7 +132,7 @@ class layoutAdminView extends layout
 
 	/**
 	 * Display list of pc layout instance
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function dispLayoutAdminInstanceList()
 	{
@@ -161,7 +161,7 @@ class layoutAdminView extends layout
 	/**
 	 * Layout setting page
 	 * Once select a layout with empty value in the DB, then adjust values
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function dispLayoutAdminInsert()
 	{
@@ -288,18 +288,18 @@ class layoutAdminView extends layout
 
 	/**
 	 * Preview a layout
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function dispLayoutAdminPreview()
 	{
 		$layout_srl = Context::get('layout_srl');
 		$code = Context::get('code');
 		$code_css = Context::get('code_css');
-		if(!$layout_srl || !$code) return new Object(-1, 'msg_invalid_request');
+		if(!$layout_srl || !$code) return new BaseObject(-1, 'msg_invalid_request');
 		// Get the layout information
 		$oLayoutModel = getModel('layout');
 		$layout_info = $oLayoutModel->getLayout($layout_srl);
-		if(!$layout_info) return new Object(-1, 'msg_invalid_request');
+		if(!$layout_info) return new BaseObject(-1, 'msg_invalid_request');
 		// Separately handle the layout if its type is faceoff
 		if($layout_info && $layout_info->type == 'faceoff') $oLayoutModel->doActivateFaceOff($layout_info);
 		// Apply CSS directly

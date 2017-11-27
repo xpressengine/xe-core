@@ -38,7 +38,7 @@ class commentView extends comment
 			$current_module_srl = $current_module_info->module_srl;
 			if(!$current_module_srl)
 			{
-				return new Object();
+				return new BaseObject();
 			}
 		}
 
@@ -57,7 +57,7 @@ class commentView extends comment
 		$tpl = $oTemplate->compile($this->module_path . 'tpl', 'comment_module_config');
 		$obj .= $tpl;
 
-		return new Object();
+		return new BaseObject();
 	}
 
 }

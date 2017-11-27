@@ -1004,7 +1004,7 @@ class FirePHP {
    * Encodes an object including members with
    * protected and private visibility
    * 
-   * @param Object $Object The object to be encoded
+   * @param BaseObject $Object The object to be encoded
    * @param int $Depth The current traversal depth
    * @return array All members of the object
    */

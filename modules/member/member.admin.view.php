@@ -24,7 +24,7 @@ class memberAdminView extends member
 	/**
 	 * Member module config.
 	 *
-	 * @var Object
+	 * @var BaseObject
 	 */
 	var $memberConfig = NULL;
 

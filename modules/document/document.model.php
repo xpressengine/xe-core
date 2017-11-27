@@ -37,7 +37,7 @@ class documentModel extends document
 	{
 		if(!is_array($documentSrls) || count($documentSrls) == 0)
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		$args = new stdClass();
@@ -214,7 +214,7 @@ class documentModel extends document
 	 * @param bool $except_notice
 	 * @param bool $load_extra_vars
 	 * @param array $columnList
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function getDocumentList($obj, $except_notice = false, $load_extra_vars=true, $columnList = array())
 	{
@@ -226,13 +226,13 @@ class documentModel extends document
 		// Call trigger (before)
 		// This trigger can be used to set an alternative output using a different search method
 		$output = ModuleHandler::triggerCall('document.getDocumentList', 'before', $obj);
-		if($output instanceof Object && !$output->toBool())
+		if($output instanceof BaseObject && !$output->toBool())
 		{
 			return $output;
 		}
 
 		// If an alternate output is set, use it instead of running the default queries
-		$use_alternate_output = (isset($obj->use_alternate_output) && $obj->use_alternate_output instanceof Object);
+		$use_alternate_output = (isset($obj->use_alternate_output) && $obj->use_alternate_output instanceof BaseObject);
 		if (!$use_alternate_output)
 		{
 			$this->_setSearchOption($obj, $args, $query_id, $use_division);
@@ -517,7 +517,7 @@ class documentModel extends document
 			$oDocument = $oDocumentModel->getDocument($document_srl, false, false, $columnList);
 			$module_srl = $oDocument->get('module_srl');
 			$member_srl = $oDocument->get('member_srl');
-			if(!$module_srl) return new Object(-1, 'msg_invalid_request');
+			if(!$module_srl) return new BaseObject(-1, 'msg_invalid_request');
 
 			$oModuleModel = getModel('module');
 			$document_config = $oModuleModel->getModulePartConfig('document',$module_srl);
@@ -919,11 +919,11 @@ class documentModel extends document
 
 	/**
 	 * Get a list for a particular module
-	 * @return void|Object
+	 * @return void|BaseObject
 	 */
 	function getDocumentCategories()
 	{
-		if(!Context::get('is_logged')) return new Object(-1,'msg_not_permitted');
+		if(!Context::get('is_logged')) return new BaseObject(-1,'msg_not_permitted');
 		$module_srl = Context::get('module_srl');
 		$categories= $this->getCategoryList($module_srl);
 		$lang = Context::get('lang');
@@ -1005,7 +1005,7 @@ class documentModel extends document
 	/**
 	 * Certain categories of information, return the template guhanhu
 	 * Manager on the page to add information about a particular menu from the server after compiling tpl compiled a direct return html
-	 * @return void|Object
+	 * @return void|BaseObject
 	 */
 	function getDocumentCategoryTplInfo()
 	{
@@ -1016,13 +1016,13 @@ class documentModel extends document
 		$module_info = $oModuleModel->getModuleInfoByModuleSrl($module_srl);
 		// Check permissions
 		$grant = $oModuleModel->getGrant($module_info, Context::get('logged_info'));
-		if(!$grant->manager) return new Object(-1,'msg_not_permitted');
+		if(!$grant->manager) return new BaseObject(-1,'msg_not_permitted');
 
 		$category_srl = Context::get('category_srl');
 		$category_info = $this->getCategory($category_srl);
 		if(!$category_info)
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		$this->add('category_info', $category_info);
@@ -1198,13 +1198,13 @@ class documentModel extends document
 
 	/**
 	 * vote up, vote down member list in Document View page
-	 * @return void|Object
+	 * @return void|BaseObject
 	 */
 	function getDocumentVotedMemberList()
 	{
 		$args = new stdClass;
 		$document_srl = Context::get('document_srl');
-		if(!$document_srl) return new Object(-1,'msg_invalid_request');
+		if(!$document_srl) return new BaseObject(-1,'msg_invalid_request');
 
 		$point = Context::get('point');
 		if($point != -1) $point = 1;
@@ -1213,18 +1213,18 @@ class documentModel extends document
 		$columnList = array('document_srl', 'module_srl');
 		$oDocument = $oDocumentModel->getDocument($document_srl, false, false, $columnList);
 		$module_srl = $oDocument->get('module_srl');
-		if(!$module_srl) return new Object(-1, 'msg_invalid_request');
+		if(!$module_srl) return new BaseObject(-1, 'msg_invalid_request');
 
 		$oModuleModel = getModel('module');
 		$document_config = $oModuleModel->getModulePartConfig('document',$module_srl);
 		if($point == -1)
 		{
-			if($document_config->use_vote_down!='S') return new Object(-1, 'msg_invalid_request');
+			if($document_config->use_vote_down!='S') return new BaseObject(-1, 'msg_invalid_request');
 			$args->below_point = 0;
 		}
 		else
 		{
-			if($document_config->use_vote_up!='S') return new Object(-1, 'msg_invalid_request');
+			if($document_config->use_vote_up!='S') return new BaseObject(-1, 'msg_invalid_request');
 			$args->more_point = 0;
 		}
 

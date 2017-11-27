@@ -27,7 +27,7 @@ class spamfilterController extends spamfilter
 	 */
 	function triggerInsertDocument(&$obj)
 	{
-		if($_SESSION['avoid_log']) return new Object();
+		if($_SESSION['avoid_log']) return new BaseObject();
 		// Check the login status, login information, and permission
 		$is_logged = Context::get('is_logged');
 		$logged_info = Context::get('logged_info');
@@ -35,8 +35,8 @@ class spamfilterController extends spamfilter
 		// In case logged in, check if it is an administrator
 		if($is_logged)
 		{
-			if($logged_info->is_admin == 'Y') return new Object();
-			if($grant->manager) return new Object();
+			if($logged_info->is_admin == 'Y') return new BaseObject();
+			if($grant->manager) return new BaseObject();
 		}
 
 		$oFilterModel = getModel('spamfilter');
@@ -64,7 +64,7 @@ class spamfilterController extends spamfilter
 		// Save a log
 		$this->insertLog();
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -72,7 +72,7 @@ class spamfilterController extends spamfilter
 	 */
 	function triggerInsertComment(&$obj)
 	{
-		if($_SESSION['avoid_log']) return new Object();
+		if($_SESSION['avoid_log']) return new BaseObject();
 		// Check the login status, login information, and permission
 		$is_logged = Context::get('is_logged');
 		$logged_info = Context::get('logged_info');
@@ -80,8 +80,8 @@ class spamfilterController extends spamfilter
 		// In case logged in, check if it is an administrator
 		if($is_logged)
 		{
-			if($logged_info->is_admin == 'Y') return new Object();
-			if($grant->manager) return new Object();
+			if($logged_info->is_admin == 'Y') return new BaseObject();
+			if($grant->manager) return new BaseObject();
 		}
 
 		$oFilterModel = getModel('spamfilter');
@@ -110,7 +110,7 @@ class spamfilterController extends spamfilter
 		// Save a log
 		$this->insertLog();
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -118,7 +118,7 @@ class spamfilterController extends spamfilter
 	 */
 	function triggerInsertTrackback(&$obj)
 	{
-		if($_SESSION['avoid_log']) return new Object();
+		if($_SESSION['avoid_log']) return new BaseObject();
 
 		$oFilterModel = getModel('spamfilter');
 		// Confirm if the trackbacks have been added more than once to your document
@@ -143,7 +143,7 @@ class spamfilterController extends spamfilter
 		{
 			$oTrackbackController->deleteTrackbackSender(60*60*6, $ipaddress, $obj->url, $obj->blog_name, $obj->title, $obj->excerpt);
 			$this->insertIP($ipaddress.'.*', 'AUTO-DENIED : trackback.insertTrackback');
-			return new Object(-1,'msg_alert_trackback_denied');
+			return new BaseObject(-1,'msg_alert_trackback_denied');
 		}
 		// If trackbacks have been registered by one C-class IP address more than once for the last 30 minutes, ban the IP address and delete all the posts
 		/* 호스팅 환경을 감안하여 일단 이 부분은 동작하지 않도록 주석 처리
@@ -151,11 +151,11 @@ class spamfilterController extends spamfilter
 		   if($count > 1) {
 		   $oTrackbackController->deleteTrackbackSender(3*60, $ipaddress, $obj->url, $obj->blog_name, $obj->title, $obj->excerpt);
 		   $this->insertIP($ipaddress.'.*');
-		   return new Object(-1,'msg_alert_trackback_denied');
+		   return new BaseObject(-1,'msg_alert_trackback_denied');
 		   }
 		 */
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -165,7 +165,7 @@ class spamfilterController extends spamfilter
 	function insertIP($ipaddress_list, $description = null)
 	{
 		$regExr = "/^((\d{1,3}(?:.(\d{1,3}|\*)){3})\s*(\/\/(.*)\s*)?)*\s*$/";
-		if(!preg_match($regExr,$ipaddress_list)) return new Object(-1, 'msg_invalid');
+		if(!preg_match($regExr,$ipaddress_list)) return new BaseObject(-1, 'msg_invalid');
 		$ipaddress_list = str_replace("\r","",$ipaddress_list);
 		$ipaddress_list = explode("\n",$ipaddress_list);
 		foreach($ipaddress_list as $ipaddressValue)
@@ -191,10 +191,10 @@ class spamfilterController extends spamfilter
 	 */
 	function triggerSendMessage(&$obj)
 	{
-		if($_SESSION['avoid_log']) return new Object();
+		if($_SESSION['avoid_log']) return new BaseObject();
 
 		$logged_info = Context::get('logged_info');
-		if($logged_info->is_admin == 'Y') return new Object();
+		if($logged_info->is_admin == 'Y') return new BaseObject();
 
 		$oFilterModel = getModel('spamfilter');
 		// Check if the IP is prohibited
@@ -210,7 +210,7 @@ class spamfilterController extends spamfilter
 		// Save a log
 		$this->insertLog();
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
