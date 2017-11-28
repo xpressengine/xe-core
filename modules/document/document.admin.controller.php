@@ -477,14 +477,21 @@ class documentAdminController extends document
 	 */
 	function procDocumentAdminInsertConfig()
 	{
-		// Get the basic information
-		$config = Context::gets('thumbnail_type');
-		// Insert by creating the module Controller object
 		$oModuleController = getController('module');
+
+		$config = getModel('document')->getDocumentConfig();
+		$config->icons = Context::get('icons');
+		$config->micons = Context::get('micons');
 		$output = $oModuleController->insertModuleConfig('document',$config);
+		if(!$output->toBool())
+		{
+			return $output;
+		}
+
+		$this->setMessage('success_updated');
 
 		$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'module', 'admin', 'act', 'dispDocumentAdminConfig');
-		return $this->setRedirectUrl($returnUrl, $output);
+		$this->setRedirectUrl($returnUrl, $output);
 	}
 
 	/**

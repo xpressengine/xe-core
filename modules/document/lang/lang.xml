@@ -12,6 +12,26 @@
 		<value xml:lang="tr"><![CDATA[Belge Listesi]]></value>
 		<value xml:lang="vi"><![CDATA[Danh sách bài viết]]></value>
 	</item>
+	<item name="cmd_document_config">
+		<value xml:lang="ko"><![CDATA[기본 설정]]></value>
+		<value xml:lang="en"><![CDATA[Default Setting]]></value>
+		<value xml:lang="jp"><![CDATA[基本設定]]></value>
+		<value xml:lang="zh-CN"><![CDATA[常规选项]]></value>
+		<value xml:lang="zh-TW"><![CDATA[基本設置]]></value>
+		<value xml:lang="fr"><![CDATA[Configuration par Défaut]]></value>
+		<value xml:lang="ru"><![CDATA[Стандартные настройки]]></value>
+		<value xml:lang="es"><![CDATA[Configuración predefinidos]]></value>
+		<value xml:lang="tr"><![CDATA[Varsayılan Ayar]]></value>
+		<value xml:lang="vi"><![CDATA[Thiết lập mặc định]]></value>
+	</item>
+	<item name="cmd_pc_icon_setting">
+		<value xml:lang="ko"><![CDATA[PC 아이콘 설정]]></value>
+		<value xml:lang="en"><![CDATA[PC icon setting]]></value>
+	</item>
+	<item name="cmd_mobile_icon_setting">
+		<value xml:lang="ko"><![CDATA[모바일 아이콘 설정]]></value>
+		<value xml:lang="en"><![CDATA[Mobile icon setting]]></value>
+	</item>
 	<item name="thumbnail_type">
 		<value xml:lang="ko"><![CDATA[섬네일 생성 방법]]></value>
 		<value xml:lang="en"><![CDATA[Thumbnail Type]]></value>
@@ -218,6 +238,12 @@
 		<value xml:lang="es"><![CDATA[분류 폰트색깔을 지정합니다.]]></value>
 		<value xml:lang="tr"><![CDATA[Kategorinin yazı rengini ayarlayabilirsiniz.]]></value>
 		<value xml:lang="vi"><![CDATA[Bạn có thể đặt màu cho thể loại.]]></value>
+	</item>
+	<item name="about_cmd_pc_icon_setting">
+		<value xml:lang="ko"><![CDATA[게시판 새로운 글 혹은 수정되었을 때 출력하는 아이콘입니다. 기본값은 default 입니다.]]></value>
+	</item>
+	<item name="about_cmd_mobile_icon_setting">
+		<value xml:lang="ko"><![CDATA[게시판 새로운 글 혹은 수정되었을 때 출력하는 아이콘입니다. 기본값은 default 입니다.]]></value>
 	</item>
 	<item name="cmd_search_next">
 		<value xml:lang="ko"><![CDATA[계속 검색]]></value>
