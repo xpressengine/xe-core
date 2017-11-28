@@ -452,7 +452,9 @@ class Context
 			return;
 		}
 
+		ob_start(); // trash BOM
 		include($self::getConfigFile());
+		ob_end_clean();
 
 		// If master_db information does not exist, the config file needs to be updated
 		if(!isset($db_info->master_db))
