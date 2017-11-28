@@ -448,6 +448,11 @@ function __xe_autoload($class_name)
 }
 spl_autoload_register('__xe_autoload');
 
+if(version_compare(PHP_VERSION, '7.2', '<'))
+{
+	class_alias('BaseObject', 'Object', true);
+}
+
 if(file_exists(_XE_PATH_  . '/vendor/autoload.php')) {
 	require _XE_PATH_  . '/vendor/autoload.php';
 }

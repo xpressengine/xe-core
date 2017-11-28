@@ -6,12 +6,6 @@
  *
  * @author NAVER (developers@xpressengine.com)
  */
-
-if(version_compare(PHP_VERSION, '7.2', '<'))
-{
-	class_alias('BaseObject', 'Object');
-}
-
 class BaseObject
 {
 	/**
