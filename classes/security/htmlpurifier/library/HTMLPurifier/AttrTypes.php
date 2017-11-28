@@ -61,7 +61,7 @@ class HTMLPurifier_AttrTypes
     /**
      * Retrieves a type
      * @param $type String type name
-     * @return BaseObject AttrDef for type
+     * @return Object AttrDef for type
      */
     public function get($type) {
 
