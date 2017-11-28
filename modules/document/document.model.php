@@ -1587,6 +1587,26 @@ class documentModel extends document
 
 		return $document_list;
 	}
+
+	/**
+	 * get to the document extra image path.
+	 * @return string
+	 */
+	function getDocumentExtraImagePath()
+	{
+		$documentConfig = getModel('document')->getDocumentConfig();
+		if(Mobile::isFromMobilePhone())
+		{
+			$iconSkin = $documentConfig->micons;
+		}
+		else
+		{
+			$iconSkin = $documentConfig->icons;
+		}
+		$path = sprintf('%s%s',getUrl(), "modules/document/tpl/icons/$iconSkin/");
+
+		return $path;
+	}
 }
 /* End of file document.model.php */
 /* Location: ./modules/document/document.model.php */

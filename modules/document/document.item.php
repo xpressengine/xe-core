@@ -1039,13 +1039,12 @@ class documentItem extends Object
 		$documentConfig = $oDocumentModel->getDocumentConfig();
 		if(Mobile::isFromMobilePhone())
 		{
-			$iconSkin = $documentConfig->icons;
+			$iconSkin = $documentConfig->micons;
 		}
 		else
 		{
-			$iconSkin = $documentConfig->micons;
+			$iconSkin = $documentConfig->icons;
 		}
-
 		$path = sprintf('%s%s',getUrl(), "modules/document/tpl/icons/$iconSkin/");
 
 		$buffs = $this->getExtraImages($time_check);
