@@ -479,7 +479,7 @@ class documentAdminController extends document
 	{
 		$oModuleController = getController('module');
 
-		$config = new stdClass();
+		$config = getModel('document')->getDocumentConfig();
 		$config->icons = Context::get('icons');
 		$config->micons = Context::get('micons');
 		$output = $oModuleController->insertModuleConfig('document',$config);
