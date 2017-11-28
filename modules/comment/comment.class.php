@@ -16,7 +16,7 @@ class comment extends ModuleObject
 
 	/**
 	 * Implemented if additional tasks are required when installing
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moduleInstall()
 	{
@@ -41,7 +41,7 @@ class comment extends ModuleObject
 			FileHandler::makeDir('./files/cache/tmp');
 		}
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -123,7 +123,7 @@ class comment extends ModuleObject
 
 	/**
 	 * Execute update
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moduleUpdate()
 	{
@@ -203,7 +203,7 @@ class comment extends ModuleObject
 			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
-		return new Object(0, 'success_updated');
+		return new BaseObject(0, 'success_updated');
 	}
 
 	/**

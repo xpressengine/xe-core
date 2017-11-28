@@ -20,23 +20,23 @@ class documentController extends document
 
 	/**
 	 * Action to handle vote-up of the post (Up)
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function procDocumentVoteUp()
 	{
-		if(!Context::get('is_logged')) return new Object(-1, 'msg_invalid_request');
+		if(!Context::get('is_logged')) return new BaseObject(-1, 'msg_invalid_request');
 
 		$document_srl = Context::get('target_srl');
-		if(!$document_srl) return new Object(-1, 'msg_invalid_request');
+		if(!$document_srl) return new BaseObject(-1, 'msg_invalid_request');
 
 		$oDocumentModel = getModel('document');
 		$oDocument = $oDocumentModel->getDocument($document_srl, false, false);
 		$module_srl = $oDocument->get('module_srl');
-		if(!$module_srl) return new Object(-1, 'msg_invalid_request');
+		if(!$module_srl) return new BaseObject(-1, 'msg_invalid_request');
 
 		$oModuleModel = getModel('module');
 		$document_config = $oModuleModel->getModulePartConfig('document',$module_srl);
-		if($document_config->use_vote_up=='N') return new Object(-1, 'msg_invalid_request');
+		if($document_config->use_vote_up=='N') return new BaseObject(-1, 'msg_invalid_request');
 
 		$point = 1;
 		$output = $this->updateVotedCount($document_srl, $point);
@@ -65,23 +65,23 @@ class documentController extends document
 
 	/**
 	 * Action to handle vote-up of the post (Down)
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function procDocumentVoteDown()
 	{
-		if(!Context::get('is_logged')) return new Object(-1, 'msg_invalid_request');
+		if(!Context::get('is_logged')) return new BaseObject(-1, 'msg_invalid_request');
 
 		$document_srl = Context::get('target_srl');
-		if(!$document_srl) return new Object(-1, 'msg_invalid_request');
+		if(!$document_srl) return new BaseObject(-1, 'msg_invalid_request');
 
 		$oDocumentModel = getModel('document');
 		$oDocument = $oDocumentModel->getDocument($document_srl, false, false);
 		$module_srl = $oDocument->get('module_srl');
-		if(!$module_srl) return new Object(-1, 'msg_invalid_request');
+		if(!$module_srl) return new BaseObject(-1, 'msg_invalid_request');
 
 		$oModuleModel = getModel('module');
 		$document_config = $oModuleModel->getModulePartConfig('document',$module_srl);
-		if($document_config->use_vote_down=='N') return new Object(-1, 'msg_invalid_request');
+		if($document_config->use_vote_down=='N') return new BaseObject(-1, 'msg_invalid_request');
 
 		$point = -1;
 		$output = $this->updateVotedCount($document_srl, $point);
@@ -91,14 +91,14 @@ class documentController extends document
 
 	/**
 	 * Action called when the post is reported by other member
-	 * @return void|Object
+	 * @return void|BaseObject
 	 */
 	function procDocumentDeclare()
 	{
-		if(!Context::get('is_logged')) return new Object(-1, 'msg_invalid_request');
+		if(!Context::get('is_logged')) return new BaseObject(-1, 'msg_invalid_request');
 
 		$document_srl = Context::get('target_srl');
-		if(!$document_srl) return new Object(-1, 'msg_invalid_request');
+		if(!$document_srl) return new BaseObject(-1, 'msg_invalid_request');
 
 		return $this->declaredDocument($document_srl);
 	}
@@ -147,12 +147,12 @@ class documentController extends document
 	/**
 	 * A trigger to delete all posts together when the module is deleted
 	 * @param object $obj
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function triggerDeleteModuleDocuments(&$obj)
 	{
 		$module_srl = $obj->module_srl;
-		if(!$module_srl) return new Object();
+		if(!$module_srl) return new BaseObject();
 		// Delete the document
 		$oDocumentAdminController = getAdminController('document');
 		$output = $oDocumentAdminController->deleteModuleDocument($module_srl);
@@ -170,7 +170,7 @@ class documentController extends document
 		// remove histories
 		$this->deleteDocumentHistory(null, null, $module_srl);
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -195,7 +195,7 @@ class documentController extends document
 	{
 		if(!$manual_inserted && !checkCSRF())
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		// begin transaction
@@ -238,7 +238,7 @@ class documentController extends document
 		if(!$output->toBool()) return $output;
 		// Register it if no given document_srl exists
 		if(!$obj->document_srl) $obj->document_srl = getNextSequence();
-		elseif(!$manual_inserted && !$isRestore && !checkUserSequence($obj->document_srl)) return new Object(-1, 'msg_not_permitted');
+		elseif(!$manual_inserted && !$isRestore && !checkUserSequence($obj->document_srl)) return new BaseObject(-1, 'msg_not_permitted');
 
 		$oDocumentModel = getModel('document');
 		// Set to 0 if the category_srl doesn't exist
@@ -247,7 +247,7 @@ class documentController extends document
 			$category_list = $oDocumentModel->getCategoryList($obj->module_srl);
 			if(count($category_list) > 0 && !$category_list[$obj->category_srl]->grant)
 			{
-				return new Object(-1, 'msg_not_permitted');
+				return new BaseObject(-1, 'msg_not_permitted');
 			}
 			if(count($category_list) > 0 && !$category_list[$obj->category_srl]) $obj->category_srl = 0;
 		}
@@ -292,7 +292,7 @@ class documentController extends document
 		// Remove iframe and script if not a top adminisrator in the session.
 		if($logged_info->is_admin != 'Y') $obj->content = removeHackTag($obj->content);
 		// An error appears if both log-in info and user name don't exist.
-		if(!$logged_info->member_srl && !$obj->nick_name) return new Object(-1,'msg_invalid_request');
+		if(!$logged_info->member_srl && !$obj->nick_name) return new BaseObject(-1,'msg_invalid_request');
 
 		$obj->lang_code = Context::getLangType();
 		// Insert data into the DB
@@ -364,10 +364,10 @@ class documentController extends document
 
 		if(!$manual_updated && !checkCSRF())
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
-		if(!$source_obj->document_srl || !$obj->document_srl) return new Object(-1,'msg_invalied_request');
+		if(!$source_obj->document_srl || !$obj->document_srl) return new BaseObject(-1,'msg_invalied_request');
 		if(!$obj->status && $obj->is_secret == 'Y') $obj->status = 'SECRET';
 		if(!$obj->status) $obj->status = 'PUBLIC';
 
@@ -619,11 +619,11 @@ class documentController extends document
 			// Check if the documnet exists
 			$oDocument = $oDocumentModel->getDocument($document_srl, $is_admin);
 		}
-		else if($isEmptyTrash && $oDocument == null) return new Object(-1, 'document is not exists');
+		else if($isEmptyTrash && $oDocument == null) return new BaseObject(-1, 'document is not exists');
 
-		if(!$oDocument->isExists() || $oDocument->document_srl != $document_srl) return new Object(-1, 'msg_invalid_document');
+		if(!$oDocument->isExists() || $oDocument->document_srl != $document_srl) return new BaseObject(-1, 'msg_invalid_document');
 		// Check if a permossion is granted
-		if(!$oDocument->isGranted()) return new Object(-1, 'msg_not_permitted');
+		if(!$oDocument->isGranted()) return new BaseObject(-1, 'msg_not_permitted');
 
 		//if empty trash, document already deleted, therefore document not delete
 		$args = new stdClass();
@@ -914,7 +914,7 @@ class documentController extends document
 	 */
 	function insertDocumentExtraKey($module_srl, $var_idx, $var_name, $var_type, $var_is_required = 'N', $var_search = 'N', $var_default = '', $var_desc = '', $eid)
 	{
-		if(!$module_srl || !$var_idx || !$var_name || !$var_type || !$eid) return new Object(-1,'msg_invalid_request');
+		if(!$module_srl || !$var_idx || !$var_name || !$var_type || !$eid) return new BaseObject(-1,'msg_invalid_request');
 
 		$obj = new stdClass();
 		$obj->module_srl = $module_srl;
@@ -954,11 +954,11 @@ class documentController extends document
 	 * Remove the extra variables of the documents
 	 * @param int $module_srl
 	 * @param int $var_idx
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function deleteDocumentExtraKeys($module_srl, $var_idx = null)
 	{
-		if(!$module_srl) return new Object(-1,'msg_invalid_request');
+		if(!$module_srl) return new BaseObject(-1,'msg_invalid_request');
 		$obj = new stdClass();
 		$obj->module_srl = $module_srl;
 		if(!is_null($var_idx)) $obj->var_idx = $var_idx;
@@ -1010,7 +1010,7 @@ class documentController extends document
 			$oCacheHandler->delete($cache_key);
 		}
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -1021,11 +1021,11 @@ class documentController extends document
 	 * @param mixed $value
 	 * @param int $eid
 	 * @param string $lang_code
-	 * @return Object|void
+	 * @return BaseObject|void
 	 */
 	function insertDocumentExtraVar($module_srl, $document_srl, $var_idx, $value, $eid = null, $lang_code = '')
 	{
-		if(!$module_srl || !$document_srl || !$var_idx || !isset($value)) return new Object(-1,'msg_invalid_request');
+		if(!$module_srl || !$document_srl || !$var_idx || !isset($value)) return new BaseObject(-1,'msg_invalid_request');
 		if(!$lang_code) $lang_code = Context::getLangType();
 
 		$obj = new stdClass;
@@ -1065,7 +1065,7 @@ class documentController extends document
 	 * Increase the number of vote-up of the document
 	 * @param int $document_srl
 	 * @param int $point
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function updateVotedCount($document_srl, $point = 1)
 	{
@@ -1074,7 +1074,7 @@ class documentController extends document
 		// Return fail if session already has information about votes
 		if($_SESSION['voted_document'][$document_srl])
 		{
-			return new Object(-1, $failed_voted);
+			return new BaseObject(-1, $failed_voted);
 		}
 		// Get the original document
 		$oDocumentModel = getModel('document');
@@ -1083,7 +1083,7 @@ class documentController extends document
 		if($oDocument->get('ipaddress') == $_SERVER['REMOTE_ADDR'])
 		{
 			$_SESSION['voted_document'][$document_srl] = true;
-			return new Object(-1, $failed_voted);
+			return new BaseObject(-1, $failed_voted);
 		}
 
 		// Create a member model object
@@ -1097,7 +1097,7 @@ class documentController extends document
 			if($member_srl && $member_srl == abs($oDocument->get('member_srl')))
 			{
 				$_SESSION['voted_document'][$document_srl] = true;
-				return new Object(-1, $failed_voted);
+				return new BaseObject(-1, $failed_voted);
 			}
 		}
 
@@ -1117,7 +1117,7 @@ class documentController extends document
 		if($output->data->count)
 		{
 			$_SESSION['voted_document'][$document_srl] = true;
-			return new Object(-1, $failed_voted);
+			return new BaseObject(-1, $failed_voted);
 		}
 
 		// begin transaction
@@ -1170,7 +1170,7 @@ class documentController extends document
 		$_SESSION['voted_document'][$document_srl] = true;
 
 		// Return result
-		$output = new Object();
+		$output = new BaseObject();
 		if($point > 0)
 		{
 			$output->setMessage('success_voted');
@@ -1188,12 +1188,12 @@ class documentController extends document
 	/**
 	 * Report posts
 	 * @param int $document_srl
-	 * @return void|Object
+	 * @return void|BaseObject
 	 */
 	function declaredDocument($document_srl)
 	{
 		// Fail if session information already has a reported document
-		if($_SESSION['declared_document'][$document_srl]) return new Object(-1, 'failed_declared');
+		if($_SESSION['declared_document'][$document_srl]) return new BaseObject(-1, 'failed_declared');
 
 		// Check if previously reported
 		$args = new stdClass();
@@ -1221,7 +1221,7 @@ class documentController extends document
 		// Pass if the author's IP address is as same as visitor's.
 		if($oDocument->get('ipaddress') == $_SERVER['REMOTE_ADDR']) {
 			$_SESSION['declared_document'][$document_srl] = true;
-			return new Object(-1, 'failed_declared');
+			return new BaseObject(-1, 'failed_declared');
 		}
 
 		// Check if document's author is a member.
@@ -1234,7 +1234,7 @@ class documentController extends document
 			if($member_srl && $member_srl == abs($oDocument->get('member_srl')))
 			{
 				$_SESSION['declared_document'][$document_srl] = true;
-				return new Object(-1, 'failed_declared');
+				return new BaseObject(-1, 'failed_declared');
 			}
 		}
 
@@ -1256,7 +1256,7 @@ class documentController extends document
 		if($output->data->count)
 		{
 			$_SESSION['declared_document'][$document_srl] = true;
-			return new Object(-1, 'failed_declared');
+			return new BaseObject(-1, 'failed_declared');
 		}
 
 		// begin transaction
@@ -1444,7 +1444,7 @@ class documentController extends document
 		// Display an error that the category cannot be deleted if it has a child
 		$output = executeQuery('document.getChildCategoryCount', $args);
 		if(!$output->toBool()) return $output;
-		if($output->data->count>0) return new Object(-1, 'msg_cannot_delete_for_child');
+		if($output->data->count>0) return new BaseObject(-1, 'msg_cannot_delete_for_child');
 		// Delete a category information
 		$output = executeQuery('document.deleteCategory', $args);
 		if(!$output->toBool()) return $output;
@@ -1499,7 +1499,7 @@ class documentController extends document
 	/**
 	 * Move the category level to higher
 	 * @param int $category_srl
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moveCategoryUp($category_srl)
 	{
@@ -1515,7 +1515,7 @@ class documentController extends document
 		// Seek a full list of categories
 		$category_list = $oDocumentModel->getCategoryList($module_srl);
 		$category_srl_list = array_keys($category_list);
-		if(count($category_srl_list)<2) return new Object();
+		if(count($category_srl_list)<2) return new BaseObject();
 
 		$prev_category = NULL;
 		foreach($category_list as $key => $val)
@@ -1524,9 +1524,9 @@ class documentController extends document
 			$prev_category = $val;
 		}
 		// Return if the previous category doesn't exist
-		if(!$prev_category) return new Object(-1,Context::getLang('msg_category_not_moved'));
+		if(!$prev_category) return new BaseObject(-1,Context::getLang('msg_category_not_moved'));
 		// Return if the selected category is the top level
-		if($category_srl_list[0]==$category_srl) return new Object(-1,Context::getLang('msg_category_not_moved'));
+		if($category_srl_list[0]==$category_srl) return new BaseObject(-1,Context::getLang('msg_category_not_moved'));
 		// Information of the selected category
 		$cur_args = new stdClass;
 		$cur_args->category_srl = $category_srl;
@@ -1540,13 +1540,13 @@ class documentController extends document
 		$prev_args->title = $prev_category->title;
 		$this->updateCategory($prev_args);
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
 	 * Move the category down
 	 * @param int $category_srl
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moveCategoryDown($category_srl)
 	{
@@ -1562,7 +1562,7 @@ class documentController extends document
 		// Seek a full list of categories
 		$category_list = $oDocumentModel->getCategoryList($module_srl);
 		$category_srl_list = array_keys($category_list);
-		if(count($category_srl_list)<2) return new Object();
+		if(count($category_srl_list)<2) return new BaseObject();
 
 		for($i=0;$i<count($category_srl_list);$i++)
 		{
@@ -1570,7 +1570,7 @@ class documentController extends document
 		}
 
 		$next_category_srl = $category_srl_list[$i+1];
-		if(!$category_list[$next_category_srl]) return new Object(-1,Context::getLang('msg_category_not_moved'));
+		if(!$category_list[$next_category_srl]) return new BaseObject(-1,Context::getLang('msg_category_not_moved'));
 		$next_category = $category_list[$next_category_srl];
 		// Information of the selected category
 		$cur_args = new stdClass;
@@ -1585,7 +1585,7 @@ class documentController extends document
 		$next_args->title = $next_category->title;
 		$this->updateCategory($next_args);
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -1650,7 +1650,7 @@ class documentController extends document
 		$columnList = array('module_srl', 'module');
 		$module_info = $oModuleModel->getModuleInfoByModuleSrl($args->module_srl, $columnList);
 		$grant = $oModuleModel->getGrant($module_info, Context::get('logged_info'));
-		if(!$grant->manager) return new Object(-1,'msg_not_permitted');
+		if(!$grant->manager) return new BaseObject(-1,'msg_not_permitted');
 
 		if($args->expand !="Y") $args->expand = "N";
 		if(!is_array($args->group_srls)) $args->group_srls = str_replace('|@|',',',$args->group_srls);
@@ -1720,7 +1720,7 @@ class documentController extends document
 		$columnList = array('module_srl', 'module');
 		$module_info = $oModuleModel->getModuleInfoByModuleSrl($source_category->module_srl, $columnList);
 		$grant = $oModuleModel->getGrant($module_info, Context::get('logged_info'));
-		if(!$grant->manager) return new Object(-1,'msg_not_permitted');
+		if(!$grant->manager) return new BaseObject(-1,'msg_not_permitted');
 
 		// First child of the parent_category_srl
 		$source_args = new stdClass;
@@ -1781,14 +1781,14 @@ class documentController extends document
 		$columnList = array('module_srl', 'module');
 		$module_info = $oModuleModel->getModuleInfoByModuleSrl($args->module_srl, $columnList);
 		$grant = $oModuleModel->getGrant($module_info, Context::get('logged_info'));
-		if(!$grant->manager) return new Object(-1,'msg_not_permitted');
+		if(!$grant->manager) return new BaseObject(-1,'msg_not_permitted');
 
 		$oDocumentModel = getModel('document');
 		// Get original information
 		$category_info = $oDocumentModel->getCategory($args->category_srl);
 		if($category_info->parent_srl) $parent_srl = $category_info->parent_srl;
 		// Display an error that the category cannot be deleted if it has a child node
-		if($oDocumentModel->getCategoryChlidCount($args->category_srl)) return new Object(-1, 'msg_cannot_delete_for_child');
+		if($oDocumentModel->getCategoryChlidCount($args->category_srl)) return new BaseObject(-1, 'msg_cannot_delete_for_child');
 		// Remove from the DB
 		$output = $this->deleteCategory($args->category_srl);
 		if(!$output->toBool())
@@ -1822,7 +1822,7 @@ class documentController extends document
 		$columnList = array('module_srl', 'module');
 		$module_info = $oModuleModel->getModuleInfoByModuleSrl($module_srl, $columnList);
 		$grant = $oModuleModel->getGrant($module_info, Context::get('logged_info'));
-		if(!$grant->manager) return new Object(-1,'msg_not_permitted');
+		if(!$grant->manager) return new BaseObject(-1,'msg_not_permitted');
 
 		$xml_file = $this->makeCategoryFile($module_srl);
 		// Set return value
@@ -2143,11 +2143,11 @@ class documentController extends document
 
 	/**
 	 * Saved in the session when an administrator selects a post
-	 * @return void|Object
+	 * @return void|BaseObject
 	 */
 	function procDocumentAddCart()
 	{
-		if(!Context::get('is_logged')) return new Object(-1, 'msg_not_permitted');
+		if(!Context::get('is_logged')) return new BaseObject(-1, 'msg_not_permitted');
 
 		// Get document_srl
 		$srls = explode(',',Context::get('srls'));
@@ -2167,14 +2167,14 @@ class documentController extends document
 		$args->document_srls = implode(',',$document_srls);
 		$args->order_type = 'asc';
 		$output = executeQueryArray('document.getDocuments', $args);
-		if(!$output->data) return new Object();
+		if(!$output->data) return new BaseObject();
 
 		unset($document_srls);
 		foreach($output->data as $key => $val)
 		{
 			$document_srls[$val->module_srl][] = $val->document_srl;
 		}
-		if(!$document_srls || !count($document_srls)) return new Object();
+		if(!$document_srls || !count($document_srls)) return new BaseObject();
 
 		// Check if each of module administrators exists. Top-level administator will have a permission to modify every document of all modules.(Even to modify temporarily saved or trashed documents)
 		$oModuleModel = getModel('module');
@@ -2199,7 +2199,7 @@ class documentController extends document
 				}
 			}
 		}
-		if(!count($document_srls)) return new Object();
+		if(!count($document_srls)) return new BaseObject();
 
 		foreach($document_srls as $module_srl => $documents)
 		{
@@ -2216,16 +2216,16 @@ class documentController extends document
 
 	/**
 	 * Move/ Delete the document in the seession
-	 * @return void|Object
+	 * @return void|BaseObject
 	 */
 	function procDocumentManageCheckedDocument()
 	{
 		@set_time_limit(0);
-		if(!Context::get('is_logged')) return new Object(-1,'msg_not_permitted');
+		if(!Context::get('is_logged')) return new BaseObject(-1,'msg_not_permitted');
 
 		if(!checkCSRF())
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		$type = Context::get('type');
@@ -2280,20 +2280,20 @@ class documentController extends document
 		$oDocumentAdminController = getAdminController('document');
 		if($type == 'move')
 		{
-			if(!$module_srl) return new Object(-1, 'fail_to_move');
+			if(!$module_srl) return new BaseObject(-1, 'fail_to_move');
 
 			$output = $oDocumentAdminController->moveDocumentModule($document_srl_list, $module_srl, $category_srl);
-			if(!$output->toBool()) return new Object(-1, 'fail_to_move');
+			if(!$output->toBool()) return new BaseObject(-1, 'fail_to_move');
 
 			$msg_code = 'success_moved';
 
 		}
 		else if($type == 'copy')
 		{
-			if(!$module_srl) return new Object(-1, 'fail_to_move');
+			if(!$module_srl) return new BaseObject(-1, 'fail_to_move');
 
 			$output = $oDocumentAdminController->copyDocumentModule($document_srl_list, $module_srl, $category_srl);
-			if(!$output->toBool()) return new Object(-1, 'fail_to_move');
+			if(!$output->toBool()) return new BaseObject(-1, 'fail_to_move');
 
 			$msg_code = 'success_copied';
 		}
@@ -2305,7 +2305,7 @@ class documentController extends document
 			{
 				$document_srl = $document_srl_list[$i];
 				$output = $this->deleteDocument($document_srl, true);
-				if(!$output->toBool()) return new Object(-1, 'fail_to_delete');
+				if(!$output->toBool()) return new BaseObject(-1, 'fail_to_delete');
 			}
 			$oDB->commit();
 			$msg_code = 'success_deleted';
@@ -2320,7 +2320,7 @@ class documentController extends document
 			for($i=0;$i<$document_srl_count;$i++) {
 				$args->document_srl = $document_srl_list[$i];
 				$output = $this->moveDocumentToTrash($args);
-				if(!$output || !$output->toBool()) return new Object(-1, 'fail_to_trash');
+				if(!$output || !$output->toBool()) return new BaseObject(-1, 'fail_to_trash');
 			}
 			$oDB->commit();
 			$msg_code = 'success_trashed';
@@ -2378,12 +2378,12 @@ class documentController extends document
 
 	/**
 	 * Document temporary save
-	 * @return void|Object
+	 * @return void|BaseObject
 	 */
 	function procDocumentTempSave()
 	{
 		// Check login information
-		if(!Context::get('is_logged')) return new Object(-1, 'msg_not_logged');
+		if(!Context::get('is_logged')) return new BaseObject(-1, 'msg_not_logged');
 		$module_info = Context::get('module_info');
 		$logged_info = Context::get('logged_info');
 
@@ -2410,11 +2410,11 @@ class documentController extends document
 		{
 			if($oDocument->get('module_srl') != $obj->module_srl)
 			{
-				return new Object(-1, 'msg_invalid_request');
+				return new BaseObject(-1, 'msg_invalid_request');
 			}
 			if(!$oDocument->isGranted())
 			{
-				return new Object(-1, 'msg_invalid_request');
+				return new BaseObject(-1, 'msg_invalid_request');
 			}
 			//if exist document status is already public, use temp status can point problem
 			$obj->status = $oDocument->get('status');
@@ -2444,11 +2444,11 @@ class documentController extends document
 
 	/**
 	 * Return Document List for exec_xml
-	 * @return void|Object
+	 * @return void|BaseObject
 	 */
 	function procDocumentGetList()
 	{
-		if(!Context::get('is_logged')) return new Object(-1,'msg_not_permitted');
+		if(!Context::get('is_logged')) return new BaseObject(-1,'msg_not_permitted');
 		$documentSrls = Context::get('document_srls');
 		if($documentSrls) $documentSrlList = explode(',', $documentSrls);
 

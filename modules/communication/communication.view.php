@@ -46,7 +46,7 @@ class communicationView extends communication
 
 	/**
 	 * Display message box
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function dispCommunicationMessages()
 	{
@@ -131,7 +131,7 @@ class communicationView extends communication
 
 	/**
 	 * display a new message
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function dispCommunicationNewMessage()
 	{
@@ -167,7 +167,7 @@ class communicationView extends communication
 
 	/**
 	 * Display message sending
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function dispCommunicationSendMessage()
 	{
@@ -242,7 +242,7 @@ class communicationView extends communication
 
 	/**
 	 * display a list of friends
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function dispCommunicationFriend()
 	{
@@ -298,7 +298,7 @@ class communicationView extends communication
 
 	/**
 	 * display Add a friend
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function dispCommunicationAddFriend()
 	{
@@ -340,7 +340,7 @@ class communicationView extends communication
 
 	/**
 	 * display add a group of friends
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function dispCommunicationAddFriendGroup()
 	{

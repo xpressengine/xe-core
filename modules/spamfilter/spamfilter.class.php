@@ -24,7 +24,7 @@ class spamfilter extends ModuleObject
 		// 2013-11-14 The trigger which try to perform spam filtering when new message are registered
 		$oModuleController->insertTrigger('communication.sendMessage', 'spamfilter', 'controller', 'triggerSendMessage', 'before');
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -118,7 +118,7 @@ class spamfilter extends ModuleObject
 			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
-		return new Object(0,'success_updated');
+		return new BaseObject(0,'success_updated');
 	}
 
 	/**

@@ -367,7 +367,7 @@ $GLOBALS['__xe_autoload_file_map'] = array_change_key_case(array(
 	'Mobile' => 'classes/mobile/Mobile.class.php',
 	'ModuleHandler' => 'classes/module/ModuleHandler.class.php',
 	'ModuleObject' => 'classes/module/ModuleObject.class.php',
-	'Object' => 'classes/object/Object.class.php',
+	'BaseObject' => 'classes/object/BaseObject.class.php',
 	'PageHandler' => 'classes/page/PageHandler.class.php',
 	'EmbedFilter' => 'classes/security/EmbedFilter.class.php',
 	'IpFilter' => 'classes/security/IpFilter.class.php',
@@ -447,6 +447,11 @@ function __xe_autoload($class_name)
 	}
 }
 spl_autoload_register('__xe_autoload');
+
+if(version_compare(PHP_VERSION, '7.2', '<'))
+{
+	class_alias('BaseObject', 'Object', true);
+}
 
 if(file_exists(_XE_PATH_  . '/vendor/autoload.php')) {
 	require _XE_PATH_  . '/vendor/autoload.php';

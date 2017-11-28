@@ -12,7 +12,7 @@ class message extends ModuleObject
 	 */
 	function moduleInstall()
 	{
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -72,7 +72,7 @@ class message extends ModuleObject
 
 			$oModuleController->insertUpdatedLog($version_update_id);
 		}
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**

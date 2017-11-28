@@ -74,7 +74,7 @@ class counterController extends counter
 	 * Leave logs
 	 *
 	 * @param integer $site_srl
-	 * @return Object result of count query
+	 * @return BaseObject result of count query
 	 */
 	function insertLog($site_srl = 0)
 	{

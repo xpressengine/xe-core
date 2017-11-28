@@ -650,7 +650,7 @@ class DBMssql extends DB
 	/**
 	 * Handles insertAct
 	 * @todo Lookup _filterNumber against sql injection - see if it is still needed and how to integrate
-	 * @param Object $queryObject
+	 * @param BaseObject $queryObject
 	 * @return resource
 	 */
 	function _executeInsertAct($queryObject)
@@ -662,7 +662,7 @@ class DBMssql extends DB
 
 	/**
 	 * Handles updateAct
-	 * @param Object $queryObject
+	 * @param BaseObject $queryObject
 	 * @return resource
 	 */
 	function _executeUpdateAct($queryObject)
@@ -684,13 +684,13 @@ class DBMssql extends DB
 		$columnsList = $query->getUpdateString($with_values);
 		if($columnsList == '')
 		{
-			return new Object(-1, "Invalid query");
+			return new BaseObject(-1, "Invalid query");
 		}
 
 		$from = $query->getFromString($with_values);
 		if($from == '')
 		{
-			return new Object(-1, "Invalid query");
+			return new BaseObject(-1, "Invalid query");
 		}
 
 		$tables = $query->getTables();
@@ -714,7 +714,7 @@ class DBMssql extends DB
 
 	/**
 	 * Handles deleteAct
-	 * @param Object $queryObject
+	 * @param BaseObject $queryObject
 	 * @return resource
 	 */
 	function _executeDeleteAct($queryObject)
@@ -752,7 +752,7 @@ class DBMssql extends DB
 		$select = $query->getSelectString($with_values);
 		if($select == '')
 		{
-			return new Object(-1, "Invalid query");
+			return new BaseObject(-1, "Invalid query");
 		}
 		if($limit != '')
 		{
@@ -766,7 +766,7 @@ class DBMssql extends DB
 		$from = $query->getFromString($with_values);
 		if($from == '')
 		{
-			return new Object(-1, "Invalid query");
+			return new BaseObject(-1, "Invalid query");
 		}
 		$from = ' FROM ' . $from;
 
@@ -837,9 +837,9 @@ class DBMssql extends DB
 	 * Handle selectAct
 	 * In order to get a list of pages easily when selecting \n
 	 * it supports a method as navigation
-	 * @param Object $queryObject
+	 * @param BaseObject $queryObject
 	 * @param resource $connection
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function _executeSelectAct($queryObject, $connection = null)
 	{
@@ -878,15 +878,15 @@ class DBMssql extends DB
 
 	/**
 	 * If have a error, return error object
-	 * @param Object $queryObject
-	 * @return Object
+	 * @param BaseObject $queryObject
+	 * @return BaseObject
 	 */
 	function queryError($queryObject)
 	{
 		$limit = $queryObject->getLimit();
 		if($limit && $limit->isPageHandler())
 		{
-			$buff = new Object ();
+			$buff = new BaseObject();
 			$buff->total_count = 0;
 			$buff->total_page = 0;
 			$buff->page = 1;
@@ -902,10 +902,10 @@ class DBMssql extends DB
 
 	/**
 	 * If select query execute, return page info
-	 * @param Object $queryObject
+	 * @param BaseObject $queryObject
 	 * @param resource $result
 	 * @param resource $connection
-	 * @return Object Object with page info containing
+	 * @return BaseObject BaseObject with page info containing
 	 */
 	function queryPageLimit($queryObject, $result, $connection)
 	{
@@ -969,7 +969,7 @@ class DBMssql extends DB
 			{
 				// If requested page is bigger than total number of pages, return empty list
 
-				$buff = new Object ();
+				$buff = new BaseObject();
 				$buff->total_count = $total_count;
 				$buff->total_page = $total_page;
 				$buff->page = $page;
@@ -989,7 +989,7 @@ class DBMssql extends DB
 			$virtual_no = $total_count - $start_count;
 			$data = $this->_fetch($result, $virtual_no);
 
-			$buff = new Object ();
+			$buff = new BaseObject();
 			$buff->total_count = $total_count;
 			$buff->total_page = $total_page;
 			$buff->page = $page;
@@ -999,7 +999,7 @@ class DBMssql extends DB
 		else
 		{
 			$data = $this->_fetch($result);
-			$buff = new Object ();
+			$buff = new BaseObject();
 			$buff->data = $data;
 		}
 		return $buff;

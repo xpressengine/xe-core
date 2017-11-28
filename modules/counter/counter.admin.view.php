@@ -23,7 +23,7 @@ class counterAdminView extends counter
 	/**
 	 * Admin page 
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function dispCounterAdminIndex()
 	{

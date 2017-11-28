@@ -36,7 +36,7 @@ class member extends ModuleObject {
 	/**
 	 * Implement if additional tasks are necessary when installing
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moduleInstall()
 	{
@@ -170,7 +170,7 @@ class member extends ModuleObject {
 		$oModuleController->insertTrigger('document.getDocumentMenu', 'member', 'controller', 'triggerGetDocumentMenu', 'after');
 		$oModuleController->insertTrigger('comment.getCommentMenu', 'member', 'controller', 'triggerGetCommentMenu', 'after');
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -261,7 +261,7 @@ class member extends ModuleObject {
 	/**
 	 * Execute update
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moduleUpdate()
 	{
@@ -421,7 +421,7 @@ class member extends ModuleObject {
 			$oModuleController->insertUpdatedLog('member.1.8.43.recreate_signup_ruleset');
 		}
 
-		return new Object(0, 'success_updated');
+		return new BaseObject(0, 'success_updated');
 	}
 
 	/**
@@ -438,7 +438,7 @@ class member extends ModuleObject {
 	 */
 	function recordLoginError($error = 0, $message = 'success')
 	{
-		if($error == 0) return new Object($error, $message);
+		if($error == 0) return new BaseObject($error, $message);
 
 		// Create a member model object
 		$oMemberModel = getModel('member');
@@ -446,7 +446,7 @@ class member extends ModuleObject {
 
 		// Check if there is recoding table.
 		$oDB = &DB::getInstance();
-		if(!$oDB->isTableExists('member_login_count') || $config->enable_login_fail_report == 'N') return new Object($error, $message);
+		if(!$oDB->isTableExists('member_login_count') || $config->enable_login_fail_report == 'N') return new BaseObject($error, $message);
 
 		$args = new stdClass();
 		$args->ipaddress = $_SERVER['REMOTE_ADDR'];
@@ -475,7 +475,7 @@ class member extends ModuleObject {
 			$args->count = 1;
 			$output = executeQuery('member.insertLoginCountByIp', $args);
 		}
-		return new Object($error, $message);
+		return new BaseObject($error, $message);
 	}
 
 	/**
@@ -483,7 +483,7 @@ class member extends ModuleObject {
 	 */
 	function recordMemberLoginError($error = 0, $message = 'success', $args = NULL)
 	{
-		if($error == 0 || !$args->member_srl) return new Object($error, $message);
+		if($error == 0 || !$args->member_srl) return new BaseObject($error, $message);
 
 		// Create a member model object
 		$oMemberModel = getModel('member');
@@ -491,7 +491,7 @@ class member extends ModuleObject {
 
 		// Check if there is recoding table.
 		$oDB = &DB::getInstance();
-		if(!$oDB->isTableExists('member_count_history') || $config->enable_login_fail_report == 'N') return new Object($error, $message);
+		if(!$oDB->isTableExists('member_count_history') || $config->enable_login_fail_report == 'N') return new BaseObject($error, $message);
 
 		$output = executeQuery('member.getLoginCountHistoryByMemberSrl', $args);
 		if($output->data && $output->data->content)

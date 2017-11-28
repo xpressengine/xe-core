@@ -558,7 +558,7 @@ class DBMysql extends DB
 
 	/**
 	 * Handles insertAct
-	 * @param Object $queryObject
+	 * @param BaseObject $queryObject
 	 * @param boolean $with_values
 	 * @return resource
 	 */
@@ -566,7 +566,7 @@ class DBMysql extends DB
 	{
 		$query = $this->getInsertSql($queryObject, $with_values, true);
 		$query .= (__DEBUG_QUERY__ & 1 && $this->query_id) ? sprintf(' ' . $this->comment_syntax, $this->query_id) : '';
-		if(is_a($query, 'Object'))
+		if(is_a($query, 'BaseObject'))
 		{
 			return;
 		}
@@ -575,14 +575,14 @@ class DBMysql extends DB
 
 	/**
 	 * Handles updateAct
-	 * @param Object $queryObject
+	 * @param BaseObject $queryObject
 	 * @param boolean $with_values
 	 * @return resource
 	 */
 	function _executeUpdateAct($queryObject, $with_values = true)
 	{
 		$query = $this->getUpdateSql($queryObject, $with_values, true);
-		if(is_a($query, 'Object'))
+		if(is_a($query, 'BaseObject'))
 		{
 			if(!$query->toBool()) return $query;
 			else return;
@@ -596,7 +596,7 @@ class DBMysql extends DB
 
 	/**
 	 * Handles deleteAct
-	 * @param Object $queryObject
+	 * @param BaseObject $queryObject
 	 * @param boolean $with_values
 	 * @return resource
 	 */
@@ -604,7 +604,7 @@ class DBMysql extends DB
 	{
 		$query = $this->getDeleteSql($queryObject, $with_values, true);
 		$query .= (__DEBUG_QUERY__ & 1 && $this->query_id) ? sprintf(' ' . $this->comment_syntax, $this->query_id) : '';
-		if(is_a($query, 'Object'))
+		if(is_a($query, 'BaseObject'))
 		{
 			return;
 		}
@@ -615,10 +615,10 @@ class DBMysql extends DB
 	 * Handle selectAct
 	 * In order to get a list of pages easily when selecting \n
 	 * it supports a method as navigation
-	 * @param Object $queryObject
+	 * @param BaseObject $queryObject
 	 * @param resource $connection
 	 * @param boolean $with_values
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function _executeSelectAct($queryObject, $connection = null, $with_values = true)
 	{
@@ -631,7 +631,7 @@ class DBMysql extends DB
 		else
 		{
 			$query = $this->getSelectSql($queryObject, $with_values);
-			if(is_a($query, 'Object'))
+			if(is_a($query, 'BaseObject'))
 			{
 				return;
 			}
@@ -644,7 +644,7 @@ class DBMysql extends DB
 			}
 
 			$data = $this->_fetch($result);
-			$buff = new Object ();
+			$buff = new BaseObject();
 			$buff->data = $data;
 
 			if($queryObject->usesClickCount())
@@ -702,15 +702,15 @@ class DBMysql extends DB
 
 	/**
 	 * If have a error, return error object
-	 * @param Object $queryObject
-	 * @return Object
+	 * @param BaseObject $queryObject
+	 * @return BaseObject
 	 */
 	function queryError($queryObject)
 	{
 		$limit = $queryObject->getLimit();
 		if($limit && $limit->isPageHandler())
 		{
-			$buff = new Object ();
+			$buff = new BaseObject();
 			$buff->total_count = 0;
 			$buff->total_page = 0;
 			$buff->page = 1;
@@ -726,11 +726,11 @@ class DBMysql extends DB
 
 	/**
 	 * If select query execute, return page info
-	 * @param Object $queryObject
+	 * @param BaseObject $queryObject
 	 * @param resource $result
 	 * @param resource $connection
 	 * @param boolean $with_values
-	 * @return Object Object with page info containing
+	 * @return BaseObject BaseObject with page info containing
 	 */
 	function queryPageLimit($queryObject, $result, $connection, $with_values = true)
 	{
@@ -791,7 +791,7 @@ class DBMysql extends DB
 		if($page > $total_page)
 		{
 			// If requested page is bigger than total number of pages, return empty list
-			$buff = new Object ();
+			$buff = new BaseObject();
 			$buff->total_count = $total_count;
 			$buff->total_page = $total_page;
 			$buff->page = $page;
@@ -813,7 +813,7 @@ class DBMysql extends DB
 		$virtual_no = $total_count - ($page - 1) * $list_count;
 		$data = $this->_fetch($result, $virtual_no);
 
-		$buff = new Object ();
+		$buff = new BaseObject();
 		$buff->total_count = $total_count;
 		$buff->total_page = $total_page;
 		$buff->page = $page;
@@ -835,14 +835,14 @@ class DBMysql extends DB
 		$select = $query->getSelectString($with_values);
 		if($select == '')
 		{
-			return new Object(-1, "Invalid query");
+			return new BaseObject(-1, "Invalid query");
 		}
 		$select = 'SELECT ' . $select;
 
 		$from = $query->getFromString($with_values);
 		if($from == '')
 		{
-			return new Object(-1, "Invalid query");
+			return new BaseObject(-1, "Invalid query");
 		}
 		$from = ' FROM ' . $from;
 

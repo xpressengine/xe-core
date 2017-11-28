@@ -586,7 +586,7 @@ class menuAdminModel extends menu
 		$menuItemSrl = Context::get('menu_item_srl');
 		if(!$menuItemSrl)
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		$menuItemInfo = $this->getMenuItemInfo($menuItemSrl);
@@ -594,7 +594,7 @@ class menuAdminModel extends menu
 		// if menu is shortcut
 		if($menuItemInfo->is_shortcut == 'Y')
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		// get module info

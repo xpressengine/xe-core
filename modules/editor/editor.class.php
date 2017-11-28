@@ -36,7 +36,7 @@ class editor extends ModuleObject
 		// 2009. 04. 14 Add a trigger from compiled codes of the editor component
 		$oModuleController->insertTrigger('display', 'editor', 'controller', 'triggerEditorComponentCompile', 'before');
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -115,7 +115,7 @@ class editor extends ModuleObject
 			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
-		return new Object(0, 'success_updated');
+		return new BaseObject(0, 'success_updated');
 	}
 
 	/**

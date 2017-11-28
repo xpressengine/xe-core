@@ -102,7 +102,7 @@ class counterModel extends counter
 	 *
 	 * @param mixed $selected_date Date(YYYYMMDD) list 
 	 * @param integer $site_srl Site_srl
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function getStatus($selected_date, $site_srl = 0)
 	{
@@ -141,7 +141,7 @@ class counterModel extends counter
 	 * @param string $type Choice time interval (year, week, month, hour or DEFAULT)
 	 * @param integer $selected_date Date(YYYYMMDD)
 	 * @param integer $site_srl Site_srl
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function getHourlyStatus($type = 'hour', $selected_date, $site_srl = 0, $isPageView = false)
 	{

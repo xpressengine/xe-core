@@ -235,7 +235,7 @@ class communicationModel extends communication
 	 * get a message list
 	 * @param string $message_type (R: Received Message, S: Sent Message, T: Archive)
 	 * @param array $columnList
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function getMessages($message_type = "R", $columnList = array())
 	{
@@ -276,7 +276,7 @@ class communicationModel extends communication
 	 * Get a list of friends
 	 * @param int $friend_group_srl (default 0)
 	 * @param array $columnList
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function getFriends($friend_group_srl = 0, $columnList = array())
 	{

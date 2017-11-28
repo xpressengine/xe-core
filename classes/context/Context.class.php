@@ -1998,7 +1998,7 @@ class Context
 	/**
 	 * Return values from the GET/POST/XMLRPC
 	 *
-	 * @return Object Request variables.
+	 * @return BaseObject Request variables.
 	 */
 	function getRequestVars()
 	{
