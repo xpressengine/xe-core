@@ -1034,8 +1034,18 @@ class documentItem extends Object
 	function printExtraImages($time_check = 43200)
 	{
 		if(!$this->document_srl) return;
-		// Get the icon directory
-		$path = sprintf('%s%s',getUrl(), 'modules/document/tpl/icons/');
+
+		$oDocumentModel = getModel('document');
+		$documentConfig = $oDocumentModel->getDocumentConfig();
+		if(Mobile::isFromMobilePhone())
+		{
+			$iconSkin = $documentConfig->micons;
+		}
+		else
+		{
+			$iconSkin = $documentConfig->icons;
+		}
+		$path = sprintf('%s%s',getUrl(), "modules/document/tpl/icons/$iconSkin/");
 
 		$buffs = $this->getExtraImages($time_check);
 		if(!count($buffs)) return;
