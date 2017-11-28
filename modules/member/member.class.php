@@ -218,6 +218,14 @@ class member extends ModuleObject {
 			// check signup form ordering info
 			if(!$config->signupForm) return true;
 
+			foreach($config->signupForm as $form)
+			{
+				if($form->name === 'email_address' && $form->isPublic !== 'N')
+				{
+					return true;
+				}
+			}
+
 			// check agreement field exist
 			if($config->agreement) return true;
 
@@ -348,13 +356,24 @@ class member extends ModuleObject {
 			// check signup form ordering info
 			if(!$config->signupForm || !is_array($config->signupForm))
 			{
-				$identifier = 'user_id';
+				$identifier = 'email_address';
 
 				$config->signupForm = $oMemberAdminController->createSignupForm($identifier);
 				$config->identifier = $identifier;
 				unset($config->agreement);
-				$output = $oModuleController->updateModuleConfig('member', $config);
 			}
+
+			// 회원정보에서 이메일 노출 제거
+			// @see https://github.com/xpressengine/xe-core/issues/2177
+			foreach($config->signupForm as $form)
+			{
+				if($form->name === 'email_address')
+				{
+					$form->isPublic = 'N';
+					break;
+				}
+			}
+			$oModuleController->updateModuleConfig('member', $config);
 
 			if($config->skin)
 			{

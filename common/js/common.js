@@ -23,6 +23,8 @@ if(typeof window.XE == "undefined") {
 			($.os.Unix) ? 'Unix' :
 			($.os.Mac) ? 'Mac' : '';
 
+		var base_url;
+
 		/**
 		 * @brief XE 공용 유틸리티 함수
 		 * @namespace XE
@@ -144,8 +146,11 @@ if(typeof window.XE == "undefined") {
 			},
 
 			isSameHost: function(url) {
-				var base_url = global.XE.URI(global.request_uri).normalizePathname();
+				if(typeof url != "string") return false;
+
 				var target_url = global.XE.URI(url).normalizePathname();
+				if(target_url.is('urn')) return false;
+
 				var port = [Number(global.http_port) || 80, Number(global.https_port) || 443];
 
 				if(!target_url.hostname()) {
@@ -161,7 +166,10 @@ if(typeof window.XE == "undefined") {
 					return false;
 				}
 
-				base_url = base_url.hostname() + base_url.directory();
+				if(!base_url) {
+					base_url = global.XE.URI(global.request_uri).normalizePathname();
+					base_url = base_url.hostname() + base_url.directory();
+				}
 				target_url = target_url.hostname() + target_url.directory();
 
 				return target_url.indexOf(base_url) === 0;
@@ -174,10 +182,11 @@ if(typeof window.XE == "undefined") {
 		$(function() {
 		$('a[target]').each(function() {
 			var $this = $(this);
-			var href = $this.attr('href');
-			var target = $this.attr('target');
+			var href = $this.attr('href').trim();
+			var target = $this.attr('target').trim();
 
 			if(!target || !href) return;
+			if(!href.match(/^(https?:\/\/)/)) return;
 
 			if(target === '_top' || target === '_self' || target === '_parent') {
 				$this.data('noopener', false);
@@ -199,9 +208,10 @@ if(typeof window.XE == "undefined") {
 
 		$('body').on('click', 'a[target]', function(e) {
 			var $this = $(this);
-			var href = $this.attr('href');
+			var href = $this.attr('href').trim();
 
 			if(!href) return;
+			if(!href.match(/^(https?:\/\/)/)) return;
 
 			if($this.data('noopener') !== false && !window.XE.isSameHost(href)) {
 				var rel = $this.attr('rel');
@@ -212,7 +222,7 @@ if(typeof window.XE == "undefined") {
 					$this.attr('rel', 'noopener');
 				}
 
-				blankshield.open(href);
+					blankshield.open(href);
 				e.preventDefault();
 			}
 		});
