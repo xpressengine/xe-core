@@ -1900,7 +1900,7 @@ class menuAdminController extends menu
 			$names = $oMenuAdminModel->getMenuItemNames($node->name, $site_srl);
 			foreach($names as $key => $val)
 			{
-				$name_arr_str .= sprintf('"%s"=>\'%s\',',$key, str_replace(array('\\', '\''), array('\\\\', '\\\''), $val));
+				$name_arr_str .= sprintf('"%s"=>%s,',$key, var_export($val, true));
 			}
 			$name_str = sprintf('$_names = array(%s); print $_names[$lang_type];', $name_arr_str);
 
@@ -1910,7 +1910,7 @@ class menuAdminController extends menu
 			{
 				$href = "getSiteUrl('$domain', '','mid','$node->url')";
 			}
-			else $href = sprintf('"%s"', $url);
+			else $href = var_export($url, true);
 			$is_shortcut = $node->is_shortcut;
 			$open_window = $node->open_window;
 			$expand = $node->expand;
@@ -1941,23 +1941,23 @@ class menuAdminController extends menu
 			if($group_srls)$group_check_code = sprintf('($is_admin==true||(is_array($group_srls)&&count(array_intersect($group_srls, array(%s))))||($is_logged&&%s))',$group_srls,$group_srls == -1?1:0);
 			else $group_check_code = "true";
 			$attribute = sprintf(
-				'node_srl="%s" parent_srl="%s" menu_name_key=\'%s\' text="<?php if(%s) { %s }?>" url="<?php print(%s?"%s":"")?>" href="<?php print(%s?%s:"")?>" is_shortcut="%s" desc="%s" open_window="%s" expand="%s" normal_btn="%s" hover_btn="%s" active_btn="%s" link="<?php if(%s) {?>%s<?php }?>"',
+				'node_srl="%d" parent_srl="%d" menu_name_key=%s text="<?php if(%s) { %s }?>" url="<?php print(%s?%s:"")?>" href="<?php print(%s?%s:"")?>" is_shortcut=%s desc=%s open_window=%s expand=%s normal_btn=%s hover_btn=%s active_btn=%s link="<?php if(%s) {?>%s<?php }?>"',
 				$menu_item_srl,
 				$node->parent_srl,
-				addslashes($node->name),
+				var_export($node->name, true),
 				$group_check_code,
 				$name_str,
 				$group_check_code,
-				$url,
+				var_export($url, true),
 				$group_check_code,
 				$href,
-				$is_shortcut,
-				$desc,
-				$open_window,
-				$expand,
-				$normal_btn,
-				$hover_btn,
-				$active_btn,
+				var_export($is_shortcut, true),
+				var_export($desc, true),
+				var_export($open_window, true),
+				var_export($expand, true),
+				var_export($normal_btn, true),
+				var_export($hover_btn, true),
+				var_export($active_btn, true),
 				$group_check_code,
 				$link
 			);
@@ -2023,7 +2023,7 @@ class menuAdminController extends menu
 			{
 				$href = "getSiteUrl('$domain', '','mid','$node->url')";
 			}
-			else $href = sprintf('"%s"', $url);
+			else $href = var_export($url, true);
 			$is_shortcut = $node->is_shortcut;
 			$open_window = $node->open_window;
 			$normal_btn = str_replace(array('&','"','<','>'),array('&amp;','&quot;','&lt;','&gt;'),$node->normal_btn);
@@ -2068,26 +2068,26 @@ class menuAdminController extends menu
 			}
 			// Create properties (check if it belongs to the menu node by url_list. It looks a trick but fast and powerful)
 			$attribute = sprintf(
-				'"node_srl" => %d, "parent_srl" => %d, "menu_name_key" => \'%s\', "isShow" => (%s ? true : false), "text" => (%s ? $_menu_names[%d][$lang_type] : ""), "href" => (%s ? %s : ""), "url" => (%s ? "%s" : ""), "is_shortcut" => "%s", "desc" => \'%s\', "open_window" => "%s", "normal_btn" => "%s", "hover_btn" => "%s", "active_btn" => "%s", "selected" => (array(%s) && in_array(Context::get("mid"), array(%s)) ? 1 : 0), "expand" => \'%s\', "list" => array(%s), "link" => (%s ? (array(%s) && in_array(Context::get("mid"), array(%s)) ? %s : %s) : ""),',
+				'"node_srl" => %d, "parent_srl" => %d, "menu_name_key" => %s, "isShow" => (%s ? true : false), "text" => (%s ? $_menu_names[%d][$lang_type] : ""), "href" => (%s ? %s : ""), "url" => (%s ? %s : ""), "is_shortcut" => %s, "desc" => %s, "open_window" => %s, "normal_btn" => %s, "hover_btn" => %s, "active_btn" => %s, "selected" => (array(%s) && in_array(Context::get("mid"), array(%s)) ? 1 : 0), "expand" => %s, "list" => array(%s), "link" => (%s ? (array(%s) && in_array(Context::get("mid"), array(%s)) ? %s : %s) : ""),',
 				$node->menu_item_srl,
 				$node->parent_srl,
-				addslashes($node->name),
+				var_export($node->name, true),
 				$group_check_code,
 				$group_check_code,
 				$node->menu_item_srl,
 				$group_check_code,
 				$href,
 				$group_check_code,
-				$url,
-				$is_shortcut,
-				$desc,
-				$open_window,
-				$normal_btn,
-				$hover_btn,
-				$active_btn,
+				var_export($url, true),
+				var_export($is_shortcut, true),
+				var_export($desc, true),
+				var_export($open_window, true),
+				var_export($normal_btn, true),
+				var_export($hover_btn, true),
+				var_export($active_btn, true),
 				$selected,
 				$selected,
-				$expand,
+				var_export($expand, true),
 				$child_buff,
 				$group_check_code,
 				$selected,

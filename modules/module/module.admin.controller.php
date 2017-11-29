@@ -858,14 +858,11 @@ class moduleAdminController extends module
 		}
 		$output = executeQueryArray('module.getLang', $args);
 		if(!$output->toBool() || !$output->data) return;
-		// Set the cache directory
-		$cache_path = _XE_PATH_.'files/cache/lang_defined/';
-		FileHandler::makeDir($cache_path);
 
 		$langMap = array();
-		foreach($output->data as $val)
+		foreach($output->data as $lang)
 		{
-			$langMap[$val->lang_code][$val->name] = $val->value;
+			$langMap[$lang->lang_code][$lang->name] = $lang->value;
 		}
 
 		$lang_supported = Context::get('lang_supported');
@@ -876,6 +873,8 @@ class moduleAdminController extends module
 		{
 			$langMap[$defaultLang] = array();
 		}
+
+		$oCacheHandler = CacheHandler::getInstance('object', null, true);
 
 		foreach($lang_supported as $langCode => $langName)
 		{
@@ -900,16 +899,15 @@ class moduleAdminController extends module
 				$langMap[$langCode] += $langMap[$targetLangCode];
 			}
 
-			$buff = array("<?php if(!defined('__XE__')) exit();");
-			foreach($langMap[$langCode] as $code => $value)
+			if($oCacheHandler->isSupport())
 			{
-				$buff[] = sprintf('$lang[\'%s\'] = \'%s\';', $code, addcslashes(stripcslashes($value), "'"));
-			}
-			if (!@file_put_contents(sprintf('%s/%d.%s.php', $cache_path, $args->site_srl, $langCode), join(PHP_EOL, $buff), LOCK_EX))
-			{
-				return;
+				$object_key = 'user_defined_langs:' . $args->site_srl . ':' . $langCode;
+				$cache_key = $oCacheHandler->getGroupKey('site_and_module', $object_key);
+				$oCacheHandler->put($cache_key, $langMap[$langCode]);
 			}
 		}
+
+		return $langMap[Context::getLangType()];
 	}
 
 	public function procModuleAdminSetDesignInfo()
