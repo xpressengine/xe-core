@@ -46,16 +46,16 @@ class spamfilterModel extends spamfilter
 		$ipaddress = $_SERVER['REMOTE_ADDR'];
 
 		$ip_list = $this->getDeniedIPList();
-		if(!count($ip_list)) return new Object();
+		if(!count($ip_list)) return new BaseObject();
 
 		$count = count($ip_list);
 		for($i=0;$i<$count;$i++)
 		{
 			$ip = str_replace('.', '\.', str_replace('*','(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)',$ip_list[$i]->ipaddress));
-			if(preg_match('/^'.$ip.'$/', $ipaddress, $matches)) return new Object(-1,'msg_alert_registered_denied_ip');
+			if(preg_match('/^'.$ip.'$/', $ipaddress, $matches)) return new BaseObject(-1,'msg_alert_registered_denied_ip');
 		}
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -77,7 +77,7 @@ class spamfilterModel extends spamfilter
 	function isDeniedWord($text)
 	{
 		$word_list = $this->getDeniedWordList();
-		if(!count($word_list)) return new Object();
+		if(!count($word_list)) return new BaseObject();
 
 		$count = count($word_list);
 		for($i=0;$i<$count;$i++)
@@ -87,11 +87,11 @@ class spamfilterModel extends spamfilter
 			{
 				$args->word = $word;
 				$output = executeQuery('spamfilter.updateDeniedWordHit', $args);
-				return new Object(-1,sprintf(Context::getLang('msg_alert_denied_word'), $word));
+				return new BaseObject(-1,sprintf(Context::getLang('msg_alert_denied_word'), $word));
 			}
 		}
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -101,7 +101,7 @@ class spamfilterModel extends spamfilter
 	{
 		$config = $this->getConfig();
 
-		if($config->limits != 'Y') return new Object(); 
+		if($config->limits != 'Y') return new BaseObject(); 
 		$limit_count = '3';
 		$interval = '10';
 
@@ -113,7 +113,7 @@ class spamfilterModel extends spamfilter
 		{
 			$oSpamFilterController = getController('spamfilter');
 			$oSpamFilterController->insertIP($ipaddress, 'AUTO-DENIED : Over limit');
-			return new Object(-1, 'msg_alert_registered_denied_ip');
+			return new BaseObject(-1, 'msg_alert_registered_denied_ip');
 		}
 		// If the number of limited posts is not reached, keep creating.
 		if($count)
@@ -130,9 +130,9 @@ class spamfilterModel extends spamfilter
 			$oSpamFilterController = getController('spamfilter');
 			$oSpamFilterController->insertLog();
 
-			return new Object(-1, $message);
+			return new BaseObject(-1, $message);
 		}
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -142,9 +142,9 @@ class spamfilterModel extends spamfilter
 	{
 		$oTrackbackModel = getModel('trackback');
 		$count = $oTrackbackModel->getTrackbackCountByIPAddress($document_srl, $_SERVER['REMOTE_ADDR']);
-		if($count>0) return new Object(-1, 'msg_alert_trackback_denied');
+		if($count>0) return new BaseObject(-1, 'msg_alert_trackback_denied');
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**

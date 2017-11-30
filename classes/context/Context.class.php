@@ -22,7 +22,7 @@ class Context
 
 	/**
 	 * Request method
-	 * @var string GET|POST|XMLRPC
+	 * @var string GET|POST|XMLRPC|JSON
 	 */
 	public $request_method = 'GET';
 
@@ -34,7 +34,7 @@ class Context
 
 	/**
 	 * Response method.If it's not set, it follows request method.
-	 * @var string HTML|XMLRPC
+	 * @var string HTML|XMLRPC|JSON|JS_CALLBACK
 	 */
 	public $response_method = '';
 
@@ -452,7 +452,9 @@ class Context
 			return;
 		}
 
+		ob_start(); // trash BOM
 		include($self::getConfigFile());
+		ob_end_clean();
 
 		// If master_db information does not exist, the config file needs to be updated
 		if(!isset($db_info->master_db))
@@ -1919,7 +1921,7 @@ class Context
 	 * Set a context value with a key
 	 *
 	 * @param string $key Key
-	 * @param string $val Value
+	 * @param mixed $val Value
 	 * @param mixed $set_to_get_vars If not FALSE, Set to get vars.
 	 * @return void
 	 */
@@ -1996,7 +1998,7 @@ class Context
 	/**
 	 * Return values from the GET/POST/XMLRPC
 	 *
-	 * @return Object Request variables.
+	 * @return BaseObject Request variables.
 	 */
 	function getRequestVars()
 	{

@@ -17,16 +17,16 @@ class memberAdminController extends member
 
 	/**
 	 * Add a user (Administrator)
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberAdminInsert()
 	{
-		// if(Context::getRequestMethod() == "GET") return new Object(-1, "msg_invalid_request");
+		// if(Context::getRequestMethod() == "GET") return new BaseObject(-1, "msg_invalid_request");
 		// Extract the necessary information in advance
 		$logged_info = Context::get('logged_info');
 		if($logged_info->is_admin != 'Y' || !checkCSRF())
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		$args = Context::gets('member_srl','email_address','find_account_answer', 'allow_mailing','allow_message','denied','is_admin','description','group_srl_list','limit_date');
@@ -135,7 +135,7 @@ class memberAdminController extends member
 
 	/**
 	 * Delete a user (Administrator)
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberAdminDelete()
 	{
@@ -186,7 +186,7 @@ class memberAdminController extends member
 
 		if((!$args->webmaster_name || !$args->webmaster_email) && $args->enable_confirm == 'Y')
 		{
-			return new Object(-1, 'msg_mail_authorization');
+			return new BaseObject(-1, 'msg_mail_authorization');
 		}
 
 		$oModuleController = getController('module');
@@ -234,7 +234,7 @@ class memberAdminController extends member
 
 			if(!$redirectModuleInfo)
 			{
-				return new Object('-1', 'msg_exist_selected_module');
+				return new BaseObject('-1', 'msg_exist_selected_module');
 			}
 
 			$args->redirect_url = Context::getDefaultUrl().$redirectModuleInfo->mid;
@@ -425,7 +425,7 @@ class memberAdminController extends member
 			$signupItem->required = in_array($key, $orgRequireds);
 			$signupItem->isUse = ($config->{$key} == 'Y') || in_array($key, $orgUse);
 			$signupItem->isPublic = ($signupItem->isUse) ? 'Y' : 'N';
-			if($key == 'find_account_question' || $key == 'password')
+			if(in_array($key, array('find_account_question', 'password', 'email_address')))
 			{
 				$signupItem->isPublic = 'N';
 			}
@@ -602,7 +602,7 @@ class memberAdminController extends member
 
 	/**
 	 * Add a user group
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberAdminInsertGroup()
 	{
@@ -620,7 +620,7 @@ class memberAdminController extends member
 
 	/**
 	 * Update user group information
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberAdminUpdateGroup()
 	{
@@ -641,7 +641,7 @@ class memberAdminController extends member
 
 	/**
 	 * Update user group information
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberAdminDeleteGroup()
 	{
@@ -660,7 +660,7 @@ class memberAdminController extends member
 
 	/**
 	 * Add a join form
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberAdminInsertJoinForm()
 	{
@@ -693,7 +693,7 @@ class memberAdminController extends member
 			if($item->name == $args->column_name)
 			{
 				if($args->member_join_form_srl && $args->member_join_form_srl == $item->member_join_form_srl) continue;
-				return new Object(-1,'msg_exists_user_id');
+				return new BaseObject(-1,'msg_exists_user_id');
 			}
 		}
 		// Fix if member_join_form_srl exists. Add if not exists.
@@ -808,7 +808,7 @@ class memberAdminController extends member
 
 	/**
 	 * selected member manager layer in dispAdminList
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberAdminSelectedMemberManage()
 	{
@@ -899,12 +899,12 @@ class memberAdminController extends member
 
 	/**
 	 * Delete the selected members
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberAdminDeleteMembers()
 	{
 		$target_member_srls = Context::get('target_member_srls');
-		if(!$target_member_srls) return new Object(-1, 'msg_invalid_request');
+		if(!$target_member_srls) return new BaseObject(-1, 'msg_invalid_request');
 		$member_srls = explode(',', $target_member_srls);
 		$oMemberController = getController('member');
 
@@ -923,12 +923,12 @@ class memberAdminController extends member
 
 	/**
 	 * Update a group of selected memebrs
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberAdminUpdateMembersGroup()
 	{
 		$member_srl = Context::get('member_srl');
-		if(!$member_srl) return new Object(-1,'msg_invalid_request');
+		if(!$member_srl) return new BaseObject(-1,'msg_invalid_request');
 		$member_srls = explode(',',$member_srl);
 
 		$group_srl = Context::get('group_srls');
@@ -1056,7 +1056,7 @@ class memberAdminController extends member
 
 	/**
 	 * Update denied ID
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberAdminUpdateDeniedID()
 	{
@@ -1098,7 +1098,7 @@ class memberAdminController extends member
 	 * Change the group values of member
 	 * @param int $source_group_srl
 	 * @param int $target_group_srl
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function changeGroup($source_group_srl, $target_group_srl)
 	{
@@ -1115,7 +1115,7 @@ class memberAdminController extends member
 	/**
 	 * Insert a group
 	 * @param object $args
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function insertGroup($args)
 	{
@@ -1147,13 +1147,13 @@ class memberAdminController extends member
 	/**
 	 * Modify Group Information
 	 * @param object $args
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function updateGroup($args)
 	{
 		if(!$args->site_srl) $args->site_srl = 0;
 		// Check the value of is_default.
-		if(!$args->group_srl) return new Object(-1, 'lang->msg_not_founded');
+		if(!$args->group_srl) return new BaseObject(-1, 'lang->msg_not_founded');
 		if($args->is_default!='Y')
 		{
 			$args->is_default = 'N';
@@ -1173,7 +1173,7 @@ class memberAdminController extends member
 	 * Delete a Group
 	 * @param int $group_srl
 	 * @param int $site_srl
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function deleteGroup($group_srl, $site_srl = 0)
 	{
@@ -1184,8 +1184,8 @@ class memberAdminController extends member
 		$columnList = array('group_srl', 'is_default');
 		$group_info = $oMemberModel->getGroup($group_srl, $columnList);
 
-		if(!$group_info) return new Object(-1, 'lang->msg_not_founded');
-		if($group_info->is_default == 'Y') return new Object(-1, 'msg_not_delete_default');
+		if(!$group_info) return new BaseObject(-1, 'lang->msg_not_founded');
+		if($group_info->is_default == 'Y') return new BaseObject(-1, 'msg_not_delete_default');
 
 		// Get groups where is_default == 'Y'
 		$columnList = array('site_srl', 'group_srl');
@@ -1299,7 +1299,7 @@ class memberAdminController extends member
 	 * Register denied ID
 	 * @param string $user_id
 	 * @param string $description
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function insertDeniedID($user_id, $description = '')
 	{
@@ -1351,7 +1351,7 @@ class memberAdminController extends member
 	/**
 	 * Delete a join form
 	 * @param int $member_join_form_srl
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function deleteJoinForm($member_join_form_srl)
 	{
@@ -1365,7 +1365,7 @@ class memberAdminController extends member
 	 * Move up a join form
 	 * @deprecated
 	 * @param int $member_join_form_srl
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moveJoinFormUp($member_join_form_srl)
 	{
@@ -1380,7 +1380,7 @@ class memberAdminController extends member
 		// Get a list of all join forms
 		$join_form_list = $oMemberModel->getJoinFormList();
 		$join_form_srl_list = array_keys($join_form_list);
-		if(count($join_form_srl_list)<2) return new Object();
+		if(count($join_form_srl_list)<2) return new BaseObject();
 
 		$prev_member_join_form = NULL;
 		foreach($join_form_list as $key => $val)
@@ -1389,7 +1389,7 @@ class memberAdminController extends member
 			$prev_member_join_form = $val;
 		}
 		// Return if no previous join form exists
-		if(!$prev_member_join_form) return new Object();
+		if(!$prev_member_join_form) return new BaseObject();
 		// Information of the join form
 		$cur_args = new stdClass;
 		$cur_args->member_join_form_srl = $member_join_form_srl;
@@ -1405,14 +1405,14 @@ class memberAdminController extends member
 		executeQuery('member.updateMemberJoinFormListorder', $prev_args);
 		if(!$output->toBool()) return $output;
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
 	 * Move down a join form
 	 * @deprecated
 	 * @param int $member_join_form_srl
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moveJoinFormDown($member_join_form_srl)
 	{
@@ -1427,7 +1427,7 @@ class memberAdminController extends member
 		// Get information of all join forms
 		$join_form_list = $oMemberModel->getJoinFormList();
 		$join_form_srl_list = array_keys($join_form_list);
-		if(count($join_form_srl_list)<2) return new Object();
+		if(count($join_form_srl_list)<2) return new BaseObject();
 
 		for($i=0;$i<count($join_form_srl_list);$i++)
 		{
@@ -1436,7 +1436,7 @@ class memberAdminController extends member
 
 		$next_member_join_form_srl = $join_form_srl_list[$i+1];
 		// Return if no previous join form exists
-		if(!$next_member_join_form_srl) return new Object();
+		if(!$next_member_join_form_srl) return new BaseObject();
 		$next_member_join_form = $join_form_list[$next_member_join_form_srl];
 		// Information of the join form
 		$cur_args = new stdClass;
@@ -1453,7 +1453,7 @@ class memberAdminController extends member
 		$output = executeQuery('member.updateMemberJoinFormListorder', $next_args);
 		if(!$output->toBool()) return $output;
 
-		return new Object();
+		return new BaseObject();
 	}
 }
 /* End of file member.admin.controller.php */

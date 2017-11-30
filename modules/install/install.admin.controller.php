@@ -20,7 +20,7 @@ class installAdminController extends install
 	function procInstallAdminInstall()
 	{
 		$module_name = Context::get('module_name');
-		if(!$module_name) return new object(-1, 'invalid_request');
+		if(!$module_name) return new BaseObject(-1, 'invalid_request');
 
 		$oInstallController = getController('install');
 		$oInstallController->installModule($module_name, './modules/'.$module_name);
@@ -35,11 +35,11 @@ class installAdminController extends install
 	{
 		@set_time_limit(0);
 		$module_name = Context::get('module_name');
-		if(!$module_name) return new object(-1, 'invalid_request');
+		if(!$module_name) return new BaseObject(-1, 'invalid_request');
 
 		$oModule = getModule($module_name, 'class');
 		if($oModule) $output = $oModule->moduleUpdate();
-		else $output = new Object(-1, 'invalid_request');
+		else $output = new BaseObject(-1, 'invalid_request');
 
 		return $output;
 	}
@@ -65,7 +65,7 @@ class installAdminController extends install
 			$admin_ip_list = explode(',',trim($admin_ip_list, ','));
 			$admin_ip_list = array_unique($admin_ip_list);
 			if(!IpFilter::validate($admin_ip_list)) {
-				return new Object(-1, 'msg_invalid_ip');
+				return new BaseObject(-1, 'msg_invalid_ip');
 			}
 		}
 		
@@ -119,7 +119,7 @@ class installAdminController extends install
 		$oInstallController = getController('install');
 		if(!$oInstallController->makeConfigFile())
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 		else
 		{
@@ -140,7 +140,7 @@ class installAdminController extends install
 	{
 		if(!Context::get('index_module_srl') || !Context::get('menu_item_srl'))
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		$site_args = new stdClass();
@@ -239,7 +239,7 @@ class installAdminController extends install
 		$oInstallController = getController('install');
 		if(!$oInstallController->makeConfigFile())
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		$site_args = new stdClass();
@@ -310,25 +310,31 @@ class installAdminController extends install
 		//$this->setMessage('success_updated');
 	}
 
-	/* 썸내일 보여주기 방식 변경.*/
+	/**
+	 * Change the way the thumbnails are show.
+	 * @param $config
+	 * @return void
+	 */
 	function setModulesConfig($config)
 	{
-		$args = new stdClass();
+		$documentConfig = getModel('document')->getDocumentConfig();
 
-		if(!$config->thumbnail_type || $config->thumbnail_type != 'ratio' ) $args->thumbnail_type = 'crop';
-		else $args->thumbnail_type = 'ratio';
+		if (!$config->thumbnail_type || $config->thumbnail_type != 'ratio')
+		{
+			$documentConfig->thumbnail_type = 'crop';
+		}
+		else
+		{
+			$documentConfig->thumbnail_type = 'ratio';
+		}
 
 		$oModuleController = getController('module');
-		$oModuleController->insertModuleConfig('document',$args);
-
-		unset($args);
+		$oModuleController->insertModuleConfig('document',$documentConfig);
 
 		$args = new stdClass;
 		$args->htmlFooter = $config->htmlFooter;
 		$args->siteTitle = $config->siteTitle;
 		$oModuleController->updateModuleConfig('module',$args);
-
-		return $output;
 	}
 
 	private function saveIconTmp($icon, $iconname)

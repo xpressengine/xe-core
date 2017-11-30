@@ -519,7 +519,7 @@ class memberView extends member
 	 */
 	function dispSavedDocumentList()
 	{
-		return new Object(0, 'Deplicated method');
+		return new BaseObject(0, 'Deplicated method');
 	}
 
 	/**
@@ -547,7 +547,7 @@ class memberView extends member
 		$temp_password = $_SESSION['xe_temp_password_'.$user_id];
 		unset($_SESSION['xe_temp_password_'.$user_id]);
 
-		if(!$user_id||!$temp_password) return new Object(-1,'msg_invaild_request');
+		if(!$user_id||!$temp_password) return new BaseObject(-1,'msg_invaild_request');
 
 		Context::set('temp_password', $temp_password);
 
@@ -641,7 +641,7 @@ class memberView extends member
 	**/
 	function dispMemberSpammer()
 	{
-		if(!Context::get('is_logged')) return new Object(-1,'msg_not_permitted');
+		if(!Context::get('is_logged')) return new BaseObject(-1,'msg_not_permitted');
 
 		$member_srl = Context::get('member_srl');
 		$module_srl = Context::get('module_srl');
@@ -652,7 +652,7 @@ class memberView extends member
 		$module_info = $oModuleModel->getModuleInfoByModuleSrl($module_srl, $columnList);
 		$grant = $oModuleModel->getGrant($module_info, Context::get('logged_info'));
 
-		if(!$grant->manager) return new Object(-1,'msg_not_permitted');
+		if(!$grant->manager) return new BaseObject(-1,'msg_not_permitted');
 
 		$oMemberModel = getModel('member');
 

@@ -9,7 +9,7 @@ class file extends ModuleObject
 	/**
 	 * Implement if additional tasks are necessary when installing
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moduleInstall()
 	{
@@ -43,7 +43,7 @@ class file extends ModuleObject
 		// 2007. 10. 19 Call a trigger to set up the file permissions before displaying
 		$oModuleController->insertTrigger('module.dispAdditionSetup', 'file', 'view', 'triggerDispFileAdditionSetup', 'before');
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -93,7 +93,7 @@ class file extends ModuleObject
 	/**
 	 * Execute update
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moduleUpdate()
 	{
@@ -156,13 +156,13 @@ class file extends ModuleObject
 			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
-		return new Object(0, 'success_updated');
+		return new BaseObject(0, 'success_updated');
 	}
 
 	/**
 	 * Re-generate the cache file
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function recompileCache()
 	{

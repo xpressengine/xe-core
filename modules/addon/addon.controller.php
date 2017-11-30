@@ -148,7 +148,7 @@ class addonController extends addon
 	 * @param object $extra_vars Extra variables
 	 * @param int $site_srl Site srl
 	 * @param string $gtype site or global
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function doSetup($addon, $extra_vars, $site_srl = 0, $gtype = 'site')
 	{

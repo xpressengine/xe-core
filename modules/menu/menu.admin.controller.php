@@ -83,7 +83,7 @@ class menuAdminController extends menu
 	 *
 	 * @param string $title
 	 * @param int $siteSrl
-	 * @return Object If success, it contains menuSrl
+	 * @return BaseObject If success, it contains menuSrl
 	 */
 	public function addMenu($title, $siteSrl = 0)
 	{
@@ -164,13 +164,13 @@ class menuAdminController extends menu
 	 * @param array $moduleInfos
 	 * @param int $menuSrl
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function updateLinkModule($moduleInfos, $menuSrl)
 	{
 		if(!$moduleInfos || !is_array($moduleInfos) || count($moduleInfos) == 0 || $menuSrl == 0)
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		foreach($moduleInfos as $moduleInfo)
@@ -218,7 +218,7 @@ class menuAdminController extends menu
 		$oMenuAdminController = getAdminController('menu');
 		$oMenuAdminController->makeXmlFile($menuSrl);
 
-		return new Object();
+		return new BaseObject();
 	}
 
 
@@ -245,7 +245,7 @@ class menuAdminController extends menu
 
 	/**
 	 * Delete menu process method
-	 * @return void|Object
+	 * @return void|BaseObject
 	 */
 	function procMenuAdminDelete()
 	{
@@ -256,7 +256,7 @@ class menuAdminController extends menu
 
 		$oAdmin = getClass('admin');
 		if($menuInfo->title == $oAdmin->getAdminMenuName())
-			return new Object(-1, 'msg_adminmenu_cannot_delete');
+			return new BaseObject(-1, 'msg_adminmenu_cannot_delete');
 
 		// get menu properies with child menu
 		$phpFile = sprintf("./files/cache/menu/%s.php", $menu_srl);
@@ -287,13 +287,13 @@ class menuAdminController extends menu
 
 		if($isStartmenuInclude)
 		{
-			return new Object(-1, 'msg_cannot_delete_homemenu');
+			return new BaseObject(-1, 'msg_cannot_delete_homemenu');
 		}
 
 		$output = $this->deleteMenu($menu_srl);
 		if(!$output->toBool())
 		{
-			return new Object(-1, $output->message);
+			return new BaseObject(-1, $output->message);
 		}
 
 		$this->setMessage('success_deleted', 'info');
@@ -304,7 +304,7 @@ class menuAdminController extends menu
 	/**
 	 * Delete menu
 	 * Delete menu_item and xml cache files
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function deleteMenu($menu_srl)
 	{
@@ -375,7 +375,7 @@ class menuAdminController extends menu
 
 		$oDB->commit();
 
-		return new Object(0,'success_deleted');
+		return new BaseObject(0,'success_deleted');
 	}
 
 	/**
@@ -393,13 +393,13 @@ class menuAdminController extends menu
 
 		if(!$request->parent_srl || !$request->menu_name)
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		$this->_setMenuSrl($request->parent_srl, $request->menu_srl);
 		if(!$request->menu_srl)
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		if($request->is_shortcut == 'Y')
@@ -413,7 +413,7 @@ class menuAdminController extends menu
 
 		if($result->error < 0)
 		{
-			return new Object($result->error, $result->message);
+			return new BaseObject($result->error, $result->message);
 		}
 
 		// recreate menu cache file
@@ -479,7 +479,7 @@ class menuAdminController extends menu
 			$itemInfo = $oMenuAdminModel->getMenuItemInfo($request->shortcut_target);
 			if(!$itemInfo->menu_item_srl)
 			{
-				return new Object(-1, 'msg_invalid_request');
+				return new BaseObject(-1, 'msg_invalid_request');
 			}
 			unset($itemInfo->normal_btn, $itemInfo->hover_btn, $itemInfo->active_btn);
 
@@ -544,7 +544,7 @@ class menuAdminController extends menu
 
 		if($request->module_id && strncasecmp('http', $request->module_id, 4) === 0)
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		// when menu copy, module already copied
@@ -553,7 +553,7 @@ class menuAdminController extends menu
 			$result = $this->_insertModule($request, $args);
 			if(!$result->toBool())
 			{
-				return new Object(-1, $result->message);
+				return new BaseObject(-1, $result->message);
 			}
 		}
 
@@ -564,7 +564,7 @@ class menuAdminController extends menu
 
 		if(!$request->module_id)
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		$args->url = $request->module_id;
@@ -629,7 +629,7 @@ class menuAdminController extends menu
 		$output = $oModuleModel->getModuleInfoByMid($request->module_id);
 		if($output->module_srl)
 		{
-			return new Object(-1, 'msg_module_name_exists');
+			return new BaseObject(-1, 'msg_module_name_exists');
 		}
 
 		$oModuleController = getController('module');
@@ -648,7 +648,7 @@ class menuAdminController extends menu
 
 		if(!$request->menu_item_srl || !$request->menu_name)
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		// variables set
@@ -675,7 +675,7 @@ class menuAdminController extends menu
 				$newItemInfo = $oMenuAdminModel->getMenuItemInfo($request->shortcut_target);
 				if(!$newItemInfo->menu_item_srl)
 				{
-					return new Object(-1, 'msg_invalid_request');
+					return new BaseObject(-1, 'msg_invalid_request');
 				}
 
 				$args->url = $newItemInfo->url;
@@ -695,7 +695,7 @@ class menuAdminController extends menu
 				$output = $oModuleModel->getModuleInfoByMid($request->module_id);
 				if($output->module_srl)
 				{
-					return new Object(-1, 'msg_module_name_exists');
+					return new BaseObject(-1, 'msg_module_name_exists');
 				}
 			}
 
@@ -703,7 +703,7 @@ class menuAdminController extends menu
 			$moduleInfo = $oModuleModel->getModuleInfoByMid($itemInfo->url);
 			if(!$moduleInfo)
 			{
-				return new Object(-1, 'msg_invalid_request');
+				return new BaseObject(-1, 'msg_invalid_request');
 			}
 
 			$moduleInfo->mid = $request->module_id;
@@ -813,7 +813,7 @@ class menuAdminController extends menu
 
 	/**
 	 * Delete menu item(menu of the menu)
-	 * @return void|Object
+	 * @return void|BaseObject
 	 */
 	function procMenuAdminDeleteItem()
 	{
@@ -841,7 +841,7 @@ class menuAdminController extends menu
 	/**
 	 * Delete menu item ( Only include BO )
 	 * @args menu_srl, menu_item_srl, is_force
-	 * @return void|Object
+	 * @return void|BaseObject
 	 */
 	public function deleteItem($args)
 	{
@@ -859,7 +859,7 @@ class menuAdminController extends menu
 			if(!$output->toBool()) return $output;
 			if($output->data->count > 0)
 			{
-				return new Object(-1001, 'msg_cannot_delete_for_child');
+				return new BaseObject(-1001, 'msg_cannot_delete_for_child');
 			}
 		}
 
@@ -896,7 +896,7 @@ class menuAdminController extends menu
 		$this->_checkHomeMenuInOriginMenu($originMenu, $siteInfo->mid, $isStartmenuInclude);
 		if($isStartmenuInclude)
 		{
-			return new Object(-1, 'msg_cannot_delete_homemenu');
+			return new BaseObject(-1, 'msg_cannot_delete_homemenu');
 		}
 
 		$oDB = DB::getInstance();
@@ -913,7 +913,7 @@ class menuAdminController extends menu
 		$this->add('menu_title', $menu_title);
 		$this->add('menu_item_srl', $parent_srl);
 
-		return new Object(0, 'success_deleted');
+		return new BaseObject(0, 'success_deleted');
 	}
 
 	private function _checkHomeMenuInOriginMenu($originMenu, $startMid, &$isStartmenuInclude)
@@ -986,7 +986,7 @@ class menuAdminController extends menu
 				}
 			}
 		}
-		return new Object(0, 'success');
+		return new BaseObject(0, 'success');
 	}
 
 	private function _recursiveDeleteMenuItem(&$oDB, &$menuInfo, $node)
@@ -994,7 +994,7 @@ class menuAdminController extends menu
 		$output = $this->_deleteMenuItem($oDB, $menuInfo, $node);
 		if(!$output->toBool())
 		{
-			return new Object(-1, $output->message);
+			return new BaseObject(-1, $output->message);
 		}
 
 		if(is_array($node['list']))
@@ -1017,7 +1017,7 @@ class menuAdminController extends menu
 		$source_srl = Context::get('source_srl');	// Same hierarchy's menu item serial number
 		$target_srl = Context::get('target_srl');	// Self menu item serial number
 
-		if(!$mode || !$parent_srl || !$target_srl) return new Object(-1,'msg_invalid_request');
+		if(!$mode || !$parent_srl || !$target_srl) return new BaseObject(-1,'msg_invalid_request');
 
 		$oMenuAdminModel = getAdminModel('menu');
 
@@ -1025,7 +1025,7 @@ class menuAdminController extends menu
 		$originalItemInfo = $oMenuAdminModel->getMenuItemInfo($target_srl);
 		if(!$originalItemInfo->menu_item_srl)
 		{
-			return new Object(-1, 'msg_empty_menu_item');
+			return new BaseObject(-1, 'msg_empty_menu_item');
 		}
 
 		// get menu properies with child menu
@@ -1409,7 +1409,7 @@ class menuAdminController extends menu
 		$oMenuAdminModel = getAdminModel('menu');
 
 		$target_item = $oMenuAdminModel->getMenuItemInfo($target_srl);
-		if($target_item->menu_item_srl != $target_srl) return new Object(-1,'msg_invalid_request');
+		if($target_item->menu_item_srl != $target_srl) return new BaseObject(-1,'msg_invalid_request');
 		// Move the menu location(change the order menu appears)
 		if($mode == 'move')
 		{
@@ -1420,7 +1420,7 @@ class menuAdminController extends menu
 			if($source_srl)
 			{
 				$source_item = $oMenuAdminModel->getMenuItemInfo($source_srl);
-				if($source_item->menu_item_srl != $source_srl) return new Object(-1,'msg_invalid_request');
+				if($source_item->menu_item_srl != $source_srl) return new BaseObject(-1,'msg_invalid_request');
 				$args->listorder = $source_item->listorder-1;
 			}
 			else
@@ -1900,7 +1900,7 @@ class menuAdminController extends menu
 			$names = $oMenuAdminModel->getMenuItemNames($node->name, $site_srl);
 			foreach($names as $key => $val)
 			{
-				$name_arr_str .= sprintf('"%s"=>\'%s\',',$key, str_replace(array('\\', '\''), array('\\\\', '\\\''), $val));
+				$name_arr_str .= sprintf('"%s"=>%s,',$key, var_export($val, true));
 			}
 			$name_str = sprintf('$_names = array(%s); print $_names[$lang_type];', $name_arr_str);
 
@@ -1910,7 +1910,7 @@ class menuAdminController extends menu
 			{
 				$href = "getSiteUrl('$domain', '','mid','$node->url')";
 			}
-			else $href = sprintf('"%s"', $url);
+			else $href = var_export($url, true);
 			$is_shortcut = $node->is_shortcut;
 			$open_window = $node->open_window;
 			$expand = $node->expand;
@@ -1941,23 +1941,23 @@ class menuAdminController extends menu
 			if($group_srls)$group_check_code = sprintf('($is_admin==true||(is_array($group_srls)&&count(array_intersect($group_srls, array(%s))))||($is_logged&&%s))',$group_srls,$group_srls == -1?1:0);
 			else $group_check_code = "true";
 			$attribute = sprintf(
-				'node_srl="%s" parent_srl="%s" menu_name_key=\'%s\' text="<?php if(%s) { %s }?>" url="<?php print(%s?"%s":"")?>" href="<?php print(%s?%s:"")?>" is_shortcut="%s" desc="%s" open_window="%s" expand="%s" normal_btn="%s" hover_btn="%s" active_btn="%s" link="<?php if(%s) {?>%s<?php }?>"',
+				'node_srl="%d" parent_srl="%d" menu_name_key=%s text="<?php if(%s) { %s }?>" url="<?php print(%s?%s:"")?>" href="<?php print(%s?%s:"")?>" is_shortcut=%s desc=%s open_window=%s expand=%s normal_btn=%s hover_btn=%s active_btn=%s link="<?php if(%s) {?>%s<?php }?>"',
 				$menu_item_srl,
 				$node->parent_srl,
-				addslashes($node->name),
+				var_export($node->name, true),
 				$group_check_code,
 				$name_str,
 				$group_check_code,
-				$url,
+				var_export($url, true),
 				$group_check_code,
 				$href,
-				$is_shortcut,
-				$desc,
-				$open_window,
-				$expand,
-				$normal_btn,
-				$hover_btn,
-				$active_btn,
+				var_export($is_shortcut, true),
+				var_export($desc, true),
+				var_export($open_window, true),
+				var_export($expand, true),
+				var_export($normal_btn, true),
+				var_export($hover_btn, true),
+				var_export($active_btn, true),
 				$group_check_code,
 				$link
 			);
@@ -2023,7 +2023,7 @@ class menuAdminController extends menu
 			{
 				$href = "getSiteUrl('$domain', '','mid','$node->url')";
 			}
-			else $href = sprintf('"%s"', $url);
+			else $href = var_export($url, true);
 			$is_shortcut = $node->is_shortcut;
 			$open_window = $node->open_window;
 			$normal_btn = str_replace(array('&','"','<','>'),array('&amp;','&quot;','&lt;','&gt;'),$node->normal_btn);
@@ -2068,26 +2068,26 @@ class menuAdminController extends menu
 			}
 			// Create properties (check if it belongs to the menu node by url_list. It looks a trick but fast and powerful)
 			$attribute = sprintf(
-				'"node_srl" => %d, "parent_srl" => %d, "menu_name_key" => \'%s\', "isShow" => (%s ? true : false), "text" => (%s ? $_menu_names[%d][$lang_type] : ""), "href" => (%s ? %s : ""), "url" => (%s ? "%s" : ""), "is_shortcut" => "%s", "desc" => \'%s\', "open_window" => "%s", "normal_btn" => "%s", "hover_btn" => "%s", "active_btn" => "%s", "selected" => (array(%s) && in_array(Context::get("mid"), array(%s)) ? 1 : 0), "expand" => \'%s\', "list" => array(%s), "link" => (%s ? (array(%s) && in_array(Context::get("mid"), array(%s)) ? %s : %s) : ""),',
+				'"node_srl" => %d, "parent_srl" => %d, "menu_name_key" => %s, "isShow" => (%s ? true : false), "text" => (%s ? $_menu_names[%d][$lang_type] : ""), "href" => (%s ? %s : ""), "url" => (%s ? %s : ""), "is_shortcut" => %s, "desc" => %s, "open_window" => %s, "normal_btn" => %s, "hover_btn" => %s, "active_btn" => %s, "selected" => (array(%s) && in_array(Context::get("mid"), array(%s)) ? 1 : 0), "expand" => %s, "list" => array(%s), "link" => (%s ? (array(%s) && in_array(Context::get("mid"), array(%s)) ? %s : %s) : ""),',
 				$node->menu_item_srl,
 				$node->parent_srl,
-				addslashes($node->name),
+				var_export($node->name, true),
 				$group_check_code,
 				$group_check_code,
 				$node->menu_item_srl,
 				$group_check_code,
 				$href,
 				$group_check_code,
-				$url,
-				$is_shortcut,
-				$desc,
-				$open_window,
-				$normal_btn,
-				$hover_btn,
-				$active_btn,
+				var_export($url, true),
+				var_export($is_shortcut, true),
+				var_export($desc, true),
+				var_export($open_window, true),
+				var_export($normal_btn, true),
+				var_export($hover_btn, true),
+				var_export($active_btn, true),
 				$selected,
 				$selected,
-				$expand,
+				var_export($expand, true),
 				$child_buff,
 				$group_check_code,
 				$selected,

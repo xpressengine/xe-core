@@ -83,7 +83,7 @@ class autoinstall extends ModuleObject
 	/**
 	 * For additional tasks required when installing
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moduleInstall()
 	{
@@ -146,7 +146,7 @@ class autoinstall extends ModuleObject
 	/**
 	 * Execute update
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moduleUpdate()
 	{
@@ -191,12 +191,12 @@ class autoinstall extends ModuleObject
 			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
-		return new Object(0, 'success_updated');
+		return new BaseObject(0, 'success_updated');
 	}
 
 	/**
 	 * Re-generate the cache file
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function recompileCache()
 	{

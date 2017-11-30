@@ -1,9 +1,16 @@
 <load target="js/document_admin.js" />
+<div class="x_page-header">
+	<h1>{$lang->document} <a class="x_icon-question-sign" href="./admin/help/index.html#UMAN_content_document" target="_blank">{$lang->help}</a></h1>
+</div>
+
+<div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/document/tpl/document_list/1'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+
 <h1>{$lang->document} {$lang->cmd_management}</h1>
-<p>
-	<a href="{getUrl('act','dispDocumentAdminList')}" class="active"|cond="$act=='dispDocumentAdminList'">{$lang->document_list}</a>
-	<i>|</i>
-	<a href="{getUrl('act','dispDocumentAdminConfig')}" class="active"|cond="$act=='dispDocumentAdminConfig'">{$lang->cmd_module_config}</a>
-	<i>|</i>
-	<a href="{getUrl('act','dispDocumentAdminDeclared')}" class="active"|cond="$act=='dispDocumentAdminDeclared'">{$lang->cmd_declared_list}</a>
-</p>
+
+<ul class="x_nav x_nav-tabs">
+	<li class="x_active"|cond="$act=='dispDocumentAdminList'"><a href="{getUrl('', 'module', 'admin', 'act', 'dispDocumentAdminList')}">{$lang->document_list}</a></li>
+	<li class="x_active"|cond="$act=='dispDocumentAdminConfig'"><a href="{getUrl('', 'module', 'admin', 'act', 'dispDocumentAdminConfig')}">{$lang->cmd_document_config}</a></li>
+	<li class="x_active"|cond="$act=='dispDocumentAdminDeclared'"><a href="{getUrl('', 'module', 'admin', 'act', 'dispDocumentAdminDeclared')}">{$lang->cmd_declared_list}</a></li>
+</ul>

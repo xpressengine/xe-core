@@ -29,14 +29,14 @@ define('__ZBXE__', __XE__);
 /**
  * Display XE's full version.
  */
-define('__XE_VERSION__', '1.8.46');
+define('__XE_VERSION__', '1.9.0');
 define('__XE_VERSION_ALPHA__', (stripos(__XE_VERSION__, 'alpha') !== false));
 define('__XE_VERSION_BETA__', (stripos(__XE_VERSION__, 'beta') !== false));
 define('__XE_VERSION_RC__', (stripos(__XE_VERSION__, 'rc') !== false));
 define('__XE_VERSION_STABLE__', (!__XE_VERSION_ALPHA__ && !__XE_VERSION_BETA__ && !__XE_VERSION_RC__));
 
 define('__XE_MIN_PHP_VERSION__', '5.3.0');
-define('__XE_RECOMMEND_PHP_VERSION__', '5.5.0');
+define('__XE_RECOMMEND_PHP_VERSION__', '5.6.4');
 
 /**
  * @deprecated __ZBXE_VERSION__ will be removed. Use __XE_VERSION__ instead.
@@ -367,7 +367,7 @@ $GLOBALS['__xe_autoload_file_map'] = array_change_key_case(array(
 	'Mobile' => 'classes/mobile/Mobile.class.php',
 	'ModuleHandler' => 'classes/module/ModuleHandler.class.php',
 	'ModuleObject' => 'classes/module/ModuleObject.class.php',
-	'Object' => 'classes/object/Object.class.php',
+	'BaseObject' => 'classes/object/BaseObject.class.php',
 	'PageHandler' => 'classes/page/PageHandler.class.php',
 	'EmbedFilter' => 'classes/security/EmbedFilter.class.php',
 	'IpFilter' => 'classes/security/IpFilter.class.php',
@@ -447,6 +447,11 @@ function __xe_autoload($class_name)
 	}
 }
 spl_autoload_register('__xe_autoload');
+
+if(version_compare(PHP_VERSION, '7.2', '<'))
+{
+	class_alias('BaseObject', 'Object', true);
+}
 
 if(file_exists(_XE_PATH_  . '/vendor/autoload.php')) {
 	require _XE_PATH_  . '/vendor/autoload.php';

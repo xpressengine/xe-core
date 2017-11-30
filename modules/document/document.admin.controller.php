@@ -49,7 +49,7 @@ class documentAdminController extends document
 	 * @param array $document_srl_list
 	 * @param int $module_srl
 	 * @param int $category_srl
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moveDocumentModule($document_srl_list, $module_srl, $category_srl)
 	{
@@ -211,7 +211,7 @@ class documentAdminController extends document
 				$oCacheHandler->delete($cache_key_item);
 			}
 		}
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -429,7 +429,7 @@ class documentAdminController extends document
 
 		$oDB->commit();
 
-		$output = new Object();
+		$output = new BaseObject();
 		$output->add('copied_srls', $copied_srls);
 		return $output;
 	}
@@ -477,14 +477,21 @@ class documentAdminController extends document
 	 */
 	function procDocumentAdminInsertConfig()
 	{
-		// Get the basic information
-		$config = Context::gets('thumbnail_type');
-		// Insert by creating the module Controller object
 		$oModuleController = getController('module');
+
+		$config = getModel('document')->getDocumentConfig();
+		$config->icons = Context::get('icons');
+		$config->micons = Context::get('micons');
 		$output = $oModuleController->insertModuleConfig('document',$config);
+		if(!$output->toBool())
+		{
+			return $output;
+		}
+
+		$this->setMessage('success_updated');
 
 		$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'module', 'admin', 'act', 'dispDocumentAdminConfig');
-		return $this->setRedirectUrl($returnUrl, $output);
+		$this->setRedirectUrl($returnUrl, $output);
 	}
 
 	/**
@@ -509,10 +516,11 @@ class documentAdminController extends document
 	 */
 	function procDocumentAdminDeleteAllThumbnail()
 	{
-		// delete all of thumbnail_ *. jpg files from files/attaches/images/ directory (prior versions to 1.0.4)
-		$this->deleteThumbnailFile('./files/attach/images');
-		// delete a directory itself, files/thumbnails (thumbnail policies have changed since version 1.0.5)
-		FileHandler::removeFilesInDir('./files/thumbnails');
+		$temp_cache_dir = './files/thumbnails_' . $_SERVER['REQUEST_TIME'];
+		FileHandler::rename('./files/thumbnails', $temp_cache_dir);
+		FileHandler::makeDir('./files/thumbnails');
+
+		FileHandler::removeDir($temp_cache_dir);
 
 		$this->setMessage('success_deleted');
 	}
@@ -554,7 +562,7 @@ class documentAdminController extends document
 		$eid = Context::get('eid');
 		$obj = new stdClass();
 
-		if(!$module_srl || !$name || !$eid) return new Object(-1,'msg_invalid_request');
+		if(!$module_srl || !$name || !$eid) return new BaseObject(-1,'msg_invalid_request');
 		// set the max value if idx is not specified
 		if(!$var_idx)
 		{
@@ -570,7 +578,7 @@ class documentAdminController extends document
 		$output = executeQuery('document.isExistsExtraKey', $obj);
 		if(!$output->toBool() || $output->data->count)
 		{
-			return new Object(-1, 'msg_extra_name_exists');
+			return new BaseObject(-1, 'msg_extra_name_exists');
 		}
 
 		// insert or update
@@ -592,7 +600,7 @@ class documentAdminController extends document
 	{
 		$module_srl = Context::get('module_srl');
 		$var_idx = Context::get('var_idx');
-		if(!$module_srl || !$var_idx) return new Object(-1,'msg_invalid_request');
+		if(!$module_srl || !$var_idx) return new BaseObject(-1,'msg_invalid_request');
 
 		$oDocumentController = getController('document');
 		$output = $oDocumentController->deleteDocumentExtraKeys($module_srl, $var_idx);
@@ -611,26 +619,26 @@ class documentAdminController extends document
 		$module_srl = Context::get('module_srl');
 		$var_idx = Context::get('var_idx');
 
-		if(!$type || !$module_srl || !$var_idx) return new Object(-1,'msg_invalid_request');
+		if(!$type || !$module_srl || !$var_idx) return new BaseObject(-1,'msg_invalid_request');
 
 		$oModuleModel = getModel('module');
 		$module_info = $oModuleModel->getModuleInfoByModuleSrl($module_srl);
-		if(!$module_info->module_srl) return new Object(-1,'msg_invalid_request');
+		if(!$module_info->module_srl) return new BaseObject(-1,'msg_invalid_request');
 
 		$oDocumentModel = getModel('document');
 		$extra_keys = $oDocumentModel->getExtraKeys($module_srl);
-		if(!$extra_keys[$var_idx]) return new Object(-1,'msg_invalid_request');
+		if(!$extra_keys[$var_idx]) return new BaseObject(-1,'msg_invalid_request');
 
 		if($type == 'up') $new_idx = $var_idx-1;
 		else $new_idx = $var_idx+1;
-		if($new_idx<1) return new Object(-1,'msg_invalid_request');
+		if($new_idx<1) return new BaseObject(-1,'msg_invalid_request');
 
 		$args = new stdClass();
 		$args->module_srl = $module_srl;
 		$args->var_idx = $new_idx;
 		$output = executeQuery('document.getDocumentExtraKeys', $args);
 		if (!$output->toBool()) return $output;
-		if (!$output->data) return new Object(-1, 'msg_invalid_request');
+		if (!$output->data) return new BaseObject(-1, 'msg_invalid_request');
 		unset($args);
 
 		// update immediately if there is no idx to change
@@ -876,7 +884,7 @@ class documentAdminController extends document
 
 		//DB restore
 		$output = $oDocumentController->insertDocument($originObject, false, true, false);
-		if(!$output->toBool()) return new Object(-1, $output->getMessage());
+		if(!$output->toBool()) return new BaseObject(-1, $output->getMessage());
 
 		//FILE restore
 		$oDocument = $oDocumentModel->getDocument($originObject->document_srl);
@@ -902,7 +910,7 @@ class documentAdminController extends document
 
 		// commit
 		$oDB->commit();
-		return new Object(0, 'success');
+		return new BaseObject(0, 'success');
 	}
 
 	/**

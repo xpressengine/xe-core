@@ -6,7 +6,7 @@
  * @author NAVER (developers@xpressengine.com)
  * base class of ModuleHandler
  * */
-class ModuleObject extends Object
+class ModuleObject extends BaseObject
 {
 
 	var $mid = NULL; ///< string to represent run-time instance of Module (XE Module)
@@ -462,7 +462,7 @@ class ModuleObject extends Object
 		$addon_file = $oAddonController->getCacheFilePath(Mobile::isFromMobilePhone() ? "mobile" : "pc");
 		if(FileHandler::exists($addon_file)) include($addon_file);
 
-		if(is_a($output, 'Object') || is_subclass_of($output, 'Object'))
+		if(is_a($output, 'BaseObject') || is_subclass_of($output, 'BaseObject'))
 		{
 			$this->setError($output->getError());
 			$this->setMessage($output->getMessage());
@@ -472,8 +472,8 @@ class ModuleObject extends Object
 				return FALSE;
 			}
 		}
-		// execute api methos of the module if view action is and result is XMLRPC or JSON
-		if($this->module_info->module_type == 'view')
+		// execute api methods of the module if view action is and result is XMLRPC or JSON
+		if($this->module_info->module_type == 'view' || $this->module_info->module_type == 'mobile')
 		{
 			if(Context::getResponseMethod() == 'XMLRPC' || Context::getResponseMethod() == 'JSON')
 			{

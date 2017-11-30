@@ -1788,7 +1788,7 @@ try
 			define('__DEBUG_QUERY__', 0);
 		}
 
-		include(_XE_PATH_ . 'classes/object/Object.class.php');
+		include(_XE_PATH_ . 'classes/object/BaseObject.class.php');
 		include(_XE_PATH_ . 'classes/handler/Handler.class.php');
 		include(_XE_PATH_ . 'classes/file/FileHandler.class.php');
 		include(_XE_PATH_ . 'classes/page/PageHandler.class.php');
@@ -2130,7 +2130,7 @@ try
 										array()							// arg_columns
 									);
 
-							if(is_a($resultset, 'Object') && !$resultset->toBool())
+							if(is_a($resultset, 'BaseObject') && !$resultset->toBool())
 							{
 								throw new XmlSchemaError($argv[$i], -1, 'mysql SQL query generation failed');
 							}

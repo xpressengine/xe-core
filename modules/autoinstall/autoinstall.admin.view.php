@@ -292,7 +292,7 @@ class autoinstallAdminView extends autoinstall
 	/**
 	 * Display installed packages
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function dispAutoinstallAdminInstalledPackages()
 	{
@@ -347,7 +347,7 @@ class autoinstallAdminView extends autoinstall
 	/**
 	 * Display install package
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function dispAutoinstallAdminInstall()
 	{
@@ -384,7 +384,7 @@ class autoinstallAdminView extends autoinstall
 	/**
 	 * Display package list
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function dispAutoinstallAdminIndex()
 	{
@@ -500,7 +500,7 @@ class autoinstallAdminView extends autoinstall
 	/**
 	 * Display uninstall package
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function dispAutoinstallAdminUninstall()
 	{

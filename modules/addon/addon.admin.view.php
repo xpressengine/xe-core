@@ -21,7 +21,7 @@ class addonAdminView extends addon
 	/**
 	 * Add Management main page (showing the list)
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function dispAddonAdminIndex()
 	{
@@ -48,7 +48,7 @@ class addonAdminView extends addon
 	/**
 	 * Display setup page
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function dispAddonAdminSetup()
 	{
@@ -109,7 +109,7 @@ class addonAdminView extends addon
 	/**
 	 * Display information
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function dispAddonAdminInfo()
 	{

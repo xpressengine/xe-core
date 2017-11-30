@@ -47,20 +47,20 @@ class editorController extends editor
 	{
 		$component = Context::get('component');
 		$method = Context::get('method');
-		if(!$component) return new Object(-1, sprintf(Context::getLang('msg_component_is_not_founded'), $component));
+		if(!$component) return new BaseObject(-1, sprintf(Context::getLang('msg_component_is_not_founded'), $component));
 
 		$oEditorModel = getModel('editor');
 		$oComponent = &$oEditorModel->getComponentObject($component);
 		if(!$oComponent->toBool()) return $oComponent;
 
-		if(!method_exists($oComponent, $method)) return new Object(-1, sprintf(Context::getLang('msg_component_is_not_founded'), $component));
+		if(!method_exists($oComponent, $method)) return new BaseObject(-1, sprintf(Context::getLang('msg_component_is_not_founded'), $component));
 
 		//$output = call_user_method($method, $oComponent);
 		//$output = call_user_func(array($oComponent, $method));
 		if(method_exists($oComponent, $method)) $output = $oComponent->{$method}();
-		else return new Object(-1,sprintf('%s method is not exists', $method));
+		else return new BaseObject(-1,sprintf('%s method is not exists', $method));
 
-		if((is_a($output, 'Object') || is_subclass_of($output, 'Object')) && !$output->toBool()) return $output;
+		if((is_a($output, 'BaseObject') || is_subclass_of($output, 'BaseObject')) && !$output->toBool()) return $output;
 
 		$this->setError($oComponent->getError());
 		$this->setMessage($oComponent->getMessage());
@@ -93,13 +93,13 @@ class editorController extends editor
 			$module_info = $oModuleModel->getModuleInfoByModuleSrl($srl);
 			if(!$module_info->module_srl)
 			{
-				return new Object(-1, 'msg_invalid_request');
+				return new BaseObject(-1, 'msg_invalid_request');
 			}
 
 			$module_grant = $oModuleModel->getGrant($module_info, $logged_info);
 			if(!$module_grant->manager)
 			{
-				return new Object(-1, 'msg_not_permitted');
+				return new BaseObject(-1, 'msg_not_permitted');
 			}
 
 			$module_srl[] = $srl;
@@ -169,7 +169,7 @@ class editorController extends editor
 	 */
 	function triggerEditorComponentCompile(&$content)
 	{
-		if(Context::getResponseMethod()!='HTML') return new Object();
+		if(Context::getResponseMethod()!='HTML') return new BaseObject();
 
 		$module_info = Context::get('module_info');
 		$module_srl = $module_info->module_srl;
@@ -214,7 +214,7 @@ class editorController extends editor
 		}
 
 		$content = $this->transComponent($content);
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -311,7 +311,7 @@ class editorController extends editor
 	function triggerDeleteSavedDoc(&$obj)
 	{
 		$this->deleteSavedDoc(false);
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**

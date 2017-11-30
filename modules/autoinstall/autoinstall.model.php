@@ -218,7 +218,7 @@ class autoinstallModel extends autoinstall
 	 * Get installed package list
 	 *
 	 * @param int $page
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function getInstalledPackageList($page)
 	{
