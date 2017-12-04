@@ -224,7 +224,11 @@ class BaseObject
 	{
 		return $this->toBool();
 	}
+}
 
+if(version_compare(PHP_VERSION, '7.2', '<') && !class_exists('Object', false))
+{
+	class_alias('BaseObject', 'Object');
 }
 /* End of file BaseObject.class.php */
 /* Location: ./classes/object/BaseObject.class.php */

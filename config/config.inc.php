@@ -308,6 +308,8 @@ if(version_compare(PHP_VERSION, '5.3.0') >= 0)
 	date_default_timezone_set(@date_default_timezone_get());
 }
 
+include _XE_PATH_ . 'classes/object/BaseObject.class.php';
+
 // Require a function-defined-file for simple use
 require(_XE_PATH_ . 'config/func.inc.php');
 
@@ -448,13 +450,8 @@ function __xe_autoload($class_name)
 }
 spl_autoload_register('__xe_autoload');
 
-if(version_compare(PHP_VERSION, '7.2', '<'))
-{
-	class_alias('BaseObject', 'Object', true);
-}
-
-if(file_exists(_XE_PATH_  . '/vendor/autoload.php')) {
-	require _XE_PATH_  . '/vendor/autoload.php';
+if(file_exists(_XE_PATH_  . 'vendor/autoload.php')) {
+	require _XE_PATH_  . 'vendor/autoload.php';
 }
 /* End of file config.inc.php */
 /* Location: ./config/config.inc.php */
