@@ -52,6 +52,25 @@ define('_XE_PATH_', str_replace('config/config.inc.php', '', str_replace('\\', '
 // Set can use other method instead cookie to store session id(for file upload)
 ini_set('session.use_only_cookies', 0);
 
+/**
+ * Invalidates a cached script of OPcache when version is changed.
+ * @see https://github.com/xpressengine/xe-core/issues/2189
+ **/
+if(
+	!is_dir(_XE_PATH_ . 'files/cache/store/' . __XE_VERSION__)
+	&& function_exists('opcache_get_status')
+	&& function_exists('opcache_invalidate')
+)
+{
+	$status = opcache_get_status();
+	$scripts = array_keys($status['scripts']);
+
+	foreach($scripts as $script) {
+		if(strpos($script, _XE_PATH_) !== 0) continue;
+
+		opcache_invalidate($script, true);
+	}
+}
 
 if(file_exists(_XE_PATH_ . 'config/package.inc.php'))
 {
