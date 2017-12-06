@@ -156,6 +156,8 @@ class FileHandler
 
 		@file_put_contents($filename, $buff, $flags|LOCK_EX);
 		@chmod($filename, 0644);
+		self::clearStatCache($filename);
+		self::invalidateOpcache($filename);
 	}
 
 	/**
