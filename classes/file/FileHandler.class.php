@@ -1121,7 +1121,7 @@ class FileHandler
 			return;
 		}
 
-		$target = self:getRealPath($target);
+		$target = self::getRealPath($target);
 
 		if($include && self::isDir($target))
 		{
