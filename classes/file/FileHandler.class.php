@@ -1106,6 +1106,66 @@ class FileHandler
 		self::removeFile($checkFile);
 		return TRUE;
 	}
+
+	/**
+	 * Clears file status cache
+	 *
+	 * @param string|array $target filename or directory
+	 * @param boolean $include include files in the directory
+	 **/
+	static public function clearStatCache($target, $include = false)
+	{
+		if(is_array($target))
+		{
+			array_map('self::clearStatCache', $target);
+			return;
+		}
+
+		$target = self:getRealPath($target);
+
+		if($include && self::isDir($target))
+		{
+			self::clearStatCache(self::readDir($target, '', false, true), $include);
+		}
+
+		clearstatcache(true, $target);
+	}
+
+	/**
+	 * Invalidates a cached script of OPcache
+	 *
+	 * @param string|array $target filename or directory
+	 * @param boolean $force force
+	 **/
+	static public function invalidateOpcache($target, $force = true)
+	{
+		static $opcache = null;
+
+		if($opcache === null)
+		{
+			$opcache = (function_exists('opcache_get_status') && function_exists('opcache_invalidate'));
+		}
+
+		if($opcache === false)
+		{
+			return;
+		}
+
+		if(is_array($target))
+		{
+			array_map('self::invalidateOpcache', $target);
+			return;
+		}
+
+		if(substr($target, -4) === '.php')
+		{
+			opcache_invalidate(self::getRealPath($target), $force);
+		}
+		else if($path = self::isDir($target))
+		{
+			self::invalidateOpcache(self::readDir($path, '', false, true));
+		}
+	}
 }
 
 /* End of file FileHandler.class.php */
