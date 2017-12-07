@@ -29,7 +29,7 @@ define('__ZBXE__', __XE__);
 /**
  * Display XE's full version.
  */
-define('__XE_VERSION__', '1.9.0');
+define('__XE_VERSION__', '1.9.1');
 define('__XE_VERSION_ALPHA__', (stripos(__XE_VERSION__, 'alpha') !== false));
 define('__XE_VERSION_BETA__', (stripos(__XE_VERSION__, 'beta') !== false));
 define('__XE_VERSION_RC__', (stripos(__XE_VERSION__, 'rc') !== false));
@@ -51,7 +51,6 @@ define('_XE_PATH_', str_replace('config/config.inc.php', '', str_replace('\\', '
 
 // Set can use other method instead cookie to store session id(for file upload)
 ini_set('session.use_only_cookies', 0);
-
 
 if(file_exists(_XE_PATH_ . 'config/package.inc.php'))
 {
@@ -308,17 +307,6 @@ if(version_compare(PHP_VERSION, '5.3.0') >= 0)
 	date_default_timezone_set(@date_default_timezone_get());
 }
 
-// Require a function-defined-file for simple use
-require(_XE_PATH_ . 'config/func.inc.php');
-
-if(__DEBUG__) {
-	define('__StartTime__', getMicroTime());
-}
-
-if(__DEBUG__) {
-	$GLOBALS['__elapsed_class_load__'] = 0;
-}
-
 $GLOBALS['__xe_autoload_file_map'] = array_change_key_case(array(
 	'CacheBase' => 'classes/cache/CacheHandler.class.php',
 	'CacheHandler' => 'classes/cache/CacheHandler.class.php',
@@ -415,6 +403,33 @@ $GLOBALS['__xe_autoload_file_map'] = array_change_key_case(array(
 	'TableTag' => 'classes/xml/xmlquery/tags/table/TableTag.class.php',
 	'TablesTag' => 'classes/xml/xmlquery/tags/table/TablesTag.class.php',
 ), CASE_LOWER);
+
+/**
+ * Invalidates a cached script of OPcache when version is changed.
+ * @see https://github.com/xpressengine/xe-core/issues/2189
+ **/
+if(
+	!is_dir(_XE_PATH_ . 'files/cache/store/' . __XE_VERSION__)
+	&& function_exists('opcache_get_status')
+	&& function_exists('opcache_invalidate')
+)
+{
+	foreach($GLOBALS['__xe_autoload_file_map'] as $script) {
+		opcache_invalidate(_XE_PATH_ . $script, true);
+	}
+	opcache_invalidate(_XE_PATH_ . 'config/func.inc.php', true);
+}
+
+// Require a function-defined-file for simple use
+require(_XE_PATH_ . 'config/func.inc.php');
+
+if(__DEBUG__) {
+	define('__StartTime__', getMicroTime());
+}
+
+if(__DEBUG__) {
+	$GLOBALS['__elapsed_class_load__'] = 0;
+}
 
 function __xe_autoload($class_name)
 {
