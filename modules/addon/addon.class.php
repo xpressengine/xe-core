@@ -37,6 +37,7 @@ class addon extends ModuleObject
 		$oModuleModel = getModel('module');
 		$oModuleController = getController('module');
 		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
 		{
 			if(!$oDB->isColumnExists("addons", "is_used_m"))
 			{

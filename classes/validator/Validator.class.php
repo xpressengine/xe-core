@@ -683,7 +683,7 @@ class Validator
 			return FALSE;
 		}
 
-		@file_put_contents($filepath, $content, LOCK_EX);
+		FileHandler::writeFile($filepath, $content);
 
 		return $filepath;
 	}
