@@ -3,10 +3,11 @@
 <load target="../../../../common/xeicon/xeicon.min.css" />
 
 <!-- JS -->
+<!--%load_js_plugin("ui")-->
 <!--%load_js_plugin("ckeditor")-->
-<load target="../../tpl/js/editor_common.js" />
-<load target="../../tpl/js/editor.app.js" />
-<load target="js/xe_interface.js" />
+<load target="../../tpl/js/editor_common.js" type="body" />
+<load target="../../tpl/js/editor.app.js" type="body" />
+<load target="js/xe_interface.js" type="body" />
 
 {@ $css_content = null }
 <!--@if($content_font || $content_font_size)-->
@@ -82,6 +83,7 @@
 		<!--@if($css_content)-->CKEDITOR.addCss('{$css_content}');<!--@end-->
 
 		var ckeApp = $('#ckeditor_instance_{$editor_sequence}').XeCkEditor(settings);
+		var appEditor = $.xe.CKEditor(settings, '#ckeditor_instance_{$editor_sequence}');
 	});
 })(jQuery);
 </script>
