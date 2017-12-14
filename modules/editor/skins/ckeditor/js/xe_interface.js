@@ -1,3 +1,39 @@
+(function($){
+	"use strict";
+
+	$.widget('xe.CKEditor', $.xe.editor, {
+		options : {
+			test: 0,
+		},
+		_create: function() {
+			this._super();
+			console.debug(
+				'xe.CKEditor _create()',
+				this.editorSequence
+			);
+		},
+		_init: function (){
+		},
+		getInstance: function() {
+			// return this.editor_sequence
+		},
+		getContent: function() {
+		},
+		setContent: function() {
+		},
+	});
+})(jQuery);
+
+
+
+
+
+
+
+
+
+
+
 function _getCkeInstance(editor_sequence) {
 	var $editor_area = jQuery("#ckeditor_instance_"+editor_sequence);
 	return $editor_area.data('cke_instance');
@@ -15,6 +51,10 @@ function editorGetSelectedHtml(editor_sequence) {
 
 function editorGetContent(editor_sequence) {
 	return _getCkeInstance(editor_sequence).getData();
+}
+
+function insertElement(editor_sequence, code) {
+	return _getCkeInstance(editor_sequence).insertHtml(code);
 }
 
 //Replace html content to editor
