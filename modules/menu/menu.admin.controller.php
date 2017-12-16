@@ -2004,7 +2004,7 @@ class menuAdminController extends menu
 			unset($name_arr_str);
 			foreach($names as $key => $val)
 			{
-				if(preg_match('/\{\$lang->menu_gnb(?:_sub)?\[\'([a-zA-Z_]+)\'\]\}/', $val) === 1)
+				if(preg_match('/\{\$lang->menu_gnb(?:_sub)?\[\'([a-zA-Z_]?[a-zA-Z_0-9]*)\'\]\}/', $val) === 1)
 				{
 					$name_arr_str .= sprintf('"%s"=>"%s",', $key, $val);
 				}
