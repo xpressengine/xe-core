@@ -72,6 +72,7 @@
 				distance: 0,
 				filter: "li",
 				tolerance: "touch",
+				toggle: false,
 				debug: true
 			},
 			/**
@@ -84,7 +85,7 @@
 				var fileSize = data.files[0].size;
 				var overLimit = false;
 
-				dd('_super.options.add()', {that, options, data});
+				dd('_super.options.add()', that, options, data);
 
 				if(options.limitFileSize <= data.files[0].size || options.leftUploadLimit <= data.files[0].size) {
 					alert(window.xe.msg_exceeds_limit_size);
@@ -100,13 +101,13 @@
 				data.submit();
 			},
 			send: function() {
-				dd('_super.options.send()', {arguments});
+				dd('_super.options.send()', arguments);
 			},
 			/**
 			 * $.blueimp.fileupload.done()
 			 */
 			done: function() {
-				dd('_super.options.done()', {arguments})
+				dd('_super.options.done()', arguments)
 			},
 			/**
 			 * $.blueimp.fileupload.stop()
@@ -157,8 +158,8 @@
 			}
 
 			// selectable
+			this.options.configSelectable.toggle = this.isTouchDevice;
 			selectable = $.xe.selectable(this.options.configSelectable, $('.xefu-list-container'));
-			// selectable = new Selectable(this.options.configSelectable);
 
 			dd('_create()', this);
 		},
@@ -243,14 +244,14 @@
 				var selected = selectable.getSelected();
 				var file_srls = [];
 
-				dd('actSelectedInsertContent', {selected});
+				dd('actSelectedInsertContent', selected);
 
 				selected.each(function(){
 					console.log($.data(this));
 					file_srls.push($(this).data('file-srl'));
 				});
 
-				dd('actSelectedInsertContent', {file_srls});
+				dd('actSelectedInsertContent', file_srls);
 
 				that._insertToContent(file_srls);
 				selectable.unselectAll();
@@ -268,7 +269,7 @@
 				selected.forEach(function(node){
 					file_srls.push($(node).data('file-srl'));
 				});
-				dd('actSelectedDeleteFilee', {file_srls});
+				dd('actSelectedDeleteFilee', file_srls);
 
 				that._deleteFile(file_srls);
 				selectable.unselectAll();
@@ -402,7 +403,7 @@
 		 * @param      {<type>}  file_list  The file list
 		 */
 		_insertToContent: function(file_list) {
-			dd('_insertToContent', {file_list});
+			dd('_insertToContent', file_list);
 			var that = this;
 			var temp_code = '';
 			var editorSequence = this.options.editorSequence;
@@ -439,7 +440,7 @@
 			var editorSequence = this.options.editorSequence;
 			var _ck = _getCkeInstance(editorSequence);
 
-			dd('_deleteFile()', {file_list});
+			dd('_deleteFile()', file_list);
 			file_srls = file_list.join(',');
 
 			if(!file_srls) return;
@@ -472,7 +473,7 @@
 			data.editor_sequence = this.options.editorSequence;
 
 			window.exec_json('file.procFileSetCoverImage', data, function(res) {
-				dd('_setCover(). file.procFileSetCoverImage', {data, res});
+				dd('_setCover(). file.procFileSetCoverImage', data, res);
 			});
 		}
 	});
