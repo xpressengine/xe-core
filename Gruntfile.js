@@ -111,6 +111,11 @@ module.exports = function(grunt) {
 					'modules/poll/tpl/js/poll.min.js': ['modules/poll/tpl/js/poll.js'],
 					'addons/oembed/jquery.oembed.min.js': ['addons/oembed/jquery.oembed.js'],
 					'addons/oembed/oembed.min.js': ['addons/oembed/oembed.js'],
+					// krzip
+					'modules/krzip/tpl/js/admin.min.js': ['modules/krzip/tpl/js/admin.js'],
+					'modules/krzip/tpl/js/daumapi.min.js': ['modules/krzip/tpl/js/daumapi.js'],
+					'modules/krzip/tpl/js/epostapi.min.js': ['modules/krzip/tpl/js/epostapi.js'],
+					'modules/krzip/tpl/js/epostapi.search.min.js': ['modules/krzip/tpl/js/epostapi.search.js'],
 				}
 			},
 			'layout': {
@@ -141,6 +146,9 @@ module.exports = function(grunt) {
 					'modules/board/m.skins/default/css/mboard.min.css': ['modules/board/m.skins/default/css/mboard.css'],
 					'modules/board/m.skins/simpleGray/css/mboard.min.css': ['modules/board/m.skins/simpleGray/css/mboard.css'],
 					'modules/board/skins/xedition/board.default.min.css': ['modules/board/skins/xedition/board.default.css'],
+					// krzip
+					'modules/krzip/tpl/css/default.min.css': ['modules/krzip/tpl/css/default.css'],
+					'modules/krzip/tpl/css/popup.min.css': ['modules/krzip/tpl/css/popup.css'],
 				}
 			},
 			'addons': {
