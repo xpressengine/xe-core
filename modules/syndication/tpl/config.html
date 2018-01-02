@@ -1,0 +1,89 @@
+<load target="css/syndication.css" />
+<load target="js/syndication.js" />
+
+<div class="x_page-header">
+	<h1>{$lang->syndication} {$lang->cmd_management} </h1>
+</div>
+{@$form_id = "modules/syndication/tpl/config.html"}
+<div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == $form_id" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+<form ruleset="insertService" class="x_form-horizontal" action="./" method="post">
+	<input type="hidden" name="xe_validator_id" value="{$form_id}" />
+	<input type="hidden" name="act" value="procSyndicationAdminInsertConfig" />
+    <input type="hidden" name="year" value="{$year}" />
+
+	<div class="x_control-group">
+        <div class="x_control-label">{$lang->help}</div>
+        <div class="x_controls">
+            <p>{$lang->about_syndication}</p>
+            <p><a href="http://webmastertool.naver.com/guide/syndi_guide.naver" target="_blank">http://webmastertool.naver.com/guide/syndi_guide.naver</a></p>
+        </div>
+	</div>
+
+	<div class="x_control-group">
+        <div class="x_control-label">{$lang->use}</div>
+        <div class="x_controls">
+			<select name="syndication_use">
+				<option value="Y" selected="selected"|cond="$syndication_use=='Y'">{$lang->use}</option>
+				<option value="N" selected="selected"|cond="$syndication_use=='N'">{$lang->notuse}</option>
+			</select>
+        </div>
+	</div>
+
+	<div class="x_control-group">
+        <div class="x_control-label">{$lang->my_syndication_url}</div>
+        <div class="x_controls">
+            {$uri_scheme}<input type="text" id="site_url" name="site_url" value="{$site_url}" />
+            <input type="button" value="{$lang->cmd_check_syndication_echo}" onclick="pingCheck(jQuery('#site_url').val())" class="x_btn" />
+            <p class="x_help-inline">{$lang->about_my_syndication_url}</p>
+			<p class="ping_test_result"></p>
+        </div>
+	</div>
+
+	<div class="x_control-group">
+        <div class="x_control-label">{$lang->naver_syndication_token}</div>
+        <div class="x_controls">
+			<input type="text" name="syndication_token" value="{$syndication_token}" id="syndication_token" style="width:90%"/>
+        </div>
+	</div>
+
+	<div class="x_control-group">
+        <div class="x_control-label">{$lang->my_syndication_password}</div>
+        <div class="x_controls">
+            <input type="text" id="syndication_password" name="syndication_password" value="{$syndication_password}" />
+            <p class="x_help-inline">{$lang->about_my_syndication_password}</p>
+        </div>
+	</div>
+
+	<div class="x_control-group">
+        <div class="x_control-label">{$lang->except_module}</div>
+        <div class="x_controls">
+            <select name="_except_module" id="_except_module" size="10" class="exceptModuleList">
+                {@$except_module_srls = array()}
+                <!--@foreach($except_module as $v)-->
+                {@$except_module_srls[] = $v->module_srl}
+                <option value="{$v->module_srl}">{$v->browser_title} ({$v->mid})</option>
+                <!--@end-->
+            </select>
+			<div>
+                <a href="{getUrl('','module','module','act','dispModuleSelectList','id','except_module')}" onclick="popopen(this.href, 'ModuleSelect');return false;" class="x_btn">{$lang->cmd_insert}</a>
+                <a href="#" onclick="removeExceptModule('except_module');return false;" class="x_btn">{$lang->cmd_delete}</a>
+			</div>
+            <p>{$lang->about_except_module}</p>
+            <input type="hidden" name="except_module" id="except_module" value="{implode(',',$except_module_srls)}" />
+		</div>
+	</div>
+	<div class="x_clearfix btnArea">
+		<button type="submit" class="x_btn x_btn-primary x_pull-right">{$lang->cmd_save}</button>
+	</div>
+</form>
+
+<div>
+	<h2>Ping Fail log</h2>
+	<ul>
+		<li loop="$ping_log=>$obj">
+			<span>{zdate($obj->regdate)}</span> / <span>{urldecode($obj->message)}</span>
+		</li>
+	</ul>
+</div>
