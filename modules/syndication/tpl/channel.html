@@ -1,0 +1,16 @@
+{'<?xml version="1.0" encoding="utf-8"?>'}
+<feed xmlns="http://webmastertool.naver.com">
+	<include target="./include.channel.html" />
+
+	<block cond="$articles->list">
+		<block loop="$articles->list => $key, $article">
+			<include target="./include.articles.html" />
+		</block>
+	</block>
+
+	<block cond="$deleted->list">
+		<block loop="$deleted->list => $key, $delete">
+			<include target="./include.deleted.html" />
+		</block>
+	</block>
+</feed>

@@ -1,0 +1,12 @@
+<entry>
+	<id>{$article->alternative_href}</id>
+	<title><![CDATA[{$article->title}]]></title>
+	<author>
+		<name><![CDATA[{$article->nick_name}]]></name>
+	</author>
+	<updated>{$article->updated}</updated>
+	<published>{$article->published}</published>
+	<link rel="via" href="{$article->channel_alternative_href}" title="{htmlspecialchars($channel_info->title)}" />
+	<content type="html"><![CDATA[{$article->content}]]></content>
+	<category cond="$article->category" term="{$article->category->term}" label="{htmlspecialchars($article->category->label)}" />
+</entry>
