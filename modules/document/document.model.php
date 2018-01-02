@@ -141,6 +141,10 @@ class documentModel extends document
 		if(!$GLOBALS['XE_DOCUMENT_LIST'][$document_srl])
 		{
 			$oDocument = new documentItem($document_srl, $load_extra_vars, $columnList);
+			if(!$oDocument->isExists())
+			{
+				return $oDocument;
+			}
 			$GLOBALS['XE_DOCUMENT_LIST'][$document_srl] = $oDocument;
 			if($load_extra_vars) $this->setToAllDocumentExtraVars();
 		}
