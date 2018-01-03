@@ -1431,6 +1431,24 @@ class documentModel extends document
 				case 'uploaded_count' :
 					$args->{"s_".$search_target} = (int)$search_keyword;
 					break;
+				case 'member_srls' :
+					$args->{"s_".$search_target} = (int)$search_keyword;
+
+					if($logged_info->member_srl)
+					{
+						$srls = explode(',', $search_keyword);
+						foreach($srls as $srl)
+						{
+							if(abs($srl) != $logged_info->member_srl)
+							{
+								break; // foreach
+							}
+
+							$args->{"s_".$search_target} = $search_keyword;
+							break; // foreach
+						}
+					}
+					break;
 				case 'blamed_count' :
 					$args->{"s_".$search_target} = (int)$search_keyword * -1;
 					break;
