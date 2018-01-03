@@ -271,7 +271,7 @@ class boardView extends board
 				if($this->consultation && !$oDocument->isNotice())
 				{
 					$logged_info = Context::get('logged_info');
-					if($oDocument->get('member_srl')!=$logged_info->member_srl)
+					if(abs($oDocument->get('member_srl')) != $logged_info->member_srl)
 					{
 						$oDocument = $oDocumentModel->getDocument(0);
 					}
@@ -537,6 +537,12 @@ class boardView extends board
 		{
 			$logged_info = Context::get('logged_info');
 			$args->member_srl = $logged_info->member_srl;
+
+			if($this->module_info->use_anonymous === 'Y')
+			{
+				unset($args->member_srl);
+				$args->member_srls = $logged_info->member_srl . ',' . $logged_info->member_srl * -1;
+			}
 		}
 
 		// setup the list config variable on context
