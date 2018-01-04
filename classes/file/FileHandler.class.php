@@ -686,6 +686,8 @@ class FileHandler
 		try
 		{
 			$result = self::getRemoteResource($url, $body, $timeout, $method, $content_type, $headers, $cookies, $post_data, $request_config);
+			self::clearStatCache($target_filename);
+			self::invalidateOpcache($target_filename);
 		}
 		catch(Exception $e)
 		{
