@@ -53,68 +53,16 @@ var calledArgs = null;
 					});
 				}
 			});
-			var body    = $(document.body);
-			var captchaIma;
+
+			var audioURL = current_url.setQuery('captcha_action','captchaAudio').setQuery('rnd', (new Date).getTime());
+			var audioLoaded = false;
+			var objAudio = null;
+			var objFlash = null;
 
 			if (!captchaXE) {
-				var fc_isIE  = (navigator.appVersion.indexOf("MSIE") != -1) ? true : false;
-				var fc_isWin = (navigator.appVersion.toLowerCase().indexOf("win") != -1) ? true : false;
-				var fc_isOpera = (navigator.userAgent.indexOf("Opera") != -1) ? true : false;
-				var _swfURL_ = request_uri + 'addons/captcha/swf/play.swf';
-
-				if(fc_isIE && fc_isWin && !fc_isOpera){
-					_object_ ='<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" width="0" height="0" id="captcha_audio" align="middle">';
-					_object_ += '<param name="allowScriptAccess" value="always" />';
-					_object_ += '<param name="quality" value="high" />';
-					_object_ += '<param name="movie" value="'+_swfURL_+'" />';
-					_object_ += '<param name="wmode" value="window" />';
-					_object_ += '<param name="allowFullScreen" value="false">';
-					_object_ += '<param name="bgcolor" value="#fffff" />';
-					_object_ += '</object>';
-				}else{
-					_object_ = '<embed src="'+_swfURL_+'" quality="high" wmode="window" allowFullScreen="false" bgcolor="#ffffff" width="0" height="0" name="captcha_audio" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />';
-				}
-
-				captchaXE = $('<div id="captcha_layer" style="position:fixed; top:0; left:0; width:100%; height:100%;display:none;z-index:10">').appendTo(document.body);
-
-				var top_left = 'margin:-105px 0 0 -105px; top:50%; left:50%;';
-				if(screen.width<480) { top_left = ''; }
-				var $div = $('<div style="z-index:1000;position:absolute; width:310px;' + top_left + ' background:#fff; border:3px solid #ccc;">'+
-								'<form method="post" action="">'+
-									'<div style="position:relative; margin:25px 20px 15px 20px">'+
-										'<img src="about:blank" id="captcha_image" alt="CAPTCHA" width="240" height="50" style="display:block; width:240px; height:50px; border:1px solid #b0b0b0" />'+
-										'<button type="button" class="reload" title="" style="position:absolute; top:0; left:245px; width:25px; height:25px; padding:0; overflow:visible; border:1px solid #575757; background:#747474 url('+request_uri + 'addons/captcha/img/icon.gif) no-repeat center 5px;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px; cursor:pointer;box-shadow:0 0 3px #444 inset;-moz-box-shadow:0 0 3px #444 inset;-webkit-box-shadow:0 0 3px #444 inset;"></button>'+
-										'<button type="button" class="play" title="" style="position:absolute; top:27px; left:245px; width:25px; height:25px; padding:0; overflow:visible; border:1px solid #575757; background:#747474 url('+request_uri + 'addons/captcha/img/icon.gif) no-repeat center -20px;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px; cursor:pointer;box-shadow:0 0 3px #444 inset;-moz-box-shadow:0 0 3px #444 inset;-webkit-box-shadow:0 0 3px #444 inset;"></button>'+
-									'</div>'+
-									'<label id="captchaAbout" for="captcha" style="display:block; border-top:1px dashed #c5c5c5; padding:15px 0; margin:0 20px; font-size:12px; color:#5f5f5f;"></label>'+
-									'<input name="" type="text" id="secret_text" style="ime-mode:inactive;margin:0 20px; width:232px; border:1px solid #bdbdbd; padding:3px 4px; font-size:18px; font-weight:bold;" />'+
-									'<div style="margin:20px; border-top:1px dashed #c5c5c5; padding:15px 0 0 0; text-align:center">'+
-										'<button type="submit" style="height:31px; line-height:31px; padding:0 15px; margin:0 2px; font-size:12px; font-weight:bold; color:#fff; overflow:visible; border:1px solid #5c8a16; background:#6faa13;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px; cursor:pointer;box-shadow:0 0 3px #666 inset;-moz-box-shadow:0 0 3px #666 inset;-webkit-box-shadow:0 0 3px #666 inset;"></button>'+
-										'<button type="button" class="cancel" style="height:31px; line-height:31px; padding:0 15px; margin:0 2px; font-size:12px; font-weight:bold; color:#fff; overflow:visible; border:1px solid #575757; background:#747474;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px; cursor:pointer;box-shadow:0 0 3px #444 inset;-moz-box-shadow:0 0 3px #444 inset;-webkit-box-shadow:0 0 3px #444 inset;"></button>'+
-									'</div>'+
-								'</form>'+_object_ +
-							'</div>').appendTo(captchaXE);
-
-				  $div.find('button.cancel')
-					.click(function(){ $('#captcha_layer').hide(); });
-
-				  $div.find('button.play')
-					.click(function(){
-						var swf = window['captcha_audio'] || document['captcha_audio'];
-						var audio = current_url.setQuery('captcha_action','captchaAudio').setQuery('rnd', (new Date).getTime());
-						$div.find('input[type=text]').focus();
-						swf.setSoundTarget(audio,'1');
-						});
-
-				  $div.find('button.reload')
-					.click(function(){
-						var params = new Array();
-						params['captcha_action'] = 'setCaptchaSession';
-						params['mid'] = current_mid;
-						window.oldExecXml('','',params, function() {
-							$("#captcha_image").attr("src", current_url.setQuery('captcha_action','captchaImage').setQuery('rnd', (new Date).getTime()));
-						});
-					});
+				var _object_ = '';
+				captchaXE = $('<div id="captcha_layer" style="position:fixed; top:0; left:0; width:100%; height:100%;display:none;z-index:10">');
+				captchaXE.appendTo(document.body);
 
 				captchaXE.exec = function(module, act, params, callback_func, response_tags, callback_func_arg, fo_obj) {
 					var doCheck = false;
@@ -166,6 +114,80 @@ var calledArgs = null;
 						window.oldExecXml(calledArgs.module, calledArgs.act, calledArgs.params, calledArgs.callback_func, calledArgs.response_tags, calledArgs.callback_func_arg, calledArgs.fo_obj);
 					} );
 				};
+
+				captchaXE.loadAudio = function() {
+					if(!Modernizr.audio || !Modernizr.audio.mp3) return;
+
+					audioURL = audioURL.setQuery('rnd', (new Date).getTime());
+					if(!objAudio) {
+						objAudio = new Audio(audioURL);
+					}
+					objAudio.setAttribute('src', audioURL);
+					objAudio.load();
+				};
+
+				captchaXE.playAudio = function() {
+					$div.find('input[type=text]').focus();
+
+					if(Modernizr.audio && Modernizr.audio.mp3) {
+						captchaXE.loadAudio();
+						objAudio.play();
+					} else {
+						if(!objFlash) objFlash = document.querySelector('#captcha_audio_flash');
+						if(objFlash && typeof objFlash.setSoundTarget === "function") {
+							audioURL = audioURL.setQuery('rnd', (new Date).getTime());
+							objFlash.setSoundTarget(audioURL, '1'); // play
+						}
+					}
+				};
+
+				if(!Modernizr.audio || !Modernizr.audio.mp3) {
+					var _swfURL_ = request_uri + 'addons/captcha/swf/play.swf';
+					_object_ = [];
+					_object_.push('<object id="captcha_audio_flash" width="0" height="0" type="application/x-shockwave-flash" data="' + _swfURL_ + '">');
+					_object_.push('<param name="movie" value="' + _swfURL_ + '" />');
+					_object_.push('<param name="allowScriptAccess" value="always" />');
+					_object_.push('<param name="quality" value="high" />');
+					_object_.push('<param name="wmode" value="transparent" />');
+					_object_.push('</object>');
+					_object_ = _object_.join('');
+				}
+
+				var top_left = 'margin:-105px 0 0 -105px; top:50%; left:50%;';
+				if(screen.width < 480) top_left = '';
+
+				var $div = $('<div style="z-index:1000;position:absolute; width:310px;' + top_left + ' background:#fff; border:3px solid #ccc;">'+
+					'<form method="post" action="">'+
+						'<div style="position:relative; margin:25px 20px 15px 20px">'+
+							'<img src="about:blank" id="captcha_image" alt="CAPTCHA" width="240" height="50" style="display:block; width:240px; height:50px; border:1px solid #b0b0b0" />'+
+							'<button type="button" class="reload" title="" style="position:absolute; top:0; left:245px; width:25px; height:25px; padding:0; overflow:visible; border:1px solid #575757; background:#747474 url('+request_uri + 'addons/captcha/img/icon.gif) no-repeat center 5px;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px; cursor:pointer;box-shadow:0 0 3px #444 inset;-moz-box-shadow:0 0 3px #444 inset;-webkit-box-shadow:0 0 3px #444 inset;"></button>'+
+							'<button type="button" class="play" title="" style="position:absolute; top:27px; left:245px; width:25px; height:25px; padding:0; overflow:visible; border:1px solid #575757; background:#747474 url('+request_uri + 'addons/captcha/img/icon.gif) no-repeat center -20px;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px; cursor:pointer;box-shadow:0 0 3px #444 inset;-moz-box-shadow:0 0 3px #444 inset;-webkit-box-shadow:0 0 3px #444 inset;"></button>'+
+						'</div>'+
+						'<label id="captchaAbout" for="captcha" style="display:block; border-top:1px dashed #c5c5c5; padding:15px 0; margin:0 20px; font-size:12px; color:#5f5f5f;"></label>'+
+						'<input name="" type="text" id="secret_text" style="ime-mode:inactive;margin:0 20px; width:232px; border:1px solid #bdbdbd; padding:3px 4px; font-size:18px; font-weight:bold;" />'+
+						'<div style="margin:20px; border-top:1px dashed #c5c5c5; padding:15px 0 0 0; text-align:center">'+
+							'<button type="submit" style="height:31px; line-height:31px; padding:0 15px; margin:0 2px; font-size:12px; font-weight:bold; color:#fff; overflow:visible; border:1px solid #5c8a16; background:#6faa13;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px; cursor:pointer;box-shadow:0 0 3px #666 inset;-moz-box-shadow:0 0 3px #666 inset;-webkit-box-shadow:0 0 3px #666 inset;"></button>'+
+							'<button type="button" class="cancel" style="height:31px; line-height:31px; padding:0 15px; margin:0 2px; font-size:12px; font-weight:bold; color:#fff; overflow:visible; border:1px solid #575757; background:#747474;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px; cursor:pointer;box-shadow:0 0 3px #444 inset;-moz-box-shadow:0 0 3px #444 inset;-webkit-box-shadow:0 0 3px #444 inset;"></button>'+
+						'</div>'+
+					'</form>'+_object_ +
+					'</div>').appendTo(captchaXE);
+
+				$div.find('button.cancel')
+					.click(function(){ $('#captcha_layer').hide(); });
+
+				$div.find('button.play') .click(captchaXE.playAudio);
+
+				$div.find('button.reload')
+					.click(function(){
+						var params = new Array();
+						params['captcha_action'] = 'setCaptchaSession';
+						params['mid'] = current_mid;
+						window.oldExecXml('','',params, function() {
+							$("#captcha_image").attr("src", current_url.setQuery('captcha_action','captchaImage').setQuery('rnd', (new Date).getTime()));
+							if(objAudio) captchaXE.loadAudio();
+						});
+					});
+
 			}
 			return captchaXE;
 		}
