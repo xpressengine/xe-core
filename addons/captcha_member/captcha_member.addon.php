@@ -85,7 +85,7 @@ if(!class_exists('AddonMemberCaptcha', false))
 						if(!captchaTargetAct) {var captchaTargetAct = [];}
 						captchaTargetAct.push("' . implode('","', $this->target_acts) . '");
 						</script>');
-					Context::loadFile(array('./addons/captcha_member/captcha.min.js', 'body', '', null), true);
+					Context::loadFile(array('./addons/captcha/captcha.min.js', 'body', '', null), true);
 				}
 			}
 
@@ -282,7 +282,7 @@ if(!class_exists('AddonMemberCaptcha', false))
 		function createCaptchaAudio($string)
 		{
 			$data = '';
-			$_audio = './addons/captcha_member/audio/F_%s.mp3';
+			$_audio = './addons/captcha/audio/F_%s.mp3';
 			for($i = 0, $c = strlen($string); $i < $c; $i++)
 			{
 				$_data = FileHandler::readFile(sprintf($_audio, $string{$i}));
@@ -350,9 +350,9 @@ if(!class_exists('AddonMemberCaptcha', false))
 			unset($_SESSION['member_captcha_authed']);
 			$this->createKeyword();
 
-			$swfURL = getUrl() . 'addons/captcha_member/swf/play.swf';
-			Context::unloadFile('./addons/captcha_member/captcha.min.js');
-			Context::loadFile(array('./addons/captcha_member/inline_captcha.js', 'body'));
+			$swfURL = getUrl() . 'addons/captcha/swf/play.swf';
+			Context::unloadFile('./addons/captcha/captcha.min.js');
+			Context::loadFile(array('./addons/captcha/inline_captcha.js', 'body'));
 
 			global $lang;
 

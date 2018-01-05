@@ -70,7 +70,6 @@ module.exports = function(grunt) {
 					'common/js/x.min.js' : ['common/js/x.js'],
 					// addon
 					'addons/captcha/captcha.min.js' : ['addons/captcha/captcha.js'],
-					'addons/captcha_member/captcha.min.js' : ['addons/captcha_member/captcha.js'],
 					'addons/resize_image/js/resize_image.min.js' : ['addons/resize_image/js/resize_image.js'],
 					// module/editor
 					'modules/editor/skins/xpresseditor/js/xpresseditor.min.js': ['modules/editor/skins/xpresseditor/js/xpresseditor.js'],
