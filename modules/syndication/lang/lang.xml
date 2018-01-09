@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<lang>
+	<item name="syndication">
+		<value xml:lang="ko"><![CDATA[신디케이션]]></value>
+		<value xml:lang="en"><![CDATA[Syndication]]></value>
+		<value xml:lang="jp"><![CDATA[シンディケーション]]></value>
+		<value xml:lang="zh-TW"><![CDATA[聯合供搞]]></value>
+		<value xml:lang="tr"><![CDATA[İçerik Paylaşımı]]></value>
+	</item>
+	<item name="about_syndication">
+		<value xml:lang="ko"><![CDATA[신디케이션이란 검색 서비스 업체와 syndication 이라는 표준 규약을 통해서 보다 더 잘 검색되게 하는 기능입니다.<br/>최소한의 요청만으로 효과적으로 컨텐츠를 검색 서비스 업체와 동기화합니다]]></value>
+		<value xml:lang="en"><![CDATA[Syndication communicates with search service providers with standard protocol called "syndication", and makes it much better to search any information.<br/>It will synchronize contents with search service providers with the least requests.]]></value>
+		<value xml:lang="jp"><![CDATA[シンディケーションとは、検索サービス業者とsyndicationという標準規約を通じて検索の品質を向上させる機能です。<br/>最小限の要求だけで、検索サービス業者とコンテンツを効果的に同期させます。]]></value>
+		<value xml:lang="tr"><![CDATA[İçerik Paylaşımı, adı "sendikasyon" olan standard bir protokole bağlı arama hizmeti sunucularıyla iletişime geçer ve her türlü bilgiye ulaşmayı daha kolay hale getirir.<br/>Gerekli olan şeyleri en aza indirerek, arama hizmeti sunucusunu içeriklerle uygun hale getirir.]]></value>
+	</item>
+	<item name="syndication_service">
+		<value xml:lang="ko"><![CDATA[신디케이션 서비스]]></value>
+		<value xml:lang="en"><![CDATA[Syndication Service]]></value>
+		<value xml:lang="zh-TW"><![CDATA[供稿服務]]></value>
+		<value xml:lang="tr"><![CDATA[İçerik Paylaşım Hizmeti]]></value>
+	</item>
+	<item name="naver_syndication_token">
+		<value xml:lang="ko"><![CDATA[NAVER 신디케이션 Token]]></value>
+		<value xml:lang="en"><![CDATA[NAVER Syndication Token]]></value>
+		<value xml:lang="jp"><![CDATA[NAVER シンディケーション Token]]></value>
+		<value xml:lang="zh-TW"><![CDATA[NAVER 聯合供搞 Token]]></value>
+		<value xml:lang="tr"><![CDATA[NAVER İçerik Paylaşımı Token]]></value>
+	</item>
+	<item name="about_syndication_service">
+		<value xml:lang="ko"><![CDATA[신디케이션 표준 규약에 맞춰 신디케이션 서비스를 제공하는 곳입니다.<br/>[적용하기] 버튼을 선택하시면 선택 또는 해제된 서비스에 Ping 을 통해서 결과를 통보하게 됩니다]]></value>
+		<value xml:lang="en"><![CDATA[Syndication Service provides syndication services according to a standard protocol.<br/>You will get Ping result from the selected (deselected) services if you apply.]]></value>
+		<value xml:lang="jp"><![CDATA[シンディケーション標準規約に沿ってシンディケーションサービスを提供します。<br/>[適用]ボタンをクリックすると、選択、または解除されているサービスにPingを通じて結果を通報します。]]></value>
+		<value xml:lang="zh-TW"><![CDATA[提供根據標準協議的聯合供搞服務。<br/>[應用] 透過 Ping 的方式]]></value>
+		<value xml:lang="tr"><![CDATA[İçerik Paylaşım Hizmeti, sendikasyon hizmetlerini standard bir protokole göre sağlar.<br/>Tercih edilen(edilmeyen) hizmetlerin Ping sonuçlarını başvurarak alabilirsiniz.]]></value>
+	</item>
+	<item name="my_syndication_url">
+		<value xml:lang="ko"><![CDATA[사이트 주소]]></value>
+		<value xml:lang="en"><![CDATA[URL]]></value>
+		<value xml:lang="jp"><![CDATA[サイトアドレス]]></value>
+		<value xml:lang="zh-TW"><![CDATA[供稿網址]]></value>
+	</item>
+	<item name="my_syndication_password">
+		<value xml:lang="ko"><![CDATA[신디케이션 비밀번호]]></value>
+		<value xml:lang="en"><![CDATA[Syndication Password]]></value>
+		<value xml:lang="jp"><![CDATA[シンジケーションパスワード]]></value>
+		<value xml:lang="zh-TW"><![CDATA[聚合密碼]]></value>
+	</item>
+	<item name="about_my_syndication_url">
+		<value xml:lang="ko"><![CDATA[신디케이션 정보를 제공할때 사용되는 사이트의 주소를 입력해주세요. 이 주소는 대표 주소를 이용해주시고 가능한 바꾸시지 않는 것이 좋습니다]]></value>
+		<value xml:lang="en"><![CDATA[Please enter the URL which will be used when providing syndication information. It is recommended to use representative URL and keep it as long as you can.]]></value>
+		<value xml:lang="jp"><![CDATA[シンディケーション情報を提供するときに使用されるサイトのアドレスを入力してください。このアドレスは、代表アドレスを利用し、できれば変更しないでください。]]></value>
+		<value xml:lang="tr"><![CDATA[Lütfen sendikasyon bilgilerini sağlarken kullanılacak URLyi girin. Temsili bir URLyi mümkün olduğu sürece kullanmak daha uygun olabilir.]]></value>
+	</item>
+	<item name="about_my_syndication_password">
+		<value xml:lang="ko"><![CDATA[신디케이션 비밀번호를 설정하여 허용되지 않은 곳에서의 접근을 차단합니다.]]></value>
+		<value xml:lang="en"><![CDATA[Set syndication password for block access where not allowed.]]></value>
+		<value xml:lang="jp"><![CDATA[許可されていないブロックアクセスのための設定シンジケーションパスワード。]]></value>
+		<value xml:lang="zh-TW"><![CDATA[銀團設置密碼的地方不允許的訪問。]]></value>
+	</item>
+	<item name="except_module">
+		<value xml:lang="ko"><![CDATA[제외시킬 모듈]]></value>
+		<value xml:lang="en"><![CDATA[Modules to exclude]]></value>
+		<value xml:lang="jp"><![CDATA[除くモジュール]]></value>
+		<value xml:lang="tr"><![CDATA[Dahil edilmeyecek modüller]]></value>
+	</item>
+	<item name="about_except_module">
+		<value xml:lang="ko"><![CDATA[신디케이션 대상에서 제외시켜 검색서비스 업체와 동기화를 시키지 않을 모듈을 선택해주세요]]></value>
+		<value xml:lang="en"><![CDATA[Selected modules will not be synchronized with search service providers.]]></value>
+		<value xml:lang="jp"><![CDATA[シンディケーション対象から除き、検索サービス業者と同期化させないモジュールを選択してください。]]></value>
+		<value xml:lang="tr"><![CDATA[Seçili modüller arama hizmeti sağlayıcısıyla uyumlu hale getirilmeyecek.]]></value>
+	</item>
+	<item name="msg_site_url_is_null">
+		<value xml:lang="ko"><![CDATA[사이트 주소를 입력해주세요]]></value>
+		<value xml:lang="en"><![CDATA[Please enter URL.]]></value>
+		<value xml:lang="jp"><![CDATA[サイトアドレスを入力してください。]]></value>
+		<value xml:lang="zh-TW"><![CDATA[請輸入網站網址]]></value>
+		<value xml:lang="tr"><![CDATA[Lütfen URL girişi yapın]]></value>
+	</item>
+	<item name="msg_syndication_token_is_null">
+		<value xml:lang="ko"><![CDATA[신디케이션 Token을 입력해주세요]]></value>
+		<value xml:lang="en"><![CDATA[Please enter Syndication Token.]]></value>
+		<value xml:lang="jp"><![CDATA[シンジケートTokenを入力してください]]></value>
+		<value xml:lang="zh-TW"><![CDATA[請輸入辛迪加令牌]]></value>
+		<value xml:lang="tr"><![CDATA[Sendikasyon Token'ı girin.]]></value>
+	</item>
+	<item name="success_applied">
+		<value xml:lang="ko"><![CDATA[적용되었습니다]]></value>
+		<value xml:lang="en"><![CDATA[Successfully Applied]]></value>
+		<value xml:lang="jp"><![CDATA[適用しました。]]></value>
+		<value xml:lang="tr"><![CDATA[Başarıyla Uygulandı]]></value>
+	</item>
+	<item name="msg_ping_test_error">
+		<value xml:lang="ko"><![CDATA[Ping 테스트 에러입니다. 도메인 및 서버 설정을 확인해주세요]]></value>
+		<value xml:lang="en"><![CDATA[Ping test error found. Please check domain and server configurations.]]></value>
+		<value xml:lang="jp"><![CDATA[Ping テストエラーです。ドメイン、およびサーバー設定を確認してください。]]></value>
+		<value xml:lang="tr"><![CDATA[Ping testi hatası bulundu. Lütfen alan adı ve sunucu yapılandırmasını kontrol edin.]]></value>
+	</item>
+	<item name="msg_success_ping_test">
+		<value xml:lang="ko"><![CDATA[정상적 동작으로 확인되었습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Ping test works fine.]]></value>
+		<value xml:lang="jp"><![CDATA[正常動作を確認しました。]]></value>
+		<value xml:lang="tr"><![CDATA[Ping test gayet iyi çalışıyor.]]></value>
+	</item>
+	<item name="cmd_check_syndication_echo">
+		<value xml:lang="ko"><![CDATA[Syndication 문서 출력 동작확인]]></value>
+		<value xml:lang="en"><![CDATA[Check Syndication ariticle printing]]></value>
+		<value xml:lang="jp"><![CDATA[Syndication記事の出力動作確認]]></value>
+		<value xml:lang="tr"><![CDATA[İçerik paylaşımlı yazı yazdırmayı kontrol et.]]></value>
+	</item>
+	<item name="cmd_check_syndication_status">
+		<value xml:lang="ko"><![CDATA[연결상태 확인]]></value>
+		<value xml:lang="en"><![CDATA[Check connection status]]></value>
+		<value xml:lang="jp"><![CDATA[接続状態確認]]></value>
+		<value xml:lang="tr"><![CDATA[Bağlantı statülerini kontrol et]]></value>
+	</item>
+	<item name="site">
+		<value xml:lang="ko"><![CDATA[사이트]]></value>
+		<value xml:lang="jp"><![CDATA[サイト]]></value>
+		<value xml:lang="en"><![CDATA[Site]]></value>
+	</item>
+	<item name="syndication_synic_start_date">
+		<value xml:lang="ko"><![CDATA[서버 등록일]]></value>
+		<value xml:lang="en"><![CDATA[Server registered]]></value>
+		<value xml:lang="jp"><![CDATA[サーバー登録日]]></value>
+		<value xml:lang="tr"><![CDATA[Sunucu kaydedildi.]]></value>
+	</item>
+	<item name="syndication_synic_last_date">
+		<value xml:lang="ko"><![CDATA[마지막 업데이트]]></value>
+		<value xml:lang="en"><![CDATA[Latest updates]]></value>
+		<value xml:lang="jp"><![CDATA[最後のアップデート]]></value>
+		<value xml:lang="tr"><![CDATA[Son Güncellemeler]]></value>
+	</item>
+	<item name="syndication_visit_ok_count">
+		<value xml:lang="ko"><![CDATA[Ping 연속접속 성공 횟수]]></value>
+		<value xml:lang="en"><![CDATA[Ping successed]]></value>
+		<value xml:lang="jp"><![CDATA[Ping連続接続成功回数]]></value>
+		<value xml:lang="tr"><![CDATA[Ping tamamlandı]]></value>
+	</item>
+	<item name="syndication_visit_fail_count">
+		<value xml:lang="ko"><![CDATA[Ping 실패 횟수]]></value>
+		<value xml:lang="en"><![CDATA[Ping failed]]></value>
+		<value xml:lang="jp"><![CDATA[失敗回数]]></value>
+		<value xml:lang="tr"><![CDATA[Ping tamamlanamadı]]></value>
+	</item>
+	<item name="syndication_status_result">
+		<value xml:lang="ko"><![CDATA[상태정보]]></value>
+		<value xml:lang="en"><![CDATA[Status]]></value>
+		<value xml:lang="jp"><![CDATA[状態情報]]></value>
+		<value xml:lang="tr"><![CDATA[Statüler]]></value>
+	</item>
+	<item name="syndication_sync_article">
+		<value xml:lang="ko"><![CDATA[동기화 문서]]></value>
+		<value xml:lang="en"><![CDATA[Synchronized Articles]]></value>
+		<value xml:lang="jp"><![CDATA[同期化された書き込み]]></value>
+		<value xml:lang="tr"><![CDATA[Eş zamanlı hale getirilmiş yazılar]]></value>
+	</item>
+	<item name="syndication_status">
+		<value xml:lang="ko"><![CDATA[동기화 상태]]></value>
+		<value xml:lang="en"><![CDATA[Synchronization Status]]></value>
+		<value xml:lang="jp"><![CDATA[同期化状態]]></value>
+		<value xml:lang="tr"><![CDATA[Eş zamanlama statüleri]]></value>
+	</item>
+	<item name="msg_need_openssl_support">
+		<value xml:lang="ko"><![CDATA[OpenSSL(http://php.net/manual/en/book.openssl.php)이 필요합니다. 서버 관리자에게 문의하세요.]]></value>
+		<value xml:lang="en"><![CDATA[Need OpenSSL(http://php.net/manual/en/book.openssl.php) support. Please contact to your server administrator.]]></value>
+	</item>
+</lang>

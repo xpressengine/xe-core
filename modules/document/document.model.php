@@ -141,6 +141,10 @@ class documentModel extends document
 		if(!$GLOBALS['XE_DOCUMENT_LIST'][$document_srl])
 		{
 			$oDocument = new documentItem($document_srl, $load_extra_vars, $columnList);
+			if(!$oDocument->isExists())
+			{
+				return $oDocument;
+			}
 			$GLOBALS['XE_DOCUMENT_LIST'][$document_srl] = $oDocument;
 			if($load_extra_vars) $this->setToAllDocumentExtraVars();
 		}
@@ -1327,6 +1331,7 @@ class documentModel extends document
 		$args->start_date = $searchOpt->start_date?$searchOpt->start_date:null;
 		$args->end_date = $searchOpt->end_date?$searchOpt->end_date:null;
 		$args->member_srl = $searchOpt->member_srl;
+		$args->member_srls = $searchOpt->member_srls;
 
 		$logged_info = Context::get('logged_info');
 
@@ -1426,6 +1431,24 @@ class documentModel extends document
 				case 'trackback_count' :
 				case 'uploaded_count' :
 					$args->{"s_".$search_target} = (int)$search_keyword;
+					break;
+				case 'member_srls' :
+					$args->{"s_".$search_target} = (int)$search_keyword;
+
+					if($logged_info->member_srl)
+					{
+						$srls = explode(',', $search_keyword);
+						foreach($srls as $srl)
+						{
+							if(abs($srl) != $logged_info->member_srl)
+							{
+								break; // foreach
+							}
+
+							$args->{"s_".$search_target} = $search_keyword;
+							break; // foreach
+						}
+					}
 					break;
 				case 'blamed_count' :
 					$args->{"s_".$search_target} = (int)$search_keyword * -1;

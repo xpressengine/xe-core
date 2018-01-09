@@ -337,8 +337,9 @@ class memberView extends member
 
 		$module_srl = Context::get('module_srl');
 		Context::set('module_srl',Context::get('selected_module_srl'));
-		Context::set('search_target','member_srl');
-		Context::set('search_keyword',$member_srl);
+		Context::set('search_target','member_srls');
+		Context::set('search_keyword', implode(',', array($member_srl, $member_srl * -1)));
+
 
 		$oDocumentAdminView = getAdminView('document');
 		$oDocumentAdminView->dispDocumentAdminList();
