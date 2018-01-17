@@ -1,9 +1,5 @@
 (function($){
 	"use strict";
-
-
-(function($){
-	"use strict";
 	var default_ckeconfig = {
 		bodyClass: 'xe_content editable',
 		toolbarCanCollapse: true,
