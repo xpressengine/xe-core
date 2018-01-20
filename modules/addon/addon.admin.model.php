@@ -37,7 +37,7 @@ class addonAdminModel extends addon
 	/**
 	 * Get addon list for super admin
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function getAddonListForSuperAdmin()
 	{

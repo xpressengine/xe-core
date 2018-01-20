@@ -14,7 +14,11 @@ class JSONDisplayHandler
 		$variables = $oModule->getVariables();
 		$variables['error'] = $oModule->getError();
 		$variables['message'] = $oModule->getMessage();
-		$json = str_replace(array("\r\n", "\n", "\t"), array('\n', '\n', '\t'), json_encode2($variables));
+
+		$json = json_encode2($variables);
+		$json = str_replace(array("\r\n", "\n", "\t"), array('\n', '\n', '\t'), $json);
+		$json = filter_var($json, FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_LOW);
+
 		return $json;
 	}
 

@@ -29,14 +29,14 @@ define('__ZBXE__', __XE__);
 /**
  * Display XE's full version.
  */
-define('__XE_VERSION__', '1.8.42');
+define('__XE_VERSION__', '1.9.3');
 define('__XE_VERSION_ALPHA__', (stripos(__XE_VERSION__, 'alpha') !== false));
 define('__XE_VERSION_BETA__', (stripos(__XE_VERSION__, 'beta') !== false));
 define('__XE_VERSION_RC__', (stripos(__XE_VERSION__, 'rc') !== false));
 define('__XE_VERSION_STABLE__', (!__XE_VERSION_ALPHA__ && !__XE_VERSION_BETA__ && !__XE_VERSION_RC__));
 
 define('__XE_MIN_PHP_VERSION__', '5.3.0');
-define('__XE_RECOMMEND_PHP_VERSION__', '5.5.0');
+define('__XE_RECOMMEND_PHP_VERSION__', '5.6.4');
 
 /**
  * @deprecated __ZBXE_VERSION__ will be removed. Use __XE_VERSION__ instead.
@@ -51,7 +51,6 @@ define('_XE_PATH_', str_replace('config/config.inc.php', '', str_replace('\\', '
 
 // Set can use other method instead cookie to store session id(for file upload)
 ini_set('session.use_only_cookies', 0);
-
 
 if(file_exists(_XE_PATH_ . 'config/package.inc.php'))
 {
@@ -281,6 +280,21 @@ if(!defined('__ERROR_LOG__'))
 	define('__ERROR_LOG__', 0);
 }
 
+if(!defined('__DISABLE_DEFAULT_CSS__'))
+{
+	/**
+	 * XE의 기본 CSS 스타일을 로드하지 않도록 합니다.
+	 *
+	 * CSS 적용이 해제됨에 따라 버튼, 팝업 메뉴 및 일부 중요 메시지 등이 표시되지 않을 수 있습니다.
+	 * common/css/xe.css
+	 * common/css/mobile.css
+	 *
+	 * 0: CSS 적용 (기존과 동일)
+	 * 1: 사용하지 않음
+	 */
+	define('__DISABLE_DEFAULT_CSS__', 0);
+}
+
 // Require specific files when using Firebug console output
 if((__DEBUG_OUTPUT__ == 2) && version_compare(PHP_VERSION, '6.0.0') === -1)
 {
@@ -291,17 +305,6 @@ if((__DEBUG_OUTPUT__ == 2) && version_compare(PHP_VERSION, '6.0.0') === -1)
 if(version_compare(PHP_VERSION, '5.3.0') >= 0)
 {
 	date_default_timezone_set(@date_default_timezone_get());
-}
-
-// Require a function-defined-file for simple use
-require(_XE_PATH_ . 'config/func.inc.php');
-
-if(__DEBUG__) {
-	define('__StartTime__', getMicroTime());
-}
-
-if(__DEBUG__) {
-	$GLOBALS['__elapsed_class_load__'] = 0;
 }
 
 $GLOBALS['__xe_autoload_file_map'] = array_change_key_case(array(
@@ -352,7 +355,7 @@ $GLOBALS['__xe_autoload_file_map'] = array_change_key_case(array(
 	'Mobile' => 'classes/mobile/Mobile.class.php',
 	'ModuleHandler' => 'classes/module/ModuleHandler.class.php',
 	'ModuleObject' => 'classes/module/ModuleObject.class.php',
-	'Object' => 'classes/object/Object.class.php',
+	'BaseObject' => 'classes/object/BaseObject.class.php',
 	'PageHandler' => 'classes/page/PageHandler.class.php',
 	'EmbedFilter' => 'classes/security/EmbedFilter.class.php',
 	'IpFilter' => 'classes/security/IpFilter.class.php',
@@ -401,6 +404,33 @@ $GLOBALS['__xe_autoload_file_map'] = array_change_key_case(array(
 	'TablesTag' => 'classes/xml/xmlquery/tags/table/TablesTag.class.php',
 ), CASE_LOWER);
 
+/**
+ * Invalidates a cached script of OPcache when version is changed.
+ * @see https://github.com/xpressengine/xe-core/issues/2189
+ **/
+if(
+	!is_dir(_XE_PATH_ . 'files/cache/store/' . __XE_VERSION__)
+	&& function_exists('opcache_get_status')
+	&& function_exists('opcache_invalidate')
+)
+{
+	foreach($GLOBALS['__xe_autoload_file_map'] as $script) {
+		opcache_invalidate(_XE_PATH_ . $script, true);
+	}
+	opcache_invalidate(_XE_PATH_ . 'config/func.inc.php', true);
+}
+
+// Require a function-defined-file for simple use
+require(_XE_PATH_ . 'config/func.inc.php');
+
+if(__DEBUG__) {
+	define('__StartTime__', getMicroTime());
+}
+
+if(__DEBUG__) {
+	$GLOBALS['__elapsed_class_load__'] = 0;
+}
+
 function __xe_autoload($class_name)
 {
 	if(__DEBUG__) {
@@ -432,6 +462,11 @@ function __xe_autoload($class_name)
 	}
 }
 spl_autoload_register('__xe_autoload');
+
+if(version_compare(PHP_VERSION, '7.2', '<'))
+{
+	class_alias('BaseObject', 'Object', true);
+}
 
 if(file_exists(_XE_PATH_  . '/vendor/autoload.php')) {
 	require _XE_PATH_  . '/vendor/autoload.php';

@@ -58,7 +58,7 @@ class fileController extends file
 	/**
 	 * Iframe upload attachments
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function procFileIframeUpload()
 	{
@@ -106,7 +106,7 @@ class fileController extends file
 	/**
 	 * Image resize
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function procFileImageResize()
 	{
@@ -116,14 +116,14 @@ class fileController extends file
 
 		if(!$file_srl || !$width)
 		{
-			return new Object(-1,'msg_invalid_request');
+			return new BaseObject(-1,'msg_invalid_request');
 		}
 
 		$oFileModel = getModel('file');
 		$fileInfo = $oFileModel->getFile($file_srl);
 		if(!$fileInfo || $fileInfo->direct_download != 'Y')
 		{
-			return new Object(-1,'msg_invalid_request');
+			return new BaseObject(-1,'msg_invalid_request');
 		}
 
 		$source_src = $fileInfo->uploaded_filename;
@@ -139,7 +139,7 @@ class fileController extends file
 		}
 		else
 		{
-			return new Object(-1,'msg_invalid_request');
+			return new BaseObject(-1,'msg_invalid_request');
 		}
 
 		$this->add('resized_info',$output);
@@ -180,7 +180,7 @@ class fileController extends file
 	{
 		$oFileModel = getModel('file');
 
-		if(isset($this->grant->access) && $this->grant->access !== true) return new Object(-1, 'msg_not_permitted');
+		if(isset($this->grant->access) && $this->grant->access !== true) return new BaseObject(-1, 'msg_not_permitted');
 
 		$file_srl = Context::get('file_srl');
 		$sid = Context::get('sid');
@@ -373,7 +373,7 @@ class fileController extends file
 		header("Content-Transfer-Encoding: binary\n");
 
 		// if file size is lager than 10MB, use fread function (#18675748)
-		if(filesize($uploaded_filename) > 1024 * 1024)
+		if($file_size > 1024 * 1024)
 		{
 			while(!feof($fp)) echo fread($fp, 1024);
 			fclose($fp);
@@ -389,7 +389,7 @@ class fileController extends file
 	/**
 	 * Delete an attachment from the editor
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function procFileDelete()
 	{
@@ -433,18 +433,18 @@ class fileController extends file
 	/**
 	 * get file list
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function procFileGetList()
 	{
-		if(!Context::get('is_logged')) return new Object(-1,'msg_not_permitted');
+		if(!Context::get('is_logged')) return new BaseObject(-1,'msg_not_permitted');
 
 		$oModuleModel = getModel('module');
 
 		$logged_info = Context::get('logged_info');
 		if($logged_info->is_admin !== 'Y' && !$oModuleModel->isSiteAdmin($logged_info))
 		{
-			return new Object(-1, 'msg_not_permitted');
+			return new BaseObject(-1, 'msg_not_permitted');
 		}
 
 		$fileSrls = Context::get('file_srls');
@@ -479,46 +479,46 @@ class fileController extends file
 	 * A trigger to return numbers of attachments in the upload_target_srl (document_srl)
 	 *
 	 * @param object $obj Trigger object
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function triggerCheckAttached(&$obj)
 	{
 		$document_srl = $obj->document_srl;
-		if(!$document_srl) return new Object();
+		if(!$document_srl) return new BaseObject();
 		// Get numbers of attachments
 		$oFileModel = getModel('file');
 		$obj->uploaded_count = $oFileModel->getFilesCount($document_srl);
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
 	 * A trigger to link the attachment with the upload_target_srl (document_srl)
 	 *
 	 * @param object $obj Trigger object
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function triggerAttachFiles(&$obj)
 	{
 		$document_srl = $obj->document_srl;
-		if(!$document_srl) return new Object();
+		if(!$document_srl) return new BaseObject();
 
 		$output = $this->setFilesValid($document_srl);
 		if(!$output->toBool()) return $output;
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
 	 * A trigger to delete the attachment in the upload_target_srl (document_srl)
 	 *
 	 * @param object $obj Trigger object
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function triggerDeleteAttached(&$obj)
 	{
 		$document_srl = $obj->document_srl;
-		if(!$document_srl) return new Object();
+		if(!$document_srl) return new BaseObject();
 
 		$output = $this->deleteFiles($document_srl);
 		return $output;
@@ -528,49 +528,49 @@ class fileController extends file
 	 * A trigger to return numbers of attachments in the upload_target_srl (comment_srl)
 	 *
 	 * @param object $obj Trigger object
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function triggerCommentCheckAttached(&$obj)
 	{
 		$comment_srl = $obj->comment_srl;
-		if(!$comment_srl) return new Object();
+		if(!$comment_srl) return new BaseObject();
 		// Get numbers of attachments
 		$oFileModel = getModel('file');
 		$obj->uploaded_count = $oFileModel->getFilesCount($comment_srl);
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
 	 * A trigger to link the attachment with the upload_target_srl (comment_srl)
 	 *
 	 * @param object $obj Trigger object
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function triggerCommentAttachFiles(&$obj)
 	{
 		$comment_srl = $obj->comment_srl;
 		$uploaded_count = $obj->uploaded_count;
-		if(!$comment_srl || !$uploaded_count) return new Object();
+		if(!$comment_srl || !$uploaded_count) return new BaseObject();
 
 		$output = $this->setFilesValid($comment_srl);
 		if(!$output->toBool()) return $output;
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
 	 * A trigger to delete the attachment in the upload_target_srl (comment_srl)
 	 *
 	 * @param object $obj Trigger object
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function triggerCommentDeleteAttached(&$obj)
 	{
 		$comment_srl = $obj->comment_srl;
-		if(!$comment_srl) return new Object();
+		if(!$comment_srl) return new BaseObject();
 
-		if($obj->isMoveToTrash) return new Object();
+		if($obj->isMoveToTrash) return new BaseObject();
 
 		$output = $this->deleteFiles($comment_srl);
 		return $output;
@@ -580,12 +580,12 @@ class fileController extends file
 	 * A trigger to delete all the attachements when deleting the module
 	 *
 	 * @param object $obj Trigger object
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function triggerDeleteModuleFiles(&$obj)
 	{
 		$module_srl = $obj->module_srl;
-		if(!$module_srl) return new Object();
+		if(!$module_srl) return new BaseObject();
 
 		$oFileController = getAdminController('file');
 		return $oFileController->deleteModuleFiles($module_srl);
@@ -613,7 +613,7 @@ class fileController extends file
 	 * By changing its state to valid when a document is inserted, it prevents from being considered as a unnecessary file
 	 *
 	 * @param int $upload_target_srl
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function setFilesValid($upload_target_srl)
 	{
@@ -651,7 +651,7 @@ class fileController extends file
 	 * @param int $upload_target_srl Sequence of target to upload file
 	 * @param int $download_count Initial download count
 	 * @param bool $manual_insert If set true, pass validation check
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function insertFile($file_info, $module_srl, $upload_target_srl, $download_count = 0, $manual_insert = false)
 	{
@@ -698,13 +698,13 @@ class fileController extends file
 				$allowed_filesize = $config->allowed_filesize * 1024 * 1024;
 				$allowed_attach_size = $config->allowed_attach_size * 1024 * 1024;
 				// An error appears if file size exceeds a limit
-				if($allowed_filesize < filesize($file_info['tmp_name'])) return new Object(-1, 'msg_exceeds_limit_size');
+				if($allowed_filesize < filesize($file_info['tmp_name'])) return new BaseObject(-1, 'msg_exceeds_limit_size');
 				// Get total file size of all attachements (from DB)
 				$size_args = new stdClass;
 				$size_args->upload_target_srl = $upload_target_srl;
 				$output = executeQuery('file.getAttachedFileSize', $size_args);
 				$attached_size = (int)$output->data->attached_size + filesize($file_info['tmp_name']);
-				if($attached_size > $allowed_attach_size) return new Object(-1, 'msg_exceeds_limit_size');
+				if($attached_size > $allowed_attach_size) return new BaseObject(-1, 'msg_exceeds_limit_size');
 			}
 		}
 
@@ -717,7 +717,7 @@ class fileController extends file
 		$random = new Password();
 
 		// Set upload path by checking if the attachement is an image or other kinds of file
-		if(preg_match("/\.(jpe?g|gif|png|wm[va]|mpe?g|avi|swf|flv|mp[1-4]|as[fx]|wav|midi?|moo?v|qt|r[am]{1,2}|m4v)$/i", $file_info['name']))
+		if(preg_match("/\.(jpe?g|gif|png|wm[va]|mpe?g|avi|flv|mp[1-4]|as[fx]|wav|midi?|moo?v|qt|r[am]{1,2}|m4v)$/i", $file_info['name']))
 		{
 			$path = sprintf("./files/attach/images/%s/%s", $module_srl,getNumberingPath($upload_target_srl,3));
 
@@ -742,10 +742,10 @@ class fileController extends file
 			$direct_download = 'N';
 		}
 		// Create a directory
-		if(!FileHandler::makeDir($path)) return new Object(-1,'msg_not_permitted_create');
+		if(!FileHandler::makeDir($path)) return new BaseObject(-1,'msg_not_permitted_create');
 
 		// Check uploaded file
-		if(!checkUploadedFile($file_info['tmp_name']))  return new Object(-1,'msg_file_upload_error');
+		if(!checkUploadedFile($file_info['tmp_name']))  return new BaseObject(-1,'msg_file_upload_error');
 
 		// Get random number generator
 		$random = new Password();
@@ -765,7 +765,7 @@ class fileController extends file
 			if(!@move_uploaded_file($file_info['tmp_name'], $filename))
 			{
 				$filename = $path.$random->createSecureSalt(32, 'hex').'.'.$ext;
-				if(!@move_uploaded_file($file_info['tmp_name'], $filename))  return new Object(-1,'msg_file_upload_error');
+				if(!@move_uploaded_file($file_info['tmp_name'], $filename))  return new BaseObject(-1,'msg_file_upload_error');
 			}
 		}
 		// Get member information
@@ -828,7 +828,7 @@ class fileController extends file
 	 * </pre>
 	 *
 	 * @param int $file_srl Sequence of file to delete
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function deleteFile($file_srl)
 	{
@@ -893,7 +893,7 @@ class fileController extends file
 	 * Delete all attachments of a particular document
 	 *
 	 * @param int $upload_target_srl Upload target srl to delete files
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function deleteFiles($upload_target_srl)
 	{
@@ -902,7 +902,7 @@ class fileController extends file
 		$columnList = array('file_srl', 'uploaded_filename', 'module_srl');
 		$file_list = $oFileModel->getFiles($upload_target_srl, $columnList);
 		// Success returned if no attachement exists
-		if(!is_array($file_list)||!count($file_list)) return new Object();
+		if(!is_array($file_list)||!count($file_list)) return new BaseObject();
 
 		// Delete the file
 		$path = array();
@@ -948,14 +948,14 @@ class fileController extends file
 		if(!$file_list) return;
 
 		$file_count = count($file_list);
-
+ 
 		for($i=0;$i<$file_count;$i++)
 		{
 			unset($file_info);
 			$file_info = $file_list[$i];
 			$old_file = $file_info->uploaded_filename;
 			// Determine the file path by checking if the file is an image or other kinds
-			if(preg_match("/\.(asf|asf|asx|avi|flv|gif|jpeg|jpg|m4a|m4v|mid|midi|moov|mov|mp1|mp2|mp3|mp4|mpeg|mpg|ogg|png|qt|ra|ram|rm|rmm|swf|wav|webm|webp|wma|wmv)$/i", $file_info->source_filename))
+			if(preg_match("/\.(asf|asf|asx|avi|flv|gif|jpeg|jpg|m4a|m4v|mid|midi|moov|mov|mp1|mp2|mp3|mp4|mpeg|mpg|ogg|png|qt|ra|ram|rm|rmm|wav|webm|webp|wma|wmv)$/i", $file_info->source_filename))
 			{
 				$path = sprintf("./files/attach/images/%s/%s/", $target_module_srl,$target_srl);
 				$new_file = $path.$file_info->source_filename;
@@ -987,16 +987,16 @@ class fileController extends file
 		$vars = Context::getRequestVars();
 		$logged_info = Context::get('logged_info');
 
-		if(!$vars->editor_sequence) return new Object(-1, 'msg_invalid_request');
+		if(!$vars->editor_sequence) return new BaseObject(-1, 'msg_invalid_request');
 
 		$upload_target_srl = $_SESSION['upload_info'][$vars->editor_sequence]->upload_target_srl;
 
 		$oFileModel = getModel('file');
 		$file_info = $oFileModel->getFile($vars->file_srl);
 
-		if(!$file_info) return new Object(-1, 'msg_not_founded');
+		if(!$file_info) return new BaseObject(-1, 'msg_not_founded');
 
-		if(!$this->manager && !$file_info->member_srl === $logged_info->member_srl) return new Object(-1, 'msg_not_permitted');
+		if(!$this->manager && !$file_info->member_srl === $logged_info->member_srl) return new BaseObject(-1, 'msg_not_permitted');
 
 		$args =  new stdClass();
 		$args->file_srl = $vars->file_srl;

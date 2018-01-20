@@ -13,8 +13,9 @@ class HTMLDisplayHandler
 	{
 		$oTemplate = TemplateHandler::getInstance();
 
-		// compile module tpl
-		// deprecated themes skin
+		// SECISSUE https://github.com/xpressengine/xe-core/issues/1583
+		$oSecurity = new Security();
+		$oSecurity->encodeHTML('is_keyword', 'search_keyword', 'search_target', 'order_target', 'order_type');
 
 		$template_path = $oModule->getTemplatePath();
 
@@ -57,12 +58,7 @@ class HTMLDisplayHandler
 		}
 
 		$tpl_file = $oModule->getTemplateFile();
-
 		$output = $oTemplate->compile($template_path, $tpl_file);
-
-		// SECISSUE https://github.com/xpressengine/xe-core/issues/1583
-		$oSecurity = new Security();
-		$oSecurity->encodeHTML('is_keyword', 'search_keyword', 'search_target', 'order_target', 'order_type');
 
 		// add .x div for adminitration pages
 		if(Context::getResponseMethod() == 'HTML')
@@ -179,8 +175,8 @@ class HTMLDisplayHandler
 			$url = parse_url(Context::getRequestUri());
 			$real_path = $url['path'];
 
-			$pattern = '/src=("|\'){1}(\.\/)?(files\/attach|files\/cache|files\/faceOff|files\/member_extra_info|modules|common|widgets|widgetstyle|layouts|addons)\/([^"\']+)\.(jpg|jpeg|png|gif)("|\'){1}/s';
-			$output = preg_replace($pattern, 'src=$1' . $real_path . '$3/$4.$5$6', $output);
+			$pattern = '/src=("|\'){1}(?:\.\/)?((?:files\/(?:attach|cache|faceOff|member_extra_info|thumbnails)|addons|common|(?:m\.)?layouts|modules|widgets|widgetstyle)\/[^"\']+)("|\'){1}/s';
+			$output = preg_replace($pattern, 'src=$1' . $real_path . '$2$3', $output);
 
 			$pattern = '/href=("|\'){1}(\?[^"\']+)/s';
 			$output = preg_replace($pattern, 'href=$1' . $real_path . '$2', $output);
@@ -393,24 +389,40 @@ class HTMLDisplayHandler
 		// add common JS/CSS files
 		if(__DEBUG__ || !__XE_VERSION_STABLE__)
 		{
-			$oContext->loadFile(array('./common/js/jquery-1.x.js', 'head', 'lt IE 9', -111000), true);
-			$oContext->loadFile(array('./common/js/jquery.js', 'head', 'gte IE 9', -110000), true);
-			$oContext->loadFile(array('./common/js/modernizr.js', 'head', '', -100000), true);
-			$oContext->loadFile(array('./common/js/x.js', 'head', '', -100000), true);
-			$oContext->loadFile(array('./common/js/common.js', 'head', '', -100000), true);
-			$oContext->loadFile(array('./common/js/js_app.js', 'head', '', -100000), true);
-			$oContext->loadFile(array('./common/js/xml2json.js', 'head', '', -100000), true);
-			$oContext->loadFile(array('./common/js/xml_handler.js', 'head', '', -100000), true);
-			$oContext->loadFile(array('./common/js/xml_js_filter.js', 'head', '', -100000), true);
-			$oContext->loadFile(array('./common/css/xe.css', '', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/jquery-1.x.js', 'head', 'lt IE 9', -1110000), true);
+			$oContext->loadFile(array('./common/js/jquery.js', 'head', 'gte IE 9', -1100000), true);
+			$oContext->loadFile(array('./common/js/modernizr.js', 'head', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/x.js', 'head', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/URI.js', 'head', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/blankshield.min.js', 'head', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/common.js', 'head', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/js_app.js', 'head', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/xml2json.js', 'head', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/xml_handler.js', 'head', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/xml_js_filter.js', 'head', '', -1000000), true);
+			if(!__DISABLE_DEFAULT_CSS__)
+			{
+				$oContext->loadFile(array('./common/css/xe.css', '', '', -10000000), true);
+			}
+			else
+			{
+				$oContext->unloadFile(array('./common/css/xe.css', '', '', -10000000), true);
+			}
 		}
 		else
 		{
-			$oContext->loadFile(array('./common/js/jquery-1.x.min.js', 'head', 'lt IE 9', -111000), true);
-			$oContext->loadFile(array('./common/js/jquery.min.js', 'head', 'gte IE 9', -110000), true);
-			$oContext->loadFile(array('./common/js/x.min.js', 'head', '', -100000), true);
-			$oContext->loadFile(array('./common/js/xe.min.js', 'head', '', -100000), true);
-			$oContext->loadFile(array('./common/css/xe.min.css', '', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/jquery-1.x.min.js', 'head', 'lt IE 9', -1110000), true);
+			$oContext->loadFile(array('./common/js/jquery.min.js', 'head', 'gte IE 9', -1100000), true);
+			$oContext->loadFile(array('./common/js/x.min.js', 'head', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/xe.min.js', 'head', '', -1000000), true);
+			if(!__DISABLE_DEFAULT_CSS__)
+			{
+				$oContext->loadFile(array('./common/css/xe.min.css', '', '', -10000000), true);
+			}
+			else
+			{
+				$oContext->unloadFile(array('./common/css/xe.min.css', '', '', -10000000), true);
+			}
 		}
 
 		// for admin page, add admin css
@@ -450,24 +462,42 @@ class HTMLDisplayHandler
 		// add common JS/CSS files
 		if(__DEBUG__ || !__XE_VERSION_STABLE__)
 		{
-			$oContext->loadFile(array('./common/js/jquery.js', 'head', '', -110000), true);
-			$oContext->loadFile(array('./common/js/modernizr.js', 'head', '', -100000), true);
-			$oContext->loadFile(array('./common/js/x.js', 'head', '', -100000), true);
-			$oContext->loadFile(array('./common/js/common.js', 'head', '', -100000), true);
-			$oContext->loadFile(array('./common/js/js_app.js', 'head', '', -100000), true);
-			$oContext->loadFile(array('./common/js/xml2json.js', 'head', '', -100000), true);
-			$oContext->loadFile(array('./common/js/xml_handler.js', 'head', '', -100000), true);
-			$oContext->loadFile(array('./common/js/xml_js_filter.js', 'head', '', -100000), true);
-			$oContext->loadFile(array('./common/css/xe.css', '', '', -1000000), true);
-			$oContext->loadFile(array('./common/css/mobile.css', '', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/jquery.js', 'head', '', -1100000), true);
+			$oContext->loadFile(array('./common/js/modernizr.js', 'head', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/x.js', 'head', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/URI.js', 'head', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/blankshield.min.js', 'head', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/common.js', 'head', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/js_app.js', 'head', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/xml2json.js', 'head', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/xml_handler.js', 'head', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/xml_js_filter.js', 'head', '', -1000000), true);
+			if(!__DISABLE_DEFAULT_CSS__)
+			{
+				$oContext->loadFile(array('./common/css/xe.css', '', '', -10000000), true);
+				$oContext->loadFile(array('./common/css/mobile.css', '', '', -10000000), true);
+			}
+			else
+			{
+				$oContext->unloadFile(array('./common/css/xe.css', '', '', -10000000), true);
+				$oContext->unloadFile(array('./common/css/mobile.css', '', '', -10000000), true);
+			}
 		}
 		else
 		{
-			$oContext->loadFile(array('./common/js/jquery.min.js', 'head', '', -110000), true);
-			$oContext->loadFile(array('./common/js/x.min.js', 'head', '', -100000), true);
-			$oContext->loadFile(array('./common/js/xe.min.js', 'head', '', -100000), true);
-			$oContext->loadFile(array('./common/css/xe.min.css', '', '', -1000000), true);
-			$oContext->loadFile(array('./common/css/mobile.min.css', '', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/jquery.min.js', 'head', '', -1100000), true);
+			$oContext->loadFile(array('./common/js/x.min.js', 'head', '', -1000000), true);
+			$oContext->loadFile(array('./common/js/xe.min.js', 'head', '', -1000000), true);
+			if(!__DISABLE_DEFAULT_CSS__)
+			{
+				$oContext->loadFile(array('./common/css/xe.min.css', '', '', -10000000), true);
+				$oContext->loadFile(array('./common/css/mobile.min.css', '', '', -10000000), true);
+			}
+			else
+			{
+				$oContext->unloadFile(array('./common/css/xe.min.css', '', '', -10000000), true);
+				$oContext->unloadFile(array('./common/css/mobile.min.css', '', '', -10000000), true);
+			}
 		}
 	}
 

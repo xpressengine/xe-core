@@ -76,7 +76,7 @@ class board extends ModuleObject
 			}
 		}
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -85,12 +85,19 @@ class board extends ModuleObject
 	function checkUpdate()
 	{
 		$oModuleModel = getModel('module');
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
+		{
+			// 2007. 10. 17 get the member menu trigger
+			if(!$oModuleModel->getTrigger('member.getMemberMenu', 'board', 'controller', 'triggerMemberMenu', 'after')) return true;
 
-		// 2007. 10. 17 get the member menu trigger
-		if(!$oModuleModel->getTrigger('member.getMemberMenu', 'board', 'controller', 'triggerMemberMenu', 'after')) return true;
+			// 2011. 09. 20 when add new menu in sitemap, custom menu add
+			if(!$oModuleModel->getTrigger('menu.getModuleListInSitemap', 'board', 'model', 'triggerModuleListInSitemap', 'after')) return true;
 
-		// 2011. 09. 20 when add new menu in sitemap, custom menu add
-		if(!$oModuleModel->getTrigger('menu.getModuleListInSitemap', 'board', 'model', 'triggerModuleListInSitemap', 'after')) return true;
+			$oModuleController->insertUpdatedLog($version_update_id);
+		}
+
 		return false;
 	}
 
@@ -101,26 +108,30 @@ class board extends ModuleObject
 	{
 		$oModuleModel = getModel('module');
 		$oModuleController = getController('module');
-
-		// 2007. 10. 17  check the member menu trigger, if it is not existed then insert
-		if(!$oModuleModel->getTrigger('member.getMemberMenu', 'board', 'controller', 'triggerMemberMenu', 'after'))
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
 		{
-			$oModuleController->insertTrigger('member.getMemberMenu', 'board', 'controller', 'triggerMemberMenu', 'after');
+			// 2007. 10. 17  check the member menu trigger, if it is not existed then insert
+			if(!$oModuleModel->getTrigger('member.getMemberMenu', 'board', 'controller', 'triggerMemberMenu', 'after'))
+			{
+				$oModuleController->insertTrigger('member.getMemberMenu', 'board', 'controller', 'triggerMemberMenu', 'after');
+			}
+
+			// 2011. 09. 20 when add new menu in sitemap, custom menu add
+			if(!$oModuleModel->getTrigger('menu.getModuleListInSitemap', 'board', 'model', 'triggerModuleListInSitemap', 'after'))
+			{
+				$oModuleController->insertTrigger('menu.getModuleListInSitemap', 'board', 'model', 'triggerModuleListInSitemap', 'after');
+			}
+			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
-		// 2011. 09. 20 when add new menu in sitemap, custom menu add
-		if(!$oModuleModel->getTrigger('menu.getModuleListInSitemap', 'board', 'model', 'triggerModuleListInSitemap', 'after'))
-		{
-			$oModuleController->insertTrigger('menu.getModuleListInSitemap', 'board', 'model', 'triggerModuleListInSitemap', 'after');
-		}
-
-		return new Object(0, 'success_updated');
+		return new BaseObject(0, 'success_updated');
 	}
 
 	function moduleUninstall()
 	{
 		$output = executeQueryArray("board.getAllBoard");
-		if(!$output->data) return new Object();
+		if(!$output->data) return new BaseObject();
 		@set_time_limit(0);
 
 		$oModuleController = getController('module');
@@ -130,6 +141,6 @@ class board extends ModuleObject
 			$oModuleController->deleteModule($board->module_srl);
 		}
 
-		return new Object();
+		return new BaseObject();
 	}
 }

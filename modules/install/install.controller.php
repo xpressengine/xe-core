@@ -105,7 +105,7 @@ class installController extends install
 		if(!$oDB->isConnected()) return $oDB->getError();
 
 		// Create a db temp config file
-		if(!$this->makeDBConfigFile()) return new Object(-1, 'msg_install_failed');
+		if(!$this->makeDBConfigFile()) return new BaseObject(-1, 'msg_install_failed');
 
 		if(!in_array(Context::getRequestMethod(),array('XMLRPC','JSON')))
 		{
@@ -125,7 +125,7 @@ class installController extends install
 		if($config_info->use_rewrite!='Y') $config_info->use_rewrite = 'N';
 
 		// Create a db temp config file
-		if(!$this->makeEtcConfigFile($config_info)) return new Object(-1, 'msg_install_failed');
+		if(!$this->makeEtcConfigFile($config_info)) return new BaseObject(-1, 'msg_install_failed');
 
 		if(!in_array(Context::getRequestMethod(),array('XMLRPC','JSON')))
 		{
@@ -141,7 +141,18 @@ class installController extends install
 	function procInstall()
 	{
 		// Check if it is already installed
-		if(Context::isInstalled()) return new Object(-1, 'msg_already_installed');
+		if(Context::isInstalled()) return new BaseObject(-1, 'msg_already_installed');
+
+		Context::loadLang('modules/member/lang');
+		$oMemberModel = getModel('member');
+		$vars = Context::getRequestVars();
+
+		if(!$oMemberModel->checkPasswordStrength($vars->password, 'high'))
+		{
+			Context::loadLang('modules/member/lang');
+			$message = Context::getLang('about_password_strength');
+			return new BaseObject(-1, $message['high']);
+		}
 
 		// Assign a temporary administrator when installing
 		$logged_info = new stdClass();
@@ -174,11 +185,11 @@ class installController extends install
 			$oDB->commit();
 		} catch(Exception $e) {
 			$oDB->rollback();
-			return new Object(-1, $e->getMessage());
+			return new BaseObject(-1, $e->getMessage());
 		}
 
 		// Create a config file
-		if(!$this->makeConfigFile()) return new Object(-1, 'msg_install_failed');
+		if(!$this->makeConfigFile()) return new BaseObject(-1, 'msg_install_failed');
 
 		// load script
 		$scripts = FileHandler::readDir(_XE_PATH_ . 'modules/install/script', '/(\.php)$/');
@@ -205,7 +216,7 @@ class installController extends install
 		{
 			$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('');
 			header('location:'.$returnUrl);
-			return new Object();
+			return new BaseObject();
 		}
 	}
 
@@ -252,7 +263,7 @@ class installController extends install
 	 */
 	function procInstallFTP()
 	{
-		if(Context::isInstalled()) return new Object(-1, 'msg_already_installed');
+		if(Context::isInstalled()) return new BaseObject(-1, 'msg_already_installed');
 		$ftp_info = Context::gets('ftp_host', 'ftp_user','ftp_password','ftp_port','ftp_root_path');
 		$ftp_info->ftp_port = (int)$ftp_info->ftp_port;
 		if(!$ftp_info->ftp_port) $ftp_info->ftp_port = 21;
@@ -269,40 +280,40 @@ class installController extends install
 		// If safe_mode
 		if(ini_get('safe_mode'))
 		{
-			if(!$ftp_info->ftp_user || !$ftp_info->ftp_password) return new Object(-1,'msg_safe_mode_ftp_needed');
+			if(!$ftp_info->ftp_user || !$ftp_info->ftp_password) return new BaseObject(-1,'msg_safe_mode_ftp_needed');
 
 			require_once(_XE_PATH_.'libs/ftp.class.php');
 			$oFtp = new ftp();
-			if(!$oFtp->ftp_connect($ftp_info->ftp_host, $ftp_info->ftp_port)) return new Object(-1, sprintf(Context::getLang('msg_ftp_not_connected'), 'host'));
+			if(!$oFtp->ftp_connect($ftp_info->ftp_host, $ftp_info->ftp_port)) return new BaseObject(-1, sprintf(Context::getLang('msg_ftp_not_connected'), 'host'));
 
 			if(!$oFtp->ftp_login($ftp_info->ftp_user, $ftp_info->ftp_password))
 			{
 				$oFtp->ftp_quit();
-				return new Object(-1,'msg_ftp_invalid_auth_info');
+				return new BaseObject(-1,'msg_ftp_invalid_auth_info');
 			}
 
 			if(!is_dir(_XE_PATH_.'files') && !$oFtp->ftp_mkdir($ftp_info->ftp_root_path.'files'))
 			{
 				$oFtp->ftp_quit();
-				return new Object(-1,'msg_ftp_mkdir_fail');
+				return new BaseObject(-1,'msg_ftp_mkdir_fail');
 			}
 
 			if(!$oFtp->ftp_site("CHMOD 777 ".$ftp_info->ftp_root_path.'files'))
 			{
 				$oFtp->ftp_quit();
-				return new Object(-1,'msg_ftp_chmod_fail');
+				return new BaseObject(-1,'msg_ftp_chmod_fail');
 			}
 
 			if(!is_dir(_XE_PATH_.'files/config') && !$oFtp->ftp_mkdir($ftp_info->ftp_root_path.'files/config'))
 			{
 				$oFtp->ftp_quit();
-				return new Object(-1,'msg_ftp_mkdir_fail');
+				return new BaseObject(-1,'msg_ftp_mkdir_fail');
 			}
 
 			if(!$oFtp->ftp_site("CHMOD 777 ".$ftp_info->ftp_root_path.'files/config'))
 			{
 				$oFtp->ftp_quit();
-				return new Object(-1,'msg_ftp_chmod_fail');
+				return new BaseObject(-1,'msg_ftp_chmod_fail');
 			}
 
 			$oFtp->ftp_quit();
@@ -318,26 +329,26 @@ class installController extends install
 		if(!$ftp_info->ftp_port) $ftp_info->ftp_port = 21;
 		if(!$ftp_info->sftp) $ftp_info->sftp = 'N';
 
-		if(!$ftp_info->ftp_user || !$ftp_info->ftp_password) return new Object(-1,'msg_safe_mode_ftp_needed');
+		if(!$ftp_info->ftp_user || !$ftp_info->ftp_password) return new BaseObject(-1,'msg_safe_mode_ftp_needed');
 
 		if($ftp_info->sftp == 'Y')
 		{
 			$connection = ssh2_connect('localhost', $ftp_info->ftp_port);
 			if(!ssh2_auth_password($connection, $ftp_info->ftp_user, $ftp_info->ftp_password))
 			{
-				return new Object(-1,'msg_ftp_invalid_auth_info');
+				return new BaseObject(-1,'msg_ftp_invalid_auth_info');
 			}
 		}
 		else
 		{
 			require_once(_XE_PATH_.'libs/ftp.class.php');
 			$oFtp = new ftp();
-			if(!$oFtp->ftp_connect('127.0.0.1', $ftp_info->ftp_port)) return new Object(-1, sprintf(Context::getLang('msg_ftp_not_connected'), 'localhost'));
+			if(!$oFtp->ftp_connect('127.0.0.1', $ftp_info->ftp_port)) return new BaseObject(-1, sprintf(Context::getLang('msg_ftp_not_connected'), 'localhost'));
 
 			if(!$oFtp->ftp_login($ftp_info->ftp_user, $ftp_info->ftp_password))
 			{
 				$oFtp->ftp_quit();
-				return new Object(-1,'msg_ftp_invalid_auth_info');
+				return new BaseObject(-1,'msg_ftp_invalid_auth_info');
 			}
 			$oFtp->ftp_quit();
 		}
@@ -411,7 +422,7 @@ class installController extends install
 		else
 		{
 			FileHandler::removeFile($this->flagLicenseAgreement);
-			return new Object(-1, 'msg_must_accept_license_agreement');
+			return new BaseObject(-1, 'msg_must_accept_license_agreement');
 		}
 
 		if(!in_array(Context::getRequestMethod(),array('XMLRPC','JSON')))
@@ -553,7 +564,7 @@ class installController extends install
 			}
 		}
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -580,7 +591,7 @@ class installController extends install
 		unset($oModule);
 		$oModule = getClass($module);
 		if(method_exists($oModule, 'moduleInstall')) $oModule->moduleInstall();
-		return new Object();
+		return new BaseObject();
 	}
 
 	function _getDBConfigFileContents($db_info)

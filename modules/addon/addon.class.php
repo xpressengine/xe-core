@@ -11,23 +11,19 @@ class addon extends ModuleObject
 	/**
 	 * Implement if additional tasks are necessary when installing
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moduleInstall()
 	{
 		// Register to add a few
 		$oAddonController = getAdminController('addon');
 		$oAddonController->doInsert('autolink', 0, 'site', 'Y');
-		$oAddonController->doInsert('blogapi');
 		$oAddonController->doInsert('member_communication', 0, 'site', 'Y');
 		$oAddonController->doInsert('member_extra_info', 0, 'site', 'Y');
-		$oAddonController->doInsert('mobile', 0, 'site', 'Y');
 		$oAddonController->doInsert('resize_image', 0, 'site', 'Y');
-		$oAddonController->doInsert('openid_delegation_id');
-		$oAddonController->doInsert('point_level_icon');
 
 		$oAddonController->makeCacheFile(0);
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -38,19 +34,27 @@ class addon extends ModuleObject
 	function checkUpdate()
 	{
 		$oDB = DB::getInstance();
-		if(!$oDB->isColumnExists("addons", "is_used_m"))
+		$oModuleModel = getModel('module');
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
 		{
-			return TRUE;
-		}
-		if(!$oDB->isColumnExists("addons_site", "is_used_m"))
-		{
-			return TRUE;
-		}
+			if(!$oDB->isColumnExists("addons", "is_used_m"))
+			{
+				return TRUE;
+			}
+			if(!$oDB->isColumnExists("addons_site", "is_used_m"))
+			{
+				return TRUE;
+			}
 
-		// 2011. 7. 29. add is_fixed column
-		if(!$oDB->isColumnExists('addons', 'is_fixed'))
-		{
-			return TRUE;
+			// 2011. 7. 29. add is_fixed column
+			if(!$oDB->isColumnExists('addons', 'is_fixed'))
+			{
+				return TRUE;
+			}
+
+			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
 		return FALSE;
@@ -59,49 +63,57 @@ class addon extends ModuleObject
 	/**
 	 * Execute update
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moduleUpdate()
 	{
 		$oDB = DB::getInstance();
-		if(!$oDB->isColumnExists("addons", "is_used_m"))
-		{
-			$oDB->addColumn("addons", "is_used_m", "char", 1, "N", TRUE);
-		}
-		if(!$oDB->isColumnExists("addons_site", "is_used_m"))
-		{
-			$oDB->addColumn("addons_site", "is_used_m", "char", 1, "N", TRUE);
-		}
 
-		// 2011. 7. 29. add is_fixed column
-		if(!$oDB->isColumnExists('addons', 'is_fixed'))
+		$oModuleModel = getModel('module');
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
 		{
-			$oDB->addColumn('addons', 'is_fixed', 'char', 1, 'N', TRUE);
-
-			// move addon info to addon_site table
-			$output = executeQueryArray('addon.getAddons');
-			if($output->data)
+			if(!$oDB->isColumnExists("addons", "is_used_m"))
 			{
-				foreach($output->data as $row)
+				$oDB->addColumn("addons", "is_used_m", "char", 1, "N", TRUE);
+			}
+			if(!$oDB->isColumnExists("addons_site", "is_used_m"))
+			{
+				$oDB->addColumn("addons_site", "is_used_m", "char", 1, "N", TRUE);
+			}
+
+			// 2011. 7. 29. add is_fixed column
+			if(!$oDB->isColumnExists('addons', 'is_fixed'))
+			{
+				$oDB->addColumn('addons', 'is_fixed', 'char', 1, 'N', TRUE);
+
+				// move addon info to addon_site table
+				$output = executeQueryArray('addon.getAddons');
+				if($output->data)
 				{
-					$args = new stdClass();
-					$args->site_srl = 0;
-					$args->addon = $row->addon;
-					$args->is_used = $row->is_used;
-					$args->is_used_m = $row->is_used_m;
-					$args->extra_vars = $row->extra_vars;
-					executeQuery('addon.insertSiteAddon', $args);
+					foreach($output->data as $row)
+					{
+						$args = new stdClass();
+						$args->site_srl = 0;
+						$args->addon = $row->addon;
+						$args->is_used = $row->is_used;
+						$args->is_used_m = $row->is_used_m;
+						$args->extra_vars = $row->extra_vars;
+						executeQuery('addon.insertSiteAddon', $args);
+					}
 				}
 			}
+			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
-		return new Object(0, 'success_updated');
+		return new BaseObject(0, 'success_updated');
 	}
 
 	/**
 	 * Re-generate the cache file
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function recompileCache()
 	{

@@ -43,7 +43,9 @@ class Purifier
 		$this->_config->set('URI.SafeIframeRegexp', $whiteDomainRegex);
 		$this->_config->set('Cache.SerializerPath', $this->_cacheDir);
 		$this->_config->set('Attr.AllowedFrameTargets', array('_blank'));
-		//$this->_config->set('Attr.AllowedClasses', $allowdClasses);
+
+		// @see https://github.com/xpressengine/xe-core/issues/2138
+		$this->_config->set('Attr.IDPrefix', 'user_content_');
 
 		$this->_def = $this->_config->getHTMLDefinition(TRUE);
 	}

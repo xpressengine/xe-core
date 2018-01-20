@@ -1,0 +1,9 @@
+<query id="deleteLog" action="delete">
+    <tables>
+        <table name="syndication_logs" />
+    </tables>
+    <conditions>
+        <condition operation="equal" column="module_srl" var="module_srl" filter="number" />
+        <condition operation="equal" column="document_srl" var="document_srl" filter="number" pipe="and" />
+    </conditions>
+</query>

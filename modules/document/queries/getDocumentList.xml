@@ -11,6 +11,7 @@
         <condition operation="in" column="category_srl" var="category_srl" pipe="and" />
         <condition operation="equal" column="is_notice" var="s_is_notice" pipe="and" />
         <condition operation="equal" column="member_srl" var="member_srl" filter="number" pipe="and" />
+        <condition operation="in" column="member_srl" var="member_srls" filter="number" pipe="and" />
         <condition operation="in" column="status" var="statusList" pipe="and" />
         <group pipe="and">
             <condition operation="more" column="list_order" var="division" pipe="and" />
@@ -26,6 +27,7 @@
             <condition operation="like" column="homepage" var="s_homepage" pipe="or" />
             <condition operation="like" column="tags" var="s_tags" pipe="or" />
             <condition operation="equal" column="member_srl" var="s_member_srl" pipe="or" />
+            <condition operation="in" column="member_srl" var="s_member_srls" pipe="or" />
             <condition operation="more" column="readed_count" var="s_readed_count" pipe="or" />
             <condition operation="more" column="voted_count" var="s_voted_count" pipe="or" />
             <condition operation="less" column="blamed_count" var="s_blamed_count" pipe="or" />

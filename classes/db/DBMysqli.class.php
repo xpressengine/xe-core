@@ -134,7 +134,7 @@ class DBMysqli extends DBMysql
 					$status = call_user_func_array('mysqli_stmt_bind_param', $args);
 					if(!$status)
 					{
-						$this->setError(-1, "Invalid arguments: $query" . mysqli_error($connection) . PHP_EOL . print_r($args, true));
+						$this->setError(-1, "Invalid arguments: $query" . mysqli_error($connection));
 					}
 				}
 
@@ -143,7 +143,7 @@ class DBMysqli extends DBMysql
 
 				if(!$status)
 				{
-					$this->setError(-1, "Prepared statement failed: $query" . mysqli_error($connection) . PHP_EOL . print_r($args, true));
+					$this->setError(-1, "Prepared statement failed: $query" . mysqli_error($connection));
 				}
 
 				// Return stmt for other processing - like retrieving resultset (_fetch)
@@ -324,7 +324,7 @@ class DBMysqli extends DBMysql
 
 	/**
 	 * Handles insertAct
-	 * @param Object $queryObject
+	 * @param BaseObject $queryObject
 	 * @param boolean $with_values
 	 * @return resource
 	 */
@@ -342,7 +342,7 @@ class DBMysqli extends DBMysql
 
 	/**
 	 * Handles updateAct
-	 * @param Object $queryObject
+	 * @param BaseObject $queryObject
 	 * @param boolean $with_values
 	 * @return resource
 	 */
@@ -360,7 +360,7 @@ class DBMysqli extends DBMysql
 
 	/**
 	 * Handles deleteAct
-	 * @param Object $queryObject
+	 * @param BaseObject $queryObject
 	 * @param boolean $with_values
 	 * @return resource
 	 */
@@ -380,10 +380,10 @@ class DBMysqli extends DBMysql
 	 * Handle selectAct
 	 * In order to get a list of pages easily when selecting \n
 	 * it supports a method as navigation
-	 * @param Object $queryObject
+	 * @param BaseObject $queryObject
 	 * @param resource $connection
 	 * @param boolean $with_values
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function _executeSelectAct($queryObject, $connection = null, $with_values = false)
 	{

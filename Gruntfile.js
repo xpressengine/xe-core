@@ -23,6 +23,8 @@ module.exports = function(grunt) {
 				},
 				src: [
 					'common/js/modernizr.js',
+					'common/js/URI.js',
+					'common/js/blankshield.min.js',
 					'common/js/common.js',
 					'common/js/js_app.js',
 					'common/js/xml2json.js',
@@ -68,7 +70,6 @@ module.exports = function(grunt) {
 					'common/js/x.min.js' : ['common/js/x.js'],
 					// addon
 					'addons/captcha/captcha.min.js' : ['addons/captcha/captcha.js'],
-					'addons/captcha_member/captcha.min.js' : ['addons/captcha_member/captcha.js'],
 					'addons/resize_image/js/resize_image.min.js' : ['addons/resize_image/js/resize_image.js'],
 					// module/editor
 					'modules/editor/skins/xpresseditor/js/xpresseditor.min.js': ['modules/editor/skins/xpresseditor/js/xpresseditor.js'],
@@ -109,6 +110,11 @@ module.exports = function(grunt) {
 					'modules/poll/tpl/js/poll.min.js': ['modules/poll/tpl/js/poll.js'],
 					'addons/oembed/jquery.oembed.min.js': ['addons/oembed/jquery.oembed.js'],
 					'addons/oembed/oembed.min.js': ['addons/oembed/oembed.js'],
+					// krzip
+					'modules/krzip/tpl/js/admin.min.js': ['modules/krzip/tpl/js/admin.js'],
+					'modules/krzip/tpl/js/daumapi.min.js': ['modules/krzip/tpl/js/daumapi.js'],
+					'modules/krzip/tpl/js/epostapi.min.js': ['modules/krzip/tpl/js/epostapi.js'],
+					'modules/krzip/tpl/js/epostapi.search.min.js': ['modules/krzip/tpl/js/epostapi.search.js'],
 				}
 			},
 			'layout': {
@@ -139,6 +145,9 @@ module.exports = function(grunt) {
 					'modules/board/m.skins/default/css/mboard.min.css': ['modules/board/m.skins/default/css/mboard.css'],
 					'modules/board/m.skins/simpleGray/css/mboard.min.css': ['modules/board/m.skins/simpleGray/css/mboard.css'],
 					'modules/board/skins/xedition/board.default.min.css': ['modules/board/skins/xedition/board.default.css'],
+					// krzip
+					'modules/krzip/tpl/css/default.min.css': ['modules/krzip/tpl/css/default.css'],
+					'modules/krzip/tpl/css/popup.min.css': ['modules/krzip/tpl/css/popup.css'],
 				}
 			},
 			'addons': {
@@ -181,6 +190,8 @@ module.exports = function(grunt) {
 					'common/js/xe.js',
 					'common/js/xml2json.js',
 					'common/js/modernizr.js',
+					'common/js/blankshield.min.js',
+					'common/js/URI.js',
 					'vendor/**',
 					'tests/**',
 				]
@@ -248,7 +259,7 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('build', '', function(A, B) {
 		var _only_export = false;
-		var tasks = ['krzip', 'syndication', 'seo'];
+		var tasks = [];
 
 		if(!A) {
 			grunt.fail.warn('Undefined build target.');
@@ -330,79 +341,52 @@ module.exports = function(grunt) {
 			cmd: "git",
 			args: ['archive', '--output=build/temp.full.tar', version, '.']
 		}, function (error, result, code){
-			if(!_only_export) {
-				// changed
-				grunt.util.spawn({
-					cmd: "git",
-					args: ['diff', '--name-only', '--diff-filter' ,'ACM', target]
-				}, function (error, result, code) {
-					diff = result.stdout;
-
-					if(diff) {
-						diff = diff.split(grunt.util.linefeed);
-					}
-
-					// changed
-					if(diff.length) {
-						var args_tar = ['archive', '-o', 'build/xe.'+version+'.changed.tar.gz', version];
-						var args_zip = ['archive', '-o', 'build/xe.'+version+'.changed.zip', version];
-						args_tar = args_tar.concat(diff);
-						args_zip = args_zip.concat(diff);
-
-						grunt.util.spawn({
-							cmd: "git",
-							args: args_tar
-						}, function (error, result, code) {
-							grunt.log.ok('Archived(changed) : ' + build_dir + '/xe.'+version+'.changed.tar.gz');
-							createPackageChecksum(build_dir + '/xe.'+version+'.changed.tar.gz');
-
-							grunt.util.spawn({
-								cmd: "git",
-								args: args_zip
-							}, function (error, result, code) {
-								grunt.log.ok('Archived(changed) : ' + build_dir + '/xe.'+version+'.changed.zip');
-								createPackageChecksum(build_dir + '/xe.'+version+'.changed.zip');
-
-								taskDone();
-							});
-						});
-					} else {
-						taskDone();
-					}
-				});
-			}
-
 			// full
 			grunt.util.spawn({
 				cmd: "tar",
 				args: ['xf', 'build/temp.full.tar', '-C', 'build/xe']
 			}, function (error, result, code) {
-				// krzip
-				grunt.util.spawn({
-					cmd: "git",
-					args: ['clone', '-b', 'master', 'git@github.com:xpressengine/xe-module-krzip.git', 'build/xe/modules/krzip']
-				}, function (error, result, code) {
-					grunt.file.delete('build/xe/modules/krzip/.git');
-					taskDone();
-				});
+				if(!_only_export) {
+					// changed
+					grunt.util.spawn({
+						cmd: "git",
+						args: ['diff', '--name-only', '--diff-filter' ,'ACMR', target]
+					}, function (error, result, code) {
+						diff = result.stdout;
 
-				// syndication
-				grunt.util.spawn({
-					cmd: "git",
-					args: ['clone', '-b', 'master', 'git@github.com:xpressengine/xe-module-syndication.git', 'build/xe/modules/syndication']
-				}, function (error, result, code) {
-					grunt.file.delete('build/xe/modules/syndication/.git');
-					taskDone();
-				});
+						if(diff) {
+							diff = diff.split(grunt.util.linefeed);
+						}
 
-        // seo
-        grunt.util.spawn({
-          cmd: "git",
-          args: ['clone', '-b', 'master', 'git@github.com:xpressengine/xe-module-seo.git', 'build/xe/modules/seo']
-        }, function (error, result, code) {
-          grunt.file.delete('build/xe/modules/seo/.git');
-          taskDone();
-        });
+						// changed
+						if(diff.length) {
+							var args_tar = ['archive', '-o', 'build/xe.'+version+'.changed.tar.gz', version];
+							var args_zip = ['archive', '-o', 'build/xe.'+version+'.changed.zip', version];
+							args_tar = args_tar.concat(diff);
+							args_zip = args_zip.concat(diff);
+
+							grunt.util.spawn({
+								cmd: "git",
+								args: args_tar
+							}, function (error, result, code) {
+								grunt.log.ok('Archived(changed) : ' + build_dir + '/xe.'+version+'.changed.tar.gz');
+								createPackageChecksum(build_dir + '/xe.'+version+'.changed.tar.gz');
+
+								grunt.util.spawn({
+									cmd: "git",
+									args: args_zip
+								}, function (error, result, code) {
+									grunt.log.ok('Archived(changed) : ' + build_dir + '/xe.'+version+'.changed.zip');
+									createPackageChecksum(build_dir + '/xe.'+version+'.changed.zip');
+
+									taskDone();
+								});
+							});
+						} else {
+							taskDone();
+						}
+					});
+				}
 			});
 		});
 	});

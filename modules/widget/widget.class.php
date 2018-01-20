@@ -19,7 +19,7 @@ class widget extends ModuleObject
 		$oModuleController = getController('module');
 		$oModuleController->insertTrigger('display', 'widget', 'controller', 'triggerWidgetCompile', 'before');
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -28,8 +28,15 @@ class widget extends ModuleObject
 	function checkUpdate()
 	{
 		$oModuleModel = getModel('module');
-		// widget compile display.after trigger for further (04/14/2009)
-		if(!$oModuleModel->getTrigger('display', 'widget', 'controller', 'triggerWidgetCompile', 'before')) return true;
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
+		{
+			// widget compile display.after trigger for further (04/14/2009)
+			if(!$oModuleModel->getTrigger('display', 'widget', 'controller', 'triggerWidgetCompile', 'before')) return true;
+
+			$oModuleController->insertUpdatedLog($version_update_id);
+		}
 
 		return false;
 	}
@@ -41,13 +48,19 @@ class widget extends ModuleObject
 	{
 		$oModuleModel = getModel('module');
 		$oModuleController = getController('module');
-		// widget compile display.after trigger for further (04/14/2009)
-		if(!$oModuleModel->getTrigger('display', 'widget', 'controller', 'triggerWidgetCompile', 'before'))
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
 		{
-			$oModuleController->insertTrigger('display', 'widget', 'controller', 'triggerWidgetCompile', 'before');
+			// widget compile display.after trigger for further (04/14/2009)
+			if(!$oModuleModel->getTrigger('display', 'widget', 'controller', 'triggerWidgetCompile', 'before'))
+			{
+				$oModuleController->insertTrigger('display', 'widget', 'controller', 'triggerWidgetCompile', 'before');
+			}
+
+			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
-		return new Object(0, 'success_updated');
+		return new BaseObject(0, 'success_updated');
 	}
 
 	/**

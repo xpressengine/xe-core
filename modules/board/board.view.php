@@ -271,7 +271,7 @@ class boardView extends board
 				if($this->consultation && !$oDocument->isNotice())
 				{
 					$logged_info = Context::get('logged_info');
-					if($oDocument->get('member_srl')!=$logged_info->member_srl)
+					if(abs($oDocument->get('member_srl')) != $logged_info->member_srl)
 					{
 						$oDocument = $oDocumentModel->getDocument(0);
 					}
@@ -342,7 +342,7 @@ class boardView extends board
 		 **/
 		Context::addJsFilter($this->module_path.'tpl/filter', 'insert_comment.xml');
 
-//            return new Object();
+//            return new BaseObject();
 	}
 
 	/**
@@ -537,6 +537,12 @@ class boardView extends board
 		{
 			$logged_info = Context::get('logged_info');
 			$args->member_srl = $logged_info->member_srl;
+
+			if($this->module_info->use_anonymous === 'Y')
+			{
+				unset($args->member_srl);
+				$args->member_srls = $logged_info->member_srl . ',' . $logged_info->member_srl * -1;
+			}
 		}
 
 		// setup the list config variable on context
@@ -692,7 +698,7 @@ class boardView extends board
 
 		if($oDocument->isExists() && $this->module_info->protect_content=="Y" && $oDocument->get('comment_count')>0 && $this->grant->manager==false)
 		{
-			return new Object(-1, 'msg_protect_content');
+			return new BaseObject(-1, 'msg_protect_content');
 		}
 
 		// if the document is not granted, then back to the password input form
@@ -878,7 +884,7 @@ class boardView extends board
 		// if the parent comment is not existed
 		if(!$parent_srl)
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		// get the comment
@@ -939,7 +945,7 @@ class boardView extends board
 		// if the comment is not existed
 		if(!$comment_srl)
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		// get comment information

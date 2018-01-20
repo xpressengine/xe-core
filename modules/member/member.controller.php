@@ -30,14 +30,14 @@ class memberController extends member
 	 * @param string $password
 	 * @param string $keep_signed
 	 *
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberLogin($user_id = null, $password = null, $keep_signed = null)
 	{
 		if(!$user_id && !$password && Context::getRequestMethod() == 'GET')
 		{
 			$this->setRedirectUrl(getNotEncodedUrl(''));
-			return new Object(-1, 'null_user_id');
+			return new BaseObject(-1, 'null_user_id');
 		}
 
 		// Variables
@@ -49,8 +49,8 @@ class memberController extends member
 
 		if(!$keep_signed) $keep_signed = Context::get('keep_signed');
 		// Return an error when id and password doesn't exist
-		if(!$user_id) return new Object(-1,'null_user_id');
-		if(!$password) return new Object(-1,'null_password');
+		if(!$user_id) return new BaseObject(-1,'null_user_id');
+		if(!$password) return new BaseObject(-1,'null_password');
 
 		$output = $this->doLogin($user_id, $password, $keep_signed=='Y'?true:false);
 		if (!$output->toBool()) return $output;
@@ -68,7 +68,7 @@ class memberController extends member
 			if($this->memberInfo->change_password_date < date ('YmdHis', strtotime ('-' . $limit_date . ' day')))
 			{
 				$msg = sprintf(Context::getLang('msg_change_password_date'), $limit_date);
-				return $this->setRedirectUrl(getNotEncodedUrl('','vid',Context::get('vid'),'mid',Context::get('mid'),'act','dispMemberModifyPassword'), new Object(-1, $msg));
+				return $this->setRedirectUrl(getNotEncodedUrl('','vid',Context::get('vid'),'mid',Context::get('mid'),'act','dispMemberModifyPassword'), new BaseObject(-1, $msg));
 			}
 		}
 
@@ -91,7 +91,7 @@ class memberController extends member
 	/**
 	 * Log-out
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function procMemberLogout()
 	{
@@ -105,7 +105,7 @@ class memberController extends member
 		$trigger_output = ModuleHandler::triggerCall('member.doLogout', 'after', $logged_info);
 		if(!$trigger_output->toBool()) return $trigger_output;
 
-		$output = new Object();
+		$output = new BaseObject();
 
 		$oModuleModel = getModel('module');
 		$config = $oModuleModel->getModuleConfig('member');
@@ -120,19 +120,19 @@ class memberController extends member
 	/**
 	 * Scrap document
 	 *
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberScrapDocument()
 	{
 		$oModuleModel = &getModel('module');
 
 		// Check login information
-		if(!Context::get('is_logged')) return new Object(-1, 'msg_not_logged');
+		if(!Context::get('is_logged')) return new BaseObject(-1, 'msg_not_logged');
 		$logged_info = Context::get('logged_info');
 
 		$document_srl = (int)Context::get('document_srl');
 		if(!$document_srl) $document_srl = (int)Context::get('target_srl');
-		if(!$document_srl) return new Object(-1,'msg_invalid_request');
+		if(!$document_srl) return new BaseObject(-1,'msg_invalid_request');
 
 		// Get document
 		$oDocumentModel = getModel('document');
@@ -140,14 +140,32 @@ class memberController extends member
 
 		if($oDocument->isSecret() && !$oDocument->isGranted())
 		{
-			return new Object(-1, 'msg_is_secret');
+			return new BaseObject(-1, 'msg_is_secret');
 		}
 
 		// 모듈 권한 확인
-		$grant = $oModuleModel->getGrant($oModuleModel->getModuleInfoByModuleSrl($oDocument->get('module_srl')), $logged_info);
+		$module_info = $oModuleModel->getModuleInfoByModuleSrl($oDocument->get('module_srl'));
+		$grant = $oModuleModel->getGrant($module_info, $logged_info);
+
 		if(!$grant->access)
 		{
-			return new Object(-1, 'msg_not_permitted');
+			return new BaseObject(-1, 'msg_not_permitted');
+		}
+
+		// 게시판 모듈에서 글 목록 보기 권한이 없으면 스크랩 제한
+		if($module_info->module === 'board' && isset($grant->list) && !$grant->list)
+		{
+			return new BaseObject(-1, 'msg_not_permitted');
+		}
+
+		// 게시판 모듈에서 상담 기능 사용 시 권한이 없는 게시물(타인의 게시물) 스크랩 제한
+		if($module_info->module === 'board' &&
+			$module_info->consultation === 'Y' &&
+			isset($grant->consultation_read) &&
+			!$grant->consultation_read && !$oDocument->isGranted()
+		)
+		{
+			return new BaseObject(-1, 'msg_not_permitted');
 		}
 
 		// Variables
@@ -162,7 +180,7 @@ class memberController extends member
 
 		// Check if already scrapped
 		$output = executeQuery('member.getScrapDocument', $args);
-		if($output->data->count) return new Object(-1, 'msg_alreay_scrapped');
+		if($output->data->count) return new BaseObject(-1, 'msg_alreay_scrapped');
 
 		// Insert
 		$output = executeQuery('member.addScrapDocument', $args);
@@ -175,16 +193,16 @@ class memberController extends member
 	/**
 	 * Delete a scrap
 	 *
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberDeleteScrap()
 	{
 		// Check login information
-		if(!Context::get('is_logged')) return new Object(-1, 'msg_not_logged');
+		if(!Context::get('is_logged')) return new BaseObject(-1, 'msg_not_logged');
 		$logged_info = Context::get('logged_info');
 
 		$document_srl = (int)Context::get('document_srl');
-		if(!$document_srl) return new Object(-1,'msg_invalid_request');
+		if(!$document_srl) return new BaseObject(-1,'msg_invalid_request');
 		// Variables
 		$args = new stdClass;
 		$args->member_srl = $logged_info->member_srl;
@@ -195,38 +213,38 @@ class memberController extends member
 	/**
 	 * Save posts
 	 * @deprecated - instead Document Controller - procDocumentTempSave method use
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function procMemberSaveDocument()
 	{
-		return new Object(0, 'Deprecated method');
+		return new BaseObject(0, 'Deprecated method');
 	}
 
 	/**
 	 * Delete the post
 	 *
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberDeleteSavedDocument()
 	{
 		// Check login information
-		if(!Context::get('is_logged')) return new Object(-1, 'msg_not_logged');
+		if(!Context::get('is_logged')) return new BaseObject(-1, 'msg_not_logged');
 		$logged_info = Context::get('logged_info');
 
 		$document_srl = (int)Context::get('document_srl');
-		if(!$document_srl) return new Object(-1,'msg_invalid_request');
+		if(!$document_srl) return new BaseObject(-1,'msg_invalid_request');
 
 		$oDocumentModel = getModel('document');
 		$oDocument = $oDocumentModel->getDocument($document_srl);
 		if ($oDocument->get('member_srl') != $logged_info->member_srl)
 		{
-			return new Object(-1,'msg_invalid_request');
+			return new BaseObject(-1,'msg_invalid_request');
 		}
 
 		$configStatusList = $oDocumentModel->getStatusList();
 		if ($oDocument->get('status') != $configStatusList['temp'])
 		{
-			return new Object(-1,'msg_invalid_request');
+			return new BaseObject(-1,'msg_invalid_request');
 		}
 
 		$oDocumentController = getController('document');
@@ -236,7 +254,7 @@ class memberController extends member
 	/**
 	 * Check values when member joining
 	 *
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberCheckValue()
 	{
@@ -253,26 +271,26 @@ class memberController extends member
 		{
 			case 'user_id' :
 				// Check denied ID
-				if($oMemberModel->isDeniedID($value)) return new Object(0,'denied_user_id');
+				if($oMemberModel->isDeniedID($value)) return new BaseObject(0,'denied_user_id');
 				// Check if duplicated
 				$member_srl = $oMemberModel->getMemberSrlByUserID($value);
-				if($member_srl && $logged_info->member_srl != $member_srl ) return new Object(0,'msg_exists_user_id');
+				if($member_srl && $logged_info->member_srl != $member_srl ) return new BaseObject(0,'msg_exists_user_id');
 				break;
 			case 'nick_name' :
 				// Check denied ID
 				if($oMemberModel->isDeniedNickName($value))
 				{
-					return new Object(0,'denied_nick_name');
+					return new BaseObject(0,'denied_nick_name');
 				}
 				// Check if duplicated
 				$member_srl = $oMemberModel->getMemberSrlByNickName($value);
-				if($member_srl && $logged_info->member_srl != $member_srl ) return new Object(0,'msg_exists_nick_name');
+				if($member_srl && $logged_info->member_srl != $member_srl ) return new BaseObject(0,'msg_exists_nick_name');
 
 				break;
 			case 'email_address' :
 				// Check if duplicated
 				$member_srl = $oMemberModel->getMemberSrlByEmailAddress($value);
-				if($member_srl && $logged_info->member_srl != $member_srl ) return new Object(0,'msg_exists_email_address');
+				if($member_srl && $logged_info->member_srl != $member_srl ) return new BaseObject(0,'msg_exists_email_address');
 				break;
 		}
 	}
@@ -280,11 +298,11 @@ class memberController extends member
 	/**
 	 * Join Membership
 	 *
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberInsert()
 	{
-		if (Context::getRequestMethod () == "GET") return new Object (-1, "msg_invalid_request");
+		if (Context::getRequestMethod () == "GET") return new BaseObject(-1, "msg_invalid_request");
 		$oMemberModel = &getModel ('member');
 		$config = $oMemberModel->getMemberConfig();
 
@@ -328,7 +346,7 @@ class memberController extends member
 		if(!$oMemberModel->checkPasswordStrength($args->password, $config->password_strength))
 		{
 			$message = Context::getLang('about_password_strength');
-			return new Object(-1, $message[$config->password_strength]);
+			return new BaseObject(-1, $message[$config->password_strength]);
 		}
 
 		// Remove some unnecessary variables from all the vars
@@ -424,7 +442,7 @@ class memberController extends member
 		{
 			$msg = sprintf(Context::getLang('msg_confirm_mail_sent'), $args->email_address);
 			$this->setMessage($msg);
-			return $this->setRedirectUrl(getUrl('', 'act', 'dispMemberLoginForm'), new Object(-12, $msg));
+			return $this->setRedirectUrl(getUrl('', 'act', 'dispMemberLoginForm'), new BaseObject(-12, $msg));
 		}
 		else $this->setMessage('success_registed');
 		// Call a trigger (after)
@@ -487,7 +505,7 @@ class memberController extends member
 		// Verify the current password
 		if(!$oMemberModel->isValidPassword($this->memberInfo->password, $password))
 		{
-			return new Object(-1, 'invalid_password');
+			return new BaseObject(-1, 'invalid_password');
 		}
 
 		$_SESSION['rechecked_password_step'] = 'VALIDATE_PASSWORD';
@@ -506,7 +524,7 @@ class memberController extends member
 	/**
 	 * Edit member profile
 	 *
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberModifyInfo()
 	{
@@ -541,12 +559,17 @@ class memberController extends member
 		{
 			$args->{$val} = Context::get($val);
 			if($val == 'birthday') $args->birthday_ui = Context::get('birthday_ui');
+			if($val == 'find_account_answer' && !Context::get($val)) {
+				unset($args->{$val});
+			}
 		}
+
 		// Login Information
 		$logged_info = Context::get('logged_info');
 		$args->member_srl = $logged_info->member_srl;
 		$args->birthday = intval(strtr($args->birthday, array('-'=>'', '/'=>'', '.'=>'', ' '=>'')));
 		if(!$args->birthday && $args->birthday_ui) $args->birthday = intval(strtr($args->birthday_ui, array('-'=>'', '/'=>'', '.'=>'', ' '=>'')));
+
 		// Remove some unnecessary variables from all the vars
 		$all_args = Context::getRequestVars();
 		unset($all_args->module);
@@ -627,7 +650,7 @@ class memberController extends member
 	/**
 	 * Change the user password
 	 *
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberModifyPassword()
 	{
@@ -645,10 +668,10 @@ class memberController extends member
 
 		$member_info = $oMemberModel->getMemberInfoByMemberSrl($member_srl, 0, $columnList);
 		// Verify the cuttent password
-		if(!$oMemberModel->isValidPassword($member_info->password, $current_password, $member_srl)) return new Object(-1, 'invalid_password');
+		if(!$oMemberModel->isValidPassword($member_info->password, $current_password, $member_srl)) return new BaseObject(-1, 'invalid_password');
 
 		// Check if a new password is as same as the previous password
-		if($current_password == $password) return new Object(-1, 'invalid_new_password');
+		if($current_password == $password) return new BaseObject(-1, 'invalid_new_password');
 
 		// Execute insert or update depending on the value of member_srl
 		$args = new stdClass;
@@ -667,7 +690,7 @@ class memberController extends member
 	/**
 	 * Membership withdrawal
 	 *
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberLeave()
 	{
@@ -687,7 +710,7 @@ class memberController extends member
 			$this->memberInfo->password = $memberInfo->password;
 		}
 		// Verify the cuttent password
-		if(!$oMemberModel->isValidPassword($this->memberInfo->password, $password)) return new Object(-1, 'invalid_password');
+		if(!$oMemberModel->isValidPassword($this->memberInfo->password, $password)) return new BaseObject(-1, 'invalid_password');
 
 		$output = $this->deleteMember($member_srl);
 		if(!$output->toBool()) return $output;
@@ -703,7 +726,7 @@ class memberController extends member
 	/**
 	 * Add a profile image
 	 *
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberInsertProfileImage()
 	{
@@ -717,13 +740,12 @@ class memberController extends member
 		$logged_info = Context::get('logged_info');
 		if($logged_info->is_admin != 'Y' && $logged_info->member_srl != $member_srl) return $this->stop('msg_not_uploaded_profile_image');
 		// Return if member module is set not to use an image name or the user is not an administrator ;
-		$oModuleModel = getModel('module');
-		$config = $oModuleModel->getModuleConfig('member');
+		$oMemberModel = getModel('member');
+		$config = $oMemberModel->getMemberConfig();
 		if($logged_info->is_admin != 'Y' && $config->profile_image != 'Y') return $this->stop('msg_not_uploaded_profile_image');
 
-		$this->insertProfileImage($member_srl, $file['tmp_name']);
-		// Page refresh
-		//$this->setRefreshPage();
+		$output = $this->insertProfileImage($member_srl, $file['tmp_name']);
+		if(!$output->toBool()) return $output;
 
 		$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'mid', Context::get('mid'), 'act', 'dispMemberModifyInfo');
 		$this->setRedirectUrl($returnUrl);
@@ -739,50 +761,76 @@ class memberController extends member
 	 */
 	function insertProfileImage($member_srl, $target_file)
 	{
-
-		// Check uploaded file
-		if(!checkUploadedFile($target_file)) return;
-
 		$oMemberModel = getModel('member');
 		$config = $oMemberModel->getMemberConfig();
-
-		// Get an image size
 		$max_width = $config->profile_image_max_width;
-		if(!$max_width) $max_width = "90";
 		$max_height = $config->profile_image_max_height;
-		if(!$max_height) $max_height = "90";
-		// Get a target path to save
-		$target_path = sprintf('files/member_extra_info/profile_image/%s', getNumberingPath($member_srl));
-		FileHandler::makeDir($target_path);
+		$max_filesize = $config->profile_image_max_filesize;
+
+		Context::loadLang(_XE_PATH_ . 'modules/file/lang');
 
 		// Get file information
-		list($width, $height, $type, $attrs) = @getimagesize($target_file);
+		FileHandler::clearStatCache($target_file);
+		list($width, $height, $type) = @getimagesize($target_file);
 		if(IMAGETYPE_PNG == $type) $ext = 'png';
 		elseif(IMAGETYPE_JPEG == $type) $ext = 'jpg';
 		elseif(IMAGETYPE_GIF == $type) $ext = 'gif';
 		else
 		{
-			return;
+			return $this->stop('msg_not_uploaded_profile_image');
 		}
 
-		FileHandler::removeFilesInDir($target_path);
+		$target_path = sprintf('files/member_extra_info/profile_image/%s', getNumberingPath($member_srl));
+		FileHandler::makeDir($target_path);
 
 		$target_filename = sprintf('%s%d.%s', $target_path, $member_srl, $ext);
+
 		// Convert if the image size is larger than a given size or if the format is not a gif
 		if(($width > $max_width || $height > $max_height ) && $type != 1)
 		{
-			FileHandler::createImageFile($target_file, $target_filename, $max_width, $max_height, $ext);
+			$temp_filename = sprintf('files/cache/tmp/profile_image_%d.%s', $member_srl, $ext);
+			FileHandler::createImageFile($target_file, $temp_filename, $max_width, $max_height, $ext);
+
+			// 파일 용량 제한
+			FileHandler::clearStatCache($temp_filename);
+			$filesize = filesize($temp_filename);
+			if($max_filesize && $filesize > ($max_filesize * 1024))
+			{
+				FileHandler::removeFile($temp_filename);
+				return $this->stop(implode(' ' , array(
+					Context::getLang('msg_not_uploaded_profile_image'),
+					Context::getLang('msg_exceeds_limit_size')
+				)));
+			}
+
+			FileHandler::removeFilesInDir($target_path);
+			FileHandler::moveFile($temp_filename, $target_filename);
+			FileHandler::clearStatCache($target_filename);
 		}
 		else
 		{
+			// 파일 용량 제한
+			$filesize = filesize($target_file);
+			if($max_filesize && $filesize > ($max_filesize * 1024))
+			{
+				return $this->stop(implode(' ' , array(
+					Context::getLang('msg_not_uploaded_profile_image'),
+					Context::getLang('msg_exceeds_limit_size')
+				)));
+			}
+
+			FileHandler::removeFilesInDir($target_path);
 			@copy($target_file, $target_filename);
+			FileHandler::clearStatCache($target_filename);
 		}
+
+		return new BaseObject(0, 'success');
 	}
 
 	/**
 	 * Add an image name
 	 *
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberInsertImageName()
 	{
@@ -796,11 +844,13 @@ class memberController extends member
 		$logged_info = Context::get('logged_info');
 		if($logged_info->is_admin != 'Y' && $logged_info->member_srl != $member_srl) return $this->stop('msg_not_uploaded_image_name');
 		// Return if member module is set not to use an image name or the user is not an administrator ;
-		$oModuleModel = getModel('module');
-		$config = $oModuleModel->getModuleConfig('member');
+		$oMemberModel = getModel('member');
+		$config = $oMemberModel->getMemberConfig();
 		if($logged_info->is_admin != 'Y' && $config->image_name != 'Y') return $this->stop('msg_not_uploaded_image_name');
 
-		$this->insertImageName($member_srl, $file['tmp_name']);
+		$output = $this->insertImageName($member_srl, $file['tmp_name']);
+		if(!$output->toBool()) return $output;
+
 		// Page refresh
 		//$this->setRefreshPage();
 
@@ -818,39 +868,74 @@ class memberController extends member
 	 */
 	function insertImageName($member_srl, $target_file)
 	{
-		// Check uploaded file
-		if(!checkUploadedFile($target_file)) return;
-
-		$oModuleModel = getModel('module');
-		$config = $oModuleModel->getModuleConfig('member');
-		// Get an image size
+		$oMemberModel = getModel('member');
+		$config = $oMemberModel->getMemberConfig();
 		$max_width = $config->image_name_max_width;
-		if(!$max_width) $max_width = "90";
 		$max_height = $config->image_name_max_height;
-		if(!$max_height) $max_height = "20";
+		$max_filesize = $config->image_name_max_filesize;
+
+		Context::loadLang(_XE_PATH_ . 'modules/file/lang');
+
 		// Get a target path to save
 		$target_path = sprintf('files/member_extra_info/image_name/%s/', getNumberingPath($member_srl));
 		FileHandler::makeDir($target_path);
 
 		$target_filename = sprintf('%s%d.gif', $target_path, $member_srl);
 		// Get file information
-		list($width, $height, $type, $attrs) = @getimagesize($target_file);
+		list($width, $height, $type) = @getimagesize($target_file);
 		// Convert if the image size is larger than a given size or if the format is not a gif
-		if($width > $max_width || $height > $max_height || $type!=1) FileHandler::createImageFile($target_file, $target_filename, $max_width, $max_height, 'gif');
-		else @copy($target_file, $target_filename);
+		if($width > $max_width || $height > $max_height || $type!=1)
+		{
+			$temp_filename = sprintf('files/cache/tmp/image_name_%d.gif', $member_srl, $ext);
+			FileHandler::createImageFile($target_file, $temp_filename, $max_width, $max_height, 'gif');
+
+			// 파일 용량 제한
+			FileHandler::clearStatCache($temp_filename);
+			$filesize = filesize($temp_filename);
+			if($max_filesize && $filesize > ($max_filesize * 1024))
+			{
+				FileHandler::removeFile($temp_filename);
+				return $this->stop(implode(' ' , array(
+					Context::getLang('msg_not_uploaded_image_name'),
+					Context::getLang('msg_exceeds_limit_size')
+				)));
+			}
+
+			FileHandler::removeFilesInDir($target_path);
+			FileHandler::moveFile($temp_filename, $target_filename);
+			FileHandler::clearStatCache($target_filename);
+		}
+		else
+		{
+			// 파일 용량 제한
+			$filesize = filesize($target_file);
+			if($max_filesize && $filesize > ($max_filesize * 1024))
+			{
+				return $this->stop(implode(' ' , array(
+					Context::getLang('msg_not_uploaded_image_name'),
+					Context::getLang('msg_exceeds_limit_size')
+				)));
+			}
+
+			FileHandler::removeFilesInDir($target_path);
+			@copy($target_file, $target_filename);
+			FileHandler::clearStatCache($target_filename);
+		}
+
+		return new BaseObject(0, 'success');
 	}
 
 	/**
 	 * Delete profile image
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function procMemberDeleteProfileImage($_memberSrl = 0)
 	{
 		$member_srl = ($_memberSrl) ? $_memberSrl : Context::get('member_srl');
 		if(!$member_srl)
 		{
-			return new Object(0,'success');
+			return new BaseObject(0,'success');
 		}
 
 		$logged_info = Context::get('logged_info');
@@ -861,7 +946,7 @@ class memberController extends member
 			$profile_image = $oMemberModel->getProfileImage($member_srl);
 			FileHandler::removeFile($profile_image->file);
 		}
-		return new Object(0,'success');
+		return new BaseObject(0,'success');
 	}
 
 	/**
@@ -874,7 +959,7 @@ class memberController extends member
 		$member_srl = ($_memberSrl) ? $_memberSrl : Context::get('member_srl');
 		if(!$member_srl)
 		{
-			return new Object(0,'success');
+			return new BaseObject(0,'success');
 		}
 
 		$logged_info = Context::get('logged_info');
@@ -885,13 +970,13 @@ class memberController extends member
 			$image_name = $oMemberModel->getImageName($member_srl);
 			FileHandler::removeFile($image_name->file);
 		}
-		return new Object(0,'success');
+		return new BaseObject(0,'success');
 	}
 
 	/**
 	 * Add an image to mark
 	 *
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberInsertImageMark()
 	{
@@ -905,13 +990,12 @@ class memberController extends member
 		$logged_info = Context::get('logged_info');
 		if($logged_info->is_admin != 'Y' && $logged_info->member_srl != $member_srl) return $this->stop('msg_not_uploaded_image_mark');
 		// Membership in the images mark the module using the ban was set by an administrator or return;
-		$oModuleModel = getModel('module');
-		$config = $oModuleModel->getModuleConfig('member');
+		$oMemberModel = getModel('member');
+		$config = $oMemberModel->getMemberConfig();
 		if($logged_info->is_admin != 'Y' && $config->image_mark != 'Y') return $this->stop('msg_not_uploaded_image_mark');
 
 		$this->insertImageMark($member_srl, $file['tmp_name']);
-		// Page refresh
-		//$this->setRefreshPage();
+		if(!$output->toBool()) return $output;
 
 		$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'mid', Context::get('mid'), 'act', 'dispMemberModifyInfo');
 		$this->setRedirectUrl($returnUrl);
@@ -927,16 +1011,13 @@ class memberController extends member
 	 */
 	function insertImageMark($member_srl, $target_file)
 	{
-		// Check uploaded file
-		if(!checkUploadedFile($target_file)) return;
-
-		$oModuleModel = getModel('module');
-		$config = $oModuleModel->getModuleConfig('member');
-		// Get an image size
+		$oMemberModel = getModel('member');
+		$config = $oMemberModel->getMemberConfig();
 		$max_width = $config->image_mark_max_width;
-		if(!$max_width) $max_width = "20";
 		$max_height = $config->image_mark_max_height;
-		if(!$max_height) $max_height = "20";
+		$max_filesize = $config->image_mark_max_filesize;
+
+		Context::loadLang(_XE_PATH_ . 'modules/file/lang');
 
 		$target_path = sprintf('files/member_extra_info/image_mark/%s/', getNumberingPath($member_srl));
 		FileHandler::makeDir($target_path);
@@ -945,21 +1026,58 @@ class memberController extends member
 		// Get file information
 		list($width, $height, $type, $attrs) = @getimagesize($target_file);
 
-		if($width > $max_width || $height > $max_height || $type!=1) FileHandler::createImageFile($target_file, $target_filename, $max_width, $max_height, 'gif');
-		else @copy($target_file, $target_filename);
+		if($width > $max_width || $height > $max_height || $type!=1)
+		{
+			$temp_filename = sprintf('files/cache/tmp/image_mark_%d.gif', $member_srl);
+			FileHandler::createImageFile($target_file, $temp_filename, $max_width, $max_height, 'gif');
+
+			// 파일 용량 제한
+			FileHandler::clearStatCache($temp_filename);
+			$filesize = filesize($temp_filename);
+			if($max_filesize && $filesize > ($max_filesize * 1024))
+			{
+				FileHandler::removeFile($temp_filename);
+				return $this->stop(implode(' ' , array(
+					Context::getLang('msg_not_uploaded_group_image_mark'),
+					Context::getLang('msg_exceeds_limit_size')
+				)));
+			}
+
+			FileHandler::removeFilesInDir($target_path);
+			FileHandler::moveFile($temp_filename, $target_filename);
+			FileHandler::clearStatCache($target_filename);
+		}
+		else
+		{
+			$filesize = filesize($target_file);
+			if($max_filesize && $filesize > ($max_filesize * 1024))
+			{
+				FileHandler::removeFile($target_file);
+				return $this->stop(implode(' ' , array(
+					Context::getLang('msg_not_uploaded_group_image_mark'),
+					Context::getLang('msg_exceeds_limit_size')
+				)));
+			}
+
+			FileHandler::removeFilesInDir($target_path);
+			@copy($target_file, $target_filename);
+			FileHandler::clearStatCache($target_filename);
+		}
+
+		return new BaseObject(0, 'success');
 	}
 
 	/**
 	 * Delete Image Mark
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function procMemberDeleteImageMark($_memberSrl = 0)
 	{
 		$member_srl = ($_memberSrl) ? $_memberSrl : Context::get('member_srl');
 		if(!$member_srl)
 		{
-			return new Object(0,'success');
+			return new BaseObject(0,'success');
 		}
 
 		$logged_info = Context::get('logged_info');
@@ -970,25 +1088,25 @@ class memberController extends member
 			$image_mark = $oMemberModel->getImageMark($member_srl);
 			FileHandler::removeFile($image_mark->file);
 		}
-		return new Object(0,'success');
+		return new BaseObject(0,'success');
 	}
 
 	/**
 	 * Find ID/Password
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function procMemberFindAccount()
 	{
 		$email_address = Context::get('email_address');
-		if(!$email_address) return new Object(-1, 'msg_invalid_request');
+		if(!$email_address) return new BaseObject(-1, 'msg_invalid_request');
 
 		$oMemberModel = getModel('member');
 		$oModuleModel = getModel('module');
 
 		// Check if a member having the same email address exists
 		$member_srl = $oMemberModel->getMemberSrlByEmailAddress($email_address);
-		if(!$member_srl) return new Object(-1, 'msg_email_not_exists');
+		if(!$member_srl) return new BaseObject(-1, 'msg_email_not_exists');
 
 		// Get information of the member
 		$columnList = array('denied', 'member_srl', 'user_id', 'user_name', 'email_address', 'nick_name');
@@ -1000,7 +1118,7 @@ class memberController extends member
 			$chk_args = new stdClass;
 			$chk_args->member_srl = $member_info->member_srl;
 			$output = executeQuery('member.chkAuthMail', $chk_args);
-			if($output->toBool() && $output->data->count != '0') return new Object(-1, 'msg_user_not_confirmed');
+			if($output->toBool() && $output->data->count != '0') return new BaseObject(-1, 'msg_user_not_confirmed');
 		}
 
 		// Insert data into the authentication DB
@@ -1070,17 +1188,18 @@ class memberController extends member
 			$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'mid', Context::get('mid'), 'act', 'dispMemberFindAccount');
 			$this->setRedirectUrl($returnUrl);
 		}
-		return new Object(0,$msg);
+		return new BaseObject(0,$msg);
 	}
 
 	/**
 	 * Generate a temp password by answering to the pre-determined question
 	 *
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberFindAccountByQuestion()
 	{
 		$oMemberModel = getModel('member');
+		$oPassword =  new Password();
 		$config = $oMemberModel->getMemberConfig();
 
 		$email_address = Context::get('email_address');
@@ -1088,20 +1207,47 @@ class memberController extends member
 		$find_account_question = trim(Context::get('find_account_question'));
 		$find_account_answer = trim(Context::get('find_account_answer'));
 
-		if(($config->identifier == 'user_id' && !$user_id) || !$email_address || !$find_account_question || !$find_account_answer) return new Object(-1, 'msg_invalid_request');
+		if(($config->identifier == 'user_id' && !$user_id) || !$email_address || !$find_account_question || !$find_account_answer) return new BaseObject(-1, 'msg_invalid_request');
 
 		$oModuleModel = getModel('module');
 		// Check if a member having the same email address exists
 		$member_srl = $oMemberModel->getMemberSrlByEmailAddress($email_address);
-		if(!$member_srl) return new Object(-1, 'msg_email_not_exists');
+		if(!$member_srl) return new BaseObject(-1, 'msg_email_not_exists');
+
 		// Get information of the member
 		$columnList = array('member_srl', 'find_account_question', 'find_account_answer');
 		$member_info = $oMemberModel->getMemberInfoByMemberSrl($member_srl, 0, $columnList);
 
 		// Display a message if no answer is entered
-		if(!$member_info->find_account_question || !$member_info->find_account_answer) return new Object(-1, 'msg_question_not_exists');
+		if(!$member_info->find_account_question || !$member_info->find_account_answer) return new BaseObject(-1, 'msg_question_not_exists');
 
-		if(trim($member_info->find_account_question) != $find_account_question || trim($member_info->find_account_answer) != $find_account_answer) return new Object(-1, 'msg_answer_not_matches');
+		// 답변 확인
+		$hashed = $oPassword->checkAlgorithm($member_info->find_account_answer);
+		$authed = true;
+		$member_info->find_account_question = trim($member_info->find_account_question);
+		if($member_info->find_account_question != $find_account_question)
+		{
+			$authed = false;
+		}
+		else if($hashed && !$oPassword->checkPassword($find_account_answer, $member_info->find_account_answer))
+		{
+			$authed = false;
+		}
+		else if(!$hashed && $find_account_answer != $member_info->find_account_answer)
+		{
+			$authed = false;
+		}
+
+		if(!$authed)
+		{
+			return new BaseObject(-1, 'msg_answer_not_matches');
+		}
+
+		// answer가 동일하고 hash 되지 않았으면 hash 값으로 저장
+		if($authed && !$hashed)
+		{
+			$this->updateFindAccountAnswer($member_srl, $find_account_answer);
+		}
 
 		if($config->identifier == 'email_address')
 		{
@@ -1109,7 +1255,6 @@ class memberController extends member
 		}
 
 		// Update to a temporary password and set change_password_date to 1
-		$oPassword =  new Password();
 		$temp_password = $oPassword->createTemporaryPassword(8);
 
 		$args = new stdClass();
@@ -1131,7 +1276,7 @@ class memberController extends member
 	 * Execute finding ID/Passoword
 	 * When clicking the link in the verification email, a method is called to change the old password and to authenticate it
 	 *
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberAuthAccount()
 	{
@@ -1203,20 +1348,20 @@ class memberController extends member
 	/**
 	 * Request to re-send the authentication mail
 	 *
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberResendAuthMail()
 	{
 		// Get an email_address
 		$email_address = Context::get('email_address');
-		if(!$email_address) return new Object(-1, 'msg_invalid_request');
+		if(!$email_address) return new BaseObject(-1, 'msg_invalid_request');
 		// Log test by using email_address
 		$oMemberModel = getModel('member');
 
 		$args = new stdClass;
 		$args->email_address = $email_address;
 		$memberSrl = $oMemberModel->getMemberSrlByEmailAddress($email_address);
-		if(!$memberSrl) return new Object(-1, 'msg_not_exists_member');
+		if(!$memberSrl) return new BaseObject(-1, 'msg_not_exists_member');
 
 		$columnList = array('member_srl', 'user_id', 'user_name', 'nick_name', 'email_address');
 		$member_info = $oMemberModel->getMemberInfoByMemberSrl($memberSrl, 0, $columnList);
@@ -1230,12 +1375,12 @@ class memberController extends member
 		$chk_args = new stdClass;
 		$chk_args->member_srl = $member_info->member_srl;
 		$output = executeQuery('member.chkAuthMail', $chk_args);
-		if($output->toBool() && $output->data->count == '0') return new Object(-1, 'msg_invalid_request');
+		if($output->toBool() && $output->data->count == '0') return new BaseObject(-1, 'msg_invalid_request');
 
 		$auth_args = new stdClass;
 		$auth_args->member_srl = $member_info->member_srl;
 		$output = executeQueryArray('member.getAuthMailInfo', $auth_args);
-		if(!$output->data || !$output->data[0]->auth_key)  return new Object(-1, 'msg_invalid_request');
+		if(!$output->data || !$output->data[0]->auth_key)  return new BaseObject(-1, 'msg_invalid_request');
 		$auth_info = $output->data[0];
 
 		// Update the regdate of authmail entry
@@ -1313,7 +1458,7 @@ class memberController extends member
 		$member_srl = $oMemberModel->getMemberSrlByEmailAddress($newEmail);
 		if($member_srl)
 		{
-			return new Object(-1,'msg_exists_email_address');
+			return new BaseObject(-1,'msg_exists_email_address');
 		}
 
 		// remove all key by member_srl
@@ -1417,13 +1562,13 @@ class memberController extends member
 	/**
 	 * Join a virtual site
 	 *
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberSiteSignUp()
 	{
 		$site_module_info = Context::get('site_module_info');
 		$logged_info = Context::get('logged_info');
-		if(!$site_module_info->site_srl || !Context::get('is_logged') || count($logged_info->group_srl_list) ) return new Object(-1,'msg_invalid_request');
+		if(!$site_module_info->site_srl || !Context::get('is_logged') || count($logged_info->group_srl_list) ) return new BaseObject(-1,'msg_invalid_request');
 
 		$oMemberModel = getModel('member');
 		$columnList = array('site_srl', 'group_srl', 'title');
@@ -1436,13 +1581,13 @@ class memberController extends member
 	/**
 	 * Leave the virtual site
 	 *
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procMemberSiteLeave()
 	{
 		$site_module_info = Context::get('site_module_info');
 		$logged_info = Context::get('logged_info');
-		if(!$site_module_info->site_srl || !Context::get('is_logged') || count($logged_info->group_srl_list) ) return new Object(-1,'msg_invalid_request');
+		if(!$site_module_info->site_srl || !Context::get('is_logged') || count($logged_info->group_srl_list) ) return new BaseObject(-1,'msg_invalid_request');
 
 		$args = new stdClass;
 		$args->site_srl= $site_module_info->site_srl;
@@ -1485,7 +1630,7 @@ class memberController extends member
 		$agreement_file = _XE_PATH_.'files/member_extra_info/agreement.txt';
 		FileHandler::writeFile($agreement_file, $agreement);
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -1532,7 +1677,7 @@ class memberController extends member
 	 * @param int $group_srl
 	 * @param int $site_srl
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function addMemberToGroup($member_srl, $group_srl, $site_srl=0)
 	{
@@ -1556,7 +1701,7 @@ class memberController extends member
 	 *
 	 * @param object $args
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function replaceMemberGroup($args)
 	{
@@ -1588,7 +1733,7 @@ class memberController extends member
 			$this->_clearMemberCache($obj->member_srl, $args->site_srl);
 		}
 
-		return new Object();
+		return new BaseObject();
 	}
 
 
@@ -1680,12 +1825,12 @@ class memberController extends member
 	 * @param string $password
 	 * @param boolean $keep_signed
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function doLogin($user_id, $password = '', $keep_signed = false)
 	{
 		$user_id = strtolower($user_id);
-		if(!$user_id) return new Object(-1, 'null_user_id');
+		if(!$user_id) return new BaseObject(-1, 'null_user_id');
 		// Call a trigger before log-in (before)
 		$trigger_obj = new stdClass();
 		$trigger_obj->user_id = $user_id;
@@ -1731,7 +1876,7 @@ class memberController extends member
 				elseif(3600 <= $term && $term < 86400) $term = intval($term/3600).Context::getLang('unit_hour');
 				else $term = intval($term/86400).Context::getLang('unit_day');
 
-				return new Object(-1, sprintf(Context::getLang('excess_ip_access_count'),$term));
+				return new BaseObject(-1, sprintf(Context::getLang('excess_ip_access_count'),$term));
 			}
 			else
 			{
@@ -1755,12 +1900,12 @@ class memberController extends member
 			{
 				$_SESSION['auth_member_srl'] = $this->memberInfo->member_srl;
 				$redirectUrl = getUrl('', 'act', 'dispMemberResendAuthMail');
-				return $this->setRedirectUrl($redirectUrl, new Object(-1,'msg_user_not_confirmed'));
+				return $this->setRedirectUrl($redirectUrl, new BaseObject(-1,'msg_user_not_confirmed'));
 			}
-			return new Object(-1,'msg_user_denied');
+			return new BaseObject(-1,'msg_user_denied');
 		}
 		// Notify if denied_date is less than the current time
-		if($this->memberInfo->limit_date && substr($this->memberInfo->limit_date,0,8) >= date("Ymd")) return new Object(-9,sprintf(Context::getLang('msg_user_limited'),zdate($this->memberInfo->limit_date,"Y-m-d")));
+		if($this->memberInfo->limit_date && substr($this->memberInfo->limit_date,0,8) >= date("Ymd")) return new BaseObject(-9,sprintf(Context::getLang('msg_user_limited'),zdate($this->memberInfo->limit_date,"Y-m-d")));
 		// Update the latest login time
 		$args->member_srl = $this->memberInfo->member_srl;
 		$output = executeQuery('member.updateLastLogin', $args);
@@ -1984,7 +2129,7 @@ class memberController extends member
 			if(!$oMemberModel->checkPasswordStrength($args->password, $config->password_strength))
 			{
 				$message = Context::getLang('about_password_strength');
-				return new Object(-1, $message[$config->password_strength]);
+				return new BaseObject(-1, $message[$config->password_strength]);
 			}
 			$args->password = $oMemberModel->hashPassword($args->password);
 		}
@@ -1993,37 +2138,46 @@ class memberController extends member
 			unset($args->password);
 		}
 
+		if($args->find_account_answer && !$password_is_hashed)
+		{
+			$args->find_account_answer = $oMemberModel->hashPassword($args->find_account_answer);
+		}
+		elseif(!$args->find_account_answer)
+		{
+			unset($args->find_account_answer);
+		}
+
 		// Check if ID is prohibited
 		if($oMemberModel->isDeniedID($args->user_id))
 		{
-			return new Object(-1,'denied_user_id');
+			return new BaseObject(-1,'denied_user_id');
 		}
 
 		// Check if ID is duplicate
 		$member_srl = $oMemberModel->getMemberSrlByUserID($args->user_id);
 		if($member_srl)
 		{
-			return new Object(-1,'msg_exists_user_id');
+			return new BaseObject(-1,'msg_exists_user_id');
 		}
 
 		// Check if nickname is prohibited
 		if($oMemberModel->isDeniedNickName($args->nick_name))
 		{
-			return new Object(-1,'denied_nick_name');
+			return new BaseObject(-1,'denied_nick_name');
 		}
 
 		// Check if nickname is duplicate
 		$member_srl = $oMemberModel->getMemberSrlByNickName($args->nick_name);
 		if($member_srl)
 		{
-			return new Object(-1,'msg_exists_nick_name');
+			return new BaseObject(-1,'msg_exists_nick_name');
 		}
 
 		// Check if email address is duplicate
 		$member_srl = $oMemberModel->getMemberSrlByEmailAddress($args->email_address);
 		if($member_srl)
 		{
-			return new Object(-1,'msg_exists_email_address');
+			return new BaseObject(-1,'msg_exists_email_address');
 		}
 
 		// Insert data into the DB
@@ -2170,7 +2324,7 @@ class memberController extends member
 			$member_srl = $oMemberModel->getMemberSrlByEmailAddress($args->email_address);
 			if($member_srl && $args->member_srl != $member_srl)
 			{
-				return new Object(-1,'msg_exists_email_address');
+				return new BaseObject(-1,'msg_exists_email_address');
 			}
 			$args->email_address = $orgMemberInfo->email_address;
 		}
@@ -2179,7 +2333,7 @@ class memberController extends member
 			$member_srl = $oMemberModel->getMemberSrlByUserID($args->user_id);
 			if($member_srl && $args->member_srl != $member_srl)
 			{
-				return new Object(-1,'msg_exists_user_id');
+				return new BaseObject(-1,'msg_exists_user_id');
 			}
 
 			$args->user_id = $orgMemberInfo->user_id;
@@ -2190,13 +2344,13 @@ class memberController extends member
 			// Check if ID is prohibited
 			if($args->user_id && $oMemberModel->isDeniedID($args->user_id))
 			{
-				return new Object(-1,'denied_user_id');
+				return new BaseObject(-1,'denied_user_id');
 			}
 
 			// Check if nickname is prohibited
 			if($args->nick_name && $oMemberModel->isDeniedNickName($args->nick_name))
 			{
-				return new Object(-1, 'denied_nick_name');
+				return new BaseObject(-1, 'denied_nick_name');
 			}
 		}
 
@@ -2206,7 +2360,7 @@ class memberController extends member
 			$member_srl = $oMemberModel->getMemberSrlByUserID($args->user_id);
 			if($member_srl && $args->member_srl != $member_srl)
 			{
-				return new Object(-1,'msg_exists_user_id');
+				return new BaseObject(-1,'msg_exists_user_id');
 			}
 		}
 
@@ -2214,7 +2368,7 @@ class memberController extends member
 		$member_srl = $oMemberModel->getMemberSrlByNickName($args->nick_name);
  		if($member_srl && $args->member_srl != $member_srl)
  		{
- 			return new Object(-1,'msg_exists_nick_name');
+ 			return new BaseObject(-1,'msg_exists_nick_name');
  		}
 
 		list($args->email_id, $args->email_host) = explode('@', $args->email_address);
@@ -2228,13 +2382,28 @@ class memberController extends member
 			if(!$oMemberModel->checkPasswordStrength($args->password, $config->password_strength))
 			{
 				$message = Context::getLang('about_password_strength');
-				return new Object(-1, $message[$config->password_strength]);
+				return new BaseObject(-1, $message[$config->password_strength]);
 			}
 			$args->password = $oMemberModel->hashPassword($args->password);
 		}
 		else
 		{
 			$args->password = $orgMemberInfo->password;
+		}
+
+		if($args->find_account_answer) {
+			$args->find_account_answer = $oMemberModel->hashPassword($args->find_account_answer);
+		}
+		else
+		{
+			$oPassword =  new Password();
+			$hashed = $oPassword->checkAlgorithm($orgMemberInfo->find_account_answer);
+
+			if($hashed) {
+				$args->find_account_answer = $orgMemberInfo->find_account_answer;
+			} else {
+				$args->find_account_answer = $oPassword->createHash($orgMemberInfo->find_account_answer);
+			}
 		}
 
 		if(!$args->user_name) $args->user_name = $orgMemberInfo->user_name;
@@ -2319,7 +2488,7 @@ class memberController extends member
 			if(!$oMemberModel->checkPasswordStrength($args->password, $config->password_strength))
 			{
 				$message = Context::getLang('about_password_strength');
-				return new Object(-1, $message[$config->password_strength]);
+				return new BaseObject(-1, $message[$config->password_strength]);
 			}
 
 			$args->password = $oMemberModel->hashPassword($args->password);
@@ -2340,6 +2509,16 @@ class memberController extends member
 		return $output;
 	}
 
+	function updateFindAccountAnswer($member_srl, $answer)
+	{
+		$oPassword =  new Password();
+
+		$args = new stdClass();
+		$args->member_srl = $member_srl;
+		$args->find_account_answer = $oPassword->createHash($answer);
+		$output = executeQuery('member.updateFindAccountAnswer', $args);
+	}
+
 	/**
 	 * Delete User
 	 */
@@ -2358,9 +2537,9 @@ class memberController extends member
 			$columnList = array('member_srl', 'is_admin');
 			$this->memberInfo = $oMemberModel->getMemberInfoByMemberSrl($member_srl, 0, $columnList);
 		}
-		if(!$this->memberInfo) return new Object(-1, 'msg_not_exists_member');
+		if(!$this->memberInfo) return new BaseObject(-1, 'msg_not_exists_member');
 		// If managers can not be deleted
-		if($this->memberInfo->is_admin == 'Y') return new Object(-1, 'msg_cannot_delete_admin');
+		if($this->memberInfo->is_admin == 'Y') return new BaseObject(-1, 'msg_cannot_delete_admin');
 
 		$oDB = &DB::getInstance();
 		$oDB->begin();
@@ -2490,7 +2669,7 @@ class memberController extends member
 
 		$oMemberModel = getModel('member');
 		$member_srl = $oMemberModel->getMemberSrlByEmailAddress($newEmail);
-		if($member_srl) return new Object(-1,'msg_exists_email_address');
+		if($member_srl) return new BaseObject(-1,'msg_exists_email_address');
 
 		if($_SESSION['rechecked_password_step'] != 'INPUT_DATA')
 		{
@@ -2593,7 +2772,7 @@ class memberController extends member
 	**/
 	function triggerGetDocumentMenu(&$menu_list)
 	{
-		if(!Context::get('is_logged')) return new Object();
+		if(!Context::get('is_logged')) return new BaseObject();
 
 		$logged_info = Context::get('logged_info');
 		$document_srl = Context::get('target_srl');
@@ -2604,14 +2783,14 @@ class memberController extends member
 		$member_srl = $oDocument->get('member_srl');
 		$module_srl = $oDocument->get('module_srl');
 
-		if(!$member_srl) return new Object();
-		if($oDocumentModel->grant->manager != 1 || $member_srl==$logged_info->member_srl) return new Object();
+		if(!$member_srl) return new BaseObject();
+		if($oDocumentModel->grant->manager != 1 || $member_srl==$logged_info->member_srl) return new BaseObject();
 
 		$oDocumentController = getController('document');
 		$url = getUrl('','module','member','act','dispMemberSpammer','member_srl',$member_srl,'module_srl',$module_srl);
 		$oDocumentController->addDocumentPopupMenu($url,'cmd_spammer','','popup');
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -2623,7 +2802,7 @@ class memberController extends member
 	**/
 	function triggerGetCommentMenu(&$menu_list)
 	{
-		if(!Context::get('is_logged')) return new Object();
+		if(!Context::get('is_logged')) return new BaseObject();
 
 		$logged_info = Context::get('logged_info');
 		$comment_srl = Context::get('target_srl');
@@ -2634,14 +2813,14 @@ class memberController extends member
 		$module_srl = $oComment->get('module_srl');
 		$member_srl = $oComment->get('member_srl');
 
-		if(!$member_srl) return new Object();
-		if($oCommentModel->grant->manager != 1 || $member_srl==$logged_info->member_srl) return new Object();
+		if(!$member_srl) return new BaseObject();
+		if($oCommentModel->grant->manager != 1 || $member_srl==$logged_info->member_srl) return new BaseObject();
 
 		$oCommentController = getController('comment');
 		$url = getUrl('','module','member','act','dispMemberSpammer','member_srl',$member_srl,'module_srl',$module_srl);
 		$oCommentController->addCommentPopupMenu($url,'cmd_spammer','','popup');
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -2651,7 +2830,7 @@ class memberController extends member
 	**/
 	function procMemberSpammerManage()
 	{
-		if(!Context::get('is_logged')) return new Object(-1,'msg_not_permitted');
+		if(!Context::get('is_logged')) return new BaseObject(-1,'msg_not_permitted');
 
 		$logged_info = Context::get('logged_info');
 		$member_srl = Context::get('member_srl');
@@ -2668,7 +2847,7 @@ class memberController extends member
 		$module_info = $oModuleModel->getModuleInfoByModuleSrl($module_srl, $columnList);
 		$grant = $oModuleModel->getGrant($module_info, $logged_info);
 
-		if(!$grant->manager) return new Object(-1,'msg_not_permitted');
+		if(!$grant->manager) return new BaseObject(-1,'msg_not_permitted');
 
 		$proc_msg = "";
 
@@ -2705,7 +2884,7 @@ class memberController extends member
 		$this->add('cnt_loop', ++$cnt_loop);
 		$this->add('proc_type', $proc_type);
 
-		return new Object(0);
+		return new BaseObject(0);
 	}
 
 	/**

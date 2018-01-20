@@ -986,7 +986,7 @@ function getMicroTime()
  * Delete the second object vars from the first argument
  *
  * @param object $target_obj An original object
- * @param object $del_obj Object vars to delete from the original object
+ * @param object $del_obj BaseObject vars to delete from the original object
  * @return object
  */
 function delObjectVars($target_obj, $del_obj)

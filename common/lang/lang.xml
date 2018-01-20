@@ -2633,7 +2633,7 @@
 		<value xml:lang="en"><![CDATA[IP address input format<br />You can use wildcard(*) (ex: 192.168.0.*)<br />You can use hyphen(*) for ip range  (you can't use wild card with hyphen, ex: 192.168.0.1-192.168.0.254)<br />]]></value>
 		<value xml:lang="jp"><![CDATA[IPアドレス入力方法<br />１．ワイルドカード（＊）使用可能（例：192.168.0.*)<br />２．ハイフン（-）を使用して帯域で入力可能<br />（ただし、帯域幅で入力する場合、ワイルドカードは使用不可。例：192.168.0.1-192.168.0.254）<br />３．複数の項目は行を変えて入力してください。]]></value>
 		<value xml:lang="de"><![CDATA[IP adresse eingabeformat<br />Sie können Platzhalter (*) verwenden (zB:. 192.168.0 *)<br />Sie können Bindestrich (*) für IP-Bereich nutzen (können Sie nicht wild card mit Bindestrich, ex: 192.168.0.1-192.168.0.254)]]></value>
-		
+
 	</item>
 	<item name="msg_invalid_ip">
 		<value xml:lang="ko"><![CDATA[잘못된 IP주소 형식입니다.]]></value>
@@ -3319,6 +3319,18 @@
 		<value xml:lang="jp"><![CDATA[処理しますか？]]></value>
 		<value xml:lang="de"><![CDATA[Sind Sie sicher, dass Sie fortfahren möchten?]]></value>
 	</item>
+	<item name="comfirm_act_msg">
+		<value xml:lang="ko"><![CDATA[이 %1$s%3$s %2$s하시겠습니까?]]></value>
+		<value xml:lang="en"><![CDATA[Are you sure to %2$s this %1$s?]]></value>
+	</item>
+	<item name="msg_eul">
+		<value xml:lang="ko"><![CDATA[을]]></value>
+		<value xml:lang="en"><![CDATA[]]></value>
+	</item>
+	<item name="msg_rul">
+		<value xml:lang="ko"><![CDATA[를]]></value>
+		<value xml:lang="en"><![CDATA[]]></value>
+	</item>
 	<item name="column_type">
 		<value xml:lang="ko"><![CDATA[형식]]></value>
 		<value xml:lang="en"><![CDATA[Column Type]]></value>
@@ -3747,19 +3759,23 @@
 			<value xml:lang="vi"><![CDATA[Định dạng của %s không hợp lệ. Chỉ sử dụng các chữ số]]></value>
 			<value xml:lang="mn"><![CDATA[%s-ын хэлбэр буруу байна. Зөвхөн тоогоор оруулах ёстой.]]></value>
 		</item>
+		<item name="invalid_extension">
+			<value xml:lang="ko"><![CDATA[%s의 형식이 잘못되었습니다. *.* 나 *.jpg;*.gif; 처럼 입력해야 합니다.]]></value>
+			<value xml:lang="en"><![CDATA[The format of %s is invalid. e.g.) *.* or *.jpg;*.gif;.]]></value>
+		</item>
 	</item>
 	<item name="security_invalid_session">
-			<value xml:lang="ko"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
-			<value xml:lang="en"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
-			<value xml:lang="jp"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
-			<value xml:lang="zh-CN"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
-			<value xml:lang="zh-TW"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
-			<value xml:lang="fr"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
-			<value xml:lang="de"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
-			<value xml:lang="es"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
-			<value xml:lang="tr"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
-			<value xml:lang="vi"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
-			<value xml:lang="mn"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
+		<value xml:lang="ko"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
+		<value xml:lang="en"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
+		<value xml:lang="jp"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
+		<value xml:lang="zh-CN"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
+		<value xml:lang="fr"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
+		<value xml:lang="de"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
+		<value xml:lang="es"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
+		<value xml:lang="tr"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
+		<value xml:lang="vi"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
+		<value xml:lang="mn"><![CDATA[바르지 않은 접근입니다. 인증을 위해 다시 로그인해야 합니다.]]></value>
 	</item>
 	<item name="security_warning_embed">
 		<value xml:lang="ko"><![CDATA[보안 문제로 관리자 아이디로는 embed를 볼 수 없습니다. 확인하려면 다른 아이디로 접속하세요]]></value>
@@ -3925,20 +3941,20 @@
 		<value xml:lang="de"><![CDATA[Menü überspringen]]></value>
 	</item>
 	<item name="dashboard">
-		 <value xml:lang="ko"><![CDATA[대시보드]]></value>
-		 <value xml:lang="en"><![CDATA[Dashboard]]></value>
-		 <value xml:lang="jp"><![CDATA[ダッシュボード]]></value>
-		 <value xml:lang="zh-CN"><![CDATA[控制面板]]></value>
-		 <value xml:lang="de"><![CDATA[Armaturenbrett]]></value>
-		 <value xml:lang="tr"><![CDATA[Kontrol Paneli]]></value>
+		<value xml:lang="ko"><![CDATA[대시보드]]></value>
+		<value xml:lang="en"><![CDATA[Dashboard]]></value>
+		<value xml:lang="jp"><![CDATA[ダッシュボード]]></value>
+		<value xml:lang="zh-CN"><![CDATA[控制面板]]></value>
+		<value xml:lang="de"><![CDATA[Armaturenbrett]]></value>
+		<value xml:lang="tr"><![CDATA[Kontrol Paneli]]></value>
 	</item>
 	<item name="user">
-		 <value xml:lang="ko"><![CDATA[회원]]></value>
-		 <value xml:lang="en"><![CDATA[Member]]></value>
-		 <value xml:lang="jp"><![CDATA[会員]]></value>
-		 <value xml:lang="zh-CN"><![CDATA[会员]]></value>
-		 <value xml:lang="de"><![CDATA[Mitglied]]></value>
-		 <value xml:lang="tr"><![CDATA[Üye]]></value>
+		<value xml:lang="ko"><![CDATA[회원]]></value>
+		<value xml:lang="en"><![CDATA[Member]]></value>
+		<value xml:lang="jp"><![CDATA[会員]]></value>
+		<value xml:lang="zh-CN"><![CDATA[会员]]></value>
+		<value xml:lang="de"><![CDATA[Mitglied]]></value>
+		<value xml:lang="tr"><![CDATA[Üye]]></value>
 	</item>
 	<item name="yes">
 		<value xml:lang="ko"><![CDATA[예]]></value>

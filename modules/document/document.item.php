@@ -8,7 +8,7 @@
  * @package /modules/document
  * @version 0.1
  */
-class documentItem extends Object
+class documentItem extends BaseObject
 {
 	/**
 	 * Document number
@@ -175,7 +175,10 @@ class documentItem extends Object
 		$grant = $oModuleModel->getGrant($oModuleModel->getModuleInfoByModuleSrl($this->get('module_srl')), $logged_info);
 		if($grant->manager) return $this->grant_cache = true;
 
-		if($this->get('member_srl') && ($this->get('member_srl') == $logged_info->member_srl || $this->get('member_srl')*-1 == $logged_info->member_srl)) return $this->grant_cache = true;
+		if($this->get('member_srl') && abs($this->get('member_srl')) == $logged_info->member_srl)
+		{
+			return $this->grant_cache = true;
+		}
 
 		return $this->grant_cache = false;
 	}
@@ -617,7 +620,7 @@ class documentItem extends Object
 
 	function getPermanentUrl()
 	{
-		return getFullUrl('','document_srl',$this->get('document_srl'));
+		return getFullUrl('','mid', $this->getDocumentMid('document_srl'), 'document_srl', $this->get('document_srl'));
 	}
 
 	function getTrackbackUrl()
@@ -1022,7 +1025,10 @@ class documentItem extends Object
 
 	function getStatus()
 	{
-		if(!$this->get('status')) return $this->getDefaultStatus();
+		if(!$this->get('status')) {
+			$oDocumentClass = getClass('document');
+			return $oDocumentClass->getDefaultStatus();
+		}
 		return $this->get('status');
 	}
 
@@ -1034,8 +1040,18 @@ class documentItem extends Object
 	function printExtraImages($time_check = 43200)
 	{
 		if(!$this->document_srl) return;
-		// Get the icon directory
-		$path = sprintf('%s%s',getUrl(), 'modules/document/tpl/icons/');
+
+		$oDocumentModel = getModel('document');
+		$documentConfig = $oDocumentModel->getDocumentConfig();
+		if(Mobile::isFromMobilePhone())
+		{
+			$iconSkin = $documentConfig->micons;
+		}
+		else
+		{
+			$iconSkin = $documentConfig->icons;
+		}
+		$path = sprintf('%s%s',getUrl(), "modules/document/tpl/icons/$iconSkin/");
 
 		$buffs = $this->getExtraImages($time_check);
 		if(!count($buffs)) return;

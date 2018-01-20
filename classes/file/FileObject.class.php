@@ -6,7 +6,7 @@
  *
  * @author NAVER (developers@xpressengine.com)
  */
-class FileObject extends Object
+class FileObject extends BaseObject
 {
 
 	/**

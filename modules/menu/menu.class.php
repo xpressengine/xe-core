@@ -12,14 +12,14 @@ class menu extends ModuleObject
 {
 	/**
 	 * Implement if additional tasks are necessary when installing
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moduleInstall()
 	{
 		// Create a directory to use menu
 		FileHandler::makeDir('./files/cache/menu');
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -29,161 +29,175 @@ class menu extends ModuleObject
 	function checkUpdate()
 	{
 		$oDB = &DB::getInstance();
-		// 2009. 02. 11 menu added to the table site_srl
-		if(!$oDB->isColumnExists('menu', 'site_srl')) return true;
-
-		// 2012. 02. 01 title index check
-		if(!$oDB->isIndexExists("menu", "idx_title")) return true;
-
-		if(!$oDB->isColumnExists('menu_item', 'is_shortcut'))
+		$oModuleModel = getModel('module');
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
 		{
-			return TRUE;
+			// 2009. 02. 11 menu added to the table site_srl
+			if(!$oDB->isColumnExists('menu', 'site_srl')) return true;
+
+			// 2012. 02. 01 title index check
+			if(!$oDB->isIndexExists("menu", "idx_title")) return true;
+
+			if(!$oDB->isColumnExists('menu_item', 'is_shortcut'))
+			{
+				return TRUE;
+			}
+
+			$oMenuAdminModel = getAdminModel('menu');
+			$args = new stdClass();
+			$args->title = array("Temporary menu");
+			$temp_menus = executeQueryArray('menu.getMenuByTitle', $args);
+			if($temp_menus->toBool() && count($temp_menus->data)) return true;
+
+			// 2015. 06. 15 add column desc
+			if(!$oDB->isColumnExists('menu_item', 'desc'))
+			{
+				return true;
+			}
+
+			$oModuleController->insertUpdatedLog($version_update_id);
 		}
-		
-		
-		$oMenuAdminModel = getAdminModel('menu');
-		$args = new stdClass();
-		$args->title = array("Temporary menu");
-		$temp_menus = executeQueryArray('menu.getMenuByTitle', $args);
-		if($temp_menus->toBool() && count($temp_menus->data)) return true;
-		
-		// 2015. 06. 15 add column desc
-		if(!$oDB->isColumnExists('menu_item', 'desc'))
-		{
-			return true;
-		}
-		
+
 		return false;
 	}
 
 	/**
 	 * Execute update
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moduleUpdate() {
 		$oDB = &DB::getInstance();
-		// 2009. 02. 11 menu added to the table site_srl
-		if(!$oDB->isColumnExists('menu', 'site_srl'))
+		$oModuleModel = getModel('module');
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
 		{
-			$oDB->addColumn('menu','site_srl','number',11,0,true);
-		}
-
-		// 2012. 02. 01 title index check
-		if(!$oDB->isIndexExists("menu","idx_title"))
-		{
-			$oDB->addIndex('menu', 'idx_title', array('title'));
-		}
-		
-		// 2015. 06. 15 add column desc
-		if(!$oDB->isColumnExists('menu_item', 'desc'))
-		{
-			$oDB->addColumn('menu_item', 'desc','varchar',250,"",true);
-		}
-
-		// 1.7(maserati) shortcut column add and mirgration
-		if(!$oDB->isColumnExists('menu_item', 'is_shortcut'))
-		{
-			$oDB->addColumn('menu_item', 'is_shortcut', 'char', 1, 'N');
-
-			// check empty url and change shortcut type
-			$oMenuAdminModel = getAdminModel('menu');
-			$output = $oMenuAdminModel->getMenus();
-
-			if(is_array($output))
+			// 2009. 02. 11 menu added to the table site_srl
+			if(!$oDB->isColumnExists('menu', 'site_srl'))
 			{
-				$menuItemUniqueList = array();
-				$menuItemAllList = array();
-				foreach($output  AS $key=>$value)
-				{
-					unset($args);
-					$args->menu_srl = $value->menu_srl;
-					$output2 = executeQueryArray('menu.getMenuItems', $args);
-					if(is_array($output2->data))
-					{
-						foreach($output2->data AS $key2=>$value2)
-						{
-							$menuItemAllList[$value2->menu_item_srl] = $value2->url;
-							if(!in_array($value2->url, $menuItemUniqueList))
-							{
-								$menuItemUniqueList[$value2->menu_item_srl] = $value2->url;
-							}
+				$oDB->addColumn('menu','site_srl','number',11,0,true);
+			}
 
-							// if url is empty, change type to shortcurt
-							if($value2->is_shortcut == 'N' && (!$value2->url || strncasecmp('http', $value2->url, 4) === 0))
-							{
-								$value2->is_shortcut = 'Y';
-								$output3 = executeQuery('menu.updateMenuItem', $value2);
-							}
-						}
-					}
-				}
+			// 2012. 02. 01 title index check
+			if(!$oDB->isIndexExists("menu","idx_title"))
+			{
+				$oDB->addIndex('menu', 'idx_title', array('title'));
+			}
 
-				$oModuleModel = getModel('module');
-				// if duplicate reference, change type to shortcut
-				$shortcutItemList = array_diff_assoc($menuItemAllList, $menuItemUniqueList);
-				foreach($output AS $key=>$value)
+			// 2015. 06. 15 add column desc
+			if(!$oDB->isColumnExists('menu_item', 'desc'))
+			{
+				$oDB->addColumn('menu_item', 'desc','varchar',250,"",true);
+			}
+
+			// 1.7(maserati) shortcut column add and mirgration
+			if(!$oDB->isColumnExists('menu_item', 'is_shortcut'))
+			{
+				$oDB->addColumn('menu_item', 'is_shortcut', 'char', 1, 'N');
+
+				// check empty url and change shortcut type
+				$oMenuAdminModel = getAdminModel('menu');
+				$output = $oMenuAdminModel->getMenus();
+
+				if(is_array($output))
 				{
-					unset($args);
-					$args->menu_srl = $value->menu_srl;
-					$output2 = executeQueryArray('menu.getMenuItems', $args);
-					if(is_array($output2->data))
+					$menuItemUniqueList = array();
+					$menuItemAllList = array();
+					foreach($output  AS $key=>$value)
 					{
-						foreach($output2->data AS $key2=>$value2)
+						unset($args);
+						$args->menu_srl = $value->menu_srl;
+						$output2 = executeQueryArray('menu.getMenuItems', $args);
+						if(is_array($output2->data))
 						{
-							if(!empty($value2->url) && strncasecmp('http', $value2->url, 4) !== 0)
+							foreach($output2->data AS $key2=>$value2)
 							{
-								$moduleInfo = $oModuleModel->getModuleInfoByMid($value2->url);
-								if(!$moduleInfo->module_srl)
+								$menuItemAllList[$value2->menu_item_srl] = $value2->url;
+								if(!in_array($value2->url, $menuItemUniqueList))
 								{
-									$value2->url = Context::getDefaultUrl();
-									if(!$value2->url) $value2->url = '#';
-									$value2->is_shortcut = 'Y';
+									$menuItemUniqueList[$value2->menu_item_srl] = $value2->url;
+								}
 
-									$updateOutput = executeQuery('menu.updateMenuItem', $value2);
+								// if url is empty, change type to shortcurt
+								if($value2->is_shortcut == 'N' && (!$value2->url || strncasecmp('http', $value2->url, 4) === 0))
+								{
+									$value2->is_shortcut = 'Y';
+									$output3 = executeQuery('menu.updateMenuItem', $value2);
 								}
 							}
+						}
+					}
 
-							if($shortcutItemList[$value2->menu_item_srl])
+					$oModuleModel = getModel('module');
+					// if duplicate reference, change type to shortcut
+					$shortcutItemList = array_diff_assoc($menuItemAllList, $menuItemUniqueList);
+					foreach($output AS $key=>$value)
+					{
+						unset($args);
+						$args->menu_srl = $value->menu_srl;
+						$output2 = executeQueryArray('menu.getMenuItems', $args);
+						if(is_array($output2->data))
+						{
+							foreach($output2->data AS $key2=>$value2)
 							{
-								$value2->is_shortcut = 'Y';
-								$output3 = executeQuery('menu.updateMenuItem', $value2);
+								if(!empty($value2->url) && strncasecmp('http', $value2->url, 4) !== 0)
+								{
+									$moduleInfo = $oModuleModel->getModuleInfoByMid($value2->url);
+									if(!$moduleInfo->module_srl)
+									{
+										$value2->url = Context::getDefaultUrl();
+										if(!$value2->url) $value2->url = '#';
+										$value2->is_shortcut = 'Y';
+
+										$updateOutput = executeQuery('menu.updateMenuItem', $value2);
+									}
+								}
+
+								if($shortcutItemList[$value2->menu_item_srl])
+								{
+									$value2->is_shortcut = 'Y';
+									$output3 = executeQuery('menu.updateMenuItem', $value2);
+								}
 							}
 						}
 					}
 				}
+
+				$this->recompileCache();
 			}
 
-			$this->recompileCache();
-		}
-		
-		// for 1.7.4 update, 기존에 생성된 Temporary menu 항목 정리
-		$oMenuAdminModel = getAdminModel('menu');
-		$args = new stdClass();
-		$args->title = array("Temporary menu");
-		$temp_menus = executeQueryArray('menu.getMenuByTitle', $args);
-		
-		$args = new stdClass();
-		if($temp_menus->toBool() && count($temp_menus->data))
-		{
-			
-			$oMenuAdminController = getAdminController('menu');
-			foreach($temp_menus->data as $menu)
+			// for 1.7.4 update, 기존에 생성된 Temporary menu 항목 정리
+			$oMenuAdminModel = getAdminModel('menu');
+			$args = new stdClass();
+			$args->title = array("Temporary menu");
+			$temp_menus = executeQueryArray('menu.getMenuByTitle', $args);
+
+			$args = new stdClass();
+			if($temp_menus->toBool() && count($temp_menus->data))
 			{
-				$args->current_menu_srl = $menu->menu_srl;
-				$args->menu_srl = $oMenuAdminController->getUnlinkedMenu();
-				$output3 = executeQuery('menu.updateMenuItems', $args);
-					
-				if($output3->toBool())
+				$oMenuAdminController = getAdminController('menu');
+				foreach($temp_menus->data as $menu)
 				{
-					// delete
-					$oMenuAdminController->deleteMenu($menu->menu_srl);
+					$args->current_menu_srl = $menu->menu_srl;
+					$args->menu_srl = $oMenuAdminController->getUnlinkedMenu();
+					$output3 = executeQuery('menu.updateMenuItems', $args);
+
+					if($output3->toBool())
+					{
+						// delete
+						$oMenuAdminController->deleteMenu($menu->menu_srl);
+					}
 				}
+
+				$this->recompileCache();
 			}
-			
-			$this->recompileCache();
+
+			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
-		return new Object(0, 'success_updated');
+		return new BaseObject(0, 'success_updated');
 	}
 
 	/**

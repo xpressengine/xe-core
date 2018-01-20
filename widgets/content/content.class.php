@@ -204,7 +204,7 @@ class content extends WidgetHandler
 			$attribute = $oComment->getObjectVars();
 			$title = $oComment->getSummary($args->content_cut_size);
 			$thumbnail = $oComment->getThumbnail($args->thumbnail_width,$args->thumbnail_height,$args->thumbnail_type);
-			$url = sprintf("%s#comment_%s",getUrl('','document_srl',$oComment->get('document_srl')),$oComment->get('comment_srl'));
+			$url = sprintf("%s#comment_%s",getUrl('','mid', $args->mid_lists[$attribute->module_srl], 'document_srl',$oComment->get('document_srl')),$oComment->get('comment_srl'));
 
 			$attribute->mid = $args->mid_lists[$attribute->module_srl];
 			$browser_title = $args->module_srls_info[$attribute->module_srl]->browser_title;
@@ -282,7 +282,7 @@ class content extends WidgetHandler
 				$content_item->setCategory( $category_lists[$module_srl][$category_srl]->title );
 				$content_item->setDomain( $args->module_srls_info[$module_srl]->domain );
 				$content_item->setContent($oDocument->getSummary($args->content_cut_size));
-				$content_item->setLink( getSiteUrl($domain,'','document_srl',$document_srl) );
+				$content_item->setLink( getSiteUrl($domain, '', 'mid', $args->mid_lists[$module_srl],'document_srl',$document_srl) );
 				$content_item->setThumbnail($thumbnail);
 				$content_item->setExtraImages($oDocument->printExtraImages($args->duration_new * 60 * 60));
 				$content_item->add('mid', $args->mid_lists[$module_srl]);
@@ -502,7 +502,7 @@ class content extends WidgetHandler
 				$content_item->setTitle($item->title);
 				$content_item->setNickName(max($item->author,$item->{'dc:creator'}));
 				//$content_item->setCategory($item->category);
-				$item->description = preg_replace('!<a href=!is','<a onclick="window.open(this.href);return false" href=', $item->description);
+				$item->description = preg_replace('!<a href=!is','<a target="_blank" rel="noopener" href=', $item->description);
 				$content_item->setContent($this->_getSummary($item->description, $args->content_cut_size));
 				$content_item->setThumbnail($this->_getRssThumbnail($item->description));
 				$content_item->setLink($item->link);
@@ -541,7 +541,7 @@ class content extends WidgetHandler
 				$content_item->setTitle($item->title);
 				$content_item->setNickName(max($item->author,$item->{'dc:creator'}));
 				//$content_item->setCategory($item->category);
-				$item->description = preg_replace('!<a href=!is','<a onclick="window.open(this.href);return false" href=', $item->description);
+				$item->description = preg_replace('!<a href=!is','<a target="_blank" rel="noopener" href=', $item->description);
 				$content_item->setContent($this->_getSummary($item->description, $args->content_cut_size));
 				$content_item->setThumbnail($this->_getRssThumbnail($item->description));
 				$content_item->setLink($item->link);
@@ -613,7 +613,7 @@ class content extends WidgetHandler
 
 				//$content_item->setCategory($item->category);
 				$item->description = ($item->content) ? $item->content : $item->description = $item->summary;
-				$item->description = preg_replace('!<a href=!is','<a onclick="window.open(this.href);return false" href=', $item->description);
+				$item->description = preg_replace('!<a href=!is','<a target="_blank" rel="noopener" href=', $item->description);
 
 				if(($item->content && stripos($value->content->attrs->type, "html") === FALSE) || (!$item->content && stripos($value->summary->attrs->type, "html") === FALSE))
 				{
@@ -771,7 +771,7 @@ class content extends WidgetHandler
 	}
 }
 
-class contentItem extends Object
+class contentItem extends BaseObject
 {
 	var $browser_title = null;
 	var $has_first_thumbnail_idx = false;

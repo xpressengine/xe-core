@@ -210,7 +210,7 @@ class CacheHandler extends Handler
 	 * 								If stored time is older then modified time, the data is invalid.
 	 * @return bool Return true on valid or false on invalid.
 	 */
-	function isValid($key, $modified_time)
+	function isValid($key, $modified_time = 0)
 	{
 		if(!$this->handler)
 		{

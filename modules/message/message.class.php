@@ -12,7 +12,7 @@ class message extends ModuleObject
 	 */
 	function moduleInstall()
 	{
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -21,17 +21,25 @@ class message extends ModuleObject
 	function checkUpdate()
 	{
 		$oModuleModel = getModel('module');
-		$config = $oModuleModel->getModuleConfig('message');
-
-		if($config->skin)
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
 		{
-			$config_parse = explode('.', $config->skin);
-			if (count($config_parse) > 1)
+			$config = $oModuleModel->getModuleConfig('message');
+
+			if($config->skin)
 			{
-				$template_path = sprintf('./themes/%s/modules/message/', $config_parse[0]);
-				if(is_dir($template_path)) return true;
+				$config_parse = explode('.', $config->skin);
+				if (count($config_parse) > 1)
+				{
+					$template_path = sprintf('./themes/%s/modules/message/', $config_parse[0]);
+					if(is_dir($template_path)) return true;
+				}
 			}
+
+			$oModuleController->insertUpdatedLog($version_update_id);
 		}
+
 		return false;
 	}
 
@@ -41,23 +49,30 @@ class message extends ModuleObject
 	function moduleUpdate()
 	{
 		$oModuleModel = getModel('module');
-		$config = $oModuleModel->getModuleConfig('message');
-
-		if($config->skin)
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
 		{
-			$config_parse = explode('.', $config->skin);
-			if (count($config_parse) > 1)
+			$config = $oModuleModel->getModuleConfig('message');
+
+			if($config->skin)
 			{
-				$template_path = sprintf('./themes/%s/modules/message/', $config_parse[0]);
-				if(is_dir($template_path))
+				$config_parse = explode('.', $config->skin);
+				if (count($config_parse) > 1)
 				{
-					$config->skin = implode('|@|', $config_parse);
-					$oModuleController = getController('module');
-					$oModuleController->updateModuleConfig('message', $config);
+					$template_path = sprintf('./themes/%s/modules/message/', $config_parse[0]);
+					if(is_dir($template_path))
+					{
+						$config->skin = implode('|@|', $config_parse);
+						$oModuleController = getController('module');
+						$oModuleController->updateModuleConfig('message', $config);
+					}
 				}
 			}
+
+			$oModuleController->insertUpdatedLog($version_update_id);
 		}
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**

@@ -10,7 +10,7 @@ class integration_search extends ModuleObject
 	/**
 	 * Implement if additional tasks are necessary when installing
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moduleInstall()
 	{
@@ -18,7 +18,7 @@ class integration_search extends ModuleObject
 		$oModuleController = getController('module');
 		$oModuleController->insertActionForward('integration_search', 'view', 'IS');
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -29,46 +29,61 @@ class integration_search extends ModuleObject
 	function checkUpdate() 
 	{
 		$oModuleModel = getModel('module');
-		$config = $oModuleModel->getModuleConfig('integration_search');
-
-		if($config->skin)
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
 		{
-			$config_parse = explode('.', $config->skin);
-			if(count($config_parse) > 1)
+			$config = $oModuleModel->getModuleConfig('integration_search');
+
+			if($config->skin)
 			{
-				$template_path = sprintf('./themes/%s/modules/integration_search/', $config_parse[0]);
-				if(is_dir($template_path)) return true;
+				$config_parse = explode('.', $config->skin);
+				if(count($config_parse) > 1)
+				{
+					$template_path = sprintf('./themes/%s/modules/integration_search/', $config_parse[0]);
+					if(is_dir($template_path)) return true;
+				}
 			}
+
+			$oModuleController->insertUpdatedLog($version_update_id);
 		}
+
 		return false;
 	}
 
 	/**
 	 * Execute update
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moduleUpdate() 
 	{
 		$oModuleModel = getModel('module');
-		$config = $oModuleModel->getModuleConfig('message');
-
-		if($config->skin)
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
 		{
-			$config_parse = explode('.', $config->skin);
-			if(count($config_parse) > 1)
+			$config = $oModuleModel->getModuleConfig('message');
+
+			if($config->skin)
 			{
-				$template_path = sprintf('./themes/%s/modules/integration_search/', $config_parse[0]);
-				if(is_dir($template_path))
+				$config_parse = explode('.', $config->skin);
+				if(count($config_parse) > 1)
 				{
-					$config->skin = implode('|@|', $config_parse);
-					$oModuleController = getController('module');
-					$oModuleController->updateModuleConfig('integration_search', $config);
+					$template_path = sprintf('./themes/%s/modules/integration_search/', $config_parse[0]);
+					if(is_dir($template_path))
+					{
+						$config->skin = implode('|@|', $config_parse);
+						$oModuleController = getController('module');
+						$oModuleController->updateModuleConfig('integration_search', $config);
+					}
 				}
 			}
+
+			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
-		return new Object(0, 'success_updated');
+		return new BaseObject(0, 'success_updated');
 	}
 
 	/**

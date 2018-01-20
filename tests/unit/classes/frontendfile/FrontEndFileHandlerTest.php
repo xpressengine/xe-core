@@ -12,6 +12,7 @@ class FrontEndFileHandlerTest extends \Codeception\TestCase\Test
 	{
 		// js(head)
 		$handler = new FrontEndFileHandler();
+		$expected = array();
 
 		$handler->loadFile(array('./common/js/jquery.js'));
 		$handler->loadFile(array('./common/js/js_app.js', 'head'));
@@ -22,17 +23,18 @@ class FrontEndFileHandlerTest extends \Codeception\TestCase\Test
 		if(__DEBUG__ || !__XE_VERSION_STABLE__)
 		{
 			$expected[] = array('file' => '/xe/common/js/jquery.js' . $this->_filemtime('common/js/jquery.js'), 'targetie' => null);
+			$expected[] = array('file' => '/xe/common/js/js_app.js' . $this->_filemtime('common/js/js_app.js'), 'targetie' => null);
+			$expected[] = array('file' => '/xe/common/js/common.js' . $this->_filemtime('common/js/common.js'), 'targetie' => null);
 		} else {
 			$expected[] = array('file' => '/xe/common/js/jquery.min.js' . $this->_filemtime('common/js/jquery.min.js'), 'targetie' => null);
 		}
-		$expected[] = array('file' => '/xe/common/js/js_app.js' . $this->_filemtime('common/js/js_app.js'), 'targetie' => null);
-		$expected[] = array('file' => '/xe/common/js/common.js' . $this->_filemtime('common/js/common.js'), 'targetie' => null);
 		$this->assertEquals($handler->getJsFileList(), $expected);
 	}
 
 	public function testFrontEndFileHandler002()
 	{
 		$handler = new FrontEndFileHandler();
+		$expected = array();
 
 		// js(body)
 		$handler->loadFile(array('./common/js/jquery.js', 'body'));
@@ -52,6 +54,7 @@ class FrontEndFileHandlerTest extends \Codeception\TestCase\Test
 	public function testFrontEndFileHandler003()
 	{
 		$handler = new FrontEndFileHandler();
+		$expected = array();
 
 		// css
 		$handler->loadFile(array('./common/css/xe.css'));
@@ -73,6 +76,7 @@ class FrontEndFileHandlerTest extends \Codeception\TestCase\Test
 	public function testFrontEndFileHandler004()
 	{
 		$handler = new FrontEndFileHandler();
+		$expected = array();
 
 		// order (duplicate)
 		$handler->loadFile(array('./common/js/jquery.js', 'head', '', -100000));
@@ -89,21 +93,22 @@ class FrontEndFileHandlerTest extends \Codeception\TestCase\Test
 		if(__DEBUG__ || !__XE_VERSION_STABLE__)
 		{
 			$expected[] = array('file' => '/xe/common/js/jquery.js' . $this->_filemtime('common/js/jquery.js'), 'targetie' => null);
+			$expected[] = array('file' => '/xe/common/js/js_app.js' . $this->_filemtime('common/js/js_app.js'), 'targetie' => null);
+			$expected[] = array('file' => '/xe/common/js/common.js' . $this->_filemtime('common/js/common.js'), 'targetie' => null);
+			$expected[] = array('file' => '/xe/common/js/xml_handler.js' . $this->_filemtime('common/js/xml_handler.js'), 'targetie' => null);
+			$expected[] = array('file' => '/xe/common/js/xml_js_filter.js' . $this->_filemtime('common/js/xml_js_filter.js'), 'targetie' => null);
 		}
 		else
 		{
 			$expected[] = array('file' => '/xe/common/js/jquery.min.js' . $this->_filemtime('common/js/jquery.min.js'), 'targetie' => null);
 		}
-		$expected[] = array('file' => '/xe/common/js/js_app.js' . $this->_filemtime('common/js/js_app.js'), 'targetie' => null);
-		$expected[] = array('file' => '/xe/common/js/common.js' . $this->_filemtime('common/js/common.js'), 'targetie' => null);
-		$expected[] = array('file' => '/xe/common/js/xml_handler.js' . $this->_filemtime('common/js/xml_handler.js'), 'targetie' => null);
-		$expected[] = array('file' => '/xe/common/js/xml_js_filter.js' . $this->_filemtime('common/js/xml_js_filter.js'), 'targetie' => null);
 		$this->assertEquals($handler->getJsFileList(), $expected);
 	}
 
 	public function testFrontEndFileHandler005()
 	{
 		$handler = new FrontEndFileHandler();
+		$expected = array();
 
 		// order (redefine)
 		$handler->loadFile(array('./common/js/xml_handler.js', 'head', '', 1));
@@ -115,21 +120,22 @@ class FrontEndFileHandlerTest extends \Codeception\TestCase\Test
 		if(__DEBUG__ || !__XE_VERSION_STABLE__)
 		{
 			$expected[] = array('file' => '/xe/common/js/jquery.js' . $this->_filemtime('common/js/jquery.js'), 'targetie' => null);
+			$expected[] = array('file' => '/xe/common/js/js_app.js' . $this->_filemtime('common/js/js_app.js'), 'targetie' => null);
+			$expected[] = array('file' => '/xe/common/js/common.js' . $this->_filemtime('common/js/common.js'), 'targetie' => null);
+			$expected[] = array('file' => '/xe/common/js/xml_js_filter.js' . $this->_filemtime('common/js/xml_js_filter.js'), 'targetie' => null);
+			$expected[] = array('file' => '/xe/common/js/xml_handler.js' . $this->_filemtime('common/js/xml_handler.js'), 'targetie' => null);
 		}
 		else
 		{
 			$expected[] = array('file' => '/xe/common/js/jquery.min.js' . $this->_filemtime('common/js/jquery.min.js'), 'targetie' => null);
 		}
-		$expected[] = array('file' => '/xe/common/js/js_app.js' . $this->_filemtime('common/js/js_app.js'), 'targetie' => null);
-		$expected[] = array('file' => '/xe/common/js/common.js' . $this->_filemtime('common/js/common.js'), 'targetie' => null);
-		$expected[] = array('file' => '/xe/common/js/xml_js_filter.js' . $this->_filemtime('common/js/xml_js_filter.js'), 'targetie' => null);
-		$expected[] = array('file' => '/xe/common/js/xml_handler.js' . $this->_filemtime('common/js/xml_handler.js'), 'targetie' => null);
 		$this->assertEquals($handler->getJsFileList(), $expected);
 	}
 
 	public function testFrontEndFileHandler006()
 	{
 		$handler = new FrontEndFileHandler();
+		$expected = array();
 
 		// unload
 		$handler->loadFile(array('./common/js/jquery.js', 'head', '', -100000));
@@ -139,10 +145,14 @@ class FrontEndFileHandlerTest extends \Codeception\TestCase\Test
 		$handler->loadFile(array('./common/js/xml_js_filter.js', 'head', '', -100000));
 		$handler->unloadFile('./common/js/jquery.js', '', 'all');
 
-		$expected[] = array('file' => '/xe/common/js/js_app.js' . $this->_filemtime('common/js/js_app.js'), 'targetie' => null);
-		$expected[] = array('file' => '/xe/common/js/common.js' . $this->_filemtime('common/js/common.js'), 'targetie' => null);
-		$expected[] = array('file' => '/xe/common/js/xml_handler.js' . $this->_filemtime('common/js/xml_handler.js'), 'targetie' => null);
-		$expected[] = array('file' => '/xe/common/js/xml_js_filter.js' . $this->_filemtime('common/js/xml_js_filter.js'), 'targetie' => null);
+		if(__DEBUG__ || !__XE_VERSION_STABLE__)
+		{
+			$expected[] = array('file' => '/xe/common/js/js_app.js' . $this->_filemtime('common/js/js_app.js'), 'targetie' => null);
+			$expected[] = array('file' => '/xe/common/js/common.js' . $this->_filemtime('common/js/common.js'), 'targetie' => null);
+			$expected[] = array('file' => '/xe/common/js/xml_handler.js' . $this->_filemtime('common/js/xml_handler.js'), 'targetie' => null);
+			$expected[] = array('file' => '/xe/common/js/xml_js_filter.js' . $this->_filemtime('common/js/xml_js_filter.js'), 'targetie' => null);
+		}
+
 		$this->assertEquals($handler->getJsFileList(), $expected);
 	}
 

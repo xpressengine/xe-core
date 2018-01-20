@@ -22,7 +22,7 @@ class Context
 
 	/**
 	 * Request method
-	 * @var string GET|POST|XMLRPC
+	 * @var string GET|POST|XMLRPC|JSON
 	 */
 	public $request_method = 'GET';
 
@@ -34,7 +34,7 @@ class Context
 
 	/**
 	 * Response method.If it's not set, it follows request method.
-	 * @var string HTML|XMLRPC
+	 * @var string HTML|XMLRPC|JSON|JS_CALLBACK
 	 */
 	public $response_method = '';
 
@@ -452,7 +452,9 @@ class Context
 			return;
 		}
 
+		ob_start(); // trash BOM
 		include($self::getConfigFile());
+		ob_end_clean();
 
 		// If master_db information does not exist, the config file needs to be updated
 		if(!isset($db_info->master_db))
@@ -1031,14 +1033,11 @@ class Context
 	function convertEncoding($source_obj)
 	{
 		$charset_list = array(
-			'UTF-8', 'EUC-KR', 'CP949', 'ISO8859-1', 'EUC-JP', 'SHIFT_JIS', 'CP932',
-			'EUC-CN', 'HZ', 'GBK', 'GB18030', 'EUC-TW', 'BIG5', 'CP950', 'BIG5-HKSCS',
-			'ISO2022-CN', 'ISO2022-CN-EXT', 'ISO2022-JP', 'ISO2022-JP-2', 'ISO2022-JP-1',
-			'ISO8859-6', 'ISO8859-8', 'JOHAB', 'ISO2022-KR', 'CP1255', 'CP1256', 'CP862',
-			'ASCII', 'ISO8859-1', 'ISO8850-2', 'ISO8850-3', 'ISO8850-4', 'ISO8850-5',
-			'ISO8850-7', 'ISO8850-9', 'ISO8850-10', 'ISO8850-13', 'ISO8850-14',
-			'ISO8850-15', 'ISO8850-16', 'CP1250', 'CP1251', 'CP1252', 'CP1253', 'CP1254',
-			'CP1257', 'CP850', 'CP866',
+			'UTF-8', 'EUC-KR', 'CP949', 'ISO8859-1', 'EUC-JP', 'SHIFT_JIS',
+			'CP932', 'EUC-CN', 'HZ', 'GBK', 'GB18030', 'EUC-TW', 'BIG5',
+			'CP950', 'BIG5-HKSCS', 'ISO8859-6', 'ISO8859-8', 'JOHAB', 'CP1255',
+			'CP1256', 'CP862', 'ASCII', 'ISO8859-1', 'CP1250', 'CP1251',
+			'CP1252', 'CP1253', 'CP1254', 'CP1257', 'CP850', 'CP866'
 		);
 
 		$obj = clone $source_obj;
@@ -1635,10 +1634,23 @@ class Context
 				array_shift($args_list);
 			}
 		}
-		else
+		elseif($_SERVER['REQUEST_METHOD'] == 'GET')
 		{
 			// Otherwise, make GET variables into array
 			$get_vars = get_object_vars($self->get_vars);
+		}
+		else
+		{
+			if(!!$self->get_vars->module) $get_vars['module'] = $self->get_vars->module;
+			if(!!$self->get_vars->mid) $get_vars['mid'] = $self->get_vars->mid;
+			if(!!$self->get_vars->act) $get_vars['act'] = $self->get_vars->act;
+			if(!!$self->get_vars->page) $get_vars['page'] = $self->get_vars->page;
+			if(!!$self->get_vars->search_target) $get_vars['search_target'] = $self->get_vars->search_target;
+			if(!!$self->get_vars->search_keyword) $get_vars['search_keyword'] = $self->get_vars->search_keyword;
+			if($get_vars['act'] == 'IS')
+			{
+				if(!!$self->get_vars->is_keyword) $get_vars['is_keyword'] = $self->get_vars->is_keyword;
+			}
 		}
 
 		// arrange args_list
@@ -1906,7 +1918,7 @@ class Context
 	 * Set a context value with a key
 	 *
 	 * @param string $key Key
-	 * @param string $val Value
+	 * @param mixed $val Value
 	 * @param mixed $set_to_get_vars If not FALSE, Set to get vars.
 	 * @return void
 	 */
@@ -1983,7 +1995,7 @@ class Context
 	/**
 	 * Return values from the GET/POST/XMLRPC
 	 *
-	 * @return Object Request variables.
+	 * @return BaseObject Request variables.
 	 */
 	function getRequestVars()
 	{

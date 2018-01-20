@@ -20,11 +20,11 @@ class admin extends ModuleObject
 
 	/**
 	 * Install admin module
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moduleInstall()
 	{
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -34,9 +34,17 @@ class admin extends ModuleObject
 	function checkUpdate()
 	{
 		$oDB = DB::getInstance();
-		if(!$oDB->isColumnExists("admin_favorite", "type"))
+		$oModuleModel = getModel('module');
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
 		{
-			return TRUE;
+			if(!$oDB->isColumnExists("admin_favorite", "type"))
+			{
+				return TRUE;
+			}
+
+			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
 		return FALSE;
@@ -44,31 +52,39 @@ class admin extends ModuleObject
 
 	/**
 	 * Update module
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function moduleUpdate()
 	{
 		$oDB = DB::getInstance();
-		if(!$oDB->isColumnExists("admin_favorite", "type"))
+		$oModuleModel = getModel('module');
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
 		{
-			$oAdminAdminModel = getAdminModel('admin');
-			$output = $oAdminAdminModel->getFavoriteList();
-			$favoriteList = $output->get('favoriteList');
-
-			$oDB->dropColumn('admin_favorite', 'admin_favorite_srl');
-			$oDB->addColumn('admin_favorite', "admin_favorite_srl", "number", 11, 0);
-			$oDB->addColumn('admin_favorite', "type", "varchar", 30, 'module');
-			if(is_array($favoriteList))
+			if(!$oDB->isColumnExists("admin_favorite", "type"))
 			{
-				$oAdminAdminController = getAdminController('admin');
-				$oAdminAdminController->_deleteAllFavorite();
-				foreach($favoriteList AS $key => $value)
+				$oAdminAdminModel = getAdminModel('admin');
+				$output = $oAdminAdminModel->getFavoriteList();
+				$favoriteList = $output->get('favoriteList');
+
+				$oDB->dropColumn('admin_favorite', 'admin_favorite_srl');
+				$oDB->addColumn('admin_favorite', "admin_favorite_srl", "number", 11, 0);
+				$oDB->addColumn('admin_favorite', "type", "varchar", 30, 'module');
+				if(is_array($favoriteList))
 				{
-					$oAdminAdminController->_insertFavorite($value->site_srl, $value->module);
+					$oAdminAdminController = getAdminController('admin');
+					$oAdminAdminController->_deleteAllFavorite();
+					foreach($favoriteList AS $key => $value)
+					{
+						$oAdminAdminController->_insertFavorite($value->site_srl, $value->module);
+					}
 				}
 			}
+			$oModuleController->insertUpdatedLog($version_update_id);
 		}
-		return new Object();
+
+		return new BaseObject();
 	}
 
 	/**

@@ -268,7 +268,7 @@ class moduleController extends module
 		if(isSiteID($domain))
 		{
 			$oModuleModel = getModel('module');
-			if($oModuleModel->isIDExists($domain, 0)) return new Object(-1,'msg_already_registed_vid');
+			if($oModuleModel->isIDExists($domain, 0)) return new BaseObject(-1,'msg_already_registed_vid');
 		}
 		else
 		{
@@ -284,7 +284,7 @@ class moduleController extends module
 		$columnList = array('modules.site_srl');
 		$oModuleModel = getModel('module');
 		$output = $oModuleModel->getSiteInfoByDomain($args->domain, $columnList);
-		if($output) return new Object(-1,'msg_already_registed_vid');
+		if($output) return new BaseObject(-1,'msg_already_registed_vid');
 
 		$output = executeQuery('module.insertSite', $args);
 		if(!$output->toBool()) return $output;
@@ -310,8 +310,8 @@ class moduleController extends module
 		if($site_info->domain != $args->domain)
 		{
 			$info = $oModuleModel->getSiteInfoByDomain($args->domain, $columnList);
-			if($info->site_srl && $info->site_srl != $args->site_srl) return new Object(-1,'msg_already_registed_domain');
-			if(isSiteID($args->domain) && $oModuleModel->isIDExists($args->domain)) return new Object(-1,'msg_already_registed_vid');
+			if($info->site_srl && $info->site_srl != $args->site_srl) return new BaseObject(-1,'msg_already_registed_domain');
+			if(isSiteID($args->domain) && $oModuleModel->isIDExists($args->domain)) return new BaseObject(-1,'msg_already_registed_vid');
 
 			if($args->domain && !isSiteID($args->domain))
 			{
@@ -345,7 +345,7 @@ class moduleController extends module
 		unset($args->act);
 		unset($args->page);
 		// Test mid value
-		if(!preg_match("/^[a-z][a-z0-9_]+$/i", $args->mid)) return new Object(-1, 'msg_limit_mid');
+		if(!preg_match("/^[a-z][a-z0-9_]+$/i", $args->mid)) return new BaseObject(-1, 'msg_limit_mid');
 		// Test variables (separate basic vars and other vars in modules)
 		$extra_vars = clone($args);
 		unset($extra_vars->module_srl);
@@ -371,7 +371,7 @@ class moduleController extends module
 		unset($extra_vars->footer_text);
 		$args = delObjectVars($args, $extra_vars);
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -393,7 +393,7 @@ class moduleController extends module
 		// Check whether the module name already exists
 		if(!$args->site_srl) $args->site_srl = 0;
 		$oModuleModel = getModel('module');
-		if($oModuleModel->isIDExists($args->mid, $args->site_srl)) return new Object(-1, 'msg_module_name_exists');
+		if($oModuleModel->isIDExists($args->mid, $args->site_srl)) return new BaseObject(-1, 'msg_module_name_exists');
 
 		// begin transaction
 		$oDB = &DB::getInstance();
@@ -443,7 +443,7 @@ class moduleController extends module
 
 		$args->browser_title = strip_tags($args->browser_title);
 
-		if($isMenuCreate == TRUE)
+		if($isMenuCreate === TRUE)
 		{
 			$menuArgs = new stdClass;
 			$menuArgs->menu_srl = $args->menu_srl;
@@ -507,6 +507,15 @@ class moduleController extends module
 	 */
 	function updateModule($args)
 	{
+		if(isset($args->isMenuCreate))
+		{
+			$isMenuCreate = $args->isMenuCreate;
+		}
+		else
+		{
+			$isMenuCreate = TRUE;
+		}
+		
 		$output = $this->arrangeModuleInfo($args, $extra_vars);
 		if(!$output->toBool()) return $output;
 		// begin transaction
@@ -529,7 +538,7 @@ class moduleController extends module
 		if(!$output->toBool() || $output->data->count)
 		{
 			$oDB->rollback();
-			return new Object(-1, 'msg_module_name_exists');
+			return new BaseObject(-1, 'msg_module_name_exists');
 		}
 
 		// default value
@@ -571,22 +580,25 @@ class moduleController extends module
 			return $output;
 		}
 
-		$menuArgs = new stdClass;
-		$menuArgs->url = $module_info->mid;
-		$menuArgs->site_srl = $module_info->site_srl;
-		$menuOutput = executeQueryArray('menu.getMenuItemByUrl', $menuArgs);
-		if($menuOutput->data && count($menuOutput->data))
+		if($isMenuCreate === TRUE)
 		{
-			$oMenuAdminController = getAdminController('menu');
-			foreach($menuOutput->data as $itemInfo)
+			$menuArgs = new stdClass;
+			$menuArgs->url = $module_info->mid;
+			$menuArgs->site_srl = $module_info->site_srl;
+			$menuOutput = executeQueryArray('menu.getMenuItemByUrl', $menuArgs);
+			if($menuOutput->data && count($menuOutput->data))
 			{
-				$itemInfo->url = $args->mid;
-
-				$updateMenuItemOutput = $oMenuAdminController->updateMenuItem($itemInfo);
-				if(!$updateMenuItemOutput->toBool())
+				$oMenuAdminController = getAdminController('menu');
+				foreach($menuOutput->data as $itemInfo)
 				{
-					$oDB->rollback();
-					return $updateMenuItemOutput;
+					$itemInfo->url = $args->mid;
+	
+					$updateMenuItemOutput = $oMenuAdminController->updateMenuItem($itemInfo);
+					if(!$updateMenuItemOutput->toBool())
+					{
+						$oDB->rollback();
+						return $updateMenuItemOutput;
+					}
 				}
 			}
 		}
@@ -612,6 +624,22 @@ class moduleController extends module
 		}
 
 		return $output;
+	}
+
+	/**
+	 * @brief 업데이트 기록 저장
+	 * @param string $update_id
+	 * @return Boolean
+	 */
+	public function insertUpdatedLog($update_id)
+	{
+		$args = new stdClass();
+		$args->update_id = $update_id;
+		$output = executeQuery('module.insertModuleUpdateLog', $args);
+
+		if(!!$output->error) return false;
+
+		return true;
 	}
 
 	/**
@@ -643,7 +671,7 @@ class moduleController extends module
 	 */
 	function deleteModule($module_srl, $site_srl = 0)
 	{
-		if(!$module_srl) return new Object(-1,'msg_invalid_request');
+		if(!$module_srl) return new BaseObject(-1,'msg_invalid_request');
 
 		$site_module_info = Context::get('site_module_info');
 
@@ -686,11 +714,11 @@ class moduleController extends module
 
 			if($output->isSuccess)
 			{
-				return new Object(0, 'success_deleted');
+				return new BaseObject(0, 'success_deleted');
 			}
 			else
 			{
-				return new Object($output->error, $output->message);
+				return new BaseObject($output->error, $output->message);
 			}
 		}
 		// only delete module
@@ -706,13 +734,13 @@ class moduleController extends module
 	 */
 	public function onlyDeleteModule($module_srl)
 	{
-		if(!$module_srl) return new Object(-1,'msg_invalid_request');
+		if(!$module_srl) return new BaseObject(-1,'msg_invalid_request');
 
 		// check start module
 		$oModuleModel = getModel('module');
 		$columnList = array('sites.index_module_srl');
 		$start_module = $oModuleModel->getSiteInfo(0, $columnList);
-		if($module_srl == $start_module->index_module_srl) return new Object(-1, 'msg_cannot_delete_startmodule');
+		if($module_srl == $start_module->index_module_srl) return new BaseObject(-1, 'msg_cannot_delete_startmodule');
 
 		// Call a trigger (before)
 		$trigger_obj = new stdClass();
@@ -770,7 +798,7 @@ class moduleController extends module
 	 */
 	function updateModuleSkinVars($module_srl, $skin_vars)
 	{
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -840,13 +868,13 @@ class moduleController extends module
 
 		if(!$output->toBool()) return $output;
 		// Get user id of an administrator
-		if(!is_array($arr_admins) || !count($arr_admins)) return new Object();
+		if(!is_array($arr_admins) || !count($arr_admins)) return new BaseObject();
 		foreach($arr_admins as $key => $user_id)
 		{
 			if(!trim($user_id)) continue;
 			$admins[] = trim($user_id);
 		}
-		if(!count($admins)) return new Object();
+		if(!count($admins)) return new BaseObject();
 
 		$oMemberModel = getModel('member');
 		$member_config = $oMemberModel->getMemberConfig();
@@ -870,7 +898,7 @@ class moduleController extends module
 			$output = executeQueryArray('module.insertSiteAdmin', $args);
 			if(!$output->toBool()) return $output;
 		}
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -949,7 +977,7 @@ class moduleController extends module
 		}
 
 		getDestroyXeVars($obj);
-		if(!$obj || !count($obj)) return new Object();
+		if(!$obj || !count($obj)) return new BaseObject();
 
 		$args = new stdClass;
 		$args->module_srl = $module_srl;
@@ -983,7 +1011,7 @@ class moduleController extends module
 
 		$oDB->commit();
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -1133,9 +1161,10 @@ class moduleController extends module
 
 	function _replaceLangCode($matches)
 	{
-		static $lang = null;
+		static $lang = false;
 
-		if(is_null($lang))
+		$oCacheHandler = CacheHandler::getInstance('object', null, true);
+		if($lang === false && $oCacheHandler->isSupport())
 		{
 			$site_module_info = Context::get('site_module_info');
 			if(!$site_module_info)
@@ -1144,26 +1173,17 @@ class moduleController extends module
 				$site_module_info = $oModuleModel->getDefaultMid();
 				Context::set('site_module_info', $site_module_info);
 			}
-			$cache_file = sprintf('%sfiles/cache/lang_defined/%d.%s.php', _XE_PATH_, $site_module_info->site_srl, Context::getLangType());
-			if(!file_exists($cache_file))
-			{
+
+			$object_key = 'user_defined_langs:' . $site_module_info->site_srl . ':' . Context::getLangType();
+			$cache_key = $oCacheHandler->getGroupKey('site_and_module', $object_key);
+			$lang = $oCacheHandler->get($cache_key);
+
+			if($lang === false) {
 				$oModuleAdminController = getAdminController('module');
-				$oModuleAdminController->makeCacheDefinedLangCode($site_module_info->site_srl);
-			}
-
-			if(file_exists($cache_file))
-			{
-				$moduleAdminControllerMtime = filemtime(_XE_PATH_ . 'modules/module/module.admin.controller.php');
-				$cacheFileMtime = filemtime($cache_file);
-				if($cacheFileMtime < $moduleAdminControllerMtime)
-				{
-					$oModuleAdminController = getAdminController('module');
-					$oModuleAdminController->makeCacheDefinedLangCode($site_module_info->site_srl);
-				}
-
-				require_once($cache_file);
+				$lang = $oModuleAdminController->makeCacheDefinedLangCode($site_module_info->site_srl);
 			}
 		}
+
 		if(!Context::get($matches[1]) && $lang[$matches[1]]) return $lang[$matches[1]];
 
 		return str_replace('$user_lang->','',$matches[0]);
@@ -1179,7 +1199,7 @@ class moduleController extends module
 		if ($ajax) Context::setRequestMethod('JSON');
 
 		$logged_info = Context::get('logged_info');
-		if($logged_info->is_admin !='Y' && !$logged_info->is_site_admin) return new Object(-1, 'msg_not_permitted');
+		if($logged_info->is_admin !='Y' && !$logged_info->is_site_admin) return new BaseObject(-1, 'msg_not_permitted');
 
 		$vars = Context::gets('addfile','filter');
 		$attributeNames = Context::get('attribute_name');
@@ -1205,7 +1225,7 @@ class moduleController extends module
 		$vars->ext = $ext;
 		if($vars->filter) $filter = explode(',',$vars->filter);
 		else $filter = array('jpg','jpeg','gif','png');
-		if(!in_array($ext,$filter)) return new Object(-1, 'msg_error_occured');
+		if(!in_array($ext,$filter)) return new BaseObject(-1, 'msg_error_occured');
 
 		$vars->member_srl = $logged_info->member_srl;
 
@@ -1218,10 +1238,10 @@ class moduleController extends module
 		// insert
 		else
 		{
-			if(!Context::isUploaded()) return new Object(-1, 'msg_error_occured');
+			if(!Context::isUploaded()) return new BaseObject(-1, 'msg_error_occured');
 			$addfile = Context::get('addfile');
-			if(!is_uploaded_file($addfile['tmp_name'])) return new Object(-1, 'msg_error_occured');
-			if($vars->addfile['error'] != 0) return new Object(-1, 'msg_error_occured');
+			if(!is_uploaded_file($addfile['tmp_name'])) return new BaseObject(-1, 'msg_error_occured');
+			if($vars->addfile['error'] != 0) return new BaseObject(-1, 'msg_error_occured');
 			$output = $this->insertModuleFileBox($vars);
 		}
 
@@ -1326,10 +1346,10 @@ class moduleController extends module
 	function procModuleFileBoxDelete()
 	{
 		$logged_info = Context::get('logged_info');
-		if($logged_info->is_admin !='Y' && !$logged_info->is_site_admin) return new Object(-1, 'msg_not_permitted');
+		if($logged_info->is_admin !='Y' && !$logged_info->is_site_admin) return new BaseObject(-1, 'msg_not_permitted');
 
 		$module_filebox_srl = Context::get('module_filebox_srl');
-		if(!$module_filebox_srl) return new Object(-1, 'msg_invalid_request');
+		if(!$module_filebox_srl) return new BaseObject(-1, 'msg_invalid_request');
 		$vars = new stdClass();
 		$vars->module_filebox_srl = $module_filebox_srl;
 		$output = $this->deleteModuleFileBox($vars);

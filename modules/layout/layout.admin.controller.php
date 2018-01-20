@@ -19,7 +19,7 @@ class layoutAdminController extends layout
 	 * Create a new layout
 	 * Insert a title into "layouts" table in order to create a layout
 	 * @deprecated 
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procLayoutAdminInsert()
 	{
@@ -52,7 +52,7 @@ class layoutAdminController extends layout
 	/**
 	 * Insert layout information into the DB
 	 * @param object $args layout information
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function insertLayout($args)
 	{
@@ -84,7 +84,7 @@ class layoutAdminController extends layout
 	/**
 	 * Update layout information
 	 * Apply a title of the new layout and extra vars
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function procLayoutAdminUpdate()
 	{
@@ -129,7 +129,7 @@ class layoutAdminController extends layout
 					$output = executeQuery('menu.getMenuItemByUrl', $tmpArgs);
 					if(!$output->toBool())
 					{
-						return new Object(-1, 'fail_to_update');
+						return new BaseObject(-1, 'fail_to_update');
 					}
 
 					$menu_srl = $output->data->menu_srl;
@@ -254,7 +254,7 @@ class layoutAdminController extends layout
 	/**
 	 * Update layout information into the DB
 	 * @param object $args
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function updateLayout($args) {
 		$output = executeQuery('layout.updateLayout', $args);
@@ -271,7 +271,7 @@ class layoutAdminController extends layout
 	/**
 	 * Delete Layout
 	 * Delete xml cache file too when deleting a layout
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function procLayoutAdminDelete()
 	{
@@ -283,7 +283,7 @@ class layoutAdminController extends layout
 	/**
 	 * Delete layout xml cache file
 	 * @param int $layout_srl
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function deleteLayout($layout_srl, $force = FALSE)
 	{
@@ -315,7 +315,7 @@ class layoutAdminController extends layout
 
 					if(!$output->toBool())
 					{
-						return new Object(-1, $output->message);
+						return new BaseObject(-1, $output->message);
 					}
 				}
 			}
@@ -333,12 +333,12 @@ class layoutAdminController extends layout
 
 		if(!$output->toBool()) return $output;
 
-		return new Object(0,'success_deleted');
+		return new BaseObject(0,'success_deleted');
 	}
 
 	/**
 	 * Adding Layout Code
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procLayoutAdminCodeUpdate()
 	{
@@ -355,7 +355,7 @@ class layoutAdminController extends layout
 
 		if(!$layout_srl || !$code || !$is_post)
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		$oLayoutModel = getModel('layout');
@@ -371,12 +371,12 @@ class layoutAdminController extends layout
 
 	/**
 	 * Reset layout code
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procLayoutAdminCodeReset()
 	{
 		$layout_srl = Context::get('layout_srl');
-		if(!$layout_srl) return new Object(-1, 'msg_invalid_request');
+		if(!$layout_srl) return new BaseObject(-1, 'msg_invalid_request');
 
 		// delete user layout file
 		$oLayoutModel = getModel('layout');
@@ -475,20 +475,20 @@ class layoutAdminController extends layout
 	 * Save layout configuration
 	 * save in "ini" format for faceoff
 	 * @deprecated
-	 * @return void|Object (void : success, Object : fail)
+	 * @return void|BaseObject (void : success, BaseObject : fail)
 	 */
 	function procLayoutAdminUserValueInsert()
 	{
 		$oModuleModel = getModel('module');
 
 		$mid = Context::get('mid');
-		if(!$mid) return new Object(-1, 'msg_invalid_request');
+		if(!$mid) return new BaseObject(-1, 'msg_invalid_request');
 
 		$site_module_info = Context::get('site_module_info');
 		$columnList = array('layout_srl');
 		$module_info = $oModuleModel->getModuleInfoByMid($mid, $site_module_info->site_srl, $columnList);
 		$layout_srl = $module_info->layout_srl;
-		if(!$layout_srl) return new Object(-1, 'msg_invalid_request');
+		if(!$layout_srl) return new BaseObject(-1, 'msg_invalid_request');
 
 		$oLayoutModel = getModel('layout');
 
@@ -591,7 +591,7 @@ class layoutAdminController extends layout
 	function procLayoutAdminUserLayoutExport()
 	{
 		$layout_srl = Context::get('layout_srl');
-		if(!$layout_srl) return new Object('-1','msg_invalid_request');
+		if(!$layout_srl) return new BaseObject('-1','msg_invalid_request');
 
 		require_once(_XE_PATH_.'libs/tar.class.php');
 		$oLayoutModel = getModel('layout');
@@ -933,7 +933,7 @@ class layoutAdminController extends layout
 			return;
 		}
 
-		if(!preg_match('/\.(jpg|jpeg|gif|png|swf)$/i', $img['name']))
+		if(!preg_match('/\.(jpg|jpeg|gif|png)$/i', $img['name']))
 		{
 			Context::set('msg', Context::getLang('msg_layout_image_target'));
 			return;

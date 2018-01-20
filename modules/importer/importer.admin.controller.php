@@ -291,12 +291,12 @@ class importerAdminController extends importer
 		$this->unit_count = Context::get('unit_count');
 		// Check if an index file exists
 		$index_file = './files/cache/importer/'.$key.'/index';
-		if(!file_exists($index_file)) return new Object(-1, 'msg_invalid_xml_file');
+		if(!file_exists($index_file)) return new BaseObject(-1, 'msg_invalid_xml_file');
 
 		switch($type)
 		{
 			case 'ttxml' :
-				if(!$target_module) return new Object(-1,'msg_invalid_request');
+				if(!$target_module) return new BaseObject(-1,'msg_invalid_request');
 
 				$oModuleModel = getModel('module');
 				$columnList = array('module_srl', 'module');
@@ -316,7 +316,7 @@ class importerAdminController extends importer
 				break;
 			case 'module' :
 				// Check if the target module exists
-				if(!$target_module) return new Object(-1,'msg_invalid_request');
+				if(!$target_module) return new BaseObject(-1,'msg_invalid_request');
 				$cur = $this->importModule($key, $cur, $index_file, $target_module);
 				break;
 		}
@@ -371,7 +371,7 @@ class importerAdminController extends importer
 			FileHandler::removeFile($target_file);
 			if(!$xmlObj) continue;
 			// List Objects
-			$obj = null;
+			$obj = new stdClass();
 			$obj->user_id = base64_decode($xmlObj->member->user_id->body);
 			$obj->password = base64_decode($xmlObj->member->password->body);
 			$obj->user_name = base64_decode($xmlObj->member->user_name->body);
@@ -1057,7 +1057,7 @@ class importerAdminController extends importer
 				{
 					$random = new Password();
 					// Set upload path by checking if the attachement is an image or other kind of file
-					if(preg_match("/\.(jpe?g|gif|png|wm[va]|mpe?g|avi|swf|flv|mp[1-4]|as[fx]|wav|midi?|moo?v|qt|r[am]{1,2}|m4v)$/i", $file_obj->source_filename))
+					if(preg_match("/\.(jpe?g|gif|png|wm[va]|mpe?g|avi|flv|mp[1-4]|as[fx]|wav|midi?|moo?v|qt|r[am]{1,2}|m4v)$/i", $file_obj->source_filename))
 					{
 						// Immediately remove the direct file if it has any kind of extensions for hacking
 						$file_obj->source_filename = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|jsp|asp|inc)/i', '$0-x', $file_obj->source_filename);

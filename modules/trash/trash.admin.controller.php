@@ -13,13 +13,13 @@ class trashAdminController extends trash
 	/**
 	 * object insert to trash
 	 * @param TrashVO $obj
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function insertTrash($obj)
 	{
 		if(!Context::get('is_logged'))
 		{
-			return new Object(-1, 'msg_not_permitted');
+			return new BaseObject(-1, 'msg_not_permitted');
 		}
 
 		$logged_info = Context::get('logged_info');
@@ -39,7 +39,7 @@ class trashAdminController extends trash
 	/**
 	 * Empty trash
 	 * @param array trashSrls
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function procTrashAdminEmptyTrash()
 	{
@@ -57,9 +57,9 @@ class trashAdminController extends trash
 
 		//module relation data delete...
 		$output = $this->_relationDataDelete($isAll, $trashSrls);
-		if(!$output->toBool()) return new Object(-1, $output->message);
+		if(!$output->toBool()) return new BaseObject(-1, $output->message);
 
-		if(!$this->_emptyTrash($trashSrls)) return new Object(-1, $lang->fail_empty);
+		if(!$this->_emptyTrash($trashSrls)) return new BaseObject(-1, $lang->fail_empty);
 
 		$this->setMessage('success_deleted', 'info');
 
@@ -71,7 +71,7 @@ class trashAdminController extends trash
 	 * Empty trash - private method
 	 * @param string $isAll
 	 * @param array trashSrls
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function _relationDataDelete($isAll, &$trashSrls)
 	{
@@ -81,7 +81,7 @@ class trashAdminController extends trash
 			$output = $oTrashModel->getTrashAllList(array());
 			if(!$output->toBool())
 			{
-				return new Object(-1, $output->message);
+				return new BaseObject(-1, $output->message);
 			}
 
 			if(is_array($output->data))
@@ -99,7 +99,7 @@ class trashAdminController extends trash
 			$output = $oTrashModel->getTrashList($args);
 			if(!$output->toBool())
 			{
-				return new Object(-1, $output->message);
+				return new BaseObject(-1, $output->message);
 			}
 		}
 
@@ -109,25 +109,25 @@ class trashAdminController extends trash
 			{
 				//class file check
 				$classPath = ModuleHandler::getModulePath($oTrashVO->getOriginModule());
-				if(!is_dir(FileHandler::getRealPath($classPath))) return new Object(-1, 'not exist restore module directory');
+				if(!is_dir(FileHandler::getRealPath($classPath))) return new BaseObject(-1, 'not exist restore module directory');
 
 				$classFile = sprintf('%s%s.admin.controller.php', $classPath, $oTrashVO->getOriginModule());
 				$classFile = FileHandler::getRealPath($classFile);
-				if(!file_exists($classFile)) return new Object(-1, 'not exist restore module class file');
+				if(!file_exists($classFile)) return new BaseObject(-1, 'not exist restore module class file');
 
 				$oAdminController = getAdminController($oTrashVO->getOriginModule());
-				if(!method_exists($oAdminController, 'emptyTrash')) return new Object(-1, 'not exist restore method in module class file');
+				if(!method_exists($oAdminController, 'emptyTrash')) return new BaseObject(-1, 'not exist restore method in module class file');
 
 				$output2 = $oAdminController->emptyTrash($oTrashVO->getSerializedObject());
-				if(!$output2->toBool()) return new Object(-1, $output2->message);
+				if(!$output2->toBool()) return new BaseObject(-1, $output2->message);
 			}
 		}
-		return new Object(0, $lang->success_deleted);
+		return new BaseObject(0, $lang->success_deleted);
 	}
 
 	/**
 	 * Restore content object
-	 * @return void|Object
+	 * @return void|BaseObject
 	 */
 	function procTrashAdminRestore()
 	{
@@ -144,18 +144,18 @@ class trashAdminController extends trash
 			{
 				$oTrashModel = getModel('trash');
 				$output = $oTrashModel->getTrash($value);
-				if(!$output->toBool()) return new Object(-1, $output->message);
+				if(!$output->toBool()) return new BaseObject(-1, $output->message);
 
 				//class file check
 				$classPath = ModuleHandler::getModulePath($output->data->getOriginModule());
-				if(!is_dir(FileHandler::getRealPath($classPath))) return new Object(-1, 'not exist restore module directory');
+				if(!is_dir(FileHandler::getRealPath($classPath))) return new BaseObject(-1, 'not exist restore module directory');
 
 				$classFile = sprintf('%s%s.admin.controller.php', $classPath, $output->data->getOriginModule());
 				$classFile = FileHandler::getRealPath($classFile);
-				if(!file_exists($classFile)) return new Object(-1, 'not exist restore module class file');
+				if(!file_exists($classFile)) return new BaseObject(-1, 'not exist restore module class file');
 
 				$oAdminController = getAdminController($output->data->getOriginModule());
-				if(!method_exists($oAdminController, 'restoreTrash')) return new Object(-1, 'not exist restore method in module class file');
+				if(!method_exists($oAdminController, 'restoreTrash')) return new BaseObject(-1, 'not exist restore method in module class file');
 
 				$originObject = unserialize($output->data->getSerializedObject());
 				$output = $oAdminController->restoreTrash($originObject);
@@ -163,14 +163,14 @@ class trashAdminController extends trash
 				if(!$output->toBool())
 				{
 					$oDB->rollback();
-					return new Object(-1, $output->message);
+					return new BaseObject(-1, $output->message);
 				}
 			}
 
 			// restore object delete in trash box
 			if(!$this->_emptyTrash($trashSrlList)) {
 				$oDB->rollback();
-				return new Object(-1, $lang->fail_empty);
+				return new BaseObject(-1, $lang->fail_empty);
 			}
 			$oDB->commit();
 		}
@@ -183,11 +183,11 @@ class trashAdminController extends trash
 
 	/**
 	 * Set trash list to Context
-	 * @return void|Object
+	 * @return void|BaseObject
 	 */
 	function procTrashAdminGetList()
 	{
-		if(!Context::get('is_logged')) return new Object(-1,'msg_not_permitted');
+		if(!Context::get('is_logged')) return new BaseObject(-1,'msg_not_permitted');
 		$trashSrls = Context::get('trash_srls');
 		if($trashSrls) $trashSrlList = explode(',', $trashSrls);
 

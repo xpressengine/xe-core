@@ -37,6 +37,11 @@
 		init : function() {
 			var self = this;
 
+			// @see https://github.com/xpressengine/xe-core/issues/2207
+			if(CKEDITOR.env.iOS) {
+				default_ckeconfig.removePlugins += ',enterkey';
+			}
+
 			CKEDITOR.on('instanceCreated', function(evt){
 				self.cast('CKEDITOR_CREATED');
 			});

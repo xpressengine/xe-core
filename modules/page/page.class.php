@@ -15,7 +15,7 @@ class page extends ModuleObject
 		// page generated from the cache directory to use
 		FileHandler::makeDir('./files/cache/page');
 
-		return new Object();
+		return new BaseObject();
 	}
 
 	/**
@@ -23,11 +23,19 @@ class page extends ModuleObject
 	 */
 	function checkUpdate()
 	{
-		$output = executeQuery('page.pageTypeOpageCheck');
-		if($output->toBool() && $output->data) return true;
+		$oModuleModel = getModel('module');
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
+		{
+			$output = executeQuery('page.pageTypeOpageCheck');
+			if($output->toBool() && $output->data) return true;
 
-		$output = executeQuery('page.pageTypeNullCheck');
-		if($output->toBool() && $output->data) return true;
+			$output = executeQuery('page.pageTypeNullCheck');
+			if($output->toBool() && $output->data) return true;
+
+			$oModuleController->insertUpdatedLog($version_update_id);
+		}
 
 		return false;
 	}
@@ -37,46 +45,55 @@ class page extends ModuleObject
 	 */
 	function moduleUpdate()
 	{
-		$args = new stdClass;
-		// opage module instance update
-		$output = executeQueryArray('page.pageTypeOpageCheck');
-		if($output->toBool() && count($output->data) > 0)
+		$oModuleModel = getModel('module');
+		$oModuleController = getController('module');
+		$version_update_id = implode('.', array(__CLASS__, __XE_VERSION__, 'updated'));
+		if($oModuleModel->needUpdate($version_update_id))
 		{
-			foreach($output->data as $val)
+			$args = new stdClass;
+			// opage module instance update
+			$output = executeQueryArray('page.pageTypeOpageCheck');
+			if($output->toBool() && count($output->data) > 0)
 			{
-				$args->module_srl = $val->module_srl;
-				$args->name = 'page_type';
-				$args->value= 'OUTSIDE';
-				$in_out = executeQuery('page.insertPageType', $args);
+				foreach($output->data as $val)
+				{
+					$args->module_srl = $val->module_srl;
+					$args->name = 'page_type';
+					$args->value= 'OUTSIDE';
+					$in_out = executeQuery('page.insertPageType', $args);
+				}
+				$output = executeQuery('page.updateAllOpage');
+				if(!$output->toBool()) return $output;
 			}
-			$output = executeQuery('page.updateAllOpage');
-			if(!$output->toBool()) return $output;
-		}
 
-		// old page module instance update
-		$output = executeQueryArray('page.pageTypeNullCheck');
-		$skin_update_srls = array();
-		if($output->toBool() && $output->data)
-		{
-			foreach($output->data as $val)
+			// old page module instance update
+			$output = executeQueryArray('page.pageTypeNullCheck');
+			$skin_update_srls = array();
+			if($output->toBool() && $output->data)
 			{
-				$args->module_srl = $val->module_srl;
-				$args->name = 'page_type';
-				$args->value= 'WIDGET';
-				$in_out = executeQuery('page.insertPageType', $args);
+				foreach($output->data as $val)
+				{
+					$args->module_srl = $val->module_srl;
+					$args->name = 'page_type';
+					$args->value= 'WIDGET';
+					$in_out = executeQuery('page.insertPageType', $args);
 
-				$skin_update_srls[] = $val->module_srl;
+					$skin_update_srls[] = $val->module_srl;
+				}
 			}
+
+			if(count($skin_update_srls)>0)
+			{
+				$skin_args = new stdClass;
+				$skin_args->module_srls = implode(',',$skin_update_srls);
+				$skin_args->is_skin_fix = "Y";
+				$ouput = executeQuery('page.updateSkinFix', $skin_args);
+			}
+
+			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
-		if(count($skin_update_srls)>0)
-		{
-			$skin_args = new stdClass;
-			$skin_args->module_srls = implode(',',$skin_update_srls);
-			$skin_args->is_skin_fix = "Y";
-			$ouput = executeQuery('page.updateSkinFix', $skin_args);
-		}
-		return new Object(0,'success_updated');
+		return new BaseObject(0,'success_updated');
 	}
 
 	/**

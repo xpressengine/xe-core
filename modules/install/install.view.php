@@ -214,6 +214,11 @@ class installView extends install
 			return $this->dispInstallCheckEnv();
 		}
 
+		Context::loadLang('modules/member/lang');
+		$message = Context::getLang('about_password_strength');
+
+		Context::setLang('msg_password_strength', $message['high']);
+
 		$this->setTemplateFile('admin_form');
 	}
 }

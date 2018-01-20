@@ -1,13 +1,20 @@
 jQuery(function($){
 	$('button.captchaPlay')
 		.click(function(){
-			var swf = document['captcha_audio'] || window['captcha_audio'];
-			var audio = current_url.setQuery('captcha_action','captchaAudio').setQuery('rand', (new Date).getTime());
+			var audioURL = current_url.setQuery('captcha_action','captchaAudio').setQuery('rand', (new Date).getTime());
 
-			if(swf.length > 1) swf = swf[0];
+			if(Modernizr.audio || Modernizr.audio.mp3) {
+				var objAudio = new Audio(audioURL);
+				objAudio.play();
+			} else {
+				var swf = document.querySelector('#captcha_audio_flash');
+				if(!swf) return;
 
-			$('input[type=text]#secret_text').focus();
-			swf.setSoundTarget(audio,'1');
+				if(swf.length > 1) swf = swf[0];
+
+				$('input[type=text]#secret_text').focus();
+				swf.setSoundTarget(audioURL, '1');
+			}
 		});
 
 	$('button.captchaReload')

@@ -207,7 +207,7 @@ class editorModel extends editor
 		// content_style setting
 		if(!$option->content_style) $option->content_style = 'ckeditor_light';
 		Context::set('content_style', $option->content_style);
-		Context::set('content_style_path', $this->module_path . 'styles/' . $option->content_style);
+		Context::set('content_style_path', getScriptPath() . ltrim($this->module_path, './') . 'styles/' . $option->content_style);
 		// Default font setting
 		Context::set('content_font', addslashes($option->content_font));
 		Context::set('content_font_size', $option->content_font_size);
@@ -547,11 +547,11 @@ class editorModel extends editor
 			// Create an object of the component and execute
 			$class_path = sprintf('%scomponents/%s/', $this->module_path, $component);
 			$class_file = sprintf('%s%s.class.php', $class_path, $component);
-			if(!file_exists($class_file)) return new Object(-1, sprintf(Context::getLang('msg_component_is_not_founded'), $component));
+			if(!file_exists($class_file)) return new BaseObject(-1, sprintf(Context::getLang('msg_component_is_not_founded'), $component));
 			// Create an object after loading the class file
 			require_once($class_file);
 			$oComponent = new $component($editor_sequence, $class_path);
-			if(!$oComponent) return new Object(-1, sprintf(Context::getLang('msg_component_is_not_founded'), $component));
+			if(!$oComponent) return new BaseObject(-1, sprintf(Context::getLang('msg_component_is_not_founded'), $component));
 			// Add configuration information
 			$component_info = $this->getComponent($component, $site_srl);
 			$oComponent->setInfo($component_info);
@@ -674,6 +674,8 @@ class editorModel extends editor
 			$output = executeQuery('editor.getComponent', $args);
 		}
 		$component = $output->data;
+
+		if(!$output->data) return false;
 
 		$component_name = $component->component_name;
 

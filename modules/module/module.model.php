@@ -257,7 +257,7 @@ class moduleModel extends module
 	 *
 	 * @params int $menu_item_srl
 	 *
-	 * @return Object $moduleInfo
+	 * @return BaseObject $moduleInfo
 	 */
 	public function getModuleInfoByMenuItemSrl($menu_item_srl = 0)
 	{
@@ -1559,6 +1559,26 @@ class moduleModel extends module
 	}
 
 	/**
+	 * @brief 업데이트 적용 여부 확인
+	 * @param array|string $update_id
+	 * @return Boolean
+	 */
+	public function needUpdate($update_id)
+	{
+		if(!is_array($update_id)) $update_id = array($update_id);
+
+		$args = new stdClass();
+		$args->update_id = implode(',', $update_id);
+		$output = executeQueryArray('module.getModuleUpdateLog', $args);
+
+		if(!!$output->error) return false;
+		if(!$output->data) $output->data = array();
+		if(count($update_id) === count($output->data)) return false;
+
+		return true;
+	}
+
+	/**
 	 * @brief Get a type and information of the module
 	 */
 	function getModuleList()
@@ -2074,6 +2094,11 @@ class moduleModel extends module
 							}
 							// All of non-logged members
 						}
+						elseif($val->group_srl == -3)
+						{
+							$granted[$val->name] = true;
+							$grant->{$val->name} = ($grant->is_admin || $grant->is_site_admin);
+						}
 						elseif($val->group_srl == 0)
 						{
 							$granted[$val->name] = true;
@@ -2190,7 +2215,7 @@ class moduleModel extends module
 	function getFileBoxListHtml()
 	{
 		$logged_info = Context::get('logged_info');
-		if($logged_info->is_admin !='Y' && !$logged_info->is_site_admin) return new Object(-1, 'msg_not_permitted');
+		if($logged_info->is_admin !='Y' && !$logged_info->is_site_admin) return new BaseObject(-1, 'msg_not_permitted');
 		$link = parse_url($_SERVER["HTTP_REFERER"]);
 		$link_params = explode('&',$link['query']);
 		foreach ($link_params as $param)

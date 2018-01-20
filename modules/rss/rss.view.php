@@ -20,7 +20,7 @@ class rssView extends rss
 	 * Feed output.
 	 * When trying to directly print out the RSS, the results variable can be directly specified through $oRssView->rss($document_list)
 	 *
-	 * @param Object $document_list Document list 
+	 * @param BaseObject $document_list Document list 
 	 * @param string $rss_title Rss title
 	 * @param string $add_description Add description
 	 */
@@ -212,7 +212,7 @@ class rssView extends rss
 	/**
 	 * ATOM output
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function atom()
 	{
@@ -223,7 +223,7 @@ class rssView extends rss
 	/**
 	 * Error output
 	 *
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function dispError()
 	{
@@ -236,7 +236,7 @@ class rssView extends rss
 	 * Receive the form for the form used by rss
 	 *
 	 * @param string $obj Will be inserted content in template
-	 * @return Object
+	 * @return BaseObject
 	 */
 	function triggerDispRssAdditionSetup(&$obj)
 	{
@@ -248,7 +248,7 @@ class rssView extends rss
 			// Get information of the selected module
 			$current_module_info = Context::get('current_module_info');
 			$current_module_srl = $current_module_info->module_srl;
-			if(!$current_module_srl) return new Object();
+			if(!$current_module_srl) return new BaseObject();
 		}
 		// Get teh RSS configurations for the selected module
 		$oRssModel = getModel('rss');
@@ -259,7 +259,7 @@ class rssView extends rss
 		$tpl = $oTemplate->compile($this->module_path.'tpl', 'rss_module_config');
 		$obj .= $tpl;
 
-		return new Object();
+		return new BaseObject();
 	}
 }
 /* End of file rss.view.php */
