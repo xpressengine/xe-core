@@ -86,7 +86,7 @@ class CacheWincache extends CacheBase
 
 		if($modified_time > 0 && $modified_time > $obj[0])
 		{
-			$this->_delete($_key);
+			//$this->_delete($_key);
 			return false;
 		}
 
