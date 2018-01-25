@@ -84,7 +84,7 @@ class CacheApc extends CacheBase
 
 		if($modified_time > 0 && $modified_time > $obj[0])
 		{
-			$this->delete($key);
+			//$this->delete($key);
 			return false;
 		}
 

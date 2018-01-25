@@ -99,7 +99,7 @@ class CacheFile extends CacheBase
 		{
 			if($modified_time > 0 && filemtime($cache_file) < $modified_time)
 			{
-				FileHandler::removeFile($cache_file);
+				//FileHandler::removeFile($cache_file);
 				return false;
 			}
 
