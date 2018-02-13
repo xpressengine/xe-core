@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="0.2">
 	<title xml:lang="ko">SEO</title>
+	<title xml:lang="vi">SEO</title>
+	<title xml:lang="zh-CN">SEO</title>
+	<title xml:lang="jp">SEO</title>
+	<title xml:lang="en">SEO</title>
+	<title xml:lang="es">SEO</title>
+	<title xml:lang="ru">SEO</title>
+	<title xml:lang="zh-TW">SEO</title>
+	<title xml:lang="tr">SEO</title>
 	<description xml:lang="ko">검색엔진 최적화</description>
+	<description xml:lang="vi">Tối ưu hoá Công cụ Tìm kiếm</description>
+	<description xml:lang="jp">検索エンジンの最適化</description>
+	<description xml:lang="en">Optimize Search Engine</description>
+	<description xml:lang="es">Optimizar el motor de búsqueda</description>
+	<description xml:lang="ru">Оптимизировать поисковую систему</description>
+	<description xml:lang="zh-TW">-</description>
+	<description xml:lang="tr">Arama Motorunu Optimize Edin</description>
 	<version>1.9.0</version>
 	<date>2017-11-30</date>
 	<license>MIT</license>
