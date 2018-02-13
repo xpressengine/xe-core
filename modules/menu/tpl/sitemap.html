@@ -2,9 +2,11 @@
 <load target="./css/sitemap.css" index="11" />
 <load target="./js/_lib/jquery.cookie.js" />
 <load target="./js/jquery.scrollTo-1.4.2.js" />
-<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+<!--@if($XE_VALIDATOR_MESSAGE)-->
+<div class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
 	<p>{$XE_VALIDATOR_MESSAGE}</p>
 </div>
+<!--@end-->
 
 <div class="_quick_help x_alert">
 	<p class="_quick_help_msg">msg</p>

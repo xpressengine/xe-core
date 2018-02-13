@@ -11,6 +11,11 @@
 	<li class="x_active"|cond="$act == 'dispMemberAdminLoginConfig'"><a href="{getUrl('', 'module', 'admin', 'act', 'dispMemberAdminLoginConfig')}">{$lang->cmd_login}</a></li>
 	<li class="x_active"|cond="$act == 'dispMemberAdminDesignConfig'"><a href="{getUrl('', 'module', 'admin', 'act', 'dispMemberAdminDesignConfig')}">{$lang->cmd_set_design_info}</a></li>
 </ul>
+<block cond="$act == 'dispMemberAdminSignUpConfig'">
+	<div class="x_msg-warn message error">
+		<p>{$lang->warn_member_setting}</p>
+	</div>
+</block>
 <script>
-	enableSignUpTab({$config->enable_join == 'Y' ? 'true' : 'false'});
+	alertNewMemberAcceptSetting({$config->enable_join == 'Y' ? 'true' : 'false'});
 </script>
