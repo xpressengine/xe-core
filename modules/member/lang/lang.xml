@@ -2801,4 +2801,9 @@
 		<value xml:lang="en"><![CDATA[Completed.]]></value>
 		<value xml:lang="jp"><![CDATA[完了しました。]]></value>
 	</item>
+	<item name="warn_member_setting">
+		<value xml:lang="ko"><![CDATA[주의! 현재 설정이 사이트의 회원 가입을 허용하고 있지 않고 있다는 것을 명심하십시오.]]></value>
+		<value xml:lang="en"><![CDATA[Warning! Please remember current site setting doesn't accept new member.]]></value>
+		<value xml:lang="jp"><![CDATA[注意！現在のサイト設定は、会員登録を許可していないということを覚えなさい。]]></value>
+	</item>
 </lang>
