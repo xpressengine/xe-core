@@ -211,10 +211,6 @@ class pointController extends point
 			// if the point is set to decrease when writing a document, make sure it does not increase the points when deleting an article
 			if($point < 0) return new BaseObject();
 			$cur_point -= $point;
-			// Add points related to deleting an attachment
-			$point = $module_config['upload_file'];
-			if(strlen($point) == 0 && !is_int($point)) $point = $config->upload_file;
-			if($obj->uploaded_count) $cur_point -= $point * $obj->uploaded_count;
 			// Increase the point
 			$this->setPoint($member_srl,$cur_point);
 		}
