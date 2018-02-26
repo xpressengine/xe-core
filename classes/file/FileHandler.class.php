@@ -841,7 +841,24 @@ class FileHandler
 			return FALSE;
 		}
 
-		imagefilledrectangle($thumb, 0, 0, $resize_width - 1, $resize_height - 1, imagecolorallocate($thumb, 255, 255, 255));
+		if(function_exists('imagecolorallocatealpha') && $target_type == 'png')
+		{
+			imagefill($thumb, 0, 0, imagecolorallocatealpha($thumb, 0, 0, 0, 127));
+			
+			if(function_exists('imagesavealpha'))
+			{
+				imagesavealpha($thumb, TRUE);
+			}
+
+			if(function_exists('imagealphablending'))
+			{
+				imagealphablending($thumb, true);
+			}
+		}
+		else
+		{
+			imagefilledrectangle($thumb, 0, 0, $resize_width - 1, $resize_height - 1, imagecolorallocate($thumb, 255, 255, 255));
+		}
 
 		// create temporary image having original type
 		$source = NULL;
