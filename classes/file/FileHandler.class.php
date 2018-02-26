@@ -852,7 +852,7 @@ class FileHandler
 
 			if(function_exists('imagealphablending'))
 			{
-				imagealphablending($thumb, true);
+				imagealphablending($thumb, TRUE);
 			}
 		}
 		else
