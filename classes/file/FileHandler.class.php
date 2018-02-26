@@ -751,9 +751,10 @@ class FileHandler
 	 * @param int $resize_height Height to resize
 	 * @param string $target_type If $target_type is set (gif, jpg, png, bmp), result image will be saved as target type
 	 * @param string $thumbnail_type Thumbnail type(crop, ratio)
+	 * @param bool $thumbnail_transparent If $target_type is png, set background set transparent color
 	 * @return bool TRUE: success, FALSE: failed
 	 */
-	function createImageFile($source_file, $target_file, $resize_width = 0, $resize_height = 0, $target_type = '', $thumbnail_type = 'crop')
+	function createImageFile($source_file, $target_file, $resize_width = 0, $resize_height = 0, $target_type = '', $thumbnail_type = 'crop', $thumbnail_transparent = FALSE)
 	{
 		// check params
 		if (($source_file = self::exists($source_file)) === FALSE)
@@ -841,7 +842,7 @@ class FileHandler
 			return FALSE;
 		}
 
-		if(function_exists('imagecolorallocatealpha') && $target_type == 'png')
+		if(function_exists('imagecolorallocatealpha') && $target_type == 'png' && $thumbnail_transparent)
 		{
 			imagefill($thumb, 0, 0, imagecolorallocatealpha($thumb, 0, 0, 0, 127));
 			
