@@ -15,7 +15,7 @@
 				<i class="xi-time"></i> {$oDocument->getRegdate('Y.m.d H:i')}
 			</span>
 			<span class="read_count">
-				<i class="xi-eye"></i> {$lang->readed_count} : {$oDocument->get('readed_count')}
+				<i class="xi-eye-o"></i> {$lang->readed_count} : {$oDocument->get('readed_count')}
 			</span>
 			<span class="vote_count" cond="$oDocument->get('voted_count')!=0">
 				<i class="xi-thumbs-up"></i>{$lang->cmd_vote}:{$oDocument->get('voted_count')}
@@ -103,10 +103,10 @@
 			<div cond="$oDocument->getSignature()" class="tx">{$oDocument->getSignature()}</div>
 		</div>
 		<div class="btnArea"> 
-			<a cond="$oDocument->isEditable()" class="btn" href="{getUrl('act','dispBoardWrite','document_srl',$oDocument->document_srl,'comment_srl','')}"><i class="xi-eraser"></i>{$lang->cmd_modify}</a>
+			<a cond="$oDocument->isEditable()" class="btn" href="{getUrl('act','dispBoardWrite','document_srl',$oDocument->document_srl,'comment_srl','')}"><i class="xi-eraser-o"></i>{$lang->cmd_modify}</a>
 			<a cond="$oDocument->isEditable()" class="btn" href="{getUrl('act','dispBoardDelete','document_srl',$oDocument->document_srl,'comment_srl','')}"><i class="xi-trash"></i>{$lang->cmd_delete}</a>
 			<span class="etc">
-				<a href="{getUrl('document_srl','')}" class="btn"><i class="xi-list-ul-l"></i>{$lang->cmd_list}</a>
+				<a href="{getUrl('document_srl','')}" class="btn"><i class="xi-list"></i>{$lang->cmd_list}</a>
 			</span>
 		</div>
 	</div>
