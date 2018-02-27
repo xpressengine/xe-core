@@ -1,3 +1,6 @@
+/*
+ * @DEPRECATED
+*/
 /**
  * @author NAVER (developers@xpressengine.com)
  * @version 0.1.1
