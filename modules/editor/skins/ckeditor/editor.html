@@ -3,10 +3,10 @@
 <load target="../../../../common/xeicon/xeicon.min.css" />
 
 <!-- JS -->
+<!--%load_js_plugin("ui")-->
 <!--%load_js_plugin("ckeditor")-->
-<load target="../../tpl/js/editor_common.js" />
-<load target="../../tpl/js/editor.app.js" />
-<load target="js/xe_interface.js" />
+<load target="../../tpl/js/editor_common.js" type="body" />
+<load target="js/xe_interface.js" type="body" />
 
 {@ $css_content = null }
 <!--@if($content_font || $content_font_size)-->
@@ -23,15 +23,24 @@
 	{@ $css_content .= chr(125);}
 <!--@endif-->
 
-<div id="ckeditor_instance_{$editor_sequence}" data-editor-sequence="{$editor_sequence}" data-editor-primary-key-name="{$editor_primary_key_name}" data-editor-content-key-name="{$editor_content_key_name}" style="min-height:{$editor_height}px;"></div>
+<div id="ckeditor_instance_{$editor_sequence}"></div>
+
+<p cond="$enable_autosave" class="editor_autosaved_message autosave_message" id="editor_autosaved_message_{$editor_sequence}">&nbsp;</p>
 
 <block cond="$allow_fileupload">
 	<include target="file_upload.html" />
 </block>
 
+<!--@if($enable_autosave)-->
+    <input type="hidden" name="_saved_doc_title" value="{htmlspecialchars($saved_doc->title, ENT_COMPAT | ENT_HTML401, 'UTF-8', false)}" />
+    <input type="hidden" name="_saved_doc_content" value="{htmlspecialchars($saved_doc->content, ENT_COMPAT | ENT_HTML401, 'UTF-8', false)}" />
+    <input type="hidden" name="_saved_doc_document_srl" value="{$saved_doc->document_srl}" style="min-height: 130px;" />
+<!--@end-->
+
 <script>
 (function($){
 	"use strict";
+
 	// editor
 	$(function(){
 		<!--@if(!FileHandler::exists('common/js/plugins/ckeditor/ckeditor/config.js'))-->CKEDITOR.config.customConfig = '';<!--@endif-->
@@ -44,9 +53,16 @@
 				toolbarCanCollapse: true,
 				language: "{str_replace('jp','ja',$lang_type)}"
 			},
+			autosave: {
+				enable: <!--@if($enable_autosave)-->true<!--@else-->false<!--@endif-->,
+				exists: <!--@if($saved_doc->title || $saved_doc->content)-->true<!--@else-->false<!--@endif-->,
+				message: '{$lang->msg_load_saved_doc}',
+			},
 			loadXeComponent: true,
 			enableToolbar: true,
-			content_field: jQuery('[name={$editor_content_key_name}]')
+			contentKeyName: '{$editor_content_key_name}',
+			primaryKeyName: '{$editor_primary_key_name}',
+			editorSequence: '{$editor_sequence}',
 		};
 
 		CKEDITOR.dtd.$removeEmpty.ins = 0;
@@ -81,7 +97,12 @@
 
 		<!--@if($css_content)-->CKEDITOR.addCss('{$css_content}');<!--@end-->
 
-		var ckeApp = $('#ckeditor_instance_{$editor_sequence}').XeCkEditor(settings);
+		$.xe.CKEditor(settings, '#ckeditor_instance_{$editor_sequence}');
+		/*
+		var ckInstance = jQuery('#ckeditor_instance_{$editor_sequence}').data('cke_instance');
+		var widgetOptions = $('#ckeditor_instance_{$editor_sequence}').CKEditor('option');
+		console.debug('CKE', ckInstance, widgetOptions);
+		*/
 	});
 })(jQuery);
 </script>

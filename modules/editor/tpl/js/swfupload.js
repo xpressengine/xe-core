@@ -1,3 +1,6 @@
+/*
+ * @DEPRECATED
+*/
 /**
  * SWFUpload: http://www.swfupload.org, http://swfupload.googlecode.com
  *

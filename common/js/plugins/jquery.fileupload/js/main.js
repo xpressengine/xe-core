@@ -1,395 +1,489 @@
 (function($){
 	"use strict";
 
-	var default_settings = {
-		autoUpload: true,
-		dataType: 'json',
-		sequentialUploads: true,
+	var selectable;
 
-		dropZone: '.xefu-dropzone',
-		fileList: '.xefu-list',
-		controll: '.xefu-controll',
-		filelist: '.xefu-list-files ul',
-		filelistImages: '.xefu-list-images ul',
+	$.widget('xe.fileUploader', $.blueimp.fileupload, {
+		options: {
+			loadedFileList: function(e,d) {dd('loadedFileList', e, d);},
+			/**
+			 * 이미지 자동 본문 삽입
+			 */
+			imageAutoAttach: true,
+			sequentialUploads: true,
+			maxChunkSize: 1024000,
 
-		progressbar: '.xefu-progressbar',
-		progressbarGraph: '.xefu-progressbar div',
-		progressStatus: '.xefu-progress-status',
-		progressPercent: '.xefu-progress-percent',
+			leftUploadLimit: 0,
+			limitFileSize: 0,
+			limitTotalFileSize: 0,
 
-		actSelectedInsertContent : '.xefu-act-link-selected',
-		actSelectedDeleteFile : '.xefu-act-delete-selected',
-		actDeleteFile : '.xefu-act-delete',
-		actSetCover : '.xefu-act-set-cover',
+			editorSequence: null,
+			uploadTargetSrl: null,
 
-		tmplXeUploaderFileitem : '<li class="xefu-file xe-clearfix" data-file-srl="{{file_srl}}"><span class="xefu-file-name">{{source_filename}}</span><span class="xefu-file-info"><span>{{disp_file_size}}</span><span><input type="checkbox" data-file-srl="{{file_srl}}"> 선택</span></span></li>',
-		tmplXeUploaderFileitemImage: '<li class="xefu-file xefu-file-image {{#if cover_image}}xefu-is-cover-image{{/if}}" data-file-srl="{{file_srl}}"><strong class="xefu-file-name">{{source_filename}}</strong><span class="xefu-file-info"><span class="xefu-file-size">{{disp_file_size}}</span><span><img src="{{download_url}}" alt=""></span><span><input type="checkbox" data-file-srl="{{file_srl}}"></span><button class="xefu-act-set-cover" data-file-srl="{{file_srl}}" title="커버이미지로 선택"><i class="xi-check-circle"></i></button></span></li>'
-	};
+			tmplFileItemId: 'tmpl-xefu-item-file',
+			tmplImageItemId: 'tmpl-xefu-item-image',
+			/**
+			 * element 셀렉터 목록
+			 */
+			classes: {
+				// dropzone
+				dropZone: '.xefu-dropzone',
+				dropZoneMessage: '.xefu-dropzone-message',
 
-	var _elements = [
-		'fileList',
-		'actSelectedInsertContent',
-		'actSelectedDeleteFile',
-		'actDeleteFile',
-		'actSetCover',
-		'controll',
-		'dropZone',
-		'filelist',
-		'filelistImages',
-		'progressbar',
-		'progressbarGraph',
-		'progressPercent',
-		'progressStatus',
-	];
+				// 파일 목록
+				controll: '.xefu-controll',
+				fileList: '.xefu-list-container',
+				filelistOther: '.xefu-list-other ul',
+				filelistImages: '.xefu-list-images ul',
 
-	var XeUploader = xe.createApp('XeUploader', {
-		settings: {},
-		init : function() {
-		},
-		deactivate: function() {
-		},
-		createInstance: function(containerEl, opt) {
-			var self = this;
-			var $container = containerEl;
-			var data = $container.data();
+				// progressbar
+				progressbar: '.xefu-progressbar',
+				progressbarGraph: '.xefu-progressbar div',
+				progressStatus: '.xefu-progress-status',
+				progressPercent: '.xefu-progress-percent',
 
-			$.extend(data, {
-				files: {},
-				selected_files: {},
-				settings: {},
-				last_selected_file: null,
-			});
+				// 버튼: 파일 선택
+				actSelectable : '.xefu-act-mode-selectable',
+				actSelectedInsertContent : '.xefu-act-link-selected',
+				actSelectedDeleteFile : '.xefu-act-delete-selected',
+				actSelectAll : '.xefu-select-all',
+				actSelectAllImages : '.xefu-select-all-images',
+				actUnselectAll : '.xefu-unselect-all',
 
-			var currentEnforce_ssl = window.enforce_ssl;
-			if(location.protocol == 'https:') { window.enforce_ssl = true; }
+				// 버튼
+				actInsertMedia : '.xefu-act-insert-media',
+				actInsertFile : '.xefu-act-insert-file',
+				actDeleteFile : '.xefu-act-delete',
+				actSetCover : '.xefu-act-set-cover',
 
-			var settings = {
-				url: request_uri
-				.setQuery('module', 'file')
-				.setQuery('act', 'procFileUpload')
-				.setQuery('mid', window.current_mid),
-				formData: {
-					"editor_sequence": data.editorSequence,
-					"upload_target_srl" : data.uploadTargetSrl,
-					"mid" : window.current_mid,
-					"act": 'procFileUpload'
-				},
-				dropZone: $container,
-				add: function(e, d) {
-					var dfd = jQuery.Deferred();
+				// 상태
+				statusCount: '.xefu-status-count',
+				statusAttachedSize: '.xefu-status-attached-size',
+				statusLimitSize: '.xefu-status-limit-size',
+				statusFiletypesContainer: '.xefu-allowed-filetypes-container',
+				statusFiletypesText: '.xefu-allowed-filetypes',
+			},
+			/**
+			 * selectable 설정
+			 */
+			configSelectable: {
+				appendTo: ".xefu-list-container",
+				autoRefresh: true,
+				distance: 0,
+				filter: "li",
+				tolerance: "touch",
+				toggle: false,
+				debug: true
+			},
+			/**
+			 * $.blueimp.fileupload.add()
+			 */
+			add: function (e, data) {
+				var $this = $(this);
+				var that = $this.data('xe-fileUploader');
+				var options = $this.fileUploader('option');
+				var fileSize = data.files[0].size;
+				var overLimit = false;
 
-					$.each(d.files, function(index, file) {
-						if(data.settings.maxFileSize <= file.size) {
-							dfd.reject();
-							alert(window.xe.msg_exceeds_limit_size);
-							return false;
-						}
-						dfd.resolve();
-					});
+				dd('_super.options.add()', that, options, data);
 
-					dfd.done(function(){
-						d.submit();
-					});
-				},
-				done: function(e, res) {
-					var result = res.response().result;
-					var temp_code = '';
-
-					if(!result) return;
-
-					if(!jQuery.isPlainObject(result)) result = jQuery.parseJSON(result);
-
-					if(!result) return;
-
-					if(result.error == 0) {
-						if(/\.(jpe?g|png|gif)$/i.test(result.source_filename)) {
-							temp_code += '<img src="' + window.request_uri + result.download_url + '" alt="' + result.source_filename + '" editor_component="image_link" data-file-srl="' + result.file_srl + '" />';
-							temp_code += "\r\n<p><br></p>\r\n";
-						}
-
-						_getCkeInstance(settings.formData.editor_sequence).insertHtml(temp_code, "unfiltered_html");
-					} else {
-						alert(result.message);
-					}
-				},
-				stop: function() {
-					self.loadFilelist($container);
-				},
-				start: function() {
-					data.settings.progressbarGraph.width(0);
-					data.settings.progressStatus.show();
-					data.settings.progressbar.show();
-				},
-				progressall: function (e, d) {
-					var progress = parseInt(d.loaded / d.total * 100, 10);
-					data.settings.progressbarGraph.width(progress+'%');
-					data.settings.progressPercent.text(progress+'%');
-
-					if(progress >= 100) {
-						data.settings.progressbar.delay(3000).slideUp();
-						data.settings.progressStatus.delay(3000).slideUp();
-					}
+				if(options.limitFileSize <= data.files[0].size || options.leftUploadLimit <= data.files[0].size) {
+					alert(window.xe.msg_exceeds_limit_size);
+					return false;
 				}
+
+				if(/^image\/(gif|jpeg|png)$/.test(data.files[0].type)) {
+					var holder = $('<li class="xefu-file xefu-file-image xefu-uploading"><div class="progress"></div></li>').attr('data-uploading', data.files[0].name);
+
+					that.element.find(options.classes.filelistImages).append(holder);
+				}
+
+				data.submit();
+			},
+			send: function() {
+				dd('_super.options.send()', arguments);
+			},
+			/**
+			 * $.blueimp.fileupload.done()
+			 */
+			done: function() {
+				dd('_super.options.done()', arguments)
+			},
+			/**
+			 * $.blueimp.fileupload.stop()
+			 */
+			stop: function(e, res) {
+				dd('_super.options.stop()', res, this)
+				var $this = $(this);
+
+				var that = $this.data('xe-fileUploader');
+
+				that._loadFiles();
+			}
+		},
+		booted: false,
+		files: [],
+		selectMode: false,
+		isTouchDevice: false,
+		chunkedUpload: false,
+		/**
+		 * create
+		 */
+		_create: function() {
+			_debug = this.options.debug;
+
+			this.options.sequentialUploads = true;
+			this.options.leftUploadLimit = this.options.limitTotalFileSize;
+
+			this._super();
+
+			this.isTouchDevice = window.Modernizr.touch;
+			this.files = {};
+			this.selected_files = [];
+			this.chunkedUpload = this.chunkedUpload && typeof $.support.blobSlice !== 'function' && this.options.maxChunkSize;
+
+			this.options.formData = {
+				'editor_sequence': null,
+				'upload_target_srl' : null,
+				'mid' : window.current_mid,
+				'act': 'procFileUpload'
 			};
-			window.enforce_ssl = currentEnforce_ssl;
 
+			if(!this.chunkedUpload) {
+				delete this.options.maxChunkSize;
+			}
 
-			data.settings = $.extend({} , default_settings, settings, opt || {});
-			$container.data(data);
+			if(this.isTouchDevice) {
+				this.element.addClass('xefu-select-mode');
+			}
 
-			$.each(_elements, function(idx, val) {
-				if(typeof data.settings[val] === 'string') data.settings[val] = $container.find(data.settings[val]);
+			// selectable
+			this.options.configSelectable.toggle = this.isTouchDevice;
+			selectable = $.xe.selectable(this.options.configSelectable, $('.xefu-list-container'));
+
+			dd('_create()', this);
+		},
+		toggleSelectMode: function() {
+			dd('toggleSelectMode()');
+			this.element.toggleClass('xefu-select-mode');
+			selectable.unselectAll();
+		},
+		_init: function() {
+			dd('_init()')
+			var that = this;
+
+			this._super();
+
+			this.element.find('.xefu-image-auto-attach').prop('checked', this.options.imageAutoAttach);
+
+			this.element.find('.xefu-image-auto-attach').on('change', function() {
+				var $el = $(this);
+				dd('auto-attach.change', $el.prop('checked'))
+				that.options.imageAutoAttach = $el.prop('checked');
+			})
+
+			// 본문 삽입: 이미지
+			this.element.on('click', this.options.classes.actInsertMedia, function(e) {
+				e.preventDefault();
+
+				var $el = $(this);
+				var file_srl = $el.data('file-srl') || $el.closest('.xefu-file').data('file-srl');
+
+				that._insertToContent([file_srl]);
 			});
 
-			var INS = $container.fileupload(data.settings)
-			.prop('disabled', !$.support.fileInput)
-			.parent()
-			.addClass($.support.fileInput ? undefined : 'disabled');
+			// 본문 삽입: 다운로드
+			this.element.on('click', this.options.classes.actInsertFile, function(e) {
+				e.preventDefault();
 
-			$container.data('xefu-instance', this);
+				var $el = $(this);
+				var file_srl = $el.data('file-srl') || $el.closest('.xefu-file').data('file-srl');
 
-			// 파일 목록 불러오기
-			this.loadFilelist($container);
-
-			// 본문 삽입
-			data.settings.actSelectedInsertContent.on('click', function() {
-				self.insertToContent($container);
+				that._insertToContent([file_srl]);
 			});
 
 			// 파일 삭제
-			data.settings.actSelectedDeleteFile.on('click', function() {
-				self.deleteFile($container);
-			});
-
-			// finderSelect
-			var fileselect = data.settings.fileList.finderSelect({children:"li", enableDesktopCtrlDefault:true});
-			data.settings.fileList.on("mousedown", 'img', function(e){ e.preventDefault(); });
-
-			fileselect.finderSelect('addHook','highlight:after', function(el) {
-				el.find('input').prop('checked', true);
-				var selected = data.settings.fileList.find('input:checked');
-				data.selected_files = selected;
-			});
-
-			fileselect.finderSelect('addHook','unHighlight:after', function(el) {
-				el.find('input').prop('checked', false);
-				var selected = data.settings.fileList.find('input:checked');
-				data.selected_files = selected;
-			});
-
-			fileselect.on("click", ":checkbox", function(e){
+			this.element.on('click', this.options.classes.actDeleteFile, function(e) {
 				e.preventDefault();
+				e.stopPropagation();
+
+				var $el = $(this);
+				var file_srl = $el.data('file-srl') || $el.closest('.xefu-file').data('file-srl');
+
+				that._deleteFile([file_srl]);
 			});
 
-			fileselect.on("click", ".xefu-act-set-cover", function(e){
+			// 선택 모드 전환
+			this.element.on('click', this.options.classes.actSelectable, function(e) {
 				e.preventDefault();
-				self.setCover($container, e.currentTarget);
+				e.stopPropagation();
+
+				that.toggleSelectMode();
 			});
 
+			/* controll */
+			// 전체 파일 선택
+			this.element.on('click', this.options.classes.actSelectAll, function() {
+				selectable.selectAll();
+			});
 
-			$(document).bind('dragover', function (e) {
-				var timeout = window.dropZoneTimeout,
-				dropZone = data.settings.dropZone;
+			// 선택해제
+			this.element.on('click', this.options.classes.actUnselectAll, function() {
+				selectable.unselectAll();
+			});
 
-				if (!timeout) {
-					dropZone.addClass('in');
-				} else {
-					clearTimeout(timeout);
-				}
+			// 이미지 전체 선택
+			this.element.on('click', this.options.classes.actSelectAllImages, function() {
+				selectable.select($('.xefu-file-image'));
+			});
 
-				var found = false,
-				node = e.target;
+			// 선택 파일 삽입
+			this.element.on('click', this.options.classes.actSelectedInsertContent, function(e) {
+				e.preventDefault();
 
-				do {
-					if (node === dropZone[0]) {
-						found = true;
-						break;
+				var selected = selectable.getSelected();
+				var file_srls = [];
+
+				dd('actSelectedInsertContent', selected);
+
+				selected.each(function(){
+					console.log($.data(this));
+					file_srls.push($(this).data('file-srl'));
+				});
+
+				dd('actSelectedInsertContent', file_srls);
+
+				that._insertToContent(file_srls);
+				selectable.unselectAll();
+			});
+
+			// 선택 파일 삭제
+			this.element.on('click', this.options.classes.actSelectedDeleteFile, function(e) {
+				var selected = selectable.getSelectedNodes();
+				var file_srls = [];
+
+				e.preventDefault();
+
+				if(!selected.length) return;
+
+				selected.forEach(function(node){
+					file_srls.push($(node).data('file-srl'));
+				});
+				dd('actSelectedDeleteFilee', file_srls);
+
+				that._deleteFile(file_srls);
+				selectable.unselectAll();
+			});
+
+			// 커버 이미지로 지정
+			this.element.on("click", this.options.classes.actSetCover, function(e){
+				e.preventDefault();
+
+				var $el = $(this);
+
+				that._setCover($el.data('file-srl'));
+
+				$el.closest('li').siblings('li').removeClass('xefu-is-cover-image');
+				$el.closest('li').addClass('xefu-is-cover-image');
+			});
+			/* END:controll */
+
+			// 파일 업로드 URL
+			this.options.url = window.request_uri
+				.setQuery('module', 'file')
+				.setQuery('act', 'procFileUpload')
+				.setQuery('mid', window.current_mid);
+			this.options.editorSequence = this.element.data('editorSequence');
+			this.options.formData.editor_sequence = this.options.editorSequence;
+
+			// 첨부된 파일 목록
+			this._loadFiles();
+		},
+		/**
+		 * 파일 목록 그리기
+		 *
+		 * @param      {<type>}  data    The data
+		 */
+		_renderList: function(data) {
+			var that = this;
+			var result = [];
+			var options = this.options;
+			var result_image = [];
+			var tmpl_fileitem   = $('#' + options.tmplFileItemId).html();
+			var template_fileitem = Handlebars.compile(tmpl_fileitem);
+			var tmpl_fileitem_image = $('#' + options.tmplImageItemId).html();
+			var template_fileitem_image = Handlebars.compile(tmpl_fileitem_image);
+			var new_images = [];
+			var files = [];
+
+			if(!data.files.length) {
+				this.element.find(options.classes.fileList).hide();
+				this.element.find(options.classes.controll).hide();
+				return;
+			}
+
+			dd('_renderList', that.files, data.files);
+
+			$.each(data.files, function (index, file) {
+				files.push(file.file_srl);
+				if(that.files[file.file_srl]) return;
+
+				that.files[file.file_srl] = file;
+
+				if(/\.(jpe?g|png|gif)$/i.test(file.source_filename)) {
+					var eee = that.element.find(options.classes.filelistImages).find('[data-uploading="' + file.source_filename + '"]');
+
+					if(eee.length) {
+						eee.before(template_fileitem_image(file)).remove();
+					} else {
+						result_image.push(template_fileitem_image(file));
 					}
-					node = node.parentNode;
-				} while (node != null);
+					new_images.push(file.file_srl);
 
-				if (found) {
-					dropZone.addClass('hover');
-				} else {
-					dropZone.removeClass('hover');
 				}
-
-				window.dropZoneTimeout = setTimeout(function () {
-					window.dropZoneTimeout = null;
-					dropZone.removeClass('in hover');
-				}, 100);
+				else
+				{
+					result.push(template_fileitem(file));
+				}
 			});
 
-			$container.data(data);
-		},
-		done: function() {
-			// this.loadFilelist();
-		},
-		selectAllFiles: function() {},
-		selectImageFiles: function() {},
-		selectNonImageFiles: function() {},
-		unselectAllFiles: function() {},
-		unselectImageFiles: function() {},
-		unselectNonImageFiles: function() {},
+			$.each(that.files, function (index, file) {
+				if($.inArray(file.file_srl, files) !== -1) return;
 
-		insertToContent: function($container) {
-			var self = this;
+				var $list = $(that.options.classes.filelistImages);
+				$list.find('[data-file-srl=' + file.file_srl + ']').remove();
+			});
+
+			this.element.find(options.classes.filelistImages).append(result_image.join(''))
+			this.element.find(options.classes.filelistOther).append(result.join(''))
+			this.element.find(options.classes.fileList).show();
+			this.element.find(options.classes.controll).show();
+			// if(this.options.imageAutoAttach) this._insertToContent(new_images);
+
+			selectable.refresh();
+
+			this._updateStatus.call(this, data);
+		},
+		_updateStatus: function(data) {
+			this.element.find(this.options.classes.statusCount).text(data.files.length || 0);
+			this.element.find(this.options.classes.statusAttachedSize).text(data.attached_size);
+			this.element.find(this.options.classes.statusLimitSize).text(data.allowed_attach_size);
+
+			if(data.allowed_filetypes && data.allowed_filetypes != '*.*') {
+				this.element.find(this.options.classes.statusFiletypesContainer).show();
+				this.element.find(this.options.classes.statusFiletypesText).show(data.allowed_filetypes);
+			}
+		},
+		_loadFiles: function() {
+			var that = this;
+			var options = this.options;
+			var data = {};
+			data.mid = window.current_mid;
+			data.editor_sequence = this.options.editorSequence;
+
+			$.exec_json('file.getFileList', data, function(res) {
+				dd('_loadFile', that.files, res);
+
+				options.leftUploadLimit = res.left_size;
+				if(!options.uploadTargetSrl) {
+					options.uploadTargetSrl = res.upload_target_srl;
+					options.formData.upload_target_srl = options.uplwoadTargetSrl;
+				}
+
+				if(!res.files.length) return;
+
+				that._trigger('loadedFileList', null, res);
+
+				that._renderList.call(that, res);
+			});
+		},
+		/**
+		 * 본문 삽입
+		 *
+		 * @param      {<type>}  file_list  The file list
+		 */
+		_insertToContent: function(file_list) {
+			dd('_insertToContent', file_list);
+			var that = this;
 			var temp_code = '';
-			var data = $container.data();
+			var editorSequence = this.options.editorSequence;
 
-			$.each(data.selected_files, function(idx, file) {
-				var file_srl = $(file).data().fileSrl;
-				var fileinfo = data.files[file_srl];
+			$.each(file_list, function(idx, file_srl) {
+				var fileinfo = that.files[file_srl];
 
 				if(!fileinfo) return;
 
 				if(/\.(jpe?g|png|gif)$/i.test(fileinfo.download_url)) {
-					if(fileinfo.download_url.indexOf('http://')!=-1 || fileinfo.download_url.indexOf('https://')!=-1) {
-						temp_code += '<img src="' + fileinfo.download_url + '" alt="' + fileinfo.source_filename + '" editor_component="image_link" data-file-srl="' + fileinfo.file_srl + '" />';
+					if(fileinfo.download_url.indexOf('http://') === 0 || fileinfo.download_url.indexOf('https://') === 0) {
+						temp_code += '<p><img src="' + fileinfo.download_url + '" alt="' + fileinfo.source_filename + '" editor_component="image_link" data-file-srl="' + fileinfo.file_srl + '" /></p>';
+					} else {
+						temp_code += '<p><img src="' + window.request_uri + fileinfo.download_url + '" alt="' + fileinfo.source_filename + '" editor_component="image_link" data-file-srl="' + fileinfo.file_srl + '" /></p>';
 					}
-					else {
-						temp_code += '<img src="' + window.request_uri + fileinfo.download_url + '" alt="' + fileinfo.source_filename + '" editor_component="image_link" data-file-srl="' + fileinfo.file_srl + '" />';
-					}
-					temp_code += "\r\n<p><br></p>\r\n";
 				} else {
-					temp_code += '<a href="' + window.request_uri + fileinfo.download_url + '" data-file-srl="' + fileinfo.file_srl + '">' + fileinfo.source_filename + "</a>\n";
+					temp_code += '<a href="' + window.request_uri + fileinfo.download_url + '" data-file-srl="' + fileinfo.file_srl + '">' + fileinfo.source_filename + '</a> ';
 				}
-
 			});
 
-			_getCkeInstance(data.editorSequence).insertHtml(temp_code, "unfiltered_html");
+			// @FIXME
+			insertElement(editorSequence, temp_code);
 		},
+
 		/**
 		 * 지정된 하나의 파일 또는 다중 선택된 파일 삭제
+		 *
+		 * @param      {<type>}    el        Element
+		 * @param      {Function}  file_srl  The file srl
 		 */
-		deleteFile: function($container, file_srl) {
-			var self = this;
-			var file_srls = [];
-			var data = $container.data();
+		_deleteFile: function(file_list) {
+			var that = this;
+			var file_srls = '';
+			var editorSequence = this.options.editorSequence;
+			var _ck = _getCkeInstance(editorSequence);
 
-			if(!file_srl)
-			{
-				$.each(data.selected_files, function(idx, file) {
-					if(!file) return;
+			dd('_deleteFile()', file_list);
+			file_srls = file_list.join(',');
 
-					var file_srl = $(file).data().fileSrl;
+			if(!file_srls) return;
 
-					file_srls.push(file_srl);
-				});
-			}
-			else
-			{
-				file_srls.push(file_srl);
-			}
+			window.exec_json('file.procFileDelete', {'file_srls': file_srls, 'editor_sequence': editorSequence}, function(res) {
+				dd('file.procFileDelete', res);
+				$.each(file_list, function(idx, srl) {
+					var img = _ck.document.find('img');
 
-			file_srls = file_srls.join(',');
+					for(var i = 0; i <= img.count() - 1; i++) {
+						var elItem = img.getItem(i);
+						if(elItem.getAttribute('data-file-srl') == srl) {
+							var elParent = elItem.getParent();
+							dd('_deleteFile. find element', elParent, elParent.getHtml(), elParent.getChildCount(), elParent.getChildren())
 
-			exec_json('file.procFileDelete', {'file_srls': file_srls, 'editor_sequence': data.editorSequence}, function() {
-				file_srls = file_srls.split(',');
-				$.each(file_srls, function(idx, srl){
-					data.settings.fileList.find('ul').find('li[data-file-srl=' + srl + ']').remove();
-				});
-				self.loadFilelist($container);
-			});
-		 },
-		/**
-		 * 파일 목록 갱신
-		 */
-		loadFilelist: function($container) {
-			var self = this;
-			var data = $container.data();
-			var obj = {};
-			obj.mid = window.current_mid;
-			obj.editor_sequence = data.editorSequence;
-
-			$.exec_json('file.getFileList', obj, function(res){
-				data.uploadTargetSrl = res.upload_target_srl;
-				editorRelKeys[data.editorSequence].primary.value = res.upload_target_srl;
-				data.uploadTargetSrl = res.uploadTargetSrl;
-
-				// @TODO 정리
-				$container.find('.allowed_filetypes').text(res.allowed_filetypes);
-				$container.find('.allowed_filesize').text(res.allowed_filesize);
-				$container.find('.allowed_attach_size').text(res.allowed_attach_size);
-				$container.find('.attached_size').text(res.attached_size);
-				$container.find('.file_count').text(res.files.length);
-
-				var tmpl_fileitem = data.settings.tmplXeUploaderFileitem;
-				var tmpl_fileitem_image = data.settings.tmplXeUploaderFileitemImage;
-				var template_fileimte = Handlebars.compile(tmpl_fileitem);
-				var template_fileimte_image = Handlebars.compile(tmpl_fileitem_image);
-				var result_image = [];
-				var result = [];
-
-				// 첨부된 파일이 없으면 감춤
-				if(!res.files.length) {
-					data.settings.fileList.hide();
-					data.settings.controll.hide();
-					return;
-				}
-
-				// 이미지와 그외 파일 분리
-				$.each(res.files, function (index, file) {
-					if(data.files[file.file_srl]) return;
-
-					data.files[file.file_srl] = file;
-					$container.data(data);
-
-					if(/\.(jpe?g|png|gif)$/i.test(file.source_filename)) {
-						result_image.push(template_fileimte_image(file));
-					}
-					else
-					{
-						result.push(template_fileimte(file));
+							if(elParent.getChildCount() === 1) {
+								elParent.remove();
+							} else {
+								elItem.remove();
+							}
+						}
 					}
 				});
-
-				// 파일 목록
-				data.settings.filelistImages.append(result_image.join(''));
-				data.settings.filelist.append(result.join(''));
-
-				// 컨트롤, 리스트 표시
-				data.settings.controll.show()
-				data.settings.fileList.show();
+				that._loadFiles();
 			});
 		},
-		setCover: function($container, selected_el) {
-			var data = $container.data();
-			var $el = $(selected_el);
-			var file_srl = $el.data().fileSrl;
+		_setCover: function(file_srl) {
+			var data = {};
+			data.file_srl = file_srl;
+			data.editor_sequence = this.options.editorSequence;
 
-			exec_json('file.procFileSetCoverImage', {'file_srl' : file_srl, 'mid' : window.current_mid, 'editor_sequence' : data.editorSequence}, function(res) {
-				if(res.error != 0) return;
-
-				data.settings.filelistImages.find('li').removeClass('xefu-is-cover-image');
-				var $parentLi = $el.closest('li');
-
-				if(res.is_cover == 'N') {
-
-				$parentLi.removeClass('xefu-is-cover-image');
-
-				} else if(res.is_cover == 'Y') {
-
-				$parentLi.addClass('xefu-is-cover-image');
-
-				}
-
+			window.exec_json('file.procFileSetCoverImage', data, function(res) {
+				dd('_setCover(). file.procFileSetCoverImage', data, res);
 			});
 		}
 	});
 
-	// Shortcut function in jQuery
-	$.fn.xeUploader = function(opts) {
-		var u = new XeUploader();
+	var _debug = false;
+	function dd() {
+		if(!_debug || typeof console.debug !== 'function') return;
 
-		if(u) {
-			xe.registerApp(u);
-			u.createInstance(this.eq(0), opts);
-		}
+		arguments[0] = '[$.xe.fileUploader] ' + arguments[0];
 
-		return u;
-	};
+		console.debug.apply(this, arguments);
+	}
 })(jQuery);
-
-
-
