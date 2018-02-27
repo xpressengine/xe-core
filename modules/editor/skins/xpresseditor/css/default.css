@@ -5,12 +5,9 @@
 .xeTextEditor textarea {display:block;margin:0;padding:5px}
 .xeTextEditor.black textarea {color:#fff;background-color:#000}
 /* Type Selector */
-.xpress-editor *{margin:0;padding:0;font-style:normal;font-size:12px}
 .xpress-editor img,
 .xpress-editor fieldset,
 .xpress-editor button{border:0}
-.xpress-editor button{background:none;background-repeat:no-repeat;cursor:pointer}
-.xpress-editor button *{visibility:hidden}
 .xpress-editor legend{position:absolute;width:0;height:0;font-size:0;line-height:0;overflow:hidden;visibility:hidden}
 .xpress-editor label{cursor:pointer}
 .xpress-editor hr{display:none}
