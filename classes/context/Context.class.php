@@ -301,7 +301,7 @@ class Context
 		{
 			if($_COOKIE['lang_type'] != $this->lang_type)
 			{
-				setcookie('lang_type', $this->lang_type, $_SERVER['REQUEST_TIME'] + 3600 * 24 * 1000);
+				saveCookie('lang_type', $this->lang_type, false, $_SERVER['REQUEST_TIME'] + 3600 * 24 * 1000);
 			}
 		}
 		elseif($_COOKIE['lang_type'])
@@ -342,11 +342,14 @@ class Context
 		}
 
 		if($sess = $_POST[session_name()]) session_id($sess);
+		ini_set('session.cookie_httponly', true);
+		ini_set('session.cookie_secure', Context::getSslStatus() === 'always');
 		session_start();
 
 		// set authentication information in Context and session
 		if(self::isInstalled())
 		{
+			$this->set('csrf_token', '4040DDA2-53B9-4984-9E69-4140558B8B76');
 			$oModuleModel = getModel('module');
 			$oModuleModel->loadModuleExtends();
 
@@ -708,8 +711,8 @@ class Context
 					echo self::get('lang')->msg_invalid_request;
 					return false;
 				}
-				
-				setcookie(session_name(), $session_name);
+
+				saveCookie(session_name(), $session_name, true);
 
 				$url = preg_replace('/[\?\&]SSOID=.+$/', '', self::getRequestUrl());
 				header('location:' . $url);
@@ -718,7 +721,7 @@ class Context
 			}
 			else if(!self::get('SSOID') && $_COOKIE['sso'] != md5(self::getRequestUri()))
 			{
-				setcookie('sso', md5(self::getRequestUri()));
+				saveCookie('sso', md5(self::getRequestUri()), true);
 				$origin_url = self::getRequestUrl();
 				$origin_sig = Password::createSignature($origin_url);
 				$url = sprintf("%s?url=%s&sig=%s", $default_url, urlencode(base64_encode($origin_url)), urlencode($origin_sig));

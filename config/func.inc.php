@@ -494,6 +494,32 @@ function isSiteID($domain)
 	return preg_match('/^([a-zA-Z0-9\_]+)$/', $domain);
 }
 
+
+/**
+ * setcookie 간소화
+ *
+ * @param      string   $name
+ * @param      string   $value
+ * @param      boolean  $httponly
+ * @param      integer  $expire
+ * @return     boolean
+ */
+function saveCookie($name, $value = '', $httponly = false, $expire = 0)
+{
+	static $secure = null;
+
+	$path = '/';
+	$domain = '';
+
+	if($secure === null)
+	{
+		$secure = (Context::getSslStatus() === 'always') ? true : false;
+	}
+
+	return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
+}
+
+
 /**
  * Put a given tail after trimming string to the specified size
  *
