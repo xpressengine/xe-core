@@ -507,13 +507,25 @@ function isSiteID($domain)
 function saveCookie($name, $value = '', $httponly = false, $expire = 0)
 {
 	static $secure = null;
+	static $db_info = null;
+
+	if($db_info === null)
+	{
+		$db_info = Context::getDBInfo();
+	}
 
 	$path = '/';
 	$domain = '';
 
-	if($secure === null)
+	if($db_info->disable_cookie_secure !== 'Y')
 	{
-		$secure = (Context::getSslStatus() === 'always') ? true : false;
+		if($secure === null)
+		{
+			$secure = (Context::getSslStatus() === 'always') ? true : false;
+		}
+	} else {
+		$httponly = false;
+		$secure = false;
 	}
 
 	return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
@@ -1634,18 +1646,29 @@ function requirePear()
 
 function checkCSRF()
 {
+	static $disable_csrf_token = null;
+
 	if($_SERVER['REQUEST_METHOD'] != 'POST')
 	{
 		return FALSE;
 	}
 
-	$csrf_token = ($_SERVER['HTTP_X_CSRF_TOKEN']) ? $_SERVER['HTTP_X_CSRF_TOKEN'] : $_POST['_token'];
-
-	// Token
-	if(!$csrf_token || $_SESSION['csrf_token'] !== $csrf_token)
+	if($disable_csrf_token === null)
 	{
-		header("HTTP/1.1 403 Forbidden");
-		return FALSE;
+		$db_info = Context::getDBinfo();
+		$disable_csrf_token = $db_info->disable_csrf_token;
+	}
+
+	if($disable_csrf_token !== 'Y')
+	{
+		$csrf_token = ($_SERVER['HTTP_X_CSRF_TOKEN']) ? $_SERVER['HTTP_X_CSRF_TOKEN'] : $_POST['_token'];
+
+		// Token
+		if(!$csrf_token || $_SESSION['csrf_token'] !== $csrf_token)
+		{
+			header("HTTP/1.1 403 Forbidden");
+			return FALSE;
+		}
 	}
 
 	$default_url = Context::getDefaultUrl();

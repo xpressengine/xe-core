@@ -163,7 +163,7 @@
 </section>
 
 
-<section class="section collapsed">
+<section class="section">
 	<h1>{$lang->subtitle_advanced}</h1>
 	<form action="./" method="post" enctype="multipart/form-data" class="x_form-horizontal">
 		<input type="hidden" name="module" value="install" />
@@ -223,6 +223,22 @@
 			<div class="x_controls">
 				<label for="qmail_compatibility_y" class="x_inline"><input type="radio" name="qmail_compatibility" id="qmail_compatibility_y" value="Y" checked="checked"|cond="$qmail_compatibility=='Y'" /> {$lang->cmd_yes}</label>
 				<label for="qmail_compatibility_n" class="x_inline"><input type="radio" name="qmail_compatibility" id="qmail_compatibility_n" value="N" checked="checked"|cond="$qmail_compatibility!='Y'" /> {$lang->cmd_no}</label>
+			</div>
+		</div>
+
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->disable_csrf_token}</label>
+			<div class="x_controls">
+				<label for="disable_csrf_token_y" class="x_inline"><input type="radio" name="disable_csrf_token" id="disable_csrf_token_y" value="Y" checked="checked"|cond="$disable_csrf_token == 'Y'" /> {$lang->cmd_yes}</label>
+				<label for="disable_csrf_token_n" class="x_inline"><input type="radio" name="disable_csrf_token" id="disable_csrf_token_n" value="N" checked="checked"|cond="$disable_csrf_token != 'Y'" /> {$lang->cmd_no}</label>
+			</div>
+		</div>
+
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->disable_cookie_secure}</label>
+			<div class="x_controls">
+				<label for="disable_cookie_secure_y" class="x_inline"><input type="radio" name="disable_cookie_secure" id="disable_cookie_secure_y" value="Y" checked="checked"|cond="$disable_cookie_secure == 'Y'" /> {$lang->cmd_yes}</label>
+				<label for="disable_cookie_secure_n" class="x_inline"><input type="radio" name="disable_cookie_secure" id="disable_cookie_secure_n" value="N" checked="checked"|cond="$disable_cookie_secure != 'Y'" /> {$lang->cmd_no}</label>
 			</div>
 		</div>
 		<div class="x_clearfix btnArea">

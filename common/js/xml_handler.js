@@ -8,6 +8,7 @@ var show_waiting_message = true;
 
 (function($){
 	var x2js = new X2JS();
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 
 	/**
 	* @brief exec_xml
@@ -147,7 +148,7 @@ var show_waiting_message = true;
 				contentType : 'text/plain',
 				beforeSend  : function(xhr){
 					_xhr = xhr;
-					xhr.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content')); 
+					if(csrf_token) xhr.setRequestHeader("X-CSRF-TOKEN", csrf_token);
 				},
 				success     : onsuccess,
 				error       : function(xhr, textStatus) {
@@ -258,7 +259,7 @@ var show_waiting_message = true;
 			try {
 				$.ajax({
 					beforeSend : function(xhr){
-						xhr.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content')); 
+						if(csrf_token) xhr.setRequestHeader("X-CSRF-TOKEN", csrf_token);
 					},
 					type: "POST",
 					dataType: "json",
@@ -332,7 +333,7 @@ var show_waiting_message = true;
 			try {
 				$.ajax({
 					beforeSend : function(xhr){
-						xhr.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content')); 
+						if(csrf_token) xhr.setRequestHeader("X-CSRF-TOKEN", csrf_token);
 					},
 					type:"POST",
 					dataType:"html",

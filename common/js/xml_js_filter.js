@@ -81,7 +81,7 @@
 						this.onsubmit = null;
 					}
 
-					if(window.XE.isSameHost(this.action))
+					if(csrf_token && window.XE.isSameHost(this.action))
 					{
 						$(this).prepend('<input type="hidden" name="_token" value="' + csrf_token + '" />');
 					}

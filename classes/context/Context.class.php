@@ -342,18 +342,24 @@ class Context
 		}
 
 		if($sess = $_POST[session_name()]) session_id($sess);
-		ini_set('session.cookie_httponly', true);
-		ini_set('session.cookie_secure', Context::getSslStatus() === 'always');
+		if($this->db_info->disable_cookie_secure !== 'Y')
+		{
+			ini_set('session.cookie_httponly', true);
+			ini_set('session.cookie_secure', Context::getSslStatus() === 'always');
+		}
 		session_start();
 
 		// set authentication information in Context and session
 		if(self::isInstalled())
 		{
-			if(!$_SESSION['csrf_token'])
+			if($this->db_info->disable_csrf_token !== 'Y')
 			{
-				$_SESSION['csrf_token'] = Password::createSecureSalt(40);
+				if(!$_SESSION['csrf_token'])
+				{
+					$_SESSION['csrf_token'] = Password::createSecureSalt(40);
+				}
+				$this->set('csrf_token', $_SESSION['csrf_token']);
 			}
-			$this->set('csrf_token', $_SESSION['csrf_token']);
 			$oModuleModel = getModel('module');
 			$oModuleModel->loadModuleExtends();
 
@@ -522,6 +528,16 @@ class Context
 
 		if(is_string($db_info->sitelock_whitelist)) {
 			$db_info->sitelock_whitelist = explode(',', $db_info->sitelock_whitelist);
+		}
+
+		if(!$db_info->disable_cookie_secure)
+		{
+			$db_info->disable_cookie_secure = 'Y';
+		}
+
+		if(!$db_info->disable_csrf_token)
+		{
+			$db_info->disable_csrf_token = 'Y';
 		}
 
 		$self->setDBInfo($db_info);

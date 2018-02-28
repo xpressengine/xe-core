@@ -760,6 +760,12 @@
 		<value xml:lang="zh-CN"><![CDATA[启用Qmail]]></value>
 		<value xml:lang="tr"><![CDATA[Qmail etkinleştirin]]></value>
 	</item>
+	<item name="disable_csrf_token">
+		<value xml:lang="ko"><![CDATA[CSRF 보호 해제]]></value>
+	</item>
+	<item name="disable_cookie_secure">
+		<value xml:lang="ko"><![CDATA[Cookie 보호 해제]]></value>
+	</item>
 	<item name="sftp">
 		<value xml:lang="ko"><![CDATA[SFTP 사용]]></value>
 		<value xml:lang="en"><![CDATA[Use SFTP]]></value>

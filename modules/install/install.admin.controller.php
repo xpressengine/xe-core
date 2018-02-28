@@ -96,11 +96,17 @@ class installAdminController extends install
 		$qmail_compatibility = Context::get('qmail_compatibility');
 		if($qmail_compatibility!='Y') $qmail_compatibility = 'N';
 
+		$disable_csrf_token = (Context::get('disable_csrf_token') === 'Y') ? 'Y' : 'N';
+		$disable_cookie_secure = (Context::get('disable_cookie_secure') === 'Y') ? 'Y' : 'N';
+
 		$use_html5 = Context::get('use_html5');
 		if(!$use_html5) $use_html5 = 'N';
 
 		$db_info->default_url = $default_url;
 		$db_info->qmail_compatibility = $qmail_compatibility;
+		$db_info->disable_csrf_token = $disable_csrf_token;
+		$db_info->disable_cookie_secure = $disable_cookie_secure;
+
 		$db_info->use_db_session = $use_db_session;
 		$db_info->use_rewrite = $use_rewrite;
 		$db_info->use_sso = $use_sso;
