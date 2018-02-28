@@ -349,7 +349,11 @@ class Context
 		// set authentication information in Context and session
 		if(self::isInstalled())
 		{
-			$this->set('csrf_token', '4040DDA2-53B9-4984-9E69-4140558B8B76');
+			if(!$_SESSION['csrf_token'])
+			{
+				$_SESSION['csrf_token'] = Password::createSecureSalt(40);
+			}
+			$this->set('csrf_token', $_SESSION['csrf_token']);
 			$oModuleModel = getModel('module');
 			$oModuleModel->loadModuleExtends();
 
