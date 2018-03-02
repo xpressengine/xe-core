@@ -2883,6 +2883,7 @@ var show_waiting_message = true;
 
 (function($){
 	var x2js = new X2JS();
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 
 	/**
 	* @brief exec_xml
@@ -3020,7 +3021,10 @@ var show_waiting_message = true;
 				dataType    : 'xml',
 				data        : xml.join('\n'),
 				contentType : 'text/plain',
-				beforeSend  : function(xhr){ _xhr = xhr; },
+				beforeSend  : function(xhr){
+					_xhr = xhr;
+					if(csrf_token) xhr.setRequestHeader("X-CSRF-TOKEN", csrf_token);
+				},
 				success     : onsuccess,
 				error       : function(xhr, textStatus) {
 					waiting_obj.css('display', 'none');
@@ -3033,6 +3037,9 @@ var show_waiting_message = true;
 						if(xhr.responseText === "") return;
 
 						msg += xhr.responseText.replace(/<[^>]+>/g, '');
+					} else if(textStatus === 'error') {
+						msg = xhr.statusText;
+						alert(msg);
 					} else {
 						msg = textStatus;
 					}
@@ -3126,6 +3133,9 @@ var show_waiting_message = true;
 
 			try {
 				$.ajax({
+					beforeSend : function(xhr){
+						if(csrf_token) xhr.setRequestHeader("X-CSRF-TOKEN", csrf_token);
+					},
 					type: "POST",
 					dataType: "json",
 					url: request_uri,
@@ -3154,12 +3164,15 @@ var show_waiting_message = true;
 
 						var msg = '';
 
-						if (textStatus == 'parsererror') {
+						if (textStatus === 'parsererror') {
 							msg  = 'The result is not valid JSON :\n-------------------------------------\n';
 
 							if(xhr.responseText === "") return;
 
 							msg += xhr.responseText.replace(/<[^>]+>/g, '');
+						} else if(textStatus === 'error') {
+							msg = xhr.statusText;
+							alert(msg);
 						} else {
 							msg = textStatus;
 						}
@@ -3194,6 +3207,9 @@ var show_waiting_message = true;
 			$.extend(data,{module:action[0],act:action[1]});
 			try {
 				$.ajax({
+					beforeSend : function(xhr){
+						if(csrf_token) xhr.setRequestHeader("X-CSRF-TOKEN", csrf_token);
+					},
 					type:"POST",
 					dataType:"html",
 					url:request_uri,
@@ -3313,6 +3329,7 @@ var show_waiting_message = true;
 		},
 		API_ONREADY : function() {
 			var self = this;
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
 
 			// hook form submit event
 			$('form')
@@ -3320,6 +3337,11 @@ var show_waiting_message = true;
 					if (this.onsubmit) {
 						this['xe:onsubmit'] = this.onsubmit;
 						this.onsubmit = null;
+					}
+
+					if(csrf_token && window.XE.isSameHost(this.action))
+					{
+						$(this).prepend('<input type="hidden" name="_token" value="' + csrf_token + '" />');
 					}
 				})
 				.submit(function(e){
