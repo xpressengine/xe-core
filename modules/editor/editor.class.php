@@ -67,6 +67,8 @@ class editor extends ModuleObject
 			// 2012. 08. 29 Add a trigger to copy additional setting when the module is copied 
 			if(!$oModuleModel->getTrigger('module.procModuleAdminCopyModule', 'editor', 'controller', 'triggerCopyModule', 'after')) return true;
 
+			if(!$oDB->isIndexExists('editor_autosave', 'certify_key')) return true;
+
 			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
@@ -110,6 +112,11 @@ class editor extends ModuleObject
 			if(!$oModuleModel->getTrigger('module.procModuleAdminCopyModule', 'editor', 'controller', 'triggerCopyModule', 'after'))
 			{
 				$oModuleController->insertTrigger('module.procModuleAdminCopyModule', 'editor', 'controller', 'triggerCopyModule', 'after');
+			}
+
+			if(!$oDB->isColumnExists('editor_autosave','certify_key'))
+			{
+				$oDB->addColumn('editor_autosave', 'certify_key', 'varchar', 100);
 			}
 
 			$oModuleController->insertUpdatedLog($version_update_id);
