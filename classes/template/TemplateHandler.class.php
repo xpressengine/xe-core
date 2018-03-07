@@ -29,6 +29,7 @@ class TemplateHandler
 	 */
 	public function __construct()
 	{
+		ini_set('pcre.jit', "0");
 		$this->xe_path = rtrim(getScriptPath(), '/');
 		$this->compiled_path = _XE_PATH_ . $this->compiled_path;
 	}
@@ -449,7 +450,7 @@ class TemplateHandler
 	 */
 	private function _parseInline($buff)
 	{
-		if(preg_match_all('/<([a-zA-Z]+\d?)(?>(?!<[a-z]+\d?[\s>]).)*?(?:[ \|]cond| loop)="/s', $buff, $match) === false)
+		if(!preg_match_all('/<([a-zA-Z]+\d?)(?:\s)/', $buff, $match))
 		{
 			return $buff;
 		}
