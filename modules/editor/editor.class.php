@@ -122,7 +122,7 @@ class editor extends ModuleObject
 			}
 			if(!$oDB->isIndexExists("editor_autosave","idx_certify_key"))
 			{
-				$oDB->addIndex("editor_autosave", "certify_key");
+				$oDB->addIndex("editor_autosave","idx_certify_key", "certify_key");
 			}
 
 			$oModuleController->insertUpdatedLog($version_update_id);
