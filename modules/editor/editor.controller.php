@@ -487,6 +487,7 @@ class editorController extends editor
 		// Get xml_info of downloaded list
 		foreach($downloaded_list as $component_name)
 		{
+			if(!is_dir(_XE_PATH_.'modules/editor/components/'.$component_name)) continue;
 			if(in_array($component_name, array('colorpicker_text','colorpicker_bg'))) continue;
 			// Pass if configured
 			if($component_list->{$component_name}) continue;
