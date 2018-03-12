@@ -57,8 +57,11 @@ $I->amOnPage('/');
 $I->dontSeeElement('//div[@id="progress"]/ul/li');
 $I->amOnPage('/index.php?act=dispMemberLoginForm');
 
+$token = $I->grabAttributeFrom('meta[name="csrf-token"]', 'content');
+
 $I->fillField('user_id', 'admin@admin.net');
 $I->submitForm('.login-body form', [
+    '_token' => $token,
     'act' => 'procMemberLogin',
     'user_id' => 'admin@admin.net',
     'password' => 'admin1@3',
