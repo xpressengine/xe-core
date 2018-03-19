@@ -37,12 +37,10 @@
 		</div>
 
 		<div style="float: right;padding: 5px 0;">
-			<!--// 선택 모드 전환  -->
-			<input type="button" class="xefu-btn xefu-act-mode-selectable" style="vertical-align: middle; vertical-align: middle;" value="선택">
-			<button class="xefu-btn xefu-act-link-selected" style=" vertical-align: middle; vertical-align: middle;"><i class="xi-arrow-up"></i> {$lang->edit->link_file}</button>
-			<input type="button" class="xefu-btn xefu-select-all-images" style=" vertical-align: middle; vertical-align: middle;" value="그림 선택">
-			<input type="button" class="xefu-btn xefu-unselect-all" style=" vertical-align: middle; vertical-align: middle;" value="선택 해제">
-			<input type="button" class="xefu-btn xefu-act-delete-selected" style=" vertical-align: middle; vertical-align: middle;" value="{$lang->edit->delete_selected}">
+			<button type="button" class="xefu-btn xefu-act-link-selected"><i class="xi-arrow-up"></i> {$lang->edit->link_file}</button>
+			<button type="button" class="xefu-btn xefu-select-all-images">그림 선택</button>
+			<button type="button" class="xefu-btn xefu-unselect-all">선택 해제</button>
+			<button type="button" class="xefu-btn xefu-act-delete-selected"><i class="xi-close-square-o"></i> {$lang->edit->delete_selected}</button>
 		</div>
 	</div>
 
@@ -52,10 +50,11 @@
 			<script id="tmpl-xefu-item-image" type="text/x-handlebars-template">
 				<li class="xefu-file xefu-file-image selectable-item {{#if cover_image}}xefu-is-cover-image{{/if}}" data-file-srl="{{file_srl}}">
 					<span class="xefu-image"><img src="{{download_url}}" alt=""></span>
-					<span class="xefu-select"><i class="xi-check"></i></span>
-					<button class="xefu-act-set-cover" data-file-srl="{{file_srl}}" title="표지로 사용">표지</button>
-					<button class="xefu-act-delete" data-file-srl="{{file_srl}}" title="삭제"><i class="xi-close"></i></button>
-					<button class="xefu-act-insert-media" data-file-srl="{{file_srl}}" title="본문에 삽입"><i class="xi-arrow-up"></i></button>
+					<button type="button" class="xefu-act-select"><i class="xi-check"></i></button>
+					<button type="button" class="xefu-act-unselect"><i class="xi-minus"></i></button>
+					<button type="button" class="xefu-act-set-cover" data-file-srl="{{file_srl}}" title="표지로 사용">표지</button>
+					<button type="button" class="xefu-act-delete" data-file-srl="{{file_srl}}" title="삭제"><i class="xi-close"></i></button>
+					<button type="button" class="xefu-act-insert-media" data-file-srl="{{file_srl}}" title="본문에 삽입"><i class="xi-arrow-up"></i></button>
 				</li>
 			</script>
 		</div>

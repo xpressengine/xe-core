@@ -35,6 +35,10 @@
 		},
 		_init: function() {
 		},
+		_enable: function() {
+			this.refresh();
+			this._mouseInit();
+		},
 		_destroy: function() {
 			this.selectees.removeData('xe-selectable-item');
 			this._mouseDestroy();
@@ -261,6 +265,7 @@ dd('_mouseStop()');
 				selectee.unselecting = false;
 				selectee.startselected = false;
 			});
+			that._trigger('selected', null, targets);
 		},
 		selectAll: function() {
 			var that = this;
@@ -275,12 +280,31 @@ dd('_mouseStop()');
 				selectee.unselecting = false;
 				selectee.startselected = false;
 			});
+			that._trigger('selected', null, this.selectees);
 		},
 		getSelected: function() {
 			return $('.ui-selected', this.element[0]);
 		},
 		getSelectedNodes: function() {
 			return this.getSelected().toArray();
+		},
+		unselect: function(targets) {
+			var that = this;
+			dd('unselect()', targets);
+
+			targets.each(function() {
+				var selectee = $.data(this, "xe-selectable-item");
+
+				that._removeClass(selectee.$element, "ui-selected");
+				that._removeClass(selectee.$element, "ui-selecting");
+				that._removeClass(selectee.$element, "ui-unselecting");
+				selectee.selected = false;
+				selectee.selecting = false;
+				selectee.unselecting = false;
+				selectee.startselected = false;
+
+			});
+			that._trigger('unselected', null, targets);
 		},
 		unselectAll: function() {
 			var that = this;
@@ -295,6 +319,7 @@ dd('_mouseStop()');
 				selectee.unselecting = false;
 				selectee.startselected = false;
 			});
+			that._trigger('unselected', null, this.selectees);
 		}
 	});
 
