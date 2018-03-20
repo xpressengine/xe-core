@@ -57,7 +57,6 @@ class member extends ModuleObject {
 
 		// Set the basic information
 		$config->enable_join = 'Y';
-		$config->enable_openid = 'N';
 		if(!$config->enable_auth_mail) $config->enable_auth_mail = 'N';
 		if(!$config->image_name) $config->image_name = 'Y';
 		if(!$config->image_mark) $config->image_mark = 'Y';

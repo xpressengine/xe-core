@@ -1617,7 +1617,6 @@ class memberController extends member
 		if(!$args->editor_skin) $args->editor_skin= "ckeditor";
 		if(!$args->editor_colorset) $args->editor_colorset = "moono";
 		if($args->enable_join!='Y') $args->enable_join = 'N';
-		$args->enable_openid= 'N';
 		if($args->profile_image !='Y') $args->profile_image = 'N';
 		if($args->image_name!='Y') $args->image_name = 'N';
 		if($args->image_mark!='Y') $args->image_mark = 'N';
