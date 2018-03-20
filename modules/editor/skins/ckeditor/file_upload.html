@@ -46,32 +46,37 @@
 
 	<div class="xefu-list-container">
 		<div class="xefu-list-images">
-			<ul></ul>
-			<script id="tmpl-xefu-item-image" type="text/x-handlebars-template">
-				<li class="xefu-file xefu-file-image selectable-item {{#if cover_image}}xefu-is-cover-image{{/if}}" data-file-srl="{{file_srl}}">
-					<span class="xefu-image"><img src="{{download_url}}" alt=""></span>
-					<button type="button" class="xefu-act-select"><i class="xi-check"></i></button>
-					<button type="button" class="xefu-act-unselect"><i class="xi-minus"></i></button>
-					<button type="button" class="xefu-act-set-cover" data-file-srl="{{file_srl}}" title="표지로 사용">표지</button>
-					<button type="button" class="xefu-act-delete" data-file-srl="{{file_srl}}" title="삭제"><i class="xi-close"></i></button>
-					<button type="button" class="xefu-act-insert-media" data-file-srl="{{file_srl}}" title="본문에 삽입"><i class="xi-arrow-up"></i></button>
-				</li>
-			</script>
+			<ul>
+				<script id="tmpl-xefu-item-image" type="text/x-handlebars-template">
+					<li class="xefu-file xefu-file-image selectable-item {{#if cover_image}}xefu-is-cover-image{{/if}}" data-file-srl="{{file_srl}}">
+						<span class="xefu-image"><img src="{{download_url}}" alt=""></span>
+						<button type="button" class="xefu-act-select" title="선택"><i class="xi-check"></i></button>
+						<button type="button" class="xefu-act-unselect" title="선택 해제"><i class="xi-minus"></i></button>
+						<button type="button" class="xefu-act-set-cover" data-file-srl="{{file_srl}}" title="표지로 사용">표지</button>
+						<button type="button" class="xefu-act-delete" data-file-srl="{{file_srl}}" title="삭제"><i class="xi-close"></i></button>
+						<button type="button" class="xefu-act-insert-media" data-file-srl="{{file_srl}}" title="본문에 삽입"><i class="xi-arrow-up"></i></button>
+					</li>
+				</script>
+			</ul>
 		</div>
 
 		<div class="xefu-list-other">
-			<ul></ul>
-			<script id="tmpl-xefu-item-file" type="text/x-handlebars-template">
-				<li class="xefu-file xe-clearfix" data-file-srl="{{file_srl}}">
-					<input type="button" class="xefu-act-insert-file" value="본문 삽입" />
-					<span class="xefu-file-name">
-						<label><input type="checkbox" data-file-srl="{{file_srl}}" /> {{source_filename}}</label>
-					</span>
-					<span class="xefu-file-info">
-						<span>{{disp_file_size}}</span>
-					</span>
-				</li>
-			</script>
+			<ul>
+				<script id="tmpl-xefu-item-file" type="text/x-handlebars-template">
+					<li class="xefu-file xe-clearfix selectable-item" data-file-srl="{{file_srl}}">
+						<button type="button" class="xefu-act-insert-file" title="본문에 삽입"><i class="xi-arrow-up"></i></button>
+						<button type="button" class="xefu-act-select" title="선택"><i class="xi-check"></i></button>
+						<button type="button" class="xefu-act-unselect" title="선택 해제"><i class="xi-minus"></i></button>
+						<button type="button" class="xefu-act-delete" data-file-srl="{{file_srl}}" title="삭제"><i class="xi-close"></i></button>
+						<span class="xefu-file-name">
+							{{source_filename}}
+						</span>
+						<span class="xefu-file-info">
+							<span>{{disp_file_size}}</span>
+						</span>
+					</li>
+				</script>
+			</ul>
 		</div>
 	</div>
 </div>
