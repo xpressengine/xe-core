@@ -196,10 +196,6 @@
 	color: #fff;
 	background-color: rgba(88, 86, 214, 0.8);
 }
-.xefu-select-mode .xefu-list-images li .xefu-act-set-cover,
-.modernizr-no-touch .xefu-select-mode .xefu-list-images li .xefu-act-set-cover {
-	display: none;
-}
 .xefu-is-cover-image {
 	border-color: #5856D6 !important;
 }

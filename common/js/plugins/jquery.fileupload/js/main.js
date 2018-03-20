@@ -112,16 +112,18 @@
 			/**
 			 * $.blueimp.fileupload.done()
 			 */
-			done: function() {
-				dd('_super.options.done()', arguments)
+			done: function(e, data) {
+				var $this = $(this);
+				var that = $this.data('xe-fileUploader');
+				var result = JSON.parse(data.result);
+				that.latestFiles.push(result);
 			},
 			/**
 			 * $.blueimp.fileupload.stop()
 			 */
 			stop: function(e, res) {
-				dd('_super.options.stop()', res, this)
+				dd('_super.options.stop()', e, res, this)
 				var $this = $(this);
-
 				var that = $this.data('xe-fileUploader');
 
 				that._loadFiles();
@@ -129,6 +131,7 @@
 		},
 		booted: false,
 		files: [],
+		latestFiles: [],
 		selectMode: false,
 		isTouchDevice: false,
 		chunkedUpload: false,
@@ -192,9 +195,9 @@
 
 			this.element.find('.xefu-image-auto-attach').prop('checked', this.options.imageAutoAttach);
 
-			this.element.find('.xefu-image-auto-attach').on('change', function() {
+			this.element.on('change', '.xefu-image-auto-attach', function() {
 				var $el = $(this);
-				dd('auto-attach.change', $el.prop('checked'))
+				console.debug('auto-attach.change', $el.prop('checked'))
 				that.options.imageAutoAttach = $el.prop('checked');
 			})
 
@@ -330,8 +333,6 @@
 		},
 		/**
 		 * 파일 목록 그리기
-		 *
-		 * @param      {<type>}  data    The data
 		 */
 		_renderList: function(data) {
 			var that = this;
@@ -368,7 +369,6 @@
 						result_image.push(template_fileitem_image(file));
 					}
 					new_images.push(file.file_srl);
-
 				}
 				else
 				{
@@ -387,7 +387,14 @@
 			this.element.find(options.classes.filelistOther).append(result.join(''))
 			this.element.find(options.classes.fileList).show();
 			this.element.find(options.classes.controll).show();
-			// if(this.options.imageAutoAttach) this._insertToContent(new_images);
+			if(this.options.imageAutoAttach) {
+				$.each(that.latestFiles, function (index, file) {
+					if(that._isImage(file)) {
+						that._insertToContent(file);
+					}
+				});
+				that.latestFiles = [];
+			}
 
 			that.selectable.refresh();
 
@@ -504,6 +511,9 @@
 			window.exec_json('file.procFileSetCoverImage', data, function(res) {
 				dd('_setCover(). file.procFileSetCoverImage', data, res);
 			});
+		},
+		_isImage: function(file) {
+			return /\.(jpe?g|png|gif)$/i.test(file.download_url)
 		}
 	});
 
