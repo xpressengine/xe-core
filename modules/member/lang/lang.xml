@@ -2806,4 +2806,9 @@
 		<value xml:lang="en"><![CDATA[Warning! Please remember current site setting doesn't accept new member.]]></value>
 		<value xml:lang="jp"><![CDATA[注意！現在のサイト設定は、会員登録を許可していないということを覚えなさい。]]></value>
 	</item>
+	<item name="allow_transparent_thumbnail">
+		<value xml:lang="ko"><![CDATA[리사이즈 이미지에 투명 배경을 허용합니다. (PNG only)]]></value>
+		<value xml:lang="en"><![CDATA[Allow transparent background on resized image (PNG only)]]></value>
+		<value xml:lang="jp"><![CDATA[サイズ変更した画像に透明な背景を許可します。(PNG only)]]></value>
+	</item>
 </lang>
