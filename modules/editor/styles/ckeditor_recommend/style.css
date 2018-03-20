@@ -1,17 +1,35 @@
 @charset "utf-8";
 /* NAVER (developers@xpressengine.com) */
-.xe_content {color:#000;font-size:14px;font-family:sans-serif;line-height:1.6}
+.xe_content { color: #000; font-size: 14px; font-family: sans-serif; line-height: 1.6; word-break: break-all; word-wrap: break-word; }
+.xe_content img { border: 0; max-width: 100%; }
+.xe_content ul,
+.xe_content ol { padding-left: 3em; list-style: initial; }
+.xe_content ul ul,
+.xe_content ol ul { list-style-type: circle; }
+.xe_content ol ol ul,
+.xe_content ol ul ul,
+.xe_content ul ol ul,
+.xe_content ul ul ul { list-style-type: square; }
+.xe_content h1 { margin: 0.67em 0; }
+.xe_content h2 { margin: 0.83em 0; }
+.xe_content h3 { margin: 1em 0; }
+.xe_content h4,
+.xe_content h5,
+.xe_content h6 { margin: 1.33em 0; }
+.xe_content strong,
+.xe_content b { font-weight: bold; }
 .xe_content blockquote.q1,
 .xe_content blockquote.q2,
 .xe_content blockquote.q3,
 .xe_content blockquote.q4,
 .xe_content blockquote.q5,
 .xe_content blockquote.q6,
-.xe_content blockquote.q7{padding:10px;margin:0 15px}
-.xe_content blockquote.q1{padding:0 10px;border-left:2px solid #ccc}
-.xe_content blockquote.q2{padding:0 10px;background:url(./img/bg_qmark.gif) no-repeat left top}
-.xe_content blockquote.q3{border:1px solid #d9d9d9}
-.xe_content blockquote.q4{border:1px solid #d9d9d9;background:#fbfbfb}
-.xe_content blockquote.q5{border:2px solid #707070}
-.xe_content blockquote.q6{border:1px dashed #707070}
-.xe_content blockquote.q7{border:1px dashed #707070;background:#fbfbfb}
+.xe_content blockquote.q7 { padding: 10px; margin: 0 15px; }
+.xe_content blockquote.q1 { padding: 0 10px; border-left: 2px solid #CCC; }
+.xe_content blockquote.q2 { padding: 0 10px; background: url(./img/bg_qmark.gif) no-repeat left top; }
+.xe_content blockquote.q3 { border: 1px solid #D9D9D9; }
+.xe_content blockquote.q4 { border: 1px solid #D9D9D9; background: #FBFBFB; }
+.xe_content blockquote.q5 { border: 2px solid #707070; }
+.xe_content blockquote.q6 { border: 1px dashed #707070; }
+.xe_content blockquote.q7 { border: 1px dashed #707070; background: #FBFBFB; }
+.xe_content p { margin: 1.2em 0; }
