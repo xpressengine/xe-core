@@ -41,8 +41,6 @@
 			this.options.ckeconfig = $.extend({}, this.default_ckeconfig, this.options.ckeconfig);
 			this._mergeCkeconfig(this.options.ckeconfig);
 
-			console.debug('xe.CKEditor _create()', this, this.options.ckeconfig);
-
 			// 자동 저장 메시지 표시
 			CKEDITOR.plugins.add( 'autosavemsg', {
 				init: function(editor) {
@@ -77,12 +75,8 @@
 				}
 			});
 
-			console.debug('xe.CKEditor _create()', this.options.ckeconfig, this.ckeInstance.config);
-
 			$.data(this, 'xe-ckeditor-instance', this.ckeInstance);
 			jQuery("#ckeditor_instance_" + this.editorSequence).data('cke_instance', this.ckeInstance);
-
-			console.debug('data xe-ckeditor-instance', $.data(this, 'xe-ckeditor-instance'));
 
 			if(this.options.autosave.enable) {
 				this._enableAutosave();
@@ -106,7 +100,6 @@
 			var $form = this.element.closest('form');
 		},
 		getContent: function() {
-			console.debug('getContent', this.ckeInstance.getData());
 			return this.ckeInstance.getData();
 		},
 		insertContent: function(content) {
@@ -138,7 +131,6 @@
 
 			// 저장
 			window.exec_json('editor.procEditorSaveDoc', data, function(res) {
-				console.debug('editor.procEditorSaveDoc', res, that._spaceElement);
 
 				// 자동 저장 완료 메시지 출력
 				var spaceId = that.ckeInstance.ui.spaceId('autosave');
@@ -246,35 +238,29 @@
 
 function _getCkeInstance(editor_sequence) {
 	var $editor_area = jQuery("#ckeditor_instance_"+editor_sequence);
-	console.debug('_getCkeInstance', $editor_area.data('cke_instance'));
 	return $editor_area.data('cke_instance');
 }
 
 //Get content from editor
 function editorGetContentTextarea_xe(editor_sequence) {
-	console.debug('editorGetContentTextarea_xe', _getCkeInstance(editor_sequence).getText());
 	return _getCkeInstance(editor_sequence).getText();
 }
 
 
 function editorGetSelectedHtml(editor_sequence) {
-	console.debug('editorGetSelectedHtml', _getCkeInstance(editor_sequence).getSelection().getSelectedText());
 	return _getCkeInstance(editor_sequence).getSelection().getSelectedText();
 }
 
 function editorGetContent(editor_sequence) {
-	console.debug('editorGetContent', _getCkeInstance(editor_sequence).getData());
 	return _getCkeInstance(editor_sequence).getData();
 }
 
 function insertElement(editor_sequence, code) {
-	console.debug('insertElement', code);
 	return _getCkeInstance(editor_sequence).insertHtml(code);
 }
 
 //Replace html content to editor
 function editorReplaceHTML(iframe_obj, content) {
-	console.debug('editorReplaceHTML', iframe_obj, content);
 	content = editorReplacePath(content);
 
 	var editor_sequence = parseInt(iframe_obj.id.replace(/^.*_/, ''), 10);
@@ -283,7 +269,6 @@ function editorReplaceHTML(iframe_obj, content) {
 }
 
 function editorGetIFrame(editor_sequence) {
-	console.debug('editorGetIFrame', editor_sequence);
 	return jQuery('#ckeditor_instance_' + editor_sequence).get(0);
 }
 
@@ -298,7 +283,6 @@ function editorReplacePath(content) {
 
 	return content;
 }
-
 
 // @DEPRECATED
 //Insert uploaded file to editor
