@@ -108,6 +108,8 @@ class module extends ModuleObject
 			// check fix mskin
 			if(!$oDB->isColumnExists("modules", "is_mskin_fix")) return true;
 
+			if(!$oDB->isIndexExists("module_part_config", "unique_module_part_config")) return true;
+
 			$oModuleModel = getModel('module');
 			$moduleConfig = $oModuleModel->getModuleConfig('module');
 			if(!$moduleConfig->isUpdateFixedValue) return true;
@@ -428,6 +430,11 @@ class module extends ModuleObject
 				if(!$moduleConfig) $moduleConfig = new stdClass;
 				$moduleConfig->isUpdateFixedValue = TRUE;
 				$output = $oModuleController->updateModuleConfig('module', $moduleConfig);
+			}
+
+			if(!$oDB->isIndexExists("module_part_config", "unique_module_part_config"))
+			{
+				$oDB->addIndex("module_part_config", "unique_module_part_config", array("module", "module_srl"), TRUE);
 			}
 
 			$oModuleController->insertUpdatedLog($version_update_id);
