@@ -507,25 +507,13 @@ function isSiteID($domain)
 function saveCookie($name, $value = '', $httponly = false, $expire = 0)
 {
 	static $secure = null;
-	static $db_info = null;
-
-	if($db_info === null)
-	{
-		$db_info = Context::getDBInfo();
-	}
 
 	$path = '/';
 	$domain = '';
 
-	if($db_info->disable_cookie_secure !== 'Y')
+	if($secure === null)
 	{
-		if($secure === null)
-		{
-			$secure = (Context::getSslStatus() === 'always') ? true : false;
-		}
-	} else {
-		$httponly = false;
-		$secure = false;
+		$secure = (Context::getSslStatus() === 'always') ? true : false;
 	}
 
 	return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
@@ -1646,29 +1634,18 @@ function requirePear()
 
 function checkCSRF()
 {
-	static $disable_csrf_token = null;
-
 	if($_SERVER['REQUEST_METHOD'] != 'POST')
 	{
 		return FALSE;
 	}
 
-	if($disable_csrf_token === null)
-	{
-		$db_info = Context::getDBinfo();
-		$disable_csrf_token = $db_info->disable_csrf_token;
-	}
+	$csrf_token = ($_SERVER['HTTP_X_CSRF_TOKEN']) ? $_SERVER['HTTP_X_CSRF_TOKEN'] : $_POST['_token'];
 
-	if($disable_csrf_token !== 'Y')
+	// Token
+	if(!$csrf_token || $_SESSION['csrf_token'] !== $csrf_token)
 	{
-		$csrf_token = ($_SERVER['HTTP_X_CSRF_TOKEN']) ? $_SERVER['HTTP_X_CSRF_TOKEN'] : $_POST['_token'];
-
-		// Token
-		if(!$csrf_token || $_SESSION['csrf_token'] !== $csrf_token)
-		{
-			header("HTTP/1.1 403 Forbidden");
-			return FALSE;
-		}
+		header("HTTP/1.1 403 Forbidden");
+		return FALSE;
 	}
 
 	$default_url = Context::getDefaultUrl();

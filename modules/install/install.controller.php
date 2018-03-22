@@ -241,8 +241,6 @@ class installController extends install
 		Context::setLangType($db_info->lang_type);
 		$db_info->use_rewrite = Context::get('use_rewrite');
 		$db_info->time_zone = Context::get('time_zone');
-		$db_info->disable_cookie_secure = 'N';
-		$db_info->disable_csrf_token = 'N';
 
 		if($_SERVER['HTTPS'] == 'on')
 		{
