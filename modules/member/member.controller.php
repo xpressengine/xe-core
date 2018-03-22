@@ -462,7 +462,7 @@ class memberController extends member
 			else if($_COOKIE['XE_REDIRECT_URL'])
 			{
 				$returnUrl = $_COOKIE['XE_REDIRECT_URL'];
-				savecookie('XE_REDIRECT_URL');
+				setcookie("XE_REDIRECT_URL", '', 1);
 			}
 		}
 
@@ -1757,7 +1757,7 @@ class memberController extends member
 		// If no information exists, delete a cookie
 		if(!$output->toBool() || !$output->data)
 		{
-			saveCookie('xeak');
+			setCookie('xeak',null,$_SERVER['REQUEST_TIME']+60*60*24*365);
 			return;
 		}
 
@@ -1769,7 +1769,7 @@ class memberController extends member
 
 		if(!$user_id || !$password)
 		{
-			saveCookie('xeak');
+			setCookie('xeak',null,$_SERVER['REQUEST_TIME']+60*60*24*365);
 			return;
 		}
 
@@ -1819,7 +1819,7 @@ class memberController extends member
 		else
 		{
 			executeQuery('member.deleteAutologin', $args);
-			saveCookie('xeak');
+			setCookie('xeak',null,$_SERVER['REQUEST_TIME']+60*60*24*365);
 		}
 	}
 
@@ -1973,7 +1973,7 @@ class memberController extends member
 			$autologin_args->member_srl = $this->memberInfo->member_srl;
 			executeQuery('member.deleteAutologin', $autologin_args);
 			$autologin_output = executeQuery('member.insertAutologin', $autologin_args);
-			if($autologin_output->toBool()) saveCookie('xeak', $autologin_args->autologin_key, true, $_SERVER['REQUEST_TIME']+31536000);
+			if($autologin_output->toBool()) setCookie('xeak',$autologin_args->autologin_key, $_SERVER['REQUEST_TIME']+31536000);
 		}
 		if($this->memberInfo->is_admin == 'Y')
 		{
@@ -2017,7 +2017,7 @@ class memberController extends member
 		$_SESSION['ipaddress'] = $_SERVER['REMOTE_ADDR'];
 		$_SESSION['member_srl'] = $this->memberInfo->member_srl;
 		$_SESSION['is_admin'] = '';
-		saveCookie('xe_logged', 'true');
+		setcookie('xe_logged', 'true');
 		// Do not save your password in the session jiwojum;;
 		//unset($this->memberInfo->password);
 		// User Group Settings
@@ -2619,10 +2619,10 @@ class memberController extends member
 		}
 
 		session_destroy();
-		saveCookie(session_name());
-		saveCookie('sso');
-		saveCookie('xeak');
-		saveCookie('xe_logged', 'false');
+		setcookie(session_name(), '', $_SERVER['REQUEST_TIME']-42000);
+		setcookie('sso','',$_SERVER['REQUEST_TIME']-42000);
+		setcookie('xeak','',$_SERVER['REQUEST_TIME']-42000);
+		setcookie('xe_logged', 'false', $_SERVER['REQUEST_TIME'] - 42000);
 
 		if($memberSrl || $_COOKIE['xeak'])
 		{
