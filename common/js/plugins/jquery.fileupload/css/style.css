@@ -1,5 +1,4 @@
 @charset "UTF-8";
-
 .xefu-act-selectfile {
 	overflow: hidden !important;
 	display: inline-block;
@@ -63,19 +62,19 @@
 	padding: 0;
 }
 .xefu-list-images li {
-	overflow: hidden;
 	position: relative;
 	display: inline-block;
 	margin: 3px;
 	width: auto;
-	min-width: 90px;
 	max-height: 90px;
-	text-align: center;
 	border: 2px solid #EDEDED;
-	border-radius: 6px;
-	background: #EDEDED;
 }
 .xefu-list-images li {
+	display: inline-block;
+	width: auto;
+	min-width: 90px;
+	text-align: center;
+	background: #EDEDED;
 }
 .xefu-list-images li span {
 	width: 100%;
@@ -134,32 +133,9 @@
 .xefu-list-images .xefu-file-size {
 	display: none;
 }
-.xefu-list-images .xefu-uploading {
-	position: relative;
-	width: 94px;
-	height: 94px;
-}
-
-.xefu-list-images .xefu-uploading:after {
-	content: '';
-	border: 1px solid #5678D7;
-	width: 80px;
-	height: 4px;
-	position: absolute;
-	top: 50%;
-	left: 7px;
-	border-radius: 2px;
-}
-
-.xefu-list-images .xefu-uploading:before {
-	content: '';
-	width: 20px;
-	height: 6px;
-	background: #5678D7;
-	position: absolute;
-	left: 5px;
-	top: 50%;
-	border-radius: 2px;
+.xefu-list-images li img {
+	/*width: 90px;*/
+	/*height: 90px;*/
 }
 
 .modernizr-no-touch .xefu-list-images li:hover .xefu-act-insert-media {
@@ -225,15 +201,16 @@
 .modernizr-no-touch li:hover .xefu-act-delete {
 	display: inline-block;
 }
-.xefu-select-mode .xefu-list-images {
-	cursor: crosshair;
-}
 .xefu-select-mode .xefu-list-images li .xefu-act-delete {
 	display: none;
 }
 
-.xefu-select-mode .xefu-list-images .xefu-select {
+.xefu-select-mode .xefu-list-images li .xefu-select {
 	display: none;
+}
+.modernizr-no-touch .xefu-select-mode .xefu-list-images li:hover .xefu-select,
+.xefu-select-mode .xefu-list-images li.selected .xefu-select {
+	display: inline-block;
 	position: absolute;
 	bottom: 3px;
 	left: auto;
@@ -249,25 +226,14 @@
 	border: 1px solid #FFF;
 }
 
-.modernizr-no-touch .xefu-select-mode .selectable-item:hover .xefu-select,
-.xefu-select-mode .selectable-item .ui-unselecting .xefu-select {
-	display: inline-block;
+.modernizr-no-touch .xefu-select-mode .xefu-list-images li:hover .xefu-select {
 	background: #BDBDBD;
 }
-.modernizr-no-touch .xefu-select-mode .selectable-item.ui-selecting .xefu-select,
-.xefu-select-mode .xefu-list-images .ui-selected .xefu-select {
-	display: inline-block;
+.xefu-select-mode .xefu-list-images li.selected .xefu-select,
+.modernizr-no-touch .xefu-select-mode .xefu-list-images li.selected .xefu-select {
 	background: #007BFF;
 }
-.xefu-list-images li.ui-selecting,
-.xefu-list-images li.ui-selected {
-	border-radius: 6px;
-	border-color: #007BFF;
-	overflow: hidden;
-}
-.ui-selected img {
-	opacity: .5;
-}
+
 /* END:images */
 
 /* files */
@@ -285,7 +251,7 @@
 .xefu-list-other .xefu-file {
 	line-height: 2.2;
 }
-.xefu-list-other li.ui-selected {
+.xefu-list-other li.selected {
 	background-color: #E9F3EF;
 }
 .xefu-list-other .xefu-file-info {
@@ -390,14 +356,14 @@ button.xefu-btn {
 
 .xefu-act-link-selected,
 .xefu-select-all,
-.xefu-unselect-all,
+.xefu-deselect-all,
 .xefu-select-all-images,
 .xefu-act-delete-selected {
 	display: none;
 }
 .xefu-select-mode .xefu-act-link-selected,
 .xefu-select-mode .xefu-select-all,
-.xefu-select-mode .xefu-unselect-all,
+.xefu-select-mode .xefu-deselect-all,
 .xefu-select-mode .xefu-select-all-images,
 .xefu-select-mode .xefu-act-delete-selected {
 	display: inline-block;

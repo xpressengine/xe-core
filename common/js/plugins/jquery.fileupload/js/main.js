@@ -1,17 +1,14 @@
 (function($){
 	"use strict";
 
-	var selectable;
-
 	$.widget('xe.fileUploader', $.blueimp.fileupload, {
 		options: {
-			loadedFileList: function(e,d) {dd('loadedFileList', e, d);},
+			loadedFileList: function(e,d) {console.debug('loadedFileList', e, d);},
 			/**
 			 * 이미지 자동 본문 삽입
 			 */
 			imageAutoAttach: true,
 			sequentialUploads: true,
-			maxChunkSize: 1024000,
 
 			leftUploadLimit: 0,
 			limitFileSize: 0,
@@ -48,11 +45,10 @@
 				actSelectedDeleteFile : '.xefu-act-delete-selected',
 				actSelectAll : '.xefu-select-all',
 				actSelectAllImages : '.xefu-select-all-images',
-				actUnselectAll : '.xefu-unselect-all',
+				actDeselectAll : '.xefu-deselect-all',
 
 				// 버튼
-				actInsertMedia : '.xefu-act-insert-media',
-				actInsertFile : '.xefu-act-insert-file',
+				actInsertMedia : 'xefu-act-insert-media',
 				actDeleteFile : '.xefu-act-delete',
 				actSetCover : '.xefu-act-set-cover',
 
@@ -64,55 +60,43 @@
 				statusFiletypesText: '.xefu-allowed-filetypes',
 			},
 			/**
-			 * selectable 설정
+			 * FinderSelect 설정
 			 */
-			configSelectable: {
-				appendTo: ".xefu-list-container",
-				autoRefresh: true,
-				distance: 0,
-				filter: "li",
-				tolerance: "touch",
-				debug: true
+			configFinderSelect: {
+				children: 'li',
+				enableDesktopCtrlDefault: true,
+				enableClickDrag: true
 			},
 			/**
 			 * $.blueimp.fileupload.add()
 			 */
 			add: function (e, data) {
 				var $this = $(this);
-				var that = $this.data('xe-fileUploader');
+				var that = $(this);
 				var options = $this.fileUploader('option');
 				var fileSize = data.files[0].size;
+				console.debug('add() that', that);
+
 				var overLimit = false;
 
-				dd('_super.options.add()', {that, options, data});
-
-				if(options.limitFileSize <= data.files[0].size || options.leftUploadLimit <= data.files[0].size) {
+				if(options.limitFileSize <= data.files[0].size) {
 					alert(window.xe.msg_exceeds_limit_size);
 					return false;
+				} else {
+					data.submit();
 				}
-
-				if(/^image\/(gif|jpeg|png)$/.test(data.files[0].type)) {
-					var holder = $('<li class="xefu-file xefu-file-image xefu-uploading"><div class="progress"></div></li>').attr('data-uploading', data.files[0].name);
-
-					that.element.find(options.classes.filelistImages).append(holder);
-				}
-
-				data.submit();
-			},
-			send: function() {
-				dd('_super.options.send()', {arguments});
 			},
 			/**
 			 * $.blueimp.fileupload.done()
 			 */
 			done: function() {
-				dd('_super.options.done()', {arguments})
+				console.debug('done()', arguments)
 			},
 			/**
 			 * $.blueimp.fileupload.stop()
 			 */
 			stop: function(e, res) {
-				dd('_super.options.stop()', res, this)
+				console.debug('stop()', res, this)
 				var $this = $(this);
 
 				var that = $this.data('xe-fileUploader');
@@ -124,12 +108,12 @@
 		files: [],
 		selectMode: false,
 		isTouchDevice: false,
-		chunkedUpload: false,
 		/**
 		 * create
 		 */
 		_create: function() {
-			_debug = this.options.debug;
+			console.debug('xe.fileUploader._create()');
+			var that = this;
 
 			this.options.sequentialUploads = true;
 			this.options.leftUploadLimit = this.options.limitTotalFileSize;
@@ -139,7 +123,10 @@
 			this.isTouchDevice = window.Modernizr.touch;
 			this.files = {};
 			this.selected_files = [];
-			this.chunkedUpload = this.chunkedUpload && typeof $.support.blobSlice !== 'function' && this.options.maxChunkSize;
+
+			if(this.isTouchDevice) {
+				this.element.addClass('xefu-select-mode');
+			}
 
 			this.options.formData = {
 				'editor_sequence': null,
@@ -148,27 +135,20 @@
 				'act': 'procFileUpload'
 			};
 
-			if(!this.chunkedUpload) {
-				delete this.options.maxChunkSize;
-			}
-
-			if(this.isTouchDevice) {
-				this.element.addClass('xefu-select-mode');
-			}
-
-			// selectable
-			selectable = $.xe.selectable(this.options.configSelectable, $('.xefu-list-container'));
-			// selectable = new Selectable(this.options.configSelectable);
-
-			dd('_create()', this);
+			// finderSelect
+			this.finderSelect = this.element.find(this.options.classes.fileList).finderSelect({
+				children: 'li',
+				enableDesktopCtrlDefault: true,
+				enableClickDrag: true
+			});
 		},
 		toggleSelectMode: function() {
-			dd('toggleSelectMode()');
+			console.debug('toggleSelectMode()');
 			this.element.toggleClass('xefu-select-mode');
-			selectable.unselectAll();
+			this.element.find(this.options.classes.fileList).finderSelect('unHighlightAll');
 		},
 		_init: function() {
-			dd('_init()')
+			console.debug('xe.fileUploader._init()')
 			var that = this;
 
 			this._super();
@@ -177,24 +157,14 @@
 
 			this.element.find('.xefu-image-auto-attach').on('change', function() {
 				var $el = $(this);
-				dd('auto-attach.change', $el.prop('checked'))
+				console.debug($el.prop('checked'))
 				that.options.imageAutoAttach = $el.prop('checked');
 			})
 
-			// 본문 삽입: 이미지
-			this.element.on('click', this.options.classes.actInsertMedia, function(e) {
+			// 본문 삽입
+			this.element.on('click', '.' + this.options.classes.actInsertMedia, function(e) {
 				e.preventDefault();
-
-				var $el = $(this);
-				var file_srl = $el.data('file-srl') || $el.closest('.xefu-file').data('file-srl');
-
-				that._insertToContent([file_srl]);
-			});
-
-			// 본문 삽입: 다운로드
-			this.element.on('click', this.options.classes.actInsertFile, function(e) {
-				e.preventDefault();
-
+				e.stopPropagation();
 				var $el = $(this);
 				var file_srl = $el.data('file-srl') || $el.closest('.xefu-file').data('file-srl');
 
@@ -223,55 +193,49 @@
 			/* controll */
 			// 전체 파일 선택
 			this.element.on('click', this.options.classes.actSelectAll, function() {
-				selectable.selectAll();
+				that.finderSelect.finderSelect('highlightAll');
 			});
 
 			// 선택해제
-			this.element.on('click', this.options.classes.actUnselectAll, function() {
-				selectable.unselectAll();
+			this.element.on('click', this.options.classes.actDeselectAll, function() {
+				that.finderSelect.finderSelect('unHighlightAll');
 			});
 
 			// 이미지 전체 선택
 			this.element.on('click', this.options.classes.actSelectAllImages, function() {
-				selectable.select($('.xefu-file-image'));
+				that.finderSelect.finderSelect('highlight', that.element.find(that.options.classes.filelistImages).find('li'));
 			});
 
 			// 선택 파일 삽입
 			this.element.on('click', this.options.classes.actSelectedInsertContent, function(e) {
 				e.preventDefault();
 
-				var selected = selectable.getSelected();
+				var selected = that.finderSelect.finderSelect('selected');
 				var file_srls = [];
 
-				dd('actSelectedInsertContent', {selected});
-
-				selected.each(function(){
-					console.log($.data(this));
-					file_srls.push($(this).data('file-srl'));
+				selected.each(function(idx, el){
+					file_srls.push($(el).data('file-srl'));
 				});
 
-				dd('actSelectedInsertContent', {file_srls});
-
+				console.debug('actSelectedInsertContent file_srls', file_srls);
 				that._insertToContent(file_srls);
-				selectable.unselectAll();
+				that.finderSelect.finderSelect('unHighlightAll');
 			});
 
 			// 선택 파일 삭제
 			this.element.on('click', this.options.classes.actSelectedDeleteFile, function(e) {
-				var selected = selectable.getSelectedNodes();
-				var file_srls = [];
-
 				e.preventDefault();
 
-				if(!selected.length) return;
+				var selected = that.finderSelect.finderSelect('selected');
+				var file_srls = [];
 
-				selected.forEach(function(node){
-					file_srls.push($(node).data('file-srl'));
+				selected.each(function(idx, el){
+					file_srls.push($(el).data('file-srl'));
 				});
-				dd('actSelectedDeleteFilee', {file_srls});
 
+				console.debug('act Selected Delete File file_srls', file_srls);
 				that._deleteFile(file_srls);
-				selectable.unselectAll();
+				that.finderSelect.finderSelect('unHighlightAll');
 			});
 
 			// 커버 이미지로 지정
@@ -321,7 +285,7 @@
 				return;
 			}
 
-			dd('_renderList', that.files, data.files);
+			console.debug('_renderList', that.files, data.files, files);
 
 			$.each(data.files, function (index, file) {
 				files.push(file.file_srl);
@@ -330,15 +294,8 @@
 				that.files[file.file_srl] = file;
 
 				if(/\.(jpe?g|png|gif)$/i.test(file.source_filename)) {
-					var eee = that.element.find(options.classes.filelistImages).find('[data-uploading="' + file.source_filename + '"]');
-
-					if(eee.length) {
-						eee.before(template_fileitem_image(file)).remove();
-					} else {
-						result_image.push(template_fileitem_image(file));
-					}
+					result_image.push(template_fileitem_image(file));
 					new_images.push(file.file_srl);
-
 				}
 				else
 				{
@@ -357,9 +314,9 @@
 			this.element.find(options.classes.filelistOther).append(result.join(''))
 			this.element.find(options.classes.fileList).show();
 			this.element.find(options.classes.controll).show();
-			// if(this.options.imageAutoAttach) this._insertToContent(new_images);
+			if(this.options.imageAutoAttach) this._insertToContent(new_images);
 
-			selectable.refresh();
+			this.finderSelect.finderSelect('unHighlightAll');
 
 			this._updateStatus.call(this, data);
 		},
@@ -374,6 +331,7 @@
 			}
 		},
 		_loadFiles: function() {
+			console.debug('_loadFiles', this.files);
 			var that = this;
 			var options = this.options;
 			var data = {};
@@ -381,7 +339,7 @@
 			data.editor_sequence = this.options.editorSequence;
 
 			$.exec_json('file.getFileList', data, function(res) {
-				dd('_loadFile', that.files, res);
+				console.debug('_loadFiles', res);
 
 				options.leftUploadLimit = res.left_size;
 				if(!options.uploadTargetSrl) {
@@ -402,7 +360,7 @@
 		 * @param      {<type>}  file_list  The file list
 		 */
 		_insertToContent: function(file_list) {
-			dd('_insertToContent', {file_list});
+			console.debug('_insertToContent', file_list);
 			var that = this;
 			var temp_code = '';
 			var editorSequence = this.options.editorSequence;
@@ -413,13 +371,14 @@
 				if(!fileinfo) return;
 
 				if(/\.(jpe?g|png|gif)$/i.test(fileinfo.download_url)) {
-					if(fileinfo.download_url.indexOf('http://') === 0 || fileinfo.download_url.indexOf('https://') === 0) {
+					if(fileinfo.download_url.indexOf('http://')!=-1 || fileinfo.download_url.indexOf('https://')!=-1) {
 						temp_code += '<p><img src="' + fileinfo.download_url + '" alt="' + fileinfo.source_filename + '" editor_component="image_link" data-file-srl="' + fileinfo.file_srl + '" /></p>';
-					} else {
+					}
+					else {
 						temp_code += '<p><img src="' + window.request_uri + fileinfo.download_url + '" alt="' + fileinfo.source_filename + '" editor_component="image_link" data-file-srl="' + fileinfo.file_srl + '" /></p>';
 					}
 				} else {
-					temp_code += '<a href="' + window.request_uri + fileinfo.download_url + '" data-file-srl="' + fileinfo.file_srl + '">' + fileinfo.source_filename + '</a> ';
+					temp_code += '<a href="' + window.request_uri + fileinfo.download_url + '" data-file-srl="' + fileinfo.file_srl + '">' + fileinfo.source_filename + "</a>\n";
 				}
 			});
 
@@ -434,18 +393,18 @@
 		 * @param      {Function}  file_srl  The file srl
 		 */
 		_deleteFile: function(file_list) {
+			console.debug('_deleteFile()', file_list, this);
 			var that = this;
 			var file_srls = '';
 			var editorSequence = this.options.editorSequence;
 			var _ck = _getCkeInstance(editorSequence);
 
-			dd('_deleteFile()', {file_list});
 			file_srls = file_list.join(',');
 
 			if(!file_srls) return;
 
 			window.exec_json('file.procFileDelete', {'file_srls': file_srls, 'editor_sequence': editorSequence}, function(res) {
-				dd('file.procFileDelete', res);
+				console.debug('file.procFileDelete', file_srls, res);
 				$.each(file_list, function(idx, srl) {
 					var img = _ck.document.find('img');
 
@@ -453,7 +412,7 @@
 						var elItem = img.getItem(i);
 						if(elItem.getAttribute('data-file-srl') == srl) {
 							var elParent = elItem.getParent();
-							dd('_deleteFile. find element', elParent, elParent.getHtml(), elParent.getChildCount(), elParent.getChildren())
+							console.debug('_deleteFile', elParent, elParent.getHtml(), elParent.getChildCount(), elParent.getChildren())
 
 							if(elParent.getChildCount() === 1) {
 								elParent.remove();
@@ -472,17 +431,8 @@
 			data.editor_sequence = this.options.editorSequence;
 
 			window.exec_json('file.procFileSetCoverImage', data, function(res) {
-				dd('_setCover(). file.procFileSetCoverImage', {data, res});
+				console.debug('file.procFileSetCoverImage', res);
 			});
 		}
 	});
-
-	var _debug = false;
-	function dd() {
-		if(!_debug || typeof console.debug !== 'function') return;
-
-		arguments[0] = '[$.xe.fileUploader] ' + arguments[0];
-
-		console.debug.apply(this, arguments);
-	}
 })(jQuery);

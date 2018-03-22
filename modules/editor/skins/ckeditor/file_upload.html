@@ -1,6 +1,5 @@
-<!--%load_js_plugin("ui")-->
 <!--%load_js_plugin("jquery.fileupload")-->
-<!--%load_js_plugin("xe.ui.selectable")-->
+<!--%load_js_plugin("jquery.finderSelect")-->
 
 <!--%load_js_plugin("handlebars")-->
 <load target="./lang" />
@@ -40,7 +39,7 @@
 			<input type="button" class="xefu-btn xefu-act-mode-selectable" style="vertical-align: middle; vertical-align: middle;" value="선택">
 			<button class="xefu-btn xefu-act-link-selected" style=" vertical-align: middle; vertical-align: middle;"><i class="xi-arrow-up"></i> {$lang->edit->link_file}</button>
 			<input type="button" class="xefu-btn xefu-select-all-images" style=" vertical-align: middle; vertical-align: middle;" value="그림 선택">
-			<input type="button" class="xefu-btn xefu-unselect-all" style=" vertical-align: middle; vertical-align: middle;" value="선택 해제">
+			<input type="button" class="xefu-btn xefu-deselect-all" style=" vertical-align: middle; vertical-align: middle;" value="선택 해제">
 			<input type="button" class="xefu-btn xefu-act-delete-selected" style=" vertical-align: middle; vertical-align: middle;" value="{$lang->edit->delete_selected}">
 		</div>
 	</div>
@@ -49,7 +48,7 @@
 		<div class="xefu-list-images">
 			<ul></ul>
 			<script id="tmpl-xefu-item-image" type="text/x-handlebars-template">
-				<li class="xefu-file xefu-file-image selectable-item {{#if cover_image}}xefu-is-cover-image{{/if}}" data-file-srl="{{file_srl}}">
+				<li class="xefu-file xefu-file-image {{#if cover_image}}xefu-is-cover-image{{/if}}" data-file-srl="{{file_srl}}">
 					<span class="xefu-image"><img src="{{download_url}}" alt=""></span>
 					<span class="xefu-select"><i class="xi-check"></i></span>
 					<button class="xefu-act-set-cover" data-file-srl="{{file_srl}}" title="표지로 사용">표지</button>
