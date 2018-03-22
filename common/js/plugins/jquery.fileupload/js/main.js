@@ -30,10 +30,9 @@
 
 				// 파일 목록
 				controll: '.xefu-controll',
-				fileListContainer: '.xefu-list-container',
+				fileList: '.xefu-list-container',
 				filelistOther: '.xefu-list-other ul',
 				filelistImages: '.xefu-list-images ul',
-				fileItem: '.xefu-file',
 
 				// progressbar
 				progressbar: '.xefu-progressbar',
@@ -76,10 +75,10 @@
 				toggle: false,
 				debug: true,
 				selected: function(e, targets) {
-					dd('event selected', targets)
+					console.debug('event selected', targets)
 				},
 				unselected: function(e, targets) {
-					dd('event unselected', targets)
+					console.debug('event unselected', targets)
 				}
 			},
 			/**
@@ -140,7 +139,7 @@
 		 * create
 		 */
 		_create: function() {
-			_debug = true//this.options.debug;
+			_debug = this.options.debug;
 
 			this.options.sequentialUploads = true;
 			this.options.leftUploadLimit = this.options.limitTotalFileSize;
@@ -198,7 +197,7 @@
 
 			this.element.on('change', '.xefu-image-auto-attach', function() {
 				var $el = $(this);
-				dd('auto-attach.change', $el.prop('checked'))
+				console.debug('auto-attach.change', $el.prop('checked'))
 				that.options.imageAutoAttach = $el.prop('checked');
 			})
 
@@ -226,13 +225,13 @@
 			this.element.on('click', this.options.classes.actSelect, function(e) {
 				that.element.addClass('xefu-select-mode');
 				that.modeSelectable(true);
-				that.selectable.select($(e.target).closest('.xefu-file'));
+				that.selectable.select($(e.target).closest('.xefu-file-image'));
 			});
 
 			// 선택
 			this.element.on('click', this.options.classes.actUnselect, function(e) {
 				that.element.addClass('xefu-select-mode');
-				that.selectable.unselect($(e.target).closest('.xefu-file'));
+				that.selectable.unselect($(e.target).closest('.xefu-file-image'));
 			});
 
 			// 파일 삭제
@@ -348,7 +347,7 @@
 			var files = [];
 
 			if(!data.files.length) {
-				this.element.find(options.classes.fileListContainer).hide();
+				this.element.find(options.classes.fileList).hide();
 				this.element.find(options.classes.controll).hide();
 				return;
 			}
@@ -380,16 +379,14 @@
 			$.each(that.files, function (index, file) {
 				if($.inArray(file.file_srl, files) !== -1) return;
 
-				var $list = $(that.options.classes.fileListContainer);
+				var $list = $(that.options.classes.filelistImages);
 				$list.find('[data-file-srl=' + file.file_srl + ']').remove();
 			});
 
 			this.element.find(options.classes.filelistImages).append(result_image.join(''))
 			this.element.find(options.classes.filelistOther).append(result.join(''))
-			this.element.find(options.classes.fileListContainer).show();
+			this.element.find(options.classes.fileList).show();
 			this.element.find(options.classes.controll).show();
-
-			// 이미지 자동 삽입
 			if(this.options.imageAutoAttach) {
 				$.each(that.latestFiles, function (index, file) {
 					if(that._isImage(file)) {
