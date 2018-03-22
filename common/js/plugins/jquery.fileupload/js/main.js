@@ -1,6 +1,8 @@
 (function($){
 	"use strict";
 
+	var selectable;
+
 	$.widget('xe.fileUploader', $.blueimp.fileupload, {
 		options: {
 			loadedFileList: function(e,d) {dd('loadedFileList', e, d);},
@@ -53,8 +55,6 @@
 				actInsertFile : '.xefu-act-insert-file',
 				actDeleteFile : '.xefu-act-delete',
 				actSetCover : '.xefu-act-set-cover',
-				actSelect : '.xefu-act-select',
-				actUnselect : '.xefu-act-unselect',
 
 				// 상태
 				statusCount: '.xefu-status-count',
@@ -73,13 +73,7 @@
 				filter: "li",
 				tolerance: "touch",
 				toggle: false,
-				debug: true,
-				selected: function(e, targets) {
-					console.debug('event selected', targets)
-				},
-				unselected: function(e, targets) {
-					console.debug('event unselected', targets)
-				}
+				debug: true
 			},
 			/**
 			 * $.blueimp.fileupload.add()
@@ -165,24 +159,14 @@
 
 			// selectable
 			this.options.configSelectable.toggle = this.isTouchDevice;
-			this.selectable = $.xe.selectable(this.options.configSelectable, $('.xefu-list-container'));
-			if(!Modernizr.touch) this.selectable.disable();
+			selectable = $.xe.selectable(this.options.configSelectable, $('.xefu-list-container'));
 
 			dd('_create()', this);
 		},
-		toggleSelectable: function() {
-			dd('toggleSelectable()');
+		toggleSelectMode: function() {
+			dd('toggleSelectMode()');
 			this.element.toggleClass('xefu-select-mode');
-			this.selectable.unselectAll();
-		},
-		modeSelectable: function(selectable) {
-			if(!!selectable) {
-				this.element.addClass('xefu-select-mode');
-				this.selectable.enable();
-			} else {
-				this.element.removeClass('xefu-select-mode');
-				this.selectable.disable();
-			}
+			selectable.unselectAll();
 		},
 		_init: function() {
 			dd('_init()')
@@ -218,19 +202,6 @@
 				that._insertToContent([file_srl]);
 			});
 
-			// 선택
-			this.element.on('click', this.options.classes.actSelect, function(e) {
-				that.element.addClass('xefu-select-mode');
-				that.modeSelectable(true);
-				that.selectable.select($(e.target).closest('.xefu-file-image'));
-			});
-
-			// 선택
-			this.element.on('click', this.options.classes.actUnselect, function(e) {
-				that.element.addClass('xefu-select-mode');
-				that.selectable.unselect($(e.target).closest('.xefu-file-image'));
-			});
-
 			// 파일 삭제
 			this.element.on('click', this.options.classes.actDeleteFile, function(e) {
 				e.preventDefault();
@@ -247,30 +218,30 @@
 				e.preventDefault();
 				e.stopPropagation();
 
-				that.toggleSelectable();
+				that.toggleSelectMode();
 			});
 
 			/* controll */
 			// 전체 파일 선택
 			this.element.on('click', this.options.classes.actSelectAll, function() {
-				that.selectable.selectAll();
+				selectable.selectAll();
 			});
 
 			// 선택해제
 			this.element.on('click', this.options.classes.actUnselectAll, function() {
-				that.selectable.unselectAll();
+				selectable.unselectAll();
 			});
 
 			// 이미지 전체 선택
 			this.element.on('click', this.options.classes.actSelectAllImages, function() {
-				that.selectable.select($('.xefu-file-image'));
+				selectable.select($('.xefu-file-image'));
 			});
 
 			// 선택 파일 삽입
 			this.element.on('click', this.options.classes.actSelectedInsertContent, function(e) {
 				e.preventDefault();
 
-				var selected = that.selectable.getSelected();
+				var selected = selectable.getSelected();
 				var file_srls = [];
 
 				dd('actSelectedInsertContent', selected);
@@ -283,12 +254,12 @@
 				dd('actSelectedInsertContent', file_srls);
 
 				that._insertToContent(file_srls);
-				that.selectable.unselectAll();
+				selectable.unselectAll();
 			});
 
 			// 선택 파일 삭제
 			this.element.on('click', this.options.classes.actSelectedDeleteFile, function(e) {
-				var selected = that.selectable.getSelectedNodes();
+				var selected = selectable.getSelectedNodes();
 				var file_srls = [];
 
 				e.preventDefault();
@@ -301,7 +272,7 @@
 				dd('actSelectedDeleteFilee', file_srls);
 
 				that._deleteFile(file_srls);
-				that.selectable.unselectAll();
+				selectable.unselectAll();
 			});
 
 			// 커버 이미지로 지정
@@ -389,7 +360,7 @@
 			this.element.find(options.classes.controll).show();
 			// if(this.options.imageAutoAttach) this._insertToContent(new_images);
 
-			that.selectable.refresh();
+			selectable.refresh();
 
 			this._updateStatus.call(this, data);
 		},
