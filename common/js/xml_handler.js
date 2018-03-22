@@ -145,10 +145,7 @@ var show_waiting_message = true;
 				dataType    : 'xml',
 				data        : xml.join('\n'),
 				contentType : 'text/plain',
-				beforeSend  : function(xhr){
-					_xhr = xhr;
-					xhr.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content')); 
-				},
+				beforeSend  : function(xhr){ _xhr = xhr; },
 				success     : onsuccess,
 				error       : function(xhr, textStatus) {
 					waiting_obj.css('display', 'none');
@@ -161,9 +158,6 @@ var show_waiting_message = true;
 						if(xhr.responseText === "") return;
 
 						msg += xhr.responseText.replace(/<[^>]+>/g, '');
-					} else if(textStatus === 'error') {
-						msg = xhr.statusText;
-						alert(msg);
 					} else {
 						msg = textStatus;
 					}
@@ -257,9 +251,6 @@ var show_waiting_message = true;
 
 			try {
 				$.ajax({
-					beforeSend : function(xhr){
-						xhr.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content')); 
-					},
 					type: "POST",
 					dataType: "json",
 					url: request_uri,
@@ -288,15 +279,12 @@ var show_waiting_message = true;
 
 						var msg = '';
 
-						if (textStatus === 'parsererror') {
+						if (textStatus == 'parsererror') {
 							msg  = 'The result is not valid JSON :\n-------------------------------------\n';
 
 							if(xhr.responseText === "") return;
 
 							msg += xhr.responseText.replace(/<[^>]+>/g, '');
-						} else if(textStatus === 'error') {
-							msg = xhr.statusText;
-							alert(msg);
 						} else {
 							msg = textStatus;
 						}
@@ -331,9 +319,6 @@ var show_waiting_message = true;
 			$.extend(data,{module:action[0],act:action[1]});
 			try {
 				$.ajax({
-					beforeSend : function(xhr){
-						xhr.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content')); 
-					},
 					type:"POST",
 					dataType:"html",
 					url:request_uri,
