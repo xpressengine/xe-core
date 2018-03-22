@@ -232,21 +232,6 @@ function editorGetAutoSavedDoc(form) {
 	
 }
 
-function insertElement(editorSequence, code) {
-	// html 모드
-	if(editorMode[editorSequence]=='html'){
-		if(code.length>0 && get_by_id('editor_textarea_'+editorSequence))
-		{
-			get_by_id('editor_textarea_'+editorSequence).value += code;
-		}
-	// 위지윅 모드
-	}else{
-		var iframe_obj = editorGetIFrame(editorSequence);
-		if(!iframe_obj) return;
-		if(code.length>0) editorReplaceHTML(iframe_obj, code);
-	}
-}
-
 // WYSIWYG 모드를 저장하는 확장기능
 xe.XE_GET_WYSYWYG_MODE = jQuery.Class({
 	name : "XE_GET_WYSYWYG_MODE",
