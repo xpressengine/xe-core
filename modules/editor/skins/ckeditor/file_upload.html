@@ -1,10 +1,7 @@
 <!--%load_js_plugin("jquery.fileupload")-->
 <!--%load_js_plugin("jquery.finderSelect")-->
-
 <!--%load_js_plugin("handlebars")-->
 <load target="./lang" />
-
-
 <div cond="$allow_fileupload" id="xefu-container-{$editor_sequence}" class="xefu-container xe-clearfix" data-editor-sequence="{$editor_sequence}">
 	<!--// dropzone -->
 	<div class="xefu-dropzone">
@@ -13,14 +10,9 @@
 			<input id="xe-fileupload" type="file" class="fileupload-processing " value="{$lang->edit->upload_file}" name="Filedata" data-auto-upload="true" data-editor-sequence="{$editor_sequence}" multiple />
 		</span>
 
-		<div style="float:right; line-height: 24px;">
-			<label><input type="checkbox" class="xefu-image-auto-attach" /> 내용에 그림 넣기</label>
-		</div>
+		<p class="xefu-dropzone-message">{$lang->ckeditor_about_file_drop_area}</p>
 
-		<p class="xefu-dropzone-message">
-			{$lang->ckeditor_about_file_drop_area}
-		</p>
-
+		<p class="upload_info">{$lang->allowed_filesize} : <span class="allowed_filesize">0MB</span> <span>({$lang->allowed_filetypes} : <span class="allowed_filetypes">*.*</span>)</span></p>
 
 		<p class="xefu-progress-status" style="display: none;">{$lang->ckeditor_file_uploading} (<span class="xefu-progress-percent">0%</span>)</p>
 		<div class="xefu-progressbar" style="display: none;"><div></div></div>
@@ -28,66 +20,39 @@
 	<!--// END:dropzone -->
 
 	<div class="xefu-controll xe-clearfix">
-		<div style="float: left;padding: 5px 0;">
-			{$lang->ckeditor_file_count} (<span class="xefu-status-attached-size"></span> / <span class="xefu-status-limit-size"></span>)
-			<br>
-			<span class="xefu-allowed-filetypes-container"><span>({$lang->allowed_filetypes} : <span class="xefu-allowed-filetypes">*.*</span>)</span></span>
+		<div style="float: left;">
+			{$lang->ckeditor_file_count} (<span class="attached_size"></span> / <span class="allowed_attach_size"></span>)
 		</div>
 
-		<div style="float: right;padding: 5px 0;">
-			<!--// 선택 모드 전환  -->
-			<input type="button" class="xefu-btn xefu-act-mode-selectable" style="vertical-align: middle; vertical-align: middle;" value="선택">
-			<button class="xefu-btn xefu-act-link-selected" style=" vertical-align: middle; vertical-align: middle;"><i class="xi-arrow-up"></i> {$lang->edit->link_file}</button>
-			<input type="button" class="xefu-btn xefu-select-all-images" style=" vertical-align: middle; vertical-align: middle;" value="그림 선택">
-			<input type="button" class="xefu-btn xefu-deselect-all" style=" vertical-align: middle; vertical-align: middle;" value="선택 해제">
+		<div style="float: right">
+			<input type="button" class="xefu-btn xefu-act-link-selected" style=" vertical-align: middle; vertical-align: middle;" value="{$lang->edit->link_file}">
 			<input type="button" class="xefu-btn xefu-act-delete-selected" style=" vertical-align: middle; vertical-align: middle;" value="{$lang->edit->delete_selected}">
 		</div>
 	</div>
 
-	<div class="xefu-list-container">
+	<div class="xefu-list">
 		<div class="xefu-list-images">
-			<ul></ul>
-			<script id="tmpl-xefu-item-image" type="text/x-handlebars-template">
-				<li class="xefu-file xefu-file-image {{#if cover_image}}xefu-is-cover-image{{/if}}" data-file-srl="{{file_srl}}">
-					<span class="xefu-image"><img src="{{download_url}}" alt=""></span>
-					<span class="xefu-select"><i class="xi-check"></i></span>
-					<button class="xefu-act-set-cover" data-file-srl="{{file_srl}}" title="표지로 사용">표지</button>
-					<button class="xefu-act-delete" data-file-srl="{{file_srl}}" title="삭제"><i class="xi-close"></i></button>
-					<button class="xefu-act-insert-media" data-file-srl="{{file_srl}}" title="본문에 삽입"><i class="xi-arrow-up"></i></button>
-				</li>
-			</script>
+			<ul>
+			</ul>
 		</div>
 
-		<div class="xefu-list-other">
-			<ul></ul>
-			<script id="tmpl-xefu-item-file" type="text/x-handlebars-template">
-				<li class="xefu-file xe-clearfix" data-file-srl="{{file_srl}}">
-					<input type="button" class="xefu-act-insert-file" value="본문 삽입" />
-					<span class="xefu-file-name">
-						<label><input type="checkbox" data-file-srl="{{file_srl}}" /> {{source_filename}}</label>
-					</span>
-					<span class="xefu-file-info">
-						<span>{{disp_file_size}}</span>
-					</span>
-				</li>
-			</script>
+		<div class="xefu-list-files">
+			<ul>
+			</ul>
 		</div>
 	</div>
+
 </div>
 
 <script>
-	jQuery(document).ready(function($){
+	jQuery(function($){
 		// uploader
 		<!--@if($allow_fileupload)-->
 		var setting = {
-			limitFileSize: {$file_config->allowed_filesize},
-			limitTotalFileSize: {$file_config->allowed_filesize},
-			// loadedFiles: function(e, data) {
-			// 	console.info('callback!!!!! loadedFiles', data);
-			// }
+			maxFileSize: {$file_config->allowed_filesize},
+			limitMultiFileUploadSize: {$file_config->allowed_filesize}
 		};
-		var uploader = $.xe.fileUploader(setting, '#xefu-container-{$editor_sequence}');
-
+		var uploader = $('#xefu-container-{$editor_sequence}').xeUploader(setting);
 		window.xe.msg_exceeds_limit_size = '{$lang->msg_exceeds_limit_size}';
 		window.xe.msg_checked_file_is_deleted = '{$lang->msg_checked_file_is_deleted}';
 		window.xe.msg_file_cart_is_null = '{$lang->msg_file_cart_is_null}';

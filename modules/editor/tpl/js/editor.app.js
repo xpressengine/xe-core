@@ -1,31 +1,5 @@
 (function($){
 	"use strict";
-
-	$.widget('xe.editor', {
-		options : {
-			test: 0,
-		},
-		_create: function() {
-			this.editorSequence = this.element.data('editor-sequence');
-			console.debug('xe.editor _create()', this.editorSequence, this.options);
-		},
-		_init: function (){},
-		// get/set
-		content: function() {},
-		// get
-		selectedContent: function() {},
-		insertElement: function() {},
-		insertFile: function() {},
-	});
-})(jQuery);
-
-
-
-
-
-
-(function($){
-	"use strict";
 	var default_ckeconfig = {
 		bodyClass: 'xe_content editable',
 		toolbarCanCollapse: true,
