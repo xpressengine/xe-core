@@ -19,7 +19,7 @@
 			start: null,
 			stop: null,
 			unselected: null,
-			unselecting: null
+			unselecting: null,
 		},
 		_create: function() {
 			var that = this;
