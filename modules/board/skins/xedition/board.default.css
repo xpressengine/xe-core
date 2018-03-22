@@ -230,7 +230,7 @@
 	float: left;
 	position: relative;
 	margin: 0 4px 0 0; }
-.list_footer .board_search .xi-search {
+.list_footer .board_search .xi-magnifier {
 	position:absolute; top:7px; left: 7px;
 }
 .list_footer .board_search * {

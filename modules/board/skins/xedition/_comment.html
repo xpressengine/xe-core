@@ -1,7 +1,7 @@
 <!-- COMMENT -->
 <div class="feedback" id="comment">
 	<div class="fbHeader">
-		<h2><i class="xi-comment-o"></i> {$lang->comment} <em>{$oDocument->getCommentcount()}</em></h2>
+		<h2><i class="xi-comment"></i> {$lang->comment} <em>{$oDocument->getCommentcount()}</em></h2>
 	</div>
 	<ul cond="$oDocument->getCommentcount()" class="fbList">
 		<li loop="$oDocument->getComments()=>$key,$comment" class="fbItem"|cond="!$comment->get('depth')" class="fbItem indent indent{($comment->get('depth'))}"|cond="$comment->get('depth')" id="comment_{$comment->comment_srl}">
@@ -36,7 +36,7 @@
 			<p class="action">
 				<span class="vote" cond="$comment->get('voted_count')!=0">{$lang->cmd_vote}:{$comment->get('voted_count')?$comment->get('voted_count'):0}</span>
 				<a cond="$oDocument->allowComment()" href="{getUrl('act','dispBoardReplyComment','comment_srl',$comment->comment_srl)}" class="reply"><i class="xi-reply"></i> {$lang->cmd_reply}</a>
-				<a cond="$comment->isGranted()||!$comment->get('member_srl')" href="{getUrl('act','dispBoardModifyComment','comment_srl',$comment->comment_srl)}" class="modify"><i class="xi-eraser-o"></i> {$lang->cmd_modify}</a>
+				<a cond="$comment->isGranted()||!$comment->get('member_srl')" href="{getUrl('act','dispBoardModifyComment','comment_srl',$comment->comment_srl)}" class="modify"><i class="xi-eraser"></i> {$lang->cmd_modify}</a>
 				<a cond="$comment->isGranted()||!$comment->get('member_srl')" href="{getUrl('act','dispBoardDeleteComment','comment_srl',$comment->comment_srl)}" class="delete"><i class="xi-trash"></i> {$lang->cmd_delete}</a>
 				<a cond="$is_logged" class="comment_{$comment->comment_srl} this" href="#popup_menu_area" onclick="return false">{$lang->cmd_comment_do}</a>
 			</p>
@@ -76,7 +76,7 @@
 			<label cond="$module_info->secret=='Y'" for="is_secret">{$lang->secret}</label>
 		</div>
 		<div style="float:right">
-			<button type="submit" class="btn_insert"><i class="xi-message-o"></i> {$lang->cmd_comment_registration}</button>
+			<button type="submit" class="btn_insert"><i class="xi-message"></i> {$lang->cmd_comment_registration}</button>
 		</div>
 	</form>
 </div>
