@@ -726,6 +726,12 @@ class FileHandler
 	 */
 	function checkMemoryLoadImage(&$imageInfo)
 	{
+		$memoryLimit = self::returnBytes(ini_get('memory_limit'));
+		if($memoryLimit == -1)
+		{
+			return true;
+		}
+
 		$K64 = 65536;
 		$TWEAKFACTOR = 2.0;
 		$channels = $imageInfo['channels'];
@@ -733,12 +739,14 @@ class FileHandler
 		{
 			$channels = 6; //for png
 		}
+
 		$memoryNeeded = round(($imageInfo[0] * $imageInfo[1] * $imageInfo['bits'] * $channels / 8 + $K64 ) * $TWEAKFACTOR);
 		$availableMemory = self::returnBytes(ini_get('memory_limit')) - memory_get_usage();
 		if($availableMemory < $memoryNeeded)
 		{
 			return FALSE;
 		}
+
 		return TRUE;
 	}
 
