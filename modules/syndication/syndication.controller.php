@@ -13,6 +13,7 @@ class syndicationController extends syndication
 
 	function triggerInsertDocument(&$obj) {
 		if($obj->module_srl < 1) return $this->makeObject();
+		if($obj->status !== 'PUBLIC') return $this->makeObject();
 
 		$oSyndicationModel = getModel('syndication');
 		$oModuleModel = getModel('module');
@@ -44,7 +45,16 @@ class syndicationController extends syndication
 
 		$target_id = sprintf('%s-%s', $obj->module_srl, $obj->document_srl);
 		$id = $oSyndicationModel->getID('article', $target_id);
+
+		// PUBLIC 외 삭제
+		if($obj->status === 'PUBLIC')
+		{
 		$this->ping($id, 'article');
+		}
+		else
+		{
+			$this->ping($id, 'deleted');
+		}
 
 		return $this->makeObject();
 	}
