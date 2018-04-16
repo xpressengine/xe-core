@@ -530,6 +530,9 @@ class syndicationModel extends syndication
 		$args->document_srl = $document_srl;
 		$output = executeQueryArray('syndication.getDeletedList', $args);
 
+		$time_zone = substr($GLOBALS['_time_zone'],0,3).':'.substr($GLOBALS['_time_zone'],3);
+		Context::set('time_zone', $time_zone);
+
 		foreach($output->data as $key => $val)
 		{
 			$module_srl = $val->module_srl;
