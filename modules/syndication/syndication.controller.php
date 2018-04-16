@@ -78,24 +78,8 @@ class syndicationController extends syndication
 		return $this->makeObject();
 	}
 
-	// @deprecated
+	// @DEPRECATED
 	function triggerDeleteModule(&$obj) {
-		$oSyndicationModel = getModel('syndication');
-		$oModuleModel = getModel('module');
-
-		if($oSyndicationModel->isExceptedModules($obj->module_srl)) return $this->makeObject();
-
-		$config = $oModuleModel->getModuleConfig('syndication');
-
-		if($config->syndication_use!='Y') return $this->makeObject();
-
-		$output = executeQuery('syndication.getExceptModule', $obj);
-		if($output->data->count) return $this->makeObject();
-		
-
-		$id = $oSyndicationModel->getID('site', $obj->module_srl);
-		$this->ping($id, 'deleted');
-
 		return $this->makeObject();
 	}
 
@@ -158,24 +142,6 @@ class syndicationController extends syndication
 	function triggerRestoreTrash(&$obj) {
 		// 중복 전송으로 인해 중단
 		return $this->makeObject();
-
-		// $oSyndicationModel = getModel('syndication');
-		// $oModuleModel = getModel('module');
-
-		// if($oSyndicationModel->isExceptedModules($obj->module_srl)) return $this->makeObject();
-
-		// $config = $oModuleModel->getModuleConfig('syndication');
-
-		// if($config->syndication_use!='Y') return $this->makeObject();
-
-		// // 신디케이션 삭제 로그 제거
-		// $this->deleteLog($obj->module_srl, $obj->document_srl);
-
-		// $target_id = sprintf('%s-%s', $obj->module_srl, $obj->document_srl);
-		// $id = $oSyndicationModel->getID('article', $target_id);
-		// $this->ping($id, 'article');
-
-		// return $this->makeObject();
 	}
 
 	function insertLog($module_srl, $document_srl, $title = null, $summary = null)
