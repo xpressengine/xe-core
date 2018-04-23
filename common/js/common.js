@@ -182,8 +182,8 @@ if(typeof window.XE == "undefined") {
 		$(function() {
 		$('a[target]').each(function() {
 			var $this = $(this);
-			var href = $this.attr('href').trim();
-			var target = $this.attr('target').trim();
+			var href = String($this.attr('href')).trim();
+			var target = String($this.attr('target')).trim();
 
 			if(!target || !href) return;
 			if(!href.match(/^(https?:\/\/)/)) return;
@@ -208,7 +208,7 @@ if(typeof window.XE == "undefined") {
 
 		$('body').on('click', 'a[target]', function(e) {
 			var $this = $(this);
-			var href = $this.attr('href').trim();
+			var href = String($this.attr('href')).trim();
 
 			if(!href) return;
 			if(!href.match(/^(https?:\/\/)/)) return;
