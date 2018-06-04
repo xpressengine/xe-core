@@ -1123,7 +1123,7 @@ if(typeof window.XE == "undefined") {
 			isSameHost: function(url) {
 				if(typeof url != "string") return false;
 
-				var target_url = global.XE.URI(url).normalizePathname();
+				var target_url = global.XE.URI(url).normalizeHostname().normalizePort().normalizePathname();
 				if(target_url.is('urn')) return false;
 
 				var port = [Number(global.http_port) || 80, Number(global.https_port) || 443];
@@ -1142,7 +1142,7 @@ if(typeof window.XE == "undefined") {
 				}
 
 				if(!base_url) {
-					base_url = global.XE.URI(global.request_uri).normalizePathname();
+					base_url = global.XE.URI(global.request_uri).normalizeHostname().normalizePort().normalizePathname();
 					base_url = base_url.hostname() + base_url.directory();
 				}
 				target_url = target_url.hostname() + target_url.directory();
