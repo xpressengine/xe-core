@@ -48,6 +48,7 @@ class Purifier
 		$this->_config->set('Attr.IDPrefix', 'user_content_');
 
 		$this->_def = $this->_config->getHTMLDefinition(TRUE);
+		$this->_def->addAttribute('iframe', 'allowfullscreen', 'Text');
 	}
 
 	private function _setDefinition(&$content)

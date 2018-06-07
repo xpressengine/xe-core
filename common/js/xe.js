@@ -982,9 +982,6 @@ d.fn.uri=function(b){var d=this.first(),g=d.get(0),h=u(g);if(!h)throw Error('Ele
 this._string),this._dom_element[this._dom_attribute]=this._string;else if(!0===b)this._deferred_build=!0;else if(void 0===b||this._deferred_build)this._string=k.build(this._parts),this._deferred_build=!1;return this};var q=/^([a-zA-Z]+)\s*([\^\$*]?=|:)\s*(['"]?)(.+)\3|^\s*([a-zA-Z0-9]+)\s*$/;var w=d.expr.createPseudo?d.expr.createPseudo(function(b){return function(d){return p(d,b)}}):function(b,d,g){return p(b,g[3])};d.expr[":"].uri=w;return d});
 
 !function(e){"use strict";function n(e){if("undefined"==typeof e.length)o(e,"click",t);else if("string"!=typeof e&&!(e instanceof String))for(var n=0;n<e.length;n++)o(e[n],"click",t)}function t(e){var t,o,i,d;return e=e||window.event,t=e.currentTarget||e.srcElement,i=t.getAttribute("href"),i&&(d=e.ctrlKey||e.shiftKey||e.metaKey,o=t.getAttribute("target"),d||o&&!r(o))?(n.open(i),e.preventDefault?e.preventDefault():e.returnValue=!1,!1):void 0}function o(e,n,t){var o,i;return e.addEventListener?e.addEventListener(n,t,!1):(o="on"+n,e.attachEvent?e.attachEvent(o,t):e[o]?(i=e[o],e[o]=function(){t(),i()}):e[o]=t,void 0)}function i(e,n,t){var o,i,r,d,u;return o=document.createElement("iframe"),o.style.display="none",document.body.appendChild(o),i=o.contentDocument||o.contentWindow.document,d='"'+e+'"',n&&(d+=', "'+n+'"'),t&&(d+=', "'+t+'"'),r=i.createElement("script"),r.type="text/javascript",r.text="window.parent = null; window.top = null;window.frameElement = null; var child = window.open("+d+");child.opener = null",i.body.appendChild(r),u=o.contentWindow.child,document.body.removeChild(o),u}function r(e){return"_top"===e||"_self"===e||"_parent"===e}var d=-1!==navigator.userAgent.indexOf("MSIE"),u=window.open;n.open=function(e,n,t){var o;return r(n)?u.apply(window,arguments):d?(o=u.apply(window,arguments),o.opener=null,o):i(e,n,t)},n.patch=function(){window.open=function(){return n.open.apply(this,arguments)}},"undefined"!=typeof exports&&("undefined"!=typeof module&&module.exports?module.exports=n:exports.blankshield=n),"function"==typeof define&&"object"==typeof define.amd&&define("blankshield",[],function(){return n}),e.blankshield=n}(this);
-/* jQuery 참조변수($) 제거 */
-if(jQuery) jQuery.noConflict();
-
 if(typeof window.XE == "undefined") {
 	/*jshint -W082 */
 	(function($, global) {
@@ -1126,7 +1123,7 @@ if(typeof window.XE == "undefined") {
 			isSameHost: function(url) {
 				if(typeof url != "string") return false;
 
-				var target_url = global.XE.URI(url).normalizePathname();
+				var target_url = global.XE.URI(url).normalizeHostname().normalizePort().normalizePathname();
 				if(target_url.is('urn')) return false;
 
 				var port = [Number(global.http_port) || 80, Number(global.https_port) || 443];
@@ -1145,7 +1142,7 @@ if(typeof window.XE == "undefined") {
 				}
 
 				if(!base_url) {
-					base_url = global.XE.URI(global.request_uri).normalizePathname();
+					base_url = global.XE.URI(global.request_uri).normalizeHostname().normalizePort().normalizePathname();
 					base_url = base_url.hostname() + base_url.directory();
 				}
 				target_url = target_url.hostname() + target_url.directory();
@@ -1160,8 +1157,8 @@ if(typeof window.XE == "undefined") {
 		$(function() {
 		$('a[target]').each(function() {
 			var $this = $(this);
-			var href = $this.attr('href').trim();
-			var target = $this.attr('target').trim();
+			var href = String($this.attr('href')).trim();
+			var target = String($this.attr('target')).trim();
 
 			if(!target || !href) return;
 			if(!href.match(/^(https?:\/\/)/)) return;
@@ -1186,7 +1183,7 @@ if(typeof window.XE == "undefined") {
 
 		$('body').on('click', 'a[target]', function(e) {
 			var $this = $(this);
-			var href = $this.attr('href').trim();
+			var href = String($this.attr('href')).trim();
 
 			if(!href) return;
 			if(!href.match(/^(https?:\/\/)/)) return;

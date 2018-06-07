@@ -726,6 +726,12 @@ class FileHandler
 	 */
 	function checkMemoryLoadImage(&$imageInfo)
 	{
+		$memoryLimit = self::returnBytes(ini_get('memory_limit'));
+		if($memoryLimit == -1)
+		{
+			return true;
+		}
+
 		$K64 = 65536;
 		$TWEAKFACTOR = 2.0;
 		$channels = $imageInfo['channels'];
@@ -733,12 +739,14 @@ class FileHandler
 		{
 			$channels = 6; //for png
 		}
+
 		$memoryNeeded = round(($imageInfo[0] * $imageInfo[1] * $imageInfo['bits'] * $channels / 8 + $K64 ) * $TWEAKFACTOR);
 		$availableMemory = self::returnBytes(ini_get('memory_limit')) - memory_get_usage();
 		if($availableMemory < $memoryNeeded)
 		{
 			return FALSE;
 		}
+
 		return TRUE;
 	}
 
@@ -751,9 +759,10 @@ class FileHandler
 	 * @param int $resize_height Height to resize
 	 * @param string $target_type If $target_type is set (gif, jpg, png, bmp), result image will be saved as target type
 	 * @param string $thumbnail_type Thumbnail type(crop, ratio)
+	 * @param bool $thumbnail_transparent If $target_type is png, set background set transparent color
 	 * @return bool TRUE: success, FALSE: failed
 	 */
-	function createImageFile($source_file, $target_file, $resize_width = 0, $resize_height = 0, $target_type = '', $thumbnail_type = 'crop')
+	function createImageFile($source_file, $target_file, $resize_width = 0, $resize_height = 0, $target_type = '', $thumbnail_type = 'crop', $thumbnail_transparent = FALSE)
 	{
 		// check params
 		if (($source_file = self::exists($source_file)) === FALSE)
@@ -841,7 +850,24 @@ class FileHandler
 			return FALSE;
 		}
 
-		imagefilledrectangle($thumb, 0, 0, $resize_width - 1, $resize_height - 1, imagecolorallocate($thumb, 255, 255, 255));
+		if(function_exists('imagecolorallocatealpha') && $target_type == 'png' && $thumbnail_transparent)
+		{
+			imagefill($thumb, 0, 0, imagecolorallocatealpha($thumb, 0, 0, 0, 127));
+			
+			if(function_exists('imagesavealpha'))
+			{
+				imagesavealpha($thumb, TRUE);
+			}
+
+			if(function_exists('imagealphablending'))
+			{
+				imagealphablending($thumb, TRUE);
+			}
+		}
+		else
+		{
+			imagefilledrectangle($thumb, 0, 0, $resize_width - 1, $resize_height - 1, imagecolorallocate($thumb, 255, 255, 255));
+		}
 
 		// create temporary image having original type
 		$source = NULL;

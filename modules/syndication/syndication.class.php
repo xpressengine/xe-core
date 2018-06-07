@@ -34,7 +34,7 @@ class syndication extends ModuleObject {
 		$oModuleController->insertTrigger('module.deleteModule', 'syndication', 'controller', 'triggerDeleteModule', 'after');
 
 		$oModuleController->insertTrigger('document.moveDocumentToTrash', 'syndication', 'controller', 'triggerMoveDocumentToTrash', 'after');
-		$oModuleController->insertTrigger('document.restoreTrash', 'syndication', 'controller', 'triggerRestoreTrash', 'after');
+		// $oModuleController->insertTrigger('document.restoreTrash', 'syndication', 'controller', 'triggerRestoreTrash', 'after');
 		$oModuleController->insertTrigger('document.moveDocumentModule', 'syndication', 'controller', 'triggerMoveDocumentModule', 'after');
 
 		$oAddonAdminModel = getAdminModel('addon');
@@ -48,7 +48,7 @@ class syndication extends ModuleObject {
 	function checkUpdate() {
 		$oModuleModel = getModel('module');
 		if(!$oModuleModel->getTrigger('document.moveDocumentToTrash', 'syndication', 'controller', 'triggerMoveDocumentToTrash', 'after')) return true;
-		if(!$oModuleModel->getTrigger('document.restoreTrash', 'syndication', 'controller', 'triggerRestoreTrash', 'after')) return true;
+		// if(!$oModuleModel->getTrigger('document.restoreTrash', 'syndication', 'controller', 'triggerRestoreTrash', 'after')) return true;
 		if(!$oModuleModel->getTrigger('document.moveDocumentModule', 'syndication', 'controller', 'triggerMoveDocumentModule', 'after')) return true;
 
 		return false;
@@ -61,9 +61,9 @@ class syndication extends ModuleObject {
 		if(!$oModuleModel->getTrigger('document.moveDocumentToTrash', 'syndication', 'controller', 'triggerMoveDocumentToTrash', 'after')){
 			$oModuleController->insertTrigger('document.moveDocumentToTrash', 'syndication', 'controller', 'triggerMoveDocumentToTrash', 'after');
 		}
-		if(!$oModuleModel->getTrigger('document.restoreTrash', 'syndication', 'controller', 'triggerRestoreTrash', 'after')){
-			$oModuleController->insertTrigger('document.restoreTrash', 'syndication', 'controller', 'triggerRestoreTrash', 'after');
-		}
+		// if(!$oModuleModel->getTrigger('document.restoreTrash', 'syndication', 'controller', 'triggerRestoreTrash', 'after')){
+		// 	$oModuleController->insertTrigger('document.restoreTrash', 'syndication', 'controller', 'triggerRestoreTrash', 'after');
+		// }
 		if(!$oModuleModel->getTrigger('document.moveDocumentModule', 'syndication', 'controller', 'triggerMoveDocumentModule', 'after')){
 			$oModuleController->insertTrigger('document.moveDocumentModule', 'syndication', 'controller', 'triggerMoveDocumentModule', 'after');
 		}
