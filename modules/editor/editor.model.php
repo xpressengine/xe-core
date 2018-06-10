@@ -490,6 +490,13 @@ class editorModel extends editor
 	function getSavedDoc($upload_target_srl)
 	{
 		$auto_save_args = new stdClass();
+		$auto_save_args->module_srl = Context::get('module_srl');
+		// Get the current module if module_srl doesn't exist
+		if(!$auto_save_args->module_srl)
+		{
+			$current_module_info = Context::get('current_module_info');
+			$auto_save_args->module_srl = $current_module_info->module_srl;
+		}
 		// Find a document by using member_srl for logged-in user and ipaddress for non-logged user
 		if(Context::get('is_logged'))
 		{
@@ -498,20 +505,22 @@ class editorModel extends editor
 		}
 		else
 		{
-			$auto_save_args->ipaddress = $_SERVER['REMOTE_ADDR'];
-		}
-		$auto_save_args->module_srl = Context::get('module_srl');
-		// Get the current module if module_srl doesn't exist
-		if(!$auto_save_args->module_srl)
-		{
-			$current_module_info = Context::get('current_module_info');
-			$auto_save_args->module_srl = $current_module_info->module_srl;
+			$auto_save_args->certify_key = $_COOKIE['autosave_certify_key_' . $auto_save_args->module_srl];
+			// @see https://github.com/xpressengine/xe-core/issues/2208
+			// 변경 이전에 작성된 게시물 호환성 유지
+			if(!$auto_save_args->certify_key) $auto_save_args->ipaddress = $_SERVER['REMOTE_ADDR'];
 		}
 		// Extract auto-saved data from the DB
 		$output = executeQuery('editor.getSavedDocument', $auto_save_args);
 		$saved_doc = $output->data;
 		// Return null if no result is auto-saved
 		if(!$saved_doc) return;
+
+		if($saved_doc->certify_key && !isset($auto_save_args->certify_key))
+		{
+			return;
+		}
+
 		// Check if the auto-saved document already exists
 		$oDocumentModel = getModel('document');
 		$oSaved = $oDocumentModel->getDocument($saved_doc->document_srl);
@@ -526,6 +535,7 @@ class editorModel extends editor
 		}
 		else if($upload_target_srl) $saved_doc->document_srl = $upload_target_srl;
 		// Change auto-saved data
+		$saved_doc->certify_key = $auto_save_args->certify_key;
 		$oEditorController = getController('editor');
 		$oEditorController->deleteSavedDoc(false);
 		$oEditorController->doSaveDoc($saved_doc);

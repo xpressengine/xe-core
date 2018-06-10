@@ -260,6 +260,15 @@ class editorController extends editor
 	function doSaveDoc($args)
 	{
 		if(!$args->document_srl) $args->document_srl = $_SESSION['upload_info'][$editor_sequence]->upload_target_srl;
+
+		// Get the current module if module_srl doesn't exist
+		if(!$args->module_srl) $args->module_srl = Context::get('module_srl');
+		if(!$args->module_srl)
+		{
+			$current_module_info = Context::get('current_module_info');
+			$args->module_srl = $current_module_info->module_srl;
+		}
+
 		if(Context::get('is_logged'))
 		{
 			$logged_info = Context::get('logged_info');
@@ -267,20 +276,11 @@ class editorController extends editor
 		}
 		else
 		{
-			$args->ipaddress = $_SERVER['REMOTE_ADDR'];
+			$args->certify_key = $_COOKIE['autosave_certify_key_' . $args->module_srl];
+			if(!$args->certify_key) $args->certify_key = Password::createSecureSalt(40);
+			setcookie('autosave_certify_key_' . $args->module_srl, $args->certify_key, $_SERVER['REQUEST_TIME'] + 3600, '', '', false, true);
 		}
 
-		// Get the current module if module_srl doesn't exist
-		if(!$args->module_srl)
-		{
-			$args->module_srl = Context::get('module_srl');
-		}
-		if(!$args->module_srl)
-		{
-			$current_module_info = Context::get('current_module_info');
-			$args->module_srl = $current_module_info->module_srl;
-		}
-		// Save
 		return executeQuery('editor.insertSavedDoc', $args);
 	}
 
@@ -321,6 +321,14 @@ class editorController extends editor
 	function deleteSavedDoc($mode = false)
 	{
 		$args = new stdClass();
+		$args->module_srl = Context::get('module_srl');
+
+		// Get the current module if module_srl doesn't exist
+		if(!$args->module_srl)
+		{
+			$current_module_info = Context::get('current_module_info');
+			$args->module_srl = $current_module_info->module_srl;
+		}
 		if(Context::get('is_logged'))
 		{
 			$logged_info = Context::get('logged_info');
@@ -328,14 +336,13 @@ class editorController extends editor
 		}
 		else
 		{
-			$args->ipaddress = $_SERVER['REMOTE_ADDR'];
-		}
-		$args->module_srl = Context::get('module_srl');
-		// Get the current module if module_srl doesn't exist
-		if(!$args->module_srl)
-		{
-			$current_module_info = Context::get('current_module_info');
-			$args->module_srl = $current_module_info->module_srl;
+			$args->certify_key = $_COOKIE['autosave_certify_key_' . $args->module_srl];
+			// @see https://github.com/xpressengine/xe-core/issues/2208
+			// 변경 이전에 작성된 게시물 호환성 유지
+			if(!$args->certify_key) {
+				unset($args->certify_key);
+				$args->ipaddress = $_SERVER['REMOTE_ADDR'];
+			}
 		}
 		// Check if the auto-saved document already exists
 		$output = executeQuery('editor.getSavedDocument', $args);
@@ -352,8 +359,9 @@ class editorController extends editor
 				$output = ModuleHandler::triggerCall('editor.deleteSavedDoc', 'after', $saved_doc);
 			}
 		}
-		// Delete the saved document
-		return executeQuery('editor.deleteSavedDoc', $args);
+
+		$output = executeQuery('editor.deleteSavedDoc', $args);
+		return $output;
 	}
 
 	/**
@@ -479,6 +487,7 @@ class editorController extends editor
 		// Get xml_info of downloaded list
 		foreach($downloaded_list as $component_name)
 		{
+			if(!is_dir(_XE_PATH_.'modules/editor/components/'.$component_name)) continue;
 			if(in_array($component_name, array('colorpicker_text','colorpicker_bg'))) continue;
 			// Pass if configured
 			if($component_list->{$component_name}) continue;
