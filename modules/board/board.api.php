@@ -113,13 +113,6 @@ class boardAPI extends board {
 		if($content){
 			$output = $content->gets('document_srl','category_srl','member_srl','nick_name','title','content','tags','readed_count','voted_count','blamed_count','comment_count','regdate','last_update','extra_vars','status');
 
-			if(!$oBoardView->grant->view)
-			{
-				unset($output->content);
-				unset($output->tags);
-				unset($output->extra_vars);
-			}
-			
 			$output->content = $content->getContent(false, false, true, false, true);
 
 			$t_width  = Context::get('thumbnail_width');
@@ -139,10 +132,9 @@ class boardAPI extends board {
 			foreach($comment_list as $key => $val){
 				$item = null;
 				$item = $val->gets('comment_srl','parent_srl','depth','nick_name','content','is_secret','voted_count','blamed_count','regdate','last_update');
-				if(!$val->isAccessible())
-				{
-					$item->content = Context::getLang('msg_is_secret');
-				}
+
+				$item->content = $val->getContent(false, false, false);
+
 				$output[] = $item;
 			}
 		}
