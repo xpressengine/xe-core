@@ -334,12 +334,12 @@ class fileController extends file
 			}
 			else
 			{
-				$filename_param = "filename*=UTF-8''" . rawurlencode($filename) . '; filename="' . rawurlencode($filename) . '"';
+				$filename_param = sprintf('filename="%s"; filename*=UTF-8\'\'%s', $filename, rawurlencode($filename));
 			}
 		}
 		elseif(preg_match('#(?:Firefox|Safari|Trident)/(\d+)\.#', $_SERVER['HTTP_USER_AGENT'], $matches) && $matches[1] >= 6)
 		{
-			$filename_param = "filename*=UTF-8''" . rawurlencode($filename) . '; filename="' . rawurlencode($filename) . '"';
+			$filename_param = sprintf('filename="%s"; filename*=UTF-8\'\'%s', $filename, rawurlencode($filename));
 		}
 		elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== FALSE)
 		{
