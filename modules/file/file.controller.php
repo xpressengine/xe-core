@@ -712,6 +712,7 @@ class fileController extends file
 		$file_info['name'] = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|jsp|asp|inc)/i', '$0-x',$file_info['name']);
 		$file_info['name'] = removeHackTag($file_info['name']);
 		$file_info['name'] = str_replace(array('<','>'),array('%3C','%3E'),$file_info['name']);
+		$file_info['name'] = str_replace('&amp;', '&', $file_info['name']);
 
 		// Get random number generator
 		$random = new Password();
