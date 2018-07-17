@@ -10,12 +10,12 @@ class FuncIncTest extends \Codeception\TestCase\Test
             array(
                 '<div class="frame"><iframe src="path/to/file.html"></iframe><p><a href="#iframe">IFrame</a></p></div>',
                 // '<div class="frame">&lt;iframe src="path/to/file.html">&lt;/iframe><p><a href="#iframe">IFrame</a></p></div>'
-                '<div class="frame"><p><a href="#iframe">IFrame</a></p></div>'
+                '<div class="frame"><iframe></iframe><p><a href="#iframe">IFrame</a></p></div>'
             ),
             // expression
             array(
                 '<div class="dummy" style="xss:expr/*XSS*/ession(alert(\'XSS\'))">',
-                ''
+                '<div class="dummy"></div>'
             ),
             // no quotes and no semicolon - http://ha.ckers.org/xss.html
             array(
