@@ -47,9 +47,6 @@ class Purifier
 		// @see https://github.com/xpressengine/xe-core/issues/2138
 		$this->_config->set('Attr.IDPrefix', 'user_content_');
 
-		// @see https://github.com/xpressengine/xe-core/issues/2273
-		$this->_config->set('AutoFormat.RemoveEmpty', true);
-
 		$this->_def = $this->_config->getHTMLDefinition(TRUE);
 		$this->_def->addAttribute('iframe', 'allowfullscreen', 'Text');
 	}
