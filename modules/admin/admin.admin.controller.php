@@ -73,7 +73,10 @@ class adminAdminController extends admin
 		// remove debug files
 		FileHandler::removeFile(_XE_PATH_ . 'files/_debug_message.php');
 		FileHandler::removeFile(_XE_PATH_ . 'files/_debug_db_query.php');
-		FileHandler::removeFile(_XE_PATH_ . 'files/_db_slow_query.php');
+		FileHandler::removeFile(_XE_PATH_ . 'files/_slowlog_query.php');
+		FileHandler::removeFile(_XE_PATH_ . 'files/_slowlog_trigger.php');
+		FileHandler::removeFile(_XE_PATH_ . 'files/_slowlog_addon.php');
+		FileHandler::removeFile(_XE_PATH_ . 'files/_slowlog_widget.php');
 
 		$oModuleModel = getModel('module');
 		$module_list = $oModuleModel->getModuleList();
