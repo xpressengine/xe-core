@@ -380,7 +380,7 @@ class memberController extends member
 		{
 			if(isset($args->{$val}))
 			{
-				$args->{$val} = preg_replace('/[\pZ\pC]+/u', '', $args->{$val});
+				$args->{$val} = preg_replace('/[\pZ\pC]+/u', '', html_entity_decode($args->{$val}));
 			}
 		}
 		$output = $this->insertMember($args);
@@ -597,7 +597,7 @@ class memberController extends member
 		{
 			if(isset($args->{$val}))
 			{
-				$args->{$val} = preg_replace('/[\pZ\pC]+/u', '', $args->{$val});
+				$args->{$val} = preg_replace('/[\pZ\pC]+/u', '', html_entity_decode($args->{$val}));
 			}
 		}
 
@@ -1315,7 +1315,27 @@ class memberController extends member
 		if(ztime($output->data->regdate) < $_SERVER['REQUEST_TIME'] + zgap() - 86400)
 		{
 			executeQuery('member.deleteAuthMail', $args);
-			return $this->stop('msg_invalid_auth_key');
+
+			$memberInfo = $oMemberModel->getMemberInfoByMemberSrl($member_srl);
+
+			$oPassword = new Password();
+			$auth_args = new stdClass();
+			$auth_args->user_id = $memberInfo->user_id;
+			$auth_args->member_srl = $memberInfo->member_srl;
+			$auth_args->new_password = '';
+			$auth_args->auth_key = $oPassword->createSecureSalt(40);
+			$auth_args->is_register = 'Y';
+
+			$output = executeQuery('member.insertAuthMail', $auth_args);
+			if(!$output->toBool()) return $output;
+
+			// resend auth mail.
+			$this->_sendAuthMail($auth_args, $memberInfo);
+
+			$this->setTemplatePath($this->module_path.'tpl');
+			$this->setTemplateFile('msg_failed_auth');
+
+			return;
 		}
 
 		$args->password = $output->data->new_password;

@@ -1383,6 +1383,17 @@
 		<value xml:lang="tr"><![CDATA[Hesabınız başarıyla etkinleştirildi.]]></value>
 		<value xml:lang="vi"><![CDATA[Đã xác nhận thành công.<br />Xin cảm ơn đã tham gia cùng chúng tôi!]]></value>
 	</item>
+	<item name="msg_failed_auth">
+		<value xml:lang="ko"><![CDATA[이 가입인증 링크는 만료되었습니다(24시간 초과).\n새로운 가입 인증 메일을 확인해주세요.]]></value>
+		<value xml:lang="en"><![CDATA[이 가입인증 링크는 만료되었습니다(24시간 초과).\n새로운 가입 인증 메일을 확인해주세요.]]></value>
+		<value xml:lang="jp"><![CDATA[이 가입인증 링크는 만료되었습니다(24시간 초과).\n새로운 가입 인증 메일을 확인해주세요.]]></value>
+		<value xml:lang="zh-CN"><![CDATA[이 가입인증 링크는 만료되었습니다(24시간 초과).\n새로운 가입 인증 메일을 확인해주세요.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[이 가입인증 링크는 만료되었습니다(24시간 초과).\n새로운 가입 인증 메일을 확인해주세요.]]></value>
+		<value xml:lang="fr"><![CDATA[이 가입인증 링크는 만료되었습니다(24시간 초과).\n새로운 가입 인증 메일을 확인해주세요.]]></value>
+		<value xml:lang="ru"><![CDATA[이 가입인증 링크는 만료되었습니다(24시간 초과).\n새로운 가입 인증 메일을 확인해주세요.]]></value>
+		<value xml:lang="tr"><![CDATA[이 가입인증 링크는 만료되었습니다(24시간 초과).\n새로운 가입 인증 메일을 확인해주세요.]]></value>
+		<value xml:lang="vi"><![CDATA[이 가입인증 링크는 만료되었습니다(24시간 초과).\n새로운 가입 인증 메일을 확인해주세요.]]></value>
+	</item>
 	<item name="msg_new_member">
 		<value xml:lang="ko"><![CDATA[회원 추가]]></value>
 		<value xml:lang="en"><![CDATA[Add Member]]></value>
