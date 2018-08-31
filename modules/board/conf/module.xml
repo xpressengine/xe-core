@@ -70,14 +70,14 @@
 		<action name="dispBoardContentFileList" type="view" />
 
 		<action name="dispBoardTagList" type="view" />
-		<action name="dispBoardWrite" type="view" standalone="false" />
-		<action name="dispBoardDelete" type="view" standalone="false" />
-		<action name="dispBoardWriteComment" type="view" standalone="false" />
-		<action name="dispBoardReplyComment" type="view" standalone="false" />
-		<action name="dispBoardModifyComment" type="view" standalone="false" />
-		<action name="dispBoardDeleteComment" type="view" standalone="false" />
-		<action name="dispBoardDeleteTrackback" type="view" standalone="false" />
-		<action name="dispBoardMessage" type="view" />
+		<action name="dispBoardWrite" type="view" standalone="false" meta-noindex="true" />
+		<action name="dispBoardDelete" type="view" standalone="false" meta-noindex="true" />
+		<action name="dispBoardWriteComment" type="view" standalone="false" meta-noindex="true" />
+		<action name="dispBoardReplyComment" type="view" standalone="false" meta-noindex="true" />
+		<action name="dispBoardModifyComment" type="view" standalone="false" meta-noindex="true" />
+		<action name="dispBoardDeleteComment" type="view" standalone="false" meta-noindex="true" />
+		<action name="dispBoardDeleteTrackback" type="view" standalone="false" meta-noindex="true" />
+		<action name="dispBoardMessage" type="view" meta-noindex="true" />
 
 		<action name="procBoardInsertDocument" type="controller" ruleset="insertDocument" standalone="false" />
 		<action name="procBoardDeleteDocument" type="controller" standalone="false" />
