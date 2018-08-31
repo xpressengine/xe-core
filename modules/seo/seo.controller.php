@@ -92,6 +92,14 @@ class seoController extends seo
 			$single_image = true;
 		}
 
+
+		if($current_module_info->module_srl !== $site_module_info->module_srl) {
+			$mdoulePartConfig = $oModuleModel->getModulePartConfig('seo', $current_module_info->module_srl);
+			if($mdoulePartConfig && isset($mdoulePartConfig->meta_description) && trim($mdoulePartConfig->meta_description)) {
+				$piece->description = trim($mdoulePartConfig->meta_description);
+			}
+		}
+
 		if ($document_srl) {
 			$oDocument = Context::get('oDocument');
 			if (!is_a($oDocument, 'documentItem')) {

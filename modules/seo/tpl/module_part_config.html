@@ -1,0 +1,20 @@
+<section class="section">
+	<h1>SEO</h1>
+
+	<form action="./" method="post" class="x_form-horizontal">
+		<input type="hidden" name="module" value="seo" />
+		<input type="hidden" name="act" value="procSeoAdminInsertModuleConfig" />
+		<input type="hidden" name="success_return_url" value="{getRequestUriByServerEnviroment()}" />
+		<input type="hidden" name="target_module_srl" value="{$module_info->module_srl}" />
+		
+		<div class="x_control-group">
+			<label for="meta_description" class="x_control-label">{$lang->description}</label>
+			<div class="x_controls">
+				<input type="text" id="meta_description" name="meta_description" style="width: 50%;" value="{htmlspecialchars($seo_module_part_config->meta_description, ENT_COMPAT | ENT_HTML401, 'UTF-8', false)}" />
+			</div>
+		</div>
+		<div class="btnArea">
+			<button type="submit" class="x_btn x_btn-primary">{$lang->cmd_save}</button>
+		</div>
+	</form>
+</section>
