@@ -1097,6 +1097,13 @@ function purifierHtml(&$content)
 {
 	require_once(_XE_PATH_ . 'classes/security/Purifier.class.php');
 	$oPurifier = Purifier::getInstance();
+
+	// @see https://github.com/xpressengine/xe-core/issues/2278
+	$logged_info = Context::get('logged_info');
+	if($logged_info->is_admin !== 'Y') {
+		$oPurifier->setConfig('HTML.Nofollow', true);
+	}
+
 	$oPurifier->purify($content);
 }
 
