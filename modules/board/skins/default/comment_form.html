@@ -1,7 +1,7 @@
 <include target="_header.html" />
 <div cond="$oSourceComment->isExists()" class="context_data">
 	<h3 class="author">
-		<a cond="$oSourceComment->homepage" href="{$oSourceComment->homepage}">{$oSourceComment->getNickName()}</a>
+		<a cond="$oSourceComment->homepage" href="{$oSourceComment->homepage}" rel="nofollow noopener">{$oSourceComment->getNickName()}</a>
 		<strong cond="!$oSourceComment->homepage">{$oSourceComment->getNickName()}</strong>
 	</h3>
 	{$oSourceComment->getContent(false)}

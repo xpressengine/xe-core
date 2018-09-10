@@ -43,19 +43,19 @@
 	<!-- VISUAL | DEFAULT -->
 	<div class="visual main"|cond="$layout_info->LAYOUT_TYPE=='MAIN_PAGE'" class="visual sub"|cond="$layout_info->LAYOUT_TYPE=='SUB_PAGE'" cond="!$layout_info->VISUAL_IMAGE_1 && !$layout_info->VISUAL_IMAGE_2 && !$layout_info->VISUAL_IMAGE_3 && $layout_info->VISUAL_USE=='YES'">
 		<div class="list">
-			<a href="{geturl('','module','admin','act','dispAdminConfigGeneral')}" class="item i1" cond="$layout_info->LAYOUT_TYPE=='MAIN_PAGE'">
+			<a href="{geturl('','module','admin','act','dispAdminConfigGeneral')}" rel="nofollow" class="item i1" cond="$layout_info->LAYOUT_TYPE=='MAIN_PAGE'">
 				<img src="visual.main.1.jpg" alt="" />
 				<p>Click, to change<br> the site title.</p>
 			</a>
-			<a href="{geturl('','module','admin','act','dispMenuAdminSiteMap')}" class="item i2" cond="$layout_info->LAYOUT_TYPE=='MAIN_PAGE'">
+			<a href="{geturl('','module','admin','act','dispMenuAdminSiteMap')}" rel="nofollow" class="item i2" cond="$layout_info->LAYOUT_TYPE=='MAIN_PAGE'">
 				<img src="visual.main.2.jpg" alt="" />
 				<p>Click, to change<br> the site navigation.</p>
 			</a>
-			<a href="{geturl('','module','admin','act','dispLayoutAdminInstanceList','layout','default')}" class="item i3" cond="$layout_info->LAYOUT_TYPE=='MAIN_PAGE'">
+			<a href="{geturl('','module','admin','act','dispLayoutAdminInstanceList','layout','default')}" rel="nofollow" class="item i3" cond="$layout_info->LAYOUT_TYPE=='MAIN_PAGE'">
 				<img src="visual.main.3.jpg" alt="" />
 				<p>Click, to change<br> the site visual image.</p>
 			</a>
-			<a href="{geturl('','module','admin','act','dispLayoutAdminInstanceList','layout','default')}" class="item i1" cond="$layout_info->LAYOUT_TYPE=='SUB_PAGE'">
+			<a href="{geturl('','module','admin','act','dispLayoutAdminInstanceList','layout','default')}" rel="nofollow" class="item i1" cond="$layout_info->LAYOUT_TYPE=='SUB_PAGE'">
 				<img src="visual.sub.jpg" alt="" />
 				<p>Click, to change the site visual image.</p>
 			</a>
