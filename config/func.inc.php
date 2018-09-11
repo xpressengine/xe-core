@@ -252,6 +252,9 @@ function setUserSequence($seq)
 	$arr_seq = array();
 	if(isset($_SESSION['seq']))
 	{
+		if(!is_array($_SESSION['seq'])) {
+			$_SESSION['seq'] = array($_SESSION['seq']);
+		}
 		$arr_seq = $_SESSION['seq'];
 	}
 	$arr_seq[] = $seq;
