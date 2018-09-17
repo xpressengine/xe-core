@@ -358,10 +358,10 @@
 		<nav cond="$_selected_menu['list'] && $layout_info->layout_type === 'sub' && $layout_info->sidebar_position !== 'none'" class="lnb">
 			<ul>
 				<li loop="$_selected_menu['list'] => $key1, $val1">
-					<a href="{$val1['href']}" target="_blank"|cond="$val1['open_window'] == 'Y'">{$val1['link']}</a>
+					<a href="{$val1['href']}" target="_blank"|cond="$val1['open_window'] == 'Y'">{$val1['link']|noescape}</a>
 					<ul cond="$val1['list']">
 						<li loop="$val1['list'] => $key2, $val2" class="on"|cond="$val2['selected']">
-							<a href="{$val2['href']}" target="_blank"|cond="$val2['open_window'] == 'Y'">{$val2['link']}</a>
+							<a href="{$val2['href']}" target="_blank"|cond="$val2['open_window'] == 'Y'">{$val2['link']|noescape}</a>
 						</li>
 					</ul>
 				</li>
@@ -403,10 +403,10 @@
 						{@$i = 0}
 						<li loop="$FNB->list => $key1, $val1" class="clear"|cond="!($i % 3) && $i > 0">
 							{@$i++}
-							<a href="{$val1['href']}" target="_blank"|cond="$val1['open_window'] == 'Y'">{$val1['link']}</a>
+							<a href="{$val1['href']}" target="_blank"|cond="$val1['open_window'] == 'Y'">{$val1['link']|noescape}</a>
 							<ul cond="$val1['list']">
 								<li loop="$val1['list'] => $key2, $val2">
-									<a href="{$val2['href']}" target="_blank"|cond="$val2['open_window'] == 'Y'">{$val2['link']}</a>
+									<a href="{$val2['href']}" target="_blank"|cond="$val2['open_window'] == 'Y'">{$val2['link']|noescape}</a>
 								</li>
 							</ul>
 						</li>
