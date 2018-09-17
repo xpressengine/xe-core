@@ -608,6 +608,10 @@ function ztime($str)
 	{
 		return;
 	}
+	if (strlen($str) === 9 || (strlen($str) === 10 && $str <= 2147483647))
+ 	{
+ 		return intval($str);
+ 	}
 
 	$hour = (int) substr($str, 8, 2);
 	$min = (int) substr($str, 10, 2);
