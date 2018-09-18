@@ -1223,7 +1223,7 @@ class Context
 				continue;
 			}
 			$key = htmlentities($key);
-			$val = $this->_filterRequestVar($key, $val);
+			$val = $this->_filterRequestVar($key, $val, false, ($requestMethod == 'GET'));
 
 			if($requestMethod == 'GET' && isset($_GET[$key]))
 			{
@@ -1390,7 +1390,7 @@ class Context
 	 * @param string $do_stripslashes Whether to strip slashes
 	 * @return mixed filtered value. Type are string or array
 	 */
-	function _filterRequestVar($key, $val, $do_stripslashes = 1)
+	function _filterRequestVar($key, $val, $do_stripslashes = true, $remove_hack = true)
 	{
 		if(!($isArray = is_array($val)))
 		{
@@ -1400,6 +1400,14 @@ class Context
 		$result = array();
 		foreach($val as $k => $v)
 		{
+			if($remove_hack && !is_array($v)) {
+				if(stripos($v, '<script') || stripos($v, 'lt;script') || stripos($v, '%3Cscript'))
+				{
+					$result[$k] = escape($v);
+					continue;
+				}
+			}
+
 			$k = htmlentities($k);
 			if($key === 'page' || $key === 'cpage' || substr_compare($key, 'srl', -3) === 0)
 			{
@@ -1407,7 +1415,7 @@ class Context
 			}
 			elseif($key === 'mid' || $key === 'search_keyword')
 			{
-				$result[$k] = htmlspecialchars($v, ENT_COMPAT | ENT_HTML401, 'UTF-8', FALSE);
+				$result[$k] = escape($v, false);
 			}
 			elseif($key === 'vid')
 			{
@@ -1415,7 +1423,7 @@ class Context
 			}
 			elseif($key === 'xe_validator_id')
 			{
-				$result[$k] = htmlspecialchars($v, ENT_COMPAT | ENT_HTML401, 'UTF-8', FALSE);
+				$result[$k] = escape($v, false);
 			}
 			elseif(stripos($key, 'XE_VALIDATOR', 0) === 0)
 			{
@@ -1444,6 +1452,11 @@ class Context
 				else
 				{
 					$result[$k] = trim($result[$k]);
+				}
+
+				if($remove_hack)
+				{
+					$result[$k] = escape($result[$k], false);
 				}
 			}
 		}
