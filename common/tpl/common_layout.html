@@ -25,13 +25,13 @@
 </block>
 <!-- JS -->
 <script>
-var current_url = "{$current_url}";
-var request_uri = "{$request_uri}";
+var current_url = "{$current_url|noescape}";
+var request_uri = "{$request_uri|noescape}";
 <block cond="$vid">var xeVid = "{$vid}";</block>
 var current_mid = "{$mid}";
 var waiting_message = "{$lang->msg_call_server}";
 var ssl_actions = new Array(<block cond="count($ssl_actions)">"{implode('","',array_keys($ssl_actions))}"</block>);
-var default_url = "{Context::getDefaultUrl()}";
+var default_url = "{Context::getDefaultUrl()|noescape}";
 <block cond="Context::get('_http_port')">var http_port = {Context::get("_http_port")};</block>
 <block cond="Context::get('_https_port')">var https_port = {Context::get("_https_port")};</block>
 <block cond="Context::get('_use_ssl') && Context::get('_use_ssl') == 'always'">var enforce_ssl = true;</block>
@@ -50,7 +50,7 @@ var default_url = "{Context::getDefaultUrl()}";
 <!-- ICON -->
 <link cond="$favicon_url" rel="shortcut icon" href="{$favicon_url}" />
 <link cond="$mobicon_url" rel="apple-touch-icon" href="{$mobicon_url}" />
-{Context::getHtmlHeader()}
+{Context::getHtmlHeader()|noescape}
 <script>
 //<![CDATA[
 xe.current_lang = "{$lang_type}";
@@ -68,9 +68,9 @@ xe.msg_select_menu = "{$lang->msg_select_menu}";
 {@$isAdminKind = true}
 <!--@end-->
 <body{Context::getBodyClass()}>
-{Context::getBodyHeader()}
-{$content}
-{Context::getHtmlFooter()}
+{Context::getBodyHeader()|noescape}
+{$content|noescape}
+{Context::getHtmlFooter()|noescape}
 <!-- ETC -->
 <div class="wfsr"></div>
 {@ $js_body_files = Context::getJsFile('body') }

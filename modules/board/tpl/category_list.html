@@ -2,7 +2,7 @@
 <div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/board/tpl/category_list/1'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
 	<p>{$XE_VALIDATOR_MESSAGE}</p>
 </div>
-{$category_content}
+{$category_content|noescape}
 <form class="x_form-horizontal" action="./" method="post" enctype="multipart/form-data">
 	<input type="hidden" name="module" value="board" />
 	<input type="hidden" name="act" value="procBoardAdminSaveCategorySettings" />
