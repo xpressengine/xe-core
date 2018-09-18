@@ -22,6 +22,7 @@ class TemplateHandler
 	private $config = NULL;
 	private $skipTags = NULL;
 	private $handler_mtime = 0;
+	private $safeguard = false;
 	static private $rootTpl = NULL;
 
 	/**
@@ -34,6 +35,56 @@ class TemplateHandler
 		$this->xe_path = rtrim(getScriptPath(), '/');
 		$this->compiled_path = _XE_PATH_ . $this->compiled_path;
 		$this->config = new stdClass();
+
+		$this->ignoreEscape = array(
+			'html_content' => function ($m) {
+				$list = array(
+					'$content', // 레이아웃 등
+					'$editor', // 에디터 출력
+					'$page_content', // page 모듈
+					'$setup_content', // 모듈 추가 설정 페이지
+					'$grant_content', // 모듈 권한 설정 페이지
+					'$skin_content', // 모듈 스킨 설정 페이지
+					'$extra_vars_content', // 모듈 확장변수 설정 페이지
+					'Context::getHtmlHeader()',
+					'Context::getHtmlFooter()',
+					'Context::getBodyHeader()'
+				);
+				return in_array($m[1], $list);
+			},
+			'url' => function ($m) {
+				$list = array(
+					'getUrl',
+					'getNotEncodedUrl',
+					'getAutoEncodedUrl',
+					'getFullUrl',
+					'getNotEncodedFullUrl',
+					'getSiteUrl',
+					'getNotEncodedSiteUrl',
+					'getFullSiteUrl',
+					'getCurrentPageUrl',
+					'getCurrentPageUrl',
+				);
+				return in_array(array_shift(explode('(', $m[1])), $list);
+			},
+			'methods' => function ($m) {
+				$list = array(
+					'getEditor',
+					'getCommentEditor',
+					'getFormHTML', // 확장변수
+					'getContent',
+					'getSignature', // 회원 서명
+					'printExtraImages', // new, file 아이콘 등
+				);
+				return preg_match('/\-\>(' . implode('|', $list) . ')\(/', $m[1]);
+			},
+			'lang' => function ($m) {
+				// 다국어
+				return preg_match('/^\$lang\-\>/', trim($m[1]));
+			}
+		);
+
+		$this->dbinfo = Context::getDBInfo();
 	}
 
 	/**
@@ -103,6 +154,8 @@ class TemplateHandler
 		// get compiled file name
 		$hash = md5($this->file . __XE_VERSION__);
 		$this->compiled_file = "{$this->compiled_path}{$hash}.compiled.php";
+
+		$this->safeguard = $this->isSafeguard();
 
 		// compare various file's modified time for check changed
 		$this->handler_mtime = filemtime(__FILE__);
@@ -238,9 +291,6 @@ class TemplateHandler
 		// reset config for this buffer (this step is necessary because we use a singleton for every template)
 		$previous_config = clone $this->config;
 		$this->config = new stdClass();
-
-		// detect existence of autoescape config
-		$this->config->autoescape = (strpos($buff, ' autoescape="') === FALSE) ? NULL : 'off';
 
 		// replace comments
 		$buff = preg_replace('@<!--//.*?-->@s', '', $buff);
@@ -593,6 +643,13 @@ class TemplateHandler
 	 */
 	private function _parseResource($m)
 	{
+		$escape_option = 'auto';
+
+		if($this->safeguard)
+		{
+			$escape_option = 'autoescape';
+		}
+
 		// {@ ... } or {$var} or {func(...)}
 		if($m[1])
 		{
@@ -609,13 +666,13 @@ class TemplateHandler
 			else
 			{
 				// Get escape options.
-				if($m[1] === '$content' && preg_match('@/layouts/.+/layout\.html$@', $this->file))
+				foreach ($this->ignoreEscape as $key => $value)
 				{
-					$escape_option = 'noescape';
-				}
-				else
-				{
-					$escape_option = $this->config->autoescape !== null ? 'auto' : 'noescape';
+					if($this->ignoreEscape[$key]($m))
+					{
+						$escape_option = 'noescape';
+						break;
+					}
 				}
 
 				// Separate filters from variable.
@@ -937,14 +994,14 @@ class TemplateHandler
  		switch($escape_option)
  		{
  			case 'escape':
- 				return "htmlspecialchars({$str}, ENT_COMPAT, 'UTF-8', true)";
+ 				return "escape({$str}, true)";
  			case 'noescape':
  				return "{$str}";
  			case 'autoescape':
- 				return "htmlspecialchars({$str}, ENT_COMPAT, 'UTF-8', false)";
+ 				return "escape({$str}, false)";
  			case 'auto':
  			default:
- 				return "(\$this->config->autoescape === 'on' ? htmlspecialchars({$str}, ENT_COMPAT, 'UTF-8', false) : {$str})";
+ 				return "(\$this->config->autoescape === 'on' ? escape({$str}, false) : {$str})";
  		}
  	}
 
@@ -1011,6 +1068,21 @@ class TemplateHandler
 		return preg_replace('@(?<!::|\\\\|(?<!eval\()\')\$([a-z]|_[a-z0-9])@i', '\$__Context->$1', $php);
 	}
 
+	function isSafeguard()
+	{
+		if ($this->dbinfo->safeguard === 'Y') return true;
+
+		$absPath = str_replace(_XE_PATH_, '', $this->path);
+		$modules = '(addon|admin|adminlogging|autoinstall|board|comment|communication|counter|document|editor|file|importer|install|integration_search|krzip|layout|member|menu|message|module|page|point|poll|rss|seo|session|spamfilter|syndication|tag|trash|widget)';
+
+		// admin, common layout
+		if(preg_match('/^(\.\/)?(modules\/' . $modules . '|common)\/tpl\//', $absPath))
+		{
+			return true;
+		}
+
+		return false;
+	}
 }
 /* End of File: TemplateHandler.class.php */
 /* Location: ./classes/template/TemplateHandler.class.php */

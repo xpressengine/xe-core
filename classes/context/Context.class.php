@@ -513,6 +513,9 @@ class Context
 			$db_info->sitelock_whitelist = '127.0.0.1';
 		}
 
+		// @see https://github.com/xpressengine/xe-core/issues/2301
+		if($db_info->safeguard !== 'Y') $db_info->safeguard = 'N';
+
 		if(is_string($db_info->sitelock_whitelist)) {
 			$db_info->sitelock_whitelist = explode(',', $db_info->sitelock_whitelist);
 		}
