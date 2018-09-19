@@ -77,6 +77,7 @@ class TemplateHandler
 					'getValueHTML', // 확장변수
 					'getExtraValueHTML', // 확장변수
 					'getExtraEidValueHTML', // 확장변수
+					'getTitle',
 					'getContent',
 					'getSignature', // 회원 서명
 					'printExtraImages', // new, file 아이콘 등

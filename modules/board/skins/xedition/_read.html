@@ -28,7 +28,7 @@
 		<table border="1" cellspacing="0" summary="Extra Form Output">
 			<tr loop="$oDocument->getExtraVars() => $key,$val">
 				<th scope="row">{$val->name}</th>
-				<td>{$val->getValueHTML()}&nbsp;</td>
+				<td>{$val->getValueHTML()|noescape}&nbsp;</td>
 			</tr>
 		</table>
 	</div>
@@ -100,7 +100,7 @@
 		</div>
 		<div class="sign" cond="$module_info->display_sign!='N'&&($oDocument->getProfileImage()||$oDocument->getSignature())">
 			<img cond="$oDocument->getProfileImage()" src="{$oDocument->getProfileImage()}" alt="Profile" class="pf" />
-			<div cond="$oDocument->getSignature()" class="tx">{$oDocument->getSignature()}</div>
+			<div cond="$oDocument->getSignature()" class="tx">{$oDocument->getSignature()|noescape}</div>
 		</div>
 		<div class="btnArea"> 
 			<a cond="$oDocument->isEditable()" class="btn" href="{getUrl('act','dispBoardWrite','document_srl',$oDocument->document_srl,'comment_srl','')}" rel="nofollow"><i class="xi-eraser"></i>{$lang->cmd_modify}</a>
