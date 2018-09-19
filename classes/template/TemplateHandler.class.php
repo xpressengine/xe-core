@@ -74,6 +74,8 @@ class TemplateHandler
 					'getCommentEditor',
 					'getFormHTML', // 확장변수
 					'getValueHTML', // 확장변수
+					'getExtraValueHTML', // 확장변수
+					'getExtraEidValueHTML', // 확장변수
 					'getContent',
 					'getSignature', // 회원 서명
 					'printExtraImages', // new, file 아이콘 등
