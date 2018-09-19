@@ -45,6 +45,7 @@ class TemplateHandler
 					'$setup_content', // 모듈 추가 설정 페이지
 					'$grant_content', // 모듈 권한 설정 페이지
 					'$skin_content', // 모듈 스킨 설정 페이지
+					'$widget_content', // widget HTML content
 					'$extra_vars_content', // 모듈 확장변수 설정 페이지
 					'Context::getHtmlHeader()',
 					'Context::getHtmlFooter()',
@@ -72,6 +73,7 @@ class TemplateHandler
 					'getEditor',
 					'getCommentEditor',
 					'getFormHTML', // 확장변수
+					'getValueHTML', // 확장변수
 					'getContent',
 					'getSignature', // 회원 서명
 					'printExtraImages', // new, file 아이콘 등
