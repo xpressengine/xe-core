@@ -78,6 +78,12 @@ class TemplateHandler
 				);
 				return preg_match('/\-\>(' . implode('|', $list) . ')\(/', $m[1]);
 			},
+			'functions' => function ($m) {
+				$list = array(
+					'htmlspecialchars',
+				);
+				return preg_match('/^(' . implode('|', $list) . ')\(/', $m[1]);
+			},
 			'lang' => function ($m) {
 				// 다국어
 				return preg_match('/^\$lang\-\>/', trim($m[1]));
@@ -291,6 +297,23 @@ class TemplateHandler
 		// reset config for this buffer (this step is necessary because we use a singleton for every template)
 		$previous_config = clone $this->config;
 		$this->config = new stdClass();
+		$this->config->autoescape = null;
+
+		if(preg_match('/\<config( [^\>\/]+)/', $buff, $config_match))
+		{
+			if(preg_match_all('@ (?<name>\w+)="(?<value>[^"]+)"@', $config_match[1], $config_matches, PREG_SET_ORDER))
+			{
+				foreach($config_matches as $config_match)
+				{
+					if($config_match['name'] === 'autoescape')
+					{
+						$this->config->autoescape = $config_match['value'];
+					}
+				}
+			}
+		}
+
+		if($this->config->autoescape === 'on') $this->safeguard = true;
 
 		// replace comments
 		$buff = preg_replace('@<!--//.*?-->@s', '', $buff);
@@ -643,11 +666,16 @@ class TemplateHandler
 	 */
 	private function _parseResource($m)
 	{
-		$escape_option = 'auto';
+		$escape_option = 'noescape';
 
 		if($this->safeguard)
 		{
 			$escape_option = 'autoescape';
+		}
+
+		// 템플릿에서 명시적으로 off이면 'noescape' 적용
+		if ($this->config->autoescape === 'off') {
+			$escape_option = 'noescape';
 		}
 
 		// {@ ... } or {$var} or {func(...)}
@@ -723,15 +751,18 @@ class TemplateHandler
 
 						case 'escapejs':
 							$var = "escape_js({$var})";
+							$escape_option = 'noescape';
 							break;
 
 						case 'json':
 							$var = "json_encode({$var})";
+							$escape_option = 'noescape';
 							break;
 
 						case 'strip':
 						case 'strip_tags':
 							$var = $filter_option ? "strip_tags({$var}, {$filter_option})" : "strip_tags({$var})";
+							$escape_option = 'noescape';
 							break;
 
 						case 'trim':
@@ -740,6 +771,7 @@ class TemplateHandler
 
 						case 'urlencode':
 							$var = "rawurlencode({$var})";
+							$escape_option = 'noescape';
 							break;
 
 						case 'lower':
@@ -758,22 +790,25 @@ class TemplateHandler
 
 						case 'join':
 							$var = $filter_option ? "implode({$filter_option}, {$var})" : "implode(', ', {$var})";
+							$escape_option = 'noescape';
 							break;
 
 						case 'date':
 							$var = $filter_option ? "getDisplayDateTime(ztime({$var}), {$filter_option})" : "getDisplayDateTime(ztime({$var}), 'Y-m-d H:i:s')";
+							$escape_option = 'noescape';
 							break;
 
 						case 'format':
 						case 'number_format':
 							$var = $filter_option ? "number_format({$var}, {$filter_option})" : "number_format({$var})";
+							$escape_option = 'noescape';
 							break;
 
 						case 'link':
-							$var = $this->_applyEscapeOption($var, $escape_option);
+							$var = $this->_applyEscapeOption($var, 'autoescape');
 							if ($filter_option)
 							{
-								$filter_option = $this->_applyEscapeOption($filter_option, $escape_option);
+								$filter_option = $this->_applyEscapeOption($filter_option, 'autoescape');
 								$var = "'<a href=\"' . {$filter_option} . '\">' . {$var} . '</a>'";
 							}
 							else
@@ -786,6 +821,7 @@ class TemplateHandler
 						default:
 							$filter = escape_sqstr($filter);
 							$var = "'INVALID FILTER ({$filter})'";
+							$escape_option = 'noescape';
 					}
 				}
 
@@ -989,7 +1025,7 @@ class TemplateHandler
 	/**
  	 * Apply escape option to an expression.
  	 */
- 	private function _applyEscapeOption($str, $escape_option)
+ 	private function _applyEscapeOption($str, $escape_option = 'noescape')
  	{
  		switch($escape_option)
  		{
@@ -1082,6 +1118,11 @@ class TemplateHandler
 		}
 
 		return false;
+	}
+
+	public function setSafeguard($val = true)
+	{
+		$this->safeguard = $val;
 	}
 }
 /* End of File: TemplateHandler.class.php */
