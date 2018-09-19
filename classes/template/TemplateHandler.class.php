@@ -85,6 +85,7 @@ class TemplateHandler
 			'functions' => function ($m) {
 				$list = array(
 					'htmlspecialchars',
+					'nl2br',
 				);
 				return preg_match('/^(' . implode('|', $list) . ')\(/', $m[1]);
 			},
