@@ -47,6 +47,7 @@ class TemplateHandler
 					'$skin_content', // 모듈 스킨 설정 페이지
 					'$widget_content', // widget HTML content
 					'$extra_vars_content', // 모듈 확장변수 설정 페이지
+					'$message->content', // 쪽지함 메시지
 					'Context::getHtmlHeader()',
 					'Context::getHtmlFooter()',
 					'Context::getBodyHeader()'
