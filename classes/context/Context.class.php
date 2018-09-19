@@ -1390,7 +1390,7 @@ class Context
 	 * @param string $do_stripslashes Whether to strip slashes
 	 * @return mixed filtered value. Type are string or array
 	 */
-	function _filterRequestVar($key, $val, $do_stripslashes = true, $remove_hack = true)
+	function _filterRequestVar($key, $val, $do_stripslashes = true, $remove_hack = false)
 	{
 		if(!($isArray = is_array($val)))
 		{
