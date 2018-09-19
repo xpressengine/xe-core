@@ -46,7 +46,9 @@ class ModuleHandler extends Handler
 		if($oContext->isSuccessInit == FALSE)
 		{
 			$logged_info = Context::get('logged_info');
-			if($logged_info->is_admin != "Y")
+			$dbInfo = Context::getDBInfo();
+			// @see https://github.com/xpressengine/xe-core/issues/2304
+			if($dbInfo->safeguard === 'Y' || $logged_info->is_admin != "Y")
 			{
 				$this->error = 'msg_invalid_request';
 				return;
