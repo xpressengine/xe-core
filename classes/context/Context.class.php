@@ -204,7 +204,7 @@ class Context
 		if(!isset($GLOBALS['HTTP_RAW_POST_DATA']) && version_compare(PHP_VERSION, '5.6.0', '>=') === TRUE)
 		{
 			$GLOBALS['HTTP_RAW_POST_DATA'] = file_get_contents("php://input");
-			
+
 			// If content is not XML JSON, unset
 			if(!preg_match('/^[\<\{\[]/', $GLOBALS['HTTP_RAW_POST_DATA']) && strpos($_SERVER['CONTENT_TYPE'], 'json') === FALSE && strpos($_SERVER['HTTP_CONTENT_TYPE'], 'json') === FALSE)
 			{
@@ -711,7 +711,7 @@ class Context
 					echo self::get('lang')->msg_invalid_request;
 					return false;
 				}
-				
+
 				setcookie(session_name(), $session_name);
 
 				$url = preg_replace('/[\?\&]SSOID=.+$/', '', self::getRequestUrl());
@@ -1413,17 +1413,12 @@ class Context
 			{
 				$result[$k] = !preg_match('/^[0-9,]+$/', $v) ? (int) $v : $v;
 			}
-			elseif($key === 'mid' || $key === 'search_keyword')
-			{
+			elseif(in_array($key, array('mid','search_keyword','search_target','xe_validator_id'))) {
 				$result[$k] = escape($v, false);
 			}
 			elseif($key === 'vid')
 			{
 				$result[$k] = urlencode($v);
-			}
-			elseif($key === 'xe_validator_id')
-			{
-				$result[$k] = escape($v, false);
 			}
 			elseif(stripos($key, 'XE_VALIDATOR', 0) === 0)
 			{
@@ -1492,7 +1487,7 @@ class Context
 			$tmp_name = $val['tmp_name'];
 			if(!is_array($tmp_name))
 			{
-				if(!$tmp_name || !is_uploaded_file($tmp_name))
+				if(!UploadFileFilter::check($tmp_name, $val['name']))
 				{
 					continue;
 				}
@@ -1503,22 +1498,26 @@ class Context
 			else
 			{
 				$files = array();
-				$count_files = count($tmp_name);
-
-				for($i = 0; $i < $count_files; $i++)
+				foreach ($tmp_name as $i => $j)
 				{
-					if($val['size'][$i] > 0)
+					if(!UploadFileFilter::check($val['tmp_name'][$i], $val['name'][$i]))
 					{
-						$file = array();
-						$file['name'] = $val['name'][$i];
-						$file['type'] = $val['type'][$i];
-						$file['tmp_name'] = $val['tmp_name'][$i];
-						$file['error'] = $val['error'][$i];
-						$file['size'] = $val['size'][$i];
-						$files[] = $file;
+						$files = array();
+						unset($_FILES[$key]);
+						break;
 					}
+					$file = array();
+					$file['name'] = $val['name'][$i];
+					$file['type'] = $val['type'][$i];
+					$file['tmp_name'] = $val['tmp_name'][$i];
+					$file['error'] = $val['error'][$i];
+					$file['size'] = $val['size'][$i];
+					$files[] = $file;
 				}
-				if($files) $this->set($key, $files, TRUE);
+				if(count($files))
+				{
+					self::set($key, $files, true);
+				}
 			}
 		}
 	}
