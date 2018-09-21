@@ -58,7 +58,7 @@ class documentItem extends BaseObject
 	 * @param array columnList
 	 * @return void
 	 */
-	function documentItem($document_srl = 0, $load_extra_vars = true, $columnList = array())
+	function __construct($document_srl = 0, $load_extra_vars = true, $columnList = array())
 	{
 		$this->document_srl = $document_srl;
 		$this->columnList = $columnList;
