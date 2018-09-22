@@ -9,7 +9,7 @@
 			{$oDocument->getRegdate('Y.m.d H:i')}
 		</p>
 		<p class="meta">
-			<a cond="$module_info->display_author!='N' && !$oDocument->getMemberSrl() && $oDocument->isExistsHomepage()" href="{$oDocument->getHomepageUrl()}" target="_blank" rel="noopener" class="author">{$oDocument->getNickName()}</a>
+			<a cond="$module_info->display_author!='N' && !$oDocument->getMemberSrl() && $oDocument->isExistsHomepage()" href="{$oDocument->getHomepageUrl()}" target="_blank"  rel="nofollow noopener" class="author">{$oDocument->getNickName()}</a>
 			<block cond="$module_info->display_author!='N' && !$oDocument->getMemberSrl() && !$oDocument->isExistsHomepage()">{$oDocument->getNickName()}</block>
 			<a cond="$module_info->display_author!='N' && $oDocument->getMemberSrl()" href="#popup_menu_area" class="member_{$oDocument->get('member_srl')} author" onclick="return false">{$oDocument->getNickName()}</a>
 			<span class="sum">
@@ -50,7 +50,7 @@
 		<div cond="$oDocument->hasUploadedFiles()" class="fileList">
 			<button type="button" class="toggleFile" onclick="jQuery(this).next('ul.files').toggle();">{$lang->uploaded_file} [<strong>{$oDocument->get('uploaded_count')}</strong>]</button>
 			<ul class="files">
-				<li loop="$oDocument->getUploadedFiles()=>$key,$file"><a href="{getUrl('')}{$file->download_url}">{$file->source_filename} <span class="fileSize">[File Size:{FileHandler::filesize($file->file_size)}/Download:{number_format($file->download_count)}]</span></a></li>
+				<li loop="$oDocument->getUploadedFiles()=>$key,$file"><a href="{getUrl('')}{$file->download_url}" rel="nofollow">{$file->source_filename} <span class="fileSize">[File Size:{FileHandler::filesize($file->file_size)}/Download:{number_format($file->download_count)}]</span></a></li>
 			</ul>
 		</div>
 		<div class="tns">
@@ -90,8 +90,8 @@
 			<div cond="$oDocument->getSignature()" class="tx">{$oDocument->getSignature()}</div>
 		</div>
 		<div class="btnArea"> 
-			<a cond="$oDocument->isEditable()" class="btn" href="{getUrl('act','dispBoardWrite','document_srl',$oDocument->document_srl,'comment_srl','')}">{$lang->cmd_modify}</a>
-			<a cond="$oDocument->isEditable()" class="btn" href="{getUrl('act','dispBoardDelete','document_srl',$oDocument->document_srl,'comment_srl','')}">{$lang->cmd_delete}</a>
+			<a cond="$oDocument->isEditable()" class="btn" href="{getUrl('act','dispBoardWrite','document_srl',$oDocument->document_srl,'comment_srl','')}" rel="nofollow">{$lang->cmd_modify}</a>
+			<a cond="$oDocument->isEditable()" class="btn" href="{getUrl('act','dispBoardDelete','document_srl',$oDocument->document_srl,'comment_srl','')}" rel="nofollow">{$lang->cmd_delete}</a>
 			<span class="etc">
 				<a href="{getUrl('document_srl','')}" class="btn">{$lang->cmd_list}</a>
 			</span>

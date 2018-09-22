@@ -451,6 +451,7 @@ class ExtraItem
 				$buff[] =	'  };';
 				$buff[] =	'  $.extend(option,$.datepicker.regional[\'' . Context::getLangType() . '\']);';
 				$buff[] =	'  $("#date_' . $column_name . '").datepicker(option);';
+				$buff[] =	'  $("#date_' . $column_name . '").datepicker("option", "dateFormat", "yy-mm-dd");';
 				$buff[] =	'  $("#dateRemover_' . $column_name . '").click(function(){';
 				$buff[] =	'    $(this).siblings("input").val("");';
 				$buff[] =	'    return false;';

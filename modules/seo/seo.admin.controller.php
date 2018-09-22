@@ -71,5 +71,26 @@ class seoAdminController extends seo
 			$this->setRedirectUrl(Context::get('success_return_url'));
 		}
 	}
+
+	function procSeoAdminInsertModuleConfig()
+	{
+		$vars = Context::getRequestVars();
+		$oModule = getModel('module');
+
+		$modulePartConfig = $oModule->getModulePartConfig('seo', $vars->target_module_srl);
+
+		if (!$modulePartConfig) {
+			$modulePartConfig = new stdClass();
+		}
+
+
+		$modulePartConfig->meta_description = htmlspecialchars($vars->meta_description, ENT_COMPAT | ENT_HTML401, 'UTF-8', FALSE);
+
+		$oModuleController = getController('module');
+		$output = $oModuleController->insertModulePartConfig('seo', $vars->target_module_srl, $modulePartConfig);
+
+		$this->setMessage('success_updated', 'info');
+		$this->setRedirectUrl($vars->success_return_url);
+	}
 }
 /* !End of file */

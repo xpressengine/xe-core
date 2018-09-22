@@ -1,12 +1,12 @@
 <entry>
-	<id>{$article->alternative_href}</id>
-	<title><![CDATA[{$article->title}]]></title>
+	<id>{$article->alternative_href|noescape}</id>
+	<title><![CDATA[{$article->title|noescape}]]></title>
 	<author>
-		<name><![CDATA[{$article->nick_name}]]></name>
+		<name><![CDATA[{$article->nick_name|noescape}]]></name>
 	</author>
-	<updated>{$article->updated}</updated>
-	<published>{$article->published}</published>
-	<link rel="via" href="{$article->channel_alternative_href}" title="{htmlspecialchars($channel_info->title)}" />
-	<content type="html"><![CDATA[{$article->content}]]></content>
-	<category cond="$article->category" term="{$article->category->term}" label="{htmlspecialchars($article->category->label)}" />
+	<updated>{$article->updated|noescape}</updated>
+	<published>{$article->published|noescape}</published>
+	<link rel="via" href="{$article->channel_alternative_href|noescape}" title="{escape($channel_info->title)}" />
+	<content type="html"><![CDATA[{$article->content|noescape}]]></content>
+	<category cond="$article->category" term="{$article->category->term|noescape}" label="{escape($article->category->label)}" />
 </entry>

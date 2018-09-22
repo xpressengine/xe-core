@@ -3,7 +3,7 @@
 	<actions>
 		<action name="dispKrzipAdminConfig" type="view" menu_name="krzip" menu_index="true" admin_index="true" />
 		<action name="procKrzipAdminInsertConfig" type="controller" ruleset="krzipConfig" />
-		<action name="dispKrzipSearchForm" type="view" />
+		<action name="dispKrzipSearchForm" type="view" meta-noindex="true" />
 		<action name="getKrzipCodeList" type="model" />
 	</actions>
 	<menus>

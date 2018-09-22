@@ -593,7 +593,7 @@ class commentItem extends BaseObject
 			}
 			else
 			{
-				return $thumbnail_url;
+				return $thumbnail_url . '?' . date('YmdHis', filemtime($thumbnail_file));
 			}
 		}
 
@@ -685,18 +685,13 @@ class commentItem extends BaseObject
 		// Remove lockfile
 		FileHandler::removeFile($thumbnail_lockfile);
 
-		// Return the thumbnail path if it was successfully generated
-		if($output)
-		{
-			return $thumbnail_url;
-		}
 		// Create an empty file if thumbnail generation failed
-		else
+		if(!$output)
 		{
 			FileHandler::writeFile($thumbnail_file, '','w');
 		}
 
-		return;
+		return $thumbnail_url . '?' . date('YmdHis', filemtime($thumbnail_file));
 	}
 
 	function isCarted()

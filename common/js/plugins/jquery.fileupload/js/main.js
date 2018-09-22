@@ -266,6 +266,7 @@
 			var self = this;
 			var file_srls = [];
 			var data = $container.data();
+			var img = _getCkeInstance(data.editorSequence).document.find('img');
 
 			if(!file_srl)
 			{
@@ -288,6 +289,21 @@
 				file_srls = file_srls.split(',');
 				$.each(file_srls, function(idx, srl){
 					data.settings.fileList.find('ul').find('li[data-file-srl=' + srl + ']').remove();
+
+
+					for(var i = 0; i <= img.count() - 1; i++) {
+						var elItem = img.getItem(i);
+						if(elItem.getAttribute('data-file-srl') == srl) {
+							var elParent = elItem.getParent();
+							console.debug('_deleteFile', elParent, elParent.getHtml(), elParent.getChildCount(), elParent.getChildren())
+
+							if(elParent.getChildCount() === 1) {
+								elParent.remove();
+							} else {
+								elItem.remove();
+							}
+						}
+					}
 				});
 				self.loadFilelist($container);
 			});

@@ -9,7 +9,7 @@
 				<img cond="$comment->getProfileImage()" src="{$comment->getProfileImage()}" alt="Profile" class="profile" />
 				<span cond="!$comment->getProfileImage()" class="profile"></span>
 				<h3 class="author">
-					<a cond="!$comment->member_srl && $comment->homepage" href="{$comment->getHomepageUrl()}">{$comment->getNickName()}</a>
+					<a cond="!$comment->member_srl && $comment->homepage" href="{$comment->getHomepageUrl()}" rel="nofollow noopener">{$comment->getNickName()}</a>
 					<strong cond="!$comment->member_srl && !$comment->homepage">{$comment->getNickName()}</strong>
 					<a cond="$comment->member_srl" href="#popup_menu_area" class="member_{$comment->member_srl}" onclick="return false">{$comment->getNickName()}</a>
 				</h3>
@@ -25,19 +25,19 @@
 				<input type="hidden" name="comment_srl" value="{$comment->get('comment_srl')}" />
 			</form>
 			<!--@else-->
-			{$comment->getContent(false)}
+			{$comment->getContent(false)|noescape}
 			<!--@end-->
 			<div cond="$comment->hasUploadedFiles()" class="fileList">
 				<button type="button" class="toggleFile" onclick="jQuery(this).next('ul.files').toggle();"><i class="xi-diskette"></i> {$lang->uploaded_file} [<strong>{$comment->get('uploaded_count')}</strong>]</button>
 				<ul class="files">
-					<li loop="$comment->getUploadedFiles()=>$key,$file"><a href="{getUrl('')}{$file->download_url}">{$file->source_filename} <span class="fileSize">[File Size:{FileHandler::filesize($file->file_size)}/Download:{number_format($file->download_count)}]</span></a></li>
+					<li loop="$comment->getUploadedFiles()=>$key,$file"><a href="{getUrl('')}{$file->download_url}" rel="nofollow">{$file->source_filename} <span class="fileSize">[File Size:{FileHandler::filesize($file->file_size)}/Download:{number_format($file->download_count)}]</span></a></li>
 				</ul>
 			</div>
 			<p class="action">
 				<span class="vote" cond="$comment->get('voted_count')!=0">{$lang->cmd_vote}:{$comment->get('voted_count')?$comment->get('voted_count'):0}</span>
-				<a cond="$oDocument->allowComment()" href="{getUrl('act','dispBoardReplyComment','comment_srl',$comment->comment_srl)}" class="reply"><i class="xi-reply"></i> {$lang->cmd_reply}</a>
-				<a cond="$comment->isGranted()||!$comment->get('member_srl')" href="{getUrl('act','dispBoardModifyComment','comment_srl',$comment->comment_srl)}" class="modify"><i class="xi-eraser"></i> {$lang->cmd_modify}</a>
-				<a cond="$comment->isGranted()||!$comment->get('member_srl')" href="{getUrl('act','dispBoardDeleteComment','comment_srl',$comment->comment_srl)}" class="delete"><i class="xi-trash"></i> {$lang->cmd_delete}</a>
+				<a cond="$oDocument->allowComment()" href="{getUrl('act','dispBoardReplyComment','comment_srl',$comment->comment_srl)}" class="reply" rel="nofollow"><i class="xi-reply"></i> {$lang->cmd_reply}</a>
+				<a cond="$comment->isGranted()||!$comment->get('member_srl')" href="{getUrl('act','dispBoardModifyComment','comment_srl',$comment->comment_srl)}" class="modify" rel="nofollow"><i class="xi-eraser"></i> {$lang->cmd_modify}</a>
+				<a cond="$comment->isGranted()||!$comment->get('member_srl')" href="{getUrl('act','dispBoardDeleteComment','comment_srl',$comment->comment_srl)}" class="delete" rel="nofollow"><i class="xi-trash"></i> {$lang->cmd_delete}</a>
 				<a cond="$is_logged" class="comment_{$comment->comment_srl} this" href="#popup_menu_area" onclick="return false">{$lang->cmd_comment_do}</a>
 			</p>
 		</li>
@@ -55,7 +55,7 @@
 		<input type="hidden" name="document_srl" value="{$oDocument->document_srl}" />
 		<input type="hidden" name="comment_srl" value="" />
         <input type="hidden" name="content" value="" />
-        {$oDocument->getCommentEditor()}
+        {$oDocument->getCommentEditor()|noescape}
         
 		<div class="write_author">
 			<span class="item" cond="!$is_logged">

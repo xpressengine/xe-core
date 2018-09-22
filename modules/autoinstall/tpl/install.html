@@ -17,19 +17,29 @@
 	</ul>
 </div>
 
-<div cond="$contain_core" class="x_alert x_alert-block">
+<div cond="$contain_core" class="x_alert x_alert-info x_alert-block">
 	<h4>{$lang->msg_update_core_title}</h4>
 	<p>{$lang->msg_update_core}</p>
+	<p>
+		<a href="{getUrl('package_srl', 18325662)}" class="x_btn x_btn-primary">{$lang->update}</a>
+	</p>
 </div>
+
 <div cond="$package->installed" class="x_well">
+	<div cond="$package->path === '.'" class="x_alert x_alert-danger">
+		<p>{$lang->msg_update_core}</p>
+	</div>
+
 	<p>{$lang->current_version}: {$package->cur_version} <block cond="$package->need_update">({$lang->require_update})</block></p>
 </div>
+
 <div cond="$package->depends && (!$package->installed || $package->need_update)" class="x_well">
 	<p>{$lang->about_depending_programs}</p>
 	<p>{$lang->description_install}</p>
 	<ul>
 		<li loop="$package->depends => $dep">
-			{$dep->title} ver. {$dep->version} -
+			{@ $target_url = $original_site."?mid=download&package_srl=".$dep->package_srl; }
+			<a href="{$target_url}" title="{$dep->title}" target="_blank">{$dep->title}</a> ver. {$dep->version} -
 			<block cond="$dep->installed">{$lang->current_version}: {$dep->cur_version} <block cond="$dep->need_update">({$lang->require_update})</block></block>
 			<block cond="!$dep->installed">{$lang->require_installation}</block>
 			<block cond="$show_ftp_note && ($dep->need_update || !$dep->installed)">
@@ -53,7 +63,7 @@
 			<p><a class="x_btn x_btn-primary x_pull-right" href="{_XE_DOWNLOAD_SERVER_}?module=resourceapi&act=procResourceapiDownload&package_srl={$package->package_srl}">{$lang->cmd_download}</a>
 		</block>
 	</div>
-	<div cond="!$show_ftp_note">
+	<div cond="!$show_ftp_note && !$package->contain_core">
 		<div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/autoinstall/tpl/install/1'" class="message error">
 			<p>{$XE_VALIDATOR_MESSAGE}</p>
 		</div>

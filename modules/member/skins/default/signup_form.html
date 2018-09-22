@@ -13,7 +13,7 @@
 		<input type="hidden" name="success_return_url" value="{getUrl('act','dispMemberInfo')}" />
 		<div class="agreement" cond="$member_config->agreement">
 			<div class="text">
-				{$member_config->agreement}
+				{$member_config->agreement|noescape}
 			</div>
 			<div class="confirm">
 				<label for="accept_agree">
@@ -42,8 +42,8 @@
 			</div>
 		</div>
 		<div class="control-group" loop="$formTags=>$formTag" cond="$formTag->name != 'signature'">
-			<label for="{$formTag->name}" class="control-label">{$formTag->title}</label>
-			<div class="controls">{$formTag->inputTag}</div>
+			<label for="{$formTag->name}" class="control-label">{$formTag->title|noescape}</label>
+			<div class="controls">{$formTag->inputTag|noescape}</div>
 		</div>
 		<div class="control-group">
 			<div class="control-label">{$lang->allow_mailing}</div>

@@ -334,12 +334,6 @@ class autoinstallAdminModel extends autoinstall
 				$package->cur_version = $installedPackage->current_version;
 				$package->need_update = version_compare($package->version, $installedPackage->current_version, ">");
 			}
-
-			if($package->path === '.')
-			{
-				$package->contain_core = TRUE;
-				$package->contain_core_version = $package->version;
-			}
 		}
 
 		return $package;

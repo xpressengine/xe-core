@@ -12,7 +12,8 @@ class seo extends ModuleObject
 		array('display', 'seo', 'controller', 'triggerBeforeDisplay', 'before'),
 		array('file.deleteFile', 'seo', 'controller', 'triggerAfterFileDeleteFile', 'after'),
 		array('document.updateDocument', 'seo', 'controller', 'triggerAfterDocumentUpdateDocument', 'after'),
-		array('document.deleteDocument', 'seo', 'controller', 'triggerAfterDocumentDeleteDocument', 'after')
+		array('document.deleteDocument', 'seo', 'controller', 'triggerAfterDocumentDeleteDocument', 'after'),
+		array('module.dispAdditionSetup', 'seo', 'view', 'triggerDispSeoAdditionSetup', 'before')
 	);
 
 	public function getConfig()
