@@ -722,7 +722,6 @@ class TemplateHandler
 						case 'strip':
 						case 'strip_tags':
 							$var = $filter_option ? "strip_tags({$var}, {$filter_option})" : "strip_tags({$var})";
-							$escape_option = 'noescape';
 							break;
 
 						case 'trim':
@@ -750,13 +749,12 @@ class TemplateHandler
 
 						case 'join':
 							$var = $filter_option ? "implode({$filter_option}, {$var})" : "implode(', ', {$var})";
-							$escape_option = 'noescape';
 							break;
 
-						case 'date':
-							$var = $filter_option ? "getDisplayDateTime(ztime({$var}), {$filter_option})" : "getDisplayDateTime(ztime({$var}), 'Y-m-d H:i:s')";
-							$escape_option = 'noescape';
-							break;
+						// case 'date':
+						// 	$var = $filter_option ? "getDisplayDateTime(ztime({$var}), {$filter_option})" : "getDisplayDateTime(ztime({$var}), 'Y-m-d H:i:s')";
+						// 	$escape_option = 'noescape';
+						// 	break;
 
 						case 'format':
 						case 'number_format':
