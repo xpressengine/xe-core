@@ -408,12 +408,16 @@ $GLOBALS['__xe_autoload_file_map'] = array_change_key_case(array(
  * Invalidates a cached script of OPcache when version is changed.
  * @see https://github.com/xpressengine/xe-core/issues/2189
  **/
+$cache_path = _XE_PATH_ . 'files/cache/store/' . __XE_VERSION__;
 if(
-	!is_dir(_XE_PATH_ . 'files/cache/store/' . __XE_VERSION__)
+	!is_dir($cache_path)
 	&& function_exists('opcache_get_status')
 	&& function_exists('opcache_invalidate')
 )
 {
+	@mkdir($cache_path, 0755, TRUE);
+	@chmod($cache_path, 0755);
+
 	foreach($GLOBALS['__xe_autoload_file_map'] as $script) {
 		opcache_invalidate(_XE_PATH_ . $script, true);
 	}
