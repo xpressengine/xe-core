@@ -1075,7 +1075,7 @@ class TemplateHandler
 		}
 
 		// skin, layout
-		if(preg_match('/^(\.\/)?(' . $dirSkin . '\//', $absPath))
+		if(preg_match('/^(\.\/)?\(' . $dirSkin . '\//', $absPath))
 		{
 			return true;
 		}
