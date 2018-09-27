@@ -40,7 +40,7 @@
 				</td>
 				<td class="title" cond="$val->type=='title' && $val->idx==-1">
 					<a href="{getUrl('document_srl',$document->document_srl, 'listStyle', $listStyle, 'cpage','')}">
-						{$document->getTitle()}
+						{$document->getTitle()|noescape}
 					</a>
 					<a cond="$document->getCommentCount()" href="{getUrl('document_srl', $document->document_srl)}#comment" class="replyNum" title="Replies">
 						[{$document->getCommentCount()}]
@@ -69,7 +69,7 @@
 				<td class="readNum" cond="$val->type=='readed_count' && $val->idx==-1">{$document->get('readed_count')>0?$document->get('readed_count'):'0'}</td>
 				<td class="voteNum" cond="$val->type=='voted_count' && $val->idx==-1">{$document->get('voted_count')!=0?$document->get('voted_count'):'0'}</td>
 				<td class="voteNum" cond="$val->type=='blamed_count' && $val->idx==-1">{$document->get('blamed_count')!=0?$document->get('blamed_count'):'0'}</td>
-				<td cond="$val->idx!=-1">{$document->getExtraValueHTML($val->idx)}&nbsp;</td>
+				<td cond="$val->idx!=-1">{$document->getExtraValueHTML($val->idx)|noescape}&nbsp;</td>
 				</block>
 				<td cond="$grant->manager" class="check"><input type="checkbox" name="cart" value="{$document->document_srl}" class="iCheck" title="Check This Article" onclick="doAddDocumentCart(this)" checked="checked"|cond="$document->isCarted()" /></td>
 			</tr>
@@ -82,10 +82,10 @@
 					<block cond="$document_srl!=$document->document_srl">{$no}</block>
 				</td>
 				<td class="title" cond="$val->type=='title' && $val->idx==-1">
-					<a href="{getUrl('document_srl',$document->document_srl, 'listStyle', $listStyle, 'cpage','')}" rel="nofollow">{$document->getTitle()}</a>
+					<a href="{getUrl('document_srl',$document->document_srl, 'listStyle', $listStyle, 'cpage','')}" rel="nofollow">{$document->getTitle()|noescape}</a>
 					<a cond="$document->getCommentCount()" href="{getUrl('document_srl', $document->document_srl)}#comment" class="replyNum" title="Replies">[{$document->getCommentCount()}]</a>
 					<a cond="$document->getTrackbackCount()" href="{getUrl('document_srl', $document->document_srl)}#trackback" class="trackbackNum" title="Trackbacks">[{$document->getTrackbackCount()}]</a>
-					{$document->printExtraImages(60*60*$module_info->duration_new)}
+					{$document->printExtraImages(60*60*$module_info->duration_new)|noescape}
 				</td>
 				<td class="author" cond="$val->type=='nick_name' && $val->idx==-1"><a href="#popup_menu_area" class="member_{$document->get('member_srl')}" onclick="return false">{$document->getNickName()}</a></td>
 				<td class="author" cond="$val->type=='user_id' && $val->idx==-1">{$document->getUserID()}</td>
@@ -107,7 +107,7 @@
 				<td class="readNum" cond="$val->type=='readed_count' && $val->idx==-1">{$document->get('readed_count')>0?$document->get('readed_count'):'0'}</td>
 				<td class="voteNum" cond="$val->type=='voted_count' && $val->idx==-1">{$document->get('voted_count')!=0?$document->get('voted_count'):'0'}</td>
 				<td class="voteNum" cond="$val->type=='blamed_count' && $val->idx==-1">{$document->get('blamed_count')!=0?$document->get('blamed_count'):'0'}</td>
-				<td cond="$val->idx!=-1">{$document->getExtraValueHTML($val->idx)}&nbsp;</td>
+				<td cond="$val->idx!=-1">{$document->getExtraValueHTML($val->idx)|noescape}&nbsp;</td>
 				</block>
 				<td cond="$grant->manager" class="check"><input type="checkbox" name="cart" value="{$document->document_srl}" class="iCheck" title="Check This Article" onclick="doAddDocumentCart(this)" checked="checked"|cond="$document->isCarted()" /></td>
 			</tr>

@@ -253,7 +253,7 @@
 			<div cond="$_enable_unb && $UNB->list" class="custom_area">
 				<ul>
 					<li loop="$UNB->list => $key, $val">
-						<a href="{$val['href']}" target="_blank"|cond="$val['open_window'] == 'Y'">{$val['link']}</a>
+						<a href="{$val['href']}" target="_blank"|cond="$val['open_window'] == 'Y'">{$val['link']|noescape}</a>
 					</li>
 				</ul>
 			</div>
@@ -370,7 +370,7 @@
 		<!-- /LNB -->
 		<!-- CONTENT -->
 			<div class="content" id="content">
-				{$content}
+				{$content|noescape}
 			</div>
 			<!--@if($layout_info->use_demo === 'Y')-->
 				<include target="./demo/welcome_main.html" />
@@ -392,7 +392,7 @@
 							<!--@end-->
 						</a>
 					</p>
-					<p class="sub_desc">{$layout_info->footer_text}</p>
+					<p class="sub_desc">{$layout_info->footer_text|noescape}</p>
 				<!--@else-->
 					<include target="./demo/footer.html" />
 				<!--@end-->

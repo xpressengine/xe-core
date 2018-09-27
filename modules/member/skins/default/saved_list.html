@@ -12,8 +12,8 @@
 	<tbody>
 		<tr loop="$document_list => $no,$val">
 			<td class="title">
-				<a href="#saved_document_{$val->document_srl}" onclick="jQuery('#saved_document_{$val->document_srl}').toggle(); return false;">{$val->getTitle()}</a>
-				<div id="saved_document_{$val->document_srl}" class="savedContent" style="display:none;">{$val->getContent(false)}</div>
+				<a href="#saved_document_{$val->document_srl}" onclick="jQuery('#saved_document_{$val->document_srl}').toggle(); return false;">{$val->getTitle()|noescape}</a>
+				<div id="saved_document_{$val->document_srl}" class="savedContent" style="display:none;">{$val->getContent(false)|noescape}</div>
 			</td>
 			<td>{$val->getRegdate("Y-m-d")}</td>
 			<td><button type="button" class="text" onclick="doDeleteSavedDocument('{$val->document_srl}','{$lang->confirm_delete}');">{$lang->cmd_delete}</button></td>

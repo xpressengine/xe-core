@@ -27,7 +27,7 @@
 					{$item->getCategory()} &rsaquo;
 					<!--@end-->
 					
-					<strong>{$item->getTitle($widget_info->subject_cut_size)}</strong>
+					<strong>{$item->getTitle($widget_info->subject_cut_size)|noescape}</strong>
 					
 					<!--@if($widget_info->show_comment_count=='Y' && $item->getCommentCount())-->
 					<em title="Replies">[{$item->getCommentCount()}]</em>

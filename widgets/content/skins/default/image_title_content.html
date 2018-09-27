@@ -30,7 +30,7 @@
                 <a href="{getSiteUrl($item->domain,'','mid',$item->get('mid'),'category',$item->get('category_srl'))}" target="_blank"|cond="$widget_info->new_window"><strong class="category">{$item->getCategory()}</strong></a>
             <!--@end-->
 
-            <a href="{$item->getLink()}" class="title" target="_blank"|cond="$widget_info->new_window">{$item->getTitle($widget_info->subject_cut_size)}</a>
+            <a href="{$item->getLink()}" class="title" target="_blank"|cond="$widget_info->new_window">{$item->getTitle($widget_info->subject_cut_size)|noescape}</a>
 
             <!--@if($widget_info->show_comment_count=='Y' && $item->getCommentCount())-->
                 <em class="replyNum" title="Replies"><a href="{$item->getLink()}#comment" target="_blank"|cond="$widget_info->new_window">{$item->getCommentCount()}</a></em>
@@ -41,7 +41,7 @@
             <!--@end-->
 
             <!--@if($widget_info->show_icon=='Y')-->
-                <span class="icon">{$item->printExtraImages()}</span>
+                <span class="icon">{$item->printExtraImages()|noescape}</span>
             <!--@end-->
 
             <!--@if($widget_info->option_view_arr[$j+1]=='regdate')-->
@@ -51,7 +51,7 @@
 
         <!--@else if($widget_info->option_view_arr[$j]=='content')-->
         <p class="text" style="margin-left:{$widget_info->thumbnail_width+20}px;">
-            {$item->getContent()}
+            {$item->getContent()|noescape}
             <!--@if($widget_info->option_view_arr[$j+1]=='regdate')-->
                 <span class="date">{$item->getRegdate("Y-m-d")}</span> <span class="hour">{$item->getRegdate("H:i")}</span>
             <!--@end-->

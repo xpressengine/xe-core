@@ -4,7 +4,7 @@
 		<a cond="$oComment->homepage" href="{$oComment->homepage}" rel="nofollow noopener">{$oComment->getNickName()}</a>
 		<strong cond="!$oComment->homepage">{$oComment->getNickName()}</strong>
 	</h3>
-	{$oComment->getContent(false)}
+	{$oComment->getContent(false)|noescape}
 </div>
 <form action="./" method="get" onsubmit="return procFilter(this, delete_comment)" class="context_message">
 	<input type="hidden" name="mid" value="{$mid}" />

@@ -4,10 +4,10 @@
 {$oDocument->getRegdate()}
 <!--@if($oDocument->isExtraVarsExists() && (!$oDocument->isSecret() || $oDocument->isGranted()) )-->
 <!--@foreach($oDocument->getExtraVars() as $key => $val)-->    
-{$val->name}: {$val->getValueHtml()}
+{$val->name}: {$val->getValueHtml()|noescape}
 <!--@end-->
 <!--@end-->    
-{$oDocument->getContent(false, false)} 
+{$oDocument->getContent(false, false)|noescape} 
 <script>
 //<![CDATA[
     jQuery(window).load(function() { window.print(); } );

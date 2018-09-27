@@ -7,7 +7,7 @@
 	<!--@foreach($notice_list as $no => $document)-->
 	<li>
 		<a href="{getUrl('document_srl', $document->document_srl)}">
-		<span class="title"><span class="notice">{$lang->notice}</span> <!--@if($module_info->use_category == "Y" && $document->get('category_srl'))-->{$category_list[$document->get('category_srl')]->title} &rsaquo;<!--@end--> <strong>{$document->getTitle($module_info->subject_cut_size)}</strong> <!--@if($document->getCommentCount())--><em>[{$document->getCommentCount()}]</em><!--@endif--></span>
+		<span class="title"><span class="notice">{$lang->notice}</span> <!--@if($module_info->use_category == "Y" && $document->get('category_srl'))-->{$category_list[$document->get('category_srl')]->title} &rsaquo;<!--@end--> <strong>{$document->getTitle($module_info->subject_cut_size)|noescape}</strong> <!--@if($document->getCommentCount())--><em>[{$document->getCommentCount()}]</em><!--@endif--></span>
 			<span class="auth"><strong>{$document->getNickName()}</strong> <span class="time">{$document->getRegDate("Y.m.d")}</span></span>
 		</a>
 	</li>
@@ -15,7 +15,7 @@
 	<!--@foreach($document_list as $no => $document)-->
 	<li>
 		<a href="{getUrl('document_srl', $document->document_srl)}">
-			<span class="title"><!--@if($module_info->use_category == "Y" && $document->get('category_srl'))-->{$category_list[$document->get('category_srl')]->title} &rsaquo;<!--@end--> <strong>{$document->getTitle($module_info->subject_cut_size)}</strong> <!--@if($document->getCommentCount())--><em>[{$document->getCommentCount()}]</em><!--@endif--></span>
+			<span class="title"><!--@if($module_info->use_category == "Y" && $document->get('category_srl'))-->{$category_list[$document->get('category_srl')]->title} &rsaquo;<!--@end--> <strong>{$document->getTitle($module_info->subject_cut_size)|noescape}</strong> <!--@if($document->getCommentCount())--><em>[{$document->getCommentCount()}]</em><!--@endif--></span>
 			<span class="auth"><strong>{$document->getNickName()}</strong> <span class="time">{$document->getRegDate("Y.m.d")}</span></span>
 		</a>
 	</li>

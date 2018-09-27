@@ -34,7 +34,7 @@
 		<tr>
 			<td>{$no}</td>
 			<td>
-				{$oDocument->getTitle()}
+				{$oDocument->getTitle()|noescape}
 				
 				<!--@if($oDocument->getCommentCount())-->
 				[{$oDocument->getCommentCount()}]

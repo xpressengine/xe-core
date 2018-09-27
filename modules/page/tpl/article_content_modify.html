@@ -8,7 +8,7 @@
 		<input type="text" name="title" value="{htmlspecialchars($oDocument->getTitleText(), ENT_COMPAT | ENT_HTML401, 'UTF-8', false)}" title="{$lang->title}" style="width:100%" />
 	</div>
 
-    <div class="editor">{$oDocument->getEditor()}</div>
+    <div class="editor">{$oDocument->getEditor()|noescape}</div>
 
     <div class="tag">
         <input type="text" name="tags" value="{htmlspecialchars($oDocument->get('tags'), ENT_COMPAT | ENT_HTML401, 'UTF-8', false)}" class="iText" title="Tag" />

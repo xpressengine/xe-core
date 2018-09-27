@@ -3,7 +3,7 @@
 	<div class="read_header">
 		<h1>
 			<a href="{getUrl('category',$oDocument->get('category_srl'), 'document_srl', '')}" class="category" cond="$module_info->use_category=='Y'">{$category_list[$oDocument->get('category_srl')]->title}</a>
-			<a href="{$oDocument->getPermanentUrl()}">{$oDocument->getTitle()}</a>
+			<a href="{$oDocument->getPermanentUrl()}">{$oDocument->getTitle()|noescape}</a>
 		</h1>
 		<p class="time">
 			{$oDocument->getRegdate('Y.m.d H:i')}
@@ -24,7 +24,7 @@
 		<table border="1" cellspacing="0" summary="Extra Form Output">
 			<tr loop="$oDocument->getExtraVars() => $key,$val">
 				<th scope="row">{$val->name}</th>
-				<td>{$val->getValueHTML()}&nbsp;</td>
+				<td>{$val->getValueHTML()|noescape}&nbsp;</td>
 			</tr>
 		</table>
 	</div>
@@ -41,7 +41,7 @@
 			</p>
 		</form>
 		<!--@else-->
-		{$oDocument->getContent(false)}
+		{$oDocument->getContent(false)|noescape}
 		<!--@end-->
 	</div>
 	<!-- /READ BODY -->
@@ -87,7 +87,7 @@
 		</div>
 		<div class="sign" cond="$module_info->display_sign!='N'&&($oDocument->getProfileImage()||$oDocument->getSignature())">
 			<img cond="$oDocument->getProfileImage()" src="{$oDocument->getProfileImage()}" alt="Profile" class="pf" />
-			<div cond="$oDocument->getSignature()" class="tx">{$oDocument->getSignature()}</div>
+			<div cond="$oDocument->getSignature()" class="tx">{$oDocument->getSignature()|noescape}</div>
 		</div>
 		<div class="btnArea"> 
 			<a cond="$oDocument->isEditable()" class="btn" href="{getUrl('act','dispBoardWrite','document_srl',$oDocument->document_srl,'comment_srl','')}" rel="nofollow">{$lang->cmd_modify}</a>
