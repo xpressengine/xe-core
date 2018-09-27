@@ -483,7 +483,7 @@ class TemplateHandlerWrapper extends \TemplateHandler {
     }
 
     public function parse($buff = null, $safeguard = false) {
-    	$this->inst->setSafeguard($safeguard);
+    	$this->inst->setAutoescape($safeguard);
         return call_user_func(array($this->inst, 'parse'), $buff);
     }
 }

@@ -22,7 +22,7 @@ class TemplateHandler
 	private $config = NULL;
 	private $skipTags = NULL;
 	private $handler_mtime = 0;
-	private $safeguard = false;
+	private $autoescape = false;
 	static private $rootTpl = NULL;
 
 	/**
@@ -37,53 +37,6 @@ class TemplateHandler
 		$this->config = new stdClass();
 
 		$this->ignoreEscape = array(
-			'html_content' => function ($m) {
-				$list = array(
-					'$content', // 레이아웃 등
-					'$editor', // 에디터 출력
-					'$page_content', // page 모듈
-					'$setup_content', // 모듈 추가 설정 페이지
-					'$grant_content', // 모듈 권한 설정 페이지
-					'$skin_content', // 모듈 스킨 설정 페이지
-					'$widget_content', // widget HTML content
-					'$extra_vars_content', // 모듈 확장변수 설정 페이지
-					'$message->content', // 쪽지함 메시지
-					'Context::getHtmlHeader()',
-					'Context::getHtmlFooter()',
-					'Context::getBodyHeader()'
-				);
-				return in_array($m[1], $list);
-			},
-			'url' => function ($m) {
-				$list = array(
-					'getUrl',
-					'getNotEncodedUrl',
-					'getAutoEncodedUrl',
-					'getFullUrl',
-					'getNotEncodedFullUrl',
-					'getSiteUrl',
-					'getNotEncodedSiteUrl',
-					'getFullSiteUrl',
-					'getCurrentPageUrl',
-					'getCurrentPageUrl',
-				);
-				return in_array(array_shift(explode('(', $m[1])), $list);
-			},
-			'methods' => function ($m) {
-				$list = array(
-					'getEditor',
-					'getCommentEditor',
-					'getFormHTML', // 확장변수
-					'getValueHTML', // 확장변수
-					'getExtraValueHTML', // 확장변수
-					'getExtraEidValueHTML', // 확장변수
-					'getTitle',
-					'getContent',
-					'getSignature', // 회원 서명
-					'printExtraImages', // new, file 아이콘 등
-				);
-				return preg_match('/\-\>(' . implode('|', $list) . ')\(/', $m[1]);
-			},
 			'functions' => function ($m) {
 				$list = array(
 					'htmlspecialchars',
@@ -168,7 +121,7 @@ class TemplateHandler
 		$hash = md5($this->file . __XE_VERSION__);
 		$this->compiled_file = "{$this->compiled_path}{$hash}.compiled.php";
 
-		$this->safeguard = $this->isSafeguard();
+		$this->autoescape = $this->isAutoescape();
 
 		// compare various file's modified time for check changed
 		$this->handler_mtime = filemtime(__FILE__);
@@ -320,7 +273,7 @@ class TemplateHandler
 			}
 		}
 
-		if($this->config->autoescape === 'on') $this->safeguard = true;
+		if($this->config->autoescape === 'on') $this->autoescape = true;
 
 		// replace comments
 		$buff = preg_replace('@<!--//.*?-->@s', '', $buff);
@@ -675,7 +628,7 @@ class TemplateHandler
 	{
 		$escape_option = 'noescape';
 
-		if($this->safeguard)
+		if($this->autoescape)
 		{
 			$escape_option = 'autoescape';
 		}
@@ -1111,10 +1064,8 @@ class TemplateHandler
 		return preg_replace('@(?<!::|\\\\|(?<!eval\()\')\$([a-z]|_[a-z0-9])@i', '\$__Context->$1', $php);
 	}
 
-	function isSafeguard()
+	function isAutoescape()
 	{
-		if ($this->dbinfo->safeguard === 'Y') return true;
-
 		$absPath = str_replace(_XE_PATH_, '', $this->path);
 		$dirTpl = '(addon|admin|adminlogging|autoinstall|board|comment|communication|counter|document|editor|file|importer|install|integration_search|krzip|layout|member|menu|message|module|page|point|poll|rss|seo|session|spamfilter|syndication|tag|trash|widget)';
 		$dirSkins = '(layouts\/default|layouts\/user_layout|layouts\/xedition|layouts\/xedition\/demo|m\.layouts\/colorCode|m\.layouts\/default|m\.layouts\/simpleGray|modules\/board\/m\.skins\/default|modules\/board\/m\.skins\/simpleGray|modules\/board\/skins\/default|modules\/board\/skins\/xedition|modules\/communication\/m\.skins\/default|modules\/communication\/skins\/default|modules\/editor\/skins\/ckeditor|modules\/editor\/skins\/xpresseditor|modules\/integration_search\/skins\/default|modules\/layout\/faceoff|modules\/member\/m\.skins\/default|modules\/member\/skins\/default|modules\/message\/m\.skins\/default|modules\/message\/skins\/default|modules\/message\/skins\/xedition|modules\/page\/m\.skins\/default|modules\/page\/skins\/default|modules\/poll\/skins\/default|modules\/poll\/skins\/simple|widgets\/content\/skins\/default|widgets\/counter_status\/skins\/default|widgets\/language_select\/skins\/default|widgets\/login_info\/skins\/default|widgets\/mcontent\/skins\/default|widgetstyles\/simple)';
@@ -1134,9 +1085,9 @@ class TemplateHandler
 		return false;
 	}
 
-	public function setSafeguard($val = true)
+	public function setAutoescape($val = true)
 	{
-		$this->safeguard = $val;
+		$this->autoescape = $val;
 	}
 }
 /* End of File: TemplateHandler.class.php */
