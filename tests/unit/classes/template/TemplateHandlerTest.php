@@ -482,8 +482,8 @@ class TemplateHandlerWrapper extends \TemplateHandler {
         call_user_func(array($this->inst, 'init'), $tpl_path, $tpl_filename, $tpl_file);
     }
 
-    public function parse($buff = null, $safeguard = false) {
-    	$this->inst->setAutoescape($safeguard);
+    public function parse($buff = null, $autoescape = false) {
+    	$this->inst->setAutoescape($autoescape);
         return call_user_func(array($this->inst, 'parse'), $buff);
     }
 }

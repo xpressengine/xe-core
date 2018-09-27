@@ -94,7 +94,6 @@ class installController extends install
 		$db_info->default_url = Context::getRequestUri();
 		$db_info->lang_type = Context::getLangType();
 		$db_info->use_mobile_view = 'Y';
-		$db_info->safeguard = 'Y';
 
 		// Set DB type and information
 		Context::setDBInfo($db_info);
@@ -242,7 +241,6 @@ class installController extends install
 		Context::setLangType($db_info->lang_type);
 		$db_info->use_rewrite = Context::get('use_rewrite');
 		$db_info->time_zone = Context::get('time_zone');
-		$db_info->safeguard = 'Y';
 
 		if($_SERVER['HTTPS'] == 'on')
 		{
