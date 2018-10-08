@@ -338,47 +338,31 @@ class TemplateHandlerTest extends \Codeception\TestCase\Test
             ),
             array(
                 '<p>{$foo|join:/|upper}</p>',
-                '?><p><?php echo strtoupper(implode(\'/\', $__Context->foo)) ?></p>'
+                '?><p><?php echo escape(strtoupper(implode(\'/\', $__Context->foo)), false) ?></p>'
             ),
             array(
                 '<p>{$foo|join:\||upper}</p>',
-                '?><p><?php echo strtoupper(implode(\'|\', $__Context->foo)) ?></p>'
+                '?><p><?php echo escape(strtoupper(implode(\'|\', $__Context->foo)), false) ?></p>'
             ),
             array(
                 '<p>{$foo|join:$separator}</p>',
-                '?><p><?php echo implode($__Context->separator, $__Context->foo) ?></p>'
+                '?><p><?php echo escape(implode($__Context->separator, $__Context->foo), false) ?></p>'
             ),
             array(
                 '<p>{$foo|strip}</p>',
-                '?><p><?php echo strip_tags($__Context->foo) ?></p>'
+                '?><p><?php echo escape(strip_tags($__Context->foo), false) ?></p>'
             ),
             array(
                 '<p>{$foo|strip:<br>}</p>',
-                '?><p><?php echo strip_tags($__Context->foo, \'<br>\') ?></p>'
+                '?><p><?php echo escape(strip_tags($__Context->foo, \'<br>\'), false) ?></p>'
             ),
             array(
                 '<p>{$foo|strip:$mytags}</p>',
-                '?><p><?php echo strip_tags($__Context->foo, $__Context->mytags) ?></p>'
+                '?><p><?php echo escape(strip_tags($__Context->foo, $__Context->mytags), false) ?></p>'
             ),
             array(
                 '<p>{$foo|strip:myfunc($mytags)}</p>',
-                '?><p><?php echo strip_tags($__Context->foo, myfunc($__Context->mytags)) ?></p>'
-            ),
-            array(
-                '<p>{$foo|trim|date}</p>',
-                '?><p><?php echo getDisplayDateTime(ztime(trim($__Context->foo)), \'Y-m-d H:i:s\') ?></p>'
-            ),
-            array(
-                '<p>{$foo|date:His}</p>',
-                '?><p><?php echo getDisplayDateTime(ztime($__Context->foo), \'His\') ?></p>'
-            ),
-            array(
-                '<p>{$foo|format:2}</p>',
-                '?><p><?php echo number_format($__Context->foo, \'2\') ?></p>'
-            ),
-            array(
-                '<p>{$foo|date:His}</p>',
-                '?><p><?php echo getDisplayDateTime(ztime($__Context->foo), \'His\') ?></p>'
+                '?><p><?php echo escape(strip_tags($__Context->foo, myfunc($__Context->mytags)), false) ?></p>'
             ),
             array(
                 '<p>{$foo|link}</p>',

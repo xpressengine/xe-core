@@ -25,7 +25,7 @@ class UpdateExpressionWithoutArgument extends UpdateExpression
 	 */
 	function __construct($column_name, $argument)
 	{
-		parent::Expression($column_name);
+		Expression::__construct($column_name);
 		$this->argument = $argument;
 	}
 
