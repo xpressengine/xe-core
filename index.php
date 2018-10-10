@@ -36,10 +36,6 @@ define('__XE__',   TRUE);
 /**
  * @brief Include the necessary configuration files
  **/
-if(function_exists('opcache_invalidate'))
-{
-	opcache_invalidate(dirname(__FILE__) . '/config/config.inc.php', true);
-}
 require dirname(__FILE__) . '/config/config.inc.php';
 
 /**

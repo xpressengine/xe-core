@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Rhymix Developers and Contributors
+ * @link https://github.com/rhymix/rhymix
+ */
 class UploadFileFilter
 {
 	/**
