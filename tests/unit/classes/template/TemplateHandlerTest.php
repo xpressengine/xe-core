@@ -289,11 +289,15 @@ class TemplateHandlerTest extends \Codeception\TestCase\Test
             ),
             array(
                 '<config autoescape="on" />{$foo|auto}',
-                PHP_EOL . '$this->config->autoescape = \'on\';' . "\n" . 'echo ($this->config->autoescape === \'on\' ? escape($__Context->foo, false) : $__Context->foo) ?>'
+                PHP_EOL . '$this->config->autoescape = \'on\';' . "\n" . 'echo ($this->config->autoescape === \'on\' ? escape($__Context->foo, false) : ($__Context->foo)) ?>'
             ),
             array(
                 '<config autoescape="off" />{$foo|auto}',
-                PHP_EOL . '$this->config->autoescape = \'off\';' . "\n" . 'echo ($this->config->autoescape === \'on\' ? escape($__Context->foo, false) : $__Context->foo) ?>'
+                PHP_EOL . '$this->config->autoescape = \'off\';' . "\n" . 'echo ($this->config->autoescape === \'on\' ? escape($__Context->foo, false) : ($__Context->foo)) ?>'
+            ),
+            array(
+                '<config autoescape="off" />{$foo ? $foo : ""|auto}',
+                PHP_EOL . '$this->config->autoescape = \'off\';' . "\n" . 'echo ($this->config->autoescape === \'on\' ? escape($__Context->foo ? $__Context->foo : "", false) : ($__Context->foo ? $__Context->foo : "")) ?>'
             ),
             array(
                 '<config autoescape="on" />{$foo|autoescape}',
