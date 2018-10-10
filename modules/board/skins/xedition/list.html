@@ -19,13 +19,13 @@
 				<th scope="col" cond="$val->type=='nick_name' && $val->idx==-1"><span>{$lang->writer}</span></th>
 				<th scope="col" cond="$val->type=='user_id' && $val->idx==-1"><span>{$lang->user_id}</span></th>
 				<th scope="col" cond="$val->type=='user_name' && $val->idx==-1"><span>{$lang->user_name}</span></th>
-				<th scope="col" cond="$val->type=='regdate' && $val->idx==-1"><span><a href="{getUrl('sort_index','regdate','order_type',$order_type)}">{$lang->date}</a></span></th>
-				<th scope="col" cond="$val->type=='last_update' && $val->idx==-1"><span><a href="{getUrl('sort_index','update_order','order_type',$order_type)}">{$lang->last_update}</a></span></th>
-				<th scope="col" cond="$val->type=='last_post' && $val->idx==-1"><span><a href="{getUrl('sort_index','update_order','order_type',$order_type)}">{$lang->last_post}</a></span></th>
-				<th scope="col" cond="$val->type=='readed_count' && $val->idx==-1"><span><a href="{getUrl('sort_index','readed_count','order_type',$order_type)}">{$lang->readed_count}</a></span></th>
-				<th scope="col" cond="$val->type=='voted_count' && $val->idx==-1"><span><a href="{getUrl('sort_index','voted_count','order_type',$order_type)}">{$lang->voted_count}</a></span></th>
-				<th scope="col" cond="$val->type=='blamed_count' && $val->idx==-1"><span><a href="{getUrl('sort_index','blamed_count','order_type',$order_type)}">{$lang->blamed_count}</a></span></th>
-				<th scope="col" cond="$val->idx!=-1"><span><a href="{getUrl('sort_index', $val->eid, 'order_type', $order_type)}">{$val->name}</a></span></th>
+				<th scope="col" cond="$val->type=='regdate' && $val->idx==-1"><span><a href="{getUrl('sort_index','regdate','order_type',$order_type)}" rel="nofollow">{$lang->date}</a></span></th>
+				<th scope="col" cond="$val->type=='last_update' && $val->idx==-1"><span><a href="{getUrl('sort_index','update_order','order_type',$order_type)}" rel="nofollow">{$lang->last_update}</a></span></th>
+				<th scope="col" cond="$val->type=='last_post' && $val->idx==-1"><span><a href="{getUrl('sort_index','update_order','order_type',$order_type)}" rel="nofollow">{$lang->last_post}</a></span></th>
+				<th scope="col" cond="$val->type=='readed_count' && $val->idx==-1"><span><a href="{getUrl('sort_index','readed_count','order_type',$order_type)}" rel="nofollow">{$lang->readed_count}</a></span></th>
+				<th scope="col" cond="$val->type=='voted_count' && $val->idx==-1"><span><a href="{getUrl('sort_index','voted_count','order_type',$order_type)}" rel="nofollow">{$lang->voted_count}</a></span></th>
+				<th scope="col" cond="$val->type=='blamed_count' && $val->idx==-1"><span><a href="{getUrl('sort_index','blamed_count','order_type',$order_type)}" rel="nofollow">{$lang->blamed_count}</a></span></th>
+				<th scope="col" cond="$val->idx!=-1"><span><a href="{getUrl('sort_index', $val->eid, 'order_type', $order_type)}" rel="nofollow">{$val->name}</a></span></th>
 				</block>
 				<th scope="col" cond="$grant->manager" style="width:44px"><span><input type="checkbox" onclick="XE.checkboxToggleAll({ doClick:true });" class="iCheck" title="Check All" /></span></th>
 			</tr>
@@ -48,7 +48,7 @@
 				</td>
 				<td class="title" cond="$val->type=='title' && $val->idx==-1">
 					<a href="{getUrl('document_srl',$document->document_srl, 'listStyle', $listStyle, 'cpage','')}">
-						{$document->getTitle()}
+						{$document->getTitle()|noescape}
 					</a>
 					<a cond="$document->getCommentCount()" href="{getUrl('document_srl', $document->document_srl)}#comment" class="replyNum" title="Replies">
 						[{$document->getCommentCount()}]
@@ -77,7 +77,7 @@
 				<td class="readNum" cond="$val->type=='readed_count' && $val->idx==-1">{$document->get('readed_count')>0?$document->get('readed_count'):'0'}</td>
 				<td class="voteNum" cond="$val->type=='voted_count' && $val->idx==-1">{$document->get('voted_count')!=0?$document->get('voted_count'):'0'}</td>
 				<td class="voteNum" cond="$val->type=='blamed_count' && $val->idx==-1">{$document->get('blamed_count')!=0?$document->get('blamed_count'):'0'}</td>
-				<td cond="$val->idx!=-1">{$document->getExtraValueHTML($val->idx)}&nbsp;</td>
+				<td cond="$val->idx!=-1">{$document->getExtraValueHTML($val->idx)|noescape}&nbsp;</td>
 				</block>
 				<td cond="$grant->manager" class="check"><input type="checkbox" name="cart" value="{$document->document_srl}" class="iCheck" title="Check This Article" onclick="doAddDocumentCart(this)" checked="checked"|cond="$document->isCarted()" /></td>
 			</tr>
@@ -90,10 +90,10 @@
 					<block cond="$document_srl!=$document->document_srl">{$no}</block>
 				</td>
 				<td class="title" cond="$val->type=='title' && $val->idx==-1">
-					<a href="{getUrl('document_srl',$document->document_srl, 'listStyle', $listStyle, 'cpage','')}">{$document->getTitle()}</a>
+					<a href="{getUrl('document_srl',$document->document_srl, 'listStyle', $listStyle, 'cpage','')}">{$document->getTitle()|noescape}</a>
 					<a cond="$document->getCommentCount()" href="{getUrl('document_srl', $document->document_srl)}#comment" class="replyNum" title="Replies">[{$document->getCommentCount()}]</a>
 					<a cond="$document->getTrackbackCount()" href="{getUrl('document_srl', $document->document_srl)}#trackback" class="trackbackNum" title="Trackbacks">[{$document->getTrackbackCount()}]</a>
-					{$document->printExtraImages(60*60*$module_info->duration_new)}
+					{$document->printExtraImages(60*60*$module_info->duration_new)|noescape}
 				</td>
 				<td class="author" cond="$val->type=='nick_name' && $val->idx==-1"><a href="#popup_menu_area" class="member_{$document->get('member_srl')}" onclick="return false">{$document->getNickName()}</a></td>
 				<td class="author" cond="$val->type=='user_id' && $val->idx==-1">{$document->getUserID()}</td>
@@ -115,7 +115,7 @@
 				<td class="readNum" cond="$val->type=='readed_count' && $val->idx==-1">{$document->get('readed_count')>0?$document->get('readed_count'):'0'}</td>
 				<td class="voteNum" cond="$val->type=='voted_count' && $val->idx==-1">{$document->get('voted_count')!=0?$document->get('voted_count'):'0'}</td>
 				<td class="voteNum" cond="$val->type=='blamed_count' && $val->idx==-1">{$document->get('blamed_count')!=0?$document->get('blamed_count'):'0'}</td>
-				<td cond="$val->idx!=-1">{$document->getExtraValueHTML($val->idx)}&nbsp;</td>
+				<td cond="$val->idx!=-1">{$document->getExtraValueHTML($val->idx)|noescape}&nbsp;</td>
 				</block>
 				<td cond="$grant->manager" class="check"><input type="checkbox" name="cart" value="{$document->document_srl}" class="iCheck" title="Check This Article" onclick="doAddDocumentCart(this)" checked="checked"|cond="$document->isCarted()" /></td>
 			</tr>
@@ -126,10 +126,10 @@
 <div class="list_footer">
 
 	<div class="btnArea">
-		<a href="{getUrl('act','dispBoardWrite','document_srl','')}" class="btn"><i class="xi-pen"></i> {$lang->cmd_write}</a>
+		<a href="{getUrl('act','dispBoardWrite','document_srl','')}" rel="nofollow" class="btn"><i class="xi-pen"></i> {$lang->cmd_write}</a>
 		<a href="{getUrl('act','dispBoardTagList')}" class="btn" title="{$lang->tag}"><i class="xi-tag"></i> {$lang->tag}</a>
-		<a cond="$grant->manager" class="btn" href="{getUrl('act','dispBoardAdminBoardInfo')}" title="{$lang->cmd_setup}"><i class="xi-cog"></i> {$lang->cmd_setup}</a>			
-		<a cond="$grant->manager" href="{getUrl('','module','document','act','dispDocumentManageDocument')}" class="btn" onclick="popopen(this.href,'manageDocument'); return false;">{$lang->cmd_manage_document}</a>
+		<a cond="$grant->manager" class="btn" href="{getUrl('act','dispBoardAdminBoardInfo')}" rel="nofollow" title="{$lang->cmd_setup}"><i class="xi-cog"></i> {$lang->cmd_setup}</a>			
+		<a cond="$grant->manager" href="{getUrl('','module','document','act','dispDocumentManageDocument')}" rel="nofollow" class="btn" onclick="popopen(this.href,'manageDocument'); return false;">{$lang->cmd_manage_document}</a>
 	</div>
 
 	<form cond="$grant->view" action="{getUrl()}" method="get" onsubmit="return procFilter(this, search)" id="board_search" class="board_search" no-error-return-url="true">

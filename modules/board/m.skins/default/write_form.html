@@ -32,7 +32,7 @@
 			<!--@foreach($extra_keys as $key=> $val)-->
 			<li class="exvar">
 				<label for="ex_{$val->name}">{$val->name} <!--@if($val->is_required=="Y")-->*<!--@end--></label>
-				{$val->getFormHTML()}
+				{$val->getFormHTML()|noescape}
 			</li>
 			<!--@endforeach-->
 			<!--@endif-->
@@ -41,7 +41,7 @@
 				<label for="nText">{$lang->content}</label>
 				<!--@if($module_info->mobile_use_editor === 'Y')-->
 					<input type="hidden" name="content" value="{$oDocument->getContentText()}" />
-					{$oDocument->getEditor()}
+					{$oDocument->getEditor()|noescape}
 				<!--@else-->
 					<textarea name="content" rows="8" cols="42" id="nText"></textarea>
 				<!--@endif-->

@@ -1,7 +1,7 @@
-<id>{htmlspecialchars($site_info->id)}</id>
-<title>{htmlspecialchars($site_info->title)}</title>
+<id>{escape($site_info->id)}</id>
+<title>{escape($site_info->title)}</title>
 <author>
-	<name>{$site_info->site_title}</name>
+	<name>{$site_info->site_title|noescape}</name>
 </author>
-<updated>{$site_info->updated}</updated>
-<link rel="site" href="{htmlspecialchars($site_info->site_url)}" title="{htmlspecialchars($site_info->title)}"/>
+<updated>{$site_info->updated|noescape}</updated>
+<link rel="site" href="{escape($site_info->site_url)}" title="{escape($site_info->title)}"/>

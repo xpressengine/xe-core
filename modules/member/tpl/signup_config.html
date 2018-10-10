@@ -27,7 +27,7 @@
 	<div class="x_control-group">
 		<label class="x_control-label" for="prohibited_nick_name">{$lang->cmd_manage_nick_name}</label>
 		<div class="x_controls">
-			<p>{sprintf($lang->count_manage_nick_name, count($deniedNickNames))}</p>
+			<p>{sprintf($lang->count_manage_nick_name, count($deniedNickNames))|noescape}</p>
 			<ul class="textList" id="deniedNickNameList" style="margin-left:0">
 				<li loop="$deniedNickNames=>$nicknameInfo" id="denied_{$nicknameInfo->nick_name}">{$nicknameInfo->nick_name} <button type="button" class="x_icon-remove" onclick="doUpdateDeniedNickName('{$nicknameInfo->nick_name}','delete','{$lang->confirm_delete}');return false;">{$lang->delete}</button></li>
 			</ul>
@@ -39,7 +39,7 @@
 	<div class="x_control-group" cond="$useUserID">
 		<label class="x_control-label" for="prohibited_id">{$lang->cmd_manage_id}</label>
 		<div class="x_controls">
-			<p>{sprintf($lang->count_manage_id, count($deniedIDs))}</p>
+			<p>{sprintf($lang->count_manage_id, count($deniedIDs))|noescape}</p>
 			<ul class="textList" id="deniedList" style="margin-left:0">
 				<li loop="$deniedIDs=>$denied_info" id="denied_{$denied_info->user_id}">{$denied_info->user_id} <button type="button" class="x_icon-remove" onclick="doUpdateDeniedID('{$denied_info->user_id}','delete','{$lang->confirm_delete}');return false;">{$lang->delete}</button></li>
 			</ul>
@@ -58,7 +58,7 @@
 	</div>
 	<div class="x_control-group">
 		<label class="x_control-label" for="agreement">{$lang->agreement}</label>
-		<div class="x_controls">{$editor}</div>
+		<div class="x_controls">{$editor|noescape}</div>
 <style scoped>
 #smart_content,
 #smart_content>.tool{clear:none !important}

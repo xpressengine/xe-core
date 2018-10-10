@@ -32,7 +32,7 @@ class ModuleHandler extends Handler
 	 * @return void
 	 * */
 
-	function ModuleHandler($module = '', $act = '', $mid = '', $document_srl = '', $module_srl = '')
+	function __construct($module = '', $act = '', $mid = '', $document_srl = '', $module_srl = '')
 	{
 		// If XE has not installed yet, set module as install
 		if(!Context::isInstalled())
@@ -45,12 +45,9 @@ class ModuleHandler extends Handler
 		$oContext = Context::getInstance();
 		if($oContext->isSuccessInit == FALSE)
 		{
-			$logged_info = Context::get('logged_info');
-			if($logged_info->is_admin != "Y")
-			{
-				$this->error = 'msg_invalid_request';
-				return;
-			}
+			// @see https://github.com/xpressengine/xe-core/issues/2304
+			$this->error = 'msg_invalid_request';
+			return;
 		}
 
 		// Set variables from request arguments
@@ -469,7 +466,14 @@ class ModuleHandler extends Handler
 		// get type, kind
 		$type = $xml_info->action->{$this->act}->type;
 		$ruleset = $xml_info->action->{$this->act}->ruleset;
+		$meta_noindex = $xml_info->action->{$this->act}->meta_noindex;
 		$kind = stripos($this->act, 'admin') !== FALSE ? 'admin' : '';
+
+		if ($meta_noindex === 'true')
+		{
+			Context::addMetaTag('robots', 'noindex');
+		}
+
 		if(!$kind && $this->module == 'admin')
 		{
 			$kind = 'admin';
@@ -597,6 +601,7 @@ class ModuleHandler extends Handler
 					$forward->module = $module;
 					$forward->type = $xml_info->action->{$this->act}->type;
 					$forward->ruleset = $xml_info->action->{$this->act}->ruleset;
+					$forward->meta_noindex = $xml_info->action->{$this->act}->meta_noindex;
 					$forward->act = $this->act;
 				}
 				else
@@ -623,6 +628,10 @@ class ModuleHandler extends Handler
 				$ruleset = $forward->ruleset;
 				$tpl_path = $oModule->getTemplatePath();
 				$orig_module = $oModule;
+
+				if($forward->meta_noindex === 'true') {
+					Context::addMetaTag('robots', 'noindex');
+				}
 
 				$xml_info = $oModuleModel->getModuleActionXml($forward->module);
 
@@ -836,6 +845,10 @@ class ModuleHandler extends Handler
 					Context::setBrowserTitle($module_config->siteTitle);
 				}
 			}
+		}
+
+		if ($kind === 'admin') {
+			Context::addMetaTag('robots', 'noindex');
 		}
 
 		// if failed message exists in session, set context

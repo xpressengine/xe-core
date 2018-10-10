@@ -31,7 +31,7 @@ class memberAdminController extends member
 
 		$args = Context::gets('member_srl','email_address','find_account_answer', 'allow_mailing','allow_message','denied','is_admin','description','group_srl_list','limit_date');
 		$oMemberModel = &getModel ('member');
-		$config = $oMemberModel->getMemberConfig ();
+		$config = $oMemberModel->getMemberConfig();
 		$getVars = array();
 		if($config->signupForm)
 		{
@@ -60,10 +60,13 @@ class memberAdminController extends member
 		unset($all_args->error_return_url);
 		unset($all_args->success_return_url);
 		unset($all_args->ruleset);
-		if(!isset($args->limit_date)) $args->limit_date = "";
 		unset($all_args->password);
 		unset($all_args->password2);
 		unset($all_args->reset_password);
+
+		if(!isset($args->limit_date)) $args->limit_date = "";
+		if(!isset($args->description)) $args->description = "";
+
 		// Add extra vars after excluding necessary information from all the requested arguments
 		$extra_vars = delObjectVars($all_args, $args);
 		$args->extra_vars = serialize($extra_vars);
@@ -111,21 +114,21 @@ class memberAdminController extends member
 		$this->add('member_srl', $args->member_srl);
 		$this->setMessage($msg_code);
 
-		$profile_image = $_FILES['profile_image'];
+		$profile_image = Context::get('profile_image');
 		if(is_uploaded_file($profile_image['tmp_name']))
 		{
 			$output = $oMemberController->insertProfileImage($args->member_srl, $profile_image['tmp_name']);
 			if(!$output->toBool()) return $output;
 		}
 
-		$image_mark = $_FILES['image_mark'];
+		$image_mark = Context::get('image_mark');
 		if(is_uploaded_file($image_mark['tmp_name']))
 		{
 			$output = $oMemberController->insertImageMark($args->member_srl, $image_mark['tmp_name']);
 			if(!$output->toBool()) return $output;
 		}
 
-		$image_name = $_FILES['image_name'];
+		$image_name = Context::get('image_name');
 		if (is_uploaded_file($image_name['tmp_name']))
 		{
 			$output = $oMemberController->insertImageName($args->member_srl, $image_name['tmp_name']);
@@ -166,13 +169,13 @@ class memberAdminController extends member
 			'password_hashing_work_factor',
 			'password_hashing_auto_upgrade'
 		);
-		
+
 		$oPassword = new Password();
 		if(!array_key_exists($args->password_hashing_algorithm, $oPassword->getSupportedAlgorithms()))
 		{
 			$args->password_hashing_algorithm = 'md5';
 		}
-		
+
 		$args->password_hashing_work_factor = intval($args->password_hashing_work_factor, 10);
 		if($args->password_hashing_work_factor < 4)
 		{

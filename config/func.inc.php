@@ -252,6 +252,9 @@ function setUserSequence($seq)
 	$arr_seq = array();
 	if(isset($_SESSION['seq']))
 	{
+		if(!is_array($_SESSION['seq'])) {
+			$_SESSION['seq'] = array($_SESSION['seq']);
+		}
 		$arr_seq = $_SESSION['seq'];
 	}
 	$arr_seq[] = $seq;
@@ -605,6 +608,10 @@ function ztime($str)
 	{
 		return;
 	}
+	if (strlen($str) === 9 || (strlen($str) === 10 && $str <= 2147483647))
+ 	{
+ 		return intval($str);
+ 	}
 
 	$hour = (int) substr($str, 8, 2);
 	$min = (int) substr($str, 10, 2);
@@ -1097,6 +1104,13 @@ function purifierHtml(&$content)
 {
 	require_once(_XE_PATH_ . 'classes/security/Purifier.class.php');
 	$oPurifier = Purifier::getInstance();
+
+	// @see https://github.com/xpressengine/xe-core/issues/2278
+	$logged_info = Context::get('logged_info');
+	if($logged_info->is_admin !== 'Y') {
+		$oPurifier->setConfig('HTML.Nofollow', true);
+	}
+
 	$oPurifier->purify($content);
 }
 
@@ -1765,6 +1779,112 @@ function reload($isOpener = FALSE)
 //]]>
 </script>';
 }
+
+/**
+ * This function is a shortcut to htmlspecialchars().
+ *
+ * @copyright Rhymix Developers and Contributors
+ * @link https://github.com/rhymix/rhymix
+ *
+ * @param string $str The string to escape
+ * @param bool $double_escape Set this to false to skip symbols that are already escaped (default: true)
+ * @return string
+ */
+function escape($str, $double_escape = true)
+{
+	$flags = ENT_QUOTES | ENT_SUBSTITUTE;
+	return htmlspecialchars($str, $flags, 'UTF-8', $double_escape);
+}
+
+/**
+ * This function escapes a string to be used in a CSS property.
+ *
+ * @copyright Rhymix Developers and Contributors
+ * @link https://github.com/rhymix/rhymix
+ *
+ * @param string $str The string to escape
+ * @return string
+ */
+function escape_css($str)
+{
+	return preg_replace('/[^a-zA-Z0-9_.#\/-]/', '', $str);
+}
+
+/**
+ * This function escapes a string to be used in a JavaScript string literal.
+ *
+ * @copyright Rhymix Developers and Contributors
+ * @link https://github.com/rhymix/rhymix
+ *
+ * @param string $str The string to escape
+ * @return string
+ */
+function escape_js($str)
+{
+	$flags = JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE;
+	$str = json_encode((string)$str, $flags);
+	return substr($str, 1, strlen($str) - 2);
+}
+
+/**
+ * This function escapes a string to be used in a 'single-quoted' PHP string literal.
+ * Null bytes are removed.
+ *
+ * @copyright Rhymix Developers and Contributors
+ * @link https://github.com/rhymix/rhymix
+ *
+ * @param string $str The string to escape
+ * @return string
+ */
+function escape_sqstr($str)
+{
+	return str_replace(array('\\0', '\\"'), array('', '"'), addslashes($str));
+}
+
+/**
+ * This function escapes a string to be used in a "double-quoted" PHP string literal.
+ * Null bytes are removed.
+ *
+ * @copyright Rhymix Developers and Contributors
+ * @link https://github.com/rhymix/rhymix
+ *
+ * @param string $str The string to escape
+ * @return string
+ */
+function escape_dqstr($str)
+{
+	return str_replace(array('\\0', "\\'", '$'), array('', "'", '\\$'), addslashes($str));
+}
+
+/**
+ * This function splits a string into an array, but allows the delimter to be escaped.
+ * For example, 'A|B\|C|D' will be split into 'A', 'B|C', and 'D'
+ * because the bar between B and C is escaped.
+ *
+ * @copyright Rhymix Developers and Contributors
+ * @link https://github.com/rhymix/rhymix
+ *
+ * @param string $delimiter The delimiter
+ * @param string $str The string to split
+ * @param int $limit The maximum number of items to return, 0 for unlimited (default: 0)
+ * @param string $escape_char The escape character (default: backslash)
+ * @return array
+ */
+function explode_with_escape($delimiter, $str, $limit = 0, $escape_char = '\\')
+{
+	if ($limit < 1) $limit = null;
+	$result = array();
+	$split = preg_split('/(?<!' . preg_quote($escape_char, '/') . ')' . preg_quote($delimiter, '/') . '/', $str, $limit);
+	foreach ($split as $piece)
+	{
+		if (trim($piece) !== '')
+		{
+			$result[] = trim(str_replace($escape_char . $delimiter, $delimiter, $piece));
+		}
+	}
+	return $result;
+}
+
 
 /* End of file func.inc.php */
 /* Location: ./config/func.inc.php */

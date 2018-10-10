@@ -175,7 +175,7 @@ class Context
 	 *
 	 * @return void
 	 */
-	function Context()
+	function __construct()
 	{
 		$this->oFrontEndFileHandler = new FrontEndFileHandler();
 		$this->get_vars = new stdClass();
@@ -204,7 +204,7 @@ class Context
 		if(!isset($GLOBALS['HTTP_RAW_POST_DATA']) && version_compare(PHP_VERSION, '5.6.0', '>=') === TRUE)
 		{
 			$GLOBALS['HTTP_RAW_POST_DATA'] = file_get_contents("php://input");
-			
+
 			// If content is not XML JSON, unset
 			if(!preg_match('/^[\<\{\[]/', $GLOBALS['HTTP_RAW_POST_DATA']) && strpos($_SERVER['CONTENT_TYPE'], 'json') === FALSE && strpos($_SERVER['HTTP_CONTENT_TYPE'], 'json') === FALSE)
 			{
@@ -708,7 +708,7 @@ class Context
 					echo self::get('lang')->msg_invalid_request;
 					return false;
 				}
-				
+
 				setcookie(session_name(), $session_name);
 
 				$url = preg_replace('/[\?\&]SSOID=.+$/', '', self::getRequestUrl());
@@ -1220,7 +1220,7 @@ class Context
 				continue;
 			}
 			$key = htmlentities($key);
-			$val = $this->_filterRequestVar($key, $val);
+			$val = $this->_filterRequestVar($key, $val, false, ($requestMethod == 'GET'));
 
 			if($requestMethod == 'GET' && isset($_GET[$key]))
 			{
@@ -1387,7 +1387,7 @@ class Context
 	 * @param string $do_stripslashes Whether to strip slashes
 	 * @return mixed filtered value. Type are string or array
 	 */
-	function _filterRequestVar($key, $val, $do_stripslashes = 1)
+	function _filterRequestVar($key, $val, $do_stripslashes = true, $remove_hack = false)
 	{
 		if(!($isArray = is_array($val)))
 		{
@@ -1397,22 +1397,25 @@ class Context
 		$result = array();
 		foreach($val as $k => $v)
 		{
+			if($remove_hack && !is_array($v)) {
+				if(stripos($v, '<script') || stripos($v, 'lt;script') || stripos($v, '%3Cscript'))
+				{
+					$result[$k] = escape($v);
+					continue;
+				}
+			}
+
 			$k = htmlentities($k);
 			if($key === 'page' || $key === 'cpage' || substr_compare($key, 'srl', -3) === 0)
 			{
 				$result[$k] = !preg_match('/^[0-9,]+$/', $v) ? (int) $v : $v;
 			}
-			elseif($key === 'mid' || $key === 'search_keyword')
-			{
-				$result[$k] = htmlspecialchars($v, ENT_COMPAT | ENT_HTML401, 'UTF-8', FALSE);
+			elseif(in_array($key, array('mid','search_keyword','search_target','xe_validator_id'))) {
+				$result[$k] = escape($v, false);
 			}
 			elseif($key === 'vid')
 			{
 				$result[$k] = urlencode($v);
-			}
-			elseif($key === 'xe_validator_id')
-			{
-				$result[$k] = htmlspecialchars($v, ENT_COMPAT | ENT_HTML401, 'UTF-8', FALSE);
 			}
 			elseif(stripos($key, 'XE_VALIDATOR', 0) === 0)
 			{
@@ -1441,6 +1444,11 @@ class Context
 				else
 				{
 					$result[$k] = trim($result[$k]);
+				}
+
+				if($remove_hack)
+				{
+					$result[$k] = escape($result[$k], false);
 				}
 			}
 		}
@@ -1476,7 +1484,7 @@ class Context
 			$tmp_name = $val['tmp_name'];
 			if(!is_array($tmp_name))
 			{
-				if(!$tmp_name || !is_uploaded_file($tmp_name))
+				if(!UploadFileFilter::check($tmp_name, $val['name']))
 				{
 					continue;
 				}
@@ -1487,22 +1495,26 @@ class Context
 			else
 			{
 				$files = array();
-				$count_files = count($tmp_name);
-
-				for($i = 0; $i < $count_files; $i++)
+				foreach ($tmp_name as $i => $j)
 				{
-					if($val['size'][$i] > 0)
+					if(!UploadFileFilter::check($val['tmp_name'][$i], $val['name'][$i]))
 					{
-						$file = array();
-						$file['name'] = $val['name'][$i];
-						$file['type'] = $val['type'][$i];
-						$file['tmp_name'] = $val['tmp_name'][$i];
-						$file['error'] = $val['error'][$i];
-						$file['size'] = $val['size'][$i];
-						$files[] = $file;
+						$files = array();
+						unset($_FILES[$key]);
+						break;
 					}
+					$file = array();
+					$file['name'] = $val['name'][$i];
+					$file['type'] = $val['type'][$i];
+					$file['tmp_name'] = $val['tmp_name'][$i];
+					$file['error'] = $val['error'][$i];
+					$file['size'] = $val['size'][$i];
+					$files[] = $file;
 				}
-				if($files) $this->set($key, $files, TRUE);
+				if(count($files))
+				{
+					self::set($key, $files, true);
+				}
 			}
 		}
 	}

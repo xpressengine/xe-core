@@ -23,16 +23,16 @@
 		<permission action="procDocumentAdminDeleteExtraVar" target="manager" />
 	</permissions>
 	<actions>
-		<action name="dispDocumentPrint" type="view" />
-		<action name="dispDocumentPreview" type="view" />
-		<action name="dispTempSavedList" type="view" />
+		<action name="dispDocumentPrint" type="view" meta-noindex="true" />
+		<action name="dispDocumentPreview" type="view" meta-noindex="true" />
+		<action name="dispTempSavedList" type="view" meta-noindex="true" />
 
 		<action name="procDocumentVoteUp" type="controller" />
 		<action name="procDocumentVoteDown" type="controller" />
 		<action name="procDocumentDeclare" type="controller" />
 
 		<action name="procDocumentAddCart" type="controller" />
-		<action name="dispDocumentManageDocument" type="view" />
+		<action name="dispDocumentManageDocument" type="view" meta-noindex="true" />
 		<action name="procDocumentManageCheckedDocument" type="controller" />
 
 		<action name="getDocumentMenu" type="model" />

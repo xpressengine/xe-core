@@ -47,7 +47,7 @@ var no_text_comment = '{$lang->no_text_comment}';
 						<block cond="isset($module_list[$oTrashVO->unserializedObject['module_srl']])">
 						<a href="{getUrl('', 'mid', $module_list[$oTrashVO->unserializedObject['module_srl']]->mid)}" target="_blank">{$module_list[$oTrashVO->unserializedObject['module_srl']]->browser_title}</a> - 
 						</block>
-						<a href="{getUrl('act','dispTrashAdminView','trash_srl',$oTrashVO->getTrashSrl())}">{$oTrashVO->getTitle()}</a>
+						<a href="{getUrl('act','dispTrashAdminView','trash_srl',$oTrashVO->getTrashSrl())}">{$oTrashVO->getTitle()|noescape}</a>
 					</block>
 				</td>
 				<td class="nowr"><a href="#popup_menu_area" class="member_{$oTrashVO->unserializedObject['member_srl']}">{$oTrashVO->unserializedObject['nick_name']}</a></td>

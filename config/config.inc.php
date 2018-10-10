@@ -29,7 +29,7 @@ define('__ZBXE__', __XE__);
 /**
  * Display XE's full version.
  */
-define('__XE_VERSION__', '1.9.8');
+define('__XE_VERSION__', '1.11.0');
 define('__XE_VERSION_ALPHA__', (stripos(__XE_VERSION__, 'alpha') !== false));
 define('__XE_VERSION_BETA__', (stripos(__XE_VERSION__, 'beta') !== false));
 define('__XE_VERSION_RC__', (stripos(__XE_VERSION__, 'rc') !== false));
@@ -295,6 +295,20 @@ if(!defined('__DISABLE_DEFAULT_CSS__'))
 	define('__DISABLE_DEFAULT_CSS__', 0);
 }
 
+if(!defined('__AUTO_OPCACHE_INVALIDATE__'))
+{
+	/**
+	 * 업데이트 시 주요 파일의 OPcache를 자동 초기화 옵션
+	 *
+	 * XE 버전이 변경될 때 주요 class 파일에 대하여
+	 * OPcache를 자동으로 제거할 것인지에 대한 옵션
+	 *
+	 * 0: 사용하지 않음
+	 * 1: 자동 제거 사용 (기본 값)
+	 */
+	define('__AUTO_OPCACHE_INVALIDATE__', 1);
+}
+
 // Require specific files when using Firebug console output
 if((__DEBUG_OUTPUT__ == 2) && version_compare(PHP_VERSION, '6.0.0') === -1)
 {
@@ -408,12 +422,17 @@ $GLOBALS['__xe_autoload_file_map'] = array_change_key_case(array(
  * Invalidates a cached script of OPcache when version is changed.
  * @see https://github.com/xpressengine/xe-core/issues/2189
  **/
+$cache_path = _XE_PATH_ . 'files/cache/store/' . __XE_VERSION__;
 if(
-	!is_dir(_XE_PATH_ . 'files/cache/store/' . __XE_VERSION__)
+	__AUTO_OPCACHE_INVALIDATE__ === 1
+	&& !is_dir($cache_path)
 	&& function_exists('opcache_get_status')
 	&& function_exists('opcache_invalidate')
 )
 {
+	@mkdir($cache_path, 0755, TRUE);
+	@chmod($cache_path, 0755);
+
 	foreach($GLOBALS['__xe_autoload_file_map'] as $script) {
 		opcache_invalidate(_XE_PATH_ . $script, true);
 	}

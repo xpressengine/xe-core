@@ -34,7 +34,7 @@ class FileObject extends BaseObject
 	 * @param string $mode File open mode 
 	 * @return void
 	 */
-	function FileObject($path, $mode)
+	function __construct($path, $mode)
 	{
 		if($path != NULL)
 		{

@@ -27,7 +27,7 @@
 					{$item->getCategory()} &rsaquo;
 					<!--@end-->
 					
-					<strong>{$item->getTitle($widget_info->subject_cut_size)}</strong>
+					<strong>{$item->getTitle($widget_info->subject_cut_size)|noescape}</strong>
 					
 					<!--@if($widget_info->show_comment_count=='Y' && $item->getCommentCount())-->
 					<em title="Replies">[{$item->getCommentCount()}]</em>
@@ -45,7 +45,7 @@
 				</span>
 				
 				<!--@else if($widget_info->option_view_arr[$j]=='content')-->
-				<span class="text">{$item->getContent()}</span>
+				<span class="text">{$item->getContent()|noescape}</span>
 				<!--@end-->
 			<!--@end-->
 		</a>
