@@ -1780,6 +1780,12 @@ function reload($isOpener = FALSE)
 </script>';
 }
 
+
+function isDefinedLangCode($str)
+{
+	return preg_match('!\$user_lang->([a-z0-9\_]+)$!is', trim($str));
+}
+
 /**
  * This function is a shortcut to htmlspecialchars().
  *
@@ -1790,8 +1796,10 @@ function reload($isOpener = FALSE)
  * @param bool $double_escape Set this to false to skip symbols that are already escaped (default: true)
  * @return string
  */
-function escape($str, $double_escape = true)
+function escape($str, $double_escape = true, $escape_defined_lang_code = false)
 {
+	if(!$escape_defined_lang_code && isDefinedLangCode($str)) return $str;
+
 	$flags = ENT_QUOTES | ENT_SUBSTITUTE;
 	return htmlspecialchars($str, $flags, 'UTF-8', $double_escape);
 }
