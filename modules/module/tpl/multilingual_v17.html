@@ -36,7 +36,7 @@
 				$link = '<a href="' . getUrl('', 'module', 'admin', 'act', 'dispAdminConfigGeneral') . '">' . $lang->about_language_list_manage['link'] . '</a>';
 				$text = sprintf($lang->about_language_list_manage['text'], $link);
 			}
-			{$text}
+			{$text|noescape}
 		</p>
 	</div>
 </div>

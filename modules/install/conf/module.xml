@@ -3,13 +3,14 @@
     <grants />
     <permissions />
     <actions>
-        <action name="dispInstallIntroduce" type="view" index="true" />
-        <action name="dispInstallLicenseAgreement" type="view" />
-        <action name="dispInstallCheckEnv" type="view" />
-        <action name="dispInstallSelectDB" type="view" />
-        <action name="dispInstallDBForm" type="view" />
-        <action name="dispInstallConfigForm" type="view" />
-        <action name="dispInstallManagerForm" type="view" />
+        <action name="dispInstallIntroduce" type="view" meta-noindex="true" index="true" />
+        <action name="dispInstallLicenseAgreement" type="view" meta-noindex="true" />
+        <action name="dispInstallCheckEnv" type="view" meta-noindex="true" />
+        <action name="dispInstallSelectDB" type="view" meta-noindex="true" />
+        <action name="dispInstallDBForm" type="view" meta-noindex="true" />
+        <action name="dispInstallConfigForm" type="view" meta-noindex="true" />
+        <action name="dispInstallManagerForm" type="view" meta-noindex="true" />
+
         <action name="procCubridDBSetting" type="controller" ruleset="cubrid" />
         <action name="procFirebirdDBSetting" type="controller" ruleset="firebird" />
         <action name="procMssqlDBSetting" type="controller" ruleset="mssql" />

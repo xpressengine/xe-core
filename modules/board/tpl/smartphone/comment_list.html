@@ -3,7 +3,7 @@
 
 <!--@foreach($comment_list as $val)-->
     <li class="item">
-        <span class="title">{$val->getContent(false)}</span>
+        <span class="title">{$val->getContent(false)|noescape}</span>
         <span class="info">
             {$val->getRegdate()} 
             [{$val->getNickName()}] 

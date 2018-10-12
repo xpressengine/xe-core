@@ -41,7 +41,7 @@ class Limit
 	 * @param int $offset
 	 * @return void
 	 */
-	function Limit($list_count, $page = NULL, $page_count = NULL, $offset = NULL)
+	function __construct($list_count, $page = NULL, $page_count = NULL, $offset = NULL)
 	{
 		$this->list_count = $list_count;
 		if($page)

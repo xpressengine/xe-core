@@ -19,10 +19,10 @@
 	<!--@end-->
 <!--@end-->
 <div class="board">
-	{$module_info->header_text}
+	{$module_info->header_text|noescape}
 	<div class="board_header" cond="$module_info->title_image || $grant->manager">
 		<h2 cond="$module_info->title_image"><a href="{getUrl('','mid',$mid)}"><img src="{$module_info->title_image}" alt="{$module_info->title_alt}" /></a></h2>
-		<a cond="$grant->manager" class="setup" href="{getUrl('act','dispBoardAdminBoardInfo')}" title="{$lang->cmd_setup}">{$lang->cmd_setup}</a>
+		<a cond="$grant->manager" class="setup" href="{getUrl('act','dispBoardAdminBoardInfo')}" rel="nofollow" title="{$lang->cmd_setup}">{$lang->cmd_setup}</a>
 	</div>
 	<ul class="cTab" cond="$module_info->use_category=='Y'">
 		<li class="on"|cond="!$category"><a href="{getUrl('category','','page','')}">{$lang->total}</a></li>

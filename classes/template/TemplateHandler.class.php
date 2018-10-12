@@ -19,8 +19,10 @@ class TemplateHandler
 	private $xe_path = NULL;  ///< XpressEngine base path
 	private $web_path = NULL; ///< tpl file web path
 	private $compiled_file = NULL; ///< tpl file web path
+	private $config = NULL;
 	private $skipTags = NULL;
 	private $handler_mtime = 0;
+	private $autoescape = false;
 	static private $rootTpl = NULL;
 
 	/**
@@ -32,6 +34,23 @@ class TemplateHandler
 		ini_set('pcre.jit', "0");
 		$this->xe_path = rtrim(getScriptPath(), '/');
 		$this->compiled_path = _XE_PATH_ . $this->compiled_path;
+		$this->config = new stdClass();
+
+		$this->ignoreEscape = array(
+			'functions' => function ($m) {
+				$list = array(
+					'htmlspecialchars',
+					'nl2br',
+				);
+				return preg_match('/^(' . implode('|', $list) . ')\(/', $m[1]);
+			},
+			'lang' => function ($m) {
+				// 다국어
+				return preg_match('/^\$lang\-\>/', trim($m[1]));
+			}
+		);
+
+		$this->dbinfo = Context::getDBInfo();
 	}
 
 	/**
@@ -101,6 +120,8 @@ class TemplateHandler
 		// get compiled file name
 		$hash = md5($this->file . __XE_VERSION__);
 		$this->compiled_file = "{$this->compiled_path}{$hash}.compiled.php";
+
+		$this->autoescape = $this->isAutoescape();
 
 		// compare various file's modified time for check changed
 		$this->handler_mtime = filemtime(__FILE__);
@@ -233,6 +254,27 @@ class TemplateHandler
 			$this->skipTags = array('marquee');
 		}
 
+		// reset config for this buffer (this step is necessary because we use a singleton for every template)
+		$previous_config = clone $this->config;
+		$this->config = new stdClass();
+		$this->config->autoescape = null;
+
+		if(preg_match('/\<config( [^\>\/]+)/', $buff, $config_match))
+		{
+			if(preg_match_all('@ (?<name>\w+)="(?<value>[^"]+)"@', $config_match[1], $config_matches, PREG_SET_ORDER))
+			{
+				foreach($config_matches as $config_match)
+				{
+					if($config_match['name'] === 'autoescape')
+					{
+						$this->config->autoescape = $config_match['value'];
+					}
+				}
+			}
+		}
+
+		if($this->config->autoescape === 'on') $this->autoescape = true;
+
 		// replace comments
 		$buff = preg_replace('@<!--//.*?-->@s', '', $buff);
 
@@ -243,7 +285,7 @@ class TemplateHandler
 		$buff = $this->_parseInline($buff);
 
 		// include, unload/load, import
-		$buff = preg_replace_callback('/{(@[\s\S]+?|(?=\$\w+|_{1,2}[A-Z]+|[!\(+-]|\w+(?:\(|::)|\d+|[\'"].*?[\'"]).+?)}|<(!--[#%])?(include|import|(un)?load(?(4)|(?:_js_plugin)?))(?(2)\(["\']([^"\']+)["\'])(.*?)(?(2)\)--|\/)>|<!--(@[a-z@]*)([\s\S]*?)-->(\s*)/', array($this, '_parseResource'), $buff);
+		$buff = preg_replace_callback('/{(@[\s\S]+?|(?=\$\w+|_{1,2}[A-Z]+|[!\(+-]|\w+(?:\(|::)|\d+|[\'"].*?[\'"]).+?)}|<(!--[#%])?(include|import|(un)?load(?(4)|(?:_js_plugin)?)|config)(?(2)\(["\']([^"\']+)["\'])(.*?)(?(2)\)--|\/)>|<!--(@[a-z@]*)([\s\S]*?)-->(\s*)/', array($this, '_parseResource'), $buff);
 
 		// remove block which is a virtual tag
 		$buff = preg_replace('@</?block\s*>@is', '', $buff);
@@ -260,6 +302,9 @@ class TemplateHandler
 
 		// remove php script reopening
 		$buff = preg_replace(array('/(\n|\r\n)+/', '/(;)?( )*\?\>\<\?php([\n\t ]+)?/'), array("\n", ";\n"), $buff);
+
+		// restore config to previous value
+		$this->config = $previous_config;
 
 		return $buff;
 	}
@@ -581,6 +626,18 @@ class TemplateHandler
 	 */
 	private function _parseResource($m)
 	{
+		$escape_option = 'noescape';
+
+		if($this->autoescape)
+		{
+			$escape_option = 'autoescape';
+		}
+
+		// 템플릿에서 명시적으로 off이면 'noescape' 적용
+		if ($this->config->autoescape === 'off') {
+			$escape_option = 'noescape';
+		}
+
 		// {@ ... } or {$var} or {func(...)}
 		if($m[1])
 		{
@@ -588,14 +645,147 @@ class TemplateHandler
 			{
 				return $m[0];
 			}
-
-			$echo = 'echo ';
+			
 			if($m[1]{0} == '@')
 			{
-				$echo = '';
-				$m[1] = substr($m[1], 1);
+				$m[1] = $this->_replaceVar(substr($m[1], 1));
+				return "<?php {$m[1]} ?>";
 			}
-			return '<?php ' . $echo . $this->_replaceVar($m[1]) . ' ?>';
+			else
+			{
+				// Get escape options.
+				foreach ($this->ignoreEscape as $key => $value)
+				{
+					if($this->ignoreEscape[$key]($m))
+					{
+						$escape_option = 'noescape';
+						break;
+					}
+				}
+
+				// Separate filters from variable.
+				if (preg_match('@^(.+?)(?<![|\s])((?:\|[a-z]{2}[a-z0-9_]+(?::.+)?)+)$@', $m[1], $mm))
+				{
+					$m[1] = $mm[1];
+					$filters = array_map('trim', explode_with_escape('|', substr($mm[2], 1)));
+				}
+				else
+				{
+					$filters = array();
+				}
+
+				// Process the variable.
+				$var = self::_replaceVar($m[1]);
+
+				// Apply filters.
+				foreach ($filters as $filter)
+				{
+					// Separate filter option from the filter name.
+					if (preg_match('/^([a-z0-9_-]+):(.+)$/', $filter, $matches))
+					{
+						$filter = $matches[1];
+						$filter_option = $matches[2];
+						if (!self::_isVar($filter_option) && !preg_match("/^'.*'$/", $filter_option) && !preg_match('/^".*"$/', $filter_option))
+						{
+							$filter_option = "'" . escape_sqstr($filter_option) . "'";
+						}
+						else
+						{
+							$filter_option = self::_replaceVar($filter_option);
+						}
+					}
+					else
+					{
+						$filter_option = null;
+					}
+
+					// Apply each filter.
+					switch ($filter)
+					{
+						case 'auto':
+						case 'autoescape':
+						case 'escape':
+						case 'noescape':
+							$escape_option = $filter;
+							break;
+
+						case 'escapejs':
+							$var = "escape_js({$var})";
+							$escape_option = 'noescape';
+							break;
+
+						case 'json':
+							$var = "json_encode({$var})";
+							$escape_option = 'noescape';
+							break;
+
+						case 'strip':
+						case 'strip_tags':
+							$var = $filter_option ? "strip_tags({$var}, {$filter_option})" : "strip_tags({$var})";
+							break;
+
+						case 'trim':
+							$var = "trim({$var})";
+							break;
+
+						case 'urlencode':
+							$var = "rawurlencode({$var})";
+							$escape_option = 'noescape';
+							break;
+
+						case 'lower':
+							$var = "strtolower({$var})";
+							break;
+
+						case 'upper':
+							$var = "strtoupper({$var})";
+							break;
+
+						case 'nl2br':
+							$var = $this->_applyEscapeOption($var, $escape_option);
+							$var = "nl2br({$var})";
+							$escape_option = 'noescape';
+							break;
+
+						case 'join':
+							$var = $filter_option ? "implode({$filter_option}, {$var})" : "implode(', ', {$var})";
+							break;
+
+						// case 'date':
+						// 	$var = $filter_option ? "getDisplayDateTime(ztime({$var}), {$filter_option})" : "getDisplayDateTime(ztime({$var}), 'Y-m-d H:i:s')";
+						// 	$escape_option = 'noescape';
+						// 	break;
+
+						case 'format':
+						case 'number_format':
+							$var = $filter_option ? "number_format({$var}, {$filter_option})" : "number_format({$var})";
+							$escape_option = 'noescape';
+							break;
+
+						case 'link':
+							$var = $this->_applyEscapeOption($var, 'autoescape');
+							if ($filter_option)
+							{
+								$filter_option = $this->_applyEscapeOption($filter_option, 'autoescape');
+								$var = "'<a href=\"' . {$filter_option} . '\">' . {$var} . '</a>'";
+							}
+							else
+							{
+								$var = "'<a href=\"' . {$var} . '\">' . {$var} . '</a>'";
+							}
+							$escape_option = 'noescape';
+							break;
+
+						default:
+							$filter = escape_sqstr($filter);
+							$var = "'INVALID FILTER ({$filter})'";
+							$escape_option = 'noescape';
+					}
+				}
+
+				// Apply the escape option and return.
+				return '<?php echo ' . $this->_applyEscapeOption($var, $escape_option) . ' ?>';
+			}
 		}
 
 		if($m[3])
@@ -728,6 +918,17 @@ class TemplateHandler
 					}
 
 					return $result;
+				// <config ...>
+				case 'config':
+					$result = '';
+					if(preg_match_all('@ (\w+)="([^"]+)"@', $m[6], $config_matches, PREG_SET_ORDER))
+					{
+						foreach($config_matches as $config_match)
+						{
+							$result .= "\$this->config->{$config_match[1]} = '" . trim(strtolower($config_match[2])) . "';";
+						}
+					}
+					return "<?php {$result} ?>";
 			}
 		}
 
@@ -780,6 +981,25 @@ class TemplateHandler
 	}
 
 	/**
+ 	 * Apply escape option to an expression.
+ 	 */
+ 	private function _applyEscapeOption($str, $escape_option = 'noescape')
+ 	{
+ 		switch($escape_option)
+ 		{
+ 			case 'escape':
+ 				return "escape({$str}, true)";
+ 			case 'noescape':
+ 				return "{$str}";
+ 			case 'autoescape':
+ 				return "escape({$str}, false)";
+ 			case 'auto':
+ 			default:
+ 				return "(\$this->config->autoescape === 'on' ? escape({$str}, false) : ({$str}))";
+ 		}
+ 	}
+
+	/**
 	 * change relative path
 	 * @param string $path
 	 * @return string
@@ -818,7 +1038,18 @@ class TemplateHandler
 	}
 
 	/**
-	 * replace PHP variables of $ character
+ 	 * Check if a string seems to contain a variable.
+ 	 * 
+ 	 * @param string $str
+ 	 * @return bool
+ 	 */
+ 	private static function _isVar($str)
+ 	{
+ 		return preg_match('@(?<!::|\\\\|(?<!eval\()\')\$([a-z_][a-z0-9_]*)@i', $str) ? true : false;
+ 	}
+
+	/**
+	 * Replace PHP variables of $ character
 	 * @param string $php
 	 * @return string $__Context->varname
 	 */
@@ -831,6 +1062,31 @@ class TemplateHandler
 		return preg_replace('@(?<!::|\\\\|(?<!eval\()\')\$([a-z]|_[a-z0-9])@i', '\$__Context->$1', $php);
 	}
 
+	function isAutoescape()
+	{
+		$absPath = str_replace(_XE_PATH_, '', $this->path);
+		$dirTpl = '(addon|admin|adminlogging|autoinstall|board|comment|communication|counter|document|editor|file|importer|install|integration_search|krzip|layout|member|menu|message|module|page|point|poll|rss|seo|session|spamfilter|syndication|tag|trash|widget)';
+		$dirSkins = '(layouts\/default|layouts\/user_layout|layouts\/xedition|layouts\/xedition\/demo|m\.layouts\/colorCode|m\.layouts\/default|m\.layouts\/simpleGray|modules\/board\/m\.skins\/default|modules\/board\/m\.skins\/simpleGray|modules\/board\/skins\/default|modules\/board\/skins\/xedition|modules\/communication\/m\.skins\/default|modules\/communication\/skins\/default|modules\/editor\/skins\/ckeditor|modules\/editor\/skins\/xpresseditor|modules\/integration_search\/skins\/default|modules\/layout\/faceoff|modules\/member\/m\.skins\/default|modules\/member\/skins\/default|modules\/message\/m\.skins\/default|modules\/message\/skins\/default|modules\/message\/skins\/xedition|modules\/page\/m\.skins\/default|modules\/page\/skins\/default|modules\/poll\/skins\/default|modules\/poll\/skins\/simple|widgets\/content\/skins\/default|widgets\/counter_status\/skins\/default|widgets\/language_select\/skins\/default|widgets\/login_info\/skins\/default|widgets\/mcontent\/skins\/default|widgetstyles\/simple)';
+
+		// 'tpl'
+		if(preg_match('/^(\.\/)?(modules\/' . $dirTpl . '|common)\/tpl\//', $absPath))
+		{
+			return true;
+		}
+
+		// skin, layout
+		if(preg_match('/^(\.\/)?\(' . $dirSkin . '\//', $absPath))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	public function setAutoescape($val = true)
+	{
+		$this->autoescape = $val;
+	}
 }
 /* End of File: TemplateHandler.class.php */
 /* Location: ./classes/template/TemplateHandler.class.php */

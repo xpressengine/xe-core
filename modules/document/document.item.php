@@ -58,7 +58,7 @@ class documentItem extends BaseObject
 	 * @param array columnList
 	 * @return void
 	 */
-	function documentItem($document_srl = 0, $load_extra_vars = true, $columnList = array())
+	function __construct($document_srl = 0, $load_extra_vars = true, $columnList = array())
 	{
 		$this->document_srl = $document_srl;
 		$this->columnList = $columnList;
@@ -865,7 +865,7 @@ class documentItem extends BaseObject
 			}
 			else
 			{
-				return $thumbnail_url;
+				return $thumbnail_url . '?' . date('YmdHis', filemtime($thumbnail_file));
 			}
 		}
 
@@ -959,18 +959,13 @@ class documentItem extends BaseObject
 		// Remove lockfile
 		FileHandler::removeFile($thumbnail_lockfile);
 
-		// Return the thumbnail path if it was successfully generated
-		if($output_file)
-		{
-			return $thumbnail_url;
-		}
 		// Create an empty file if thumbnail generation failed
-		else
+		if(!$output_file)
 		{
 			FileHandler::writeFile($thumbnail_file, '','w');
 		}
 
-		return;
+		return $thumbnail_url . '?' . date('YmdHis', filemtime($thumbnail_file));
 	}
 
 	/**

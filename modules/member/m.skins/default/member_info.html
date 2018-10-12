@@ -8,7 +8,7 @@
 	<table class="table table-striped table-hover">
 		<tr loop="$displayDatas => $item">
 			<th scope="row" >{$item->title} <em cond="$item->required || $item->mustRequired">*</em></th>
-			<td class="text">{$item->value}</td>
+			<td class="text">{$item->value|noescape}</td>
 		</tr>
 		<tr>
 			<th scope="row">{$lang->member_group}</th>

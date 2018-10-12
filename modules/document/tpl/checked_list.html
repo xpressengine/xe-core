@@ -15,7 +15,7 @@
 			<div class="x_controls">
 				<ul style="margin-top:5px">
 					<li class="document_list" loop="$document_list => $key, $document">
-						<input type="hidden" name="cart" value="{$document->document_srl}" />{$document->getTitle()} <i class="vr">|</i> {$document->getNickName()}
+						<input type="hidden" name="cart" value="{$document->document_srl}" />{$document->getTitle()|noescape} <i class="vr">|</i> {$document->getNickName()}
 					</li>
 				</ul>
 			</div>

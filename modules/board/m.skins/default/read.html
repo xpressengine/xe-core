@@ -3,7 +3,7 @@
 
 <div class="hx h2">
 	<h2><a href="{getUrl('document_srl','','category','','page','')}">{$module_info->browser_title}</a> 
-		<!--@if($module_info->use_category == "Y" && $oDocument->get('category_srl'))-->&rsaquo; <a href="{getUrl('document_srl','','category',$oDocument->get('category_srl'))}">{$category_list[$oDocument->get('category_srl')]->title}</a><!--@end--> &rsaquo; {$oDocument->getTitle()}</h2>
+		<!--@if($module_info->use_category == "Y" && $oDocument->get('category_srl'))-->&rsaquo; <a href="{getUrl('document_srl','','category',$oDocument->get('category_srl'))}">{$category_list[$oDocument->get('category_srl')]->title}</a><!--@end--> &rsaquo; {$oDocument->getTitle()|noescape}</h2>
 	<span class="ex">{$oDocument->getNickName()} | {$oDocument->getRegdate()} | <a href="#skip_co">{$lang->skip_to_content}</a></span>
 	<a href="{getUrl('act','dispBoardWrite','document_srl','')}" class="write">{$lang->cmd_write}</a>
 </div>
@@ -23,11 +23,11 @@
 			<dl class="xv">
 			<!--@foreach($_extra_vars as $key => $val)-->
 				<dt>{$val->name}</dt>
-				<dd>{$val->getValueHTML()}</dd>
+				<dd>{$val->getValueHTML()|noescape}</dd>
 			<!--@end-->
 			</dl>
 		<!--@end-->
-		{$oDocument->getContent(false)}
+		{$oDocument->getContent(false)|noescape}
 		<!--@end-->
 </div>
 <div id="skip_co"></div>
@@ -84,7 +84,7 @@
 			<label for="rText">{$lang->comment}</label>
 			<!--@if($module_info->mobile_use_editor === 'Y')-->
 				<input type="hidden" name="content" value="">
-				{$oDocument->getCommentEditor()}
+				{$oDocument->getCommentEditor()|noescape}
 			<!--@else-->
 				<textarea name="content" rows="8" cols="42" id="rText"></textarea>
 			<!--@endif-->

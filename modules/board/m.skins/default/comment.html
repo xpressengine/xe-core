@@ -16,7 +16,7 @@
 	<!--@end-->
 	<!--@endif-->
 	<li>
-		{$comment->getContent(false)}
+		{$comment->getContent(false)|noescape}
 		<span class="auth">
 			<em>{$comment->getNickName()}</em>
 			<span class="time">{$comment->getRegdate("Y.m.d")}</span>

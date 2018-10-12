@@ -19,7 +19,7 @@
                 </a>
 
             <!--@else if($v=='title')-->
-                <a href="{$item->getLink()}" class="title" target="_blank"|cond="$widget_info->new_window">{$item->getTitle($widget_info->subject_cut_size)}</a>
+                <a href="{$item->getLink()}" class="title" target="_blank"|cond="$widget_info->new_window">{$item->getTitle($widget_info->subject_cut_size)|noescape}</a>
                 <!--@if($widget_info->show_comment_count=='Y' && $item->getCommentCount())-->
                     <em class="replyNum" title="Replies"><a href="{$item->getLink()}#comment">{$item->getCommentCount()}</a></em>
                 <!--@end-->

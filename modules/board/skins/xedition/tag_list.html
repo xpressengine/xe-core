@@ -14,9 +14,9 @@
 		<!--@end-->
 
 		<!--@if($layout_info->mid)-->
-			<a class="{$tag_class}"|cond="$tag_class" href="{getUrl('','mid',$layout_info->mid,'search_target','tag','search_keyword',$val->tag)}">{htmlspecialchars($val->tag)}</a>
+			<a class="{$tag_class}"|cond="$tag_class" href="{getUrl('','mid',$layout_info->mid,'search_target','tag','search_keyword',$val->tag)}">{$val->tag|autoescape}</a>
 		<!--@else-->
-			<a class="{$tag_class}"|cond="$tag_class" href="{getUrl('','mid',$mid,'search_target','tag','search_keyword',$val->tag)}">{htmlspecialchars($val->tag)}</a>
+			<a class="{$tag_class}"|cond="$tag_class" href="{getUrl('','mid',$mid,'search_target','tag','search_keyword',$val->tag)}">{$val->tag|autoescape}</a>
 		<!--@end-->
 
 	<!--@end-->

@@ -47,7 +47,7 @@ class TemplateHandlerTest extends \Codeception\TestCase\Test
             // <!--@if--> ~ <!--@endif-->
             array(
                 '<a>Link</a><!--@if($cond)--><strong>Hello, {$world}</strong><!--@endif--><dummy />',
-                '?><a>Link</a><?php if($__Context->cond){ ?><strong>Hello, <?php echo $__Context->world ?></strong><?php } ?><dummy />'
+                '?><a>Link</a><?php if($__Context->cond){ ?><strong>Hello, <?php echo escape($__Context->world, false) ?></strong><?php } ?><dummy />'
             ),
             // <!--@if--> ~ <!--@else--> ~ <!--@endif-->
             array(
@@ -67,12 +67,12 @@ class TemplateHandlerTest extends \Codeception\TestCase\Test
             // <!--@foreach--> ~ <!--@endforeach-->
             array(
                 '<!--@foreach($arr as $key=>$val)--><li>item{$key} : {$val}</li><!--@endfor-->',
-                PHP_EOL . 'if($__Context->arr&&count($__Context->arr))foreach($__Context->arr as $__Context->key=>$__Context->val){ ?><li>item<?php echo $__Context->key ?> : <?php echo $__Context->val ?></li><?php } ?>'
+                PHP_EOL . 'if($__Context->arr&&count($__Context->arr))foreach($__Context->arr as $__Context->key=>$__Context->val){ ?><li>item<?php echo escape($__Context->key, false) ?> : <?php echo escape($__Context->val, false) ?></li><?php } ?>'
             ),
             // <!--@while--> ~ <!--@endwhile-->
             array(
                 '<!--@while($item=$list->getItem())--><a href="{$v->link}">{$v->text}</a><!--@endwhile-->',
-                PHP_EOL.'while($__Context->item=$__Context->list->getItem()){ ?><a href="<?php echo $__Context->v->link ?>"><?php echo $__Context->v->text ?></a><?php } ?>'
+                PHP_EOL.'while($__Context->item=$__Context->list->getItem()){ ?><a href="<?php echo escape($__Context->v->link, false) ?>"><?php echo escape($__Context->v->text, false) ?></a><?php } ?>'
             ),
             // <!--@switch--> ~ <!--@case--> ~ <!--@break--> ~ <!--@default --> ~ <!--@endswitch-->
             array(
@@ -157,7 +157,7 @@ class TemplateHandlerTest extends \Codeception\TestCase\Test
             // error case
             array(
                 '<a href="{$layout_info->index_url}" cond="$layout_info->logo_image"><img src="{$layout_info->logo_image}" alt="logo" border="0" /></a>',
-                PHP_EOL . 'if($__Context->layout_info->logo_image){ ?><a href="<?php echo $__Context->layout_info->index_url ?>"><img src="<?php echo $__Context->layout_info->logo_image ?>" alt="logo" border="0" /></a><?php } ?>'
+                PHP_EOL . 'if($__Context->layout_info->logo_image){ ?><a href="<?php echo escape($__Context->layout_info->index_url, false) ?>"><img src="<?php echo escape($__Context->layout_info->logo_image, false) ?>" alt="logo" border="0" /></a><?php } ?>'
             ),
             // error case - ignore stylesheets
             array(
@@ -181,8 +181,8 @@ class TemplateHandlerTest extends \Codeception\TestCase\Test
             ),
             // issue 135
             array(
-                '<block loop="$_m_list_all=>$key,$val"><p>{$key}</p><div>Loop block {$val}</div></block>',
-                PHP_EOL . 'if($__Context->_m_list_all&&count($__Context->_m_list_all))foreach($__Context->_m_list_all as $__Context->key=>$__Context->val){ ?><p><?php echo $__Context->key ?></p><div>Loop block <?php echo $__Context->val ?></div><?php } ?>'
+                '<block loop="$_m_list_all=>$key,$val"><p>{$key}</p><div>34 Loop block {$val}</div></block>',
+                PHP_EOL . 'if($__Context->_m_list_all&&count($__Context->_m_list_all))foreach($__Context->_m_list_all as $__Context->key=>$__Context->val){ ?><p><?php echo escape($__Context->key, false) ?></p><div>34 Loop block <?php echo escape($__Context->val, false) ?></div><?php } ?>'
             ),
             // issue 136
             array(
@@ -201,8 +201,8 @@ class TemplateHandlerTest extends \Codeception\TestCase\Test
             ),
             // issue 183
             array(
-                '<table><thead><tr><th loop="$vvvls => $vvv">{$vvv}</th></tr></thead>'."\n".'<tbody><tr><td>C</td><td>D</td></tr></tbody></table>',
-                '?><table><thead><tr><?php if($__Context->vvvls&&count($__Context->vvvls))foreach($__Context->vvvls as $__Context->vvv){ ?><th><?php echo $__Context->vvv ?></th><?php } ?></tr></thead>'."\n".'<tbody><tr><td>C</td><td>D</td></tr></tbody></table>'
+                '<table>38<thead><tr><th loop="$vvvls => $vvv">{$vvv}</th></tr></thead>'."\n".'<tbody><tr><td>C</td><td>D</td></tr></tbody></table>',
+                '?><table>38<thead><tr><?php if($__Context->vvvls&&count($__Context->vvvls))foreach($__Context->vvvls as $__Context->vvv){ ?><th><?php echo escape($__Context->vvv, false) ?></th><?php } ?></tr></thead>'."\n".'<tbody><tr><td>C</td><td>D</td></tr></tbody></table>'
             ),
             // issue 512 - ignores <marquee>
             array(
@@ -264,7 +264,7 @@ class TemplateHandlerTest extends \Codeception\TestCase\Test
             ),
             array(
                 'asf <img src="{$foo->bar}" />',
-                '?>asf <img src="<?php echo $__Context->foo->bar ?>" />'
+                '?>asf <img src="<?php echo escape($__Context->foo->bar, false) ?>" />'
             ),
             array(
                 '<img alt="" '.PHP_EOL.' src="../myxe/xe/img.png" />',
@@ -278,28 +278,174 @@ class TemplateHandlerTest extends \Codeception\TestCase\Test
                 '<input>asdf src="../img/img.gif" asdf</input>',
                 '?><input>asdf src="../img/img.gif" asdf</input>'
             ),
+            // autoescape
+			array(
+                '<config autoescape="on" />{$foo55}',
+                PHP_EOL . '$this->config->autoescape = \'on\';' . "\n" . 'echo escape($__Context->foo55, false) ?>'
+            ),
+            array(
+                '<config autoescape="off" />{$foo56}',
+                PHP_EOL . '$this->config->autoescape = \'off\';' . "\n" . 'echo $__Context->foo56 ?>'
+            ),
+            array(
+                '<config autoescape="on" />{$foo|auto}',
+                PHP_EOL . '$this->config->autoescape = \'on\';' . "\n" . 'echo ($this->config->autoescape === \'on\' ? escape($__Context->foo, false) : ($__Context->foo)) ?>'
+            ),
+            array(
+                '<config autoescape="off" />{$foo|auto}',
+                PHP_EOL . '$this->config->autoescape = \'off\';' . "\n" . 'echo ($this->config->autoescape === \'on\' ? escape($__Context->foo, false) : ($__Context->foo)) ?>'
+            ),
+            array(
+                '<config autoescape="off" />{$foo ? $foo : ""|auto}',
+                PHP_EOL . '$this->config->autoescape = \'off\';' . "\n" . 'echo ($this->config->autoescape === \'on\' ? escape($__Context->foo ? $__Context->foo : "", false) : ($__Context->foo ? $__Context->foo : "")) ?>'
+            ),
+            array(
+                '<config autoescape="on" />{$foo|autoescape}',
+                PHP_EOL . '$this->config->autoescape = \'on\';' . "\n" . 'echo escape($__Context->foo, false) ?>'
+            ),
+            array(
+                '<config autoescape="off" />{$foo|autoescape}',
+                PHP_EOL . '$this->config->autoescape = \'off\';' . "\n" . 'echo escape($__Context->foo, false) ?>'
+            ),
+            array(
+                '<config autoescape="on" />{$foo|escape}',
+                PHP_EOL . '$this->config->autoescape = \'on\';' . "\n" . 'echo escape($__Context->foo, true) ?>'
+            ),
+            array(
+                '<config autoescape="off" />{$foo|escape}',
+                PHP_EOL . '$this->config->autoescape = \'off\';' . "\n" . 'echo escape($__Context->foo, true) ?>'
+            ),
+            array(
+                '<config autoescape="on" />{$foo|noescape}',
+                PHP_EOL . '$this->config->autoescape = \'on\';' . "\n" . 'echo $__Context->foo ?>'
+            ),
+            array(
+                '<config autoescape="off"" />{$foo|noescape}',
+                PHP_EOL . '$this->config->autoescape = \'off\';' . "\n" . 'echo $__Context->foo ?>'
+            ),
+            // filters
+            array(
+                '<p>{$foo|escape}</p>',
+                '?><p><?php echo escape($__Context->foo, true) ?></p>'
+            ),
+            array(
+                '<p>{$foo|json}</p>',
+                '?><p><?php echo json_encode($__Context->foo) ?></p>'
+            ),
+            array(
+                '<p>{$foo|urlencode}</p>',
+                '?><p><?php echo rawurlencode($__Context->foo) ?></p>'
+            ),
+            array(
+                '<p>{$foo|lower|nl2br}</p>',
+                '?><p><?php echo nl2br(escape(strtolower($__Context->foo), false)) ?></p>'
+            ),
+            array(
+                '<p>{$foo|join:/|upper}</p>',
+                '?><p><?php echo escape(strtoupper(implode(\'/\', $__Context->foo)), false) ?></p>'
+            ),
+            array(
+                '<p>{$foo|join:\||upper}</p>',
+                '?><p><?php echo escape(strtoupper(implode(\'|\', $__Context->foo)), false) ?></p>'
+            ),
+            array(
+                '<p>{$foo|join:$separator}</p>',
+                '?><p><?php echo escape(implode($__Context->separator, $__Context->foo), false) ?></p>'
+            ),
+            array(
+                '<p>{$foo|strip}</p>',
+                '?><p><?php echo escape(strip_tags($__Context->foo), false) ?></p>'
+            ),
+            array(
+                '<p>{$foo|strip:<br>}</p>',
+                '?><p><?php echo escape(strip_tags($__Context->foo, \'<br>\'), false) ?></p>'
+            ),
+            array(
+                '<p>{$foo|strip:$mytags}</p>',
+                '?><p><?php echo escape(strip_tags($__Context->foo, $__Context->mytags), false) ?></p>'
+            ),
+            array(
+                '<p>{$foo|strip:myfunc($mytags)}</p>',
+                '?><p><?php echo escape(strip_tags($__Context->foo, myfunc($__Context->mytags)), false) ?></p>'
+            ),
+            array(
+                '<p>{$foo|link}</p>',
+                '?><p><?php echo \'<a href="\' . escape($__Context->foo, false) . \'">\' . escape($__Context->foo, false) . \'</a>\' ?></p>'
+            ),
+            array(
+                '<p>{$foo|link:https://www.xpressengine.com}</p>',
+                '?><p><?php echo \'<a href="\' . escape(\'https://www.xpressengine.com\', false) . \'">\' . escape($__Context->foo, false) . \'</a>\' ?></p>'
+            ),
+            array(
+                '<p>{$foo|link:$url}</p>',
+                '?><p><?php echo \'<a href="\' . escape($__Context->url, false) . \'">\' . escape($__Context->foo, false) . \'</a>\' ?></p>'
+            ),
+            array(
+                '<config autoescape="on" /><p>{$foo|link:$url}</p>',
+                PHP_EOL . '$this->config->autoescape = \'on\'; ?><p><?php echo \'<a href="\' . escape($__Context->url, false) . \'">\' . escape($__Context->foo, false) . \'</a>\' ?></p>',
+                PHP_EOL . '$this->config->autoescape = \'on\'; ?><p><?php echo \'<a href="\' . escape($__Context->url, false) . \'">\' . escape($__Context->foo, false) . \'</a>\' ?></p>'
+            ),
+            // filters (reject malformed filters)
+            array(
+                '<p>{$foo|dafuq}</p>',
+                '?><p><?php echo \'INVALID FILTER (dafuq)\' ?></p>'
+            ),
+            array(
+                '<p>{$foo|4}</p>',
+                '?><p><?php echo escape($__Context->foo|4, false) ?></p>'
+            ),
+            array(
+                '<p>{$foo|a+7|lower}</p>',
+                '?><p><?php echo escape(strtolower($__Context->foo|a+7), false) ?></p>',
+                '?><p><?php echo strtolower($__Context->foo|a+7) ?></p>'
+            ),
+            array(
+                '<p>{$foo|Filter}</p>',
+                '?><p><?php echo escape($__Context->foo|Filter, false) ?></p>'
+            ),
+            array(
+                '<p>{$foo|filter++}</p>',
+                '?><p><?php echo escape($__Context->foo|filter++, false) ?></p>'
+            ),
+            array(
+                '<p>{$foo|filter:}</p>',
+                '?><p><?php echo escape($__Context->foo|filter:, false) ?></p>'
+            ),
+            array(
+                '<p>{$foo|$bar}</p>',
+                '?><p><?php echo escape($__Context->foo|$__Context->bar, false) ?></p>'
+            ),
+            array(
+                '<p>{$foo||bar}</p>',
+                '?><p><?php echo escape($__Context->foo||bar, false) ?></p>'
+            ),
+            array(
+                '<p>{htmlspecialchars($var, ENT_COMPAT | ENT_HTML401)}</p>',
+                '?><p><?php echo htmlspecialchars($__Context->var, ENT_COMPAT | ENT_HTML401) ?></p>'
+            ),
+            array(
+                '<p>{$foo | $bar}</p>',
+                '?><p><?php echo escape($__Context->foo | $__Context->bar, false) ?></p>',
+                '?><p><?php echo $__Context->foo | $__Context->bar ?></p>'
+            ),
         );
     }
 
     /**
      * @dataProvider provider
      */
-    public function testParse($tpl, $expected)
+    public function testParse($tpl, $expectedAutoescape, $expectedAuto = null)
     {
         $tmpl = new TemplateHandlerWrapper;
         $tmpl->init(dirname(__FILE__), 'no_file.html');
-        $result = $tmpl->parse($tpl);
 
-        $this->assertEquals($result, $this->prefix.$expected);
-    }
+        $result = $tmpl->parse($tpl, true);
+        $this->assertEquals($result, $this->prefix . $expectedAutoescape);
 
-    public function testParse2()
-    {
-        $tmpl = new TemplateHandlerWrapper;
-        $tmpl->init(dirname(__FILE__), 'no_file.html');
-        $result = $tmpl->parse($tpl);
-
-        $this->assertEquals($result, '');
+        if($expectedAuto) {
+	        $result = $tmpl->parse($tpl, false);
+	        $this->assertEquals($result, $this->prefix . $expectedAuto);
+        }
     }
 
     public function testCompileDirect()
@@ -324,7 +470,8 @@ class TemplateHandlerWrapper extends \TemplateHandler {
         call_user_func(array($this->inst, 'init'), $tpl_path, $tpl_filename, $tpl_file);
     }
 
-    public function parse($buff = null) {
+    public function parse($buff = null, $autoescape = false) {
+    	$this->inst->setAutoescape($autoescape);
         return call_user_func(array($this->inst, 'parse'), $buff);
     }
 }

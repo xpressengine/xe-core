@@ -4,7 +4,7 @@
         <span class="date">{$oDocument->getRegdate()}</span>
     </div>
 
-    {$oDocument->getContent(false)}
+    {$oDocument->getContent(false)|noescape}
 
     <!--@if($oDocument->getCommentCount())-->
     <div class="link"><a href="{getUrl('comment','true')}">{$lang->replies} : {$oDocument->getCommentCount()}</a></div>

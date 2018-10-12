@@ -1,10 +1,10 @@
 <include target="_header.html" />
 <div cond="$oSourceComment->isExists()" class="context_data">
 	<h3 class="author">
-		<a cond="$oSourceComment->homepage" href="{$oSourceComment->homepage}">{$oSourceComment->getNickName()}</a>
+		<a cond="$oSourceComment->homepage" href="{$oSourceComment->homepage}" rel="nofollow noopener">{$oSourceComment->getNickName()}</a>
 		<strong cond="!$oSourceComment->homepage">{$oSourceComment->getNickName()}</strong>
 	</h3>
-	{$oSourceComment->getContent(false)}
+	{$oSourceComment->getContent(false)|noescape}
 </div>
 <div class="feedback">
 	<form action="./" method="post" onsubmit="return procFilter(this, insert_comment)" class="write_comment">
@@ -13,7 +13,7 @@
 		<input type="hidden" name="comment_srl" value="{$oComment->get('comment_srl')}" />
 		<input type="hidden" name="parent_srl" value="{$oComment->get('parent_srl')}" />
         <input type="hidden" name="content" value="{htmlspecialchars($oComment->get('content'))}" />
-        {$oComment->getEditor()}
+        {$oComment->getEditor()|noescape}
 		<div class="write_author">
 			<span class="item" cond="!$is_logged">
 				<label for="userName" class="iLabel">{$lang->writer}</label>

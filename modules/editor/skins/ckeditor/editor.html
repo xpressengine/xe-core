@@ -59,7 +59,7 @@
 			<!--@endforeach-->
 			{@ $xe_component = implode(',', $xe_component); }
 
-			settings.ckeconfig.xe_component_arrays = {{$xe_component}};
+			settings.ckeconfig.xe_component_arrays = {{$xe_component|noescape}};
 		<!--@endif-->
 
 		<!--@if(!$enable_default_component)-->

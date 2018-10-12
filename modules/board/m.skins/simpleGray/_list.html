@@ -3,7 +3,7 @@
 		<!--@foreach($notice_list as $no => $document)-->
 		<li>
 			<a href="{getUrl('document_srl', $document->document_srl)}">
-				<span class="notice">{$lang->notice}</span> <span class="title"><!--@if($module_info->use_category == "Y" && $document->get('category_srl'))-->{$category_list[$document->get('category_srl')]->title} &rsaquo;<!--@end--><strong>{$document->getTitle($module_info->subject_cut_size)}</strong> <!--@if($document->getCommentCount())--><span>[{$document->getCommentCount()}]</span><!--@endif--></span>
+				<span class="notice">{$lang->notice}</span> <span class="title"><!--@if($module_info->use_category == "Y" && $document->get('category_srl'))-->{$category_list[$document->get('category_srl')]->title} &rsaquo;<!--@end--><strong>{$document->getTitle($module_info->subject_cut_size)|noescape}</strong> <!--@if($document->getCommentCount())--><span>[{$document->getCommentCount()}]</span><!--@endif--></span>
 				<span class="auth"><em>{$document->getNickName()}</em> <span>{$document->getRegDate("Y.m.d")}</span></span>
 			</a>
 		</li>
@@ -11,7 +11,7 @@
 		<!--@foreach($document_list as $no => $document)-->
 		<li>
 			<a href="{getUrl('document_srl', $document->document_srl)}">
-				<span class="title"><!--@if($module_info->use_category == "Y" && $document->get('category_srl'))-->{$category_list[$document->get('category_srl')]->title} &rsaquo;<!--@end--><strong>{$document->getTitle($module_info->subject_cut_size)}</strong> <!--@if($document->getCommentCount())--><span>[{$document->getCommentCount()}]</span><!--@endif--></span>
+				<span class="title"><!--@if($module_info->use_category == "Y" && $document->get('category_srl'))-->{$category_list[$document->get('category_srl')]->title} &rsaquo;<!--@end--><strong>{$document->getTitle($module_info->subject_cut_size)|noescape}</strong> <!--@if($document->getCommentCount())--><span>[{$document->getCommentCount()}]</span><!--@endif--></span>
 				<span class="auth"><em>{$document->getNickName()}</em> <span>{$document->getRegDate("Y.m.d")}</span></span>
 			</a>
 		</li>
