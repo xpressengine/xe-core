@@ -663,6 +663,14 @@
 		<value xml:lang="tr"><![CDATA[Tekli Oturum Açma]]></value>
 		<value xml:lang="vi"><![CDATA[<abbr title="Single Sign On">SSO</abbr>]]></value>
 	</item>
+	<item name="use_nofollow">
+		<value xml:lang="ko"><![CDATA[Nofollow 속성 사용]]></value>
+		<value xml:lang="en"><![CDATA[Enable Nofollow attribute]]></value>
+		<value xml:lang="jp"><![CDATA[Nofollow属性を有効にする]]></value>
+		<value xml:lang="zh-CN"><![CDATA[启用Nofollow属性]]></value>
+		<value xml:lang="zh-TW"><![CDATA[啟用Nofollow屬性]]></value>
+		<value xml:lang="tr"><![CDATA[Nofollow özniteliğini etkinleştir]]></value>
+	</item>
 	<item name="about_rewrite">
 		<value xml:lang="ko"><![CDATA[이 기능을 사용하면 <em>http://yourdomain/</em><strong>?document_srl=123</strong> 과 같이 복잡한 주소를 <em>http://yourdomain/</em><strong>123</strong> 과 같이 간단하게 줄일 수 있습니다. 웹 서버에서 <strong>rewrite_mod</strong>를 지원해야 합니다. 지원 여부는 서버 관리자에게 문의하세요.]]></value>
 		<value xml:lang="en"><![CDATA[If web server provides rewrite mod, long URL such as <em>http://blah/</em><strong>?document_srl=123</strong> can be shortened like <em>http://blah/</em><strong>123</strong>]]></value>

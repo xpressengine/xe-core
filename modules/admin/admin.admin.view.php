@@ -74,6 +74,7 @@ class adminAdminView extends admin
 		Context::set('use_db_session', $db_info->use_db_session == 'N' ? 'N' : 'Y');
 		Context::set('use_mobile_view', $db_info->use_mobile_view == 'Y' ? 'Y' : 'N');
 		Context::set('use_ssl', $db_info->use_ssl ? $db_info->use_ssl : "none");
+		Context::set('use_nofollow', $db_info->use_nofollow == 'N' ? 'N' : 'Y');
 		if($db_info->http_port)
 		{
 			Context::set('http_port', $db_info->http_port);
