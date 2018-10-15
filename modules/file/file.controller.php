@@ -746,7 +746,7 @@ class fileController extends file
 		if(!FileHandler::makeDir($path)) return new BaseObject(-1,'msg_not_permitted_create');
 
 		// Check uploaded file
-		if(!checkUploadedFile($file_info['tmp_name']))  return new BaseObject(-1,'msg_file_upload_error');
+		if(!$manual_insert && !checkUploadedFile($file_info['tmp_name']))  return new BaseObject(-1,'msg_file_upload_error');
 
 		// Get random number generator
 		$random = new Password();
