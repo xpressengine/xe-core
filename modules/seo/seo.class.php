@@ -123,7 +123,7 @@ GASCRIPT;
 			$na_script = <<< NASCRIPT
 <!-- NAVER Analytics -->
 <script src="//wcs.naver.net/wcslog.js"></script>
-<script>if(!wcs_add){var wcs_add={wa:'{$config->na_id}'};}if(typeof wcs_do!="undefined"){wcs_do();}</script>
+<script>if(!wcs_add){var wcs_add={};};wcs_add['wa']='{$config->na_id}';if(typeof wcs_do!="undefined"){wcs_do();}</script>
 NASCRIPT;
 			Context::addHtmlFooter($na_script . PHP_EOL);
 		}

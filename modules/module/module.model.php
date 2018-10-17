@@ -403,7 +403,6 @@ class moduleModel extends module
 		else $module_info = $mid_info;
 
 		$oModuleController = getController('module');
-		if(isset($module_info->browser_title)) $oModuleController->replaceDefinedLangCode($module_info->browser_title);
 
 		$this->applyDefaultSkin($module_info);
 		return $this->addModuleExtraVars($module_info);

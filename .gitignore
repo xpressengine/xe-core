@@ -23,3 +23,4 @@ composer.lock
 *.sublime-project
 .codeintel
 
+install.config.php
