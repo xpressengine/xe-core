@@ -100,6 +100,13 @@
 					instance.config.extraPlugins = extraPlugins.join(',');
 				}
 
+				if(CKEDITOR.env.iOS) {
+					var removePlugins = e.editor.config.removePlugins.split(',');
+					removePlugins.push('enterkey');
+					removePlugins = arrayUnique(removePlugins);
+					instance.config.removePlugins = removePlugins.join(',');
+				}
+
 				if(!opts.enableToolbar) instance.config.toolbar = [];
 			});
 
