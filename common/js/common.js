@@ -321,7 +321,7 @@ if(typeof window.XE == "undefined") {
 				}
 			}
 
-			return normailzeUri(uri).toString();
+			return normalizeUri(uri).toString();
 		};
 
 		/**
@@ -333,7 +333,7 @@ if(typeof window.XE == "undefined") {
 			};
 		}
 
-		function normailzeUri(uri) {
+		function normalizeUri(uri) {
 			var query = uri.search(true);
 			var filename = uri.filename() || 'index.php';
 			var protocol = (global.enforce_ssl === true) ? 'https' : 'http';
