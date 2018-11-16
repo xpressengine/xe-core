@@ -212,13 +212,13 @@
 					</li>
 					<!-- admin -->
 					<li cond="$logged_info->is_admin == 'Y'">
-						<a href="{getUrl('', 'module', 'admin')}" target="_blank" title="{$lang->cmd_management}"><i class="xi-cog"></i><span class="blind">{$lang->cmd_management}</span></a>
+						<a href="{getUrl('', 'module', 'admin')}" target="_blank" rel="nofollow" title="{$lang->cmd_management}"><i class="xi-cog"></i><span class="blind">{$lang->cmd_management}</span></a>
 					</li>
 					<!-- login -->
 					<li class="hover">
 						<!--@if($is_logged)-->
 							<!-- after_login -->
-							<a href="{getUrl('act', 'dispMemberInfo')}" class="login_after">
+							<a href="{getUrl('act', 'dispMemberInfo')}" rel="nofollow" class="login_after">
 								<!--@if($logged_info->profile_image->src)-->
 									<img src="{$logged_info->profile_image->src}" alt="{$logged_info->nick_name}" />
 								<!--@else-->
@@ -227,8 +227,8 @@
 							</a>
 							<div class="ly ly_login">
 								<ul>
-									<li loop="$logged_info->menu_list => $key, $val"><a href="{getUrl('act', $key, 'member_srl', '', 'page', '')}">{Context::getLang($val)}</a></li>
-									<li><a href="{getUrl('act', 'dispMemberLogout')}">{$lang->cmd_logout}</a></li>
+									<li loop="$logged_info->menu_list => $key, $val"><a href="{getUrl('act', $key, 'member_srl', '', 'page', '')}" rel="nofollow">{Context::getLang($val)}</a></li>
+									<li><a href="{getUrl('act', 'dispMemberLogout')}" rel="nofollow">{$lang->cmd_logout}</a></li>
 								</ul>
 								<span class="edge"></span>
 							</div>
@@ -238,8 +238,8 @@
 							<a href="{getUrl('act', 'dispMemberLoginForm')}" id="ly_btn"><i class="xi-user-add"></i><span class="blind">{$lang->cmd_login}/{$lang->cmd_signup}</span></a>
 							<div class="ly ly_login">
 								<ul>
-									<li><a id="ly_login_btn" href="{getUrl('act', 'dispMemberLoginForm')}">{$lang->cmd_login}</a></li>
-									<li><a href="{getUrl('act', 'dispMemberSignUpForm')}">{$lang->cmd_signup}</a></li>
+									<li><a id="ly_login_btn" href="{getUrl('act', 'dispMemberLoginForm')}" rel="nofollow">{$lang->cmd_login}</a></li>
+									<li><a href="{getUrl('act', 'dispMemberSignUpForm')}" rel="nofollow">{$lang->cmd_signup}</a></li>
 								</ul>
 								<span class="edge"></span>
 							</div>
@@ -253,7 +253,7 @@
 			<div cond="$_enable_unb && $UNB->list" class="custom_area">
 				<ul>
 					<li loop="$UNB->list => $key, $val">
-						<a href="{$val['href']}" target="_blank"|cond="$val['open_window'] == 'Y'">{$val['link']}</a>
+						<a href="{$val['href']}" target="_blank"|cond="$val['open_window'] == 'Y'">{$val['link']|noescape}</a>
 					</li>
 				</ul>
 			</div>
@@ -269,14 +269,14 @@
 				</div>
 				<ul>
 					<li loop="$GNB->list => $key1, $val1">
-						<a href="{$val1['href']}" target="_blank"|cond="$val1['open_window'] == 'Y'">{$val1['link']}</a>
+						<a href="{$val1['href']}" target="_blank"|cond="$val1['open_window'] == 'Y'">{$val1['link']|noescape}</a>
 						<block cond="$val1['selected']">{@ $_selected_menu = $val1}</block>
 						<ul cond="$val1['list']" class="depth2">
 							<li loop="$val1['list'] => $key2, $val2" class="more"|cond="$val2['list']">
-								<a href="{$val2['href']}" target="_blank"|cond="$val2['open_window'] == 'Y'">{$val2['link']}</a>
+								<a href="{$val2['href']}" target="_blank"|cond="$val2['open_window'] == 'Y'">{$val2['link']|noescape}</a>
 								<ul cond="$val2['list']" class="depth3">
 									<li loop="$val2['list'] => $key3, $val3">
-										<a href="{$val3['href']}" target="_blank"|cond="$val3['open_window'] == 'Y'">{$val3['link']}</a>
+										<a href="{$val3['href']}" target="_blank"|cond="$val3['open_window'] == 'Y'">{$val3['link']|noescape}</a>
 									</li>
 								</ul>
 							</li>
@@ -358,10 +358,10 @@
 		<nav cond="$_selected_menu['list'] && $layout_info->layout_type === 'sub' && $layout_info->sidebar_position !== 'none'" class="lnb">
 			<ul>
 				<li loop="$_selected_menu['list'] => $key1, $val1">
-					<a href="{$val1['href']}" target="_blank"|cond="$val1['open_window'] == 'Y'">{$val1['link']}</a>
+					<a href="{$val1['href']}" target="_blank"|cond="$val1['open_window'] == 'Y'">{$val1['link']|noescape}</a>
 					<ul cond="$val1['list']">
 						<li loop="$val1['list'] => $key2, $val2" class="on"|cond="$val2['selected']">
-							<a href="{$val2['href']}" target="_blank"|cond="$val2['open_window'] == 'Y'">{$val2['link']}</a>
+							<a href="{$val2['href']}" target="_blank"|cond="$val2['open_window'] == 'Y'">{$val2['link']|noescape}</a>
 						</li>
 					</ul>
 				</li>
@@ -370,7 +370,7 @@
 		<!-- /LNB -->
 		<!-- CONTENT -->
 			<div class="content" id="content">
-				{$content}
+				{$content|noescape}
 			</div>
 			<!--@if($layout_info->use_demo === 'Y')-->
 				<include target="./demo/welcome_main.html" />
@@ -392,7 +392,7 @@
 							<!--@end-->
 						</a>
 					</p>
-					<p class="sub_desc">{$layout_info->footer_text}</p>
+					<p class="sub_desc">{$layout_info->footer_text|noescape}</p>
 				<!--@else-->
 					<include target="./demo/footer.html" />
 				<!--@end-->
@@ -403,10 +403,10 @@
 						{@$i = 0}
 						<li loop="$FNB->list => $key1, $val1" class="clear"|cond="!($i % 3) && $i > 0">
 							{@$i++}
-							<a href="{$val1['href']}" target="_blank"|cond="$val1['open_window'] == 'Y'">{$val1['link']}</a>
+							<a href="{$val1['href']}" target="_blank"|cond="$val1['open_window'] == 'Y'">{$val1['link']|noescape}</a>
 							<ul cond="$val1['list']">
 								<li loop="$val1['list'] => $key2, $val2">
-									<a href="{$val2['href']}" target="_blank"|cond="$val2['open_window'] == 'Y'">{$val2['link']}</a>
+									<a href="{$val2['href']}" target="_blank"|cond="$val2['open_window'] == 'Y'">{$val2['link']|noescape}</a>
 								</li>
 							</ul>
 						</li>
@@ -424,11 +424,11 @@
 			</p>
 			<ul class="mobile-footer-member">
 				<!--@if(!$is_logged)-->
-				<li><a href="{getUrl('act','dispMemberLoginForm')}">{$lang->cmd_login}</a></li>
-				<li><a href="{getUrl('act','dispMemberSignUpForm')}">{$lang->cmd_signup}</a></li>
+				<li><a href="{getUrl('act','dispMemberLoginForm')}" rel="nofollow">{$lang->cmd_login}</a></li>
+				<li><a href="{getUrl('act','dispMemberSignUpForm')}" rel="nofollow">{$lang->cmd_signup}</a></li>
 				<!--@else-->
-				<li><a href="{getUrl('act','dispMemberLogout')}">{$lang->cmd_logout}</a></li>
-				<li><a href="{getUrl('act','dispMemberInfo')}">{$lang->cmd_view_member_info}</a></li>
+				<li><a href="{getUrl('act','dispMemberLogout')}" rel="nofollow">{$lang->cmd_logout}</a></li>
+				<li><a href="{getUrl('act','dispMemberInfo')}" rel="nofollow">{$lang->cmd_view_member_info}</a></li>
 				<!--@end-->
 			</ul>
 		</div>
@@ -487,9 +487,9 @@
 			</form>
 		</div>
 		<div class="login-footer">
-			<a href="{getUrl('act', 'dispMemberFindAccount')}">{$lang->cmd_find_member_account}</a>
+			<a href="{getUrl('act', 'dispMemberFindAccount')}" rel="nofollow">{$lang->cmd_find_member_account}</a>
 			<span class="f_bar">|</span>
-			<a href="{getUrl('act', 'dispMemberSignUpForm')}">{$lang->cmd_signup}</a>
+			<a href="{getUrl('act', 'dispMemberSignUpForm')}" rel="nofollow">{$lang->cmd_signup}</a>
 		</div>
 		<a href="#" class="btn_ly_popup"><span class="blind">닫기</span></a>
 	</div>

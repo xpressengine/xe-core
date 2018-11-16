@@ -64,7 +64,9 @@ class documentAdminController extends document
 		$triggerObj = new stdClass();
 		$triggerObj->document_srls = implode(',',$document_srl_list);
 		$triggerObj->module_srl = $module_srl;
+		$triggerObj->source_module_srl = array();
 		$triggerObj->category_srl = $category_srl;
+
 		// Call a trigger (before)
 		$output = ModuleHandler::triggerCall('document.moveDocumentModule', 'before', $triggerObj);
 		if(!$output->toBool())
@@ -79,6 +81,8 @@ class documentAdminController extends document
 			$oDocument = $oDocumentModel->getDocument($document_srl);
 			if(!$oDocument->isExists()) continue;
 
+			$triggerObj->source_module_srl[$document_srl] = $oDocument->get('module_srl');
+
 			$source_category_srl = $oDocument->get('category_srl');
 
 			unset($obj);
@@ -86,7 +90,7 @@ class documentAdminController extends document
 
 			// ISSUE https://github.com/xpressengine/xe-core/issues/32
 			$args_doc_origin->document_srl = $document_srl;
-			$output_ori = executeQuery('document.getDocument', $args_doc_origin, array('content'));              
+			$output_ori = executeQuery('document.getDocument', $args_doc_origin, array('content'));
 			$obj->content = $output_ori->data->content;
 
 			// Move the attached file if the target module is different
@@ -104,6 +108,12 @@ class documentAdminController extends document
 						$file_info['tmp_name'] = $val->uploaded_filename;
 						$file_info['name'] = $val->source_filename;
 						$inserted_file = $oFileController->insertFile($file_info, $module_srl, $obj->document_srl, $val->download_count, true);
+
+						if(!$inserted_file->toBool()) {
+							$oDB->rollback();
+							return $inserted_file;
+						}
+
 						if($inserted_file && $inserted_file->toBool())
 						{
 							// for image/video files
@@ -297,6 +307,12 @@ class documentAdminController extends document
 					$file_info['name'] = $val->source_filename;
 					$oFileController = getController('file');
 					$inserted_file = $oFileController->insertFile($file_info, $module_srl, $obj->document_srl, 0, true);
+
+					if(!$inserted_file->toBool()) {
+						$oDB->rollback();
+						return $inserted_file;
+					}
+
 					// if image/video files
 					if($val->direct_download == 'Y')
 					{

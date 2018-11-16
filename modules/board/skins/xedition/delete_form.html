@@ -1,6 +1,6 @@
 <include target="_header.html" />
 <div cond="$oDocument->isExists()" class="context_data">
-	<h3 class="title">{$oDocument->getTitle()}</h3>
+	<h3 class="title">{$oDocument->getTitle()|noescape}</h3>
 	<p class="author">
 		<strong>{$oDocument->getNickName()}</strong>
 	</p>

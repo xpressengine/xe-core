@@ -720,7 +720,7 @@ class layoutModel extends layout
 
 		if($header_script)
 		{
-			$buff[] = sprintf(' $layout_info->header_script = "%s"; ', str_replace(array('$','"'),array('\$','\\"'),$header_script));
+			$buff[] = sprintf(' $layout_info->header_script = %s; ', var_export($header_script, true));
 		}
 
 		FileHandler::writeFile($cache_file, '<?php if(!defined("__XE__")) exit(); ' . join(PHP_EOL, $buff));

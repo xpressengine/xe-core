@@ -524,13 +524,31 @@ class syndicationModel extends syndication
 
 	function getDeletedByDocumentSrl($document_srl)
 	{
+		static $module_info = array();
+
 		$args = new stdClass;
 		$args->document_srl = $document_srl;
 		$output = executeQueryArray('syndication.getDeletedList', $args);
-		foreach($output->data as $key => $val) {
+
+		$time_zone = substr($GLOBALS['_time_zone'],0,3).':'.substr($GLOBALS['_time_zone'],3);
+		Context::set('time_zone', $time_zone);
+
+		foreach($output->data as $key => $val)
+		{
+			$module_srl = $val->module_srl;
+
+			if(!isset($module_info[$module_srl]))
+			{
+				$args = new stdClass;
+				$args->module_srl = $module_srl;
+				$module_output = executeQuery('syndication.getModuleSiteInfo', $args);
+				if($module_output->data) $module_info[$module_srl] = $module_output->data;
+				else $module_info[$module_srl] = null;
+			}
+
 			$val->id = $this->getID('article', $val->module_srl.'-'.$val->document_srl);
 			$val->deleted = date("Y-m-d\\TH:i:s", ztime($val->regdate)).$time_zone;
-			$val->alternative_href = getFullSiteUrl($this->uri_scheme . $this->site_url, '', 'document_srl', $val->document_srl);
+			$val->alternative_href = getFullSiteUrl($this->uri_scheme . $this->site_url, '', 'mid', $module_info[$module_srl]->mid, 'document_srl', $val->document_srl);
 			$val->channel_id = $this->getID('channel', $val->module_srl.'-'.$val->document_srl);
 			$output->data[$key] = $val;
 		}

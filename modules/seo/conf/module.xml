@@ -5,6 +5,7 @@
 	<actions>
 		<action name="dispSeoAdminSetting" type="view" menu_name="setting" menu_index="true" admin_index="true" />
 		<action name="procSeoAdminEnviromentGatheringAgreement" type="controller" />
+		<action name="procSeoAdminInsertModuleConfig" type="controller" />
 
 		<action name="procSeoAdminSaveSetting" type="controller" />
 	</actions>

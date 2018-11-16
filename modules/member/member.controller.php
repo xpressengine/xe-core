@@ -380,26 +380,26 @@ class memberController extends member
 		{
 			if(isset($args->{$val}))
 			{
-				$args->{$val} = preg_replace('/[\pZ\pC]+/u', '', $args->{$val});
+				$args->{$val} = preg_replace('/[\pZ\pC]+/u', '', html_entity_decode($args->{$val}));
 			}
 		}
 		$output = $this->insertMember($args);
 		if(!$output->toBool()) return $output;
 
 		// insert ProfileImage, ImageName, ImageMark
-		$profile_image = $_FILES['profile_image'];
+		$profile_image = Context::get('profile_image');
 		if(is_uploaded_file($profile_image['tmp_name']))
 		{
 			$this->insertProfileImage($args->member_srl, $profile_image['tmp_name']);
 		}
 
-		$image_mark = $_FILES['image_mark'];
+		$image_mark = Context::get('image_mark');
 		if(is_uploaded_file($image_mark['tmp_name']))
 		{
 			$this->insertImageMark($args->member_srl, $image_mark['tmp_name']);
 		}
 
-		$image_name = $_FILES['image_name'];
+		$image_name = Context::get('image_name');
 		if(is_uploaded_file($image_name['tmp_name']))
 		{
 			$this->insertImageName($args->member_srl, $image_name['tmp_name']);
@@ -597,7 +597,7 @@ class memberController extends member
 		{
 			if(isset($args->{$val}))
 			{
-				$args->{$val} = preg_replace('/[\pZ\pC]+/u', '', $args->{$val});
+				$args->{$val} = preg_replace('/[\pZ\pC]+/u', '', html_entity_decode($args->{$val}));
 			}
 		}
 
@@ -605,19 +605,19 @@ class memberController extends member
 		$output = $this->updateMember($args);
 		if(!$output->toBool()) return $output;
 
-		$profile_image = $_FILES['profile_image'];
+		$profile_image = Context::get('profile_image');
 		if(is_uploaded_file($profile_image['tmp_name']))
 		{
 			$this->insertProfileImage($args->member_srl, $profile_image['tmp_name']);
 		}
 
-		$image_mark = $_FILES['image_mark'];
+		$image_mark = Context::get('image_mark');
 		if(is_uploaded_file($image_mark['tmp_name']))
 		{
 			$this->insertImageMark($args->member_srl, $image_mark['tmp_name']);
 		}
 
-		$image_name = $_FILES['image_name'];
+		$image_name = Context::get('image_name');
 		if(is_uploaded_file($image_name['tmp_name']))
 		{
 			$this->insertImageName($args->member_srl, $image_name['tmp_name']);
@@ -731,7 +731,7 @@ class memberController extends member
 	function procMemberInsertProfileImage()
 	{
 		// Check if the file is successfully uploaded
-		$file = $_FILES['profile_image'];
+		$file = Context::get('profile_image');
 		if(!is_uploaded_file($file['tmp_name'])) return $this->stop('msg_not_uploaded_profile_image');
 		// Ignore if member_srl is invalid or doesn't exist.
 		$member_srl = Context::get('member_srl');
@@ -766,6 +766,11 @@ class memberController extends member
 		$max_width = $config->profile_image_max_width;
 		$max_height = $config->profile_image_max_height;
 		$max_filesize = $config->profile_image_max_filesize;
+		foreach($config->signupForm as $val)
+		{
+			if($val->name == "profile_image")
+				$allow_transparent = $val->allow_transparent_thumbnail == 'Y';
+		}
 
 		Context::loadLang(_XE_PATH_ . 'modules/file/lang');
 
@@ -789,7 +794,7 @@ class memberController extends member
 		if(($width > $max_width || $height > $max_height ) && $type != 1)
 		{
 			$temp_filename = sprintf('files/cache/tmp/profile_image_%d.%s', $member_srl, $ext);
-			FileHandler::createImageFile($target_file, $temp_filename, $max_width, $max_height, $ext);
+			FileHandler::createImageFile($target_file, $temp_filename, $max_width, $max_height, $ext, 'crop', $allow_transparent);
 
 			// 파일 용량 제한
 			FileHandler::clearStatCache($temp_filename);
@@ -835,7 +840,7 @@ class memberController extends member
 	function procMemberInsertImageName()
 	{
 		// Check if the file is successfully uploaded
-		$file = $_FILES['image_name'];
+		$file = Context::get('image_name');
 		if(!is_uploaded_file($file['tmp_name'])) return $this->stop('msg_not_uploaded_image_name');
 		// Ignore if member_srl is invalid or doesn't exist.
 		$member_srl = Context::get('member_srl');
@@ -981,7 +986,7 @@ class memberController extends member
 	function procMemberInsertImageMark()
 	{
 		// Check if the file is successfully uploaded
-		$file = $_FILES['image_mark'];
+		$file = Context::get('image_mark');
 		if(!is_uploaded_file($file['tmp_name'])) return $this->stop('msg_not_uploaded_image_mark');
 		// Ignore if member_srl is invalid or doesn't exist.
 		$member_srl = Context::get('member_srl');
@@ -1310,7 +1315,27 @@ class memberController extends member
 		if(ztime($output->data->regdate) < $_SERVER['REQUEST_TIME'] + zgap() - 86400)
 		{
 			executeQuery('member.deleteAuthMail', $args);
-			return $this->stop('msg_invalid_auth_key');
+
+			$memberInfo = $oMemberModel->getMemberInfoByMemberSrl($member_srl);
+
+			$oPassword = new Password();
+			$auth_args = new stdClass();
+			$auth_args->user_id = $memberInfo->user_id;
+			$auth_args->member_srl = $memberInfo->member_srl;
+			$auth_args->new_password = '';
+			$auth_args->auth_key = $oPassword->createSecureSalt(40);
+			$auth_args->is_register = 'Y';
+
+			$output = executeQuery('member.insertAuthMail', $auth_args);
+			if(!$output->toBool()) return $output;
+
+			// resend auth mail.
+			$this->_sendAuthMail($auth_args, $memberInfo);
+
+			$this->setTemplatePath($this->module_path.'tpl');
+			$this->setTemplateFile('msg_failed_auth');
+
+			return;
 		}
 
 		$args->password = $output->data->new_password;
@@ -2409,7 +2434,7 @@ class memberController extends member
 		if(!$args->user_name) $args->user_name = $orgMemberInfo->user_name;
 		if(!$args->user_id) $args->user_id = $orgMemberInfo->user_id;
 		if(!$args->nick_name) $args->nick_name = $orgMemberInfo->nick_name;
-		if(!$args->description) $args->description = $orgMemberInfo->description;
+		if(!isset($args->description)) $args->description = $orgMemberInfo->description;
 		if(!$args->birthday) $args->birthday = '';
 
 		$output = executeQuery('member.updateMember', $args);

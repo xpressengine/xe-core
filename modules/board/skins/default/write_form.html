@@ -20,12 +20,12 @@
 			<caption><em>*</em> : {$lang->is_required}</caption>
 			<tr loop="$extra_keys=>$key,$val">
 				<th scope="row"><em cond="$val->is_required=='Y'">*</em> {$val->name}</th>
-				<td>{$val->getFormHTML()}</td>
+				<td>{$val->getFormHTML()|noescape}</td>
 			</tr>
 		</table>
 	</div>
     <div class="write_editor">
-		{$oDocument->getEditor()}
+		{$oDocument->getEditor()|noescape}
 	</div>
 	<div class="write_footer">
 		<div class="write_option">

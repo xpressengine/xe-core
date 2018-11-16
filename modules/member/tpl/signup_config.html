@@ -27,7 +27,7 @@
 	<div class="x_control-group">
 		<label class="x_control-label" for="prohibited_nick_name">{$lang->cmd_manage_nick_name}</label>
 		<div class="x_controls">
-			<p>{sprintf($lang->count_manage_nick_name, count($deniedNickNames))}</p>
+			<p>{sprintf($lang->count_manage_nick_name, count($deniedNickNames))|noescape}</p>
 			<ul class="textList" id="deniedNickNameList" style="margin-left:0">
 				<li loop="$deniedNickNames=>$nicknameInfo" id="denied_{$nicknameInfo->nick_name}">{$nicknameInfo->nick_name} <button type="button" class="x_icon-remove" onclick="doUpdateDeniedNickName('{$nicknameInfo->nick_name}','delete','{$lang->confirm_delete}');return false;">{$lang->delete}</button></li>
 			</ul>
@@ -39,7 +39,7 @@
 	<div class="x_control-group" cond="$useUserID">
 		<label class="x_control-label" for="prohibited_id">{$lang->cmd_manage_id}</label>
 		<div class="x_controls">
-			<p>{sprintf($lang->count_manage_id, count($deniedIDs))}</p>
+			<p>{sprintf($lang->count_manage_id, count($deniedIDs))|noescape}</p>
 			<ul class="textList" id="deniedList" style="margin-left:0">
 				<li loop="$deniedIDs=>$denied_info" id="denied_{$denied_info->user_id}">{$denied_info->user_id} <button type="button" class="x_icon-remove" onclick="doUpdateDeniedID('{$denied_info->user_id}','delete','{$lang->confirm_delete}');return false;">{$lang->delete}</button></li>
 			</ul>
@@ -58,7 +58,7 @@
 	</div>
 	<div class="x_control-group">
 		<label class="x_control-label" for="agreement">{$lang->agreement}</label>
-		<div class="x_controls">{$editor}</div>
+		<div class="x_controls">{$editor|noescape}</div>
 <style scoped>
 #smart_content,
 #smart_content>.tool{clear:none !important}
@@ -98,7 +98,7 @@
 						<input type="hidden" name="usable_list[]" value="{$item->name}"/>
 						<input type="hidden" name="{$item->name}" value="requierd"/>
 						<th scope="row">
-							<span class="_title" style="display:inline-block;white-space:nowrap;overflow:hidden;width:120px;text-overflow:ellipsis;padding-left:20px">{$item->title} <a class="x_icon-question-sign" href="./admin/help/index.html#UMAN_login_key" target="_blank">{$lang->help}</a></span>
+							<span class="_title" style="display:inline-block;white-space:pre-line;overflow:inherit;width:120px;text-overflow:ellipsis;padding-left:20px">{$item->title} <a class="x_icon-question-sign" href="./admin/help/index.html#UMAN_login_key" target="_blank">{$lang->help}</a></span>
 						</th>
 						<td style="text-align:center"><input type="radio" name="identifier" value="{$item->name}" checked="checked" /></td>
 						<td style="text-align:center"><input type="checkbox" name="usable_list[]" value="{$item->name}" title="{$lang->use}" checked="checked"  disabled="disabled" /></td>
@@ -118,7 +118,7 @@
 						<th scope="row">
 							<div class="wrap">
 								<button type="button" class="dragBtn">Move to</button>
-								<span class="_title" style="display:inline-block;white-space:nowrap;overflow:hidden;width:120px;text-overflow:ellipsis" title="{$item->title}">{$item->title}</span>
+								<span class="_title" style="display:inline-block;white-space:pre-line;overflow:inherit;width:120px;text-overflow:ellipsis" title="{$item->title}">{$item->title}</span>
 							</div>
 						</th>
 						<td style="text-align:center"><input type="radio" name="identifier" value="{$item->name}" cond="$item->name== 'email_address' || $item->name=='user_id'" /></td>
@@ -132,6 +132,7 @@
 								<label for="{$item->name}_max_width" class="x_inline">{$lang->cmd_image_max_width} <input type="number" min="1" name="{$item->name}_max_width" id="{$item->name}_max_width" value="{$item->max_width}" /> px</label>
 								<label for="{$item->name}_max_height" class="x_inline">{$lang->cmd_image_max_height} <input type="number" min="1" name="{$item->name}_max_height" id="{$item->name}_max_height" value="{$item->max_height}" /> px</label>
 								<label for="{$item->name}_max_filesize">{$lang->allowed_filesize} : <input type="number" min="1" name="{$item->name}_max_filesize" id="{$item->name}_max_filesize" value="{$item->max_filesize}" /> KB</label>
+								<label for="{$item->name}_transparent_thumbnail" cond="$item->name == 'profile_image'"><input type="checkbox" value="Y" name="{$item->name}_transparent_thumbnail" id="{$item->name}_transparent_thumbnail" checked="checked"|cond="$item->allow_transparent_thumbnail" /> {$lang->allow_transparent_thumbnail}</label>
 							</div>
 
 							<div cond="$item->name == 'signature'" class="_subItem" style="display:none;padding-top:5px"|cond="!$item->isUse">
@@ -157,7 +158,7 @@
 							<input type="hidden" name="{$item->name}_member_join_form_srl" value="{$item->member_join_form_srl}" />
 							<div class="wrap">
 								<button type="button" class="dragBtn">Move to</button>
-								<span class="_title" style="display:inline-block;white-space:nowrap;overflow:hidden;width:120px;text-overflow:ellipsis" title="{$item->title}">{$item->title}</span>
+								<span class="_title" style="display:inline-block;white-space:pre-line;overflow:inherit;width:120px;text-overflow:ellipsis" title="{$item->title}">{$item->title}</span>
 							</div>
 						</th>
 						<td></td>

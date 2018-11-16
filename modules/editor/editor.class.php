@@ -67,6 +67,9 @@ class editor extends ModuleObject
 			// 2012. 08. 29 Add a trigger to copy additional setting when the module is copied 
 			if(!$oModuleModel->getTrigger('module.procModuleAdminCopyModule', 'editor', 'controller', 'triggerCopyModule', 'after')) return true;
 
+			if(!$oDB->isColumnExists("editor_autosave", "certify_key")) return true;
+			if(!$oDB->isIndexExists('editor_autosave', 'idx_certify_key')) return true;
+
 			$oModuleController->insertUpdatedLog($version_update_id);
 		}
 
@@ -110,6 +113,16 @@ class editor extends ModuleObject
 			if(!$oModuleModel->getTrigger('module.procModuleAdminCopyModule', 'editor', 'controller', 'triggerCopyModule', 'after'))
 			{
 				$oModuleController->insertTrigger('module.procModuleAdminCopyModule', 'editor', 'controller', 'triggerCopyModule', 'after');
+			}
+
+			// @see https://github.com/xpressengine/xe-core/issues/2229
+			if(!$oDB->isColumnExists('editor_autosave','certify_key'))
+			{
+				$oDB->addColumn('editor_autosave', 'certify_key', 'varchar', 100);
+			}
+			if(!$oDB->isIndexExists("editor_autosave","idx_certify_key"))
+			{
+				$oDB->addIndex("editor_autosave","idx_certify_key", "certify_key");
 			}
 
 			$oModuleController->insertUpdatedLog($version_update_id);

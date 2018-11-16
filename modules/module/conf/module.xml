@@ -21,11 +21,11 @@
 		<permission action="procModuleAdminUpdateSkinInfo" target="manager" />
 	</permissions>
 	<actions>
-		<action name="dispModuleSelectList" type="view" />
-		<action name="dispModuleSkinInfo" type="view" />
+		<action name="dispModuleSelectList" type="view" meta-noindex="true" />
+		<action name="dispModuleSkinInfo" type="view" meta-noindex="true" />
 
-		<action name="dispModuleFileBox" type="view" />
-		<action name="dispModuleFileBoxAdd" type="view" />
+		<action name="dispModuleFileBox" type="view" meta-noindex="true" />
+		<action name="dispModuleFileBoxAdd" type="view" meta-noindex="true" />
 
 		<action name="procModuleFileBoxAdd" type="controller" />
 		<action name="procModuleFileBoxAdd" type="controller" />

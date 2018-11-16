@@ -1383,6 +1383,11 @@
 		<value xml:lang="tr"><![CDATA[Hesabınız başarıyla etkinleştirildi.]]></value>
 		<value xml:lang="vi"><![CDATA[Đã xác nhận thành công.<br />Xin cảm ơn đã tham gia cùng chúng tôi!]]></value>
 	</item>
+	<item name="msg_failed_auth">
+		<value xml:lang="ko"><![CDATA[가입인증 링크가 24시간을 초과하여 만료되었습니다.\n새로운 가입 인증 메일을 확인해주세요.]]></value>
+		<value xml:lang="en"><![CDATA[The authentication link has expired past 24 hours.\nPlease check your new authentication email.]]></value>
+		<value xml:lang="jp"><![CDATA[認証リンクが24時間を超過して満了しました。\n新しい認証メールを確認してください.]]></value>
+	</item>
 	<item name="msg_new_member">
 		<value xml:lang="ko"><![CDATA[회원 추가]]></value>
 		<value xml:lang="en"><![CDATA[Add Member]]></value>
@@ -2800,5 +2805,15 @@
 		<value xml:lang="ko"><![CDATA[완료되었습니다.]]></value>
 		<value xml:lang="en"><![CDATA[Completed.]]></value>
 		<value xml:lang="jp"><![CDATA[完了しました。]]></value>
+	</item>
+	<item name="warn_member_setting">
+		<value xml:lang="ko"><![CDATA[주의! 현재 설정이 사이트의 회원 가입을 허용하고 있지 않고 있다는 것을 명심하십시오.]]></value>
+		<value xml:lang="en"><![CDATA[Warning! Please remember current site setting doesn't accept new member.]]></value>
+		<value xml:lang="jp"><![CDATA[注意！現在のサイト設定は、会員登録を許可していないということを覚えなさい。]]></value>
+	</item>
+	<item name="allow_transparent_thumbnail">
+		<value xml:lang="ko"><![CDATA[리사이즈 이미지에 투명 배경을 허용합니다. (PNG only)]]></value>
+		<value xml:lang="en"><![CDATA[Allow transparent background on resized image (PNG only)]]></value>
+		<value xml:lang="jp"><![CDATA[サイズ変更した画像に透明な背景を許可します。(PNG only)]]></value>
 	</item>
 </lang>

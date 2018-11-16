@@ -31,9 +31,9 @@
 		<nav class="gnb" id="gnb">
 			<ul>
 				<li loop="$GNB->list=>$key1,$val1" class="active"|cond="$val1['selected']">
-					<a href="{$val1['href']}" target="_blank"|cond="$val1['open_window']=='Y'">{$val1['link']}</a>
+					<a href="{$val1['href']}" target="_blank"|cond="$val1['open_window']=='Y'">{$val1['link']|noescape}</a>
 					<ul cond="$val1['list']">
-						<li loop="$val1['list']=>$key2,$val2" class="active"|cond="$val2['selected']"><a href="{$val2['href']}" target="_blank"|cond="$val2['open_window']=='Y'">{$val2['link']}</a></li>
+						<li loop="$val1['list']=>$key2,$val2" class="active"|cond="$val2['selected']"><a href="{$val2['href']}" target="_blank"|cond="$val2['open_window']=='Y'">{$val2['link']|noescape}</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -43,19 +43,19 @@
 	<!-- VISUAL | DEFAULT -->
 	<div class="visual main"|cond="$layout_info->LAYOUT_TYPE=='MAIN_PAGE'" class="visual sub"|cond="$layout_info->LAYOUT_TYPE=='SUB_PAGE'" cond="!$layout_info->VISUAL_IMAGE_1 && !$layout_info->VISUAL_IMAGE_2 && !$layout_info->VISUAL_IMAGE_3 && $layout_info->VISUAL_USE=='YES'">
 		<div class="list">
-			<a href="{geturl('','module','admin','act','dispAdminConfigGeneral')}" class="item i1" cond="$layout_info->LAYOUT_TYPE=='MAIN_PAGE'">
+			<a href="{geturl('','module','admin','act','dispAdminConfigGeneral')}" rel="nofollow" class="item i1" cond="$layout_info->LAYOUT_TYPE=='MAIN_PAGE'">
 				<img src="visual.main.1.jpg" alt="" />
 				<p>Click, to change<br> the site title.</p>
 			</a>
-			<a href="{geturl('','module','admin','act','dispMenuAdminSiteMap')}" class="item i2" cond="$layout_info->LAYOUT_TYPE=='MAIN_PAGE'">
+			<a href="{geturl('','module','admin','act','dispMenuAdminSiteMap')}" rel="nofollow" class="item i2" cond="$layout_info->LAYOUT_TYPE=='MAIN_PAGE'">
 				<img src="visual.main.2.jpg" alt="" />
 				<p>Click, to change<br> the site navigation.</p>
 			</a>
-			<a href="{geturl('','module','admin','act','dispLayoutAdminInstanceList','layout','default')}" class="item i3" cond="$layout_info->LAYOUT_TYPE=='MAIN_PAGE'">
+			<a href="{geturl('','module','admin','act','dispLayoutAdminInstanceList','layout','default')}" rel="nofollow" class="item i3" cond="$layout_info->LAYOUT_TYPE=='MAIN_PAGE'">
 				<img src="visual.main.3.jpg" alt="" />
 				<p>Click, to change<br> the site visual image.</p>
 			</a>
-			<a href="{geturl('','module','admin','act','dispLayoutAdminInstanceList','layout','default')}" class="item i1" cond="$layout_info->LAYOUT_TYPE=='SUB_PAGE'">
+			<a href="{geturl('','module','admin','act','dispLayoutAdminInstanceList','layout','default')}" rel="nofollow" class="item i1" cond="$layout_info->LAYOUT_TYPE=='SUB_PAGE'">
 				<img src="visual.sub.jpg" alt="" />
 				<p>Click, to change the site visual image.</p>
 			</a>
@@ -86,11 +86,11 @@
 	<div class="body main"|cond="$layout_info->LAYOUT_TYPE=='MAIN_PAGE'" class="body sub"|cond="$layout_info->LAYOUT_TYPE=='SUB_PAGE'">
 		<!-- LNB -->
 		<nav class="lnb" cond="$layout_info->LAYOUT_TYPE == 'SUB_PAGE'">
-			<h1 loop="$GNB->list=>$key1,$val1" cond="$val1['selected']"><a href="{$val1['href']}" target="_blank"|cond="$val1['open_window']=='Y'">{$val1['link']}</a></h1>
+			<h1 loop="$GNB->list=>$key1,$val1" cond="$val1['selected']"><a href="{$val1['href']}" target="_blank"|cond="$val1['open_window']=='Y'">{$val1['link']|noescape}</a></h1>
 			<ul loop="$GNB->list=>$key1,$val1" cond="$val1['selected'] && $val1['list']">
-				<li loop="$val1['list']=>$key2,$val2" class="active"|cond="$val2['selected']"><a href="{$val2['href']}" target="_blank"|cond="$val2['open_window']=='Y'">{$val2['link']}</a>
+				<li loop="$val1['list']=>$key2,$val2" class="active"|cond="$val2['selected']"><a href="{$val2['href']}" target="_blank"|cond="$val2['open_window']=='Y'">{$val2['link']|noescape}</a>
 					<ul cond="$val2['list']">
-						<li loop="$val2['list']=>$key3,$val3" class="active"|cond="$val3['selected']"><a href="{$val3['href']}" target="_blank"|cond="$val3['open_window']=='Y'">{$val3['link']}</a></li>
+						<li loop="$val2['list']=>$key3,$val3" class="active"|cond="$val3['selected']"><a href="{$val3['href']}" target="_blank"|cond="$val3['open_window']=='Y'">{$val3['link']|noescape}</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -98,7 +98,7 @@
 		<!-- /LNB -->
 		<!-- CONTENT -->
 		<div class="content" id="content">
-			{$content}
+			{$content|noescape}
 		</div>
 		<!-- /CONTENT -->
 	</div>

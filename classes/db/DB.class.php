@@ -185,7 +185,7 @@ class DB
 	 * constructor
 	 * @return void
 	 */
-	function DB()
+	function __construct()
 	{
 		$this->count_cache_path = _XE_PATH_ . $this->count_cache_path;
 		$this->cache_file = _XE_PATH_ . $this->cache_file;
@@ -439,7 +439,7 @@ class DB
 					$buff[] = '<?php exit(); ?' . '>';
 				}
 				$buff[] = print_r($log, TRUE);
-				@file_put_contents($log_file, implode("\n", $buff) . "\n\n", FILE_APPEND|LOCK_EX);
+				@file_put_contents($debug_file, implode("\n", $buff) . "\n\n", FILE_APPEND|LOCK_EX);
 			}
 		}
 		else

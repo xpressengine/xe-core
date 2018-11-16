@@ -26,14 +26,14 @@
 		<permission action="procCommunicationDeleteFriendGroup" target="member" />
 	</permissions>
 	<actions>
-		<action name="dispCommunicationMessages" type="view" standalone="true" />
-		<action name="dispCommunicationSendMessage" type="view" standalone="true" />
-		<action name="dispCommunicationNewMessage" type="view" standalone="true" />
+		<action name="dispCommunicationMessages" type="view" standalone="true" meta-noindex="true" />
+		<action name="dispCommunicationSendMessage" type="view" standalone="true" meta-noindex="true" />
+		<action name="dispCommunicationNewMessage" type="view" standalone="true" meta-noindex="true" />
 
-		<action name="dispCommunicationFriend" type="view" standalone="true" />
-		<action name="dispCommunicationAddFriend" type="view" standalone="true" />
-		<action name="dispCommunicationAddFriendGroup" type="view" standalone="true" />
-		<action name="dispCommunicationMessageBoxList" type="mobile" standalone="true" />
+		<action name="dispCommunicationFriend" type="view" standalone="true" meta-noindex="true" />
+		<action name="dispCommunicationAddFriend" type="view" standalone="true" meta-noindex="true" />
+		<action name="dispCommunicationAddFriendGroup" type="view" standalone="true" meta-noindex="true" />
+		<action name="dispCommunicationMessageBoxList" type="mobile" standalone="true" meta-noindex="true" />
 
 		<action name="procCommunicationUpdateAllowMessage" type="controller" standalone="true" />
 		<action name="procCommunicationSendMessage" type="controller" ruleset="sendMessage" standalone="true" />

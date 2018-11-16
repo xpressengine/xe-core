@@ -12,7 +12,8 @@ class seo extends ModuleObject
 		array('display', 'seo', 'controller', 'triggerBeforeDisplay', 'before'),
 		array('file.deleteFile', 'seo', 'controller', 'triggerAfterFileDeleteFile', 'after'),
 		array('document.updateDocument', 'seo', 'controller', 'triggerAfterDocumentUpdateDocument', 'after'),
-		array('document.deleteDocument', 'seo', 'controller', 'triggerAfterDocumentDeleteDocument', 'after')
+		array('document.deleteDocument', 'seo', 'controller', 'triggerAfterDocumentDeleteDocument', 'after'),
+		array('module.dispAdditionSetup', 'seo', 'view', 'triggerDispSeoAdditionSetup', 'before')
 	);
 
 	public function getConfig()
@@ -122,7 +123,7 @@ GASCRIPT;
 			$na_script = <<< NASCRIPT
 <!-- NAVER Analytics -->
 <script src="//wcs.naver.net/wcslog.js"></script>
-<script>if(!wcs_add){var wcs_add={wa:'{$config->na_id}'};}if(typeof wcs_do!="undefined"){wcs_do();}</script>
+<script>if(!wcs_add){var wcs_add={};};wcs_add['wa']='{$config->na_id}';if(typeof wcs_do!="undefined"){wcs_do();}</script>
 NASCRIPT;
 			Context::addHtmlFooter($na_script . PHP_EOL);
 		}

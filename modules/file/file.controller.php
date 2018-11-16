@@ -26,7 +26,7 @@ class fileController extends file
 	function procFileUpload()
 	{
 		Context::setRequestMethod('JSON');
-		$file_info = $_FILES['Filedata'];
+		$file_info = Context::get('Filedata');
 
 		// An error appears if not a normally uploaded file
 		if(!is_uploaded_file($file_info['tmp_name'])) exit();
@@ -334,12 +334,12 @@ class fileController extends file
 			}
 			else
 			{
-				$filename_param = "filename*=UTF-8''" . rawurlencode($filename) . '; filename="' . rawurlencode($filename) . '"';
+				$filename_param = sprintf('filename="%s"; filename*=UTF-8\'\'%s', $filename, rawurlencode($filename));
 			}
 		}
 		elseif(preg_match('#(?:Firefox|Safari|Trident)/(\d+)\.#', $_SERVER['HTTP_USER_AGENT'], $matches) && $matches[1] >= 6)
 		{
-			$filename_param = "filename*=UTF-8''" . rawurlencode($filename) . '; filename="' . rawurlencode($filename) . '"';
+			$filename_param = sprintf('filename="%s"; filename*=UTF-8\'\'%s', $filename, rawurlencode($filename));
 		}
 		elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== FALSE)
 		{
@@ -712,6 +712,7 @@ class fileController extends file
 		$file_info['name'] = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|jsp|asp|inc)/i', '$0-x',$file_info['name']);
 		$file_info['name'] = removeHackTag($file_info['name']);
 		$file_info['name'] = str_replace(array('<','>'),array('%3C','%3E'),$file_info['name']);
+		$file_info['name'] = str_replace('&amp;', '&', $file_info['name']);
 
 		// Get random number generator
 		$random = new Password();
@@ -745,7 +746,7 @@ class fileController extends file
 		if(!FileHandler::makeDir($path)) return new BaseObject(-1,'msg_not_permitted_create');
 
 		// Check uploaded file
-		if(!checkUploadedFile($file_info['tmp_name']))  return new BaseObject(-1,'msg_file_upload_error');
+		if(!$manual_insert && !checkUploadedFile($file_info['tmp_name']))  return new BaseObject(-1,'msg_file_upload_error');
 
 		// Get random number generator
 		$random = new Password();
