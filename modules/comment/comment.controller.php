@@ -1095,6 +1095,22 @@ class commentController extends comment
 			return new BaseObject(-1, $failed_voted);
 		}
 
+		// Call a trigger (before)
+		$trigger_obj = new stdClass;
+		$trigger_obj->member_srl = $oComment->get('member_srl');
+		$trigger_obj->module_srl = $oComment->get('module_srl');
+		$trigger_obj->document_srl = $oComment->get('document_srl');
+		$trigger_obj->comment_srl = $oComment->get('comment_srl');
+		$trigger_obj->update_target = ($point < 0) ? 'blamed_count' : 'voted_count';
+		$trigger_obj->point = $point;
+		$trigger_obj->before_point = ($point < 0) ? $oComment->get('blamed_count') : $oComment->get('voted_count');
+		$trigger_obj->after_point = $trigger_obj->before_point + $point;
+		$trigger_output = ModuleHandler::triggerCall('comment.updateVotedCount', 'before', $trigger_obj);
+		if(!$trigger_output->toBool())
+		{
+			return $trigger_output;
+		}
+
 		// begin transaction
 		$oDB = DB::getInstance();
 		$oDB->begin();
@@ -1115,15 +1131,8 @@ class commentController extends comment
 		$args->point = $point;
 		$output = executeQuery('comment.insertCommentVotedLog', $args);
 
-		$obj = new stdClass();
-		$obj->member_srl = $oComment->get('member_srl');
-		$obj->module_srl = $oComment->get('module_srl');
-		$obj->comment_srl = $oComment->get('comment_srl');
-		$obj->update_target = ($point < 0) ? 'blamed_count' : 'voted_count';
-		$obj->point = $point;
-		$obj->before_point = ($point < 0) ? $oComment->get('blamed_count') : $oComment->get('voted_count');
-		$obj->after_point = ($point < 0) ? $args->blamed_count : $args->voted_count;
-		$trigger_output = ModuleHandler::triggerCall('comment.updateVotedCount', 'after', $obj);
+		// Call a trigger (after)
+		$trigger_output = ModuleHandler::triggerCall('comment.updateVotedCount', 'after', $trigger_obj);
 		if(!$trigger_output->toBool())
 		{
 			$oDB->rollback();
@@ -1139,11 +1148,11 @@ class commentController extends comment
 		$output = new BaseObject(0, $success_message);
 		if($point > 0)
 		{
-			$output->add('voted_count', $obj->after_point);
+			$output->add('voted_count', $trigger_obj->after_point);
 		}
 		else
 		{
-			$output->add('blamed_count', $obj->after_point);
+			$output->add('blamed_count', $trigger_obj->after_point);
 		}
 
 		return $output;
