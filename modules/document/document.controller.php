@@ -1140,19 +1140,20 @@ class documentController extends document
 		$oDB->begin();
 
 		// Update the voted count
-		if($point < 0)
+		if($trigger_obj->update_target === 'blamed_count')
 		{
-			$args->blamed_count = $oDocument->get('blamed_count') + $point;
+			$args->blamed_count = $trigger_obj->after_point;
 			$output = executeQuery('document.updateBlamedCount', $args);
 		}
 		else
 		{
-			$args->voted_count = $oDocument->get('voted_count') + $point;
+			$args->voted_count = $trigger_obj->after_point;
 			$output = executeQuery('document.updateVotedCount', $args);
 		}
 		if(!$output->toBool()) return $output;
+
 		// Leave logs
-		$args->point = $point;
+		$args->point = $trigger_obj->point;
 		$output = executeQuery('document.insertDocumentVotedLog', $args);
 		if(!$output->toBool()) return $output;
 

@@ -1116,19 +1116,19 @@ class commentController extends comment
 		$oDB->begin();
 
 		// update the number of votes
-		if($point < 0)
+		if($trigger_obj->update_target === 'blamed_count')
 		{
-			$args->blamed_count = $oComment->get('blamed_count') + $point;
+			$args->blamed_count = $trigger_obj->after_point;
 			$output = executeQuery('comment.updateBlamedCount', $args);
 		}
 		else
 		{
-			$args->voted_count = $oComment->get('voted_count') + $point;
+			$args->voted_count = $trigger_obj->after_point;
 			$output = executeQuery('comment.updateVotedCount', $args);
 		}
 
 		// leave logs
-		$args->point = $point;
+		$args->point = $trigger_obj->point;
 		$output = executeQuery('comment.insertCommentVotedLog', $args);
 
 		// Call a trigger (after)
