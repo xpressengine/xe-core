@@ -1180,7 +1180,7 @@ class documentController extends document
 
 		// Return result
 		$output = new BaseObject();
-		if($point > 0)
+		if($trigger_obj->update_target === 'voted_count')
 		{
 			$output->setMessage('success_voted');
 			$output->add('voted_count', $trigger_obj->after_point);

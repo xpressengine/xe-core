@@ -1146,7 +1146,7 @@ class commentController extends comment
 
 		// Return the result
 		$output = new BaseObject(0, $success_message);
-		if($point > 0)
+		if($trigger_obj->update_target === 'voted_count')
 		{
 			$output->add('voted_count', $trigger_obj->after_point);
 		}
