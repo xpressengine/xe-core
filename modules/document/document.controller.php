@@ -1120,36 +1120,45 @@ class documentController extends document
 			return new BaseObject(-1, $failed_voted);
 		}
 
+		// Call a trigger (before)
+		$trigger_obj = new stdClass;
+		$trigger_obj->member_srl = $oDocument->get('member_srl');
+		$trigger_obj->module_srl = $oDocument->get('module_srl');
+		$trigger_obj->document_srl = $oDocument->get('document_srl');
+		$trigger_obj->update_target = ($point < 0) ? 'blamed_count' : 'voted_count';
+		$trigger_obj->point = $point;
+		$trigger_obj->before_point = ($point < 0) ? $oDocument->get('blamed_count') : $oDocument->get('voted_count');
+		$trigger_obj->after_point = $trigger_obj->before_point + $point;
+		$trigger_output = ModuleHandler::triggerCall('document.updateVotedCount', 'before', $trigger_obj);
+		if(!$trigger_output->toBool())
+		{
+			return $trigger_output;
+		}
+
 		// begin transaction
 		$oDB = DB::getInstance();
 		$oDB->begin();
 
 		// Update the voted count
-		if($point < 0)
+		if($trigger_obj->update_target === 'blamed_count')
 		{
-			$args->blamed_count = $oDocument->get('blamed_count') + $point;
+			$args->blamed_count = $trigger_obj->after_point;
 			$output = executeQuery('document.updateBlamedCount', $args);
 		}
 		else
 		{
-			$args->voted_count = $oDocument->get('voted_count') + $point;
+			$args->voted_count = $trigger_obj->after_point;
 			$output = executeQuery('document.updateVotedCount', $args);
 		}
 		if(!$output->toBool()) return $output;
+
 		// Leave logs
-		$args->point = $point;
+		$args->point = $trigger_obj->point;
 		$output = executeQuery('document.insertDocumentVotedLog', $args);
 		if(!$output->toBool()) return $output;
 
-		$obj = new stdClass;
-		$obj->member_srl = $oDocument->get('member_srl');
-		$obj->module_srl = $oDocument->get('module_srl');
-		$obj->document_srl = $oDocument->get('document_srl');
-		$obj->update_target = ($point < 0) ? 'blamed_count' : 'voted_count';
-		$obj->point = $point;
-		$obj->before_point = ($point < 0) ? $oDocument->get('blamed_count') : $oDocument->get('voted_count');
-		$obj->after_point = ($point < 0) ? $args->blamed_count : $args->voted_count;
-		$trigger_output = ModuleHandler::triggerCall('document.updateVotedCount', 'after', $obj);
+		// Call a trigger (after)
+		$trigger_output = ModuleHandler::triggerCall('document.updateVotedCount', 'after', $trigger_obj);
 		if(!$trigger_output->toBool())
 		{
 			$oDB->rollback();
@@ -1171,15 +1180,15 @@ class documentController extends document
 
 		// Return result
 		$output = new BaseObject();
-		if($point > 0)
+		if($trigger_obj->update_target === 'voted_count')
 		{
 			$output->setMessage('success_voted');
-			$output->add('voted_count', $obj->after_point);
+			$output->add('voted_count', $trigger_obj->after_point);
 		}
 		else
 		{
 			$output->setMessage('success_blamed');
-			$output->add('blamed_count', $obj->after_point);
+			$output->add('blamed_count', $trigger_obj->after_point);
 		}
 		
 		return $output;
