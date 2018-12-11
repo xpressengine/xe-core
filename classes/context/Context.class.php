@@ -489,10 +489,10 @@ class Context
 
 		if(version_compare(PHP_VERSION, '7.0', '>='))
 		{
-			$db_info->master_db["db_type"] = preg_replace('/^mysql(_.+)$/', 'mysqli$1', $db_info->master_db["db_type"]);
+			$db_info->master_db["db_type"] = preg_replace('/^mysql(_.+)?$/', 'mysqli$1', $db_info->master_db["db_type"]);
 			foreach($db_info->slave_db as &$slave_db_info)
 			{
-				$slave_db_info["db_type"] = preg_replace('/^mysql(_.+)$/', 'mysqli$1', $slave_db_info["db_type"]);
+				$slave_db_info["db_type"] = preg_replace('/^mysql(_.+)?$/', 'mysqli$1', $slave_db_info["db_type"]);
 			}
 		}
 
