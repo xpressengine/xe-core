@@ -1847,6 +1847,9 @@ class documentController extends document
 	{
 		// Return if there is no information you need for creating a cache file
 		if(!$module_srl) return false;
+
+		$module_srl = (int)$module_srl;
+
 		// Get module information (to obtain mid)
 		$oModuleModel = getModel('module');
 		$columnList = array('module_srl', 'mid', 'site_srl');
@@ -2238,16 +2241,17 @@ class documentController extends document
 		}
 
 		$type = Context::get('type');
-		$target_module = Context::get('target_module');
+		$target_module = Context::get('target_module_srl');
 		$module_srl = Context::get('module_srl');
 		if($target_module && !$module_srl) $module_srl = $target_module;
-		$category_srl = Context::get('target_category');
-		$message_content = Context::get('message_content');
+		$category_srl = Context::get('target_category_srl');
+		$message_content = strip_tags(Context::get('message_content'));
 		if($message_content) $message_content = nl2br($message_content);
 
 		$cart = Context::get('cart');
-		if(!is_array($cart)) $document_srl_list = explode('|@|', $cart);
-		else $document_srl_list = $cart;
+		$document_srl_list = (!is_array($cart)) ? explode('|@|', $cart) : $cart;
+
+		array_map(function ($value) { return (int)$value; }, $document_srl_list);
 
 		$document_srl_count = count($document_srl_list);
 
