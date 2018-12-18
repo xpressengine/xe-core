@@ -228,6 +228,9 @@ class editorModel extends editor
 		// Set Height
 		if(!$option->height) $editor_height = 300;
 		else $editor_height = $option->height;
+		if(Mobile::isFromMobilePhone()) {
+			$editor_height = 150;
+		}
 		// Skin Setting
 		$skin = $option->skin;
 		if(!$skin) $skin = 'ckeditor';
@@ -594,20 +597,38 @@ class editorModel extends editor
 		return $cache_file;
 	}
 
+	function getComponentListCacheKey($filter_enabled = true, $site_srl = 0)
+	{
+		$cache_key = array();
+		$cache_key[] = Context::getLangType();
+		if ($filter_enabled) $cache_key[] = 'filter';
+		if ($site_srl) $cache_key[] = $site_srl;
+
+		return 'editor.component_list:' . implode('.', $cache_key);
+	}
+
 	/**
 	 * @brief Return a component list (DB Information included)
 	 */
 	function getComponentList($filter_enabled = true, $site_srl=0, $from_db=false)
 	{
-		$cache_file = $this->getCacheFile(false, $site_srl);
-		if($from_db || !file_exists($cache_file))
-		{
-			$oEditorController = getController('editor');
-			$oEditorController->makeCache(false, $site_srl);
+		$component_list = false;
+
+		$oCacheHandler = CacheHandler::getInstance('object', null, true);
+		if($oCacheHandler->isSupport()) {
+			$cache_key = $this->getComponentListCacheKey(false, $site_srl);
+			$component_list = $oCacheHandler->get($cache_key);
 		}
 
-		if(!file_exists($cache_file)) return;
-		include($cache_file);
+		if($from_db || $component_list === false)
+		{
+			$oEditorController = getController('editor');
+			$component_list = $oEditorController->makeCache(false, $site_srl);
+
+		}
+
+		if(!$component_list) return array();
+
 		$logged_info = Context::get('logged_info');
 		if($logged_info && is_array($logged_info->group_list))
 		{

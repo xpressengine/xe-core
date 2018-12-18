@@ -87,17 +87,25 @@
 					});
 				}
 
-				var bodyClass = e.editor.config.bodyClass.split(' ');
-				bodyClass.push(default_ckeconfig.bodyClass);
-				bodyClass = arrayUnique(bodyClass);
-				instance.config.bodyClass = bodyClass.join(' ');
+				if(e.editor.config.bodyClass) {
+					var bodyClass = e.editor.config.bodyClass.split(' ');
+					bodyClass.push(default_ckeconfig.bodyClass);
+					bodyClass = arrayUnique(bodyClass);
+					instance.config.bodyClass = bodyClass.join(' ');
+				}
 
 				if(opts.loadXeComponent) {
 					var extraPlugins = e.editor.config.extraPlugins.split(',');
-
 					extraPlugins.push('xe_component');
 					extraPlugins = arrayUnique(extraPlugins);
 					instance.config.extraPlugins = extraPlugins.join(',');
+				}
+
+				if(CKEDITOR.env.iOS && e.editor.config.removePlugins) {
+					var removePlugins = e.editor.config.removePlugins.split(',');
+					removePlugins.push('enterkey');
+					removePlugins = arrayUnique(removePlugins);
+					instance.config.removePlugins = removePlugins.join(',');
 				}
 
 				if(!opts.enableToolbar) instance.config.toolbar = [];

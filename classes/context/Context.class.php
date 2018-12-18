@@ -336,6 +336,7 @@ class Context
 		{
 			$oSessionModel = getModel('session');
 			$oSessionController = getController('session');
+			ini_set('session.serialize_handler', 'php');
 			session_set_save_handler(
 					array(&$oSessionController, 'open'), array(&$oSessionController, 'close'), array(&$oSessionModel, 'read'), array(&$oSessionController, 'write'), array(&$oSessionController, 'destroy'), array(&$oSessionController, 'gc')
 			);
@@ -485,6 +486,15 @@ class Context
 
 			$oInstallController = getController('install');
 			$oInstallController->makeConfigFile();
+		}
+
+		if(version_compare(PHP_VERSION, '7.0', '>='))
+		{
+			$db_info->master_db["db_type"] = preg_replace('/^mysql(_.+)?$/', 'mysqli$1', $db_info->master_db["db_type"]);
+			foreach($db_info->slave_db as &$slave_db_info)
+			{
+				$slave_db_info["db_type"] = preg_replace('/^mysql(_.+)?$/', 'mysqli$1', $slave_db_info["db_type"]);
+			}
 		}
 
 		if(!$db_info->use_prepared_statements)
@@ -1287,6 +1297,7 @@ class Context
 
 		foreach($params as $key => $val)
 		{
+			$key = htmlentities($key);
 			$this->set($key, $this->_filterRequestVar($key, $val, 1), TRUE);
 		}
 	}

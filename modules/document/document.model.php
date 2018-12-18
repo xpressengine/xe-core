@@ -747,6 +747,8 @@ class documentModel extends document
 	 */
 	function getCategoryList($module_srl, $columnList = array())
 	{
+		$module_srl = (int)$module_srl;
+
 		// Category of the target module file swollen
 		$filename = sprintf("%sfiles/cache/document_category/%s.php", _XE_PATH_, $module_srl);
 		// If the target file to the cache file regeneration category
