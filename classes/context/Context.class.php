@@ -1297,6 +1297,7 @@ class Context
 
 		foreach($params as $key => $val)
 		{
+			$key = htmlentities($key);
 			$this->set($key, $this->_filterRequestVar($key, $val, 1), TRUE);
 		}
 	}
