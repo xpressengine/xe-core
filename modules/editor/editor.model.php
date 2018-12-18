@@ -228,6 +228,9 @@ class editorModel extends editor
 		// Set Height
 		if(!$option->height) $editor_height = 300;
 		else $editor_height = $option->height;
+		if(Mobile::isFromMobilePhone()) {
+			$editor_height = 150;
+		}
 		// Skin Setting
 		$skin = $option->skin;
 		if(!$skin) $skin = 'ckeditor';
