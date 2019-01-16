@@ -39,7 +39,7 @@ class PageHandler extends Handler
 		$this->point = 0;
 
 		$first_page = $cur_page - (int) ($page_count / 2);
-		if($first_page < 1)
+		if($first_page < 1 || $total_page <= $page_count)
 		{
 			$first_page = 1;
 		}
