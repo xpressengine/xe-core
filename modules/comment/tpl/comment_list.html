@@ -11,13 +11,13 @@ xe.lang.msg_empty_search_keyword = '{$lang->msg_empty_search_keyword}';
 		<caption>
 			<a href="{getUrl('','module','admin','act','dispCommentAdminList','Y')}" class="active"|cond="$search_keyword == ''">{$lang->all}<block cond="$search_keyword == ''">({number_format($total_count)})</block></a>
 			<i>|</i>
-			<a href="{getUrl('search_target','is_secret','search_keyword','N')}" class="active"|cond="$search_target == 'is_secret' && $search_keyword == 'N'">{$secret_name_list['N']}<block cond="$search_target == 'is_secret' && $search_keyword == 'N'">({number_format($total_count)})</block></a>
+			<a href="{getUrl('search_target','is_secret','search_keyword','N','page','')}" class="active"|cond="$search_target == 'is_secret' && $search_keyword == 'N'">{$secret_name_list['N']}<block cond="$search_target == 'is_secret' && $search_keyword == 'N'">({number_format($total_count)})</block></a>
 			<i>|</i>
-			<a href="{getUrl('search_target','is_secret','search_keyword','Y')}" class="active"|cond="$search_target == 'is_secret' && $search_keyword == 'Y'">{$secret_name_list['Y']}<block cond="$search_target == 'is_secret' && $search_keyword == 'Y'">({number_format($total_count)})</block></a>
+			<a href="{getUrl('search_target','is_secret','search_keyword','Y','page','')}" class="active"|cond="$search_target == 'is_secret' && $search_keyword == 'Y'">{$secret_name_list['Y']}<block cond="$search_target == 'is_secret' && $search_keyword == 'Y'">({number_format($total_count)})</block></a>
 			<i>|</i>
-			<a href="{getUrl('search_target','is_published','search_keyword','N')}" class="active"|cond="$search_target == 'is_published' && $search_keyword == 'N'">{$lang->published_name_list['N']}<block cond="$search_target == 'is_published' && $search_keyword == 'N'">({number_format($total_count)})</block></a>
+			<a href="{getUrl('search_target','is_published','search_keyword','N','page','')}" class="active"|cond="$search_target == 'is_published' && $search_keyword == 'N'">{$lang->published_name_list['N']}<block cond="$search_target == 'is_published' && $search_keyword == 'N'">({number_format($total_count)})</block></a>
 			<i>|</i>
-			<a href="{getUrl('search_target','is_published','search_keyword','Y')}" class="active"|cond="$search_target == 'is_published' && $search_keyword == 'Y'">{$lang->published_name_list['Y']}<block cond="$search_target == 'is_published' && $search_keyword == 'Y'">({number_format($total_count)})</block></a>
+			<a href="{getUrl('search_target','is_published','search_keyword','Y','page','')}" class="active"|cond="$search_target == 'is_published' && $search_keyword == 'Y'">{$lang->published_name_list['Y']}<block cond="$search_target == 'is_published' && $search_keyword == 'Y'">({number_format($total_count)})</block></a>
 			<i>|</i>
 			<a href="{getUrl('', 'module', 'admin', 'act','dispCommentAdminDeclared')}">{$lang->cmd_declared_list}</a>
 			<i cond="$search_target == 'ipaddress'">|</i>
@@ -56,7 +56,7 @@ xe.lang.msg_empty_search_keyword = '{$lang->msg_empty_search_keyword}';
 				<td class="nowr"><a href="#popup_menu_area" class="member_{$val->member_srl}">{$val->getNickName()}</a></td>
 				<td class="nowr">{number_format($val->get('voted_count'))}/{number_format($val->get('blamed_count'))}</td>
 				<td class="nowr">{(zdate($val->regdate,"Y-m-d\nH:i:s"))}</td>
-				<td class="nowr"><a href="{getUrl('search_target','ipaddress','search_keyword',$val->ipaddress)}">{$val->ipaddress}</a></td>
+				<td class="nowr"><a href="{getUrl('search_target','ipaddress','search_keyword',$val->ipaddress,'page','')}">{$val->ipaddress}</a></td>
 				<td class="nowr"><!--@if($val->isSecret())-->{$secret_name_list['Y']}<!--@else-->{$secret_name_list['N']}<!--@end--></td>
 				<td class="nowr"><!--@if($val->status)-->{$lang->published_name_list['Y']}<!--@else-->{$lang->published_name_list['N']}<!--@end--></td>
 				<td><input type="checkbox" name="cart" value="{$val->comment_srl}" /></td>
