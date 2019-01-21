@@ -364,7 +364,24 @@ class documentModel extends document
 		$args = new stdClass();
 		$args->module_srl = $obj->module_srl;
 		$args->category_srl= $obj->category_srl;
-		$output = executeQueryArray('document.getNoticeList', $args, $columnList);
+		
+		unset($obj->use_alternate_output);
+		$obj->columnList = $columnList;
+		$output = ModuleHandler::triggerCall('document.getNoticeList', 'before', $obj);
+		if($output instanceof BaseObject && !$output->toBool())
+		{
+			return $output;
+		}
+		$use_alternate_output = (isset($obj->use_alternate_output) && $obj->use_alternate_output instanceof BaseObject);
+		if ($use_alternate_output) 
+		{
+			$output = $obj->use_alternate_output;
+			unset($obj->use_alternate_output);
+		}
+		else {
+			$output = executeQueryArray('document.getNoticeList', $args, $columnList);
+		}
+		
 		if(!$output->toBool()||!$output->data) return;
 
 		foreach($output->data as $key => $val)
