@@ -3019,6 +3019,13 @@ class memberController extends member
 			$cache_key = $oCacheHandler->getGroupKey('member', $object_key);
 			$oCacheHandler->delete($cache_key);
 		}
+		
+		unset($GLOBALS['__member_info__'][$member_srl]);
+		unset($GLOBALS['__member_info__']['profile_image'][$member_srl]);
+		unset($GLOBALS['__member_info__']['image_name'][$member_srl]);
+		unset($GLOBALS['__member_info__']['image_mark'][$member_srl]);
+		unset($GLOBALS['__member_info__']['group_image_mark'][$member_srl]);
+		unset($GLOBALS['__member_info__']['signature'][$member_srl]);
 	}
 }
 /* End of file member.controller.php */
