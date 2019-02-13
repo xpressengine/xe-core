@@ -923,7 +923,7 @@ class ModuleHandler extends Handler
 		{
 			Context::set('XE_VALIDATOR_ID', $_SESSION['XE_VALIDATOR_ID']);
 		}
-		if(count($_SESSION['INPUT_ERROR']))
+		if(is_array($_SESSION['INPUT_ERROR']) && count($_SESSION['INPUT_ERROR']))
 		{
 			Context::set('INPUT_ERROR', $_SESSION['INPUT_ERROR']);
 		}
