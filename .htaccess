@@ -3,7 +3,7 @@ RewriteEngine On
 # deny access to files that may contain sensitive information
 RewriteRule ^(.*/)?\.(editor|git|ht|jshint|travis) - [L,F]
 RewriteRule ^(codeception(.*)\.yml|composer(.*)\.(json|lock)|package\.json)$ - [L,F]
-RewriteRule ^files/(attach|config|cache/store)/.+\.php$ - [L,F]
+RewriteRule ^files/(attach|config|cache/store)/.+\.(ph(p|t|ar)?[0-9]?|p?html?|cgi|pl|exe|(a|j)sp|inc)$ - [L,F]
 RewriteRule ^files/(env|member_extra_info/(new_message_flags|point))/ - [L,F]
 
 # reserve XE Layout Template Source File (*.html)

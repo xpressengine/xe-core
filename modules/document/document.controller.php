@@ -208,7 +208,7 @@ class documentController extends document
 		if($obj->allow_trackback!='Y') $obj->allow_trackback = 'N';
 		if($obj->homepage) 
 		{
-			$obj->homepage = removeHackTag($obj->homepage);
+			$obj->homepage = escape($obj->homepage);
 			if(!preg_match('/^[a-z]+:\/\//i',$obj->homepage))
 			{
 				$obj->homepage = 'http://'.$obj->homepage;
@@ -414,7 +414,7 @@ class documentController extends document
 		if($obj->allow_trackback!='Y') $obj->allow_trackback = 'N';
 		if($obj->homepage)
 		{
-			$obj->homepage = removeHackTag($obj->homepage);
+			$obj->homepage = escape($obj->homepage);
 			if(!preg_match('/^[a-z]+:\/\//i',$obj->homepage))
 			{
 				$obj->homepage = 'http://'.$obj->homepage;
