@@ -345,7 +345,7 @@ class documentItem extends BaseObject
 
 		if(strncasecmp('http://', $url, 7) !== 0 && strncasecmp('https://', $url, 8) !== 0)  $url = 'http://' . $url;
 
-		return $url;
+		return escape($url, false);
 	}
 
 	function getMemberSrl()

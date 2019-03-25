@@ -1276,7 +1276,11 @@ class moduleController extends module
 			$path = $oModuleModel->getModuleFileBoxPath($vars->module_filebox_srl);
 			FileHandler::makeDir($path);
 
-			$save_filename = sprintf('%s%s.%s',$path, $vars->module_filebox_srl, $ext);
+			$random = new Password();
+			$ext = explode($vars->addfile['name'], '.');
+			$ext = strtolower(array_pop($ext));
+
+			$save_filename = sprintf('%s%s.%s', $path, $random->createSecureSalt(32, 'hex'), $ext);
 			$tmp = $vars->addfile['tmp_name'];
 
 			// Check uploaded file
@@ -1287,7 +1291,7 @@ class moduleController extends module
 				return false;
 			}
 
-			$args->fileextension = strtolower(substr(strrchr($vars->addfile['name'],'.'),1));
+			$args->fileextension = $ext;
 			$args->filename = $save_filename;
 			$args->filesize = $vars->addfile['size'];
 		}
@@ -1313,7 +1317,11 @@ class moduleController extends module
 		$oModuleModel = getModel('module');
 		$path = $oModuleModel->getModuleFileBoxPath($vars->module_filebox_srl);
 		FileHandler::makeDir($path);
-		$save_filename = sprintf('%s%s.%s',$path, $vars->module_filebox_srl, $vars->ext);
+		$random = new Password();
+		$ext = explode($vars->addfile['name'], '.');
+		$ext = strtolower(array_pop($ext));
+
+		$save_filename = sprintf('%s%s.%s',$path, $random->createSecureSalt(32, 'hex'), $vars->ext);
 		$tmp = $vars->addfile['tmp_name'];
 
 		// Check uploaded file

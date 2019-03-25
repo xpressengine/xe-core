@@ -1162,10 +1162,10 @@ function blockWidgetCode($content)
  * @param string $file Taget file path
  * @return bool
  */
-function checkUploadedFile($file)
+function checkUploadedFile($file, $filename = null)
 {
 	require_once(_XE_PATH_ . 'classes/security/UploadFileFilter.class.php');
-	return UploadFileFilter::check($file);
+	return UploadFileFilter::check($file, $filename);
 }
 
 /**

@@ -279,7 +279,7 @@ class commentController extends comment
 
 			if($obj->homepage)
 			{
-				$obj->homepage = removeHackTag($obj->homepage);
+				$obj->homepage = escape($obj->homepage, false);
 				if(!preg_match('/^[a-z]+:\/\//i',$obj->homepage))
 				{
 					$obj->homepage = 'http://'.$obj->homepage;
@@ -692,7 +692,7 @@ class commentController extends comment
 
 		if($obj->homepage) 
 		{
-			$obj->homepage = removeHackTag($obj->homepage);
+			$obj->homepage = escape($obj->homepage);
 			if(!preg_match('/^[a-z]+:\/\//i',$obj->homepage))
 			{
 				$obj->homepage = 'http://'.$obj->homepage;

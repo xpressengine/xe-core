@@ -1493,13 +1493,15 @@ class Context
 		foreach($_FILES as $key => $val)
 		{
 			$tmp_name = $val['tmp_name'];
+
 			if(!is_array($tmp_name))
 			{
 				if(!UploadFileFilter::check($tmp_name, $val['name']))
 				{
+					unset($_FILES[$key]);
 					continue;
 				}
-				$val['name'] = htmlspecialchars($val['name'], ENT_COMPAT | ENT_HTML401, 'UTF-8', FALSE);
+				$val['name'] = escape($val['name'], FALSE);
 				$this->set($key, $val, TRUE);
 				$this->is_uploaded = TRUE;
 			}
