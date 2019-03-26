@@ -209,7 +209,7 @@ class ExtraItem
 				{
 					$value = 'http://' . $value;
 				}
-				return escpe($value, false);
+				return escape($value, false);
 
 			case 'tel' :
 				if(is_array($value))
@@ -228,7 +228,7 @@ class ExtraItem
 				$values = array_values($values);
 				for($i = 0, $c = count($values); $i < $c; $i++)
 				{
-					$values[$i] = trim(escpe($values[$i], false));
+					$values[$i] = trim(escape($values[$i], false));
 				}
 				return $values;
 
