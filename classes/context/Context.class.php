@@ -1408,6 +1408,8 @@ class Context
 		$result = array();
 		foreach($val as $k => $v)
 		{
+			$k = escape($k);
+
 			if($remove_hack && !is_array($v)) {
 				if(stripos($v, '<script') || stripos($v, 'lt;script') || stripos($v, '%3Cscript'))
 				{
@@ -1416,7 +1418,6 @@ class Context
 				}
 			}
 
-			$k = htmlentities($k);
 			if($key === 'page' || $key === 'cpage' || substr_compare($key, 'srl', -3) === 0)
 			{
 				$result[$k] = !preg_match('/^[0-9,]+$/', $v) ? (int) $v : $v;
