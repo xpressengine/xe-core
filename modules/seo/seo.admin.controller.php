@@ -11,6 +11,7 @@ class seoAdminController extends seo
 		if ($vars->setting_section == 'general') {
 			// 기본 설정
 			$config->enable = ($vars->enable === 'Y') ? 'Y' : 'N';
+			$config->link_nofollow = $vars->link_nofollow;
 			$config->use_optimize_title = $vars->use_optimize_title;
 			$config->site_name = $vars->site_name;
 			$config->site_slogan = $vars->site_slogan;

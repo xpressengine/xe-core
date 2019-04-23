@@ -27,6 +27,7 @@ class seo extends ModuleObject
 
 		if (!$config) $config = new stdClass;
 		if (!$config->enable) $config->enable = 'Y';
+		if (!$config->link_nofollow) $config->link_nofollow = 'N';
 		if (!$config->use_optimize_title) $config->use_optimize_title = 'N';
 		if (!$config->ga_except_admin) $config->ga_except_admin = 'N';
 		if (!$config->ga_track_subdomain) $config->ga_track_subdomain = 'N';

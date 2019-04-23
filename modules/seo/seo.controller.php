@@ -221,6 +221,22 @@ class seoController extends seo
 		$this->applySEO();
 
 		if ($config->use_optimize_title == 'Y') Context::setBrowserTitle($piece->title);
+
+		if($config->link_nofollow == 'Y') {
+			$temp_output = (string)$output_content;
+			$temp_output = preg_replace_callback('!<\!--BeforeComment\([0-9]+,[0-9]+\)-->(.+?)<\!--AfterComment\([0-9]+,[0-9]+\)-->!is', array($this, 'replaceCommentHyperlink'), $temp_output);
+			$output_content = $temp_output;
+		}
+	}
+
+	private function replaceCommentHyperlink($matches)
+	{
+		return preg_replace_callback('!<a((?:\s(?:href|target|rel)=(?:"|\')?[^"\']+(?:"|\')?)+)>(.+?)<\/a>!is', array($this, '_addNofollow'), $matches[0]);
+	}
+
+	private function _addNofollow($matches)
+	{
+		return '<a' . preg_replace('!\srel=(?:"|\')?([^"\']+)(?:"|\')?!is', '', $matches[1]) . ' rel="nofollow">' . $matches[2] . '</a>';
 	}
 
 	function triggerAfterFileDeleteFile($data)
