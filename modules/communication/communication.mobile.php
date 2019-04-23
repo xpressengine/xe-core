@@ -178,7 +178,24 @@ class communicationMobile extends communicationView
 			return $this->stop('msg_invalid_request');
 		}
 
+		$oEditorModel = getModel('editor');
+		$option = new stdClass();
+		$option->primary_key_name = 'receiver_srl';
+		$option->content_key_name = 'new_content';
+		$option->allow_fileupload = FALSE;
+		$option->enable_autosave = FALSE;
+		$option->enable_default_component = TRUE;
+		$option->enable_component = FALSE;
+		$option->resizable = FALSE;
+		$option->disable_html = TRUE;
+		$option->height = 150;
+		$option->skin = $this->communication_config->editor_skin;
+		$option->colorset = $this->communication_config->editor_colorset;
+		$editor = $oEditorModel->getEditor($logged_info->member_srl, $option);
+
 		Context::set('receiver_info', $receiver_info);
+		Context::set('editor', $editor);
+
 		$this->setTemplateFile('send_message');
 	}
 

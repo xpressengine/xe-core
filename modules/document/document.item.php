@@ -345,7 +345,7 @@ class documentItem extends BaseObject
 
 		if(strncasecmp('http://', $url, 7) !== 0 && strncasecmp('https://', $url, 8) !== 0)  $url = 'http://' . $url;
 
-		return $url;
+		return escape($url, false);
 	}
 
 	function getMemberSrl()
@@ -780,6 +780,9 @@ class documentItem extends BaseObject
 		Context::set($cpageStr, $output->page_navigation->cur_page);
 		Context::set('cpage', $output->page_navigation->cur_page);
 		if($output->total_page>1) $this->comment_page_navigation = $output->page_navigation;
+
+		// Call trigger (after)
+		$output = ModuleHandler::triggerCall('document.getComments', 'after', $comment_list);
 
 		return $comment_list;
 	}

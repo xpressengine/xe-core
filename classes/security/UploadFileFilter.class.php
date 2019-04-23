@@ -28,17 +28,30 @@ class UploadFileFilter
 
 		// Get the extension.
 		$ext = $filename ? strtolower(substr(strrchr($filename, '.'), 1)) : '';
+		$mimetype = self::_getMimetype($file, true);
 
 		// Check the first 4KB of the file for possible XML content.
 		$fp = fopen($file, 'rb');
 		$first4kb = fread($fp, 4096);
-		$is_xml = preg_match('/<(?:\?xml|!DOCTYPE|html|head|body|meta|script|svg)\b/i', $first4kb);
+		$is_xml = preg_match('/<(?:\?xml|svg)\b/i', $first4kb);
 
 		// Check SVG files.
 		if (($ext === 'svg' || $is_xml) && !self::_checkSVG($fp, 0, $filesize))
 		{
 			fclose($fp);
 			return false;
+		}
+
+		if (in_array($ext, array('jpg', 'jpeg', 'png', 'gif')) && $mimetype !== 'image')
+		{
+			return false;
+		}
+
+		if (preg_match("/(wm[va]|mpe?g|avi|flv|mp[1-4]|as[fx]|wav|midi?|moo?v|qt|r[am]{1,2}|m4v)$/i", $file))
+		{
+			if ($mimetype !== 'video' && $mimetype !== 'audio') {
+				return false;
+			}
 		}
 
 		// Check XML files.
@@ -49,7 +62,7 @@ class UploadFileFilter
 		}
 
 		// Check HTML files.
-		if (($ext === 'html' || $ext === 'shtml' || $ext === 'xhtml' || $ext === 'phtml' || $is_xml) && !self::_checkHTML($fp, 0, $filesize))
+		if (($ext === 'html' || $ext === 'shtml' || $ext === 'xhtml' || $ext === 'phtml') && !$is_xml && !self::_checkHTML($fp, 0, $filesize))
 		{
 			fclose($fp);
 			return false;
@@ -146,6 +159,20 @@ class UploadFileFilter
 			fseek($fp, min($to, $position += $block_size));
 		}
 		return false;
+	}
+
+	protected static function _getMimetype($file, $trim_subtype = false)
+	{
+		$finfo = finfo_open(FILEINFO_MIME_TYPE);
+		$mime_type = finfo_file($finfo, $file);
+		finfo_close($finfo);
+
+		if($trim_subtype)
+		{
+			$mime_type = strstr($mime_type, '/', true);
+		}
+
+		return $mime_type;
 	}
 }
 /* End of file : UploadFileFilter.class.php */

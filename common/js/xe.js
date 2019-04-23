@@ -3230,16 +3230,15 @@ var show_waiting_message = true;
 	};
 
 	function beforeUnloadHandler(){
-		return '';
 	}
 
 	$(function($){
 		$(document)
 			.ajaxStart(function(){
-				$(window).bind('beforeunload', beforeUnloadHandler);
+				$(window).on('beforeunload', beforeUnloadHandler);
 			})
 			.bind('ajaxStop cancel_confirm', function(){
-				$(window).unbind('beforeunload', beforeUnloadHandler);
+				$(window).off('beforeunload', beforeUnloadHandler);
 			});
 	});
 

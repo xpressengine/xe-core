@@ -13,10 +13,20 @@ function completeDeleteMessage(ret_obj) {
 	location.href = current_url.setQuery('message_srl','');
 }
 
-function mergeContents()
-{
-	var $form = jQuery('#fo_comm');
-	var content = $form.find('textarea[name=new_content]').val() + $form.find('input[name=source_content]').val();
-	$form.find('input[name=content]').val(content);
-	$form.submit();
+function mergeContents(data) {
+	var $form = jQuery('#fo_comm')
+	var editotSequence = data.editor_sequence || null
+	var content = ''
+	var sourceContent = $form.find('input[name=source_content]').val() || ''
+
+	if (editotSequence) {
+		content = editorGetContent(editotSequence)
+	} else {
+		content = $form.find('[name=new_content]').val()
+	}
+
+	content += sourceContent
+
+	$form.find('input[name=content]').val(content)
+	$form.submit()
 }

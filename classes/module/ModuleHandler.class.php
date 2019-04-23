@@ -218,6 +218,8 @@ class ModuleHandler extends Handler
 		$dbInfo = Context::getDBInfo();
 		$defaultUrlInfo = parse_url($dbInfo->default_url);
 		$defaultHost = $defaultUrlInfo['host'];
+		$siteDomain = parse_url($site_module_info->domain);
+		$siteDomain = $siteDomain['host'];
 
 		foreach($urls as $url)
 		{
@@ -226,12 +228,16 @@ class ModuleHandler extends Handler
 				continue;
 			}
 
-			$urlInfo = parse_url($url);
+			$urlInfo = parse_url(urldecode($url));
 			$host = $urlInfo['host'];
 
-			if($host && ($host != $defaultHost && $host != $site_module_info->domain))
+			if($host && ($host !== $defaultHost && ($host !== $site_module_info->domain || $host !== $siteDomain)))
 			{
 				throw new Exception('msg_default_url_is_null');
+			}
+			else if((!$host || !$urlInfo || !$urlInfo['scheme']) && preg_match("/^(https?|[a-z0-9])+\:(\/)*/i", urldecode($url)))
+			{
+				throw new exception('msg_invalid_request');
 			}
 		}
 

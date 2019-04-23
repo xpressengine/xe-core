@@ -9,13 +9,11 @@
 </div>
 <form ruleset="sendMessage" action="./" method="post" class="ff" id="fo_comm">
 	<input type="hidden" name="module" value="communication" />
-	<input type="hidden" name="is_popup" value="Y" />
 	<input type="hidden" name="act" value="procCommunicationSendMessage" />
 	<input type="hidden" name="receiver_srl" value="{$receiver_info->member_srl}" />
-	<input type="hidden" name="source_content" value="{$source_message->content}" />
+	<input type="hidden" name="source_content" value="{$source_message->content|autoescape}" />
 	<input type="hidden" name="content" value="" />
 	<input type="hidden" name="xe_validator_id" value="modules/communication/m.skins/default/send_message/1" />
-	<input type="hidden" name="success_return_url" value="{getNotEncodedUrl('','act', 'dispCommunicationSendMessage', 'receiver_srl', $receiver_info->member_srl)}" />
 	<ul>
 		<li>
 			<span class="memberInfo">{$receiver_info->nick_name}</span>
@@ -29,7 +27,8 @@
 		</li>
 		<li>
 			<label for="message_content">{$lang->content}</label>
-			<textarea id="message_content" name="new_content" rows="8" style="width:100%"></textarea>
+			<textarea name="new_content" style="display:none;"></textarea>
+			{$editor}
 		</li>
 		<li>
 			<span id="message_send_mail"><input type="checkbox" value="Y" name="send_mail" /> {$lang->cmd_send_mail}</span>
@@ -37,7 +36,7 @@
 	</ul>
 	<div class="bna">
 		<span class="fl"><a href="{getUrl('act', 'dispCommunicationMessages')}" class="bn white">{$lang->cmd_back}</a></span>
-		<span class="fr"><button type="button" class="bn white" onClick="mergeContents();">{$lang->cmd_send_message}</button></span>
+		<span class="fr"><button type="button" class="bn white" onClick="mergeContents({editor_sequence: '{$editor_sequence}'});">{$lang->cmd_send_message}</button></span>
 	</div>
 </form>
 

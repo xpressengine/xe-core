@@ -336,6 +336,7 @@ class Context
 		{
 			$oSessionModel = getModel('session');
 			$oSessionController = getController('session');
+			ini_set('session.serialize_handler', 'php');
 			session_set_save_handler(
 					array(&$oSessionController, 'open'), array(&$oSessionController, 'close'), array(&$oSessionModel, 'read'), array(&$oSessionController, 'write'), array(&$oSessionController, 'destroy'), array(&$oSessionController, 'gc')
 			);
@@ -485,6 +486,15 @@ class Context
 
 			$oInstallController = getController('install');
 			$oInstallController->makeConfigFile();
+		}
+
+		if(version_compare(PHP_VERSION, '7.0', '>='))
+		{
+			$db_info->master_db["db_type"] = preg_replace('/^mysql(_.+)?$/', 'mysqli$1', $db_info->master_db["db_type"]);
+			foreach($db_info->slave_db as &$slave_db_info)
+			{
+				$slave_db_info["db_type"] = preg_replace('/^mysql(_.+)?$/', 'mysqli$1', $slave_db_info["db_type"]);
+			}
 		}
 
 		if(!$db_info->use_prepared_statements)
@@ -1287,6 +1297,7 @@ class Context
 
 		foreach($params as $key => $val)
 		{
+			$key = htmlentities($key);
 			$this->set($key, $this->_filterRequestVar($key, $val, 1), TRUE);
 		}
 	}
@@ -1397,6 +1408,8 @@ class Context
 		$result = array();
 		foreach($val as $k => $v)
 		{
+			$k = escape($k);
+
 			if($remove_hack && !is_array($v)) {
 				if(stripos($v, '<script') || stripos($v, 'lt;script') || stripos($v, '%3Cscript'))
 				{
@@ -1405,7 +1418,6 @@ class Context
 				}
 			}
 
-			$k = htmlentities($k);
 			if($key === 'page' || $key === 'cpage' || substr_compare($key, 'srl', -3) === 0)
 			{
 				$result[$k] = !preg_match('/^[0-9,]+$/', $v) ? (int) $v : $v;
@@ -1482,13 +1494,15 @@ class Context
 		foreach($_FILES as $key => $val)
 		{
 			$tmp_name = $val['tmp_name'];
+
 			if(!is_array($tmp_name))
 			{
 				if(!UploadFileFilter::check($tmp_name, $val['name']))
 				{
+					unset($_FILES[$key]);
 					continue;
 				}
-				$val['name'] = htmlspecialchars($val['name'], ENT_COMPAT | ENT_HTML401, 'UTF-8', FALSE);
+				$val['name'] = escape($val['name'], FALSE);
 				$this->set($key, $val, TRUE);
 				$this->is_uploaded = TRUE;
 			}

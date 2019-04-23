@@ -754,7 +754,7 @@ class mcontentItem extends BaseObject
 
 	function getLink()
 	{
-		return $this->get('url');
+		return escape($this->get('url'), false);
 	}
 	function getModuleSrl()
 	{
