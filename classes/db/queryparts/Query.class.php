@@ -161,7 +161,7 @@ class Query extends BaseObject
 
 	function setColumns($columns)
 	{
-		if(!isset($columns) || !is_array($columns) || count($columns) === 0)
+		if(!isset($columns) || (is_array($columns) && count($columns) === 0))
 		{
 			$this->columns = array(new StarExpression());
 			return;
@@ -177,7 +177,7 @@ class Query extends BaseObject
 
 	function setTables($tables)
 	{
-		if(!isset($tables) || !is_array($tables) || count($tables) === 0)
+		if(!isset($tables) || (is_array($tables) && count($tables) === 0))
 		{
 			$this->setError(TRUE);
 			$this->setMessage("You must provide at least one table for the query.");
@@ -200,7 +200,7 @@ class Query extends BaseObject
 	function setConditions($conditions)
 	{
 		$this->conditions = array();
-		if(!isset($conditions) || !is_array($conditions) || count($conditions) === 0)
+		if(!isset($conditions) || (is_array($conditions) && count($conditions) === 0))
 		{
 			return;
 		}
@@ -220,7 +220,7 @@ class Query extends BaseObject
 
 	function setGroups($groups)
 	{
-		if(!isset($groups) || count($groups) === 0)
+		if(!isset($groups) || (is_array($groups) && count($groups) === 0))
 		{
 			return;
 		}
@@ -234,7 +234,7 @@ class Query extends BaseObject
 
 	function setOrder($order)
 	{
-		if(!isset($order) || count($order) === 0)
+		if(!isset($order) || (is_array($order) && count($order) === 0))
 		{
 			return;
 		}
@@ -587,7 +587,7 @@ class Query extends BaseObject
 	function getLimitString()
 	{
 		$limit = '';
-		if(is_array($this->limit) && count($this->limit) > 0)
+		if($this->limit)
 		{
 			$limit = '';
 			$limit .= $this->limit->toString();
