@@ -1380,11 +1380,18 @@ if(typeof window.XE == "undefined") {
 		if(typeof target == 'undefined') target = '_blank';
 		if(typeof attribute == 'undefined') attribute = '';
 
+		var win;
+
 		if(!window.XE.isSameHost(url)) {
-			window.blankshield.open(url, target, attribute);
+			win = window.open(url, target, attribute);
+			if(win) {
+				win.opener = null;
+			}
 		} else {
-			var win = window.open(url, target, attribute);
-			win.focus();
+			win = window.open(url, target, attribute);
+			if(win) {
+				win.focus();
+			}
 			if(target != '_blank') winopen_list[target] = win;
 		}
 
@@ -2028,7 +2035,8 @@ if(typeof window.XE == "undefined") {
 				win = window.open(href, name, features);
 				if(win) win.focus();
 			} else {
-				window.blankshield.open(href, name, features);
+				win = window.open(href, name, features);
+				if(win) win.opener = null;
 			}
 
 			event.preventDefault();
