@@ -219,7 +219,10 @@ if(typeof window.XE == "undefined") {
 					$this.attr('rel', 'noopener');
 				}
 
-					blankshield.open(href);
+				var child = window.open(href);
+				if(child) {
+					child.opener = null;
+				}
 				e.preventDefault();
 			}
 		});
