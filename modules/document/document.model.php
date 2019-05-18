@@ -329,7 +329,7 @@ class documentModel extends document
 				$oDocument = null;
 				$oDocument = new documentItem();
 				$oDocument->setAttribute($attribute, false);
-				if($is_admin) $oDocument->setGrant();
+				if(Context::get('logged_info')->is_admin == 'Y') $oDocument->setGrant();
 				$GLOBALS['XE_DOCUMENT_LIST'][$document_srl] = $oDocument;
 			}
 
