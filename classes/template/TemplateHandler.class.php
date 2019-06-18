@@ -899,6 +899,8 @@ class TemplateHandler
 							}
 							break;
 						case 'css':
+						case 'scss':
+						case 'less':
 							if($doUnload)
 							{
 								$result = "Context::unloadFile('{$attr['target']}','{$attr['targetie']}','{$attr['media']}');";
