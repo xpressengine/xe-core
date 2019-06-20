@@ -52,7 +52,7 @@ var default_url = "{Context::getDefaultUrl()|noescape}";
 {Context::getHtmlHeader()|noescape}
 </head>
 
-<body{Context::getBodyClass()}>
+<body{Context::getBodyClass()|noescape}>
 {Context::getBodyHeader()|noescape}
 {$content|noescape}
 {Context::getHtmlFooter()|noescape}
