@@ -1,4 +1,4 @@
-<query id="getSiteInfoByDomain" action="select">
+<query id="getSiteByDomain" action="select">
     <tables>
         <table name="sites" />
     </tables>

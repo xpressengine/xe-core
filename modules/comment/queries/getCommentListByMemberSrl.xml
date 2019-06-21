@@ -1,4 +1,4 @@
-<query id="getCommentList" action="select">
+<query id="getCommentListByMemberSrl" action="select">
 	<tables>
 		<table name="comments" />
 	</tables>

@@ -1,4 +1,4 @@
-<query id="getFilesCount" action="select">
+<query id="getFilesCountByGroupValid" action="select">
     <tables>
         <table name="files" />
     </tables>

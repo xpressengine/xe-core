@@ -1,4 +1,4 @@
-<query id="getChildMenuCount" action="select">
+<query id="getChildCategory" action="select">
     <tables>
         <table name="menu_item" />
     </tables>
