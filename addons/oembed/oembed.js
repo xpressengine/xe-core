@@ -1,7 +1,7 @@
 /**
  * @file oembed.js
  * @brief javascript code for oembed addon
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  */
 (function($){
 	var protocol_re = '(https?|ftp|news|telnet|irc|mms)://';

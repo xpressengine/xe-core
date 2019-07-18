@@ -1,11 +1,11 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xpressengine.com> */
 
 /**
  * set the include of the class file and other environment configurations
  *
  * @file   config/config.inc.php
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  */
 if(version_compare(PHP_VERSION, '5.4.0', '<'))
 {

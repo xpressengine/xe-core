@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xpressengine.com> */
 
 /**
  * File containing the XE 1.5 XmlQueryParserClass

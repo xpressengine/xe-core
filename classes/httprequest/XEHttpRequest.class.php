@@ -1,11 +1,11 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xpressengine.com> */
 
 /**
  * - HttpRequest class
  * - a class that is designed to be used for sending out HTTP request to an external server and retrieving response
  * - Connection: keep-alive is not supported
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @package /classes/httprequest
  * @version 0.1
  * @deprecated

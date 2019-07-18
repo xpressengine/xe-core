@@ -121,7 +121,7 @@ GASCRIPT;
 		// Naver Analytics
 		if ($config->na_id && !($config->na_except_admin == 'Y' && $logged_info->is_admin == 'Y')) {
 			$na_script = <<< NASCRIPT
-<!-- NAVER Analytics -->
+<!-- XEHub Analytics -->
 <script src="//wcs.naver.net/wcslog.js"></script>
 <script>if(!wcs_add){var wcs_add={};};wcs_add['wa']='{$config->na_id}';if(typeof wcs_do!="undefined"){wcs_do();}</script>
 NASCRIPT;

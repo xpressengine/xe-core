@@ -1,6 +1,6 @@
 /**
  * @file js_app.js
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @brief XE JavaScript Application Framework (JAF)
  * @namespace xe
  * @update 20100701

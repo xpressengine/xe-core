@@ -1,6 +1,6 @@
 /**
  * @file   common/js/xml_js_filter.js
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @brief  xml filter (validator) plugin
  *
  * A rule is a method validate one field.

@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xpressengine.com> */
 
 include _XE_PATH_ . 'classes/security/phphtmlparser/src/htmlparser.inc';
 

@@ -1,12 +1,12 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xpressengine.com> */
 
 require_once(_XE_PATH_ . 'modules/autoinstall/autoinstall.lib.php');
 
 /**
  * autoinstall module admin controller class
  *
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  */
 class autoinstallAdminController extends autoinstall
 {

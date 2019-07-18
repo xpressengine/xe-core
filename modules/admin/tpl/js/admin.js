@@ -1,4 +1,4 @@
-/* NAVER (developers@xpressengine.com) */
+/* XEHub (developers@xpressengine.com) */
 // install module
 function doInstallModule(module) {
 	var params = [];

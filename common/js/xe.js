@@ -1,4 +1,4 @@
-/*! Copyright (C) NAVER <http://www.navercorp.com> */
+/*! Copyright (C) XEHub <https://www.xpressengine.com> */
 /**!
  * @concat modernizr.js + common.js + js_app.js + xml2json.js + xml_handler.js + xml_js_filter.js
  * @brief XE Common JavaScript
@@ -2894,7 +2894,7 @@ var show_waiting_message = true;
 
 	/**
 	* @brief exec_xml
-	* @author NAVER (developers@xpressengine.com)
+	* @author XEHub (developers@xpressengine.com)
 	**/
 	$.exec_xml = window.exec_xml = function(module, act, params, callback_func, response_tags, callback_func_arg, fo_obj) {
 		var xml_path = request_uri+"index.php";

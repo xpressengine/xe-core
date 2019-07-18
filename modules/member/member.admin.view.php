@@ -1,8 +1,8 @@
 <?php	
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xpressengine.com> */
 /**
  * @class  memberAdminView
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * member module's admin view class
  */
 class memberAdminView extends member
