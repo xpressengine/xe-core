@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) XEHub <https://www.xpressengine.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 /**
  * filter class traslate xml content into javascript code

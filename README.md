@@ -37,7 +37,7 @@ https://www.xpressengine.com/contributors
 * Official site (Korean) : https://www.xpressengine.com
 
 ## License
-Copyright 2014 XEHub. <https://www.xpressengine.com>
+Copyright 2014 XEHub. <https://www.xehub.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public

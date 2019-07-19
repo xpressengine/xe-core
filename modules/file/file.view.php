@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) XEHub <https://www.xpressengine.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 /**
  * The view class file module
  * @author XEHub (developers@xpressengine.com)

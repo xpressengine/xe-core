@@ -1,4 +1,4 @@
-/* Copyright (C) XEHub <https://www.xpressengine.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 jQuery(function ($) {
 	$("#api_handler").on("change", function (e) {

@@ -1,4 +1,4 @@
-/*! Copyright (C) XEHub <https://www.xpressengine.com> */
+/*! Copyright (C) XEHub <https://www.xehub.io> */
 /**!
  * @concat modernizr.js + common.js + js_app.js + xml2json.js + xml_handler.js + xml_js_filter.js
  * @brief XE Common JavaScript

@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) XEHub <https://www.xpressengine.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 /**
  * set the include of the class file and other environment configurations

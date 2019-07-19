@@ -1,6 +1,6 @@
 #!/bin/env php
 <?php
-/* Copyright (C) XEHub <https://www.xpressengine.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 /**
 	vi:set ts=4:
 	@file

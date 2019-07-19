@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) XEHub <https://www.xpressengine.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 /**
  * @class  menuAdminModel
  * @brief admin model class of the menu module

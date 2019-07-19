@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) XEHub <https://www.xpressengine.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 /**
  * Every modules inherits from BaseObject class. It includes error, message, and other variables for communicatin purpose.

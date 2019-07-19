@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) XEHub <https://www.xpressengine.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 define('FOLLOW_REQUEST_SSL', 0);
 define('ENFORCE_SSL', 1);

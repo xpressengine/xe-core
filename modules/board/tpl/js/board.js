@@ -1,6 +1,6 @@
 /**
  * @file   modules/board/js/board.js
- * @author NHN (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @brief  board 모듈의 javascript
  **/
 

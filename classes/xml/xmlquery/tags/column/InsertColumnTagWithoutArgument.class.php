@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) XEHub <https://www.xpressengine.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 /**
  * Models the &lt;column&gt; tag inside an XML Query file whose action is 'insert-select'
