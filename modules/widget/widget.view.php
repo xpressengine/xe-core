@@ -38,7 +38,7 @@ class widgetView extends widget
 	function dispWidgetSkinInfo()
 	{
 		$widget = Context::get('selected_widget');
-		$skin = Context::get('skin');
+		$skin = urlencode(preg_replace("/[^a-z0-9-_]+/i", '', Context::get('skin')));
 
 		$path = sprintf('./widgets/%s/', $widget);
 		// Wanted widget is selected information
