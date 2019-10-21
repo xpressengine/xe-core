@@ -390,6 +390,8 @@ class installController extends install
 		// 5. Check gd(imagecreatefromgif function)
 		if(function_exists('imagecreatefromgif')) $checklist['gd'] = true;
 		else $checklist['gd'] = false;
+		// extension: fileinfo
+		$checklist['fileinfo'] = extension_loaded('fileinfo');
 		// 6. Check DB
 		if(DB::getEnableList()) $checklist['db'] = true;
 		else $checklist['db'] = false;

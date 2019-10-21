@@ -42,15 +42,18 @@ class UploadFileFilter
 			return false;
 		}
 
-		if (in_array($ext, array('jpg', 'jpeg', 'png', 'gif')) && $mimetype !== 'image')
+		if($mimetype)
 		{
-			return false;
-		}
-
-		if (preg_match("/(wm[va]|mpe?g|avi|flv|mp[1-4]|as[fx]|wav|midi?|moo?v|qt|r[am]{1,2}|m4v)$/i", $file))
-		{
-			if ($mimetype !== 'video' && $mimetype !== 'audio') {
+			if (in_array($ext, array('jpg', 'jpeg', 'png', 'gif')) && $mimetype !== 'image')
+			{
 				return false;
+			}
+	
+			if (preg_match("/(wm[va]|mpe?g|avi|flv|mp[1-4]|as[fx]|wav|midi?|moo?v|qt|r[am]{1,2}|m4v)$/i", $file))
+			{
+				if ($mimetype !== 'video' && $mimetype !== 'audio') {
+					return false;
+				}
 			}
 		}
 
@@ -163,6 +166,11 @@ class UploadFileFilter
 
 	protected static function _getMimetype($file, $trim_subtype = false)
 	{
+		if(!extension_loaded('fileinfo'))
+		{
+			return false;
+		}
+
 		$finfo = finfo_open(FILEINFO_MIME_TYPE);
 		$mime_type = finfo_file($finfo, $file);
 		finfo_close($finfo);
