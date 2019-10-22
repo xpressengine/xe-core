@@ -176,6 +176,8 @@ if(typeof window.XE == "undefined") {
 
 	/* jQuery(document).ready() */
 	(function($, global){
+		var isChrome = window.navigator.userAgent.indexOf('Chrome/') > -1;
+
 		$(function() {
 		$('a[target]').each(function() {
 			var $this = $(this);
@@ -219,11 +221,10 @@ if(typeof window.XE == "undefined") {
 					$this.attr('rel', 'noopener');
 				}
 
-				var child = window.open(href);
-				if(child) {
-					child.opener = null;
+				if(!isChrome) {
+					e.preventDefault();
+					blankshield.open(href);
 				}
-				e.preventDefault();
 			}
 		});
 
