@@ -346,7 +346,7 @@ class widgetModel extends widget
 						$buff[] = sprintf('$widgetStyle_info->extra_var->%s->allow_multiple = %s;', $id, var_export($var->attrs->allow_multiple, true));
 					}
 					$buff[] = sprintf('$widgetStyle_info->extra_var->%s->value = $vars->%s;', $id, $id);
-					$buff[] = sprintf('$widgetStyle_info->extra_var->%s->description = %s;', $id, str_replace('"','\"',$var->description->body));
+					$buff[] = sprintf('$widgetStyle_info->extra_var->%s->description = %s;', $id, var_export($var->description->body, true));
 
 					if($var->options)
 					{
