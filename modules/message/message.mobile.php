@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 require_once(_XE_PATH_.'modules/message/message.view.php');
 class messageMobile extends messageView
 {

@@ -1,10 +1,10 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 /**
  * trashAdminView class
  * Admin view class of the trash module
  *
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @package /modules/trash
  * @version 0.1
  */

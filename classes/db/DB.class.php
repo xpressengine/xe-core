@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 /**
  * - DB parent class
@@ -9,7 +9,7 @@
  * - query xml has unique query id, and will be created in module
  * - queryid = module_name.query_name
  *
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @package /classes/db
  * @version 0.1
  */

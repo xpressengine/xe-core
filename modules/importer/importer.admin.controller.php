@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 @set_time_limit(0);
 require_once('./modules/importer/extract.class.php');
 
@@ -7,7 +7,7 @@ require_once('./modules/importer/extract.class.php');
  * importerAdminController class
  * admin controller class of importer module
  *
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @package /modules/importer
  * @version 0.1
  */

@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 /**
  * Class to use MySQL DBMS
@@ -7,7 +7,7 @@
  *
  * Does not use prepared statements, since mysql driver does not support them
  *
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @package /classes/db
  * @version 0.1
  */

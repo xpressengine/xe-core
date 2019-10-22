@@ -7,34 +7,34 @@
     <title xml:lang="tr">XE Resmi Hareketli Yerleşim Düzeni</title>
     <description xml:lang="ko">
         XE 공식 모바일 레이아웃입니다.
-        NAVER (developers@xpressengine.com) 
+        XEHub (developers@xpressengine.com) 
     </description>
     <description xml:lang="en">
         This layout is the Official website layout for XE.
-        NAVER (developers@xpressengine.com) 
+        XEHub (developers@xpressengine.com) 
     </description>
     <description xml:lang="zh-CN">
         官方移动版布局。
-        NAVER (developers@xpressengine.com) 
+        XEHub (developers@xpressengine.com) 
     </description>
     <description xml:lang="zh-TW">
         XE Mobile 官方網站版面。
-        NAVER (developers@xpressengine.com) 
+        XEHub (developers@xpressengine.com) 
     </description>
     <description xml:lang="tr">
         Bu yerleşim düzeni, XE Resmi website yerleşim düzenidir.
-        NAVER (developers@xpressengine.com) 
+        XEHub (developers@xpressengine.com) 
     </description>
     <version>1.7</version>
     <date>2013-11-27</date>
-    <link>http://xpressengine.com/</link>
+    <link>https://www.xehub.io/</link>
 
-    <author email_address="developers@xpressengine.com" link="http://xpressengine.com/">
-        <name xml:lang="ko">NAVER</name>
-        <name xml:lang="en">NAVER</name>
-		<name xml:lang="zh-CN">NAVER</name>
-        <name xml:lang="zh-TW">NAVER</name>
-        <name xml:lang="tr">NAVER</name>
+    <author email_address="developers@xpressengine.com" link="https://www.xehub.io">
+        <name xml:lang="ko">XEHub</name>
+        <name xml:lang="en">XEHub</name>
+		<name xml:lang="zh-CN">XEHub</name>
+        <name xml:lang="zh-TW">XEHub</name>
+        <name xml:lang="tr">XEHub</name>
     </author>
     <extra_vars>
     	<var name="index_title" type="text">

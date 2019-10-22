@@ -1,12 +1,12 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 require_once(_XE_PATH_.'modules/trash/model/TrashVO.php');
 
 /**
  * trash class
  * trash the module's high class
  *
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @package /modules/trash
  * @version 0.1
  */

@@ -1,9 +1,9 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 /**
  * @class  boardView
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @brief  board module View class
  **/
 class boardView extends board
@@ -482,8 +482,10 @@ class boardView extends board
 		$args->page_count = $this->page_count;
 
 		// get the search target and keyword
-		$args->search_target = Context::get('search_target');
-		$args->search_keyword = Context::get('search_keyword');
+		if($this->grant->view) {
+			$args->search_target = Context::get('search_target');
+			$args->search_keyword = Context::get('search_keyword');
+		}
 
 		$search_option = Context::get('search_option');
 		if($search_option==FALSE)

@@ -1,11 +1,11 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 if(!defined("__XE__")) exit();
 
 /**
  * @file captcha.addon.php
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @brief Captcha for a particular action
  * English alphabets and voice verification added
  * */

@@ -146,13 +146,13 @@ class TemplateHandlerTest extends \Codeception\TestCase\Test
             ),
             // relative path1
             array(
-                '<img src="http://naver.com/naver.gif"><input type="image" src="../local.gif" />',
-                '?><img src="http://naver.com/naver.gif"><input type="image" src="/xe/tests/unit/classes/local.gif" />'
+                '<img src="http://xpressengine.com/xe.gif"><input type="image" src="../local.gif" />',
+                '?><img src="http://xpressengine.com/xe.gif"><input type="image" src="/xe/tests/unit/classes/local.gif" />'
             ),
             // relative path2
             array(
-                '<img src="http://naver.com/naver.gif"><input type="image" src="../../../dir/local.gif" />',
-                '?><img src="http://naver.com/naver.gif"><input type="image" src="/xe/tests/dir/local.gif" />'
+                '<img src="http://xpressengine.com/xe.gif"><input type="image" src="../../../dir/local.gif" />',
+                '?><img src="http://xpressengine.com/xe.gif"><input type="image" src="/xe/tests/dir/local.gif" />'
             ),
             // error case
             array(

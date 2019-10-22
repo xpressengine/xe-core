@@ -1,6 +1,6 @@
 /**
  * @brief XE Colorpicker
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  **/
 jQuery(function($){
 

@@ -1,9 +1,9 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 /**
  * @class ModuleObject
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * base class of ModuleHandler
  * */
 class ModuleObject extends BaseObject

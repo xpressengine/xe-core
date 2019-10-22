@@ -159,7 +159,7 @@ var calledArgs = null;
 				var $div = $('<div style="z-index:1000;position:absolute; width:310px;' + top_left + ' background:#fff; border:3px solid #ccc;">'+
 					'<form method="post" action="">'+
 						'<div style="position:relative; margin:25px 20px 15px 20px">'+
-							'<img src="about:blank" id="captcha_image" alt="CAPTCHA" width="240" height="50" style="display:block; width:240px; height:50px; border:1px solid #b0b0b0" />'+
+							'<img id="captcha_image" alt="CAPTCHA" width="240" height="50" style="display:block; width:240px; height:50px; border:1px solid #b0b0b0" />'+
 							'<button type="button" class="reload" title="" style="position:absolute; top:0; left:245px; width:25px; height:25px; padding:0; overflow:visible; border:1px solid #575757; background:#747474 url('+request_uri + 'addons/captcha/img/icon.gif) no-repeat center 5px;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px; cursor:pointer;box-shadow:0 0 3px #444 inset;-moz-box-shadow:0 0 3px #444 inset;-webkit-box-shadow:0 0 3px #444 inset;"></button>'+
 							'<button type="button" class="play" title="" style="position:absolute; top:27px; left:245px; width:25px; height:25px; padding:0; overflow:visible; border:1px solid #575757; background:#747474 url('+request_uri + 'addons/captcha/img/icon.gif) no-repeat center -20px;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px; cursor:pointer;box-shadow:0 0 3px #444 inset;-moz-box-shadow:0 0 3px #444 inset;-webkit-box-shadow:0 0 3px #444 inset;"></button>'+
 						'</div>'+

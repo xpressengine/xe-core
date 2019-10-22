@@ -1,8 +1,8 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 /**
  * @class  editorModel
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @brief model class of the editor odule
  */
 class editorModel extends editor
@@ -141,14 +141,14 @@ class editorModel extends editor
 		$component_info->license_link = $xml_doc->component->license->attrs->link;
 
 		$buff = '<?php if(!defined("__XE__")) exit(); ';
-		$buff .= sprintf('$xml_info->component_name = "%s";', $component_info->component_name);
-		$buff .= sprintf('$xml_info->title = "%s";', $component_info->title);
-		$buff .= sprintf('$xml_info->description = "%s";', $component_info->description);
-		$buff .= sprintf('$xml_info->version = "%s";', $component_info->version);
-		$buff .= sprintf('$xml_info->date = "%s";', $component_info->date);
-		$buff .= sprintf('$xml_info->homepage = "%s";', $component_info->homepage);
-		$buff .= sprintf('$xml_info->license = "%s";', $component_info->license);
-		$buff .= sprintf('$xml_info->license_link = "%s";', $component_info->license_link);
+		$buff .= sprintf('$xml_info->component_name = %s;', var_export($component_info->component_name, true));
+		$buff .= sprintf('$xml_info->title = %s;', var_export($component_info->title, true));
+		$buff .= sprintf('$xml_info->description = %s;', var_export($component_info->description, true));
+		$buff .= sprintf('$xml_info->version = %s;', var_export($component_info->version, true));
+		$buff .= sprintf('$xml_info->date = %s;', var_export($component_info->date, true));
+		$buff .= sprintf('$xml_info->homepage = %s;', var_export($component_info->homepage, true));
+		$buff .= sprintf('$xml_info->license = %s;', var_export($component_info->license, true));
+		$buff .= sprintf('$xml_info->license_link = %s;', var_export($component_info->license_link, true));
 
 		// Author information
 		if(!is_array($xml_doc->component->author)) $author_list[] = $xml_doc->component->author;
@@ -156,9 +156,9 @@ class editorModel extends editor
 
 		for($i=0; $i < count($author_list); $i++)
 		{
-			$buff .= sprintf('$xml_info->author['.$i.']->name = "%s";', $author_list[$i]->name->body);
-			$buff .= sprintf('$xml_info->author['.$i.']->email_address = "%s";', $author_list[$i]->attrs->email_address);
-			$buff .= sprintf('$xml_info->author['.$i.']->homepage = "%s";', $author_list[$i]->attrs->link);
+			$buff .= sprintf('$xml_info->author['.$i.']->name = %s;', var_export($author_list[$i]->name->body, true));
+			$buff .= sprintf('$xml_info->author['.$i.']->email_address = %s;', var_export($author_list[$i]->attrs->email_address, true));
+			$buff .= sprintf('$xml_info->author['.$i.']->homepage = %s;', var_export($author_list[$i]->attrs->link, true));
 		}
 
 		// List extra variables (text type only in the editor component)
@@ -175,8 +175,8 @@ class editorModel extends editor
 				$xml_info->extra_vars->{$key}->title = $title;
 				$xml_info->extra_vars->{$key}->description = $description;
 
-				$buff .= sprintf('$xml_info->extra_vars->%s->%s = "%s";', $key, 'title', $title);
-				$buff .= sprintf('$xml_info->extra_vars->%s->%s = "%s";', $key, 'description', $description);
+				$buff .= sprintf('$xml_info->extra_vars->%s->%s = %s;', $key, 'title', var_export($title));
+				$buff .= sprintf('$xml_info->extra_vars->%s->%s = %s;', $key, 'description', var_export($description));
 			}
 		}
 

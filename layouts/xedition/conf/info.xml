@@ -4,8 +4,8 @@
 	<description xml:lang="ko">XE 1.8 기본 테마</description>
 	<version>1.9</version>
 	<date>2015-06-25</date>
-	<author email_address="developer@xpressengine.com" link="https://www.xpressengine.com/">
-		<name xml:lang="ko">NAVER</name>
+	<author email_address="developer@xpressengine.com" link="https://www.xehub.io">
+		<name xml:lang="ko">XEHub</name>
 	</author>
 	<menus>
 		<menu name="GNB" maxdepth="3" default="true">

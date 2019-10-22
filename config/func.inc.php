@@ -1,10 +1,10 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 /**
  * function library files for convenience
  *
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  */
 if(!defined('__XE__'))
 {
@@ -1783,7 +1783,7 @@ function reload($isOpener = FALSE)
 
 function isDefinedLangCode($str)
 {
-	return preg_match('!\$user_lang->([a-z0-9\_]+)$!is', trim($str));
+	return preg_match('!^\$user_lang->([a-z0-9\_]+)$!is', trim($str));
 }
 
 /**

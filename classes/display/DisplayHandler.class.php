@@ -1,9 +1,9 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 /**
  * @class DisplayHandler
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  *  DisplayHandler is responsible for displaying the execution result. \n
  *  Depending on the request type, it can display either HTML or XML content.\n
  *  Xml content is simple xml presentation of variables in oModule while html content

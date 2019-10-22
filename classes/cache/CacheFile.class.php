@@ -1,12 +1,12 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 /**
  * Cache class for file
  *
  * Filedisk Cache Handler
  *
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  */
 class CacheFile extends CacheBase
 {
@@ -49,7 +49,8 @@ class CacheFile extends CacheBase
 	 */
 	function getCacheFileName($key)
 	{
-		return $this->cache_dir . str_replace(':', DIRECTORY_SEPARATOR, $key) . '.php';
+		$path_string = preg_replace("/[^a-z0-9-_:\.]+/i", '_', $key);
+		return $this->cache_dir . str_replace(':', DIRECTORY_SEPARATOR, $path_string) . '.php';
 	}
 
 	/**

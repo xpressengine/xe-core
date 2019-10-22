@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 define('_XE_PACKAGE_', 'XE');
 define('_XE_LOCATION_', 'ko');

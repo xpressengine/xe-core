@@ -1,7 +1,7 @@
 /**
  * @file  slide_gallery.js
  * @brief Slideshow type image gallery plugin
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  **/
 
 (function($){

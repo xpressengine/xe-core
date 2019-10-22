@@ -8,7 +8,7 @@
  * Forked by Andrew Mee to Provide a slightly diffent kind of embedding
  * experience
  * 
- * Modified : NAVER Corp.
+ * Modified : XEHub
  */
 (function ($) {
 	$.fn.oembed = function (url, options, embedAction) {

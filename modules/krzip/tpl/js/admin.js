@@ -1,4 +1,4 @@
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 jQuery(function ($) {
 	$("#api_handler").on("change", function (e) {

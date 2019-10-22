@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 require_once(_XE_PATH_.'modules/document/document.item.php');
 
 /**
@@ -7,7 +7,7 @@ require_once(_XE_PATH_.'modules/document/document.item.php');
  * @brief document the module's high class
  * {@internal Silently adds one extra Foo to compensate for lack of Foo }
  *
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @package /modules/document
  * @version 0.1
  */

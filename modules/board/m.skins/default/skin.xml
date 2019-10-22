@@ -6,26 +6,22 @@
     <title xml:lang="tr">XE Temel Pano Dış Görünümü</title>
     <description xml:lang="ko">
         XE 게시판의 기본 스킨입니다.
-        NHN (developers@xpressengine.com) 
     </description>
     <description xml:lang="en">
         This is the basic board skin of XE.
-        NHN (developers@xpressengine.com) 
     </description>
     <description xml:lang="tr">
         XE'nin temel pano dış görünümüdür
-        NHN (developers@xpressengine.com) 
     </description>
     <description xml:lang="zh-TW">
         XE 基本討論板面板。
-        NHN (developers@xpressengine.com) 
     </description>
     <version>0.1</version>
     <date>2010-06-10</date>
-    <author email_address="developers@xpressengine.com" link="http://www.xpressengine.com/">
-        <name xml:lang="ko">NAVER</name>
-        <name xml:lang="en">NAVER</name>
-        <name xml:lang="zh-TW">NAVER</name>
-        <name xml:lang="tr">NAVER</name>
+    <author email_address="developers@xpressengine.com" link="https://www.xehub.io">
+        <name xml:lang="ko">XEHub</name>
+        <name xml:lang="en">XEHub</name>
+        <name xml:lang="zh-TW">XEHub</name>
+        <name xml:lang="tr">XEHub</name>
     </author>
 </skin>

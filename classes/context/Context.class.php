@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 define('FOLLOW_REQUEST_SSL', 0);
 define('ENFORCE_SSL', 1);
@@ -9,7 +9,7 @@ define('RELEASE_SSL', 2);
  * Manages Context such as request arguments/environment variables
  * It has dual method structure, easy-to use methods which can be called as self::methodname(),and methods called with static object.
  *
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  */
 class Context
 {
@@ -1409,25 +1409,25 @@ class Context
 		foreach($val as $k => $v)
 		{
 			$k = escape($k);
+			$result[$k] = $v;
 
-			if($remove_hack && !is_array($v)) {
-				if(stripos($v, '<script') || stripos($v, 'lt;script') || stripos($v, '%3Cscript'))
+			if($remove_hack && !is_array($result[$k])) {
+				if(stripos($result[$k], '<script') || stripos($result[$k], 'lt;script') || stripos($result[$k], '%3Cscript'))
 				{
-					$result[$k] = escape($v);
-					continue;
+					$result[$k] = escape($result[$k]);
 				}
 			}
 
 			if($key === 'page' || $key === 'cpage' || substr_compare($key, 'srl', -3) === 0)
 			{
-				$result[$k] = !preg_match('/^[0-9,]+$/', $v) ? (int) $v : $v;
+				$result[$k] = !preg_match('/^[0-9,]+$/', $result[$k]) ? (int) $result[$k] : $result[$k];
 			}
 			elseif(in_array($key, array('mid','search_keyword','search_target','xe_validator_id'))) {
-				$result[$k] = escape($v, false);
+				$result[$k] = escape($result[$k], false);
 			}
 			elseif($key === 'vid')
 			{
-				$result[$k] = urlencode($v);
+				$result[$k] = urlencode($result[$k]);
 			}
 			elseif(stripos($key, 'XE_VALIDATOR', 0) === 0)
 			{
@@ -1435,7 +1435,26 @@ class Context
 			}
 			else
 			{
-				$result[$k] = $v;
+				if(in_array($k, array(
+					'act',
+					'addon',
+					'cur_mid',
+					'full_browse',
+					'http_status_message',
+					'l',
+					'layout',
+					'm',
+					'mid',
+					'module',
+					'selected_addon',
+					'selected_layout',
+					'selected_widget',
+					'widget',
+					'widgetstyle',
+				)))
+				{
+					$result[$k] = urlencode(preg_replace("/[^a-z0-9-_]+/i", '', $result[$k]));
+				}
 
 				if($do_stripslashes && version_compare(PHP_VERSION, '5.4.0', '<') && get_magic_quotes_gpc())
 				{

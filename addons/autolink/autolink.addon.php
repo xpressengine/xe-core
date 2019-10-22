@@ -1,12 +1,12 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 if(!defined('__XE__'))
 	exit();
 
 /**
  * @file autolink.addon.php
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @brief Automatic link add-on
  */
 if($called_position == 'after_module_proc' && Context::getResponseMethod() == "HTML")

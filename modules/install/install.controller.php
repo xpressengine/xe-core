@@ -1,8 +1,8 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 /**
  * @class  installController
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @brief install module of the Controller class
  */
 class installController extends install
@@ -390,6 +390,8 @@ class installController extends install
 		// 5. Check gd(imagecreatefromgif function)
 		if(function_exists('imagecreatefromgif')) $checklist['gd'] = true;
 		else $checklist['gd'] = false;
+		// extension: fileinfo
+		$checklist['fileinfo'] = extension_loaded('fileinfo');
 		// 6. Check DB
 		if(DB::getEnableList()) $checklist['db'] = true;
 		else $checklist['db'] = false;

@@ -1,12 +1,12 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 if(!defined('__XE__'))
 	exit();
 
 /**
  * @file point.addon.php
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @brief Icon-on-point level
  *
  * Display point level icon before user name when point system is enabled.

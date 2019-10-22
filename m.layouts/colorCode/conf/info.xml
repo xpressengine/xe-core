@@ -7,33 +7,33 @@
     <title xml:lang="zh-TW">XE Color Code 移动布局</title>
     <description xml:lang="ko">
         XE Color Code 모바일 레이아웃입니다.
-        NAVER (developers@xpressengine.com) 
+        XEHub (developers@xpressengine.com) 
     </description>
     <description xml:lang="jp">
         XEの Color Code レイアウトです。
-        제작 : NAVER
+        제작 : XEHub
     </description>
     <description xml:lang="en">
         This layout is the XE Color Code Mobile layout for XE.
-        NAVER (developers@xpressengine.com) 
+        XEHub (developers@xpressengine.com) 
     </description>
     <description xml:lang="zh-CN">
         XE Color Code 移动布局
-        NAVER (developers@xpressengine.com) 
+        XEHub (developers@xpressengine.com) 
     </description>
     <description xml:lang="zh-TW">
         XE Color Code 官方網站版面。
-        NAVER (developers@xpressengine.com) 
+        XEHub (developers@xpressengine.com) 
     </description>
     <version>1.7</version>
     <date>2013-11-27</date>
-    <link>http://xpressengine.com/</link>
+    <link>https://www.xehub.io</link>
 
-    <author email_address="developers@xpressengine.com" link="http://xpressengine.com/">
-        <name xml:lang="ko">NAVER</name>
-        <name xml:lang="en">NAVER</name>
-        <name xml:lang="zh-CN">NAVER</name>
-        <name xml:lang="zh-TW">NAVER</name>
+    <author email_address="developers@xpressengine.com" link="https://www.xehub.io">
+        <name xml:lang="ko">XEHub</name>
+        <name xml:lang="en">XEHub</name>
+        <name xml:lang="zh-CN">XEHub</name>
+        <name xml:lang="zh-TW">XEHub</name>
     </author>
     <extra_vars>
         <var name="index_title" type="text">
@@ -93,17 +93,17 @@
             </options>
             <options value="ngreena">
                 <title xml:lang="ko">네이버 그린 A</title>
-                <title xml:lang="jp">NAVER グリーン A</title>
+                <title xml:lang="jp">XEHub グリーン A</title>
                 <title xml:lang="en">nGreenA</title>
-                <title xml:lang="zh-CN">NAVER绿 A</title>
-                <title xml:lang="zh-TW">NAVER綠 A</title>
+                <title xml:lang="zh-CN">XEHub绿 A</title>
+                <title xml:lang="zh-TW">XEHub綠 A</title>
             </options>
             <options value="ngreenb">
                 <title xml:lang="ko">네이버 그린 B</title>
-                <title xml:lang="jp">NAVER グリーン B</title>
+                <title xml:lang="jp">XEHub グリーン B</title>
                 <title xml:lang="en">nGreenB</title>
-                <title xml:lang="zh-CN">NAVER绿 B</title>
-                <title xml:lang="zh-TW">NAVER綠 B</title>
+                <title xml:lang="zh-CN">XEHub绿 B</title>
+                <title xml:lang="zh-TW">XEHub綠 B</title>
             </options>
         </var>
         <var name="logo_image" type="image">

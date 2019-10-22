@@ -1,12 +1,12 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 require_once _XE_PATH_ . "libs/phpmailer/phpmailer.php";
 
 /**
  * Mailing class for XpressEngine
  *
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  */
 class Mail extends PHPMailer
 {

@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 /**
  * filter class traslate xml content into javascript code
@@ -42,7 +42,7 @@
  *  tag = key : name of variable that will contain the result of the execution
  * }</pre>
  * @class XmlJsFilter
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @package /classes/xml
  * @version 0.2
  */

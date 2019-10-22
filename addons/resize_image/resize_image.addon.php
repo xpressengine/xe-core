@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 if(!defined('__XE__'))
 {
@@ -8,7 +8,7 @@ if(!defined('__XE__'))
 
 /**
  * @file resize_image.addon.php
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @brief Add-on to resize images in the body
  */
 if($called_position == 'after_module_proc' && Context::getResponseMethod() == "HTML" && !isCrawler())

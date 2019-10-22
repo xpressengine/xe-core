@@ -1,10 +1,10 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 /**
  * Cache class for memcache
  *
- * @author NAVER (developer@xpressengine.com)
+ * @author XEHub (developer@xpressengine.com)
  */
 class CacheMemcache extends CacheBase
 {

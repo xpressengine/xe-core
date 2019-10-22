@@ -1,11 +1,11 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 /**
  * set the include of the class file and other environment configurations
  *
  * @file   config/config.inc.php
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  */
 if(version_compare(PHP_VERSION, '5.4.0', '<'))
 {
@@ -29,7 +29,7 @@ define('__ZBXE__', __XE__);
 /**
  * Display XE's full version.
  */
-define('__XE_VERSION__', '1.11.5');
+define('__XE_VERSION__', '1.11.6');
 define('__XE_VERSION_ALPHA__', (stripos(__XE_VERSION__, 'alpha') !== false));
 define('__XE_VERSION_BETA__', (stripos(__XE_VERSION__, 'beta') !== false));
 define('__XE_VERSION_RC__', (stripos(__XE_VERSION__, 'rc') !== false));

@@ -27,20 +27,18 @@ XpressEngine은 여러분들의 개발 참여를 기다립니다.
 * MYSQL version 4.1 or greater (But recommend MYSQL >= 5.x) , MS-SQL, CUBRID
 * XML Library
 * GD Library
+* Fileinfo Extension
 * ICONV
 * session.auto_start = Off (php.ini)
 
-## Maintainers
-@akasima @bnu @jhyeon1010 @khongchi @findstar @ngleader
-
 ## Contributors
-http://www.xpressengine.com/contributors
+https://www.xpressengine.com/contributors
 
 ## Support
-* Official site (Korean) : http://www.xpressengine.com/
+* Official site (Korean) : https://www.xpressengine.com
 
 ## License
-Copyright 2014 NAVER Corp. <http://www.navercorp.com>
+Copyright 2014 XEHub. <https://www.xehub.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public

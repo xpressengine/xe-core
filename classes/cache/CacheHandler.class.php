@@ -1,10 +1,10 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 /**
  * CacheHandler
  *
- * @author NAVER (developer@xpressengine.com)
+ * @author XEHub (developer@xpressengine.com)
  */
 class CacheHandler extends Handler
 {
@@ -281,7 +281,7 @@ class CacheHandler extends Handler
 /**
  * Base class of Cache
  *
- * @author NAVER (developer@xpressengine.com)
+ * @author XEHub (developer@xpressengine.com)
  */
 class CacheBase
 {

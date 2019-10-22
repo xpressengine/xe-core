@@ -1,11 +1,11 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 require_once(_XE_PATH_ . 'libs/ftp.class.php');
 
 /**
  * Module installer
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  */
 class ModuleInstaller
 {
@@ -315,7 +315,7 @@ class ModuleInstaller
 
 /**
  * Module installer for SFTP
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  */
 class SFTPModuleInstaller extends ModuleInstaller
 {
@@ -490,7 +490,7 @@ class SFTPModuleInstaller extends ModuleInstaller
 
 /**
  * Module installer for PHP FTP
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  */
 class PHPFTPModuleInstaller extends ModuleInstaller
 {
@@ -710,7 +710,7 @@ class PHPFTPModuleInstaller extends ModuleInstaller
 
 /**
  * Module installer for FTP
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  */
 class FTPModuleInstaller extends ModuleInstaller
 {
@@ -889,7 +889,7 @@ class FTPModuleInstaller extends ModuleInstaller
 
 /**
  * Module installer for Direct. Not use FTP
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  */
 class DirectModuleInstaller extends ModuleInstaller
 {

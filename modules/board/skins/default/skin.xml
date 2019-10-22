@@ -6,9 +6,9 @@
     <description xml:lang="jp">XE基本掲示板.</description>
     <version>1.0</version>
     <date>2010-12-24</date>
-    <author email_address="developers@xpressengine.com" link="http://xpressengine.com/">
-        <name xml:lang="ko">NHN</name>
-        <name xml:lang="jp">NHN</name>
+    <author email_address="developers@xpressengine.com" link="https://www.xehub.io">
+        <name xml:lang="ko">XEHub</name>
+        <name xml:lang="jp">XEHub</name>
     </author>
     <license>LGPL v2</license>
     <extra_vars>

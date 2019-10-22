@@ -1,6 +1,6 @@
 /**
  * @file   modules/poll/js/poll_admin.js
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @brief  poll 모듈의 관리자용 javascript
  **/
 

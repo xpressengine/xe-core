@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 
 if (!defined('__DIR__'))
     define('__DIR__', realpath(dirname(__FILE__))); 

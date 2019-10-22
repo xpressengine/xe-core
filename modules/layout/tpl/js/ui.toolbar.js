@@ -1,6 +1,6 @@
 /*
  * jQuery Toolbar Plug-in
- * @author NAVER (developer@xpressengine.com)
+ * @author XEHub (developer@xpressengine.com)
  */
 
 (function($){

@@ -1,8 +1,8 @@
 <?php
-/* Copyright (C) NAVER <http://www.navercorp.com> */
+/* Copyright (C) XEHub <https://www.xehub.io> */
 /**
  * @class  moduleView
- * @author NAVER (developers@xpressengine.com)
+ * @author XEHub (developers@xpressengine.com)
  * @brief view class of the module module
  */
 class moduleView extends module
@@ -22,7 +22,7 @@ class moduleView extends module
 	function dispModuleSkinInfo()
 	{
 		$selected_module = Context::get('selected_module');
-		$skin = Context::get('skin');
+		$skin = urlencode(preg_replace("/[^a-z0-9-_]+/i", '', Context::get('skin')));
 		// Get modules/skin information
 		$module_path = sprintf("./modules/%s/", $selected_module);
 		if(!is_dir($module_path)) $this->stop("msg_invalid_request");
@@ -32,7 +32,7 @@ class moduleView extends module
 
 		$oModuleModel = getModel('module');
 		$skin_info = $oModuleModel->loadSkinInfo($module_path, $skin);
-		Context::set('skin_info',$skin_info);
+		Context::set('skin_info', $skin_info);
 
 		$this->setLayoutFile("popup_layout");
 		$this->setTemplateFile("skin_info");

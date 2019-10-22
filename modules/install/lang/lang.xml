@@ -161,6 +161,16 @@
 			<value xml:lang="es"><![CDATA[Librería GD]]></value>
 			<value xml:lang="tr"><![CDATA[GD Kitaplığı]]></value>
 		</item>
+		<item name="fileinfo">
+			<value xml:lang="ko"><![CDATA[Extension: fileinfo]]></value>
+			<value xml:lang="en"><![CDATA[Extension: fileinfo]]></value>
+			<value xml:lang="jp"><![CDATA[Extension: fileinfo]]></value>
+			<value xml:lang="zh-CN"><![CDATA[Extension: fileinfo]]></value>
+			<value xml:lang="fr"><![CDATA[Extension: fileinfo]]></value>
+			<value xml:lang="ru"><![CDATA[Extension: fileinfo]]></value>
+			<value xml:lang="es"><![CDATA[Extension: fileinfo]]></value>
+			<value xml:lang="tr"><![CDATA[Extension: fileinfo]]></value>
+		</item>
 		<item name="session">
 			<value xml:lang="ko"><![CDATA[Session.auto_start 설정]]></value>
 			<value xml:lang="en"><![CDATA[Session.auto_start setting]]></value>
@@ -213,6 +223,18 @@
 			<value xml:lang="es"><![CDATA[[Requerido] Libreria XML es necesario para la comunicación de XML]]></value>
 			<value xml:lang="tr"><![CDATA[[Gerekli] XML iletişimi için XML kitaplığı gereklidir.]]></value>
 			<value xml:lang="vi"><![CDATA[[Bắt buộc] XML Library cần thiết cho việc truyền thông File XML.]]></value>
+		</item>
+		<item name="fileinfo">
+			<value xml:lang="ko"><![CDATA[[필수] 첨부파일의 변조 확인을 위해 fileinfo 모듈이 필요합니다.]]></value>
+			<value xml:lang="en"><![CDATA[[필수] 첨부파일의 변조 확인을 위해 fileinfo 모듈이 필요합니다.]]></value>
+			<value xml:lang="jp"><![CDATA[[필수] 첨부파일의 변조 확인을 위해 fileinfo 모듈이 필요합니다.]]></value>
+			<value xml:lang="zh-CN"><![CDATA[[필수] 첨부파일의 변조 확인을 위해 fileinfo 모듈이 필요합니다.]]></value>
+			<value xml:lang="zh-TW"><![CDATA[[필수] 첨부파일의 변조 확인을 위해 fileinfo 모듈이 필요합니다.]]></value>
+			<value xml:lang="fr"><![CDATA[[필수] 첨부파일의 변조 확인을 위해 fileinfo 모듈이 필요합니다.]]></value>
+			<value xml:lang="ru"><![CDATA[[필수] 첨부파일의 변조 확인을 위해 fileinfo 모듈이 필요합니다.]]></value>
+			<value xml:lang="es"><![CDATA[[필수] 첨부파일의 변조 확인을 위해 fileinfo 모듈이 필요합니다.]]></value>
+			<value xml:lang="tr"><![CDATA[[필수] 첨부파일의 변조 확인을 위해 fileinfo 모듈이 필요합니다.]]></value>
+			<value xml:lang="vi"><![CDATA[[필수] 첨부파일의 변조 확인을 위해 fileinfo 모듈이 필요합니다.]]></value>
 		</item>
 		<item name="session">
 			<value xml:lang="ko"><![CDATA[[필수] XE에서 세션 사용을 위해 php.ini 설정의 session.auto_start=0 이어야 합니다.]]></value>
