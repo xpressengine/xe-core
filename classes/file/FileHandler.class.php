@@ -281,6 +281,8 @@ class FileHandler
 	 */
 	function makeDir($path_string)
 	{
+		$path_string = preg_replace("/[^a-z0-9-_\\\\\/\.]+/i", '', $path_string);
+		$path_string = self::getRealPath($path_string);
 		if(self::exists($path_string) !== FALSE)
 		{
 			return TRUE;
