@@ -1,4 +1,4 @@
-<query id="getMemberInfoByEmailAddress" action="select">
+<query id="getMemberInfoByEmailAddressForCubrid" action="select">
     <tables>
         <table name="member" />
     </tables>

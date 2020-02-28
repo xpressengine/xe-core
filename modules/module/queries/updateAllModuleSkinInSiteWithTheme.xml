@@ -1,4 +1,4 @@
-<query id="updateModule" action="update">
+<query id="updateAllModuleSkinInSiteWithTheme" action="update">
     <tables>
         <table name="modules" />
     </tables>
