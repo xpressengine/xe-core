@@ -3,7 +3,6 @@
         <table name="member" />
     </tables>
     <columns>
-        <column name="member_srl" var="member_srl" filter="number" notnull="notnull" />
         <column name="last_login" var="last_login" notnull="notnull" default="curdate()" />
     </columns>
     <conditions>
