@@ -6,7 +6,6 @@
         <column name="password" var="password" notnull="notnull" />
         <column name="user_name" var="user_name" notnull="notnull" minlength="2" maxlength="40" />
         <column name="nick_name" var="nick_name" notnull="notnull" minlength="2" maxlength="40" />
-        <column name="user_id" var="user_id" notnull="notnull" />
 		<column name="email_address" var="email_address" notnull="notnull"/>
 		<column name="email_id" var="email_id" />
 		<column name="email_host" var="email_host" />
@@ -25,5 +24,6 @@
     </columns>
     <conditions>
         <condition operation="equal" column="member_srl" var="member_srl" notnull="notnull" filter="number" />
+        <condition operation="equal" column="user_id" var="user_id" filter="userid" pipe="and" />
     </conditions>
 </query>
