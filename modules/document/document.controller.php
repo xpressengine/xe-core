@@ -41,6 +41,7 @@ class documentController extends document
 		$point = 1;
 		$output = $this->updateVotedCount($document_srl, $point);
 		$this->add('voted_count', $output->get('voted_count'));
+		$this->add('target_srl', $document_srl);
 		return $output;
 	}
 
@@ -86,6 +87,7 @@ class documentController extends document
 		$point = -1;
 		$output = $this->updateVotedCount($document_srl, $point);
 		$this->add('blamed_count', $output->get('blamed_count'));
+		$this->add('target_srl', $document_srl);
 		return $output;
 	}
 

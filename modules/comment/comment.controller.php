@@ -56,6 +56,7 @@ class commentController extends comment
 		$point = 1;
 		$output = $this->updateVotedCount($comment_srl, $point);
 		$this->add('voted_count', $output->get('voted_count'));
+		$this->add('target_srl', $comment_srl);
 		return $output;
 	}
 
@@ -94,6 +95,7 @@ class commentController extends comment
 		$point = -1;
 		$output = $this->updateVotedCount($comment_srl, $point);
 		$this->add('blamed_count', $output->get('blamed_count'));
+		$this->add('target_srl', $comment_srl);
 		return $output;
 	}
 
