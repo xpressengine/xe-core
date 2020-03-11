@@ -415,7 +415,7 @@ class importerAdminController extends importer
 			{
 				$obj->email_address = $obj->user_id . '@example.com';
 			}
-			list($obj->email_id, $obj->email_host) = explode('@', $obj->email);
+			list($obj->email_id, $obj->email_host) = explode('@', $obj->email_address);
 			// Set the mailing option
 			if($obj->allow_mailing!='Y') $obj->allow_mailing = 'N';
 			// Set the message option
