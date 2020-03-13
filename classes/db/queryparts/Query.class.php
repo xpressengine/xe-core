@@ -144,7 +144,7 @@ class Query extends BaseObject
 	function setColumnList($columnList)
 	{
 		$this->columnList = $columnList;
-		if(count($this->columnList) > 0)
+		if(is_array($this->columnList) && count($this->columnList) > 0)
 		{
 			$selectColumns = array();
 			$dbParser = DB::getParser();
@@ -161,7 +161,7 @@ class Query extends BaseObject
 
 	function setColumns($columns)
 	{
-		if(!isset($columns) || count($columns) === 0)
+		if(!isset($columns) || (is_array($columns) && count($columns) === 0))
 		{
 			$this->columns = array(new StarExpression());
 			return;
@@ -177,7 +177,7 @@ class Query extends BaseObject
 
 	function setTables($tables)
 	{
-		if(!isset($tables) || count($tables) === 0)
+		if(!isset($tables) || (is_array($tables) && count($tables) === 0))
 		{
 			$this->setError(TRUE);
 			$this->setMessage("You must provide at least one table for the query.");
@@ -200,7 +200,7 @@ class Query extends BaseObject
 	function setConditions($conditions)
 	{
 		$this->conditions = array();
-		if(!isset($conditions) || count($conditions) === 0)
+		if(!isset($conditions) || (is_array($conditions) && count($conditions) === 0))
 		{
 			return;
 		}
@@ -220,7 +220,7 @@ class Query extends BaseObject
 
 	function setGroups($groups)
 	{
-		if(!isset($groups) || count($groups) === 0)
+		if(!isset($groups) || (is_array($groups) && count($groups) === 0))
 		{
 			return;
 		}
@@ -234,7 +234,7 @@ class Query extends BaseObject
 
 	function setOrder($order)
 	{
-		if(!isset($order) || count($order) === 0)
+		if(!isset($order) || (is_array($order) && count($order) === 0))
 		{
 			return;
 		}
@@ -560,7 +560,7 @@ class Query extends BaseObject
 	{
 		if(!$this->_orderByString)
 		{
-			if(count($this->orderby) === 0)
+			if(!is_array($this->orderby) || count($this->orderby) === 0)
 			{
 				return '';
 			}
@@ -587,7 +587,7 @@ class Query extends BaseObject
 	function getLimitString()
 	{
 		$limit = '';
-		if(count($this->limit) > 0)
+		if($this->limit)
 		{
 			$limit = '';
 			$limit .= $this->limit->toString();
@@ -611,7 +611,7 @@ class Query extends BaseObject
 			$this->arguments = array();
 
 			// Join table arguments
-			if(count($this->tables) > 0)
+			if(is_array($this->tables) && count($this->tables) > 0)
 			{
 				foreach($this->tables as $table)
 				{
@@ -628,7 +628,7 @@ class Query extends BaseObject
 
 			// Column arguments
 			// The if is for delete statements, all others must have columns
-			if(count($this->columns) > 0)
+			if(is_array($this->columns) && count($this->columns) > 0)
 			{
 				foreach($this->columns as $column)
 				{
@@ -644,7 +644,7 @@ class Query extends BaseObject
 			}
 
 			// Condition arguments
-			if(count($this->conditions) > 0)
+			if(is_array($this->conditions) && count($this->conditions) > 0)
 			{
 				foreach($this->conditions as $conditionGroup)
 				{
@@ -657,7 +657,7 @@ class Query extends BaseObject
 			}
 
 			// Navigation arguments
-			if(count($this->orderby) > 0)
+			if(is_array($this->orderby) && count($this->orderby) > 0)
 			{
 				foreach($this->orderby as $order)
 				{

@@ -480,7 +480,7 @@ class moduleModel extends module
 
 		foreach($target_module_info as $key => $val)
 		{
-			if(!$extra_vars[$val->module_srl] || !count($extra_vars[$val->module_srl])) continue;
+			if(!$extra_vars[$val->module_srl] || !count(get_object_vars($extra_vars[$val->module_srl]))) continue;
 			foreach($extra_vars[$val->module_srl] as $k => $v)
 			{
 				if($target_module_info[$key]->{$k}) continue;
@@ -1782,7 +1782,7 @@ class moduleModel extends module
 
 			if(!$output->toBool())
 			{
-				return;
+				return array();
 			}
 
 			if(!$output->data)
