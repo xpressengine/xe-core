@@ -15,11 +15,11 @@ xe.lang.msg_empty_search_keyword = '{$lang->msg_empty_search_keyword}';
 		<caption>
 			<a href="{getUrl('', 'module', 'admin', 'act', 'dispDocumentAdminList')}">{$lang->all}</a>
 			<i>|</i>
-			<a href="{getUrl('act', 'dispDocumentAdminList', 'search_target', 'is_secret', 'search_keyword', 'N')}">{$status_name_list['PUBLIC']}</a>
+			<a href="{getUrl('act', 'dispDocumentAdminList', 'search_target', 'is_secret', 'search_keyword', 'N', 'page', '')}">{$status_name_list['PUBLIC']}</a>
 			<i>|</i>
-			<a href="{getUrl('act', 'dispDocumentAdminList', 'search_target', 'is_secret', 'search_keyword', 'Y')}">{$status_name_list['SECRET']}</a>
+			<a href="{getUrl('act', 'dispDocumentAdminList', 'search_target', 'is_secret', 'search_keyword', 'Y', 'page', '')}">{$status_name_list['SECRET']}</a>
 			<i>|</i>
-			<a href="{getUrl('act', 'dispDocumentAdminList', 'search_target', 'is_secret', 'search_keyword', 'temp')}">{$status_name_list['TEMP']}</a> 
+			<a href="{getUrl('act', 'dispDocumentAdminList', 'search_target', 'is_secret', 'search_keyword', 'temp', 'page', '')}">{$status_name_list['TEMP']}</a> 
 			<a class="x_icon-question-sign" href="./admin/help/index.html#UMAN_faq_temp_document" target="_blank">{$lang->help}</a>
 			<i>|</i>
 			<a href="{getUrl('', 'module', 'admin', 'act', 'dispDocumentAdminDeclared')}" class="active"|cond="$act == 'dispDocumentAdminDeclared'">{$lang->cmd_declared_list}({number_format($total_count)})</a>

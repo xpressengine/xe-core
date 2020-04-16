@@ -12,11 +12,11 @@ xe.lang.msg_empty_search_keyword = '{$lang->msg_empty_search_keyword}';
 		<caption>
 			<a href="{getUrl('', 'module', 'admin', 'act', 'dispDocumentAdminList')}" class="active"|cond="$search_keyword == ''">{$lang->all}<block cond="$search_keyword == ''">({number_format($total_count)})</block></a>
 			<i>|</i>
-			<a href="{getUrl('search_target', 'is_secret', 'search_keyword', 'N')}" class="active"|cond="$search_target == 'is_secret' && $search_keyword == 'N'">{$status_name_list['PUBLIC']}<block cond="$search_target == 'is_secret' && $search_keyword == 'N'">({number_format($total_count)})</block></a>
+			<a href="{getUrl('search_target', 'is_secret', 'search_keyword', 'N','page','')}" class="active"|cond="$search_target == 'is_secret' && $search_keyword == 'N'">{$status_name_list['PUBLIC']}<block cond="$search_target == 'is_secret' && $search_keyword == 'N'">({number_format($total_count)})</block></a>
 			<i>|</i>
-			<a href="{getUrl('search_target', 'is_secret', 'search_keyword', 'Y')}" class="active"|cond="$search_target == 'is_secret' && $search_keyword == 'Y'">{$status_name_list['SECRET']}<block cond="$search_target == 'is_secret' && $search_keyword == 'Y'">({number_format($total_count)})</block></a>
+			<a href="{getUrl('search_target', 'is_secret', 'search_keyword', 'Y','page','')}" class="active"|cond="$search_target == 'is_secret' && $search_keyword == 'Y'">{$status_name_list['SECRET']}<block cond="$search_target == 'is_secret' && $search_keyword == 'Y'">({number_format($total_count)})</block></a>
 			<i>|</i>
-			<a href="{getUrl('search_target', 'is_secret', 'search_keyword', 'temp')}" class="active"|cond="$search_target == 'is_secret' && $search_keyword == 'temp'">{$status_name_list['TEMP']}<block cond="$search_target == 'is_secret' && $search_keyword == 'temp'">({number_format($total_count)})</block></a>
+			<a href="{getUrl('search_target', 'is_secret', 'search_keyword', 'temp','page','')}" class="active"|cond="$search_target == 'is_secret' && $search_keyword == 'temp'">{$status_name_list['TEMP']}<block cond="$search_target == 'is_secret' && $search_keyword == 'temp'">({number_format($total_count)})</block></a>
 			<a class="x_icon-question-sign" href="./admin/help/index.html#UMAN_faq_temp_document" target="_blank">{$lang->help}</a>
 			<i>|</i>
 			<a href="{getUrl('', 'module', 'admin', 'act', 'dispDocumentAdminDeclared')}">{$lang->cmd_declared_list}</a>
@@ -53,7 +53,7 @@ xe.lang.msg_empty_search_keyword = '{$lang->msg_empty_search_keyword}';
 				<td class="nowr">{$oDocument->get('readed_count')}</td>
 				<td class="nowr">{$oDocument->get('voted_count')}/{$oDocument->get('blamed_count')}</td>
 				<td class="nowr">{$oDocument->getRegdate("Y-m-d H:i")}</td>
-				<td class="nowr"><a href="{getUrl('search_target','ipaddress','search_keyword',$oDocument->get('ipaddress'))}">{$oDocument->get('ipaddress')}</a></td>
+				<td class="nowr"><a href="{getUrl('search_target','ipaddress','search_keyword',$oDocument->get('ipaddress'),'page','')}">{$oDocument->get('ipaddress')}</a></td>
 				<td class="nowr">{$status_name_list[$oDocument->get('status')]}</td>
 				<td><input type="checkbox" name="cart" value="{$oDocument->document_srl}" /></td>
 			</tr>
