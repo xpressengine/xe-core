@@ -23,7 +23,7 @@ XE 코어는 모듈, 애드온, 에디터 컴포넌트, 위젯, 레이아웃의 
 XpressEngine은 여러분들의 개발 참여를 기다립니다.
 
 ## Server Requirements
-* PHP version 5.3.0 or greater (But recommend PHP >= 5.5.0)
+* PHP version greater than 5.3.0 and less than 8.0.0 (But recommend PHP >= 5.5.0)
 * MYSQL version 4.1 or greater (But recommend MYSQL >= 5.x) , MS-SQL, CUBRID
 * XML Library
 * GD Library
