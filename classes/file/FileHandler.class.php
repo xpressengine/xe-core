@@ -1198,6 +1198,33 @@ class FileHandler
 			self::invalidateOpcache(self::readDir($path, '', false, true));
 		}
 	}
+
+	static public function protectDir($dirname)
+	{
+		$dirname = rtrim($dirname, '/\\');
+		if (!self::isDir($dirname) || !self::isWritableDir($dirname))
+		{
+			return false;
+		}
+
+		self::writeFile($dirname . '/index.html', '');
+
+		$htaccessContent = "<IfModule authz_core_module>\n"
+						. "    Require all denied\n"
+						. "</IfModule>\n"
+						. "<IfModule !authz_core_module>\n"
+						. "    Order deny,allow\n"
+						. "    Deny from all\n"
+						. "</IfModule>";
+		self::writeFile($dirname . '/.htaccess', preg_replace('/\\t/', '', $htaccessContent));
+
+		if (self::exists($dirname . '/index.html') && self::exists($dirname . '/.htaccess'))
+		{
+			return true;
+		}
+
+		return false;
+	}
 }
 
 /* End of file FileHandler.class.php */

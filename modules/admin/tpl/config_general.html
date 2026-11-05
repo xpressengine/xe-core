@@ -209,6 +209,15 @@
 			<div class="x_controls">
 				<label for="sso_y" class="x_inline"><input type="radio" name="use_sso" id="sso_y" value="Y" checked="checked"|cond="$use_sso=='Y'" /> {$lang->cmd_yes}</label>
 				<label for="sso_n" class="x_inline"><input type="radio" name="use_sso" id="sso_n" value="N" checked="checked"|cond="$use_sso!='Y'" /> {$lang->cmd_no}</label>
+				<p class="x_help-block">{$lang->about_use_sso}</p>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->use_session_regenerate}</label>
+			<div class="x_controls">
+				<label for="session_regenerate_y" class="x_inline"><input type="radio" name="use_session_regenerate" id="session_regenerate_y" value="Y" checked="checked"|cond="$use_session_regenerate=='Y' && $use_sso!='Y'" /> {$lang->cmd_yes}</label>
+				<label for="session_regenerate_n" class="x_inline"><input type="radio" name="use_session_regenerate" id="session_regenerate_n" value="N" checked="checked"|cond="$use_session_regenerate!='Y' || $use_sso=='Y'" /> {$lang->cmd_no}</label>
+				<p class="x_help-block">{$lang->about_use_session_regenerate}</p>
 			</div>
 		</div>
 		<div class="x_control-group">

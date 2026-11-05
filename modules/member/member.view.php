@@ -192,7 +192,8 @@ class memberView extends member
 	function dispMemberSignUpForm()
 	{
 		//setcookie for redirect url in case of going to member sign up
-		setcookie("XE_REDIRECT_URL", $_SERVER['HTTP_REFERER']);
+		$referer_url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+		setcookie("XE_REDIRECT_URL", Security::getSafeRedirectURL($referer_url));
 
 		$member_config = $this->member_config;
 
@@ -430,7 +431,7 @@ class memberView extends member
 		if($XE_VALIDATOR_ERROR < -10 && $XE_VALIDATOR_ERROR > -21)
 			Context::set('referer_url', getUrl('')); 
 		else
-			Context::set('referer_url', htmlspecialchars($_SERVER['HTTP_REFERER'], ENT_COMPAT | ENT_HTML401, 'UTF-8', false));
+			Context::set('referer_url', htmlspecialchars(Security::getSafeRedirectURL(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''), ENT_QUOTES, 'UTF-8', true));
 
 		// Set a template file
 		$this->setTemplateFile('login_form');
@@ -504,12 +505,14 @@ class memberView extends member
 	 */
 	function dispMemberLogout()
 	{
+		if(!Security::checkLogoutRequest()) return $this->showLogoutConfirmation('dispMemberLogout');
 		$oMemberController = getController('member');
 		$output = $oMemberController->procMemberLogout();
+		if(!$output->toBool()) return $output;
 		if(!$output->redirect_url)
 			$this->setRedirectUrl(getNotEncodedUrl('act', ''));
 		else
-			$this->setRedirectUrl($output->redirect_url);
+			$this->setRedirectUrl($output->redirect_url, NULL, TRUE);
 
 		return;
 	}

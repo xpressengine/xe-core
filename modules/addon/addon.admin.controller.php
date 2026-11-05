@@ -166,8 +166,12 @@ class addonAdminController extends addonController
 		$site_module_info = Context::get('site_module_info');
 		// batahom addon values
 		$addon = Context::get('addon');
+		if (!preg_match('/^\w+$/', $addon))
+		{
+			return new BaseObject(-1, 'msg_invalid_request');
+		}
 		$type = Context::get('type');
-		if(!$type)
+		if(!$type || !in_array($type, array('pc', 'mobile'), true))
 		{
 			$type = "pc";
 		}
@@ -204,8 +208,16 @@ class addonAdminController extends addonController
 		unset($args->body);
 		unset($args->error_return_url);
 
-		$site_module_info = Context::get('site_module_info');
+		if (!preg_match('/^\w+$/', $addon_name))
+		{
+			return new BaseObject(-1, 'msg_invalid_request');
+		}
 
+		if (!isset($args->xe_run_method) || $args->xe_run_method !== 'no_run_selected') {
+			$args->xe_run_method = 'run_selected';
+		}
+
+		$site_module_info = Context::get('site_module_info');
 		$output = $this->doSetup($addon_name, $args, $site_module_info->site_srl, 'site');
 		if(!$output->toBool())
 		{

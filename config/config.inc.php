@@ -377,6 +377,7 @@ $GLOBALS['__xe_autoload_file_map'] = array_change_key_case(array(
 	'Purifier' => 'classes/security/Purifier.class.php',
 	'Security' => 'classes/security/Security.class.php',
 	'UploadFileFilter' => 'classes/security/UploadFileFilter.class.php',
+	'SvgSanitizer' => 'classes/security/SvgSanitizer/SvgSanitizer.class.php',
 	'TemplateHandler' => 'classes/template/TemplateHandler.class.php',
 	'Validator' => 'classes/validator/Validator.class.php',
 	'WidgetHandler' => 'classes/widget/WidgetHandler.class.php',

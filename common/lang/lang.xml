@@ -2687,6 +2687,10 @@
 		<value xml:lang="vi"><![CDATA[Cấu hình Database chưa được thiết lập.]]></value>
 		<value xml:lang="mn"><![CDATA[DB тохируулга хийгдээгүй байна.]]></value>
 	</item>
+	<item name="msg_db_query_failed">
+		<value xml:lang="ko"><![CDATA[권한 정보를 조회하지 못했습니다. 잠시 후 다시 시도해 주세요.]]></value>
+		<value xml:lang="en"><![CDATA[Unable to load permissions. Please try again later.]]></value>
+	</item>
 	<item name="msg_dbconnect_failed">
 		<value xml:lang="ko"><![CDATA[DB 접속 오류가 발생했습니다. DB정보를 다시 확인해주세요.]]></value>
 		<value xml:lang="en"><![CDATA[Error has occurred while connecting to the DB. Please check the DB information again.]]></value>

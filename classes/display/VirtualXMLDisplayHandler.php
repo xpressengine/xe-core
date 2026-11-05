@@ -26,7 +26,7 @@ class VirtualXMLDisplayHandler
 		{
 			if($message != 'success') $output->message = $message;
 
-			$output->url = ($redirect_url) ? $redirect_url : $request_uri;
+			$output->url = Security::getSafeRedirectURL($redirect_url ? $redirect_url : $request_uri, $request_url, $redirect_url && !empty($oModule->allow_external_redirect));
 		}
 		else
 		{
@@ -36,16 +36,16 @@ class VirtualXMLDisplayHandler
 		$html = array();
 		$html[] = '<!DOCTYPE html><html><head><title>Moved...</title><meta charset="utf-8" /><script>';
 
-		if($output->message)
+		if(isset($output->message))
 		{
-			$html[] = 'alert(' . json_encode($output->message, JSON_UNESCAPED_SLASHES) . ');';
+			$html[] = 'alert(' . json_encode($output->message, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) . ');';
 		}
 
-		if($output->url)
+		if(isset($output->url))
 		{
-			$url = json_encode(preg_replace('/#(.+)$/i', '', $output->url), JSON_UNESCAPED_SLASHES);
+			$url = json_encode(preg_replace('/#(.+)$/i', '', $output->url), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 			$html[] = 'var win = (window.opener) ? window.opener : window.parent;';
-			$html[] = 'win.location.href = ' . $url;
+			$html[] = 'win.location.href = ' . $url . ';';
 			$html[] = 'if(window.opener) self.close();';
 		}
 

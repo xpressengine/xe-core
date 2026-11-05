@@ -27,9 +27,8 @@ class fileModel extends file
 		$oModuleModel = getModel('module');
 
 		$mid = Context::get('mid');
-		$editor_sequence = Context::get('editor_sequence');
-		$upload_target_srl = Context::get('upload_target_srl');
-		if(!$upload_target_srl) $upload_target_srl = $_SESSION['upload_info'][$editor_sequence]->upload_target_srl;
+		$editor_sequence = intval(Context::get('editor_sequence'));
+		$upload_target_srl = isset($_SESSION['upload_info'][$editor_sequence]->upload_target_srl) ? $_SESSION['upload_info'][$editor_sequence]->upload_target_srl : 0;
 
 		if($upload_target_srl)
 		{

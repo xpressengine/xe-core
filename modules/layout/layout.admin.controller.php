@@ -450,8 +450,18 @@ class layoutAdminController extends layout
 	 */
 	function procLayoutAdminUserImageDelete()
 	{
-		$filename = Context::get('filename');
 		$layout_srl = Context::get('layout_srl');
+		if (!$layout_srl)
+		{
+			return new BaseObject(-1, 'msg_invalid_request');
+		}
+
+		$filename = Context::get('filename');
+		if (preg_match('!(\.\.|[/\\\\])!', $filename))
+		{
+			return new BaseObject(-1, 'msg_invalid_request');
+		}
+
 		$this->removeUserLayoutImage($layout_srl,$filename);
 		$this->setMessage('success_deleted');
 		$this->setRedirectUrl(Context::get('error_return_url'));

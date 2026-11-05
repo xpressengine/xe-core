@@ -1174,7 +1174,7 @@ class moduleController extends module
 				Context::set('site_module_info', $site_module_info);
 			}
 
-			$object_key = 'user_defined_langs:' . $site_module_info->site_srl . ':' . Context::getLangType();
+			$object_key = 'user_defined_langs:v2:' . $site_module_info->site_srl . ':' . Context::getLangType();
 			$cache_key = $oCacheHandler->getGroupKey('site_and_module', $object_key);
 			$lang = $oCacheHandler->get($cache_key);
 

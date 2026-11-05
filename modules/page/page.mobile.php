@@ -32,6 +32,17 @@ class pageMobile extends pageView
 		// Variables used in the template Context:: set()
 		if($this->module_srl) Context::set('module_srl',$this->module_srl);
 
+		// Firt line of defense against RVE-2022-2.
+		foreach (Context::getRequestVars() as $key => $val)
+		{
+			if (preg_match('/[\{\}\(\)<>\$\'"]/', $key) || preg_match('/[\{\}\(\)<>\$\'"]/', $val))
+			{
+				$this->setError(-1);
+				$this->setMessage('msg_invalid_request');
+				return;
+			}
+		}
+
 		$page_type_name = strtolower($this->module_info->page_type);
 		$method = '_get' . ucfirst($page_type_name) . 'Content';
 		if (method_exists($this, $method)) $page_content = $this->{$method}();

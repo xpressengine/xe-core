@@ -240,6 +240,39 @@ class commentController extends comment
 		}
 		$obj->__isupdate = FALSE;
 
+		// Sanitize variables
+		$obj->comment_srl = intval($obj->comment_srl);
+		$obj->module_srl = intval($obj->module_srl);
+		$obj->document_srl = intval($obj->document_srl);
+		$obj->parent_srl = intval($obj->parent_srl);
+
+		// Only managers can customize dates.
+		$grant = Context::get('grant');
+		if(!$grant->manager)
+		{
+			unset($obj->regdate);
+			unset($obj->last_update);
+		}
+
+		// Add the current user's info, unless it is a guest post.
+		$logged_info = Context::get('logged_info');
+		if($logged_info->member_srl && !$manual_inserted)
+		{
+			$obj->member_srl = $logged_info->member_srl;
+			$obj->user_id = htmlspecialchars_decode($logged_info->user_id);
+			$obj->user_name = htmlspecialchars_decode($logged_info->user_name);
+			$obj->nick_name = htmlspecialchars_decode($logged_info->nick_name);
+			$obj->email_address = $logged_info->email_address;
+			$obj->homepage = $logged_info->homepage;
+		}
+
+		// Remove member_srl and user_id if not logged in
+		if(!$logged_info->member_srl && !$manual_inserted)
+		{
+			unset($obj->member_srl);
+			unset($obj->user_id);
+		}
+
 		// call a trigger (before)
 		$output = ModuleHandler::triggerCall('comment.insertComment', 'before', $obj);
 		if(!$output->toBool())
@@ -276,35 +309,22 @@ class commentController extends comment
 			{
 				return new BaseObject(-1, 'msg_invalid_request');
 			}
-
-			if($obj->homepage)
-			{
-				$obj->homepage = escape($obj->homepage, false);
-				if(!preg_match('/^[a-z]+:\/\//i',$obj->homepage))
-				{
-					$obj->homepage = 'http://'.$obj->homepage;
-				}
-			}
-
-			// input the member's information if logged-in
-			if(Context::get('is_logged'))
-			{
-				$logged_info = Context::get('logged_info');
-				$obj->member_srl = $logged_info->member_srl;
-
-				// user_id, user_name and nick_name already encoded
-				$obj->user_id = htmlspecialchars_decode($logged_info->user_id);
-				$obj->user_name = htmlspecialchars_decode($logged_info->user_name);
-				$obj->nick_name = htmlspecialchars_decode($logged_info->nick_name);
-				$obj->email_address = $logged_info->email_address;
-				$obj->homepage = $logged_info->homepage;
-			}
 		}
 
 		// error display if neither of log-in info and user name exist.
 		if(!$logged_info->member_srl && !$obj->nick_name)
 		{
 			return new BaseObject(-1, 'msg_invalid_request');
+		}
+
+		// Clean up the homepage link, if any
+		if($obj->homepage)
+		{
+			$obj->homepage = escape($obj->homepage);
+			if(!preg_match('/^[a-z]+:\/\//i',$obj->homepage))
+			{
+				$obj->homepage = 'http://'.$obj->homepage;
+			}
 		}
 
 		if(!$obj->comment_srl)
@@ -331,23 +351,18 @@ class commentController extends comment
 			$obj->content = nl2br($obj->content);
 		}
 
-		if(!$obj->regdate)
-		{
-			$obj->regdate = date("YmdHis");
-		}
-
 		// remove iframe and script if not a top administrator on the session.
 		if($logged_info->is_admin != 'Y')
 		{
 			$obj->content = removeHackTag($obj->content);
 		}
 
-		if(!$obj->notify_message)
+		if(isset($obj->notify_message) && $obj->notify_message !== 'Y')
 		{
 			$obj->notify_message = 'N';
 		}
 
-		if(!$obj->is_secret)
+		if(isset($obj->is_secret) && $obj->is_secret !== 'Y')
 		{
 			$obj->is_secret = 'N';
 		}
@@ -658,6 +673,26 @@ class commentController extends comment
 
 		$obj->__isupdate = TRUE;
 
+		// create a comment model object
+		$oCommentModel = getModel('comment');
+
+		// Preserve original author info.
+		$source_obj = $oCommentModel->getComment($obj->comment_srl);
+		if($source_obj->get('member_srl'))
+		{
+			$obj->member_srl = $source_obj->get('member_srl');
+			$obj->user_id = $source_obj->get('user_id');
+			$obj->user_name = $source_obj->get('user_name');
+			$obj->nick_name = $source_obj->get('nick_name');
+			$obj->email_address = $source_obj->get('email_address');
+			$obj->homepage = $source_obj->get('homepage');
+		}
+		else
+		{
+			unset($obj->member_srl);
+			unset($obj->user_id);
+		}
+
 		// call a trigger (before)
 		$output = ModuleHandler::triggerCall('comment.updateComment', 'before', $obj);
 		if(!$output->toBool())
@@ -665,19 +700,6 @@ class commentController extends comment
 			return $output;
 		}
 
-		// create a comment model object
-		$oCommentModel = getModel('comment');
-
-		// get the original data
-		$source_obj = $oCommentModel->getComment($obj->comment_srl);
-		if(!$source_obj->getMemberSrl())
-		{
-			$obj->member_srl = $source_obj->get('member_srl');
-			$obj->user_name = $source_obj->get('user_name');
-			$obj->nick_name = $source_obj->get('nick_name');
-			$obj->email_address = $source_obj->get('email_address');
-			$obj->homepage = $source_obj->get('homepage');
-		}
 
 		// check if permission is granted
 		if(!$is_admin && !$source_obj->isGranted())
@@ -699,30 +721,6 @@ class commentController extends comment
 			}
 		}
 
-		// set modifier's information if logged-in and posting author and modifier are matched.
-		if(Context::get('is_logged'))
-		{
-			$logged_info = Context::get('logged_info');
-			if($source_obj->member_srl == $logged_info->member_srl)
-			{
-				$obj->member_srl = $logged_info->member_srl;
-				$obj->user_name = $logged_info->user_name;
-				$obj->nick_name = $logged_info->nick_name;
-				$obj->email_address = $logged_info->email_address;
-				$obj->homepage = $logged_info->homepage;
-			}
-		}
-
-		// if nick_name of the logged-in author doesn't exist
-		if($source_obj->get('member_srl') && !$obj->nick_name)
-		{
-			$obj->member_srl = $source_obj->get('member_srl');
-			$obj->user_name = $source_obj->get('user_name');
-			$obj->nick_name = $source_obj->get('nick_name');
-			$obj->email_address = $source_obj->get('email_address');
-			$obj->homepage = $source_obj->get('homepage');
-		}
-
 		if(!$obj->content)
 		{
 			$obj->content = $source_obj->get('content');
@@ -741,6 +739,7 @@ class commentController extends comment
 		}
 
 		// remove iframe and script if not a top administrator on the session
+		$logged_info = Context::get('logged_info');
 		if($logged_info->is_admin != 'Y')
 		{
 			$obj->content = removeHackTag($obj->content);

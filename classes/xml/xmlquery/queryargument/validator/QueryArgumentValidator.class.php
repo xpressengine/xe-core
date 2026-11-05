@@ -80,6 +80,17 @@ class QueryArgumentValidator
 		return TRUE;
 	}
 
+	function getDefaultValueString()
+	{
+		if(!isset($this->default_value))
+		{
+			return NULL;
+		}
+
+		$default_value = new DefaultValue($this->argument_name, $this->default_value);
+		return $default_value->toString();
+	}
+
 	function toString()
 	{
 		$validator = '';

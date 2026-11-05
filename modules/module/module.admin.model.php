@@ -441,7 +441,7 @@ class moduleAdminModel extends module
 		if(is_array($lang_supported))
 		{
 			foreach($lang_supported as $key => $val)
-				$output[$key] = $selected_lang[$key]?$selected_lang[$key]:$name;
+				$output[$key] = isset($selected_lang[$key]) && $selected_lang[$key] !== '' ? $selected_lang[$key] : $name;
 		}
 		return $output;
 	}
@@ -456,6 +456,8 @@ class moduleAdminModel extends module
 		$site_module_info = Context::get('site_module_info');
 		$this->add('name', $name);
 		$output = $this->getLangCode($site_module_info->site_srl, '$user_lang->'.$name);
+		// Editing controls use text values, while storage/rendering stays escaped.
+		foreach($output as $key => $value) $output[$key] = htmlspecialchars_decode($value, ENT_QUOTES);
 		$this->add('langs', $output);
 	}
 
@@ -473,7 +475,7 @@ class moduleAdminModel extends module
 
 		$args->langName = preg_replace('/^\$user_lang->/', '', $args->lang_name);
 		$output = executeQueryArray('module.getLangListByName', $args, $columnList);
-		if($output->toBool()) $langList = $output->data;
+		if($output->toBool()) $langList = $this->_getEditableLangList((array)$output->data);
 
 		$this->add('lang_list', $langList);
 		$this->add('lang_name', $args->langName);
@@ -508,7 +510,17 @@ class moduleAdminModel extends module
 			}
 		}
 
-		$this->add('lang_list', $langList);
+		$this->add('lang_list', $this->_getEditableLangList($langList));
+	}
+
+	private function _getEditableLangList($list)
+	{
+		foreach($list as $key => $value)
+		{
+			$list[$key] = clone $value;
+			$list[$key]->value = htmlspecialchars_decode($value->value, ENT_QUOTES);
+		}
+		return $list;
 	}
 
 	/**
@@ -518,6 +530,11 @@ class moduleAdminModel extends module
 	{
 		$output = executeQueryArray('module.getLangListByLangcode', $args);
 		if(!$output->toBool()) return array();
+		foreach((array)$output->data as $key => $value)
+		{
+			$output->data[$key] = clone $value;
+			$output->data[$key]->value = htmlspecialchars(htmlspecialchars_decode($value->value, ENT_QUOTES), ENT_QUOTES, 'UTF-8', true);
+		}
 
 		return $output;
 	}

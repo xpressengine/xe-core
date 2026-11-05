@@ -61,7 +61,9 @@ var show_waiting_message = true;
 			}
 			else if ($.isPlainObject(params)) {
 				$.each(params, function(key, val) {
-					stack.push('<' + key + '>' + xmlHelper(val) + '</' + key + '>');
+					var safeKey = String(key).replace(/[^A-Za-z0-9_\-:.]/g, '');
+					if(!safeKey) return;
+					stack.push('<' + safeKey + '>' + xmlHelper(val) + '</' + safeKey + '>');
 				});
 			}
 			else if (!$.isFunction(params)) {

@@ -38,6 +38,7 @@ class boardController extends board
 		$obj->module_srl = $this->module_srl;
 		if($obj->is_notice!='Y'||!$this->grant->manager) $obj->is_notice = 'N';
 		$obj->commentStatus = $obj->comment_status;
+		unset($obj->extra_vars);
 
 		$oModuleModel = getModel('module');
 		$module_config = $oModuleModel->getModuleInfoByModuleSrl($obj->module_srl);

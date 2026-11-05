@@ -1622,44 +1622,7 @@ function requirePear()
 
 function checkCSRF()
 {
-	if($_SERVER['REQUEST_METHOD'] != 'POST')
-	{
-		return FALSE;
-	}
-
-	$default_url = Context::getDefaultUrl();
-	$referer = $_SERVER["HTTP_REFERER"];
-
-	if(strpos($default_url, 'xn--') !== FALSE && strpos($referer, 'xn--') === FALSE)
-	{
-		require_once(_XE_PATH_ . 'libs/idna_convert/idna_convert.class.php');
-		$IDN = new idna_convert(array('idn_version' => 2008));
-		$referer = $IDN->encode($referer);
-	}
-
-	$default_url = parse_url($default_url);
-	$referer = parse_url($referer);
-
-	$oModuleModel = getModel('module');
-	$siteModuleInfo = $oModuleModel->getDefaultMid();
-
-	if($siteModuleInfo->site_srl == 0)
-	{
-		if($default_url['host'] !== $referer['host'])
-		{
-			return FALSE;
-		}
-	}
-	else
-	{
-		$virtualSiteInfo = $oModuleModel->getSiteInfo($siteModuleInfo->site_srl);
-		if(strtolower($virtualSiteInfo->domain) != strtolower(Context::get('vid')) && !strstr(strtolower($virtualSiteInfo->domain), strtolower($referer['host'])))
-		{
-			return FALSE;
-		}
-	}
-
-	return TRUE;
+	return Security::checkCSRFRequest();
 }
 
 /**

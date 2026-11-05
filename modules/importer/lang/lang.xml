@@ -361,9 +361,9 @@ Hãy nhập đường dẫn cho File chứa Data trên Host dưới dạng http:
 		<value xml:lang="jp"><![CDATA[php.iniの環境設定でリモートファイルの読み込みは禁止されています。]]></value>
 	</item>
 	<item name="cannot_url_file">
-		<value xml:lang="ko"><![CDATA[원격지의 파일을 열지 못하였습니다.]]></value>
-		<value xml:lang="en"><![CDATA[Can not found XML file]]></value>
-		<value xml:lang="jp"><![CDATA[リモートファイルの読み込みに失敗しました。]]></value>
+		<value xml:lang="ko"><![CDATA[URL 입력은 지원하지 않습니다. 로컬 서버에 XML 파일을 업로드한 후 경로를 입력해 주세요.]]></value>
+		<value xml:lang="en"><![CDATA[URL input is not supported. Please upload the XML file to the local server and then enter the path.]]></value>
+		<value xml:lang="jp"><![CDATA[URLの入力はサポートされていません。 ローカルサーバーにXMLファイルをアップロードした後、パスを入力してください。]]></value>
 	</item>
 	<item name="cmd_check_path">
 		<value xml:lang="ko"><![CDATA[경로 확인]]></value>

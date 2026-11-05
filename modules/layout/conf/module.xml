@@ -2,13 +2,11 @@
 <module>
 	<grants />
 	<permissions>
-		<permission action="dispLayoutPreview" target="manager" />
 		<permission action="dispLayoutPreviewWithModule" target="manager" />
 		<permission action="getLayoutInstanceListForJSONP" target="manager" />
 	</permissions>
 	<actions>
 		<action name="dispLayoutInfo" type="view" meta-noindex="true" />
-		<action name="dispLayoutPreview" type="view" meta-noindex="true" />
 		<action name="dispLayoutPreviewWithModule" type="view" meta-noindex="true" />
 		<action name="getLayoutInstanceListForJSONP" type="model" />
 

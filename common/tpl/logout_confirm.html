@@ -1,0 +1,9 @@
+<section class="logout-confirm">
+	<h1>{$lang->cmd_logout}</h1>
+	<form action="{getUrl('', 'module', $logout_module, 'act', $logout_action)}" method="post">
+		<input type="hidden" name="module" value="{$logout_module}" />
+		<input type="hidden" name="act" value="{$logout_action}" />
+		<input type="hidden" name="logout_token" value="{$logout_token}" />
+		<button type="submit">{$lang->cmd_logout}</button>
+	</form>
+</section>

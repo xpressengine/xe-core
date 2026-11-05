@@ -85,7 +85,7 @@ class memberController extends member
 		{
 			$returnUrl = $config->after_login_url;
 		}
-		return $this->setRedirectUrl($returnUrl, $output);
+		return $this->setRedirectUrl($returnUrl, $output, !empty($config->after_login_url));
 	}
 
 	/**
@@ -95,6 +95,8 @@ class memberController extends member
 	 */
 	function procMemberLogout()
 	{
+		// Internal calls (e.g. account removal) retain their own authorization.
+		if(Context::get('act') === 'procMemberLogout' && !Security::checkLogoutRequest()) return new BaseObject(-1, 'msg_invalid_request');
 		// Call a trigger before log-out (before)
 		$logged_info = Context::get('logged_info');
 		$trigger_output = ModuleHandler::triggerCall('member.doLogout', 'before', $logged_info);
@@ -461,14 +463,14 @@ class memberController extends member
 			}
 			else if($_COOKIE['XE_REDIRECT_URL'])
 			{
-				$returnUrl = $_COOKIE['XE_REDIRECT_URL'];
+				$returnUrl = Security::getSafeRedirectURL($_COOKIE['XE_REDIRECT_URL']);
 				setcookie("XE_REDIRECT_URL", '', 1);
 			}
 		}
 
 		$this->_clearMemberCache($args->member_srl, $site_module_info->site_srl);
 
-		$this->setRedirectUrl($returnUrl);
+		$this->setRedirectUrl($returnUrl, NULL, !empty($config->redirect_url));
 	}
 
 	function procMemberModifyInfoBefore()
@@ -2002,6 +2004,14 @@ class memberController extends member
 			{
 				$_SESSION['denied_admin'] = 'Y';
 			}
+		}
+
+		// Prevent session fixation by issuing a new session ID before storing login information.
+		// SSO requires the same session ID across domains, so these features cannot be used together.
+		$db_info = Context::getDBInfo();
+		if($db_info->use_sso != 'Y' && (!isset($db_info->use_session_regenerate) || $db_info->use_session_regenerate != 'N'))
+		{
+			session_regenerate_id(true);
 		}
 
 		$this->setSessionInfo();

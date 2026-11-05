@@ -48,6 +48,17 @@ class pageView extends page
 		// Variables used in the template Context:: set()
 		if($this->module_srl) Context::set('module_srl',$this->module_srl);
 
+		// Firt line of defense against RVE-2022-2.
+		foreach (Context::getRequestVars() as $key => $val)
+		{
+			if (preg_match('/[\{\}\(\)<>\$\'"]/', $key) || preg_match('/[\{\}\(\)<>\$\'"]/', $val))
+			{
+				$this->setError(-1);
+				$this->setMessage('msg_invalid_request');
+				return;
+			}
+		}
+
 		$page_type_name = strtolower($this->module_info->page_type);
 		$method = '_get' . ucfirst($page_type_name) . 'Content';
 		if(method_exists($this, $method)) $page_content = $this->{$method}();
@@ -195,27 +206,10 @@ class pageView extends page
 			$content = preg_replace_callback('/(<!--%import\()(\")([^"]+)(\")/is',array($this,'_replacePath'),$content);
 
 			FileHandler::writeFile($cache_file, $content);
-			// Include and then Return the result
-			if(!file_exists($cache_file)) return;
-			// Attempt to compile
-			$oTemplate = &TemplateHandler::getInstance();
-			$script = $oTemplate->compileDirect($filepath, $filename);
-
-			FileHandler::writeFile($cache_file, $script);
 		}
 
-		$__Context = &$GLOBALS['__Context__'];
-		$__Context->tpl_path = $filepath;
-
-		ob_start();
-		include($cache_file);
-
-		$contents = '';
-		while (ob_get_level() - $level > 0) {
-			$contents .= ob_get_contents();
-			ob_end_clean();
-		}
-		return $contents;
+		// Don't compile, just return to prevent RVE-2022-2.
+		return file_get_contents($cache_file);
 	}
 
 	function _replacePath($matches)

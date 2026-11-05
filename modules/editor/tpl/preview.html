@@ -1,4 +1,4 @@
 <script>
-    top.xAddEventListener(window, 'load', function() { top.showPreviewContent({$editor_sequence}); } );
+    top.xAddEventListener(window, 'load', function() { top.showPreviewContent({intval($editor_sequence)}); } );
 </script>
-{$content|noescape}
+{removeHackTag($content)|noescape}

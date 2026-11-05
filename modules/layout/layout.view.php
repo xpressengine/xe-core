@@ -41,12 +41,11 @@ class layoutView extends layout
 	public function dispLayoutPreviewWithModule()
 	{
 		$content = '';
-		$layoutSrl = Context::get('layout_srl');
-
-		$module = Context::get('module_name');
-		$mid = Context::get('target_mid');
-		$skin = Context::get('skin');
-		$skinType = Context::get('skin_type');
+		$layoutSrl = intval(Context::get('layout_srl'));
+		$module = preg_replace('/[^a-zA-Z0-9_]/', '', Context::get('module_name'));
+		$mid = preg_replace('/[^a-zA-Z0-9\/_-]/', '', Context::get('target_mid'));
+		$skin = preg_replace('/[^a-zA-Z0-9_-]/', '', Context::get('skin'));
+		$skinType = Context::get('skin_type') === 'M' ? 'M' : 'P';
 
 		try
 		{
@@ -308,78 +307,6 @@ class layoutView extends layout
 		require_once(_XE_PATH_ . "classes/display/HTMLDisplayHandler.php");
 		$handler = new HTMLDisplayHandler();
 		return $handler->toDoc($oModule);
-	}
-
-	/**
-	 * Preview a layout
-	 * @return void|BaseObject (void : success, BaseObject : fail)
-	 */
-	function dispLayoutPreview()
-	{
-		if(!checkCSRF())
-		{
-			$this->stop('msg_invalid_request');
-			return new BaseObject(-1, 'msg_invalid_request');
-		}
-
-		// admin check
-		// this act is admin view but in normal view because do not load admin css/js files
-		$logged_info = Context::get('logged_info');
-		if($logged_info->is_admin != 'Y') return $this->stop('msg_invalid_request');
-
-		$layout_srl = Context::get('layout_srl');
-		$code = Context::get('code');
-
-		$code_css = Context::get('code_css');
-		if(!$layout_srl || !$code) return new BaseObject(-1, 'msg_invalid_request');
-		// Get the layout information
-		$oLayoutModel = getModel('layout');
-		$layout_info = $oLayoutModel->getLayout($layout_srl);
-		if(!$layout_info) return new BaseObject(-1, 'msg_invalid_request');
-		// Separately handle the layout if its type is faceoff
-		if($layout_info && $layout_info->type == 'faceoff') $oLayoutModel->doActivateFaceOff($layout_info);
-		// Apply CSS directly
-		Context::addHtmlHeader("<style type=\"text/css\" charset=\"UTF-8\">".$code_css."</style>");
-		// Set names and values of extra_vars to $layout_info
-		if($layout_info->extra_var_count)
-		{
-			foreach($layout_info->extra_var as $var_id => $val)
-			{
-				$layout_info->{$var_id} = $val->value;
-			}
-		}
-		// menu in layout information becomes an argument for Context:: set
-		if($layout_info->menu_count)
-		{
-			foreach($layout_info->menu as $menu_id => $menu)
-			{
-				$menu->php_file = FileHandler::getRealPath($menu->php_file);
-				if(FileHandler::exists($menu->php_file)) include($menu->php_file);
-
-				Context::set($menu_id, $menu);
-			}
-		}
-
-		Context::set('layout_info', $layout_info);
-		Context::set('content', Context::getLang('layout_preview_content'));
-		// Temporary save the codes
-		$edited_layout_file = _XE_PATH_ . 'files/cache/layout/tmp.tpl';
-		FileHandler::writeFile($edited_layout_file, $code);
-
-		// Compile
-		$oTemplate = &TemplateHandler::getInstance();
-
-		$layout_path = $layout_info->path;
-		$layout_file = 'layout';
-
-		$layout_tpl = $oTemplate->compile($layout_path, $layout_file, $edited_layout_file);
-		Context::set('layout','none');
-		// Convert widgets and others
-		$oContext = &Context::getInstance();
-		Context::set('layout_tpl', $layout_tpl);
-		// Delete Temporary Files
-		FileHandler::removeFile($edited_layout_file);
-		$this->setTemplateFile('layout_preview');
 	}
 
 	private function getRealLayoutFile($layoutSrl)
