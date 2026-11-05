@@ -1,5 +1,4 @@
 <include target="header.html" />
-<load target="js/adminEdit.js" />
 <p>{nl2br($lang->about_layout_code)}</p>
 <section class="section">
 	<h1>{$lang->layout_image_repository}</h1>
@@ -88,7 +87,6 @@
 			<button type="submit" class="x_btn" name="mode" value="reset">{$lang->cmd_reset}</button>
 		</span>
 		<span class="x_pull-right x_btn-group">
-			<button type="button" class="x_btn" onclick="doPreviewLayoutCode()">{$lang->cmd_preview}</button>
 			<button type="submit" class="x_btn x_btn-primary" name="mode" value="save">{$lang->cmd_save}</button>
 		</span>
 	</div>

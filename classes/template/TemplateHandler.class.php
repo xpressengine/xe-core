@@ -91,6 +91,7 @@ class TemplateHandler
 	protected function init($tpl_path, $tpl_filename, $tpl_file = '')
 	{
 		// verify arguments
+		$tpl_path = preg_replace('/[\{\}\(\)\[\]<>\$\'"]/', '', $tpl_path);
 		if(substr($tpl_path, -1) != '/')
 		{
 			$tpl_path .= '/';

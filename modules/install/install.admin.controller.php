@@ -90,6 +90,10 @@ class installAdminController extends install
 		$use_sso = Context::get('use_sso');
 		if($use_sso !='Y') $use_sso = 'N';
 
+		$use_session_regenerate = Context::get('use_session_regenerate');
+		if($use_sso == 'Y' || $use_session_regenerate == 'N') $use_session_regenerate = 'N';
+		else $use_session_regenerate = 'Y';
+
 		$use_db_session = Context::get('use_db_session');
 		if($use_db_session!='Y') $use_db_session = 'N';
 
@@ -104,6 +108,7 @@ class installAdminController extends install
 		$db_info->use_db_session = $use_db_session;
 		$db_info->use_rewrite = $use_rewrite;
 		$db_info->use_sso = $use_sso;
+		$db_info->use_session_regenerate = $use_session_regenerate;
 		$db_info->use_ssl = $use_ssl;
 		$db_info->use_html5 = $use_html5;
 		$db_info->admin_ip_list = $admin_ip_list;

@@ -380,7 +380,7 @@ class documentItem extends BaseObject
 		if($cut_size) $title = cut_str($this->get('title'), $cut_size, $tail);
 		else $title = $this->get('title');
 
-		return $title;
+		return escape($title, false);
 	}
 
 	function getTitle($cut_size = 0, $tail='...')
@@ -932,8 +932,16 @@ class documentItem extends BaseObject
 				$target_src = htmlspecialchars_decode($target_src);
 
 				$tmp_file = _XE_PATH_ . 'files/cache/tmp/' . $random->createSecureSalt(32, 'hex');
+				if (!FileHandler::isDir(_XE_PATH_ . 'files/cache/tmp/'))
+				{
+					FileHandler::makeDir(_XE_PATH_ . 'files/cache/tmp/');
+				}
+				if (!FileHandler::exists(_XE_PATH_ . 'files/cache/tmp/.htaccess'))
+				{
+					FileHandler::protectDir(_XE_PATH_ . 'files/cache/tmp');
+				}
 				FileHandler::getRemoteFile($target_src, $tmp_file);
-				if(!file_exists($tmp_file)) continue;
+				if(!FileHandler::exists($tmp_file)) continue;
 
 				$imageinfo = getimagesize($tmp_file);
 				list($_w, $_h) = $imageinfo;

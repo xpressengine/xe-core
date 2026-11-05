@@ -1015,16 +1015,24 @@
 		<value xml:lang="tr"><![CDATA[<abbr title="Single Sign On">SSO</abbr> kullanmak ister misiniz?]]></value>
 	</item>
 	<item name="about_use_sso">
-		<value xml:lang="ko"><![CDATA[사용자가 한 번만 로그인하면 기본 사이트와 가상 사이트에 동시에 로그인이 됩니다. 가상 사이트를 사용할 때만 필요합니다.]]></value>
-		<value xml:lang="en"><![CDATA[SSO will enable users to sign in just once for both default and virtual site. You will need this only if you are using virtual sites.]]></value>
-		<value xml:lang="jp"><![CDATA[ユーザが一度のログインで基本サイトと仮想サイトに同時にログインされる機能です。 仮想サイトの機能を使用してない場合、設定する必要がありません。]]></value>
-		<value xml:lang="zh-CN"><![CDATA[SSO will enable users to sign in just once for both default and virtual site. You will need this only if you are using virtual sites.]]></value>
-		<value xml:lang="zh-TW"><![CDATA[此功能可讓用戶只需登入一次即可訪問多個網站。 使用虛擬網站，這將會是很重要的功能。]]></value>
-		<value xml:lang="fr"><![CDATA[SSO will enable users to sign in just once for both default and virtual site. You will need this only if you are using virtual sites.]]></value>
-		<value xml:lang="ru"><![CDATA[SSO will enable users to sign in just once for both default and virtual site. You will need this only if you are using virtual sites.]]></value>
-		<value xml:lang="es"><![CDATA[SSO will enable users to sign in just once for both default and virtual site. You will need this only if you are using virtual sites.]]></value>
-		<value xml:lang="tr"><![CDATA[SSO kullanıcıları, geçreli ya da sanal siteye bir kere kayıt olmakla, ikisinden de yararlandıracaktır. Bu, size sadece sanal websiteler kullandığınız durumda lazım olacaktır.]]></value>
-		<value xml:lang="vi"><![CDATA[SSO will enable users to sign in just once for both default and virtual site. You will need this only if you are using virtual sites.]]></value>
+		<value xml:lang="ko"><![CDATA[사용자가 한 번만 로그인하면 기본 사이트와 가상 사이트에 동시에 로그인이 됩니다. 가상 사이트를 사용할 때만 필요합니다.<br>SSO를 사용하면 로그인 시 세션 ID 갱신 기능이 강제로 비활성화됩니다.]]></value>
+		<value xml:lang="en"><![CDATA[SSO will enable users to sign in just once for both default and virtual site. You will need this only if you are using virtual sites.<br>Enabling SSO forcibly disables session ID regeneration upon login.]]></value>
+		<value xml:lang="jp"><![CDATA[ユーザが一度のログインで基本サイトと仮想サイトに同時にログインされる機能です。 仮想サイトの機能を使用してない場合、設定する必要がありません。<br>SSOを使用すると、ログイン時のセッションID更新機能は強制的に無効になります。]]></value>
+		<value xml:lang="zh-CN"><![CDATA[SSO will enable users to sign in just once for both default and virtual site. You will need this only if you are using virtual sites.<br>Enabling SSO forcibly disables session ID regeneration upon login.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[此功能可讓用戶只需登入一次即可訪問多個網站。 使用虛擬網站，這將會是很重要的功能。<br>啟用 SSO 後，登入時更新工作階段 ID 的功能將被強制停用。]]></value>
+		<value xml:lang="fr"><![CDATA[SSO will enable users to sign in just once for both default and virtual site. You will need this only if you are using virtual sites.<br>Enabling SSO forcibly disables session ID regeneration upon login.]]></value>
+		<value xml:lang="ru"><![CDATA[SSO will enable users to sign in just once for both default and virtual site. You will need this only if you are using virtual sites.<br>Enabling SSO forcibly disables session ID regeneration upon login.]]></value>
+		<value xml:lang="es"><![CDATA[SSO will enable users to sign in just once for both default and virtual site. You will need this only if you are using virtual sites.<br>Enabling SSO forcibly disables session ID regeneration upon login.]]></value>
+		<value xml:lang="tr"><![CDATA[SSO kullanıcıları, geçreli ya da sanal siteye bir kere kayıt olmakla, ikisinden de yararlandıracaktır. Bu, size sadece sanal websiteler kullandığınız durumda lazım olacaktır.<br>SSO etkinleştirildiğinde, giriş sırasında oturum kimliğinin yenilenmesi zorunlu olarak devre dışı bırakılır.]]></value>
+		<value xml:lang="vi"><![CDATA[SSO will enable users to sign in just once for both default and virtual site. You will need this only if you are using virtual sites.<br>Enabling SSO forcibly disables session ID regeneration upon login.]]></value>
+	</item>
+	<item name="use_session_regenerate">
+		<value xml:lang="ko"><![CDATA[로그인 시 세션 ID 갱신]]></value>
+		<value xml:lang="en"><![CDATA[Regenerate session ID upon login?]]></value>
+	</item>
+	<item name="about_use_session_regenerate">
+		<value xml:lang="ko"><![CDATA[세션 고정 공격을 방지하기 위해 로그인 성공 시 세션 ID를 갱신합니다. 특별한 호환성 문제가 없다면 사용을 권장합니다.<br>SSO를 사용하면 이 기능이 강제로 비활성화됩니다.]]></value>
+		<value xml:lang="en"><![CDATA[Regenerates the session ID after a successful login to prevent session fixation attacks. This is recommended unless it causes a compatibility issue.<br>This feature is forcibly disabled when SSO is enabled.]]></value>
 	</item>
 	<item name="about_arrange_session">
 		<value xml:lang="ko"><![CDATA[세션을 정리하시겠습니까?]]></value>

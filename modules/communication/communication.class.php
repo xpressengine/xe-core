@@ -8,6 +8,14 @@
  */
 class communication extends ModuleObject
 {
+	/** Sent copies belong to the sender; all other copies belong to the receiver. */
+	public static function isMessageOwner($message, $member_srl)
+	{
+		if(!is_object($message) || !is_scalar($member_srl) || !preg_match('/^[1-9][0-9]*$/D', (string)$member_srl)) return false;
+		$owner = $message->message_type === 'S' ? $message->sender_srl : $message->receiver_srl;
+		// String comparison also works for large sequence IDs on 32-bit PHP.
+		return is_scalar($owner) && (string)$owner === (string)$member_srl;
+	}
 
 	/**
 	 * Implement if additional tasks are necessary when installing

@@ -286,9 +286,25 @@ class editorModel extends editor
 			Context::set('upload_status', $upload_status);
 			// Upload enabled (internally caching)
 			$oFileController = getController('file');
-			$oFileController->setUploadInfo($editor_sequence, $upload_target_srl);
+			$oFileController->setUploadInfo($editor_sequence, $upload_target_srl, isset($option->module_srl) ? $option->module_srl : 0);
+
+			// Set editor mid
+			if (!empty($option->module_srl))
+			{
+				$oModuleModel = getModel('module');
+				$editor_module_info = $oModuleModel->getModuleInfoByModuleSrl($option->module_srl);
+				$option->mid = isset($editor_module_info->mid) ? $editor_module_info->mid : null;
+			}
+			if (!empty($option->mid))
+			{
+				Context::addHtmlFooter('<script> var editor_mid = ' . json_encode($option->mid) . '; </script>');
+			}
+
 			// Check if the file already exists
-			if($upload_target_srl) $files_count = $oFileModel->getFilesCount($upload_target_srl);
+			if ($upload_target_srl)
+			{
+				$files_count = $oFileModel->getFilesCount($upload_target_srl);
+			}
 		}
 		Context::set('files_count', (int)$files_count);
 
@@ -310,11 +326,11 @@ class editorModel extends editor
 		$site_srl = (int)$site_module_info->site_srl;
 		if($enable_component)
 		{
-			if(!Context::get('component_list'))
-			{
-				$component_list = $this->getComponentList(true, $site_srl);
-				Context::set('component_list', $component_list);
-			}
+			Context::set('component_list', $this->getComponentList(true, $site_srl));
+		}
+		else
+		{
+			Context::set('component_list', array());
 		}
 		Context::set('enable_component', $enable_component);
 		Context::set('enable_default_component', $enable_default_component);
@@ -365,6 +381,7 @@ class editorModel extends editor
 
 		$config = new stdClass();
 		$config->module_type = $type;
+		$config->module_srl = (int)$module_srl;
 
 		// Configurations listed according to a type
 		if($type == 'document')

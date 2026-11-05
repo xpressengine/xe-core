@@ -219,11 +219,13 @@ class documentController extends document
 		if(!$obj->email_address) $obj->email_address = '';
 		if(!$isRestore) $obj->ipaddress = $_SERVER['REMOTE_ADDR'];
 
-                // can modify regdate only manager
-                $grant = Context::get('grant');
+		// only manager can modify regdate, last_update, last_updater
+		$grant = Context::get('grant');
 		if(!$grant->manager)
 		{
 			unset($obj->regdate);
+			unset($obj->last_update);
+			unset($obj->last_updater);
 		}
 		
 		// Serialize the $extra_vars, check the extra_vars type, because duplicate serialized avoid
@@ -233,6 +235,24 @@ class documentController extends document
 		unset($obj->_saved_doc_title);
 		unset($obj->_saved_doc_content);
 		unset($obj->_saved_doc_message);
+
+		// Add the current user's info, unless it is a guest post
+		$logged_info = Context::get('logged_info');
+		if($logged_info->member_srl && !$manual_inserted && !$isRestore)
+		{
+			$obj->member_srl = $logged_info->member_srl;
+			$obj->user_id = htmlspecialchars_decode($logged_info->user_id);
+			$obj->user_name = htmlspecialchars_decode($logged_info->user_name);
+			$obj->nick_name = htmlspecialchars_decode($logged_info->nick_name);
+			$obj->email_address = $logged_info->email_address;
+			$obj->homepage = $logged_info->homepage;
+		}
+		if(!$logged_info->member_srl && !$manual_inserted && !$isRestore)
+		{
+			unset($obj->member_srl);
+			unset($obj->user_id);
+		}
+
 		// Call a trigger (before)
 		$output = ModuleHandler::triggerCall('document.insertDocument', 'before', $obj);
 		if(!$output->toBool()) return $output;
@@ -260,23 +280,11 @@ class documentController extends document
 		{
 			$obj->password = getModel('member')->hashPassword($obj->password);
 		}
-		// Insert member's information only if the member is logged-in and not manually registered.
-		$logged_info = Context::get('logged_info');
-		if(Context::get('is_logged') && !$manual_inserted && !$isRestore)
-		{
-			$obj->member_srl = $logged_info->member_srl;
 
-			// user_id, user_name and nick_name already encoded
-			$obj->user_id = htmlspecialchars_decode($logged_info->user_id);
-			$obj->user_name = htmlspecialchars_decode($logged_info->user_name);
-			$obj->nick_name = htmlspecialchars_decode($logged_info->nick_name);
-			$obj->email_address = $logged_info->email_address;
-			$obj->homepage = $logged_info->homepage;
-		}
 		// If the tile is empty, extract string from the contents.
-		$obj->title = htmlspecialchars($obj->title, ENT_COMPAT | ENT_HTML401, 'UTF-8', false);
+		$obj->title = escape($obj->title, false);
 		settype($obj->title, "string");
-		if($obj->title == '') $obj->title = cut_str(trim(strip_tags(nl2br($obj->content))),20,'...');
+		if($obj->title == '') $obj->title = escape(cut_str(trim(strip_tags(nl2br($obj->content))),20,'...'), false);
 		// If no tile extracted from the contents, leave it untitled.
 		if($obj->title == '') $obj->title = 'Untitled';
 		// Remove XE's own tags from the contents.
@@ -371,6 +379,23 @@ class documentController extends document
 		if(!$obj->status && $obj->is_secret == 'Y') $obj->status = 'SECRET';
 		if(!$obj->status) $obj->status = 'PUBLIC';
 
+		// Preserve original author info.
+		if ($source_obj->get('member_srl'))
+		{
+			$obj->member_srl = $source_obj->get('member_srl');
+			$obj->user_id = $source_obj->get('user_id');
+			$obj->user_name = $source_obj->get('user_name');
+			$obj->nick_name = $source_obj->get('nick_name');
+			$obj->email_address = $source_obj->get('email_address');
+			$obj->homepage = $source_obj->get('homepage');
+			$obj->ipaddress = $source_obj->get('ipaddress');
+		}
+		else
+		{
+			unset($obj->member_srl);
+			unset($obj->user_id);
+		}
+
 		// Call a trigger (before)
 		$output = ModuleHandler::triggerCall('document.updateDocument', 'before', $obj);
 		if(!$output->toBool()) return $output;
@@ -403,10 +428,6 @@ class documentController extends document
 			$args->ipaddress = $_SERVER['REMOTE_ADDR'];
 			$output = executeQuery("document.insertHistory", $args);
 		}
-		else
-		{
-			$obj->ipaddress = $source_obj->get('ipaddress');
-		}
 		// List variables
 		if($obj->comment_status) $obj->commentStatus = $obj->comment_status;
 		if(!$obj->commentStatus) $obj->commentStatus = 'DENY';
@@ -423,11 +444,13 @@ class documentController extends document
 		
 		if($obj->notify_message != 'Y') $obj->notify_message = 'N';
 		
-		// can modify regdate only manager
-                $grant = Context::get('grant');
+		// only manager can modify regdate, last_update, last_updater
+		$grant = Context::get('grant');
 		if(!$grant->manager)
 		{
 			unset($obj->regdate);
+			unset($obj->last_update);
+			unset($obj->last_updater);
 		}
 		
 		// Serialize the $extra_vars
@@ -476,9 +499,9 @@ class documentController extends document
 			$obj->homepage = $source_obj->get('homepage');
 		}
 		// If the tile is empty, extract string from the contents.
-		$obj->title = htmlspecialchars($obj->title, ENT_COMPAT | ENT_HTML401, 'UTF-8', false);
+		$obj->title = escape($obj->title, false);
 		settype($obj->title, "string");
-		if($obj->title == '') $obj->title = cut_str(strip_tags($obj->content),20,'...');
+		if($obj->title == '') $obj->title = escape(cut_str(trim(strip_tags(nl2br($obj->content))),20,'...'), false);
 		// If no tile extracted from the contents, leave it untitled.
 		if($obj->title == '') $obj->title = 'Untitled';
 		// Remove XE's own tags from the contents.
@@ -490,6 +513,11 @@ class documentController extends document
 				$obj->content = htmlspecialchars($obj->content, ENT_COMPAT | ENT_HTML401, 'UTF-8', false);
 			}
 			$obj->content = nl2br($obj->content);
+		}
+		// Remove iframe and script if not a top adminisrator in the session.
+		if($logged_info->is_admin != 'Y')
+		{
+			$obj->content = removeHackTag($obj->content);
 		}
 		// Change not extra vars but language code of the original document if document's lang_code is different from author's setting.
 		if($source_obj->get('lang_code') != Context::getLangType())
@@ -513,11 +541,6 @@ class documentController extends document
 				$obj->title = $document_output->data->title;
 				$obj->content = $document_output->data->content;
 			}
-		}
-		// Remove iframe and script if not a top adminisrator in the session.
-		if($logged_info->is_admin != 'Y')
-		{
-			$obj->content = removeHackTag($obj->content);
 		}
 		// if temporary document, regdate is now setting
 		if($source_obj->get('status') == $this->getConfigStatus('temp')) $obj->regdate = date('YmdHis');

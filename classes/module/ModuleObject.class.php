@@ -26,6 +26,7 @@ class ModuleObject extends BaseObject
 	var $module_config = NULL;
 	var $ajaxRequestMethod = array('XMLRPC', 'JSON');
 	var $gzhandler_enable = TRUE;
+	var $allow_external_redirect = FALSE;
 
 	/**
 	 * setter to set the name of module
@@ -54,11 +55,18 @@ class ModuleObject extends BaseObject
 	/**
 	 * setter to set an url for redirection
 	 * @param string $url url for redirection
+	 * @param object $output optional result to return
+	 * @param bool $allow_external optional third argument, only for trusted HTTP(S) configuration
 	 * @remark redirect_url is used only for ajax requests
 	 * @return void
 	 * */
 	function setRedirectUrl($url = './', $output = NULL)
 	{
+		// Keep the legacy method signature compatible with third-party overrides.
+		$args = func_get_args();
+		$allow_external = isset($args[2]) && $args[2];
+		$this->allow_external_redirect = (bool)$allow_external;
+		if($url !== null && $url !== '') $url = Security::getSafeRedirectURL($url, null, $allow_external);
 		$ajaxRequestMethod = array_flip($this->ajaxRequestMethod);
 		if(!isset($ajaxRequestMethod[Context::getRequestMethod()]))
 		{
@@ -78,6 +86,23 @@ class ModuleObject extends BaseObject
 	function getRedirectUrl()
 	{
 		return $this->get('redirect_url');
+	}
+
+	/** Older clients without origin headers must explicitly confirm logout. */
+	protected function showLogoutConfirmation($act)
+	{
+		if(!isset($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] !== 'GET') return new BaseObject(-1, 'msg_invalid_request');
+		if(!headers_sent()) header('X-Frame-Options: SAMEORIGIN');
+		if(empty($_SESSION['XE_LOGOUT_TOKEN'])) $_SESSION['XE_LOGOUT_TOKEN'] = Security::getRandomToken();
+		if(!$_SESSION['XE_LOGOUT_TOKEN']) return new BaseObject(-1, 'msg_invalid_request');
+		Context::set('logout_token', $_SESSION['XE_LOGOUT_TOKEN']);
+		Context::set('logout_action', $act);
+		Context::set('logout_module', $act === 'procAdminLogout' ? 'admin' : 'member');
+		$this->setTemplatePath(_XE_PATH_ . 'common/tpl');
+		$this->setTemplateFile('logout_confirm');
+		$this->setLayoutPath(_XE_PATH_ . 'common/tpl');
+		$this->setLayoutFile('default_layout');
+		return new BaseObject();
 	}
 
 	/**
@@ -475,7 +500,7 @@ class ModuleObject extends BaseObject
 		// execute api methods of the module if view action is and result is XMLRPC or JSON
 		if($this->module_info->module_type == 'view' || $this->module_info->module_type == 'mobile')
 		{
-			if(Context::getResponseMethod() == 'XMLRPC' || Context::getResponseMethod() == 'JSON')
+			if ($this->getHttpStatusCode() < 400 && in_array(Context::getResponseMethod(), array('JSON', 'XMLRPC')))
 			{
 				$oAPI = getAPI($this->module_info->module, 'api');
 				if(method_exists($oAPI, $this->act))

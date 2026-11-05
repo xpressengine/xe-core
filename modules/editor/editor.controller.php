@@ -296,7 +296,7 @@ class editorController extends editor
 
 		$saved_doc = $oEditorModel->getSavedDoc(null);
 
-		$oFileController->setUploadInfo($editor_sequence, $saved_doc->document_srl);
+		$oFileController->setUploadInfo($editor_sequence, $saved_doc->document_srl, intval($saved_doc->module_srl));
 		$vars = $this->getVariables();
 		$this->add("editor_sequence", $editor_sequence);
 		$this->add("key", $primary_key);

@@ -1729,7 +1729,7 @@ jQuery(function($){
 						var $this = $(this);
 						$this.data('value', $this.data('tmp_value'));
 					});
-					$anchor.children('span').html(current_lang_value);
+					$anchor.children('span').text(current_lang_value);
 
 					$g11n_search.find('.cancel').trigger('click');
 					$this.find('.useit').trigger('click');

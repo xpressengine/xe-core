@@ -146,8 +146,10 @@ class adminAdminController extends admin
 	 */
 	function procAdminLogout()
 	{
+		if(!Security::checkLogoutRequest()) return $this->showLogoutConfirmation('procAdminLogout');
 		$oMemberController = getController('member');
-		$oMemberController->procMemberLogout();
+		$output = $oMemberController->procMemberLogout();
+		if(!$output->toBool()) return $output;
 
 		header('Location: ' . getNotEncodedUrl('', 'module', 'admin'));
 	}

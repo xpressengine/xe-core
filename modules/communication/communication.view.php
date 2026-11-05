@@ -81,28 +81,9 @@ class communicationView extends communication
 			$columnList = array('message_srl', 'sender_srl', 'receiver_srl', 'message_type', 'title', 'content', 'readed', 'regdate');
 			$message = $oCommunicationModel->getSelectedMessage($message_srl, $columnList);
 
-			switch($message->message_type)
+			if(!self::isMessageOwner($message, $logged_info->member_srl))
 			{
-				case 'R':
-					if($message->receiver_srl != $logged_info->member_srl)
-					{
-						return $this->stop('msg_invalid_request');
-					}
-					break;
-
-				case 'S':
-					if($message->sender_srl != $logged_info->member_srl)
-					{
-						return $this->stop('msg_invalid_request');
-					}
-					break;
-
-				case 'T':
-					if($message->receiver_srl != $logged_info->member_srl && $message->sender_srl != $logged_info->member_srl)
-					{
-						return $this->stop('msg_invalid_request');
-					}
-					break;
+				return $this->stop('msg_invalid_request');
 			}
 
 			if($message->message_srl == $message_srl && ($message->receiver_srl == $logged_info->member_srl || $message->sender_srl == $logged_info->member_srl))
@@ -204,7 +185,7 @@ class communicationView extends communication
 		if($message_srl)
 		{
 			$source_message = $oCommunicationModel->getSelectedMessage($message_srl);
-			if($source_message->message_srl == $message_srl && $source_message->sender_srl == $receiver_srl)
+			if($source_message->message_srl == $message_srl && $source_message->sender_srl == $receiver_srl && $source_message->receiver_srl == $logged_info->member_srl)
 			{
 				$source_message->title = "[re] " . $source_message->title;
 				$source_message->content = "\r\n<br />\r\n<br /><div style=\"padding-left:5px; border-left:5px solid #DDDDDD;\">" . trim($source_message->content) . "</div>";

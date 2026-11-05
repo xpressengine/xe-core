@@ -657,51 +657,72 @@ class moduleAdminController extends module
 	 */
 	function procModuleAdminInsertLang()
 	{
-		// Get language code
 		$site_module_info = Context::get('site_module_info');
-		$target = Context::get('target');
-		$module = Context::get('module');
 		$args = new stdClass();
 		$args->site_srl = (int)$site_module_info->site_srl;
-		$args->name = str_replace(' ','_',Context::get('lang_code'));
-		$args->lang_name = str_replace(' ','_',Context::get('lang_name'));
-		if(!empty($args->lang_name)) $args->name = $args->lang_name;
-
-		// if args->name is empty, random generate for user define language
-		if(empty($args->name)) $args->name = 'userLang'.date('YmdHis').''.sprintf('%03d', mt_rand(0, 100));
-
-		if(!$args->name) return new BaseObject(-1,'msg_invalid_request');
-		// Check whether a language code exists
-		$output = executeQueryArray('module.getLang', $args);
-		if(!$output->toBool()) return $output;
-		// If exists, clear the old values for updating
-		if($output->data) $output = executeQuery('module.deleteLang', $args);
-		if(!$output->toBool()) return $output;
-		// Enter
-		$lang_supported = Context::get('lang_supported');
-		foreach($lang_supported as $key => $val)
+		$name = Context::get('lang_name');
+		if($name === null || $name === '') $name = Context::get('lang_code');
+		if($name !== null && !is_string($name)) return new BaseObject(-1, 'msg_invalid_request');
+		$name = str_replace(' ', '_', trim((string)$name));
+		if($name === '')
 		{
-			$args->lang_code = $key;
-			$args->value = trim(Context::get($key));
+			$random = Security::getRandomToken(16);
+			if($random === false) return new BaseObject(-1, 'msg_invalid_request');
+			$name = 'userLang' . date('Ymd') . $random;
+		}
+		if(strlen($name) > 255 || !preg_match('/^[a-zA-Z0-9_]+$/D', $name)) return new BaseObject(-1, 'msg_invalid_request');
+		$args->name = $name;
 
-			// if request method is json, strip slashes
-			if(Context::getRequestMethod() == 'JSON' && version_compare(PHP_VERSION, "5.4.0", "<") && get_magic_quotes_gpc())
+		// Validate every value before deleting the previous translations.
+		$lang_supported = Context::get('lang_supported');
+		$known_languages = Context::loadLangSupported();
+		if(!is_array($lang_supported) || !count($lang_supported)) return new BaseObject(-1, 'msg_invalid_request');
+		$values = array();
+		foreach($lang_supported as $key => $label)
+		{
+			if(!isset($known_languages[$key]) || strlen($key) > 10) return new BaseObject(-1, 'msg_invalid_request');
+			$value = Context::get($key);
+			if($value !== null && !is_string($value)) return new BaseObject(-1, 'msg_invalid_request');
+			$value = trim((string)$value);
+			if(Context::getRequestMethod() == 'JSON' && version_compare(PHP_VERSION, '5.4.0', '<') && get_magic_quotes_gpc()) $value = stripslashes($value);
+			if(!preg_match('//u', $value)) return new BaseObject(-1, 'msg_invalid_request');
+			$values[$key] = htmlspecialchars($value, ENT_QUOTES, 'UTF-8', true);
+		}
+
+		$oDB = DB::getInstance();
+		$oDB->begin();
+		try
+		{
+			$output = executeQueryArray('module.getLang', $args);
+			if($output->toBool() && $output->data) $output = executeQuery('module.deleteLang', $args);
+			if(!$output->toBool())
 			{
-				$args->value = stripslashes($args->value);
+				$oDB->rollback();
+				return $output;
 			}
-
-			if($args->value)
+			foreach($values as $key => $value)
 			{
+				if($value === '') continue;
+				$args->lang_code = $key;
+				$args->value = $value;
 				$output = executeQuery('module.insertLang', $args);
-				if(!$output->toBool()) return $output;
+				if(!$output->toBool())
+				{
+					$oDB->rollback();
+					return $output;
+				}
 			}
+			$oDB->commit();
+		}
+		catch(Exception $e)
+		{
+			$oDB->rollback();
+			throw $e;
 		}
 		$this->makeCacheDefinedLangCode($args->site_srl);
-
 		$this->add('name', $args->name);
-		$this->setMessage("success_saved", 'info');
-
-		$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'module', $module, 'target', $target, 'act', 'dispModuleAdminLangcode');
+		$this->setMessage('success_saved', 'info');
+		$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'module', Context::get('module'), 'target', Context::get('target'), 'act', 'dispModuleAdminLangcode');
 		$this->setRedirectUrl($returnUrl);
 	}
 
@@ -714,10 +735,11 @@ class moduleAdminController extends module
 		$site_module_info = Context::get('site_module_info');
 		$args = new stdClass();
 		$args->site_srl = (int)$site_module_info->site_srl;
-		$args->name = str_replace(' ','_',Context::get('name'));
-		$args->lang_name = str_replace(' ','_',Context::get('lang_name'));
-		if(!empty($args->lang_name)) $args->name = $args->lang_name;
-		if(!$args->name) return new BaseObject(-1,'msg_invalid_request');
+		$name = Context::get('lang_name');
+		if($name === null || $name === '') $name = Context::get('name');
+		if(!is_string($name)) return new BaseObject(-1, 'msg_invalid_request');
+		$args->name = str_replace(' ', '_', trim($name));
+		if(!is_string($args->name) || strlen($args->name) > 255 || !preg_match('/^[a-zA-Z0-9_]+$/D', $args->name)) return new BaseObject(-1, 'msg_invalid_request');
 
 		$output = executeQuery('module.deleteLang', $args);
 		if(!$output->toBool()) return $output;
@@ -857,12 +879,15 @@ class moduleAdminController extends module
 			$args->site_srl = $site_srl;
 		}
 		$output = executeQueryArray('module.getLang', $args);
-		if(!$output->toBool() || !$output->data) return;
+		if(!$output->toBool()) return;
 
 		$langMap = array();
-		foreach($output->data as $lang)
+		$known_languages = Context::loadLangSupported();
+		foreach((array)$output->data as $lang)
 		{
-			$langMap[$lang->lang_code][$lang->name] = $lang->value;
+			if(!isset($known_languages[$lang->lang_code]) || !preg_match('/^[a-zA-Z0-9_]+$/D', $lang->name)) continue;
+			// Canonicalize both legacy raw values and newly escaped values.
+			$langMap[$lang->lang_code][$lang->name] = htmlspecialchars(htmlspecialchars_decode($lang->value, ENT_QUOTES), ENT_QUOTES, 'UTF-8', true);
 		}
 
 		$lang_supported = Context::get('lang_supported');
@@ -901,7 +926,7 @@ class moduleAdminController extends module
 
 			if($oCacheHandler->isSupport())
 			{
-				$object_key = 'user_defined_langs:' . $args->site_srl . ':' . $langCode;
+				$object_key = 'user_defined_langs:v2:' . $args->site_srl . ':' . $langCode;
 				$cache_key = $oCacheHandler->getGroupKey('site_and_module', $object_key);
 				$oCacheHandler->put($cache_key, $langMap[$langCode]);
 			}

@@ -500,6 +500,10 @@
 		<value xml:lang="zh-TW"><![CDATA[無法建立檔案或目錄。]]></value>
 		<value xml:lang="tr"><![CDATA[Dosya veya dizin oluşturma hatası.]]></value>
 	</item>
+	<item name="msg_invalid_upload_info">
+		<value xml:lang="ko"><![CDATA[업로드 대상 정보가 일치하지 않습니다. (%s)]]></value>
+		<value xml:lang="en"><![CDATA[Invalid upload target information. (%s)]]></value>
+	</item>
 	<item name="msg_file_upload_error">
 		<value xml:lang="ko"><![CDATA[파일 업로드 중 에러가 발생하였습니다.]]></value>
 		<value xml:lang="en"><![CDATA[An error has occurred during uploading.]]></value>

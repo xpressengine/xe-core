@@ -107,21 +107,27 @@ if(typeof window.XE == "undefined") {
 
 								var styleText = "";
 								var click_str = "";
+								var normalizedUrl = String(url || '').replace(/^\s+|\s+$/g, '');
+								if(!/^(?:https?:|\/|#)/i.test(normalizedUrl) && target !== 'javascript') {
+									normalizedUrl = '#';
+								}
 								/* if(icon) styleText = " style=\"background-image:url('"+icon+"')\" "; */
 								switch(target) {
 									case "popup" :
 											click_str = 'onclick="popopen(this.href, \''+target+'\'); return false;"';
 										break;
 									case "javascript" :
-											click_str = 'onclick="'+url+'; return false; "';
-											url='#';
+											click_str = 'onclick="'+String(url || '').escape()+'; return false; "';
+											normalizedUrl='#';
 										break;
 									default :
 											click_str = 'target="_blank"';
 										break;
 								}
 
-								html += '<li '+styleText+'><a href="'+url+'" '+click_str+'>'+str+'</a></li> ';
+								var escapedUrl = normalizedUrl.escape();
+								var escapedStr = String(str || '').escape();
+								html += '<li '+styleText+'><a href="'+escapedUrl+'" '+click_str+'>'+escapedStr+'</a></li> ';
 							}
 						}
 					}
@@ -358,6 +364,22 @@ if(typeof window.XE == "undefined") {
 				.filename(filename)
 				.normalizePort();
 		}
+		/**
+		 * @brief 문자열의 HTML 특수문자를 이스케이프
+		 **/
+		String.prototype.escape = function() {
+			return this
+				.replace(/&amp;(amp|lt|gt|quot|#39);/g, '&$1;')
+				.replace(/&(?!amp;|lt;|gt;|quot;|#39;)/g, '&amp;')
+				.replace(/[<>"']/g, function(match) {
+					switch (match) {
+						case '<': return '&lt;';
+						case '>': return '&gt;';
+						case '"': return '&quot;';
+						case "'": return '&#39;';
+					}
+				});
+		};
 	})(window || global);
 
 	/**

@@ -100,6 +100,8 @@ class widgetController extends widget
 	{
 		// Variable Wanted
 		$module_srl = Context::get('module_srl');
+		if(!is_scalar($module_srl) || !preg_match('/^[1-9][0-9]*$/D', (string)$module_srl)) return new BaseObject(-1, 'msg_invalid_request');
+		$module_srl = (string)$module_srl;
 		$document_srl = Context::get('document_srl');
 		$content = Context::get('content');
 		$editor_sequence = Context::get('editor_sequence');
@@ -111,7 +113,7 @@ class widgetController extends widget
 
 		// Destination Information Wanted page module
 		$oModuleModel = getModel('module');
-		$columnList = array('module_srl', 'module');
+		$columnList = array('module_srl', 'module', 'site_srl');
 		$page_info = $oModuleModel->getModuleInfoByModuleSrl($module_srl, $columnList);
 		if(!$page_info->module_srl || $page_info->module != 'page') $err++;
 
@@ -141,6 +143,10 @@ class widgetController extends widget
 		$oDocument = $oDocumentModel->getDocument($obj->document_srl);
 		if($oDocument->isExists() && $oDocument->document_srl == $obj->document_srl)
 		{
+			if((string)$oDocument->get('module_srl') !== $module_srl)
+			{
+				return new BaseObject(-1, 'msg_not_permitted');
+			}
 			$output = $oDocumentController->updateDocument($oDocument, $obj);
 		}
 		else
@@ -174,7 +180,7 @@ class widgetController extends widget
 
 		// Destination Information Wanted page module
 		$oModuleModel = getModel('module');
-		$columnList = array('module_srl', 'module');
+		$columnList = array('module_srl', 'module', 'site_srl');
 		$page_info = $oModuleModel->getModuleInfoByModuleSrl($module_srl, $columnList);
 		if(!$page_info->module_srl || $page_info->module != 'page') return new BaseObject(-1,'msg_invalid_request');
 

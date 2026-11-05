@@ -68,6 +68,7 @@ class adminAdminView extends admin
 		Context::set('time_zone', $GLOBALS['_time_zone']);
 		Context::set('use_rewrite', $db_info->use_rewrite == 'Y' ? 'Y' : 'N');
 		Context::set('use_sso', $db_info->use_sso == 'Y' ? 'Y' : 'N');
+		Context::set('use_session_regenerate', isset($db_info->use_session_regenerate) && $db_info->use_session_regenerate == 'N' ? 'N' : 'Y');
 		Context::set('use_html5', $db_info->use_html5 == 'Y' ? 'Y' : 'N');
 		Context::set('use_spaceremover', $db_info->use_spaceremover ? $db_info->use_spaceremover : 'Y'); //not use
 		Context::set('qmail_compatibility', $db_info->qmail_compatibility == 'Y' ? 'Y' : 'N');

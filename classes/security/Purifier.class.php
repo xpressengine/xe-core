@@ -8,6 +8,7 @@ class Purifier
 	private $_htmlPurifier;
 	private $_config;
 	private $_def;
+	private $_standardAttrs = array();
 
 	public function __construct()
 	{
@@ -50,6 +51,14 @@ class Purifier
 
 		$this->_def = $this->_config->getHTMLDefinition(TRUE);
 		$this->_def->addAttribute('iframe', 'allowfullscreen', 'Text');
+
+		// Custom component attributes must not replace URI, CSS, or other validators.
+		$standardConfig = HTMLPurifier_Config::inherit($this->_config);
+		$standardDefinition = $standardConfig->getHTMLDefinition();
+		foreach(array('img', 'div') as $tag)
+		{
+			$this->_standardAttrs += $standardDefinition->info[$tag]->attr;
+		}
 	}
 
 	public function setConfig($name, $value)
@@ -67,20 +76,14 @@ class Purifier
 		{
 			foreach($editComponentAttrs AS $k => $v)
 			{
+				if(isset($this->_standardAttrs[$v])) continue;
 				$this->_def->addAttribute('img', $v, 'CDATA');
 				$this->_def->addAttribute('div', $v, 'CDATA');
 			}
 		}
 
-		// add attribute for widget component
-		$widgetAttrs = $this->_searchWidget($content);
-		if(is_array($widgetAttrs))
-		{
-			foreach($widgetAttrs AS $k => $v)
-			{
-				$this->_def->addAttribute('img', $v, 'CDATA');
-			}
-		}
+		// User content is never permitted to execute widgets. Widget pages bypass
+		// this filter after their own permission checks.
 	}
 
 	/**
@@ -104,8 +107,9 @@ class Purifier
 				{
 					foreach($m2[1] as $value2)
 					{
+						$value2 = strtolower($value2);
 						//SECISSUE check style attr
-						if($value2 == 'style')
+						if($value2 == 'style' || preg_match('/^(?:on|widget$|widgetstyle$|rx_encoded_properties$)/', $value2))
 						{
 							continue;
 						}

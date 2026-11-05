@@ -243,6 +243,36 @@ class ModuleInstaller
 	}
 
 	/**
+	 * Check whether an archive entry is safe to extract.
+	 *
+	 * @param string $path Archive entry path
+	 * @return bool
+	 */
+	function _isSafeArchivePath($path)
+	{
+		if(!is_string($path) || $path === '' || strpos($path, "\0") !== FALSE)
+		{
+			return FALSE;
+		}
+
+		$path = str_replace('\\', '/', $path);
+		if(substr($path, 0, 1) === '/' || preg_match('/^[A-Za-z]:/', $path))
+		{
+			return FALSE;
+		}
+
+		foreach(explode('/', $path) as $segment)
+		{
+			if($segment === '..')
+			{
+				return FALSE;
+			}
+		}
+
+		return TRUE;
+	}
+
+	/**
 	 * Untar a downloaded tar ball
 	 *
 	 * @return array Returns file list
@@ -260,6 +290,10 @@ class ModuleInstaller
 		{
 			foreach($_files as $key => $info)
 			{
+				if(!isset($info['name']) || !$this->_isSafeArchivePath($info['name']))
+				{
+					continue;
+				}
 				FileHandler::writeFile($this->download_path . "/" . $info['name'], $info['file']);
 				$file_list[] = $info['name'];
 			}
@@ -463,9 +497,17 @@ class SFTPModuleInstaller extends ModuleInstaller
 			foreach($file_list as $k => $file)
 			{
 				$org_file = $file;
+				if(!$this->_isSafeArchivePath($org_file))
+				{
+					continue;
+				}
 				if($this->package->path == ".")
 				{
 					$file = substr($file, 3);
+				}
+				if(!$this->_isSafeArchivePath($file))
+				{
+					continue;
 				}
 				$path = FileHandler::getRealPath("./" . $this->target_path . "/" . $file);
 				$pathname = dirname($target_dir . "/" . $file);
@@ -647,9 +689,17 @@ class PHPFTPModuleInstaller extends ModuleInstaller
 					continue;
 				}
 				$org_file = $file;
+				if(!$this->_isSafeArchivePath($org_file))
+				{
+					continue;
+				}
 				if($this->package->path == ".")
 				{
 					$file = substr($file, 3);
+				}
+				if(!$this->_isSafeArchivePath($file))
+				{
+					continue;
 				}
 				$path = FileHandler::getRealPath("./" . $this->target_path . "/" . $file);
 				$path_list = explode('/', dirname($this->target_path . "/" . $file));
@@ -848,9 +898,17 @@ class FTPModuleInstaller extends ModuleInstaller
 			foreach($file_list as $k => $file)
 			{
 				$org_file = $file;
+				if(!$this->_isSafeArchivePath($org_file))
+				{
+					continue;
+				}
 				if($this->package->path == ".")
 				{
 					$file = substr($file, 3);
+				}
+				if(!$this->_isSafeArchivePath($file))
+				{
+					continue;
 				}
 				$path = FileHandler::getRealPath("./" . $this->target_path . "/" . $file);
 				$path_list = explode('/', dirname($this->target_path . "/" . $file));
@@ -982,9 +1040,17 @@ class DirectModuleInstaller extends ModuleInstaller
 			foreach($file_list as $k => $file)
 			{
 				$org_file = $file;
+				if(!$this->_isSafeArchivePath($org_file))
+				{
+					continue;
+				}
 				if($this->package->path == ".")
 				{
 					$file = substr($file, 3);
+				}
+				if(!$this->_isSafeArchivePath($file))
+				{
+					continue;
 				}
 				$path = FileHandler::getRealPath("./" . $this->target_path . "/" . $file);
 				$path_list = explode('/', dirname($this->target_path . "/" . $file));

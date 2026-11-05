@@ -263,7 +263,7 @@ class widgetModel extends widget
 	 */
 	function getWidgetStyleInfo($widgetStyle)
 	{
-		$widget = escape($widgetStyle);
+		$widgetStyle = preg_replace('/[^a-zA-Z0-9-_]/', '', $widgetStyle);
 		$widgetStyle_path = $this->getWidgetStylePath($widgetStyle);
 		if(!$widgetStyle_path) return;
 		$xml_file = sprintf("%sskin.xml", $widgetStyle_path);

@@ -101,7 +101,9 @@ class addonController extends addon
 			}
 
 			$buff[] = '$before_time = microtime(true);';
-			$buff[] = '$rm = \'' . $extra_vars->xe_run_method . "';";
+
+			$run_method = (string)(isset($extra_vars->xe_run_method) ? $extra_vars->xe_run_method : 'run_selected');
+			$buff[] = '$rm = ' . var_export($run_method, true) . ';';
 			$buff[] = '$ml = array(';
 			if($mid_list)
 			{
@@ -158,7 +160,7 @@ class addonController extends addon
 		}
 
 		$args = new stdClass();
-		$args->addon = $addon;
+		$args->addon = preg_replace('/[^\w]/', '', $addon);
 		$args->extra_vars = serialize($extra_vars);
 		if($gtype == 'global')
 		{

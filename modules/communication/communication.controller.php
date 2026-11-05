@@ -341,21 +341,9 @@ class communicationController extends communication
 		}
 
 		// Check the grant
-		switch($message->message_type)
+		if(!self::isMessageOwner($message, $member_srl))
 		{
-			case 'S':
-				if($message->sender_srl != $member_srl)
-				{
-					return new BaseObject(-1, 'msg_invalid_request');
-				}
-				break;
-
-			case 'R':
-				if($message->receiver_srl != $member_srl)
-				{
-					return new BaseObject(-1, 'msg_invalid_request');
-				}
-				break;
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 		// Delete
